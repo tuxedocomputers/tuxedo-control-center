@@ -1,0 +1,76 @@
+body {
+    margin: 0px;
+}
+
+/*
+ * Window layout
+ */
+#main-window-view {
+    display: grid;
+    grid-template-areas:
+        "top-border top-border top-border"
+        "left-nav content content";
+    grid-template-columns: 100px auto auto;
+    grid-template-rows: 50px auto;
+
+    header {
+        grid-area: top-border;
+        display: grid;
+        grid-template-columns: 25% 50% 25%;
+    }
+
+    nav {
+        grid-area: left-nav;
+    }
+
+    main {
+        grid-area: content;
+    }
+}
+
+/*
+ * Window style
+ */
+#main-window-view {
+    margin: 0;
+
+    header {
+        // background-color: #3a3a3a;
+        -webkit-app-region: drag;
+        margin: 0;
+
+        #title-logo {
+            max-height: 40px;
+        }
+
+        #main-title {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        ul {
+            list-style-type: none;
+            justify-self: right;
+            li {
+                float: left;
+
+                i {
+                    -webkit-app-region: no-drag;
+                }
+            }
+        }
+    }
+
+    nav {
+        background-color: #fbfbfb;
+
+        ul {
+            list-style-type: none;
+            border: 1px;
+
+            a:hover {
+                border-color: #ed1c24;
+            }
+        }
+    }
+}

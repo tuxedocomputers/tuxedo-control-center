@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=TUXEDO Control Center
+Comment=TUXEDO Control Center Pen..
+Exec="/usr/bin/tuxedocc" %U
+Terminal=false
+Type=Application
+Icon=/opt/tuxedocc/resources/output/dist/data/256x256.png
+StartupWMClass=tuxedocc
+Categories=System;

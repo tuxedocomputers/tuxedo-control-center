@@ -1,0 +1,11 @@
+[Unit]
+Description=TUXEDO Control Center Daemon
+
+[Service]
+Type=forking
+ExecStart=/bin/bash -c "Xvfb :98 & export DISPLAY=:98 && %TCCPATH% --startdaemon"
+ExecStop=/bin/bash -c "Xvfb :98 & export DISPLAY=:98 && %TCCPATH% --stopdaemon"
+ExecReload=/bin/bash -c "Xvfb :98 & export DISPLAY=:98 && %TCCPATH% --restartdaemon"
+
+[Install]
+WantedBy=multi-user.target

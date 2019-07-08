@@ -1,0 +1,23 @@
+<div id="main-window-view">
+
+  <header>
+    <img src="./assets/logo.svg" id="title-logo">
+    <div id="main-title">{{ title }}</div>
+    <ul>
+      <li><i class="fas fa-times" (click)="buttonExit()"></i></li>
+    </ul>
+  </header>
+
+  <nav>
+    <ul>
+      <li>
+        <a href="#" (click)="buttonExit()">exit</a>
+      </li>
+    </ul>
+  </nav>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

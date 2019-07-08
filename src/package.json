@@ -1,0 +1,5 @@
+{
+    "name": "tuxedocc",
+    "version": "1",
+    "main": "./e-app/main.js"
+}
