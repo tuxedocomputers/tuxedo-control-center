@@ -1,4 +1,4 @@
 
-export class TccConfig {
+export class TccSettings {
     activeProfileName: string;
 }
