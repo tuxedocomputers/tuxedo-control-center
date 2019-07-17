@@ -10,11 +10,10 @@
   "homepage": "https://tuxedocomputers.com",
   "scripts": {
     "start": "electron ./dist/tuxedo-control-center",
-    "build": "npm run clean && npm run build-common && tsc -p ./src/e-app && npm run build-service && ng build && npm run copy-files",
+    "build": "npm run clean && tsc -p ./src/e-app && npm run build-service && ng build && npm run copy-files",
     "build-prod": "npm run clean && tsc -p ./src/e-app && ng build --prod && npm run copy-files",
     "build-service": "tsc -p ./src/service-app && npm run bundle-service",
-    "bundle-service": "pkg --target node8-linux-x64 --out-path ./dist/tuxedo-control-center/data/service ./dist/tuxedo-control-center/service-app/main.js",
-    "build-common": "tsc -p ./src/common",
+    "bundle-service": "pkg --target node8-linux-x64 --out-path ./dist/tuxedo-control-center/data/service ./dist/tuxedo-control-center/service-app/service-app/main.js",
     "copy-files": "npm run copy-package-json && npm run copy-dist-files",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
