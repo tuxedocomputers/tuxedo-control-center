@@ -1,0 +1,6 @@
+{
+    "spec_dir": "./src/common",
+    "spec_files": [
+        "**/*spec.ts"
+    ]
+}
