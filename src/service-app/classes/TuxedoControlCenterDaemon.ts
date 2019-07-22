@@ -3,17 +3,12 @@ import * as path from 'path';
 import * as os from 'os';
 import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
-
-const PATHS = {
-    PID_FILE: '/var/run/tccd.pid',
-    CONFIG_FILE: '/etc/tcc/settings',
-    PROFILES_FILE: '/etc/tcc/profiles',
-};
+import { TccPaths } from '../../common/classes/TccPaths';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
     constructor() {
-        super(PATHS.PID_FILE);
+        super(TccPaths.PID_FILE);
     }
 
     async main() {
