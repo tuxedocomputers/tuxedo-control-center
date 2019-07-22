@@ -24,12 +24,18 @@ export class SingleProcess {
     protected async stop(): Promise<boolean> {
         return new Promise<boolean>(async resolve => {
             const pid = this.readPid();
-            if (!isNaN(pid)) {
-                try {
-                    process.kill(pid, 'SIGINT');
+
+            if (!isNaN(pid)) { // If there is a PID in file
+                if (this.isRunning()) {
+                    try {
+                        process.kill(pid, 'SIGINT');
+                        this.removePid();
+                    } catch (err) {
+                        resolve(false);
+                    }
+                } else {
+                    // If it's not running just remove file if it exists (clean-up)
                     this.removePid();
-                } catch (err) {
-                    resolve(false);
                 }
             }
 

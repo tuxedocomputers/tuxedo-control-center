@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron';
+import * as os from 'os';
 
 let win: Electron.BrowserWindow;
 

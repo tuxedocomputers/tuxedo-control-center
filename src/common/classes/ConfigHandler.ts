@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { TccSettings } from '../models/TccSettings';
 import { TccProfile } from '../models/TccProfile';
 
@@ -37,7 +38,7 @@ export class ConfigHandler {
         try {
             const fileData = fs.readFileSync(filename);
             config = JSON.parse(fileData.toString());
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
         return config;
@@ -46,8 +47,11 @@ export class ConfigHandler {
     private writeConfig<T>(config: T, filePath: string, writeFileOptions): void {
         const fileData = JSON.stringify(config);
         try {
+            if (!fs.existsSync(path.dirname(filePath))) {
+                fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
+            }
             fs.writeFileSync(filePath, fileData, writeFileOptions);
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }

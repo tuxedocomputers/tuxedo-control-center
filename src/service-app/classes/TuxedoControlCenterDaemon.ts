@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import * as os from 'os';
 import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
@@ -16,6 +17,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     async main() {
+        if (process.argv.includes('--version')) {
+            console.log('node: ' + process.version + ' arch:' + os.arch());
+            this.logLine('node: ' + process.version + ' arch:' + os.arch());
+            process.exit();
+        }
 
         // Only allow start if root
         if (process.geteuid() !== 0) {
@@ -40,9 +46,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } else {
             throw Error('No argument specified');
         }
-
-        console.log('node: ' + process.version + ' arch:' + os.arch() + ' args: ' + process.argv.join());
-        this.logLine('node: ' + process.version + ' arch:' + os.arch() + ' args: ' + process.argv.join());
 
         // Setup signal catching/handling
         process.on('SIGINT', () => {
@@ -77,8 +80,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      */
     logLine(text: string) {
         try {
+            const logPath = '/tmp/tcc/test.log';
+            if (!fs.existsSync(path.dirname(logPath))) {
+                fs.mkdirSync(path.dirname(logPath), { mode: 0o755, recursive: true });
+            }
             const date: Date = new Date();
-            fs.appendFileSync('/tmp/tcc/test.log', date.toISOString() + ': ' + text + '\n');
+            const strLogLine = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ': ' + text + '\n';
+            fs.appendFileSync(logPath, strLogLine, { mode: 0o644 });
         } catch (err) {
             console.log('Can\'t write log');
         }
