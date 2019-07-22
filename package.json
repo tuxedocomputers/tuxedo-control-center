@@ -58,6 +58,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "mock-fs": "^4.10.1",
     "ngx-electron": "^2.1.1",
     "pkg": "^4.4.0",
     "protractor": "~5.4.0",
