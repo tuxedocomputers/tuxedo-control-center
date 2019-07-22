@@ -17,20 +17,20 @@ export class ConfigHandler {
     get pathProfiles() { return this._pathProfiles; }
     set pathProfiles(filename: string) { this._pathProfiles = filename; }
 
-    readSettings() {
-        return this.readConfig<TccSettings>(this.pathSettings);
+    readSettings(filePath: string = this.pathSettings) {
+        return this.readConfig<TccSettings>(filePath);
     }
 
-    writeSettings(settings: TccSettings) {
-        this.writeConfig<TccSettings>(settings, this.pathSettings, { mode: this.settingsFileMod });
+    writeSettings(settings: TccSettings, filePath: string = this.pathSettings) {
+        this.writeConfig<TccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
-    readProfiles() {
-        return this.readConfig<TccProfile[]>(this.pathProfiles);
+    readProfiles(filePath: string = this.pathProfiles) {
+        return this.readConfig<TccProfile[]>(filePath);
     }
 
-    writeProfiles(profiles: TccProfile[]) {
-        this.writeConfig<TccProfile[]>(profiles, this.pathProfiles, { mode: this.profileFileMod });
+    writeProfiles(profiles: TccProfile[], filePath: string = this.pathProfiles) {
+        this.writeConfig<TccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
     }
 
     private readConfig<T>(filename: string): T {
