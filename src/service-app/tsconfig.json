@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/tuxedo-control-center/service-app",
+    "rootDir": "../",
     "module": "commonjs",
     "types": ["node"]
   },
