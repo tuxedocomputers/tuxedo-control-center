@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import * as child_process from 'child_process';
 import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
@@ -10,13 +11,14 @@ import { TccProfile } from '../../common/models/TccProfile';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
-    private config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE);
+    private config: ConfigHandler;
 
     private settings: TccSettings;
     private profiles: TccProfile[];
 
     constructor() {
         super(TccPaths.PID_FILE);
+        this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE);
     }
 
     async main() {
@@ -26,7 +28,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             process.exit();
         }
 
-        // Only allow start if root
+        // Only allow to continue if root
         if (process.geteuid() !== 0) {
             throw Error('Not root, bye');
         }
@@ -38,40 +40,50 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } else if (process.argv.includes('--stop')) {
             if (await this.stop()) {
                 console.log('Daemon is stopped');
+                process.exit(0);
             } else {
                 throw Error('Failed to stop');
             }
-            process.exit();
-        } else if (process.argv.includes('--reload')) {
-            if (!await this.reload()) {
-                throw Error('Failed reload');
-            }
+        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
+            // If new config is specified, replace standard config with new config
+            this.saveNewConfig<TccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
+            this.saveNewConfig<TccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
+            // Restart service
+            child_process.exec('systemctl restart tccd.service');
+            process.exit(0);
         } else {
             throw Error('No argument specified');
         }
 
         // Setup signal catching/handling
+        // SIGINT is the normal exit signal that the service gets from itself
         process.on('SIGINT', () => {
-            this.logLine('SIGINT');
-            process.exit(SIGINT);
+            this.logLine('SIGINT - Exiting..');
+            process.exit(0);
         });
 
+        // Also stop on SIGTERM
         process.on('SIGTERM', () => {
-            this.logLine('SIGTERM');
+            this.logLine('SIGTERM - Exiting..');
             process.exit(SIGTERM);
         });
 
-        // If new config is specified, replace standard config with new config
-        this.saveNewConfig<TccSettings>('--new_settings', this.config.readSettings, this.config.writeSettings);
-        this.saveNewConfig<TccProfile[]>('--new_profiles', this.config.readProfiles, this.config.writeProfiles);
+        // TODO: Make sure there is a default config
 
-        // TODO:
-        // Read current config and apply settings accordingly
-        try {
+        /*try {
             this.settings = this.config.readSettings();
         } catch (err) {
-
+            this.logLine('Failed to read settings');
+            throw Error('Failed to read settings');
         }
+        try {
+            this.profiles = this.config.readProfiles();
+        } catch (err) {
+            this.logLine('Failed to read profiles');
+            throw Error('Failed to read profiles');
+        }*/
+
+        // TODO: Apply active profile accordingly
 
         // Do some work..
         while (true) {
@@ -84,22 +96,33 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         process.exit();
     }
 
-    private saveNewConfig<T>(optionString: string, readConfig: (filePath: string) => T, writeConfig: (config: T) => void) {
-        const newConfigIndex = process.argv.indexOf(optionString);
-        const lastIndex = (process.argv.length - 1);
-        // If option is set and there is an argument after the option
-        if (newConfigIndex !== -1 && ((newConfigIndex + 1) <= lastIndex)) {
-            const newConfigPath = process.argv[newConfigIndex + 1];
+    private saveNewConfig<T>(optionString: string, configPath: string, writeFileMode: number) {
+        const newConfigPath = this.getPathArgument(optionString);
+        if (newConfigPath !== '') {
             try {
-                const newSettings: T = readConfig(newConfigPath);
+                const newConfig: T = this.config.readConfig<T>(newConfigPath);
                 try {
-                    writeConfig(newSettings);
+                    this.config.writeConfig<T>(newConfig, configPath, { mode: writeFileMode });
                 } catch (err) {
                     this.logLine('Error on write option ' + optionString);
                 }
             } catch (err) {
                 this.logLine('Error on read option ' + optionString + ' with path: ' + newConfigPath);
+                throw err;
             }
+        }
+    }
+
+    private getPathArgument(optionString: string): string {
+        const newConfigIndex = process.argv.indexOf(optionString);
+        const lastIndex = (process.argv.length - 1);
+        // If option is set and there is an argument after the option
+        if (newConfigIndex !== -1 && ((newConfigIndex + 1) <= lastIndex)) {
+            const newConfigPath = process.argv[newConfigIndex + 1];
+            newConfigPath.replace('\'', '');
+            return newConfigPath.trim();
+        } else {
+            return '';
         }
     }
 

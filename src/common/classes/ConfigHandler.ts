@@ -4,8 +4,8 @@ import { TccSettings } from '../models/TccSettings';
 import { TccProfile } from '../models/TccProfile';
 
 export class ConfigHandler {
-    private settingsFileMod: number;
-    private profileFileMod: number;
+    public settingsFileMod: number;
+    public profileFileMod: number;
 
     constructor(private _pathSettings: string, private _pathProfiles: string) {
         this.settingsFileMod = 0o644;
@@ -17,7 +17,7 @@ export class ConfigHandler {
     get pathProfiles() { return this._pathProfiles; }
     set pathProfiles(filename: string) { this._pathProfiles = filename; }
 
-    readSettings(filePath: string = this.pathSettings) {
+    readSettings(filePath: string = this.pathSettings): TccSettings {
         return this.readConfig<TccSettings>(filePath);
     }
 
@@ -25,7 +25,7 @@ export class ConfigHandler {
         this.writeConfig<TccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
-    readProfiles(filePath: string = this.pathProfiles) {
+    readProfiles(filePath: string = this.pathProfiles): TccProfile[] {
         return this.readConfig<TccProfile[]>(filePath);
     }
 
@@ -33,7 +33,7 @@ export class ConfigHandler {
         this.writeConfig<TccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
     }
 
-    private readConfig<T>(filename: string): T {
+    public readConfig<T>(filename: string): T {
         let config: T;
         try {
             const fileData = fs.readFileSync(filename);
@@ -44,7 +44,7 @@ export class ConfigHandler {
         return config;
     }
 
-    private writeConfig<T>(config: T, filePath: string, writeFileOptions): void {
+    public writeConfig<T>(config: T, filePath: string, writeFileOptions): void {
         const fileData = JSON.stringify(config);
         try {
             if (!fs.existsSync(path.dirname(filePath))) {

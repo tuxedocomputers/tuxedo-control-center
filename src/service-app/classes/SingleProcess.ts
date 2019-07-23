@@ -13,7 +13,9 @@ export class SingleProcess {
             if (this.isRunning()) {
                 resolve(false);
             } else {
-                resolve(this.writePid(process.pid));
+                const result = this.writePid(process.pid);
+                if (!result) { console.log('Failed PID write'); }
+                resolve(result);
             }
         });
     }
@@ -29,13 +31,9 @@ export class SingleProcess {
                 if (this.isRunning()) {
                     try {
                         process.kill(pid, 'SIGINT');
-                        this.removePid();
                     } catch (err) {
                         resolve(false);
                     }
-                } else {
-                    // If it's not running just remove file if it exists (clean-up)
-                    this.removePid();
                 }
             }
 
@@ -43,24 +41,11 @@ export class SingleProcess {
             const nrRetries = 50;
             const retryDelay = 100;
             let count = 0;
-            while (!isNaN(this.readPid()) && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
+            while (this.isRunning() && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
             if (count >= nrRetries) {
                 resolve(false);
             } else {
                 resolve(true);
-            }
-        });
-    }
-
-    /**
-     * Reload process
-     */
-    protected async reload(): Promise<boolean> {
-        return new Promise<boolean>(async resolve => {
-            if (await this.stop()) {
-                resolve(await this.start());
-            } else {
-                resolve(false);
             }
         });
     }
