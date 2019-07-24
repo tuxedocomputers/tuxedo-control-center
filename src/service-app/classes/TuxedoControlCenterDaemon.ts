@@ -6,8 +6,8 @@ import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { TccSettings } from '../../common/models/TccSettings';
-import { TccProfile } from '../../common/models/TccProfile';
+import { ITccSettings } from '../../common/models/TccSettings';
+import { ITccProfile } from '../../common/models/TccProfile';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
@@ -15,8 +15,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private config: ConfigHandler;
 
-    private settings: TccSettings;
-    private profiles: TccProfile[];
+    private settings: ITccSettings;
+    private profiles: ITccProfile[];
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -53,8 +53,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
             // If new config is specified, replace standard config with new config
-            const settingsSaved = this.saveNewConfig<TccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
-            const profilesSaved = this.saveNewConfig<TccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
+            const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
+            const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
             // If something changed, restart running service
             if (settingsSaved || profilesSaved) {
                 child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);

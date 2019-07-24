@@ -1,12 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { TccSettings } from '../models/TccSettings';
-import { TccProfile } from '../models/TccProfile';
+import { ITccSettings } from '../models/TccSettings';
+import { ITccProfile } from '../models/TccProfile';
 
 export class ConfigHandler {
     public settingsFileMod: number;
     public profileFileMod: number;
 
+    // tslint:disable-next-line: variable-name
     constructor(private _pathSettings: string, private _pathProfiles: string) {
         this.settingsFileMod = 0o644;
         this.profileFileMod = 0o644;
@@ -17,20 +18,20 @@ export class ConfigHandler {
     get pathProfiles() { return this._pathProfiles; }
     set pathProfiles(filename: string) { this._pathProfiles = filename; }
 
-    readSettings(filePath: string = this.pathSettings): TccSettings {
-        return this.readConfig<TccSettings>(filePath);
+    readSettings(filePath: string = this.pathSettings): ITccSettings {
+        return this.readConfig<ITccSettings>(filePath);
     }
 
-    writeSettings(settings: TccSettings, filePath: string = this.pathSettings) {
-        this.writeConfig<TccSettings>(settings, filePath, { mode: this.settingsFileMod });
+    writeSettings(settings: ITccSettings, filePath: string = this.pathSettings) {
+        this.writeConfig<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
-    readProfiles(filePath: string = this.pathProfiles): TccProfile[] {
-        return this.readConfig<TccProfile[]>(filePath);
+    readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
+        return this.readConfig<ITccProfile[]>(filePath);
     }
 
-    writeProfiles(profiles: TccProfile[], filePath: string = this.pathProfiles) {
-        this.writeConfig<TccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
+    writeProfiles(profiles: ITccProfile[], filePath: string = this.pathProfiles) {
+        this.writeConfig<ITccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
     }
 
     public readConfig<T>(filename: string): T {
