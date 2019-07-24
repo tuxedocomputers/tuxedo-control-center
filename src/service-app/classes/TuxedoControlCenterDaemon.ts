@@ -68,12 +68,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // SIGINT is the normal exit signal that the service gets from itself
         process.on('SIGINT', () => {
             this.logLine('SIGINT - Exiting');
+            this.cleanupOnExit();
             process.exit(0);
         });
 
         // Also stop on SIGTERM
         process.on('SIGTERM', () => {
             this.logLine('SIGTERM - Exiting');
+            this.cleanupOnExit();
             process.exit(SIGTERM);
         });
 
@@ -84,6 +86,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.settings = defaultSettings;
             try {
                 this.config.writeSettings(this.settings);
+                this.logLine('Wrote default settings: ' + this.config.pathSettings);
             } catch (err) {
                 this.logLine('Failed to write default settings: ' + this.config.pathSettings);
             }
@@ -96,6 +99,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.logLine('Failed to read profiles: ' + this.config.pathProfiles);
             try {
                 this.config.writeProfiles([]);
+                this.logLine('Wrote default profiles: ' + this.config.pathProfiles);
             } catch (err) {
                 this.logLine('Failed to write default profiles: ' + this.config.pathProfiles);
             }
@@ -109,12 +113,17 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         while (true) {
             await new Promise(resolve => setTimeout(resolve, 5000));
         }
+
+        // this.cleanupOnExit();
     }
 
     catchError(err: Error) {
         const errorLine = err.name + ': ' + err.message;
         this.logLine(errorLine);
         process.exit();
+    }
+
+    cleanupOnExit() {
     }
 
     /**
@@ -180,7 +189,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 fs.mkdirSync(path.dirname(logPath), { mode: 0o755, recursive: true });
             }
             const date: Date = new Date();
-            const strLogLine = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ': ' + text + '\n';
+            const lineInfo: string = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' (' + process.pid + '): ';
+            const strLogLine = lineInfo + text + '\n';
             fs.appendFileSync(logPath, strLogLine, { mode: 0o644 });
         } catch (err) {
             console.log('Can\'t write log');
