@@ -36,13 +36,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (process.argv.includes('--start')) {
             if (!await this.start()) {
                 throw Error('Couldn\'t start daemon. It is probably already running');
+            } else {
+                this.logLine('Starting daemon..');
             }
         } else if (process.argv.includes('--stop')) {
+            this.logLine('Stopping daemon..');
             if (await this.stop()) {
-                console.log('Daemon is stopped');
+                this.logLine('Daemon is stopped');
                 process.exit(0);
             } else {
-                throw Error('Failed to stop');
+                throw Error('Failed to stop daemon');
             }
         } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
             // If new config is specified, replace standard config with new config
@@ -58,13 +61,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // Setup signal catching/handling
         // SIGINT is the normal exit signal that the service gets from itself
         process.on('SIGINT', () => {
-            this.logLine('SIGINT - Exiting..');
+            this.logLine('SIGINT - Exiting');
             process.exit(0);
         });
 
         // Also stop on SIGTERM
         process.on('SIGTERM', () => {
-            this.logLine('SIGTERM - Exiting..');
+            this.logLine('SIGTERM - Exiting');
             process.exit(SIGTERM);
         });
 
@@ -85,6 +88,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         // TODO: Apply active profile accordingly
 
+        this.logLine('Daemon started');
+
         // Do some work..
         while (true) {
             await new Promise(resolve => setTimeout(resolve, 5000));
@@ -92,7 +97,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     catchError(err: Error) {
-        console.log(err.name + ': ' + err.message);
+        const errorLine = err.name + ': ' + err.message;
+        this.logLine(errorLine);
         process.exit();
     }
 
@@ -132,6 +138,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      * @param text Text to log
      */
     logLine(text: string) {
+        console.log(text);
         try {
             const logPath = '/tmp/tcc/test.log';
             if (!fs.existsSync(path.dirname(logPath))) {
