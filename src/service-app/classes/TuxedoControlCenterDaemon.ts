@@ -11,6 +11,8 @@ import { TccProfile } from '../../common/models/TccProfile';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
+    static readonly CMD_RESTART_SERVICE = 'systemctl restart tccd.service';
+
     private config: ConfigHandler;
 
     private settings: TccSettings;
@@ -34,12 +36,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         if (process.argv.includes('--start')) {
+            // Start daemon as this process
             if (!await this.start()) {
                 throw Error('Couldn\'t start daemon. It is probably already running');
             } else {
                 this.logLine('Starting daemon..');
             }
         } else if (process.argv.includes('--stop')) {
+            // Signal running process to stop
             this.logLine('Stopping daemon..');
             if (await this.stop()) {
                 this.logLine('Daemon is stopped');
@@ -49,10 +53,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
             // If new config is specified, replace standard config with new config
-            this.saveNewConfig<TccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
-            this.saveNewConfig<TccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            // Restart service
-            child_process.exec('systemctl restart tccd.service');
+            const settingsSaved = this.saveNewConfig<TccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
+            const profilesSaved = this.saveNewConfig<TccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
+            // If something changed, restart running service
+            if (settingsSaved || profilesSaved) {
+                child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);
+            }
             process.exit(0);
         } else {
             throw Error('No argument specified');
@@ -102,23 +108,43 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         process.exit();
     }
 
-    private saveNewConfig<T>(optionString: string, configPath: string, writeFileMode: number) {
+    /**
+     * Save config path from argument to the specified target location, basically copying the config.
+     *
+     * @param optionString      Command line option string that preced the source path
+     * @param targetConfigPath  Path to copy config to
+     * @param writeFileMode     Access rights for target file
+     *
+     * @returns True if file is correctly parsed and written, false otherwise
+     */
+    private saveNewConfig<T>(optionString: string, targetConfigPath: string, writeFileMode: number) {
         const newConfigPath = this.getPathArgument(optionString);
         if (newConfigPath !== '') {
             try {
                 const newConfig: T = this.config.readConfig<T>(newConfigPath);
                 try {
-                    this.config.writeConfig<T>(newConfig, configPath, { mode: writeFileMode });
+                    this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
                 } catch (err) {
                     this.logLine('Error on write option ' + optionString);
+                    return false;
                 }
             } catch (err) {
                 this.logLine('Error on read option ' + optionString + ' with path: ' + newConfigPath);
-                throw err;
+                return false;
             }
+            return true;
+        } else {
+            return false;
         }
     }
 
+    /**
+     * Parse the command line arguments looking for a string and fetching the next argument
+     *
+     * @param optionString  Command line option string that preced the argument with
+     *                      the sought data
+     * @returns The argument following the argument matching optionString
+     */
     private getPathArgument(optionString: string): string {
         const newConfigIndex = process.argv.indexOf(optionString);
         const lastIndex = (process.argv.length - 1);
