@@ -94,6 +94,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } catch (err) {
             this.profiles = [];
             this.logLine('Failed to read profiles: ' + this.config.pathProfiles);
+            try {
+                this.config.writeProfiles([]);
+            } catch (err) {
+                this.logLine('Failed to write default profiles: ' + this.config.pathProfiles);
+            }
         }
 
         // TODO: Apply active profile accordingly
