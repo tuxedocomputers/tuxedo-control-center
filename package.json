@@ -23,7 +23,8 @@
     "tests": "npm run test-common && npm run test-ng && npm run test-ng-e2e",
     "test-common": "ts-node node_modules/jasmine/bin/jasmine --config=./src/common/jasmine.json",
     "test-ng": "ng test --watch=false",
-    "test-ng-e2e": "ng e2e"
+    "test-ng-e2e": "ng e2e",
+    "install-build-dep": "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - && sudo apt install nodejs autoconf automake build-essential gcc g++ make rpm"
   },
   "private": true,
   "dependencies": {
