@@ -6,8 +6,8 @@ import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { ITccSettings, defaultSettings } from '../../common/models/TccSettings';
+import { ITccProfile, defaultProfiles } from '../../common/models/TccProfile';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
@@ -77,20 +77,24 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             process.exit(SIGTERM);
         });
 
-        // TODO: Make sure there is a default config
-
-        /*try {
+        try {
             this.settings = this.config.readSettings();
         } catch (err) {
-            this.logLine('Failed to read settings');
-            throw Error('Failed to read settings');
+            this.logLine('Failed to read settings: ' + this.config.pathSettings);
+            this.settings = defaultSettings;
+            try {
+                this.config.writeSettings(this.settings);
+            } catch (err) {
+                this.logLine('Failed to write default settings: ' + this.config.pathSettings);
+            }
         }
+
         try {
             this.profiles = this.config.readProfiles();
         } catch (err) {
-            this.logLine('Failed to read profiles');
-            throw Error('Failed to read profiles');
-        }*/
+            this.profiles = [];
+            this.logLine('Failed to read profiles: ' + this.config.pathProfiles);
+        }
 
         // TODO: Apply active profile accordingly
 
