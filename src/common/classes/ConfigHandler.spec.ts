@@ -105,4 +105,11 @@ describe('ConfigHandler file IO', () => {
             }
         }
     });
+
+    it('should not crash when values are missing', () => {
+        mock({'/etc/test1/test2/settings.conf': '{}'});
+        let settings: ITccSettings;
+        expect(() => { settings = config.readSettings('/etc/test1/test2/settings.conf'); }).not.toThrow();
+        expect(settings.activeProfileName).toBeUndefined();
+    });
 });
