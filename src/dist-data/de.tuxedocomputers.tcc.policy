@@ -9,13 +9,13 @@
     <action id="de.tuxedocomputers.tuxedocc">
         <message>Authentication is required to run the TUXEDO Control Center</message>
         <message xml:lang="de">Authentifikation wird zum starten des TUXEDO Control Centers, benötigt</message>
-        <icon_name>/opt/tuxedocc/resources/output/dist/data/256x256.png</icon_name>
+        <icon_name>/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedocc_256.png</icon_name>
         <defaults>
             <allow_any>auth_admin</allow_any>
             <allow_inactive>auth_admin</allow_inactive>
             <allow_active>auth_admin</allow_active>
         </defaults>
-        <annotate key="org.freedesktop.policykit.exec.path">/opt/tuxedocc/tuxedocc</annotate>
+        <annotate key="org.freedesktop.policykit.exec.path">/opt/tuxedo-control-center/tuxedo-control-center</annotate>
         <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
     </action>
 </policyconfig>

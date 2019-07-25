@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "./dist/tuxedo-control-center/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -13,7 +13,7 @@
     "build": "npm run clean && tsc -p ./src/e-app && npm run build-service && ng build && npm run copy-files",
     "build-prod": "npm run clean && tsc -p ./src/e-app && ng build --prod && npm run copy-files",
     "build-service": "tsc -p ./src/service-app && npm run bundle-service",
-    "bundle-service": "pkg --target node12-linux-x64 --out-path ./dist/tuxedo-control-center/data/service ./dist/tuxedo-control-center/service-app/service-app/main.js",
+    "bundle-service": "pkg --target node12-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/service-app/main.js",
     "copy-files": "npm run copy-package-json && npm run copy-dist-files",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",

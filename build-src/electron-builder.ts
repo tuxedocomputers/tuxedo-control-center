@@ -34,7 +34,7 @@ process.argv.forEach((parameter, index, array) => {
 async function buildDeb(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
-        icon: distSrc + '/data/256x256.png',
+        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
@@ -42,10 +42,11 @@ async function buildDeb(): Promise<void> {
             distSrc + '/**/*'
         ],
         extraResources: [
-            distSrc + '/data/256x256.png',
-            distSrc + '/data/tuxedocc.desktop',
-            distSrc + '/data/de.tuxedocomputers.tuxedocc.policy',
-            distSrc + '/data/tuxedocc-pkexec'
+            distSrc + '/data/service/tccd',
+            distSrc + '/data/dist-data/tuxedocc_256.png',
+            distSrc + '/data/dist-data/tuxedocc.desktop',
+            distSrc + '/data/dist-data/de.tuxedocomputers.tuxedocc.policy',
+            distSrc + '/data/dist-data/tuxedocc-pkexec'
         ],
         linux: {
             target: [
@@ -87,7 +88,7 @@ async function buildDeb(): Promise<void> {
 async function buildSuseRpm(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
-        icon: distSrc + '/data/256x256.png',
+        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
@@ -95,10 +96,11 @@ async function buildSuseRpm(): Promise<void> {
             distSrc + '/**/*'
         ],
         extraResources: [
-            distSrc + '/data/256x256.png',
-            distSrc + '/data/tuxedocc.desktop',
-            distSrc + '/data/de.tuxedocomputers.tuxedocc.policy',
-            distSrc + '/data/tuxedocc-pkexec'
+            distSrc + '/data/service/tccd',
+            distSrc + '/data/dist-data/tuxedocc_256.png',
+            distSrc + '/data/dist-data/tuxedocc.desktop',
+            distSrc + '/data/dist-data/de.tuxedocomputers.tuxedocc.policy',
+            distSrc + '/data/dist-data/tuxedocc-pkexec'
         ],
         linux: {
             target: [
@@ -140,7 +142,7 @@ async function buildSuseRpm(): Promise<void> {
 async function buildAppImage(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
-        icon: distSrc + '/data/256x256.png',
+        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
@@ -148,10 +150,11 @@ async function buildAppImage(): Promise<void> {
             distSrc + '/**/*'
         ],
         extraResources: [
-            distSrc + '/data/256x256.png',
-            distSrc + '/data/tuxedocc.desktop',
-            distSrc + '/data/de.tuxedocomputers.tuxedocc.policy',
-            distSrc + '/data/tuxedocc-pkexec'
+            distSrc + '/data/service/tccd',
+            distSrc + '/data/dist-data/tuxedocc_256.png',
+            distSrc + '/data/dist-data/tuxedocc.desktop',
+            distSrc + '/data/dist-data/de.tuxedocomputers.tuxedocc.policy',
+            distSrc + '/data/dist-data/tuxedocc-pkexec'
         ],
         linux: {
             target: [
