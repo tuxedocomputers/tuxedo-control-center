@@ -43,9 +43,10 @@ async function buildDeb(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
+            distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tuxedocc_256.png',
             distSrc + '/data/dist-data/tuxedocc.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tuxedocc.policy',
+            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
             distSrc + '/data/dist-data/tuxedocc-pkexec'
         ],
         linux: {
@@ -56,9 +57,6 @@ async function buildDeb(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         deb: {
-            depends: [
-                'xvfb'
-            ],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
@@ -97,9 +95,10 @@ async function buildSuseRpm(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
+            distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tuxedocc_256.png',
             distSrc + '/data/dist-data/tuxedocc.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tuxedocc.policy',
+            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
             distSrc + '/data/dist-data/tuxedocc-pkexec'
         ],
         linux: {
@@ -110,9 +109,6 @@ async function buildSuseRpm(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         rpm: {
-            depends: [
-                'xorg-x11-Xvfb'
-            ],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh'
@@ -151,9 +147,10 @@ async function buildAppImage(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
+            distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tuxedocc_256.png',
             distSrc + '/data/dist-data/tuxedocc.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tuxedocc.policy',
+            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
             distSrc + '/data/dist-data/tuxedocc-pkexec'
         ],
         linux: {

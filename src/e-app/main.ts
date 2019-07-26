@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import * as os from 'os';
+import * as path from 'path';
 
 let win: Electron.BrowserWindow;
 
@@ -12,7 +12,9 @@ function createWindow() {
             nodeIntegration: true
         },
     });
-    win.loadFile('./ng-app/index.html');
+
+    const indexPath = path.join(__dirname, '..', 'ng-app', 'index.html');
+    win.loadFile(indexPath);
     win.on('closed', () => {
         win = null;
     });
