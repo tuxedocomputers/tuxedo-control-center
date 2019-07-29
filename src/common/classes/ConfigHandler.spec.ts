@@ -4,8 +4,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { ConfigHandler } from './ConfigHandler';
-import { ITccSettings } from '../models/TccSettings';
-import { ITccProfile } from '../models/TccProfile';
+import { ITccSettings, defaultSettings} from '../models/TccSettings';
+import { ITccProfile, defaultProfiles } from '../models/TccProfile';
 import { TccPaths } from './TccPaths';
 
 describe('ConfigHandler file IO', () => {
@@ -30,9 +30,8 @@ describe('ConfigHandler file IO', () => {
     });
 
     it('should write to a settings file with mode 644', () => {
-        const settings: ITccSettings = {
-            activeProfileName: 'some profile'
-        };
+        const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
+        settings.activeProfileName = 'some profile';
         expect(() => { config.writeSettings(settings, '/etc/test.conf'); }).not.toThrow();
         expect(fs.existsSync('/etc/test.conf')).toBe(true);
         // tslint:disable-next-line: no-bitwise
@@ -40,9 +39,8 @@ describe('ConfigHandler file IO', () => {
     });
 
     it('should create folders with mode 755 if they do not exist', () => {
-        const settings: ITccSettings = {
-            activeProfileName: 'some profile'
-        };
+        const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
+        settings.activeProfileName = 'some profile';
         expect(() => { config.writeSettings(settings, '/etc/test/test.conf'); }).not.toThrow();
         expect(fs.existsSync('/etc/test')).toBe(true);
         // tslint:disable-next-line: no-bitwise
@@ -54,9 +52,8 @@ describe('ConfigHandler file IO', () => {
     });
 
     it('should read settings from a written file', () => {
-        const settings: ITccSettings = {
-            activeProfileName: 'profile1'
-        };
+        const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
+        settings.activeProfileName = 'profile1';
         expect(() => { config.writeSettings(settings); }).not.toThrow();
 
         let readSettings: ITccSettings;
@@ -74,16 +71,15 @@ describe('ConfigHandler file IO', () => {
 
     it('should write and read multiple profiles', () => {
         const profiles: ITccProfile[] = new Array();
-        const profile1: ITccProfile = {
-            name: 'some profile',
-            keyboardBrightness: 50,
-            screenBrightness: 12
-        };
-        const profile2: ITccProfile = {
-            name: 'some other profile',
-            keyboardBrightness: 30,
-            screenBrightness: 100,
-        };
+        const profile1: ITccProfile = JSON.parse(JSON.stringify(defaultProfiles[0]));
+        profile1.name = 'some profile';
+        profile1.keyboardBrightness = 50;
+        profile1.screenBrightness = 12;
+
+        const profile2: ITccProfile = JSON.parse(JSON.stringify(defaultProfiles[0]));
+        profile2.name = 'some other profile';
+        profile2.keyboardBrightness = 30;
+        profile2.screenBrightness = 100;
 
         profiles.push(profile1);
         profiles.push(profile2);
