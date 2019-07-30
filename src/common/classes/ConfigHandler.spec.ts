@@ -73,13 +73,11 @@ describe('ConfigHandler file IO', () => {
         const profiles: ITccProfile[] = new Array();
         const profile1: ITccProfile = JSON.parse(JSON.stringify(defaultProfiles[0]));
         profile1.name = 'some profile';
-        profile1.keyboardBrightness = 50;
-        profile1.screenBrightness = 12;
+        profile1.display.brightness = 12;
 
         const profile2: ITccProfile = JSON.parse(JSON.stringify(defaultProfiles[0]));
         profile2.name = 'some other profile';
-        profile2.keyboardBrightness = 30;
-        profile2.screenBrightness = 100;
+        profile2.display.brightness = 100;
 
         profiles.push(profile1);
         profiles.push(profile2);
@@ -92,12 +90,10 @@ describe('ConfigHandler file IO', () => {
         for (const profile of readProfiles) {
             expect(['some profile', 'some other profile'].includes(profile.name)).toBe(true);
             if (profile.name === 'some profile') {
-                expect(profile.keyboardBrightness).toBe(50);
-                expect(profile.screenBrightness).toBe(12);
+                expect(profile.display.brightness).toBe(12);
             }
             if (profile.name === 'some other profile') {
-                expect(profile.keyboardBrightness).toBe(30);
-                expect(profile.screenBrightness).toBe(100);
+                expect(profile.display.brightness).toBe(100);
             }
         }
     });

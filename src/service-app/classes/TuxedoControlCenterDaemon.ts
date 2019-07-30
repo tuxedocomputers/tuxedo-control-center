@@ -8,15 +8,21 @@ import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccSettings, defaultSettings } from '../../common/models/TccSettings';
 import { ITccProfile, defaultProfiles } from '../../common/models/TccProfile';
+import { DaemonWorker } from './DaemonWorker';
+import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
     static readonly CMD_RESTART_SERVICE = 'systemctl restart tccd.service';
+    static readonly CMD_START_SERVICE = 'systemctl start tccd.service';
+    static readonly CMD_STOP_SERVICE = 'systemctl stop tccd.service';
 
     private config: ConfigHandler;
 
-    private settings: ITccSettings;
-    private profiles: ITccProfile[];
+    public settings: ITccSettings;
+    public profiles: ITccProfile[];
+
+    private workers: DaemonWorker[] = [];
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -68,14 +74,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // SIGINT is the normal exit signal that the service gets from itself
         process.on('SIGINT', () => {
             this.logLine('SIGINT - Exiting');
-            this.cleanupOnExit();
+            this.onExit();
             process.exit(0);
         });
 
         // Also stop on SIGTERM
         process.on('SIGTERM', () => {
             this.logLine('SIGTERM - Exiting');
-            this.cleanupOnExit();
+            this.onExit();
             process.exit(SIGTERM);
         });
 
@@ -105,14 +111,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         }
 
-        // TODO: Apply active profile accordingly
-
         this.logLine('Daemon started');
 
-        // Do some work..
-        while (true) {
-            await new Promise(resolve => setTimeout(resolve, 5000));
-        }
+        this.workers.push(new DisplayBacklightWorker(this));
+
+        this.workers.forEach((worker) => {
+            worker.onStart();
+            worker.timer = setInterval(worker.onWork, worker.timeout);
+        });
 
         // this.cleanupOnExit();
     }
@@ -120,10 +126,27 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     catchError(err: Error) {
         const errorLine = err.name + ': ' + err.message;
         this.logLine(errorLine);
+        this.onExit();
         process.exit();
     }
 
-    cleanupOnExit() {
+    onExit() {
+        this.workers.forEach((worker) => {
+            clearInterval(worker.timer);
+        });
+        this.workers.forEach((worker) => {
+            worker.onExit();
+        });
+        this.config.writeSettings(this.settings);
+        this.config.writeProfiles(this.profiles);
+    }
+
+    getAllProfiles() {
+        return defaultProfiles.concat(this.profiles);
+    }
+
+    getCurrentProfile() {
+        return this.getAllProfiles().find((profile) => profile.name === this.settings.activeProfileName);
     }
 
     /**
