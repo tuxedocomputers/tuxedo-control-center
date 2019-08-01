@@ -15,7 +15,7 @@ import { IDeviceProperty } from '../models/IDeviceProperty';
  * The implemented types can then be used i.e as properties of
  * a class controlling/reading a device.
  */
-export abstract class SysDevIO<T> implements IDeviceProperty {
+export abstract class SysDevPropertyIO<T> implements IDeviceProperty {
 
     constructor(readonly readPath: string, readonly writePath: string = readPath) {}
 

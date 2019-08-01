@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { SysDevPropertyInteger } from './SysDevPropertyInteger';
+import { SysDevPropertyInteger } from './SysDevProperties';
 import { SysDevController } from './SysDevController';
 
 export class DisplayBacklightController extends SysDevController {

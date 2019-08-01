@@ -2,7 +2,7 @@ import 'jasmine';
 const mock = require('mock-fs');
 import * as fs from 'fs';
 
-import { SysDevPropertyString } from './SysDevPropertyString';
+import { SysDevPropertyString } from './SysDevProperties';
 
 describe('SysDevPropertyString', () => {
 
