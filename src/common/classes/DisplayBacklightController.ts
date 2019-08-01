@@ -1,9 +1,12 @@
 import * as path from 'path';
 import { SysDevPropertyInteger } from './SysDevPropertyInteger';
+import { SysDevController } from './SysDevController';
 
-export class DisplayBacklightController {
+export class DisplayBacklightController extends SysDevController {
 
-    constructor(readonly basePath: string) {}
+    constructor(public readonly basePath: string) {
+        super();
+    }
 
     readonly brightness = new SysDevPropertyInteger(
         path.join(this.basePath, 'actual_brightness'),

@@ -19,12 +19,3 @@ export function getFiles(source) {
         return [];
     }
 }
-
-export function getAllFiles(source: string) {
-    try {
-        return fs.readdirSync(source, { withFileTypes: true })
-            .map(dirent => dirent.name);
-    } catch (err) {
-        return [];
-    }
-}
