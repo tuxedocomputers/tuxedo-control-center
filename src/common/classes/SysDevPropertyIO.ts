@@ -55,4 +55,19 @@ export abstract class SysDevPropertyIO<T> implements IDeviceProperty {
             throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath);
         }
     }
+
+    /**
+     * Checks if read/write paths exist
+     */
+    public isAvailable(): boolean {
+        try {
+            if (fs.existsSync(this.readPath) && fs.existsSync(this.writePath)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) {
+            return false;
+        }
+    }
 }
