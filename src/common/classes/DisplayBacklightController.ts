@@ -1,16 +1,16 @@
 import * as path from 'path';
-import { SysDevPropertyInteger } from './SysDevProperties';
-import { SysDevController } from './SysDevController';
+import { SysFsPropertyInteger } from './SysFsProperties';
+import { SysFsController } from './SysFsController';
 
-export class DisplayBacklightController extends SysDevController {
+export class DisplayBacklightController extends SysFsController {
 
     constructor(public readonly basePath: string) {
         super();
     }
 
-    readonly brightness = new SysDevPropertyInteger(
+    readonly brightness = new SysFsPropertyInteger(
         path.join(this.basePath, 'actual_brightness'),
         path.join(this.basePath, 'brightness'));
 
-    readonly maxBrightness = new SysDevPropertyInteger(path.join(this.basePath, 'max_brightness'));
+    readonly maxBrightness = new SysFsPropertyInteger(path.join(this.basePath, 'max_brightness'));
 }

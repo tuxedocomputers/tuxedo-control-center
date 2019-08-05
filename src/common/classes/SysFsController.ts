@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-export abstract class SysDevController {
+export abstract class SysFsController {
 
     public static getDeviceList(sourceDir: string) {
         try {

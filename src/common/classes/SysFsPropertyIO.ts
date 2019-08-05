@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { IDeviceProperty } from '../models/IDeviceProperty';
+import { ISysFsProperty } from '../models/IDeviceProperty';
 
 /**
  * Base (abstract) IO class for communicating with devices in /sys
@@ -15,7 +15,7 @@ import { IDeviceProperty } from '../models/IDeviceProperty';
  * The implemented types can then be used i.e as properties of
  * a class controlling/reading a device.
  */
-export abstract class SysDevPropertyIO<T> implements IDeviceProperty {
+export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
 
     constructor(readonly readPath: string, readonly writePath: string = readPath) {}
 

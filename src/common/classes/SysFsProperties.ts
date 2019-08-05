@@ -1,6 +1,6 @@
-import { SysDevPropertyIO } from './SysDevPropertyIO';
+import { SysFsPropertyIO } from './SysFsPropertyIO';
 
-export class SysDevPropertyString extends SysDevPropertyIO<string> {
+export class SysFsPropertyString extends SysFsPropertyIO<string> {
 
     convertStringToType(value: string): string {
         return value;
@@ -11,7 +11,7 @@ export class SysDevPropertyString extends SysDevPropertyIO<string> {
     }
 }
 
-export class SysDevPropertyStringList extends SysDevPropertyIO<string[]> {
+export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
 
     convertStringToType(value: string): string[] {
         if (value.trim() === '') {
@@ -30,7 +30,7 @@ export class SysDevPropertyStringList extends SysDevPropertyIO<string[]> {
     }
 }
 
-export class SysDevPropertyInteger extends SysDevPropertyIO<number> {
+export class SysFsPropertyInteger extends SysFsPropertyIO<number> {
 
     convertStringToType(value: string): number {
         return parseInt(value, 10);
@@ -41,7 +41,7 @@ export class SysDevPropertyInteger extends SysDevPropertyIO<number> {
     }
 }
 
-export class SysDevPropertyBoolean extends SysDevPropertyIO<boolean> {
+export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
 
     convertStringToType(value: string): boolean {
         return parseInt(value, 10) === 1;
@@ -56,7 +56,7 @@ export class SysDevPropertyBoolean extends SysDevPropertyIO<boolean> {
     }
 }
 
-export class SysDevPropertyNumList extends SysDevPropertyIO<number[]> {
+export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
 
     convertStringToType(value: string): number[] {
         const resultArray: number[] = [];

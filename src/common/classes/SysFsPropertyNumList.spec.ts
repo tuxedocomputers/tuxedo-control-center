@@ -2,11 +2,11 @@ import 'jasmine';
 const mock = require('mock-fs');
 import * as fs from 'fs';
 
-import { SysDevPropertyNumList } from './SysDevProperties';
+import { SysFsPropertyNumList } from './SysFsProperties';
 
 describe('SysDevPropertyStringList', () => {
 
-    const dev = new SysDevPropertyNumList('/sys/devices/system/cpu/online');
+    const dev = new SysFsPropertyNumList('/sys/devices/system/cpu/online');
 
     // Mock file structure in memory
     beforeEach(() => {

@@ -2,11 +2,11 @@ import 'jasmine';
 const mock = require('mock-fs');
 import * as fs from 'fs';
 
-import { SysDevPropertyInteger } from './SysDevProperties';
+import { SysFsPropertyInteger } from './SysFsProperties';
 
 describe('SysDevPropertyInteger', () => {
 
-    const dev = new SysDevPropertyInteger(
+    const dev = new SysFsPropertyInteger(
         '/sys/class/backlight/intel_backlight/actual_brightness',
         '/sys/class/backlight/intel_backlight/brightness'
     );

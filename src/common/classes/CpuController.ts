@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { LogicalCpuController } from './LogicalCpuController';
-import { SysDevPropertyInteger, SysDevPropertyNumList } from './SysDevProperties';
+import { SysFsPropertyInteger, SysFsPropertyNumList } from './SysFsProperties';
 
 export class CpuController {
 
@@ -29,10 +29,10 @@ export class CpuController {
 
     public readonly cores: LogicalCpuController[];
 
-    public readonly kernelMax = new SysDevPropertyInteger(path.join(this.basePath, 'kernel_max'));
-    public readonly offline = new SysDevPropertyNumList(path.join(this.basePath, 'offline'));
-    public readonly online = new SysDevPropertyNumList(path.join(this.basePath, 'online'));
-    public readonly possible = new SysDevPropertyNumList(path.join(this.basePath, 'possible'));
-    public readonly present = new SysDevPropertyNumList(path.join(this.basePath, 'present'));
+    public readonly kernelMax = new SysFsPropertyInteger(path.join(this.basePath, 'kernel_max'));
+    public readonly offline = new SysFsPropertyNumList(path.join(this.basePath, 'offline'));
+    public readonly online = new SysFsPropertyNumList(path.join(this.basePath, 'online'));
+    public readonly possible = new SysFsPropertyNumList(path.join(this.basePath, 'possible'));
+    public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
 
 }

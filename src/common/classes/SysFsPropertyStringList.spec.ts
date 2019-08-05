@@ -2,11 +2,11 @@ import 'jasmine';
 const mock = require('mock-fs');
 import * as fs from 'fs';
 
-import { SysDevPropertyStringList } from './SysDevProperties';
+import { SysFsPropertyStringList } from './SysFsProperties';
 
 describe('SysDevPropertyStringList', () => {
 
-    const dev = new SysDevPropertyStringList('/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors');
+    const dev = new SysFsPropertyStringList('/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors');
 
     // Mock file structure in memory
     beforeEach(() => {

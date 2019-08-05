@@ -2,11 +2,11 @@ import 'jasmine';
 const mock = require('mock-fs');
 import * as fs from 'fs';
 
-import { SysDevPropertyString } from './SysDevProperties';
+import { SysFsPropertyString } from './SysFsProperties';
 
 describe('SysDevPropertyString', () => {
 
-    const dev = new SysDevPropertyString('/sys/class/backlight/intel_backlight/type');
+    const dev = new SysFsPropertyString('/sys/class/backlight/intel_backlight/type');
 
     // Mock file structure in memory
     beforeEach(() => {
