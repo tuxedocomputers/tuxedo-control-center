@@ -11,7 +11,8 @@ interface ITccProfileDisplay {
 
 interface ITccProfileCpu {
     onlineCores: number;
-    frequency: number;
+    scalingMinFrequency: number;
+    scalingMaxFrequency: number;
     governor: string;
     energyPerformancePreference: string;
 }
@@ -25,7 +26,8 @@ export const defaultProfiles: ITccProfile[] = [
         },
         cpu: {
             onlineCores: undefined,
-            frequency: undefined,
+            scalingMinFrequency: undefined,
+            scalingMaxFrequency: undefined,
             governor: undefined,
             energyPerformancePreference: undefined
         }
@@ -37,8 +39,9 @@ export const defaultProfiles: ITccProfile[] = [
             useBrightness: false
         },
         cpu: {
-            onlineCores: undefined,
-            frequency: 1000000,
+            onlineCores: 4,
+            scalingMinFrequency: 800000,
+            scalingMaxFrequency: 1000000,
             governor: undefined,
             energyPerformancePreference: undefined
         }

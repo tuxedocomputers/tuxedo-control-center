@@ -39,7 +39,8 @@ export class CpuController {
      *
      * @param numberOfCores Number of logical cpu cores to use
      */
-    public useCores(numberOfCores: number): void {
+    public useCores(numberOfCores?: number): void {
+        if (numberOfCores === undefined) { numberOfCores = this.cores.length; }
         if (numberOfCores === 0) { return; }
         for (let i = 1; i < this.cores.length; ++i) {
             if (i < numberOfCores) {

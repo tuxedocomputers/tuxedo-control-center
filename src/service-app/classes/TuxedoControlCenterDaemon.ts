@@ -10,6 +10,7 @@ import { ITccSettings, defaultSettings } from '../../common/models/TccSettings';
 import { ITccProfile, defaultProfiles } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
+import { CpuWorker } from './CpuWorker';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
@@ -114,13 +115,26 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.logLine('Daemon started');
 
         this.workers.push(new DisplayBacklightWorker(this));
+        this.workers.push(new CpuWorker(this));
 
         this.workers.forEach((worker) => {
-            worker.onStart();
-            worker.timer = setInterval(worker.onWork, worker.timeout);
+            // Start event for each worker
+            try {
+                worker.onStart();
+            } catch (err) {
+                this.logLine(err);
+            }
+
+            // Continuous work for each worker with individual interval
+            worker.timer = setInterval(() => {
+                try {
+                    worker.onWork();
+                } catch (err) {
+                    this.logLine(err);
+                }
+            }, worker.timeout);
         });
 
-        // this.cleanupOnExit();
     }
 
     catchError(err: Error) {
@@ -135,7 +149,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             clearInterval(worker.timer);
         });
         this.workers.forEach((worker) => {
-            worker.onExit();
+            // On exit events for each worker before exiting and saving settings
+            try {
+                worker.onExit();
+            } catch (err) {
+                this.logLine(err);
+            }
         });
         this.config.writeSettings(this.settings);
         this.config.writeProfiles(this.profiles);
