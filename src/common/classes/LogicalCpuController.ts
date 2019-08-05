@@ -24,6 +24,9 @@ export class LogicalCpuController extends SysFsController {
     readonly scalingAvailableGovernors: SysFsPropertyStringList;
     readonly scalingGovernor: SysFsPropertyString;
 
+    readonly cpuinfoMinFreq: SysFsPropertyInteger;
+    readonly cpuinfoMaxFreq: SysFsPropertyInteger;
+
 
     constructor(public readonly basePath: string, public readonly coreIndex: number) {
         super();
@@ -31,6 +34,7 @@ export class LogicalCpuController extends SysFsController {
         this.cpufreqPath = path.join(this.cpuPath, 'cpufreq');
 
         this.online = new SysFsPropertyBoolean(path.join(this.cpuPath, 'online'));
+
         this.scalingCurFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_cur_freq'));
         this.scalingMinFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_min_freq'));
         this.scalingMaxFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_max_freq'));
@@ -39,6 +43,8 @@ export class LogicalCpuController extends SysFsController {
         this.energyPerformancePreference = new SysFsPropertyString(path.join(this.cpufreqPath, 'energy_performance_preference'));
         this.scalingAvailableGovernors = new SysFsPropertyStringList(path.join(this.cpufreqPath, 'scaling_available_governors'));
         this.scalingGovernor = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_governor'));
+        this.cpuinfoMinFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_min_freq'));
+        this.cpuinfoMaxFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_max_freq'));
     }
 
 }
