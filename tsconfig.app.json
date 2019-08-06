@@ -2,7 +2,11 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "paths": {
+      "fs": [ "./src/ng-app/native/fs.js" ],
+      "path": [ "./src/ng-app/native/path.js" ],
+      "os": [ "./src/ng-app/native/os.js" ]
+    }
   },
   "include": [
     "src/**/*.ts"
