@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings } from '../models/TccSettings';
-import { ITccProfile } from '../models/TccProfile';
+import { ITccProfile, defaultProfiles } from '../models/TccProfile';
 
 export class ConfigHandler {
     public settingsFileMod: number;
@@ -55,5 +55,9 @@ export class ConfigHandler {
         } catch (err) {
             throw err;
         }
+    }
+
+    public getAllProfiles() {
+        return defaultProfiles.concat(this.readProfiles());
     }
 }
