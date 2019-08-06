@@ -17,7 +17,7 @@ export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
         if (value.trim() === '') {
             return [];
         } else {
-            return value.split(' ');
+            return value.split(' ').map((element) => element.trim());
         }
     }
 
@@ -25,6 +25,7 @@ export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
         if (value.length === 0) {
             return '';
         } else {
+            value = value.map((element) => element.trim());
             return value.join(' ');
         }
     }

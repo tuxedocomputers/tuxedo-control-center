@@ -14,7 +14,6 @@ export class SingleProcess {
                 resolve(false);
             } else {
                 const result = this.writePid(process.pid);
-                if (!result) { console.log('Failed PID write'); }
                 resolve(result);
             }
         });

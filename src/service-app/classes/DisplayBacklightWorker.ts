@@ -24,15 +24,16 @@ export class DisplayBacklightWorker extends DaemonWorker {
         // Try all possible drivers to be on the safe side, fail silently if they do not work
         this.controllers.forEach((controller) => {
             let setScreenBrightness: number;
+            const maxBrightness = controller.maxBrightness.readValue();
             try {
                 if (!currentProfile.display.useBrightness || currentProfile.display.brightness === undefined) {
-                    if (this.tccd.settings.lastBrightnessDisplay === undefined) {
-                        setScreenBrightness = controller.maxBrightness.readValue();
+                    if (this.tccd.autosave.displayBrightness === undefined) {
+                        setScreenBrightness = maxBrightness;
                     } else {
-                        setScreenBrightness = this.tccd.settings.lastBrightnessDisplay;
+                        setScreenBrightness = Math.round((this.tccd.autosave.displayBrightness * maxBrightness) / 100);
                     }
                 } else {
-                    setScreenBrightness = Math.round((currentProfile.display.brightness * controller.maxBrightness.readValue()) / 100);
+                    setScreenBrightness = Math.round((currentProfile.display.brightness * maxBrightness) / 100);
                 }
                 controller.brightness.writeValue(setScreenBrightness);
                 this.tccd.logLine('Set display brightness ' + setScreenBrightness + ' on ' + controller.basePath);
@@ -58,7 +59,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
                 this.tccd.logLine('Failed to save display brightness on exit from ' + controller.basePath);
             }
             if (value !== undefined) {
-                this.tccd.settings.lastBrightnessDisplay = Math.round((value * 100) / maxBrightness);
+                this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
             }
         });
     }

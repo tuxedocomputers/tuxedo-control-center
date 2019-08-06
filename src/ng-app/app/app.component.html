@@ -10,14 +10,19 @@
 
   <nav>
     <ul>
+      <li *ngFor="let profile of profiles">
+        <a href="#" (click)="chooseProfile(profile.name)" [ngClass]="{ 'selected': profile.name === settings.activeProfileName }">
+          {{ profile.name }}
+        </a>
+      </li>
       <li>
-        <a href="#" (click)="buttonExit()">exit</a>
+        <a href="#" (click)="buttonExit()">Exit</a>
       </li>
     </ul>
   </nav>
 
-  <main>
+  <!--main>
     <router-outlet></router-outlet>
-  </main>
+  </main-->
 
 </div>

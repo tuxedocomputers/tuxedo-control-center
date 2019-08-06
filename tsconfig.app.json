@@ -5,7 +5,9 @@
     "paths": {
       "fs": [ "./src/ng-app/native/fs.js" ],
       "path": [ "./src/ng-app/native/path.js" ],
-      "os": [ "./src/ng-app/native/os.js" ]
+      "os": [ "./src/ng-app/native/os.js" ],
+      "child_process": [ "./src/ng-app/native/child_process.js" ],
+      "crypto": [ "./src/ng-app/native/crypto.js" ]
     }
   },
   "include": [

@@ -58,6 +58,7 @@ export class CpuController {
      */
     public setGovernorScalingMaxFrequency(maxFrequency?: number): void {
         for (const core of this.cores) {
+            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             let newMaxFrequency: number;
@@ -82,6 +83,7 @@ export class CpuController {
      */
     public setGovernorScalingMinFrequency(minFrequency?: number): void {
         for (const core of this.cores) {
+            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             let newMinFrequency: number;
@@ -112,10 +114,14 @@ export class CpuController {
         }
 
         for (const core of this.cores) {
-            if (core.scalingAvailableGovernors.readValue().includes(governor)) {
+            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
+            const availableGovernors = core.scalingAvailableGovernors.readValue();
+            if (availableGovernors.includes(governor)) {
                 core.scalingGovernor.writeValue(governor);
             } else {
-                throw Error('setGovernor: choosen governor \'' + governor + '\' is not available');
+                throw Error('setGovernor: choosen governor \''
+                 + governor + '\' is not available (' + core.cpuPath
+                 + ') available are: ' + JSON.stringify(availableGovernors));
             }
         }
     }
@@ -133,6 +139,7 @@ export class CpuController {
         }
 
         for (const core of this.cores) {
+            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
             if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
                 core.energyPerformancePreference.writeValue(performancePreference);
             }

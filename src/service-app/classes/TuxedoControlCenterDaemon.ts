@@ -11,6 +11,7 @@ import { ITccProfile, defaultProfiles } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
+import { ITccAutosave, defaultAutosave } from '../../common/models/TccAutosave';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
@@ -22,12 +23,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public settings: ITccSettings;
     public profiles: ITccProfile[];
+    public autosave: ITccAutosave;
 
     private workers: DaemonWorker[] = [];
 
     constructor() {
         super(TccPaths.PID_FILE);
-        this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE);
+        this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
     }
 
     async main() {
@@ -90,7 +92,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.settings = this.config.readSettings();
         } catch (err) {
             this.logLine('Failed to read settings: ' + this.config.pathSettings);
-            this.settings = defaultSettings;
+            this.settings = JSON.parse(JSON.stringify(defaultSettings));
             try {
                 this.config.writeSettings(this.settings);
                 this.logLine('Wrote default settings: ' + this.config.pathSettings);
@@ -110,6 +112,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } catch (err) {
                 this.logLine('Failed to write default profiles: ' + this.config.pathProfiles);
             }
+        }
+
+        try {
+            this.autosave = this.config.readAutosave();
+        } catch (err) {
+            this.logLine('Failed to read autosave: ' + this.config.pathAutosave);
+            // It probably doesn't exist yet so create a structure for saving
+            this.autosave = defaultAutosave;
         }
 
         this.logLine('Daemon started');
@@ -156,8 +166,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.logLine(err);
             }
         });
-        this.config.writeSettings(this.settings);
-        this.config.writeProfiles(this.profiles);
+        this.config.writeAutosave(this.autosave);
     }
 
     getAllProfiles() {
@@ -223,7 +232,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      *
      * @param text Text to log
      */
-    logLine(text: string) {
+    public logLine(text: string) {
         console.log(text);
         try {
             const logPath = '/tmp/tcc/test.log';

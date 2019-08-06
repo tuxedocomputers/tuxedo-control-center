@@ -9,8 +9,8 @@ body {
     display: grid;
     grid-template-areas:
         "top-border top-border top-border"
-        "left-nav content content";
-    grid-template-columns: 100px auto auto;
+        "left-nav left-nav left-nav";
+    grid-template-columns: 150px auto auto;
     grid-template-rows: 50px auto;
 
     header {
@@ -67,9 +67,19 @@ body {
         ul {
             list-style-type: none;
             border: 1px;
+            margin: 0px;
+            padding: 0px;
 
-            a:hover {
-                border-color: #ed1c24;
+            li {
+                padding: 5px;
+                a {
+                    font-size: 2em;
+                    text-decoration: none;
+                    color: black;
+                }
+                a.selected {
+                    text-decoration: underline;
+                }
             }
         }
     }

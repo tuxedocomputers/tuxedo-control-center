@@ -2,21 +2,26 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings } from '../models/TccSettings';
 import { ITccProfile, defaultProfiles } from '../models/TccProfile';
+import { ITccAutosave } from '../models/TccAutosave';
 
 export class ConfigHandler {
     public settingsFileMod: number;
     public profileFileMod: number;
+    public autosaveFileMod: number;
 
     // tslint:disable-next-line: variable-name
-    constructor(private _pathSettings: string, private _pathProfiles: string) {
+    constructor(private _pathSettings: string, private _pathProfiles: string, private _pathAutosave: string) {
         this.settingsFileMod = 0o644;
         this.profileFileMod = 0o644;
+        this.autosaveFileMod = 0o644;
     }
 
     get pathSettings() { return this._pathSettings; }
     set pathSettings(filename: string) { this._pathSettings = filename; }
     get pathProfiles() { return this._pathProfiles; }
     set pathProfiles(filename: string) { this._pathProfiles = filename; }
+    get pathAutosave() { return this._pathAutosave; }
+    set pathAutosave(filename: string) { this._pathAutosave = filename; }
 
     readSettings(filePath: string = this.pathSettings): ITccSettings {
         return this.readConfig<ITccSettings>(filePath);
@@ -32,6 +37,14 @@ export class ConfigHandler {
 
     writeProfiles(profiles: ITccProfile[], filePath: string = this.pathProfiles) {
         this.writeConfig<ITccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
+    }
+
+    readAutosave(filePath: string = this.pathAutosave): ITccAutosave {
+        return this.readConfig<ITccAutosave>(filePath);
+    }
+
+    writeAutosave(autosave: ITccAutosave, filePath: string = this.pathAutosave) {
+        this.writeConfig<ITccAutosave>(autosave, filePath, { mode: this.autosaveFileMod });
     }
 
     public readConfig<T>(filename: string): T {
