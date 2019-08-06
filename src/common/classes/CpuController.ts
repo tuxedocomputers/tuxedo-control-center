@@ -37,7 +37,7 @@ export class CpuController {
     /**
      * Sets the selected number of cpu cores to be online, the rest to be offline
      *
-     * @param numberOfCores Number of logical cpu cores to use
+     * @param numberOfCores Number of logical cpu cores to use, defaults to "use all available"
      */
     public useCores(numberOfCores?: number): void {
         if (numberOfCores === undefined) { numberOfCores = this.cores.length; }
@@ -95,6 +95,46 @@ export class CpuController {
                 core.scalingMinFreq.writeValue(newMinFrequency);
             } else {
                 throw Error('setGovernorScalingMinFrequency: new frequency ' + newMinFrequency + ' is out of range');
+            }
+        }
+    }
+
+    /**
+     * Sets the scaling_governor parameter for all available logical cores
+     * if it exists in the list of available governors
+     *
+     * @param governor The chosen governor (the same will be applied to all cores),
+     *                 defaults to "don't set"
+     */
+    public setGovernor(governor?: string) {
+        if (governor === undefined) {
+            return;
+        }
+
+        for (const core of this.cores) {
+            if (core.scalingAvailableGovernors.readValue().includes(governor)) {
+                core.scalingGovernor.writeValue(governor);
+            } else {
+                throw Error('setGovernor: choosen governor \'' + governor + '\' is not available');
+            }
+        }
+    }
+
+    /**
+     * Sets the energy_performance_preference parameter for all available logical cores
+     * if it exists in the list of available energy performance preference options
+     *
+     * @param performancePreference The chosen energy performance preference (the same
+     *                              will be applied to all cores), defaults to "don't set"
+     */
+    public setEnergyPerformancePreference(performancePreference?: string) {
+        if (performancePreference === undefined) {
+            return;
+        }
+
+        for (const core of this.cores) {
+            if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
+                core.energyPerformancePreference.writeValue(performancePreference);
             }
         }
     }

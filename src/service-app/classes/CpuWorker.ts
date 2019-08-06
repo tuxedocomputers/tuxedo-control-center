@@ -20,15 +20,23 @@ export class CpuWorker extends DaemonWorker {
     public onWork() {}
     public onExit() {}
 
+    /**
+     * Applies the cpu part of a profile by writing to the sysfs interface
+     *
+     * @param profile   Profile that contains a 'cpu' key of type ITccProfileCpu.
+     *                  Undefined values are interpreted as "use default".
+     */
     private applyCpuProfile(profile: ITccProfile) {
         this.cpuCtrl.useCores(profile.cpu.onlineCores);
-        // Reset min/max frequency before applying to avoid min being higher than max
-        // also check that min is not higher than max for the profile
+        // Reset min/max frequency to cpuinfo min/max before applying to avoid min being higher than max
+        this.cpuCtrl.setGovernorScalingMinFrequency();
+        this.cpuCtrl.setGovernorScalingMaxFrequency();
+        // Check that min is not higher than max for the profile
         if (profile.cpu.scalingMinFrequency <= profile.cpu.scalingMaxFrequency) {
-            this.cpuCtrl.setGovernorScalingMinFrequency();
-            this.cpuCtrl.setGovernorScalingMaxFrequency();
             this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
             this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
         }
+        this.cpuCtrl.setGovernor(profile.cpu.governor);
+        this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
     }
 }
