@@ -16,24 +16,24 @@
                 "${workspaceRoot}/dist/tuxedo-control-center/e-app/main.js"
             ],
             "sourceMaps": true
-          },
-          {
-              "name": "Debug render process",
-              "type": "chrome",
-              "request": "launch",
-              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-              "windows": {
-                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
-              },
-              "runtimeArgs": [
-                  "./dist/tuxedo-control-center"
-              ],
-              "webRoot": "${workspaceRoot}/dist",
-              "sourceMaps": true,
-              "sourceMapPathOverrides": {
-                  "webpack:///./*": "${workspaceRoot}/*"
-              },
-              "internalConsoleOptions": "openOnSessionStart"
-          }
+        },
+        {
+            "name": "Debug render process",
+            "type": "chrome",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "runtimeArgs": [
+                "${workspaceRoot}/dist/tuxedo-control-center"
+            ],
+            "webRoot": "${workspaceRoot}/dist",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///./*": "${workspaceRoot}/*"
+            },
+            "internalConsoleOptions": "openOnSessionStart"
+        }
     ]
 }

@@ -237,7 +237,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         try {
             const logPath = '/tmp/tcc/test.log';
             if (!fs.existsSync(path.dirname(logPath))) {
-                fs.mkdirSync(path.dirname(logPath), { mode: 0o755, recursive: true });
+                fs.mkdirSync(path.dirname(logPath), { recursive: true });
             }
             const date: Date = new Date();
             const lineInfo: string = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' (' + process.pid + '): ';

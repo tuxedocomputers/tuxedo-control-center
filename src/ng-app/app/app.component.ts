@@ -5,6 +5,7 @@ import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ITccSettings } from '../../common/models/TccSettings';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -31,13 +32,20 @@ export class AppComponent {
   }
 
   chooseProfile(profileName: string) {
+    // Copy existing current settings and set name of new profile
     const newSettings: ITccSettings = JSON.parse(JSON.stringify(this.settings));
+
     newSettings.activeProfileName = profileName;
-    const tmpPath = '/tmp/tcc/tmpsettings';
-    this.config.writeSettings(newSettings, tmpPath);
+    const tmpSettingsPath = '/tmp/tmptccsettings';
+    this.config.writeSettings(newSettings, tmpSettingsPath);
+    let tccdExec: string;
+    if (environment.production) {
+      tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+      tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+    }
     const result = this.electron.ipcRenderer.sendSync(
-      'sudo-exec',
-      'pkexec tccd --new_settings ' + tmpPath
+      'sudo-exec', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
     );
     this.settings = this.config.readSettings();
   }
