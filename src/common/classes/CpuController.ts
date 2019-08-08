@@ -19,7 +19,7 @@ export class CpuController {
             coreIndexToAdd.sort((a, b) => a - b );
             for (const coreIndex of coreIndexToAdd) {
                 const newCore = new LogicalCpuController(this.basePath, coreIndex);
-                if (newCore.online.isAvailable()) {
+                if (newCore.scalingCurFreq.isAvailable()) {
                     this.cores.push(newCore);
                 }
             }
@@ -58,7 +58,7 @@ export class CpuController {
      */
     public setGovernorScalingMaxFrequency(maxFrequency?: number): void {
         for (const core of this.cores) {
-            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
+            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             let newMaxFrequency: number;
@@ -83,7 +83,7 @@ export class CpuController {
      */
     public setGovernorScalingMinFrequency(minFrequency?: number): void {
         for (const core of this.cores) {
-            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
+            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             let newMinFrequency: number;
@@ -114,7 +114,7 @@ export class CpuController {
         }
 
         for (const core of this.cores) {
-            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
+            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             const availableGovernors = core.scalingAvailableGovernors.readValue();
             if (availableGovernors.includes(governor)) {
                 core.scalingGovernor.writeValue(governor);
@@ -139,7 +139,7 @@ export class CpuController {
         }
 
         for (const core of this.cores) {
-            if (!core.online.readValue() && core.coreIndex !== 0) { return; }
+            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
                 core.energyPerformancePreference.writeValue(performancePreference);
             }
