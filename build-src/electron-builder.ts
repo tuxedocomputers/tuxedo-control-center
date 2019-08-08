@@ -57,6 +57,7 @@ async function buildDeb(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         deb: {
+            depends: [''],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',

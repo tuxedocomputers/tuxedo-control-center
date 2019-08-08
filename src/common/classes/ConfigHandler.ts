@@ -1,13 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ITccSettings } from '../models/TccSettings';
+import { ITccSettings, defaultSettings } from '../models/TccSettings';
 import { ITccProfile, defaultProfiles } from '../models/TccProfile';
-import { ITccAutosave } from '../models/TccAutosave';
+import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 
 export class ConfigHandler {
     public settingsFileMod: number;
     public profileFileMod: number;
     public autosaveFileMod: number;
+
+    private loadedCustomProfiles: ITccProfile[];
+    private loadedSettings: ITccSettings;
 
     // tslint:disable-next-line: variable-name
     constructor(private _pathSettings: string, private _pathProfiles: string, private _pathAutosave: string) {
@@ -70,7 +73,43 @@ export class ConfigHandler {
         }
     }
 
-    public getAllProfiles() {
-        return defaultProfiles.concat(this.readProfiles());
+    public copyConfig<T>(config: T): T {
+        return JSON.parse(JSON.stringify(config));
+    }
+
+    public getDefaultProfiles(): ITccProfile[] {
+        return this.copyConfig<ITccProfile[]>(defaultProfiles);
+    }
+
+    public getDefaultCustomProfiles(): ITccProfile[] {
+        return [];
+    }
+
+    public getDefaultSettings(): ITccSettings {
+        return this.copyConfig<ITccSettings>(defaultSettings);
+    }
+
+    public getDefaultAutosave(): ITccAutosave {
+        return this.copyConfig<ITccAutosave>(defaultAutosave);
+    }
+
+    public getCustomProfilesNoThrow(): ITccProfile[] {
+        try {
+            return this.readProfiles();
+        } catch (err) {
+            return this.getDefaultCustomProfiles();
+        }
+    }
+
+    public getAllProfilesNoThrow(): ITccProfile[] {
+        return this.getDefaultProfiles().concat(this.getCustomProfilesNoThrow());
+    }
+
+    public getSettingsNoThrow(): ITccSettings {
+        try {
+            return this.readSettings();
+        } catch (err) {
+            return this.getDefaultSettings();
+        }
     }
 }

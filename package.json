@@ -11,7 +11,7 @@
   "scripts": {
     "start": "electron ./dist/tuxedo-control-center",
     "build": "npm run clean && tsc -p ./src/e-app && npm run build-service && ng build && npm run copy-files",
-    "build-prod": "npm run clean && tsc -p ./src/e-app && ng build --prod && npm run copy-files",
+    "build-prod": "npm run clean && tsc -p ./src/e-app && npm run build-service && ng build --prod && npm run copy-files",
     "build-service": "tsc -p ./src/service-app && npm run bundle-service",
     "bundle-service": "pkg --target node12-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/service-app/main.js",
     "copy-files": "npm run copy-package-json && npm run copy-dist-files",

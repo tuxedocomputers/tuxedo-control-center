@@ -6,12 +6,12 @@ import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { ITccSettings, defaultSettings } from '../../common/models/TccSettings';
-import { ITccProfile, defaultProfiles } from '../../common/models/TccProfile';
+import { ITccSettings } from '../../common/models/TccSettings';
+import { ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
-import { ITccAutosave, defaultAutosave } from '../../common/models/TccAutosave';
+import { ITccAutosave } from '../../common/models/TccAutosave';
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
@@ -22,10 +22,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private config: ConfigHandler;
 
     public settings: ITccSettings;
-    public profiles: ITccProfile[];
+    public customProfiles: ITccProfile[];
     public autosave: ITccAutosave;
 
     private workers: DaemonWorker[] = [];
+
+    protected started = false;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -33,8 +35,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     async main() {
+
         if (process.argv.includes('--version')) {
-            console.log('node: ' + process.version + ' arch:' + os.arch());
             this.logLine('node: ' + process.version + ' arch:' + os.arch());
             process.exit();
         }
@@ -44,6 +46,66 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             throw Error('Not root, bye');
         }
 
+        // Check arguments, start, stop, restart config files etc..
+        await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
+
+        // If program is still running this is the start of the daemon
+        this.readOrCreateConfigurationFiles();
+        this.setupSignalHandling();
+
+        this.workers.push(new DisplayBacklightWorker(this));
+        this.workers.push(new CpuWorker(this));
+
+        // Start workers
+        for (const worker of this.workers) {
+            try {
+                worker.onStart();
+            } catch (err) {
+                this.logLine(err);
+            }
+        }
+
+        this.started = true;
+        this.logLine('Daemon started');
+
+        // Start continuous work for each worker with individual interval
+        for (const worker of this.workers) {
+            worker.timer = setInterval(() => {
+                try {
+                    worker.onWork();
+                } catch (err) {
+                    this.logLine(err);
+                }
+            }, worker.timeout);
+        }
+
+    }
+
+    public catchError(err: Error) {
+        const errorLine = err.name + ': ' + err.message;
+        this.logLine(errorLine);
+        if (this.started) {
+            this.onExit();
+        }
+        process.exit();
+    }
+
+    public onExit() {
+        this.workers.forEach((worker) => {
+            clearInterval(worker.timer);
+        });
+        this.workers.forEach((worker) => {
+            // On exit events for each worker before exiting and saving settings
+            try {
+                worker.onExit();
+            } catch (err) {
+                this.logLine(err);
+            }
+        });
+        this.config.writeAutosave(this.autosave);
+    }
+
+    private async handleArgumentProgramFlow() {
         if (process.argv.includes('--start')) {
             // Start daemon as this process
             if (!await this.start()) {
@@ -72,7 +134,43 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } else {
             throw Error('No argument specified');
         }
+    }
 
+    private readOrCreateConfigurationFiles() {
+        try {
+            this.settings = this.config.readSettings();
+        } catch (err) {
+            this.settings = this.config.getDefaultSettings();
+            try {
+                this.config.writeSettings(this.settings);
+                this.logLine('Wrote default settings: ' + this.config.pathSettings);
+            } catch (err) {
+                this.logLine('Failed to write default settings: ' + this.config.pathSettings);
+            }
+        }
+
+        try {
+            this.customProfiles = this.config.readProfiles();
+        } catch (err) {
+            this.customProfiles = [];
+            try {
+                this.config.writeProfiles([]);
+                this.logLine('Wrote default profiles: ' + this.config.pathProfiles);
+            } catch (err) {
+                this.logLine('Failed to write default profiles: ' + this.config.pathProfiles);
+            }
+        }
+
+        try {
+            this.autosave = this.config.readAutosave();
+        } catch (err) {
+            this.logLine('Failed to read autosave: ' + this.config.pathAutosave);
+            // It probably doesn't exist yet so create a structure for saving
+            this.autosave = this.config.getDefaultAutosave();
+        }
+    }
+
+    private setupSignalHandling() {
         // Setup signal catching/handling
         // SIGINT is the normal exit signal that the service gets from itself
         process.on('SIGINT', () => {
@@ -87,90 +185,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.onExit();
             process.exit(SIGTERM);
         });
-
-        try {
-            this.settings = this.config.readSettings();
-        } catch (err) {
-            this.logLine('Failed to read settings: ' + this.config.pathSettings);
-            this.settings = JSON.parse(JSON.stringify(defaultSettings));
-            try {
-                this.config.writeSettings(this.settings);
-                this.logLine('Wrote default settings: ' + this.config.pathSettings);
-            } catch (err) {
-                this.logLine('Failed to write default settings: ' + this.config.pathSettings);
-            }
-        }
-
-        try {
-            this.profiles = this.config.readProfiles();
-        } catch (err) {
-            this.profiles = [];
-            this.logLine('Failed to read profiles: ' + this.config.pathProfiles);
-            try {
-                this.config.writeProfiles([]);
-                this.logLine('Wrote default profiles: ' + this.config.pathProfiles);
-            } catch (err) {
-                this.logLine('Failed to write default profiles: ' + this.config.pathProfiles);
-            }
-        }
-
-        try {
-            this.autosave = this.config.readAutosave();
-        } catch (err) {
-            this.logLine('Failed to read autosave: ' + this.config.pathAutosave);
-            // It probably doesn't exist yet so create a structure for saving
-            this.autosave = defaultAutosave;
-        }
-
-        this.logLine('Daemon started');
-
-        this.workers.push(new DisplayBacklightWorker(this));
-        this.workers.push(new CpuWorker(this));
-
-        this.workers.forEach((worker) => {
-            // Start event for each worker
-            try {
-                worker.onStart();
-            } catch (err) {
-                this.logLine(err);
-            }
-
-            // Continuous work for each worker with individual interval
-            worker.timer = setInterval(() => {
-                try {
-                    worker.onWork();
-                } catch (err) {
-                    this.logLine(err);
-                }
-            }, worker.timeout);
-        });
-
-    }
-
-    catchError(err: Error) {
-        const errorLine = err.name + ': ' + err.message;
-        this.logLine(errorLine);
-        this.onExit();
-        process.exit();
-    }
-
-    onExit() {
-        this.workers.forEach((worker) => {
-            clearInterval(worker.timer);
-        });
-        this.workers.forEach((worker) => {
-            // On exit events for each worker before exiting and saving settings
-            try {
-                worker.onExit();
-            } catch (err) {
-                this.logLine(err);
-            }
-        });
-        this.config.writeAutosave(this.autosave);
     }
 
     getAllProfiles() {
-        return defaultProfiles.concat(this.profiles);
+        return this.config.getDefaultProfiles().concat(this.customProfiles);
     }
 
     getCurrentProfile() {

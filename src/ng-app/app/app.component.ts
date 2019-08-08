@@ -16,13 +16,13 @@ export class AppComponent {
 
   private config: ConfigHandler;
 
-  private profiles: ITccProfile[];
-  private settings: ITccSettings;
+  public profiles: ITccProfile[];
+  public settings: ITccSettings;
 
   constructor(private electron: ElectronService) {
     this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
-    this.profiles = this.config.getAllProfiles();
-    this.settings = this.config.readSettings();
+    this.profiles = this.config.getAllProfilesNoThrow();
+    this.settings = this.config.getSettingsNoThrow();
   }
 
   title = 'TUXEDO Control Center';
@@ -33,7 +33,7 @@ export class AppComponent {
 
   chooseProfile(profileName: string) {
     // Copy existing current settings and set name of new profile
-    const newSettings: ITccSettings = JSON.parse(JSON.stringify(this.settings));
+    const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.settings);
 
     newSettings.activeProfileName = profileName;
     const tmpSettingsPath = '/tmp/tmptccsettings';
