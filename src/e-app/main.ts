@@ -15,6 +15,7 @@ function createWindow() {
         title: 'TUXEDO Control Center',
         frame: false,
         resizable: false,
+        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true
         },

@@ -4,6 +4,6 @@ Comment=An application helping you to tune your TUXEDO
 Exec="/usr/bin/tuxedo-control-center" %U
 Terminal=false
 Type=Application
-Icon=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedocc_256.png
+Icon=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.png
 StartupWMClass=tuxedo-control-center
 Categories=System;

@@ -1,2 +1,0 @@
-#!/bin/sh
-pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY "/opt/tuxedocc/tuxedocc" "$@"
