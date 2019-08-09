@@ -77,6 +77,10 @@ body {
                     text-decoration: none;
                     color: black;
                 }
+                a:hover {
+                    color: #aaa;
+                    text-decoration: underline;
+                }
                 a.selected {
                     text-decoration: underline;
                 }

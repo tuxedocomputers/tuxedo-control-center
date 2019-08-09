@@ -4,6 +4,12 @@ import * as child_process from 'child_process';
 
 let win: Electron.BrowserWindow;
 
+const watch = process.argv.includes('--watch');
+
+if (watch) {
+    require('electron-reload')(path.join(__dirname, '..'));
+}
+
 function createWindow() {
     win = new BrowserWindow({
         title: 'TUXEDO Control Center',
