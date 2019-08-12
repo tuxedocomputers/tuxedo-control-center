@@ -4,13 +4,13 @@ import { SysFsController } from './SysFsController';
 
 export class DisplayBacklightController extends SysFsController {
 
-    constructor(public readonly basePath: string) {
+    constructor(public readonly basePath: string, public readonly driver: string) {
         super();
     }
 
     readonly brightness = new SysFsPropertyInteger(
-        path.join(this.basePath, 'actual_brightness'),
-        path.join(this.basePath, 'brightness'));
+        path.join(this.basePath, this.driver, 'actual_brightness'),
+        path.join(this.basePath, this.driver, 'brightness'));
 
-    readonly maxBrightness = new SysFsPropertyInteger(path.join(this.basePath, 'max_brightness'));
+    readonly maxBrightness = new SysFsPropertyInteger(path.join(this.basePath, this.driver, 'max_brightness'));
 }

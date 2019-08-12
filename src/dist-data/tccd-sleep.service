@@ -1,0 +1,13 @@
+[Unit]
+Description=TUXEDO Control Center Service (sleep/resume)
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash -c "systemctl stop tccd"
+ExecStop=/bin/bash -c "systemctl start tccd"
+
+[Install]
+WantedBy=sleep.target

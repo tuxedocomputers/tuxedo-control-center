@@ -253,7 +253,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public logLine(text: string) {
         console.log(text);
         try {
-            const logPath = '/tmp/tcc/test.log';
+            const logPath = TccPaths.TCCD_LOG_FILE;
             if (!fs.existsSync(path.dirname(logPath))) {
                 fs.mkdirSync(path.dirname(logPath), { recursive: true });
             }

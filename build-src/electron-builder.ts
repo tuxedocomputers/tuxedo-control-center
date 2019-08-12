@@ -43,6 +43,7 @@ async function buildDeb(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/dist-data/tccd.service',
+            distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy'
@@ -95,6 +96,7 @@ async function buildSuseRpm(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/dist-data/tccd.service',
+            distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy'
@@ -146,6 +148,7 @@ async function buildAppImage(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/dist-data/tccd.service',
+            distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy'
