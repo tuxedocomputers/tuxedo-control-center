@@ -112,7 +112,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (!await this.start()) {
                 throw Error('Couldn\'t start daemon. It is probably already running');
             } else {
-                this.logLine('Starting daemon..');
+                this.logLine('Starting daemon v' + tccPackage.version);
             }
         } else if (process.argv.includes('--stop')) {
             // Signal running process to stop
