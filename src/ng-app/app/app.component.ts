@@ -25,7 +25,7 @@ export class AppComponent {
     this.settings = this.config.getSettingsNoThrow();
   }
 
-  title = 'TUXEDO Control Center';
+  title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
 
   buttonExit() {
     this.electron.remote.getCurrentWindow().close();

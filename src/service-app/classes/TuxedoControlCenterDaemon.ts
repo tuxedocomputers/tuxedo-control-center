@@ -12,6 +12,7 @@ import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
+const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
 
@@ -37,7 +38,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     async main() {
 
         if (process.argv.includes('--version')) {
-            this.logLine('node: ' + process.version + ' arch:' + os.arch());
+            this.logLine('TUXEDO Control Center v' + tccPackage.version + ' node: ' + process.version + ' arch:' + os.arch());
             process.exit();
         }
 
