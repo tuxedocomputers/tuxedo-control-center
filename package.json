@@ -9,6 +9,9 @@
   },
   "homepage": "https://tuxedocomputers.com",
   "scripts": {
+    "inc-version-patch": "npm version patch --no-git-tag-version && cd src && npm version patch --no-git-tag-version",
+    "inc-version-minor": "npm version minor --no-git-tag-version && cd src && npm version minor --no-git-tag-version",
+    "inc-version-major": "npm version major --no-git-tag-version && cd src && npm version major --no-git-tag-version",
     "start": "electron ./dist/tuxedo-control-center",
     "build": "run-s clean build-electron build-service build-ng copy-files",
     "build-prod": "run-s clean build-electron build-service build-ng-prod copy-files",
