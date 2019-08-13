@@ -1,90 +1,27 @@
-body {
-    margin: 0px;
-}
+.title-row {
+    -webkit-app-region: drag;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: nowrap;
+    align-items: center;
 
-/*
- * Window layout
- */
-#main-window-view {
-    display: grid;
-    grid-template-areas:
-        "top-border top-border top-border"
-        "left-nav left-nav left-nav";
-    grid-template-columns: 150px auto auto;
-    grid-template-rows: 50px auto;
-
-    header {
-        grid-area: top-border;
-        display: grid;
-        grid-template-columns: 25% 50% 25%;
+    #title-logo {
+        max-height: 45px;
     }
 
-    nav {
-        grid-area: left-nav;
-    }
-
-    main {
-        grid-area: content;
+    i {
+        -webkit-app-region: no-drag;
     }
 }
 
-/*
- * Window style
- */
-#main-window-view {
-    margin: 0;
+.main-sidenav-container {
+    position: absolute;
+    top: 90px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
 
-    header {
-        // background-color: #3a3a3a;
-        -webkit-app-region: drag;
-        margin: 0;
-
-        #title-logo {
-            max-height: 40px;
-        }
-
-        #main-title {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        ul {
-            list-style-type: none;
-            justify-self: right;
-            li {
-                float: left;
-
-                i {
-                    -webkit-app-region: no-drag;
-                }
-            }
-        }
-    }
-
-    nav {
-        background-color: #fbfbfb;
-
-        ul {
-            list-style-type: none;
-            border: 1px;
-            margin: 0px;
-            padding: 0px;
-
-            li {
-                padding: 5px;
-                a {
-                    font-size: 2em;
-                    text-decoration: none;
-                    color: black;
-                }
-                a:hover {
-                    color: #aaa;
-                    text-decoration: underline;
-                }
-                a.selected {
-                    text-decoration: underline;
-                }
-            }
-        }
+    a.selected {
+        font-weight: bold;
     }
 }

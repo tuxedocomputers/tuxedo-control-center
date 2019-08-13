@@ -7,7 +7,7 @@ let win: Electron.BrowserWindow;
 const watch = process.argv.includes('--watch');
 
 if (watch) {
-    require('electron-reload')(path.join(__dirname, '..'));
+    require('electron-reload')(path.join(__dirname, '..', 'ng-app'));
 }
 
 function createWindow() {

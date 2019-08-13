@@ -1,28 +1,29 @@
-<div id="main-window-view">
 
-  <header>
-    <img src="./assets/logo.svg" id="title-logo">
+<mat-toolbar>
+  <mat-toolbar-row class="title-row">
+    <img src="./assets/tuxedo-control-center_256.png" id="title-logo">
     <div id="main-title">{{ title }}</div>
-    <ul>
-      <li><i class="fas fa-times" (click)="buttonExit()"></i></li>
-    </ul>
-  </header>
+    <i class="fas fa-times" (click)="buttonExit()"></i>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-  <nav>
-    <ul>
-      <li *ngFor="let profile of profiles">
-        <a href="#" (click)="chooseProfile(profile.name)" [ngClass]="{ 'selected': profile.name === settings.activeProfileName }">
+<mat-sidenav-container class="main-sidenav-container">
+  <mat-sidenav
+          mode="side"
+          opened
+          [disableClose]="true">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let profile of profiles" (click)="chooseProfile(profile.name)">
+        <a href="#" [ngClass]="{ 'selected': profile.name === settings.activeProfileName }">
           {{ profile.name }}
         </a>
-      </li>
-      <li>
+      </mat-list-item>
+      <mat-list-item>
         <a href="#" (click)="buttonExit()">Exit</a>
-      </li>
-    </ul>
-  </nav>
-
-  <!--main>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content style="height: 100%">
     <router-outlet></router-outlet>
-  </main-->
-
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
