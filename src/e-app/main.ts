@@ -20,7 +20,7 @@ function createWindow() {
         icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true
-        },
+        }
     });
 
     const indexPath = path.join(__dirname, '..', 'ng-app', 'index.html');

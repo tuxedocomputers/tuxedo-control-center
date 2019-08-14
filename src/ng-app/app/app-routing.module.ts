@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CpuSettingsComponent } from './cpu-settings/cpu-settings.component';
 
 const routes: Routes = [
+  { path: '', component: CpuSettingsComponent },
   { path: 'cpu-settings', component: CpuSettingsComponent }
 ];
 

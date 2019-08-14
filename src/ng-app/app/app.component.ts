@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
 import { TccPaths } from '../../common/classes/TccPaths';
@@ -13,11 +13,17 @@ import { ConfigService } from './config.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  public profileSelect: string;
 
   constructor(private electron: ElectronService, private config: ConfigService) {}
 
   title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
+
+  ngOnInit() {
+    this.getSettings();
+  }
 
   public buttonExit() {
     this.electron.remote.getCurrentWindow().close();
@@ -28,6 +34,7 @@ export class AppComponent {
   }
 
   public getSettings(): ITccSettings {
+    this.profileSelect = this.config.getSettings().activeProfileName;
     return this.config.getSettings();
   }
 

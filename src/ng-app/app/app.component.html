@@ -8,19 +8,21 @@
 </mat-toolbar>
 
 <mat-sidenav-container class="main-sidenav-container">
-  <mat-sidenav
-          mode="side"
-          opened
-          [disableClose]="true">
+  <mat-sidenav mode="side" opened [disableClose]="true" class="main-sidenav-nav">
     <mat-nav-list>
-      <mat-list-item *ngFor="let profile of getAllProfiles()" (click)="chooseProfile(profile.name)" [ngClass]="{ 'selected': profile.name === getSettings().activeProfileName }">
-        {{ profile.name }}
+      <mat-list-item>
+        <mat-form-field>
+          <mat-label>Active profile</mat-label>
+          <mat-select [(value)]="profileSelect">
+            <mat-option *ngFor="let profile of getAllProfiles()" [(value)]="profile.name" (click)="chooseProfile(profileSelect)">{{ profile.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-list-item>
       <mat-list-item routerLink="/cpu-settings" routerLinkActive="true">
         Cpu Settings
       </mat-list-item>
-      <mat-list-item>
-        <a href="#" (click)="buttonExit()">Exit</a>
+      <mat-list-item (click)="buttonExit()">
+        Exit
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
