@@ -13,6 +13,8 @@ if (watch) {
 function createWindow() {
     win = new BrowserWindow({
         title: 'TUXEDO Control Center',
+        width: 900,
+        height: 600,
         frame: false,
         resizable: false,
         icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),

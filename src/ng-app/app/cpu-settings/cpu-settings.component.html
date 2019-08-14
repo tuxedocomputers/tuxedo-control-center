@@ -1,0 +1,18 @@
+<table>
+    <tr>
+        <th>Index</th>
+        <th>Current freq</th>
+        <th>Scaling Min freq</th>
+        <th>Scaling Max freq</th>
+        <th>Scaling governor</th>
+        <th>Energy preference</th>
+    </tr>
+    <tr *ngFor="let core of cpuInfo" [ngStyle]="{'color': (core.online ? 'black' : 'gray')}">
+        <td>{{ core.index }}</td>
+        <td>{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz</td>
+        <td>{{ core.scalingMinFreq / 1000000 | number:'1.2-2' }} GHz</td>
+        <td>{{ core.scalingMaxFreq / 1000000 | number:'1.2-2' }} GHz</td>
+        <td>{{ core.scalingGovernor }}</td>
+        <td>{{ core.energyPerformancePreference }}</td>
+    </tr>
+</table>

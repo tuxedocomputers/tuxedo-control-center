@@ -7,14 +7,18 @@ import { AppComponent } from './app.component';
 import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { CpuSettingsComponent } from './cpu-settings/cpu-settings.component';
+
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CpuSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

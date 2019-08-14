@@ -5,6 +5,19 @@ import { SysFsPropertyInteger, SysFsPropertyNumList } from './SysFsProperties';
 export class CpuController {
 
     constructor(public readonly basePath: string) {
+        this.cores = [];
+        this.getAvailableLogicalCores();
+    }
+
+    public cores: LogicalCpuController[];
+
+    public readonly kernelMax = new SysFsPropertyInteger(path.join(this.basePath, 'kernel_max'));
+    public readonly offline = new SysFsPropertyNumList(path.join(this.basePath, 'offline'));
+    public readonly online = new SysFsPropertyNumList(path.join(this.basePath, 'online'));
+    public readonly possible = new SysFsPropertyNumList(path.join(this.basePath, 'possible'));
+    public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
+
+    public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores
         this.cores = [];
         try {
@@ -25,14 +38,6 @@ export class CpuController {
             }
         } catch (err) {}
     }
-
-    public readonly cores: LogicalCpuController[];
-
-    public readonly kernelMax = new SysFsPropertyInteger(path.join(this.basePath, 'kernel_max'));
-    public readonly offline = new SysFsPropertyNumList(path.join(this.basePath, 'offline'));
-    public readonly online = new SysFsPropertyNumList(path.join(this.basePath, 'online'));
-    public readonly possible = new SysFsPropertyNumList(path.join(this.basePath, 'possible'));
-    public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
 
     /**
      * Sets the selected number of cpu cores to be online, the rest to be offline

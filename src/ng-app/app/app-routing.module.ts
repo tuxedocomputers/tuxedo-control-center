@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [];
+import { CpuSettingsComponent } from './cpu-settings/cpu-settings.component';
+
+const routes: Routes = [
+  { path: 'cpu-settings', component: CpuSettingsComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],

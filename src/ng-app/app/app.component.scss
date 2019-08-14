@@ -21,7 +21,13 @@
     left: 8px;
     right: 8px;
 
-    a.selected {
+    .selected {
         font-weight: bold;
     }
+}
+
+.main-sidenav-content {
+    padding: 10px;
+    padding-left: 20px;
+    margin: 0;
 }
