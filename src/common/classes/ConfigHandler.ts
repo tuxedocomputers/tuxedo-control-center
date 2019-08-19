@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
-import { ITccProfile, defaultProfiles } from '../models/TccProfile';
+import { ITccProfile, defaultProfiles, defaultCustomProfile } from '../models/TccProfile';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 
 export class ConfigHandler {
@@ -81,8 +81,14 @@ export class ConfigHandler {
         return this.copyConfig<ITccProfile[]>(defaultProfiles);
     }
 
+    public getDefaultCustomProfile(): ITccProfile {
+        return this.copyConfig<ITccProfile>(defaultCustomProfile);
+    }
+
     public getDefaultCustomProfiles(): ITccProfile[] {
-        return [];
+        return [
+            this.getDefaultCustomProfile()
+        ];
     }
 
     public getDefaultSettings(): ITccSettings {

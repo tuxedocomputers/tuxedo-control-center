@@ -75,3 +75,18 @@ export const defaultProfiles: ITccProfile[] = [
         }
     }
 ];
+
+export const defaultCustomProfile: ITccProfile = {
+    name: 'Default custom profile',
+    display: {
+        brightness: 100,
+        useBrightness: false
+    },
+    cpu: {
+        onlineCores: undefined,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave',
+        energyPerformancePreference: 'default'
+    }
+};
