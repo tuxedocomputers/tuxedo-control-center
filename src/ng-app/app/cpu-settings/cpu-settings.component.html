@@ -7,7 +7,7 @@
         <th>Scaling governor</th>
         <th>Energy preference</th>
     </tr>
-    <tr *ngFor="let core of cpuInfo" [ngStyle]="{'color': (core.online ? 'black' : 'gray')}">
+    <tr *ngFor="let core of cpuInfo">
         <td>{{ core.index }}</td>
         <td>{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz</td>
         <td>{{ core.scalingMinFreq / 1000000 | number:'1.2-2' }} GHz</td>

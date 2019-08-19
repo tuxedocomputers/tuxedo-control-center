@@ -39,6 +39,8 @@ export class AppComponent implements OnInit {
   }
 
   public chooseProfile(profileName: string) {
-    this.config.setActiveProfile(profileName);
+    if (profileName !== this.config.getSettings().activeProfileName) {
+      this.config.setActiveProfile(profileName);
+    }
   }
 }

@@ -17,7 +17,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.updateData();
-    this.updateInterval = setInterval(() => { this.periodicUpdate(); }, 1000);
+    this.updateInterval = setInterval(() => { this.periodicUpdate(); }, 2000);
   }
 
   public updateData(): void {
