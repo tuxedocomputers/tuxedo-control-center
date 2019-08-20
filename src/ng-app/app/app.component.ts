@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   public profileSelect: string;
 
-  constructor(private electron: ElectronService, private config: ConfigService) {}
+  constructor(private electron: ElectronService, private config: ConfigService) { }
 
   title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
 
@@ -39,8 +39,11 @@ export class AppComponent implements OnInit {
   }
 
   public chooseProfile(profileName: string) {
-    if (profileName !== this.config.getSettings().activeProfileName) {
-      this.config.setActiveProfile(profileName);
-    }
+    setImmediate(() => {
+      if (profileName !== this.config.getSettings().activeProfileName) {
+        this.config.setActiveProfile(profileName);
+        this.profileSelect = this.config.getSettings().activeProfileName;
+      }
+    });
   }
 }

@@ -1,0 +1,17 @@
+
+table#general-cpu-info {
+    tr {
+        > th {
+            text-align: right;
+            padding-right: 10px;
+            
+            +th, +td {
+                text-align: left;
+            }
+        }
+    }
+}
+
+table#cores-detailed-view {
+    font-size: 0.9em;
+}

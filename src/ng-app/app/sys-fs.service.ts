@@ -12,6 +12,19 @@ export class SysFsService {
     this.cpu = new CpuController('/sys/devices/system/cpu');
   }
 
+  public getGeneralCpuInfo(): IGeneralCPUInfo {
+    let cpuInfo: IGeneralCPUInfo;
+    try {
+      cpuInfo = {
+        availableCores: this.cpu.cores.length
+      };
+    } catch (err) {
+      console.log(err);
+    }
+
+    return cpuInfo;
+  }
+
   public getLogicalCoreInfo(): ILogicalCoreInfo[] {
     const coreInfoList: ILogicalCoreInfo[] = [];
     for (const core of this.cpu.cores) {
@@ -26,6 +39,7 @@ export class SysFsService {
           scalingCurFreq: core.scalingCurFreq.readValue(),
           scalingMinFreq: core.scalingMinFreq.readValue(),
           scalingMaxFreq: core.scalingMaxFreq.readValue(),
+          scalingDriver: core.scalingDriver.readValue(),
           energyPerformanceAvailablePreferences: core.energyPerformanceAvailablePreferences.readValue(),
           energyPerformancePreference: core.energyPerformancePreference.readValue(),
           scalingAvailableGovernors: core.scalingAvailableGovernors.readValue(),
@@ -42,12 +56,17 @@ export class SysFsService {
   }
 }
 
+export interface IGeneralCPUInfo {
+  availableCores: number;
+}
+
 export interface ILogicalCoreInfo {
   index: number;
   online: boolean;
   scalingCurFreq: number;
   scalingMinFreq: number;
   scalingMaxFreq: number;
+  scalingDriver: string;
   energyPerformanceAvailablePreferences: string[];
   energyPerformancePreference: string;
   scalingAvailableGovernors: string[];

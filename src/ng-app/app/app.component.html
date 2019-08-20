@@ -14,7 +14,7 @@
         <mat-form-field>
           <mat-label>Active profile</mat-label>
           <mat-select [(value)]="profileSelect" [disableOptionCentering]="true">
-            <mat-option *ngFor="let profile of getAllProfiles()" [(value)]="profile.name" (click)="chooseProfile(profileSelect)">{{ profile.name }}</mat-option>
+            <mat-option *ngFor="let profile of getAllProfiles()" [value]="profile.name" (click)="chooseProfile(profileSelect)">{{ profile.name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-list-item>

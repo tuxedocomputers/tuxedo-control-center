@@ -19,6 +19,7 @@ export class LogicalCpuController extends SysFsController {
     readonly scalingCurFreq: SysFsPropertyInteger;
     readonly scalingMinFreq: SysFsPropertyInteger;
     readonly scalingMaxFreq: SysFsPropertyInteger;
+    readonly scalingDriver: SysFsPropertyString;
     readonly energyPerformanceAvailablePreferences: SysFsPropertyStringList;
     readonly energyPerformancePreference: SysFsPropertyString;
     readonly scalingAvailableGovernors: SysFsPropertyStringList;
@@ -38,6 +39,7 @@ export class LogicalCpuController extends SysFsController {
         this.scalingCurFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_cur_freq'));
         this.scalingMinFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_min_freq'));
         this.scalingMaxFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_max_freq'));
+        this.scalingDriver = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_driver'));
         this.energyPerformanceAvailablePreferences = new SysFsPropertyStringList(
             path.join(this.cpufreqPath, 'energy_performance_available_preferences'));
         this.energyPerformancePreference = new SysFsPropertyString(path.join(this.cpufreqPath, 'energy_performance_preference'));

@@ -44,7 +44,7 @@ export class ConfigService {
     return this.profiles;
   }
 
-  public setActiveProfile(profileName: string) {
+  public setActiveProfile(profileName: string): void {
     // Copy existing current settings and set name of new profile
     const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
 

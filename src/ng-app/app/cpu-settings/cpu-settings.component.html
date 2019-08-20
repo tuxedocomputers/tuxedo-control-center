@@ -1,18 +1,56 @@
-<table>
-    <tr>
-        <th>Index</th>
-        <th>Current freq</th>
-        <th>Scaling Min freq</th>
-        <th>Scaling Max freq</th>
-        <th>Scaling governor</th>
-        <th>Energy preference</th>
-    </tr>
-    <tr *ngFor="let core of cpuInfo">
-        <td>{{ core.index }}</td>
-        <td>{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz</td>
-        <td>{{ core.scalingMinFreq / 1000000 | number:'1.2-2' }} GHz</td>
-        <td>{{ core.scalingMaxFreq / 1000000 | number:'1.2-2' }} GHz</td>
-        <td>{{ core.scalingGovernor }}</td>
-        <td>{{ core.energyPerformancePreference }}</td>
-    </tr>
-</table>
+<br />
+<mat-card>
+    <mat-card-title>General CPU info</mat-card-title>
+    <mat-card-content>
+        <table id="general-cpu-info">
+            <tr><th></th><th>Active values</th></tr>
+            <tr><th>Logical cores</th><td>{{ cpuCoreInfo.length }} of {{ cpuInfo.availableCores }}</td></tr>
+            <tr><th>Scaling driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
+            <tr><th>Min scaling frequency</th><td>{{ activeScalingMinFreqs.join(',') }} GHz</td></tr>
+            <tr><th>Max scaling frequency</th><td>{{ activeScalingMaxFreqs.join(',') }} GHz</td></tr>
+            <tr><th>Scaling governor</th><td>{{ activeScalingGovernors.join(',') }}</td></tr>
+            <tr><th>Energy performance preference</th><td>{{ activeEnergyPerformancePreference.join(',') }}</td></tr>
+        </table>
+    </mat-card-content>
+</mat-card>
+<br />
+<mat-card>
+    <mat-card-title>Cores</mat-card-title>
+    <mat-card-subtitle>Logical CPU cores in use</mat-card-subtitle>
+    <mat-card-content>
+        <mat-chip-list>
+            <mat-chip *ngFor="let core of cpuCoreInfo">
+                <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
+            </mat-chip>
+        </mat-chip-list>
+        <br />
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Detailed view
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table id="cores-detailed-view">
+                <tr>
+                    <th>Index</th>
+                    <th>Current freq.</th>
+                    <th>Scaling Min freq.</th>
+                    <th>Scaling Max freq.</th>
+                    <th>Scaling gov.</th>
+                    <th>Energy pref.</th>
+                    <th>Driver</th>
+                </tr>
+                <tr *ngFor="let core of cpuCoreInfo">
+                    <td>{{ core.index }}</td>
+                    <td>{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz</td>
+                    <td>{{ core.scalingMinFreq / 1000000 | number:'1.2-2' }} GHz</td>
+                    <td>{{ core.scalingMaxFreq / 1000000 | number:'1.2-2' }} GHz</td>
+                    <td>{{ core.scalingGovernor }}</td>
+                    <td>{{ core.energyPerformancePreference }}</td>
+                    <td>{{ core.scalingDriver }}</td>
+                </tr>
+            </table>
+        </mat-expansion-panel>
+    </mat-card-content>
+</mat-card>
+<br />
