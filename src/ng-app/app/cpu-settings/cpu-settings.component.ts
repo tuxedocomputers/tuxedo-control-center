@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { SysFsService, ILogicalCoreInfo, IGeneralCPUInfo } from '../sys-fs.service';
 import { DecimalPipe } from '@angular/common';
+import { ITccProfile } from '../../../common/models/TccProfile';
+import { ConfigService } from '../config.service';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-cpu-settings',
@@ -22,13 +25,92 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
   public activeScalingGovernors: string[];
   public activeEnergyPerformancePreference: string[];
 
-  public test: string[] = ['12', '34'];
+  public customProfilesEdit: ITccProfile[];
+  public showDefaultProfiles: boolean;
+  public selectedCustomProfile: string;
 
-  constructor(private sysfs: SysFsService, private decimalPipe: DecimalPipe) {}
+  public formProfileEdit: FormGroup;
+
+  constructor(private sysfs: SysFsService, private decimalPipe: DecimalPipe, private config: ConfigService) {
+    this.formProfileEdit = new FormGroup({
+      inputNumberCores: new FormControl(),
+      inputMinFreq: new FormControl(),
+      inputMaxFreq: new FormControl(),
+      inputScalingGovernor: new FormControl(),
+      inputEnergyPerformancePreference: new FormControl()
+    });
+  }
 
   ngOnInit() {
     this.updateData();
     this.updateInterval = setInterval(() => { this.periodicUpdate(); }, 2000);
+  }
+
+  ngOnDestroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+  }
+
+  private periodicUpdate(): void {
+    this.updateData();
+  }
+
+  public getCustomProfiles(): ITccProfile[] {
+    return this.config.getCustomProfiles();
+  }
+
+  public getAllProfiles(): ITccProfile[] {
+    return this.config.getAllProfiles();
+  }
+
+  public getDefaultProfilesForTable(): ITccProfile[] {
+    if (this.showDefaultProfiles) {
+      return this.config.getDefaultProfiles().filter(e => e.name !== 'Default');
+    } else {
+      return [];
+    }
+  }
+
+  public selectCustomProfileEdit(profileName: string): void {
+    if (this.config.getCurrentEditingProfile() !== undefined && this.config.getCurrentEditingProfile().name === profileName) { return; }
+    if (!this.formProfileEdit.dirty && this.config.setCurrentEditingProfile(profileName)) {
+      const formControls = this.formProfileEdit.controls;
+      const currentProfileCpu = this.config.getCurrentEditingProfile().cpu;
+
+      if (currentProfileCpu.onlineCores === undefined) {
+        formControls.inputNumberCores.setValue(this.cpuInfo.availableCores);
+      } else {
+        formControls.inputNumberCores.setValue(currentProfileCpu.onlineCores);
+      }
+
+      if (currentProfileCpu.scalingMinFrequency === undefined) {
+        formControls.inputMinFreq.setValue(this.cpuCoreInfo[0].cpuInfoMinFreq);
+      } else {
+        formControls.inputMinFreq.setValue(currentProfileCpu.scalingMinFrequency);
+      }
+
+      if (currentProfileCpu.scalingMaxFrequency === undefined) {
+        formControls.inputMaxFreq.setValue(this.cpuCoreInfo[0].cpuInfoMaxFreq);
+      } else {
+        formControls.inputMaxFreq.setValue(currentProfileCpu.scalingMaxFrequency);
+      }
+
+      formControls.inputScalingGovernor.setValue(currentProfileCpu.governor);
+      formControls.inputEnergyPerformancePreference.setValue(currentProfileCpu.energyPerformancePreference);
+    } else {
+      setImmediate(() => {
+        if (!this.currentlyEditingProfile()) {
+          this.selectedCustomProfile = undefined;
+        } else {
+          this.selectedCustomProfile = this.config.getCurrentEditingProfile().name;
+        }
+      });
+    }
+  }
+
+  public currentlyEditingProfile(): boolean {
+    return this.config.getCurrentEditingProfile() !== undefined;
   }
 
   public updateData(): void {
@@ -64,14 +146,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     return this.decimalPipe.transform(frequency / 1000000, '1.2-2');
   }
 
-  private periodicUpdate(): void {
-    this.updateData();
+  public getEditProfile(): ITccProfile {
+    return this.config.getCurrentEditingProfile();
   }
-
-  ngOnDestroy() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-    }
-  }
-
 }

@@ -21,11 +21,11 @@ export class AppComponent implements OnInit {
 
   title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getSettings();
   }
 
-  public buttonExit() {
+  public buttonExit(): void {
     this.electron.remote.getCurrentWindow().close();
   }
 
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
     return this.config.getSettings();
   }
 
-  public chooseProfile(profileName: string) {
+  public chooseActiveProfile(profileName: string): void {
     setImmediate(() => {
       if (profileName !== this.config.getSettings().activeProfileName) {
         this.config.setActiveProfile(profileName);
