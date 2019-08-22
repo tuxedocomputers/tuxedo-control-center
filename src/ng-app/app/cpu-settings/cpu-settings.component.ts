@@ -5,6 +5,7 @@ import { DecimalPipe } from '@angular/common';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { ConfigService } from '../config.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-cpu-settings',
@@ -29,16 +30,19 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
   public showDefaultProfiles: boolean;
   public selectedCustomProfile: string;
 
-  public formProfileEdit: FormGroup;
+  public formProfileEdit: FormGroup = new FormGroup({
+    inputNumberCores: new FormControl(),
+    inputMinFreq: new FormControl(),
+    inputMaxFreq: new FormControl(),
+    inputScalingGovernor: new FormControl(),
+    inputEnergyPerformancePreference: new FormControl()
+  });
 
-  constructor(private sysfs: SysFsService, private decimalPipe: DecimalPipe, private config: ConfigService) {
-    this.formProfileEdit = new FormGroup({
-      inputNumberCores: new FormControl(),
-      inputMinFreq: new FormControl(),
-      inputMaxFreq: new FormControl(),
-      inputScalingGovernor: new FormControl(),
-      inputEnergyPerformancePreference: new FormControl()
-    });
+  constructor(
+    private sysfs: SysFsService,
+    private decimalPipe: DecimalPipe,
+    private config: ConfigService,
+    private electron: ElectronService) {
   }
 
   ngOnInit() {
@@ -74,7 +78,20 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
 
   public selectCustomProfileEdit(profileName: string): void {
     if (this.config.getCurrentEditingProfile() !== undefined && this.config.getCurrentEditingProfile().name === profileName) { return; }
-    if (!this.formProfileEdit.dirty && this.config.setCurrentEditingProfile(profileName)) {
+    let choice = 0;
+    if (this.formProfileEdit.dirty) {
+      choice = this.electron.remote.dialog.showMessageBox(
+        this.electron.remote.getCurrentWindow(),
+        {
+          title: 'Switching profile to edit',
+          message: 'Discard changes?',
+          type: 'question',
+          buttons: [ 'Discard', 'Cancel' ]
+        }
+      );
+    }
+    if (choice === 0 && this.config.setCurrentEditingProfile(profileName)) {
+      this.formProfileEdit.markAsPristine();
       const formControls = this.formProfileEdit.controls;
       const currentProfileCpu = this.config.getCurrentEditingProfile().cpu;
 

@@ -29,7 +29,6 @@ import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 
 import { DecimalPipe } from '@angular/common';
-import { GestureConfig } from '@angular/material/core';
 
 @NgModule({
   declarations: [
