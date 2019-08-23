@@ -46,8 +46,8 @@ app.on('activate', () => {
 
 ipcMain.on('sudo-exec', (event, arg) => {
     try {
-        event.returnValue = child_process.execSync(arg);
+        event.returnValue = { data: child_process.execSync(arg), error: undefined };
     } catch (err) {
-        event.returnValue = err;
+        event.returnValue = { data: undefined, error: err };
     }
 });

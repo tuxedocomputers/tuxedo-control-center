@@ -70,6 +70,34 @@ export class ConfigService {
     this.readFiles();
   }
 
+  public writeCurrentEditingProfile(): boolean {
+    if (this.editProfileChanges()) {
+      const changedProfileIndex = this.customProfiles.findIndex(profile => profile.name === this.getCurrentEditingProfile().name);
+      if (changedProfileIndex !== -1) {
+        this.customProfiles[changedProfileIndex] = this.getCurrentEditingProfile();
+        this.setCurrentEditingProfile(this.getCurrentEditingProfile().name);
+      }
+
+      const tmpProfilesPath = '/tmp/tmptccprofiles';
+      this.config.writeProfiles(this.customProfiles, tmpProfilesPath);
+      let tccdExec: string;
+      if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+      } else {
+        tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+      }
+      const result = this.electron.ipcRenderer.sendSync(
+        'sudo-exec', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
+      );
+      this.readFiles();
+      if (result.error !== undefined) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
   /**
    * Retrieves the currently chosen profile for edit
    *

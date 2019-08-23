@@ -4,7 +4,7 @@
     <mat-card-subtitle>Scaling driver: <code>{{ activeScalingDrivers.join(',') }}</code></mat-card-subtitle>
     <mat-card-content class="cpu-frequency-info">
         <mat-card><mat-card-content>
-            <form [formGroup]="formProfileEdit">
+            <form [formGroup]="formProfileEdit" (ngSubmit)="submitProfileEdit()">
                 <table id="cpu-frequency-info">
                     <tr>
                         <th></th>
@@ -19,6 +19,7 @@
                                 </mat-select>
                             </mat-form-field>
                         </th>
+                        <th><button mat-stroked-button color="primary" *ngIf="formProfileEdit.dirty">Save</button></th>
                     </tr>
                     <tr>
                         <th matTooltip="Logical CPU cores in use">CPU cores</th>
@@ -27,7 +28,7 @@
                             {{ profile.cpu.onlineCores ? profile.cpu.onlineCores : 'default' }}
                         </td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
-                            <input style="width: 40px; " matInput formControlName="inputNumberCores" type="number" min="1" [max]="cpuInfo.availableCores" step="1" />
+                            <input color="warn" style="width: 40px; " matInput formControlName="inputNumberCores" type="number" min="1" [max]="cpuInfo.availableCores" step="1" />
                             of {{ cpuInfo.availableCores }}
                         </td>
                     </tr>
@@ -54,7 +55,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th matTooltip="Scaling governor (default: 'powersave')">Governor</th><td>{{ activeScalingGovernors.join(',') }}</td>
+                        <th matTooltip="Scaling governor">Governor</th><td>{{ activeScalingGovernors.join(',') }}</td>
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.governor ? profile.cpu.governor : 'default' }}
                         </td>
@@ -67,7 +68,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th matTooltip="Energy performance preference (default: 'default')">Energy performance</th>
+                        <th matTooltip="Energy performance preference">Energy performance</th>
                         <td>{{ activeEnergyPerformancePreference.join(',') }}</td>
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.energyPerformancePreference ? profile.cpu.energyPerformancePreference : 'default' }}
@@ -84,7 +85,7 @@
             </form>
         </mat-card-content></mat-card>
         <br />
-        <mat-checkbox [(ngModel)]="showDefaultProfiles">Show default profiles</mat-checkbox>
+        <mat-checkbox [(ngModel)]="showDefaultProfiles" style="margin-top: 40px">Show default profiles</mat-checkbox>
         <br />
     </mat-card-content>
 </mat-card>
