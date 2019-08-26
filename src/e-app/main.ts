@@ -13,8 +13,8 @@ if (watch) {
 function createWindow() {
     win = new BrowserWindow({
         title: 'TUXEDO Control Center',
-        width: 900,
-        height: 600,
+        width: 1024,
+        height: 768,
         frame: false,
         resizable: false,
         icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
@@ -46,8 +46,8 @@ app.on('activate', () => {
 
 ipcMain.on('sudo-exec', (event, arg) => {
     try {
-        event.returnValue = child_process.execSync(arg);
+        event.returnValue = { data: child_process.execSync(arg), error: undefined };
     } catch (err) {
-        event.returnValue = err;
+        event.returnValue = { data: undefined, error: err };
     }
 });

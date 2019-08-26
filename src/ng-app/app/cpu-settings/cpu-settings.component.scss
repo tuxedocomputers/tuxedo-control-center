@@ -1,13 +1,30 @@
+mat-card-content.cpu-frequency-info > mat-card {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
 
-table#general-cpu-info {
-    tr {
-        > th {
+table#cpu-frequency-info {
+    >tr {
+        height: 30px;
+
+        >th {
+            min-width: 140px;
             text-align: right;
             padding-right: 10px;
-            
+
             +th, +td {
+                min-width: 100px;
                 text-align: left;
             }
+        }
+
+        th.default-profiles {
+            color: gray;
+            width: 70px;
+        }
+
+        th.custom-profile-edit, td.custom-profile-edit {
+            min-width: 200px;
         }
     }
 }
