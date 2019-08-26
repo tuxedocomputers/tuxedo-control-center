@@ -1,4 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
-// Angular material theme
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/theming';
+@include mat-core();
+
+$themes-map: (
+    indigo-pink: (
+        primary-base: $mat-indigo,
+        accent-base: $mat-pink
+    )
+);
+
+$theme-primary: mat-palette($mat-indigo);
+$theme-accent: mat-palette($mat-blue, A200, A100, A400);
+$theme-warn: mat-palette($mat-red);
+
+$tuxedo-control-center-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+
+@include angular-material-theme($tuxedo-control-center-theme);

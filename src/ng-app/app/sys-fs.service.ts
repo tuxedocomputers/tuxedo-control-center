@@ -16,7 +16,9 @@ export class SysFsService {
     let cpuInfo: IGeneralCPUInfo;
     try {
       cpuInfo = {
-        availableCores: this.cpu.cores.length
+        availableCores: this.cpu.cores.length,
+        scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValue(),
+        energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValue()
       };
     } catch (err) {
       console.log(err);
@@ -58,6 +60,8 @@ export class SysFsService {
 
 export interface IGeneralCPUInfo {
   availableCores: number;
+  scalingAvailableGovernors: string[];
+  energyPerformanceAvailablePreferences: string[];
 }
 
 export interface ILogicalCoreInfo {

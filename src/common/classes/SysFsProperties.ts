@@ -17,7 +17,9 @@ export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
         if (value.trim() === '') {
             return [];
         } else {
-            return value.split(' ').map((element) => element.trim());
+            const trimmedList = value.split(' ').map((element) => element.trim());
+            // Finally filter all empty strings
+            return trimmedList.filter(e => e !== '');
         }
     }
 
