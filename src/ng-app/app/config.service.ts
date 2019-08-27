@@ -6,6 +6,7 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +21,17 @@ export class ConfigService {
 
   private currentProfileEdit: ITccProfile;
 
+  public observeSettings: Observable<ITccSettings>;
+  private settingsSubject: Subject<ITccSettings>;
+
   // Exporting of relevant functions from ConfigHandler
   // public copyConfig = ConfigHandler.prototype.copyConfig;
   // public writeSettings = ConfigHandler.prototype.writeSettings;
 
   constructor(private electron: ElectronService) {
+    this.settingsSubject = new Subject<ITccSettings>();
+    this.observeSettings = this.settingsSubject.asObservable();
+
     this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
     this.defaultProfiles = this.config.getDefaultProfiles();
     this.readFiles();
@@ -33,6 +40,7 @@ export class ConfigService {
   public readFiles(): void {
     this.customProfiles = this.config.getCustomProfilesNoThrow();
     this.settings = this.config.getSettingsNoThrow();
+    this.settingsSubject.next(this.settings);
   }
 
   public getSettings(): ITccSettings {
@@ -105,6 +113,19 @@ export class ConfigService {
    */
   public getCurrentEditingProfile(): ITccProfile {
     return this.currentProfileEdit;
+  }
+
+  public getProfileByName(searchedProfileName: string): ITccProfile {
+    const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
+    if (foundProfile !== undefined) {
+      return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+      return undefined;
+    }
+  }
+
+  public getActiveProfile(): ITccProfile {
+    return this.config.copyConfig<ITccProfile>(this.getAllProfiles().find(profile => profile.name === this.settings.activeProfileName));
   }
 
   /**

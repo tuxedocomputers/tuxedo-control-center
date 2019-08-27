@@ -29,11 +29,13 @@ import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 
 import { DecimalPipe } from '@angular/common';
+import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CpuSettingsComponent
+    CpuSettingsComponent,
+    ProfileManagerComponent
   ],
   imports: [
     BrowserModule,

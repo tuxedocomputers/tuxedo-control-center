@@ -1,0 +1,10 @@
+<br />
+<mat-card>
+    <mat-card-title>
+        Profile: {{ currentProfile.name }}
+        <button mat-stroked-button color="primary" (click)="setActiveProfile(currentProfile.name)" *ngIf="showApplyProfileButton()">Apply</button>
+    </mat-card-title>
+    <mat-card-content>
+
+    </mat-card-content>
+</mat-card>

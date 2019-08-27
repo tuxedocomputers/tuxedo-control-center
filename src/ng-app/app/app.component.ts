@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { ElectronService } from 'ngx-electron';
 
 import { TccPaths } from '../../common/classes/TccPaths';
@@ -17,12 +19,13 @@ export class AppComponent implements OnInit {
 
   public profileSelect: string;
 
-  constructor(private electron: ElectronService, private config: ConfigService) { }
+  constructor(private electron: ElectronService, private config: ConfigService, private router: Router) { }
 
   title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
 
   public ngOnInit(): void {
     this.getSettings();
+    this.config.observeSettings.subscribe(newSettings => { this.getSettings(); });
   }
 
   public buttonExit(): void {
@@ -39,9 +42,10 @@ export class AppComponent implements OnInit {
   }
 
   public chooseActiveProfile(profileName: string): void {
+    this.router.navigate(['profile-manager', profileName]);
     setImmediate(() => {
       if (profileName !== this.config.getSettings().activeProfileName) {
-        this.config.setActiveProfile(profileName);
+        // this.config.setActiveProfile(profileName);
         this.profileSelect = this.config.getSettings().activeProfileName;
       }
     });
