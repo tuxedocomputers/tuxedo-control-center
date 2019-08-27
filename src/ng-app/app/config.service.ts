@@ -78,6 +78,43 @@ export class ConfigService {
     this.readFiles();
   }
 
+  public copyProfile(profileName: string, newProfileName: string): boolean {
+    const profileToCopy: ITccProfile = this.getProfileByName(profileName);
+    if (profileToCopy === undefined) { return false; }
+    const existingProfile = this.getProfileByName(newProfileName);
+    if (existingProfile !== undefined) { return false; }
+
+    const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
+    newProfile.name = newProfileName;
+    const newProfileList = this.getCustomProfiles().concat(newProfile);
+    const result = this.pkexecWriteCustomProfiles(newProfileList);
+    if (result) { this.readFiles(); }
+    return result;
+  }
+
+  public deleteCustomProfile(profileNameToDelete: string): boolean {
+    const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.name !== profileNameToDelete);
+    if (newProfileList.length === this.getCustomProfiles().length) { return false; }
+    const result = this.pkexecWriteCustomProfiles(newProfileList);
+    if (result) { this.readFiles(); }
+    return result;
+  }
+
+  public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {
+    const tmpProfilesPath = '/tmp/tmptccprofiles';
+    this.config.writeProfiles(customProfiles, tmpProfilesPath);
+    let tccdExec: string;
+    if (environment.production) {
+      tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+      tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+    }
+    const result = this.electron.ipcRenderer.sendSync(
+      'sudo-exec', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
+    );
+    return result.error === undefined;
+  }
+
   public writeCurrentEditingProfile(): boolean {
     if (this.editProfileChanges()) {
       const changedProfileIndex = this.customProfiles.findIndex(profile => profile.name === this.getCurrentEditingProfile().name);
@@ -117,6 +154,15 @@ export class ConfigService {
 
   public getProfileByName(searchedProfileName: string): ITccProfile {
     const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
+    if (foundProfile !== undefined) {
+      return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+      return undefined;
+    }
+  }
+
+  public getCustomProfileByName(searchedProfileName: string): ITccProfile {
+    const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
     if (foundProfile !== undefined) {
       return this.config.copyConfig<ITccProfile>(foundProfile);
     } else {

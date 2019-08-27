@@ -22,11 +22,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatInputModule } from '@angular/material/input';
+import { MatInputModule, MatInput } from '@angular/material/input';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { DecimalPipe } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -59,7 +60,8 @@ import { ProfileManagerComponent } from './profile-manager/profile-manager.compo
     MatTooltipModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatSliderModule
+    MatSliderModule,
+    MatGridListModule
   ],
   providers: [
     DecimalPipe
