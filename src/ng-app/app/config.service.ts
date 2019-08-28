@@ -20,6 +20,7 @@ export class ConfigService {
   private settings: ITccSettings;
 
   private currentProfileEdit: ITccProfile;
+  private currentProfileEditIndex: number;
 
   public observeSettings: Observable<ITccSettings>;
   private settingsSubject: Subject<ITccSettings>;
@@ -117,11 +118,8 @@ export class ConfigService {
 
   public writeCurrentEditingProfile(): boolean {
     if (this.editProfileChanges()) {
-      const changedProfileIndex = this.customProfiles.findIndex(profile => profile.name === this.getCurrentEditingProfile().name);
-      if (changedProfileIndex !== -1) {
-        this.customProfiles[changedProfileIndex] = this.getCurrentEditingProfile();
-        this.setCurrentEditingProfile(this.getCurrentEditingProfile().name);
-      }
+      this.customProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
+      this.setCurrentEditingProfile(this.getCurrentEditingProfile().name);
 
       const tmpProfilesPath = '/tmp/tmptccprofiles';
       this.config.writeProfiles(this.customProfiles, tmpProfilesPath);
@@ -134,12 +132,14 @@ export class ConfigService {
       const result = this.electron.ipcRenderer.sendSync(
         'sudo-exec', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
       );
-      this.readFiles();
       if (result.error !== undefined) {
         return false;
       } else {
+        this.readFiles();
         return true;
       }
+    } else {
+      return false;
     }
   }
 
@@ -182,7 +182,7 @@ export class ConfigService {
    */
   public editProfileChanges(): boolean {
     if (this.currentProfileEdit === undefined) { return false; }
-    const currentSavedProfile: ITccProfile = this.customProfiles.find(profile => profile.name === this.currentProfileEdit.name);
+    const currentSavedProfile: ITccProfile = this.customProfiles[this.currentProfileEditIndex];
     // Compare the two profiles
     return JSON.stringify(this.currentProfileEdit) !== JSON.stringify(currentSavedProfile);
   }
@@ -195,11 +195,12 @@ export class ConfigService {
    * @returns false if the name doesn't exist among the custom profiles, true if successfully set
    */
   public setCurrentEditingProfile(customProfileName: string): boolean {
-    const profile: ITccProfile = this.customProfiles.find(e => e.name === customProfileName);
-    if (profile === undefined) {
+    const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.name === customProfileName);
+    if (index === -1) {
       return false;
     } else {
-      this.currentProfileEdit = this.config.copyConfig<ITccProfile>(profile);
+      this.currentProfileEditIndex = index;
+      this.currentProfileEdit = this.config.copyConfig<ITccProfile>(this.customProfiles[index]);
       return true;
     }
   }

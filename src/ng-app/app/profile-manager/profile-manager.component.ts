@@ -66,7 +66,7 @@ export class ProfileManagerComponent implements OnInit {
   public copyProfile(): void {
     this.currentInputMode = InputMode.Copy;
     this.inputProfileName.setValue('');
-    this.inputProfileNameLabel = 'Copy profile';
+    this.inputProfileNameLabel = 'Copy this profile';
     this.inputActive = true;
     setImmediate( () => { this.inputFocus.focus(); });
   }
@@ -74,7 +74,7 @@ export class ProfileManagerComponent implements OnInit {
   public editProfile(): void {
     this.currentInputMode = InputMode.Edit;
     this.inputProfileName.setValue(this.currentProfile.name);
-    this.inputProfileNameLabel = 'Rename profile';
+    this.inputProfileNameLabel = 'Rename this profile';
     this.inputActive = true;
     setImmediate( () => { this.inputFocus.focus(); });
   }
@@ -95,7 +95,15 @@ export class ProfileManagerComponent implements OnInit {
           }
           break;
         case InputMode.Edit:
-          break;
+          if (this.config.setCurrentEditingProfile(this.currentProfile.name)) {
+            console.log(this.config.getCurrentEditingProfile());
+            this.config.getCurrentEditingProfile().name = this.inputProfileName.value;
+            if (this.config.writeCurrentEditingProfile()) {
+              this.inputActive = false;
+              this.router.navigate(['profile-manager', this.inputProfileName.value]);
+            }
+            break;
+          }
       }
     } else {
       const choice = this.electron.remote.dialog.showMessageBox(
@@ -134,6 +142,10 @@ export class ProfileManagerComponent implements OnInit {
 
   public showCopyProfileButton(): boolean {
     return this.currentProfile.name !== 'Default';
+  }
+
+  public showEditProfileButton(): boolean {
+    return this.isCustomProfile();
   }
 
   public formatFrequency(frequency: number): string {
