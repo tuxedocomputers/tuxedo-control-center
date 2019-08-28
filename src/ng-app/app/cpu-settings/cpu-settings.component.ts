@@ -57,7 +57,6 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
 
     this.updateInterval = setInterval(() => { this.periodicUpdate(); }, 2000);
 
-    console.log('init');
     this.setCustomProfileEdit(this.config.getCurrentEditingProfile());
     this.subscriptions.add(this.config.observeEditingProfile.subscribe(editingProfile => { this.setCustomProfileEdit(editingProfile); }));
   }

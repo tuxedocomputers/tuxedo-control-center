@@ -7,6 +7,7 @@ import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { Observable, Subject } from 'rxjs';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class ConfigService {
   // public copyConfig = ConfigHandler.prototype.copyConfig;
   // public writeSettings = ConfigHandler.prototype.writeSettings;
 
-  constructor(private electron: ElectronService) {
+  constructor(private electron: ElectronService, utils: UtilsService) {
     this.settingsSubject = new Subject<ITccSettings>();
     this.observeSettings = this.settingsSubject.asObservable();
 
@@ -41,6 +42,9 @@ export class ConfigService {
 
     this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
     this.defaultProfiles = this.config.getDefaultProfiles();
+    for (const profile of this.defaultProfiles) {
+      utils.fillDefaultValuesProfile(profile);
+    }
     this.readFiles();
   }
 
