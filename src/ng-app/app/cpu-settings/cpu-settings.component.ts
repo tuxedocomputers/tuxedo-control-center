@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { SysFsService, ILogicalCoreInfo, IGeneralCPUInfo } from '../sys-fs.service';
 import { DecimalPipe } from '@angular/common';
@@ -38,8 +39,10 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     private electron: ElectronService) {
   }
 
+  private subscriptions: Subscription = new Subscription();
+
   ngOnInit() {
-    this.updateData();
+    this.updateFrequencyData();
 
     this.formProfileEdit = new FormGroup({
       inputNumberCores: new FormControl('', [ Validators.min(1), Validators.max(this.cpuInfo.availableCores)]),
@@ -53,9 +56,14 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     this.formProfileEdit.controls.inputMaxFreq.setValidators([ Validators.min(this.formProfileEdit.controls.inputMinFreq.value) ]);
 
     this.updateInterval = setInterval(() => { this.periodicUpdate(); }, 2000);
+
+    console.log('init');
+    this.setCustomProfileEdit(this.config.getCurrentEditingProfile());
+    this.subscriptions.add(this.config.observeEditingProfile.subscribe(editingProfile => { this.setCustomProfileEdit(editingProfile); }));
   }
 
   ngOnDestroy() {
+    this.subscriptions.unsubscribe();
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
@@ -75,7 +83,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
         const profileWritten = this.config.writeCurrentEditingProfile();
         if (profileWritten) {
           this.formProfileEdit.markAsPristine();
-          this.selectCustomProfileEdit(this.config.getCurrentEditingProfile().name);
+          this.config.setCurrentEditingProfile(this.selectedCustomProfile);
         }
       } else {
         const choice = this.electron.remote.dialog.showMessageBox(
@@ -92,7 +100,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
   }
 
   private periodicUpdate(): void {
-    this.updateData();
+    this.updateFrequencyData();
   }
 
   public getCustomProfiles(): ITccProfile[] {
@@ -111,6 +119,38 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  private setCustomProfileEdit(profile: ITccProfile): void {
+    if (profile === undefined) {
+      this.selectedCustomProfile = undefined;
+      return;
+    }
+    this.selectedCustomProfile = profile.name;
+    this.formProfileEdit.markAsPristine();
+    const formControls = this.formProfileEdit.controls;
+    const currentProfileCpu = profile.cpu;
+
+    if (currentProfileCpu.onlineCores === undefined) {
+      formControls.inputNumberCores.setValue(this.cpuInfo.availableCores);
+    } else {
+      formControls.inputNumberCores.setValue(currentProfileCpu.onlineCores);
+    }
+
+    if (currentProfileCpu.scalingMinFrequency === undefined) {
+      formControls.inputMinFreq.setValue(this.cpuCoreInfo[0].cpuInfoMinFreq);
+    } else {
+      formControls.inputMinFreq.setValue(currentProfileCpu.scalingMinFrequency);
+    }
+
+    if (currentProfileCpu.scalingMaxFrequency === undefined) {
+      formControls.inputMaxFreq.setValue(this.cpuCoreInfo[0].cpuInfoMaxFreq);
+    } else {
+      formControls.inputMaxFreq.setValue(currentProfileCpu.scalingMaxFrequency);
+    }
+
+    formControls.inputScalingGovernor.setValue(currentProfileCpu.governor);
+    formControls.inputEnergyPerformancePreference.setValue(currentProfileCpu.energyPerformancePreference);
+  }
+
   public selectCustomProfileEdit(profileName: string): void {
     if (this.config.getCurrentEditingProfile() !== undefined && this.config.getCurrentEditingProfile().name === profileName) { return; }
     let choice = 0;
@@ -126,30 +166,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
       );
     }
     if (choice === 0 && this.config.setCurrentEditingProfile(profileName)) {
-      this.formProfileEdit.markAsPristine();
-      const formControls = this.formProfileEdit.controls;
-      const currentProfileCpu = this.config.getCurrentEditingProfile().cpu;
-
-      if (currentProfileCpu.onlineCores === undefined) {
-        formControls.inputNumberCores.setValue(this.cpuInfo.availableCores);
-      } else {
-        formControls.inputNumberCores.setValue(currentProfileCpu.onlineCores);
-      }
-
-      if (currentProfileCpu.scalingMinFrequency === undefined) {
-        formControls.inputMinFreq.setValue(this.cpuCoreInfo[0].cpuInfoMinFreq);
-      } else {
-        formControls.inputMinFreq.setValue(currentProfileCpu.scalingMinFrequency);
-      }
-
-      if (currentProfileCpu.scalingMaxFrequency === undefined) {
-        formControls.inputMaxFreq.setValue(this.cpuCoreInfo[0].cpuInfoMaxFreq);
-      } else {
-        formControls.inputMaxFreq.setValue(currentProfileCpu.scalingMaxFrequency);
-      }
-
-      formControls.inputScalingGovernor.setValue(currentProfileCpu.governor);
-      formControls.inputEnergyPerformancePreference.setValue(currentProfileCpu.energyPerformancePreference);
+      // this.setCustomProfileEdit(this.config.getCurrentEditingProfile());
     } else {
       setImmediate(() => {
         if (!this.currentlyEditingProfile()) {
@@ -165,7 +182,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     return this.config.getCurrentEditingProfile() !== undefined;
   }
 
-  public updateData(): void {
+  public updateFrequencyData(): void {
     this.cpuCoreInfo = this.sysfs.getLogicalCoreInfo();
     this.cpuInfo = this.sysfs.getGeneralCpuInfo();
 

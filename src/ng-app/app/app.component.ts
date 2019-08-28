@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { ElectronService } from 'ngx-electron';
 
@@ -15,9 +16,11 @@ import { ConfigService } from './config.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   public profileSelect: string;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private electron: ElectronService, private config: ConfigService, private router: Router) { }
 
@@ -25,7 +28,11 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.getSettings();
-    this.config.observeSettings.subscribe(newSettings => { this.getSettings(); });
+    this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   public buttonExit(): void {

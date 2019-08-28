@@ -40,8 +40,12 @@ export class ProfileManagerComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params.profileName) {
         this.currentProfile = this.config.getProfileByName(params.profileName);
+        this.config.setCurrentEditingProfile(this.currentProfile.name);
       } else {
-        this.currentProfile = this.config.getActiveProfile();
+        this.currentProfile = this.config.getCurrentEditingProfile();
+        if (this.currentProfile === undefined) {
+          this.currentProfile = this.config.getActiveProfile();
+        }
       }
       this.utils.fillDefaultValuesProfile(this.currentProfile);
     });
