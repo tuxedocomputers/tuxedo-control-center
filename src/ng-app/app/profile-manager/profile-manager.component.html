@@ -1,11 +1,11 @@
 <br />
 <mat-toolbar>
     <mat-toolbar-row *ngIf="!inputActive">
-        <button mat-raised-button color="primary" (click)="setActiveProfile(currentProfile.name)" *ngIf="showApplyProfileButton()">Use profile</button>
+        <button mat-raised-button color="primary" (click)="setActiveProfile(currentProfile.name)" *ngIf="showApplyProfileButton()">Use</button>
         <button mat-raised-button color="basic" (click)="copyProfile()" *ngIf="showCopyProfileButton()">Copy</button>
         <button mat-raised-button color="basic" (click)="editProfile()" *ngIf="showEditProfileButton()" [disabled]="this.isActiveProfile()">Rename</button>
         <button mat-raised-button color="warn" (click)="deleteProfile(currentProfile.name)" *ngIf="showDeleteProfileButton()" [disabled]="isActiveProfile() || inputActive">Delete</button>
-        <button mat-raised-button color="basic" (click)="newProfile()">New</button>
+        <button mat-raised-button color="basic" (click)="newProfile()">New profile</button>
     </mat-toolbar-row>
     <mat-toolbar-row *ngIf="inputActive">
         <form (ngSubmit)="onInputSubmit()">
