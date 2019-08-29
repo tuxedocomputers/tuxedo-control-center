@@ -6,6 +6,8 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
+import { Observable, Subject } from 'rxjs';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,20 +21,37 @@ export class ConfigService {
   private settings: ITccSettings;
 
   private currentProfileEdit: ITccProfile;
+  private currentProfileEditIndex: number;
+
+  public observeSettings: Observable<ITccSettings>;
+  private settingsSubject: Subject<ITccSettings>;
+
+  public observeEditingProfile: Observable<ITccProfile>;
+  private editingProfileSubject: Subject<ITccProfile>;
 
   // Exporting of relevant functions from ConfigHandler
   // public copyConfig = ConfigHandler.prototype.copyConfig;
   // public writeSettings = ConfigHandler.prototype.writeSettings;
 
-  constructor(private electron: ElectronService) {
+  constructor(private electron: ElectronService, utils: UtilsService) {
+    this.settingsSubject = new Subject<ITccSettings>();
+    this.observeSettings = this.settingsSubject.asObservable();
+
+    this.editingProfileSubject = new Subject<ITccProfile>();
+    this.observeEditingProfile = this.editingProfileSubject.asObservable();
+
     this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
     this.defaultProfiles = this.config.getDefaultProfiles();
+    for (const profile of this.defaultProfiles) {
+      utils.fillDefaultValuesProfile(profile);
+    }
     this.readFiles();
   }
 
   public readFiles(): void {
     this.customProfiles = this.config.getCustomProfilesNoThrow();
     this.settings = this.config.getSettingsNoThrow();
+    this.settingsSubject.next(this.settings);
   }
 
   public getSettings(): ITccSettings {
@@ -70,31 +89,54 @@ export class ConfigService {
     this.readFiles();
   }
 
+  public copyProfile(profileName: string, newProfileName: string): boolean {
+    const profileToCopy: ITccProfile = this.getProfileByName(profileName);
+    if (profileToCopy === undefined) { return false; }
+    const existingProfile = this.getProfileByName(newProfileName);
+    if (existingProfile !== undefined) { return false; }
+
+    const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
+    newProfile.name = newProfileName;
+    const newProfileList = this.getCustomProfiles().concat(newProfile);
+    const result = this.pkexecWriteCustomProfiles(newProfileList);
+    if (result) { this.readFiles(); }
+    return result;
+  }
+
+  public deleteCustomProfile(profileNameToDelete: string): boolean {
+    const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.name !== profileNameToDelete);
+    if (newProfileList.length === this.getCustomProfiles().length) { return false; }
+    const result = this.pkexecWriteCustomProfiles(newProfileList);
+    if (result) { this.readFiles(); }
+    return result;
+  }
+
+  public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {
+    const tmpProfilesPath = '/tmp/tmptccprofiles';
+    this.config.writeProfiles(customProfiles, tmpProfilesPath);
+    let tccdExec: string;
+    if (environment.production) {
+      tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+      tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+    }
+    const result = this.electron.ipcRenderer.sendSync(
+      'sudo-exec', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
+    );
+    return result.error === undefined;
+  }
+
   public writeCurrentEditingProfile(): boolean {
     if (this.editProfileChanges()) {
-      const changedProfileIndex = this.customProfiles.findIndex(profile => profile.name === this.getCurrentEditingProfile().name);
-      if (changedProfileIndex !== -1) {
-        this.customProfiles[changedProfileIndex] = this.getCurrentEditingProfile();
-        this.setCurrentEditingProfile(this.getCurrentEditingProfile().name);
-      }
+      const changedCustomProfiles: ITccProfile[] = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+      changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
 
-      const tmpProfilesPath = '/tmp/tmptccprofiles';
-      this.config.writeProfiles(this.customProfiles, tmpProfilesPath);
-      let tccdExec: string;
-      if (environment.production) {
-        tccdExec = TccPaths.TCCD_EXEC_FILE;
-      } else {
-        tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
-      }
-      const result = this.electron.ipcRenderer.sendSync(
-        'sudo-exec', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
-      );
-      this.readFiles();
-      if (result.error !== undefined) {
-        return false;
-      } else {
-        return true;
-      }
+      const result = this.pkexecWriteCustomProfiles(changedCustomProfiles);
+      if (result) { this.readFiles(); }
+
+      return result;
+    } else {
+      return false;
     }
   }
 
@@ -107,6 +149,28 @@ export class ConfigService {
     return this.currentProfileEdit;
   }
 
+  public getProfileByName(searchedProfileName: string): ITccProfile {
+    const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
+    if (foundProfile !== undefined) {
+      return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+      return undefined;
+    }
+  }
+
+  public getCustomProfileByName(searchedProfileName: string): ITccProfile {
+    const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
+    if (foundProfile !== undefined) {
+      return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+      return undefined;
+    }
+  }
+
+  public getActiveProfile(): ITccProfile {
+    return this.config.copyConfig<ITccProfile>(this.getAllProfiles().find(profile => profile.name === this.settings.activeProfileName));
+  }
+
   /**
    * Checks if the current edit profile has changes compared to the currently saved
    *
@@ -115,7 +179,7 @@ export class ConfigService {
    */
   public editProfileChanges(): boolean {
     if (this.currentProfileEdit === undefined) { return false; }
-    const currentSavedProfile: ITccProfile = this.customProfiles.find(profile => profile.name === this.currentProfileEdit.name);
+    const currentSavedProfile: ITccProfile = this.customProfiles[this.currentProfileEditIndex];
     // Compare the two profiles
     return JSON.stringify(this.currentProfileEdit) !== JSON.stringify(currentSavedProfile);
   }
@@ -128,11 +192,18 @@ export class ConfigService {
    * @returns false if the name doesn't exist among the custom profiles, true if successfully set
    */
   public setCurrentEditingProfile(customProfileName: string): boolean {
-    const profile: ITccProfile = this.customProfiles.find(e => e.name === customProfileName);
-    if (profile === undefined) {
+    if (customProfileName === undefined) {
+      this.currentProfileEditIndex = -1;
+      this.currentProfileEdit = undefined;
+      this.editingProfileSubject.next(undefined);
+    }
+    const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.name === customProfileName);
+    if (index === -1) {
       return false;
     } else {
-      this.currentProfileEdit = this.config.copyConfig<ITccProfile>(profile);
+      this.currentProfileEditIndex = index;
+      this.currentProfileEdit = this.config.copyConfig<ITccProfile>(this.customProfiles[index]);
+      this.editingProfileSubject.next(this.currentProfileEdit);
       return true;
     }
   }

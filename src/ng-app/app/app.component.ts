@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 import { ElectronService } from 'ngx-electron';
 
 import { TccPaths } from '../../common/classes/TccPaths';
@@ -13,16 +16,23 @@ import { ConfigService } from './config.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   public profileSelect: string;
 
-  constructor(private electron: ElectronService, private config: ConfigService) { }
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private electron: ElectronService, private config: ConfigService, private router: Router) { }
 
   title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
 
   public ngOnInit(): void {
     this.getSettings();
+    this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   public buttonExit(): void {
@@ -39,9 +49,10 @@ export class AppComponent implements OnInit {
   }
 
   public chooseActiveProfile(profileName: string): void {
+    this.router.navigate(['profile-manager', profileName]);
     setImmediate(() => {
       if (profileName !== this.config.getSettings().activeProfileName) {
-        this.config.setActiveProfile(profileName);
+        // this.config.setActiveProfile(profileName);
         this.profileSelect = this.config.getSettings().activeProfileName;
       }
     });
