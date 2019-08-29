@@ -1,11 +1,11 @@
 <br />
 <mat-toolbar>
     <mat-toolbar-row *ngIf="!inputActive">
-        <button mat-raised-button color="primary" (click)="setActiveProfile(currentProfile.name)" *ngIf="showApplyProfileButton()">Use</button>
-        <button mat-raised-button color="basic" (click)="copyProfile()" *ngIf="showCopyProfileButton()">Copy</button>
-        <button mat-raised-button color="basic" (click)="editProfile()" *ngIf="showEditProfileButton()" [disabled]="this.isActiveProfile()">Rename</button>
-        <button mat-raised-button color="warn" (click)="deleteProfile(currentProfile.name)" *ngIf="showDeleteProfileButton()" [disabled]="isActiveProfile() || inputActive">Delete</button>
-        <button mat-raised-button color="basic" (click)="newProfile()">New profile</button>
+        <span [matTooltip]="buttonActivate.tooltip()"><button mat-raised-button color="primary" (click)="buttonActivate.click()" *ngIf="buttonActivate.show()" [disabled]="buttonActivate.disable()">{{ buttonActivate.label() }}</button></span>
+        <span [matTooltip]="buttonNew.tooltip()"><button mat-raised-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()">{{ buttonNew.label() }}</button></span>
+        <span [matTooltip]="buttonCopy.tooltip()"><button mat-stroked-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()">{{ buttonCopy.label() }}</button></span>
+        <span [matTooltip]="buttonEdit.tooltip()"><button mat-stroked-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()">{{ buttonEdit.label() }}</button></span>
+        <span [matTooltip]="buttonDelete.tooltip()"><button mat-stroked-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()">{{ buttonDelete.label() }}</button></span>
     </mat-toolbar-row>
     <mat-toolbar-row *ngIf="inputActive">
         <form (ngSubmit)="onInputSubmit()">
@@ -22,23 +22,15 @@
 <mat-card>
     <mat-card-title>
         {{ currentProfile.name }}
+        <mat-chip-list style="display: inline-flex">
+            <mat-chip *ngIf="isCustomProfile()" color="accent" selected>Custom</mat-chip>
+            <mat-chip *ngIf="!isCustomProfile()">Preset</mat-chip>
+        </mat-chip-list>
     </mat-card-title>
     <mat-card-subtitle>
         Profile overview
     </mat-card-subtitle>
     <mat-card-content>
-        <mat-card>
-            <mat-card-subtitle>
-                Status
-            </mat-card-subtitle>
-            <mat-card-content>
-                <mat-grid-list cols="4" rowHeight="20px" class="profile-information">
-                    <mat-grid-tile colspan="2"><header>Type</header></mat-grid-tile><mat-grid-tile><content>{{ isCustomProfile() ? 'Custom' : 'Default' }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                    <mat-grid-tile colspan="2"><header>Status</header></mat-grid-tile><mat-grid-tile><content>{{ isActiveProfile() ? 'Active' : 'Inactive' }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                </mat-grid-list>
-            </mat-card-content>
-        </mat-card>
-        <br />
         <mat-card>
             <mat-card-subtitle>
                 Display backlight

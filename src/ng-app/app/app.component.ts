@@ -19,6 +19,7 @@ import { ConfigService } from './config.service';
 export class AppComponent implements OnInit, OnDestroy {
 
   public profileSelect: string;
+  public activeProfileName: string;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -44,17 +45,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public getSettings(): ITccSettings {
-    this.profileSelect = this.config.getSettings().activeProfileName;
+    this.activeProfileName = this.config.getSettings().activeProfileName;
     return this.config.getSettings();
   }
 
-  public chooseActiveProfile(profileName: string): void {
+  public chooseProfile(profileName: string): void {
     this.router.navigate(['profile-manager', profileName]);
     setImmediate(() => {
-      if (profileName !== this.config.getSettings().activeProfileName) {
-        // this.config.setActiveProfile(profileName);
-        this.profileSelect = this.config.getSettings().activeProfileName;
-      }
+      this.profileSelect = '';
     });
   }
 }
