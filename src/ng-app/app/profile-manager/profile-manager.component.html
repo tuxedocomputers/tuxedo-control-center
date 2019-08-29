@@ -1,0 +1,69 @@
+<br />
+<mat-toolbar>
+    <mat-toolbar-row *ngIf="!inputActive">
+        <button mat-raised-button color="primary" (click)="setActiveProfile(currentProfile.name)" *ngIf="showApplyProfileButton()">Use</button>
+        <button mat-raised-button color="basic" (click)="copyProfile()" *ngIf="showCopyProfileButton()">Copy</button>
+        <button mat-raised-button color="basic" (click)="editProfile()" *ngIf="showEditProfileButton()" [disabled]="this.isActiveProfile()">Rename</button>
+        <button mat-raised-button color="warn" (click)="deleteProfile(currentProfile.name)" *ngIf="showDeleteProfileButton()" [disabled]="isActiveProfile() || inputActive">Delete</button>
+        <button mat-raised-button color="basic" (click)="newProfile()">New profile</button>
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="inputActive">
+        <form (ngSubmit)="onInputSubmit()">
+            <mat-form-field class="profile-name-input">
+                <mat-label>{{ inputProfileNameLabel }}</mat-label>
+                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" placeholder="profile name" minLength="1" maxLength="50" />
+            </mat-form-field>
+            <button mat-stroked-button color="primary">Save</button>
+            <button mat-stroked-button color="warn" (click)="inputActive=false">Cancel</button>
+        </form>
+    </mat-toolbar-row>
+</mat-toolbar>
+<br />
+<mat-card>
+    <mat-card-title>
+        {{ currentProfile.name }}
+    </mat-card-title>
+    <mat-card-subtitle>
+        Profile overview
+    </mat-card-subtitle>
+    <mat-card-content>
+        <mat-card>
+            <mat-card-subtitle>
+                Status
+            </mat-card-subtitle>
+            <mat-card-content>
+                <mat-grid-list cols="4" rowHeight="20px" class="profile-information">
+                    <mat-grid-tile colspan="2"><header>Type</header></mat-grid-tile><mat-grid-tile><content>{{ isCustomProfile() ? 'Custom' : 'Default' }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                    <mat-grid-tile colspan="2"><header>Status</header></mat-grid-tile><mat-grid-tile><content>{{ isActiveProfile() ? 'Active' : 'Inactive' }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+        <br />
+        <mat-card>
+            <mat-card-subtitle>
+                Display backlight
+            </mat-card-subtitle>
+            <mat-card-content>
+                <mat-grid-list cols="4" rowHeight="20px" class="profile-information">
+                    <mat-grid-tile colspan="2"><header>Set fixed brightness</header></mat-grid-tile><mat-grid-tile><content>{{ currentProfile.display.useBrightness }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                    <mat-grid-tile colspan="2"><header>Brightness value</header></mat-grid-tile><mat-grid-tile><content>{{ currentProfile.display.brightness }}%</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+        <br />
+        <mat-card>
+            <mat-card-subtitle>
+                CPU settings
+            </mat-card-subtitle>
+            <mat-card-content>
+                <mat-grid-list cols="4" rowHeight="20px" class="profile-information">
+                    <mat-grid-tile colspan="2"><header>Number of logical cores</header></mat-grid-tile><mat-grid-tile><content>{{ currentProfile.cpu.onlineCores }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                    <mat-grid-tile colspan="2"><header>Minimum scaling frequency</header></mat-grid-tile><mat-grid-tile><content>{{ formatFrequency(currentProfile.cpu.scalingMinFrequency) }} GHz</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                    <mat-grid-tile colspan="2"><header>Maximum scaling frequency</header></mat-grid-tile><mat-grid-tile><content>{{ formatFrequency(currentProfile.cpu.scalingMaxFrequency) }} GHz</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                    <mat-grid-tile colspan="2"><header>Scaling governor</header></mat-grid-tile><mat-grid-tile><content>{{ currentProfile.cpu.governor }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                    <mat-grid-tile colspan="2"><header>Energy performance preference</header></mat-grid-tile><mat-grid-tile><content>{{ currentProfile.cpu.energyPerformancePreference }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+    </mat-card-content>
+</mat-card>
