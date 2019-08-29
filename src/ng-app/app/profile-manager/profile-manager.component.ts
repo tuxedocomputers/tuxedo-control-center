@@ -12,6 +12,15 @@ enum InputMode {
   New, Copy, Edit
 }
 
+class ProfileManagerButton {
+  constructor(
+    public show: () => boolean,
+    public disable: () => boolean,
+    public click: () => void,
+    public label: () => string,
+    public tooltip: () => string) {}
+}
+
 @Component({
   selector: 'app-profile-manager',
   templateUrl: './profile-manager.component.html',
@@ -27,6 +36,89 @@ export class ProfileManagerComponent implements OnInit {
   public inputProfileNameLabel: string;
 
   @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
+
+  public buttonActivate = new ProfileManagerButton(
+    // Show
+    () => true,
+    // Disable
+    () => this.isActiveProfile(),
+    // Click
+    () => { this.setActiveProfile(this.currentProfile.name); },
+    // Label
+    () => { if (this.isActiveProfile()) { return 'Activate'; } else { return 'Activate'; } },
+    // Tooltip
+    () => this.isActiveProfile() ? 'Profile is already active' : 'Set this profile as active'
+  );
+
+  public buttonCopy = new ProfileManagerButton(
+    // Show
+    () => this.currentProfile.name !== 'Default',
+    // Disable
+    () => false,
+    // Click
+    () => {
+      this.currentInputMode = InputMode.Copy;
+      this.inputProfileName.setValue('');
+      this.inputProfileNameLabel = 'Copy this profile';
+      this.inputActive = true;
+      setImmediate( () => { this.inputFocus.focus(); });
+    },
+    // Label
+    () => 'Copy',
+    // Tooltip
+    () => 'Copy this profile'
+  );
+
+  public buttonEdit = new ProfileManagerButton(
+    // Show
+    () => this.isCustomProfile(),
+    // Disable
+    () => this.isActiveProfile(),
+    // Click
+    () => {
+      this.currentInputMode = InputMode.Edit;
+      this.inputProfileName.setValue(this.currentProfile.name);
+      this.inputProfileNameLabel = 'Rename this profile';
+      this.inputActive = true;
+      setImmediate( () => { this.inputFocus.focus(); });
+    },
+    // Label
+    () => 'Rename',
+    // Tooltip
+    () => this.isActiveProfile() ? 'Can\'t rename active profile' : 'Rename this profile'
+  );
+
+  public buttonNew = new ProfileManagerButton(
+    // Show
+    () => true,
+    // Disable
+    () => false,
+    // Click
+    () => {
+      this.currentInputMode = InputMode.New;
+      this.inputProfileName.setValue('');
+      this.inputProfileNameLabel = 'New profile';
+      this.inputActive = true;
+      setImmediate( () => { this.inputFocus.focus(); });
+    },
+    // Label
+    () => 'New profile',
+    // Tooltip
+    () => 'Create a new profile with default settings'
+  );
+
+  public buttonDelete = new ProfileManagerButton(
+    // Show
+    () => this.isCustomProfile(),
+    // Disable
+    () => this.isActiveProfile(),
+    // Click
+    () => { this.deleteProfile(this.currentProfile.name); },
+    // Label
+    () => 'Delete',
+    // Tooltip
+    () => this.isActiveProfile() ? 'Can\'t delete active profile' : 'Delete this profile'
+  );
 
   constructor(
     private route: ActivatedRoute,
@@ -57,30 +149,6 @@ export class ProfileManagerComponent implements OnInit {
         this.config.setActiveProfile(profileName);
       }
     });
-  }
-
-  public newProfile(): void {
-    this.currentInputMode = InputMode.New;
-    this.inputProfileName.setValue('');
-    this.inputProfileNameLabel = 'New profile';
-    this.inputActive = true;
-    setImmediate( () => { this.inputFocus.focus(); });
-  }
-
-  public copyProfile(): void {
-    this.currentInputMode = InputMode.Copy;
-    this.inputProfileName.setValue('');
-    this.inputProfileNameLabel = 'Copy this profile';
-    this.inputActive = true;
-    setImmediate( () => { this.inputFocus.focus(); });
-  }
-
-  public editProfile(): void {
-    this.currentInputMode = InputMode.Edit;
-    this.inputProfileName.setValue(this.currentProfile.name);
-    this.inputProfileNameLabel = 'Rename this profile';
-    this.inputActive = true;
-    setImmediate( () => { this.inputFocus.focus(); });
   }
 
   public onInputSubmit(): void {
@@ -114,7 +182,7 @@ export class ProfileManagerComponent implements OnInit {
         this.electron.remote.getCurrentWindow(),
         {
           title: 'Invalid input',
-          message: 'Make sure all values are in range',
+          message: 'A name for the profile is required',
           type: 'info',
           buttons: ['ok']
         }
@@ -134,22 +202,6 @@ export class ProfileManagerComponent implements OnInit {
 
   public isActiveProfile(): boolean {
     return this.currentProfile.name === this.config.getActiveProfile().name;
-  }
-
-  public showApplyProfileButton(): boolean {
-    return !this.isActiveProfile();
-  }
-
-  public showDeleteProfileButton(): boolean {
-    return this.isCustomProfile();
-  }
-
-  public showCopyProfileButton(): boolean {
-    return this.currentProfile.name !== 'Default';
-  }
-
-  public showEditProfileButton(): boolean {
-    return this.isCustomProfile();
   }
 
   public formatFrequency(frequency: number): string {
