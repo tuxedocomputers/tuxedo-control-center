@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CpuController } from '../../common/classes/CpuController';
+import { DisplayBacklightController } from 'src/common/classes/DisplayBacklightController';
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +8,17 @@ import { CpuController } from '../../common/classes/CpuController';
 export class SysFsService {
 
   private cpu: CpuController;
+  private displayBacklightControllers: DisplayBacklightController[];
 
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
+
+    const displayBacklightControllerBasepath = '/sys/class/backlight';
+    const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
+    this.displayBacklightControllers = [];
+    for (const driverName of displayBacklightControllerNames) {
+      this.displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
+    }
   }
 
   public getGeneralCpuInfo(): IGeneralCPUInfo {
@@ -77,4 +86,9 @@ export interface ILogicalCoreInfo {
   scalingGovernor: string;
   cpuInfoMinFreq: number;
   cpuInfoMaxFreq: number;
+}
+
+export interface IDisplayBrightnessInfo {
+  brightness: number;
+  maxBrightness: number;
 }

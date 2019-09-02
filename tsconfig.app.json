@@ -7,7 +7,11 @@
       "path": [ "./src/ng-app/native/path.js" ],
       "os": [ "./src/ng-app/native/os.js" ],
       "child_process": [ "./src/ng-app/native/child_process.js" ],
-      "crypto": [ "./src/ng-app/native/crypto.js" ]
+      "crypto": [ "./src/ng-app/native/crypto.js" ],
+      "net": [ "./src/ng-app/native/net.js" ],
+      "stream": [ "./src/ng-app/native/stream.js" ],
+      "timers": [ "./src/ng-app/native/timers.js" ],
+      "x11": [ "./src/ng-app/native/x11.js" ]
     }
   },
   "include": [

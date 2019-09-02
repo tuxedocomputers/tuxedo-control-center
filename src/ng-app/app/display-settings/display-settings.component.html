@@ -1,0 +1,9 @@
+<br />
+<mat-card>
+    <mat-card-title>
+        Display brightness
+    </mat-card-title>
+    <mat-card-content>
+        <mat-slider min="1" max="100" step="5" #frmInputBrightness [formControl]="inputBrightness" (input)="inputBrightnessChange(frmInputBrightness.value)"></mat-slider> {{ frmInputBrightness.value }}
+    </mat-card-content>
+</mat-card>
