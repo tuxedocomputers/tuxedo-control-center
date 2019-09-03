@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "main": "./dist/tuxedo-control-center/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -61,6 +61,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.0.0",
     "codelyzer": "^5.0.0",
+    "dbus-next": "^0.7.1",
     "electron": "^5.0.6",
     "electron-builder": "^20.44.4",
     "electron-reload": "^1.5.0",

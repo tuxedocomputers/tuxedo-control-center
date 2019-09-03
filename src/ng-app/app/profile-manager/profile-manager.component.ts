@@ -85,7 +85,7 @@ export class ProfileManagerComponent implements OnInit {
     // Label
     () => 'Rename',
     // Tooltip
-    () => this.isActiveProfile() ? 'Can\'t rename active profile' : 'Rename this profile'
+    () => this.isActiveProfile() ? 'Can not rename active profile' : 'Rename this profile'
   );
 
   public buttonNew = new ProfileManagerButton(
@@ -111,13 +111,17 @@ export class ProfileManagerComponent implements OnInit {
     // Show
     () => this.isCustomProfile(),
     // Disable
-    () => this.isActiveProfile(),
+    () => this.isActiveProfile() || this.config.getCustomProfiles().length === 1,
     // Click
     () => { this.deleteProfile(this.currentProfile.name); },
     // Label
     () => 'Delete',
     // Tooltip
-    () => this.isActiveProfile() ? 'Can\'t delete active profile' : 'Delete this profile'
+    () => {
+      if (this.isActiveProfile()) { return 'Can not delete active profile'; }
+      if (this.config.getCustomProfiles().length === 1) { return 'Can not delete last custom profile'; }
+      return 'Delete this profile';
+    }
   );
 
   constructor(
@@ -130,6 +134,7 @@ export class ProfileManagerComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
+      this.inputActive = false;
       if (params.profileName) {
         this.currentProfile = this.config.getProfileByName(params.profileName);
         this.config.setCurrentEditingProfile(this.currentProfile.name);

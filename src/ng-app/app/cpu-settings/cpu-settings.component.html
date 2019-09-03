@@ -39,8 +39,8 @@
                             {{ profile.cpu.scalingMinFrequency ? formatFrequency(profile.cpu.scalingMinFrequency) + ' GHz' : 'default' }}
                         </td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
-                            {{ formatFrequency(formProfileEdit.controls.inputMinFreq.value) }} GHz
-                            <mat-slider formControlName="inputMinFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
+                            {{ formatFrequency(frmInputMinFreq.value) }} GHz
+                            <mat-slider #frmInputMinFreq formControlName="inputMinFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
                         </td>
                     </tr>
                     <tr>
@@ -50,8 +50,8 @@
                             {{ profile.cpu.scalingMaxFrequency ? formatFrequency(profile.cpu.scalingMaxFrequency) + ' GHz' : 'default' }}
                         </td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
-                            {{ formatFrequency(formProfileEdit.controls.inputMaxFreq.value) }} GHz
-                            <mat-slider formControlName="inputMaxFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
+                            {{ formatFrequency(frmInputMaxFreq.value) }} GHz
+                            <mat-slider #frmInputMaxFreq formControlName="inputMaxFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
                         </td>
                     </tr>
                     <tr>
