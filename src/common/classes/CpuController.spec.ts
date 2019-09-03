@@ -12,10 +12,12 @@ describe('CpuController', () => {
                 'possible': '0-1',
                 'present': '0-1',
                 'cpu0': {
-                    'online': '1'
+                    'online': '1',
+                    cpufreq: { 'scaling_cur_freq': '800000' }
                 },
                 'cpu1': {
-                    'online': '1'
+                    'online': '1',
+                    cpufreq: { 'scaling_cur_freq': '800000' }
                 }
             }
         });
