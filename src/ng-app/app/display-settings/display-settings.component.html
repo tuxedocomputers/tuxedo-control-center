@@ -4,6 +4,43 @@
         Display brightness
     </mat-card-title>
     <mat-card-content>
-        <mat-slider min="1" max="100" step="5" #frmInputBrightness [formControl]="inputBrightness" (input)="inputBrightnessChange(frmInputBrightness.value)"></mat-slider> {{ frmInputBrightness.value }}
+        <mat-grid-list cols="2" rowHeight="200px">
+            <mat-grid-tile>
+                <mat-card style="width: 300px">
+                    <mat-card-subtitle>
+                        Current brightness 
+                    </mat-card-subtitle>
+                    <mat-card-content>
+                        <mat-slider min="1" max="100" step="5" #frmInputBrightness [formControl]="inputBrightness" (input)="inputBrightnessChange(frmInputBrightness.value)"></mat-slider>
+                        &nbsp;{{ frmInputBrightness.value }}%
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-card style="width: 300px">
+                    <mat-card-subtitle>
+                        <mat-form-field>
+                            <mat-select [(ngModel)]="selectedCustomProfile" placeholder="Edit custom profile" [disableOptionCentering]="true">
+                                <mat-option *ngFor="let profile of getCustomProfiles()" [value]="profile.name" (click)="selectCustomProfileEdit(profile.name)">
+                                    <span *ngIf="formProfileEdit.dirty && profile.name === selectedCustomProfile">*</span>{{ profile.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-card-subtitle>
+                    <mat-card-content *ngIf="currentlyEditingProfile()">
+                        <form [formGroup]="formProfileEdit">
+                            <mat-form-field style="width: 50px; margin-bottom: 10px">
+                                <mat-label>Brightness</mat-label>
+                                <input matInput formControlName="inputBrightnessPercent" type="number" min="1" max="100" [readonly]="inputBrightnessTrackCurrent.value" />
+                            </mat-form-field>
+                            %
+                            <mat-checkbox [formControl]="inputBrightnessTrackCurrent" (change)="trackBrightnessSlider()" style="margin-left: 10px">Set to current</mat-checkbox>
+                            <br />
+                            <mat-checkbox formControlName="inputUseBrightness" (change)="enableBrightnessControls()">Set fixed brightness on start/wake up</mat-checkbox>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
     </mat-card-content>
 </mat-card>

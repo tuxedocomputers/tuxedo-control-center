@@ -130,6 +130,7 @@ export class ProfileManagerComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
+      this.inputActive = false;
       if (params.profileName) {
         this.currentProfile = this.config.getProfileByName(params.profileName);
         this.config.setCurrentEditingProfile(this.currentProfile.name);

@@ -13,6 +13,7 @@ export class DBusService implements OnDestroy {
   public observeDisplayBrightness: Observable<number>;
   private displayBrightnessSubject: Subject<number>;
   public currentDisplayBrightness: number;
+  public displayBrightnessNotSupported = true;
 
   constructor() {
     this.displayBrightnessSubject = new Subject<number>();
@@ -26,6 +27,7 @@ export class DBusService implements OnDestroy {
         if (result.hasOwnProperty('value')) {
           this.currentDisplayBrightness = result.value;
           this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+          this.displayBrightnessNotSupported = false;
         }
       });
       this.dbusProperties.on('PropertiesChanged', (iface, changed, invalidated) => {
