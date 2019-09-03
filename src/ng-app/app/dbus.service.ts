@@ -29,10 +29,14 @@ export class DBusService implements OnDestroy {
           this.displayBrightnessSubject.next(this.currentDisplayBrightness);
           this.displayBrightnessNotSupported = false;
         }
+      }).catch( () => {
+        this.displayBrightnessNotSupported = true;
       });
       this.dbusProperties.on('PropertiesChanged', (iface, changed, invalidated) => {
         this.screenPropertiesChanged(this, iface, changed, invalidated);
       });
+    }).catch( () => {
+      this.displayBrightnessNotSupported = true;
     });
   }
 
@@ -45,13 +49,16 @@ export class DBusService implements OnDestroy {
 
   public async setDisplayBrightness(valuePercent: number): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      if (this.dbusProperties) {
+      if (this.dbusProperties && !this.displayBrightnessNotSupported) {
         this.dbusProperties.Set('org.gnome.SettingsDaemon.Power.Screen', 'Brightness', new dbus.Variant('i', valuePercent))
         .then(() => {
           resolve(true);
         }).catch(() => {
           resolve(false);
         });
+      } else {
+        this.displayBrightnessNotSupported = true;
+        resolve(false);
       }
     });
   }
