@@ -35,7 +35,7 @@
                                 <input matInput formControlName="inputBrightnessPercent" type="number" min="1" max="100" [readonly]="inputBrightnessTrackCurrent.value" />
                             </mat-form-field>
                             %
-                            <mat-checkbox [formControl]="inputBrightnessTrackCurrent" (change)="trackBrightnessSlider()"></mat-checkbox>
+                            <mat-checkbox [formControl]="inputBrightnessTrackCurrent" (change)="trackBrightnessSlider()">Track current value</mat-checkbox>
                             <br />
                             <mat-checkbox formControlName="inputUseBrightness" (change)="enableBrightnessControls()">Set fixed brightness on start/wake up</mat-checkbox>
                         </form>
