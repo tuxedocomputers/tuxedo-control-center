@@ -159,6 +159,33 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
     this.enableBrightnessControls();
   }
 
+  public submitProfileEdit(): void {
+    if (this.formProfileEdit.dirty) {
+      const changedProfile = this.config.getCurrentEditingProfile();
+      const controls = this.formProfileEdit.controls;
+      if (this.formProfileEdit.valid) {
+        // Save profile
+        changedProfile.display.brightness = Number.parseInt(controls.inputBrightnessPercent.value, 10);
+        changedProfile.display.useBrightness = controls.inputUseBrightness.value;
+        const profileWritten = this.config.writeCurrentEditingProfile();
+        if (profileWritten) {
+          this.formProfileEdit.markAsPristine();
+          this.config.setCurrentEditingProfile(this.selectedCustomProfile);
+        }
+      } else {
+        const choice = this.electron.remote.dialog.showMessageBox(
+          this.electron.remote.getCurrentWindow(),
+          {
+            title: 'Invalid input',
+            message: 'Make sure all values are in range',
+            type: 'info',
+            buttons: ['ok']
+          }
+        );
+      }
+    }
+  }
+
   public enableBrightnessControls(): void {
     if (this.formProfileEdit.controls.inputUseBrightness.value) {
       this.formProfileEdit.controls.inputBrightnessPercent.enable();

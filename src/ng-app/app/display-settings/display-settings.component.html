@@ -1,12 +1,12 @@
 <br />
-<mat-card>
+<mat-card class="display-brightness-settings">
     <mat-card-title>
         Display brightness
     </mat-card-title>
     <mat-card-content>
         <mat-grid-list cols="2" rowHeight="200px">
             <mat-grid-tile>
-                <mat-card style="width: 300px">
+                <mat-card>
                     <mat-card-subtitle>
                         Current brightness 
                     </mat-card-subtitle>
@@ -17,7 +17,7 @@
                 </mat-card>
             </mat-grid-tile>
             <mat-grid-tile>
-                <mat-card style="width: 300px">
+                <mat-card>
                     <mat-card-subtitle>
                         <mat-form-field>
                             <mat-select [(ngModel)]="selectedCustomProfile" placeholder="Edit custom profile" [disableOptionCentering]="true">
@@ -26,15 +26,16 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+                        <button mat-stroked-button color="primary" *ngIf="formProfileEdit.dirty" (click)="submitProfileEdit()">Save</button>
                     </mat-card-subtitle>
                     <mat-card-content *ngIf="currentlyEditingProfile()">
-                        <form [formGroup]="formProfileEdit">
-                            <mat-form-field style="width: 50px; margin-bottom: 10px">
+                        <form [formGroup]="formProfileEdit" (ngSubmit)="submitProfileEdit()">
+                            <mat-form-field class="brightness-input-field">
                                 <mat-label>Brightness</mat-label>
                                 <input matInput formControlName="inputBrightnessPercent" type="number" min="1" max="100" [readonly]="inputBrightnessTrackCurrent.value" />
                             </mat-form-field>
                             %
-                            <mat-checkbox [formControl]="inputBrightnessTrackCurrent" (change)="trackBrightnessSlider()" style="margin-left: 10px">Set to current</mat-checkbox>
+                            <mat-checkbox [formControl]="inputBrightnessTrackCurrent" (change)="trackBrightnessSlider()"></mat-checkbox>
                             <br />
                             <mat-checkbox formControlName="inputUseBrightness" (change)="enableBrightnessControls()">Set fixed brightness on start/wake up</mat-checkbox>
                         </form>
