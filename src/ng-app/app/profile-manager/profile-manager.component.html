@@ -3,8 +3,8 @@
     <mat-toolbar-row *ngIf="!inputActive">
         <span [matTooltip]="buttonActivate.tooltip()"><button mat-raised-button color="primary" (click)="buttonActivate.click()" *ngIf="buttonActivate.show()" [disabled]="buttonActivate.disable()">{{ buttonActivate.label() }}</button></span>
         <span [matTooltip]="buttonNew.tooltip()"><button mat-raised-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()">{{ buttonNew.label() }}</button></span>
-        <span [matTooltip]="buttonCopy.tooltip()"><button mat-stroked-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()">{{ buttonCopy.label() }}</button></span>
-        <span [matTooltip]="buttonEdit.tooltip()"><button mat-stroked-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()">{{ buttonEdit.label() }}</button></span>
+        <span [matTooltip]="buttonCopy.tooltip()"><button mat-raised-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()">{{ buttonCopy.label() }}</button></span>
+        <span [matTooltip]="buttonEdit.tooltip()"><button mat-raised-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()">{{ buttonEdit.label() }}</button></span>
         <span [matTooltip]="buttonDelete.tooltip()"><button mat-stroked-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()">{{ buttonDelete.label() }}</button></span>
     </mat-toolbar-row>
     <mat-toolbar-row *ngIf="inputActive">
@@ -14,7 +14,7 @@
                 <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="inputActive=false" placeholder="profile name" minLength="1" maxLength="50" />
             </mat-form-field>
             <button mat-stroked-button color="primary">Save</button>
-            <button mat-stroked-button color="warn" (click)="inputActive=false">Cancel</button>
+            <button mat-stroked-button color="basic" (click)="inputActive=false">Cancel</button>
         </form>
     </mat-toolbar-row>
 </mat-toolbar>
