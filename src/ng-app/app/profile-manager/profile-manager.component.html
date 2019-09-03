@@ -11,7 +11,7 @@
         <form (ngSubmit)="onInputSubmit()">
             <mat-form-field class="profile-name-input">
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
-                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" placeholder="profile name" minLength="1" maxLength="50" />
+                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="inputActive=false" placeholder="profile name" minLength="1" maxLength="50" />
             </mat-form-field>
             <button mat-stroked-button color="primary">Save</button>
             <button mat-stroked-button color="warn" (click)="inputActive=false">Cancel</button>
