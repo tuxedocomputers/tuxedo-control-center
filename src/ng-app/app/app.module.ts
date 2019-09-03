@@ -31,12 +31,14 @@ import { MatGridListModule } from '@angular/material/grid-list';
 
 import { DecimalPipe } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
+import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CpuSettingsComponent,
-    ProfileManagerComponent
+    ProfileManagerComponent,
+    DisplaySettingsComponent
   ],
   imports: [
     BrowserModule,
