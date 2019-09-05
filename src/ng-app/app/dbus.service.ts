@@ -18,6 +18,8 @@ export class DBusService implements OnDestroy {
 
   public displayBrightnessGnome: DBusDisplayBrightnessGnome;
 
+  private dbusDriverNames: string[] = [];
+
   constructor() {
     this.displayBrightnessSubject = new Subject<number>();
     this.observeDisplayBrightness = this.displayBrightnessSubject.asObservable();
@@ -30,17 +32,25 @@ export class DBusService implements OnDestroy {
       this.sessionBus = undefined;
     }
 
-    this.initDusDisplayBrightness();
+    this.initDusDisplayBrightness().then(() => {
+      const driversList: string[] = [];
+      if (this.displayBrightnessNotSupported === false) {
+        driversList.push(this.displayBrightnessGnome.getDescriptiveString());
+      }
+      this.dbusDriverNames = driversList;
+    });
   }
 
   public async initDusDisplayBrightness(): Promise<void> {
     return new Promise<void>(async resolve => {
+
       if (this.sessionBus === undefined) {
         this.displayBrightnessNotSupported = true;
       } else {
         this.displayBrightnessGnome = new DBusDisplayBrightnessGnome(this.sessionBus);
         if (!await this.displayBrightnessGnome.isAvailable()) {
           this.displayBrightnessNotSupported = true;
+          return;
         }
 
         this.displayBrightnessGnome.getBrightness().then( (result) => {
@@ -59,14 +69,15 @@ export class DBusService implements OnDestroy {
     });
   }
 
+  public getDBusDriverNames(): string[] {
+    return this.dbusDriverNames;
+  }
+
   public async setDisplayBrightness(valuePercent: number): Promise<void> {
     return this.displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
   }
 
   ngOnDestroy() {
     this.displayBrightnessGnome.cleanUp();
-    if (this.dbusProperties) {
-      console.log('destroyed');
-    }
   }
 }

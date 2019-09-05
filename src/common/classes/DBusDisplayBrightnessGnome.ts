@@ -31,6 +31,10 @@ export class DBusDisplayBrightnessGnome {
         });
     }
 
+    public getDescriptiveString(): string {
+        return 'org.gnome.SettingsDaemon';
+    }
+
     public async isAvailable(): Promise<boolean> {
         return new Promise<boolean>(async resolve => {
             try {

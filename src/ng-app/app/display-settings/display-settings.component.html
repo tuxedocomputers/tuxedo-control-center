@@ -1,7 +1,7 @@
 <br />
 <mat-card class="display-brightness-settings">
     <mat-card-title>
-        Display brightness
+        Backlight brightness
     </mat-card-title>
     <mat-card-content>
         <mat-grid-list cols="2" rowHeight="200px">
@@ -11,7 +11,11 @@
                         Current brightness 
                     </mat-card-subtitle>
                     <mat-card-content>
-                        <mat-slider min="1" max="100" step="5" #frmInputBrightness [formControl]="inputBrightness" (input)="inputBrightnessChange(frmInputBrightness.value)"></mat-slider>
+                        <table>
+                            <tr><td>Backlight driver</td><td style="padding-left: 5px"><strong style="font-size: 0.8em">{{ brightnessDrivers.join(',') }}</strong></td></tr>
+                            <tr *ngIf="brightnessDBusDriverNames.length > 0"><td>GUI control</td><td style="padding-left: 5px"><strong style="font-size: 0.8em">{{ brightnessDBusDriverNames.join(',') }}</strong></td></tr>
+                        </table>
+                        <mat-slider min="1" max="100" step="5" #frmInputBrightness [formControl]="inputBrightness" (input)="inputBrightnessChange(frmInputBrightness.value)" [disabled]="!brightnessChangeAvailable()"></mat-slider>
                         &nbsp;{{ frmInputBrightness.value }}%
                     </mat-card-content>
                 </mat-card>
