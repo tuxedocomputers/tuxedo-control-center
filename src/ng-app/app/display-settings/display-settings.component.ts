@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { ConfigService } from '../config.service';
 import { ElectronService } from 'ngx-electron';
+import { SysFsService, IDisplayBrightnessInfo } from '../sys-fs.service';
 
 @Component({
   selector: 'app-display-settings',
@@ -15,7 +16,7 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
   private updateInterval: NodeJS.Timeout;
-  private updateIntervalMs = 1000;
+  private updateIntervalMs = 500;
 
   public inputBrightness = new FormControl(1);
   private disableBrightnessUpdate = false;
@@ -25,10 +26,16 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
   public formProfileEdit: FormGroup;
   public inputBrightnessTrackCurrent = new FormControl(false);
 
+  public sysfsBrightnessInfo: IDisplayBrightnessInfo[] = [];
+  public brightnessDrivers: string[] = [];
+
+  public brightnessDBusDriverNames: string[] = [];
+
   constructor(
     private dbus: DBusService,
-    private ref: ChangeDetectorRef,
+    private sysfs: SysFsService,
     private config: ConfigService,
+    private ref: ChangeDetectorRef,
     private electron: ElectronService) { }
 
   ngOnInit() {
@@ -38,7 +45,7 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
     this.formProfileEdit = new FormGroup({
       inputUseBrightness: new FormControl({ value: false }, [ Validators.required ]),
-      inputBrightnessPercent: new FormControl({ value: 1 }, [ Validators.min(1), Validators.max(100) ]),
+      inputBrightnessPercent: new FormControl({ value: 1 }, [ Validators.required, Validators.min(1), Validators.max(100) ]),
     });
 
     this.setCustomProfileEdit(this.config.getCurrentEditingProfile());
@@ -58,25 +65,46 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
     }));
   }
 
+  public brightnessChangeAvailable(): boolean {
+    return !this.dbus.displayBrightnessNotSupported;
+  }
+
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
     if (this.updateInterval) { clearInterval(this.updateInterval); }
   }
 
   private periodicUpdate(): void {
+    this.sysfsBrightnessInfo = this.sysfs.getDisplayBrightnessInfo();
+
+    if (this.dbus.displayBrightnessNotSupported && this.sysfsBrightnessInfo.length > 0) {
+      const info = this.sysfsBrightnessInfo[0];
+      const valuePercent = Math.round((info.brightness / info.maxBrightness) * 100);
+      this.updateBrightnessSliderValue(valuePercent);
+    }
+
+    const driverList = [];
+    for (const info of this.sysfsBrightnessInfo) {
+      driverList.push(info.driver);
+    }
+    this.brightnessDrivers = driverList;
+
+    this.brightnessDBusDriverNames = this.dbus.getDBusDriverNames();
   }
 
   inputBrightnessChange(valuePercent: number): void {
     this.disableBrightnessUpdate = true;
     if (valuePercent === 100) {
-      this.dbus.setDisplayBrightness(valuePercent);
+      this.dbus.setDisplayBrightness(valuePercent).catch(() => {});
     } else {
-      this.dbus.setDisplayBrightness(valuePercent + 1);
+      this.dbus.setDisplayBrightness(valuePercent + 1).catch(() => {});
     }
     if (this.lastDisableTimer) { clearTimeout(this.lastDisableTimer); }
     this.lastDisableTimer = setTimeout(() => {
         this.disableBrightnessUpdate = false;
-        this.updateBrightnessSliderValue(this.dbus.currentDisplayBrightness);
+        if (!this.dbus.displayBrightnessNotSupported) {
+          this.updateBrightnessSliderValue(this.dbus.currentDisplayBrightness);
+        }
     }, 500);
 
     this.trackBrightnessSlider(valuePercent);

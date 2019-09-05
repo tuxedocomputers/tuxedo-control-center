@@ -27,16 +27,28 @@ export class CpuWorker extends DaemonWorker {
      *                  Undefined values are interpreted as "use default".
      */
     private applyCpuProfile(profile: ITccProfile) {
-        this.cpuCtrl.useCores(profile.cpu.onlineCores);
-        // Reset min/max frequency to cpuinfo min/max before applying to avoid min being higher than max
-        this.cpuCtrl.setGovernorScalingMinFrequency();
-        this.cpuCtrl.setGovernorScalingMaxFrequency();
+        // Reset everything to default on all cores before applying settings
+        // Set online status last so that all cores get the same settings
+        this.setCpuDefaultConfig();
+
+        this.cpuCtrl.setGovernor(profile.cpu.governor);
+        this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+
         // Check that min is not higher than max for the profile
         if (profile.cpu.scalingMinFrequency <= profile.cpu.scalingMaxFrequency) {
             this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
             this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
         }
-        this.cpuCtrl.setGovernor(profile.cpu.governor);
-        this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+
+        // Finally set the number of online cores
+        this.cpuCtrl.useCores(profile.cpu.onlineCores);
+    }
+
+    private setCpuDefaultConfig(): void {
+        this.cpuCtrl.useCores();
+        this.cpuCtrl.setGovernor('powersave');
+        this.cpuCtrl.setEnergyPerformancePreference('default');
+        this.cpuCtrl.setGovernorScalingMinFrequency();
+        this.cpuCtrl.setGovernorScalingMaxFrequency();
     }
 }

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DbusService } from './dbus.service';
+import { DBusService } from './dbus.service';
 
 describe('DbusService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DbusService = TestBed.get(DbusService);
+    const service: DBusService = TestBed.get(DBusService);
     expect(service).toBeTruthy();
   });
 });

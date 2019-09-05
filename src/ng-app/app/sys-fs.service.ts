@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CpuController } from '../../common/classes/CpuController';
-import { DisplayBacklightController } from 'src/common/classes/DisplayBacklightController';
+import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +65,23 @@ export class SysFsService {
     }
     return coreInfoList;
   }
+
+  public getDisplayBrightnessInfo(): IDisplayBrightnessInfo[] {
+    const infoArray: IDisplayBrightnessInfo[] = [];
+    for (const controller of this.displayBacklightControllers) {
+      try {
+        const info: IDisplayBrightnessInfo = {
+          driver: controller.driver,
+          brightness: controller.brightness.readValue(),
+          maxBrightness: controller.maxBrightness.readValue()
+        };
+        infoArray.push(info);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return infoArray;
+  }
 }
 
 export interface IGeneralCPUInfo {
@@ -89,6 +106,7 @@ export interface ILogicalCoreInfo {
 }
 
 export interface IDisplayBrightnessInfo {
+  driver: string;
   brightness: number;
   maxBrightness: number;
 }

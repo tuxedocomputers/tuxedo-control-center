@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 const dbus = require('dbus-next');
+import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
 
 @Injectable({
   providedIn: 'root'
@@ -13,60 +14,74 @@ export class DBusService implements OnDestroy {
   public observeDisplayBrightness: Observable<number>;
   private displayBrightnessSubject: Subject<number>;
   public currentDisplayBrightness: number;
-  public displayBrightnessNotSupported = true;
+  public displayBrightnessNotSupported = false;
+
+  public displayBrightnessGnome: DBusDisplayBrightnessGnome;
+
+  private dbusDriverNames: string[] = [];
 
   constructor() {
     this.displayBrightnessSubject = new Subject<number>();
     this.observeDisplayBrightness = this.displayBrightnessSubject.asObservable();
 
-    this.sessionBus = dbus.sessionBus();
+    try {
+      this.sessionBus = dbus.sessionBus();
 
-    this.sessionBus.getProxyObject('org.gnome.SettingsDaemon.Power', '/org/gnome/SettingsDaemon/Power').then((obj) => {
-      this.dbusProperties = obj.getInterface('org.freedesktop.DBus.Properties');
-      this.dbusProperties.Get('org.gnome.SettingsDaemon.Power.Screen', 'Brightness').then((result) => {
-        if (result.hasOwnProperty('value')) {
-          this.currentDisplayBrightness = result.value;
-          this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-          this.displayBrightnessNotSupported = false;
-        }
-      }).catch( () => {
-        this.displayBrightnessNotSupported = true;
-      });
-      this.dbusProperties.on('PropertiesChanged', (iface, changed, invalidated) => {
-        this.screenPropertiesChanged(this, iface, changed, invalidated);
-      });
-    }).catch( () => {
-      this.displayBrightnessNotSupported = true;
-    });
-  }
-
-  private screenPropertiesChanged(that: DBusService, iface: string, changed: any, invalidated: any): void {
-    if (iface === 'org.gnome.SettingsDaemon.Power.Screen' && changed.hasOwnProperty('Brightness')) {
-      that.currentDisplayBrightness = changed.Brightness.value;
-      that.displayBrightnessSubject.next(this.currentDisplayBrightness);
+    } catch (err) {
+      console.log('dbus.sessionBus() error: ', err);
+      this.sessionBus = undefined;
     }
+
+    this.initDusDisplayBrightness().then(() => {
+      const driversList: string[] = [];
+      if (this.displayBrightnessNotSupported === false) {
+        driversList.push(this.displayBrightnessGnome.getDescriptiveString());
+      }
+      this.dbusDriverNames = driversList;
+    });
   }
 
-  public async setDisplayBrightness(valuePercent: number): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      if (this.dbusProperties && !this.displayBrightnessNotSupported) {
-        this.dbusProperties.Set('org.gnome.SettingsDaemon.Power.Screen', 'Brightness', new dbus.Variant('i', valuePercent))
-        .then(() => {
-          resolve(true);
-        }).catch(() => {
-          resolve(false);
-        });
-      } else {
+  public async initDusDisplayBrightness(): Promise<void> {
+    return new Promise<void>(async resolve => {
+
+      if (this.sessionBus === undefined) {
         this.displayBrightnessNotSupported = true;
-        resolve(false);
+      } else {
+        this.displayBrightnessGnome = new DBusDisplayBrightnessGnome(this.sessionBus);
+        if (!await this.displayBrightnessGnome.isAvailable()) {
+          this.displayBrightnessNotSupported = true;
+          return;
+        }
+
+        try {
+          const result = await this.displayBrightnessGnome.getBrightness();
+          this.currentDisplayBrightness = result;
+          this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+        } catch (err) {
+          this.displayBrightnessNotSupported = true;
+          return;
+        }
+
+        this.displayBrightnessGnome.setOnPropertiesChanged(
+          (value) => {
+            this.currentDisplayBrightness = value;
+            this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+          }
+        );
       }
+      resolve();
     });
+  }
+
+  public getDBusDriverNames(): string[] {
+    return this.dbusDriverNames;
+  }
+
+  public async setDisplayBrightness(valuePercent: number): Promise<void> {
+    return this.displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
   }
 
   ngOnDestroy() {
-    if (this.dbusProperties) {
-      console.log('destroyed');
-      this.dbusProperties.removeEventListener(this.screenPropertiesChanged);
-    }
+    this.displayBrightnessGnome.cleanUp();
   }
 }
