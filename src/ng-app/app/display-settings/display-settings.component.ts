@@ -69,14 +69,16 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
   inputBrightnessChange(valuePercent: number): void {
     this.disableBrightnessUpdate = true;
     if (valuePercent === 100) {
-      this.dbus.setDisplayBrightness(valuePercent);
+      this.dbus.setDisplayBrightness(valuePercent).catch(() => {});
     } else {
-      this.dbus.setDisplayBrightness(valuePercent + 1);
+      this.dbus.setDisplayBrightness(valuePercent + 1).catch(() => {});
     }
     if (this.lastDisableTimer) { clearTimeout(this.lastDisableTimer); }
     this.lastDisableTimer = setTimeout(() => {
         this.disableBrightnessUpdate = false;
-        this.updateBrightnessSliderValue(this.dbus.currentDisplayBrightness);
+        if (!this.dbus.displayBrightnessNotSupported) {
+          this.updateBrightnessSliderValue(this.dbus.currentDisplayBrightness);
+        }
     }, 500);
 
     this.trackBrightnessSlider(valuePercent);
