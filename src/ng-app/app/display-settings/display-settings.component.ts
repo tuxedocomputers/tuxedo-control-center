@@ -16,7 +16,7 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
   private updateInterval: NodeJS.Timeout;
-  private updateIntervalMs = 1000;
+  private updateIntervalMs = 500;
 
   public inputBrightness = new FormControl(1);
   private disableBrightnessUpdate = false;

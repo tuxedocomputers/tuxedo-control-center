@@ -53,10 +53,14 @@ export class DBusService implements OnDestroy {
           return;
         }
 
-        this.displayBrightnessGnome.getBrightness().then( (result) => {
+        try {
+          const result = await this.displayBrightnessGnome.getBrightness();
           this.currentDisplayBrightness = result;
           this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-        }).catch( () => {});
+        } catch (err) {
+          this.displayBrightnessNotSupported = true;
+          return;
+        }
 
         this.displayBrightnessGnome.setOnPropertiesChanged(
           (value) => {
