@@ -26,8 +26,8 @@ export class SysFsService {
     try {
       cpuInfo = {
         availableCores: this.cpu.cores.length,
-        scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValue(),
-        energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValue()
+        scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
+        energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT()
       };
     } catch (err) {
       console.log(err);
