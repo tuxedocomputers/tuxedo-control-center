@@ -21,18 +21,26 @@ export class SupportComponent implements OnInit {
     this.electron.shell.openExternal(url);
   }
 
+  public async anydeskIsInstalled(): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      this.utils.execCmd('which anydesk').then(() => {
+        resolve(true);
+      }).catch(() => {
+        resolve(false);
+      });
+    });
+  }
+
   public async installAnydesk(): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       try {
-        const result = await this.utils.execCmd('which anydesk').toString();
-        if (result.toString().trim() === '') {
-          await this.utils.execCmd('pkexec apt install anydesk');
+        if (!(await this.anydeskIsInstalled())) {
+          await this.utils.execCmd('pkexec apt install anydesk -y');
           resolve(true);
         } else {
           resolve(false);
         }
       } catch (err) {
-        console.log('Failed to install Anydesk => ' + err);
         resolve(false);
       }
     });
@@ -41,15 +49,13 @@ export class SupportComponent implements OnInit {
   public async removeAnydesk(): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       try {
-        const result = await this.utils.execCmd('which anydesk').toString();
-        if (result.toString().trim() !== '') {
-          await this.utils.execCmd('pkexec apt remove anydesk');
+        if (await this.anydeskIsInstalled()) {
+          await this.utils.execCmd('pkexec apt remove anydesk -y');
           resolve(true);
         } else {
           resolve(false);
         }
       } catch (err) {
-        console.log('Failed to remove Anydesk => ' + err);
         resolve(false);
       }
     });
