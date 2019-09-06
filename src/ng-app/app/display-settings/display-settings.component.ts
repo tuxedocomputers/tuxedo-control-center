@@ -31,6 +31,8 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
 
   public brightnessDBusDriverNames: string[] = [];
 
+  private displayBrightnessPreviousValues: number[] = [];
+
   constructor(
     private dbus: DBusService,
     private sysfs: SysFsService,
@@ -77,10 +79,34 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
   private periodicUpdate(): void {
     this.sysfsBrightnessInfo = this.sysfs.getDisplayBrightnessInfo();
 
-    if (this.dbus.displayBrightnessNotSupported && this.sysfsBrightnessInfo.length > 0) {
-      const info = this.sysfsBrightnessInfo[0];
+    // Algorithm for choosing which value to take
+    // First pass: take intel_backlight if available
+    // Every other take the one that changed compared to previous value
+    if (this.displayBrightnessPreviousValues.length === 0) {
+      for (const info of this.sysfsBrightnessInfo) {
+        if (info.driver === 'intel_backlight') {
+          const valuePercent = Math.round((info.brightness / info.maxBrightness) * 100);
+          this.updateBrightnessSliderValue(valuePercent);
+        }
+      }
+    }
+
+    let newSysFsBrightness;
+    const newPreviousValues: number[] = [];
+    for (let i = 0; i < this.sysfsBrightnessInfo.length; ++i) {
+      const info = this.sysfsBrightnessInfo[i];
       const valuePercent = Math.round((info.brightness / info.maxBrightness) * 100);
-      this.updateBrightnessSliderValue(valuePercent);
+      newPreviousValues.push(valuePercent);
+      if (this.displayBrightnessPreviousValues.length >= i + 1) {
+        if (this.displayBrightnessPreviousValues[i] !== valuePercent) {
+          newSysFsBrightness = valuePercent;
+        }
+      }
+    }
+    this.displayBrightnessPreviousValues = newPreviousValues;
+
+    if ((this.dbus.displayBrightnessNotSupported) && newSysFsBrightness !== undefined) {
+      this.updateBrightnessSliderValue(newSysFsBrightness);
     }
 
     const driverList = [];
