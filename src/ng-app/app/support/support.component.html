@@ -39,7 +39,7 @@
         </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
-        <button mat-raised-button (click)="installAnydesk()">Install anydesk</button>&nbsp;
-        <button mat-raised-button (click)="removeAnydesk()">Remove anydesk</button>
+        <button mat-raised-button (click)="buttonInstallAnydesk()" *ngIf="!anydeskInstalled">Install Anydesk</button>
+        <button mat-raised-button (click)="buttonRemoveAnydesk()" *ngIf="anydeskInstalled">Remove Anydesk</button>
     </p>
 </mat-expansion-panel>

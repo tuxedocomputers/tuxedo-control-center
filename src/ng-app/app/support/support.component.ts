@@ -9,16 +9,41 @@ import { UtilsService } from '../utils.service';
 })
 export class SupportComponent implements OnInit {
 
+  public anydeskInstalled: boolean;
+
   constructor(
     private electron: ElectronService,
     private utils: UtilsService
   ) { }
 
   ngOnInit() {
+    this.updateAnydeskInstallStatus();
+  }
+
+  public updateAnydeskInstallStatus(): void {
+    this.anydeskIsInstalled().then((isInstalled) => {
+      this.anydeskInstalled = isInstalled;
+    });
   }
 
   public openExternalUrl(url: string): void {
     this.electron.shell.openExternal(url);
+  }
+
+  public buttonInstallAnydesk(): void {
+    this.installAnydesk().then((success) => {
+      if (success) {
+        this.updateAnydeskInstallStatus();
+      }
+    });
+  }
+
+  public buttonRemoveAnydesk(): void {
+    this.removeAnydesk().then((success) => {
+      if (success) {
+        this.updateAnydeskInstallStatus();
+      }
+    });
   }
 
   public async anydeskIsInstalled(): Promise<boolean> {
