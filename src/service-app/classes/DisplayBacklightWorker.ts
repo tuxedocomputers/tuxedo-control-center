@@ -60,7 +60,9 @@ export class DisplayBacklightWorker extends DaemonWorker {
                 if (!Number.isNaN(value) && value !== 0) {
                     this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
                 }
-            } catch (err) {}
+            } catch (err) {
+                this.tccd.logLine('DisplayBacklightWorker => ' + err);
+            }
         }
     }
 
@@ -72,14 +74,16 @@ export class DisplayBacklightWorker extends DaemonWorker {
                 value = controller.brightness.readValue();
                 maxBrightness = controller.maxBrightness.readValue();
             } catch (err) {
-                this.tccd.logLine('Failed to read display brightness on exit from ' + controller.driver);
+                this.tccd.logLine('DisplayBacklightWorker: Failed to read display brightness on exit from '
+                    + controller.driver + ' => ' + err);
             }
             if (value !== undefined) {
                 if (value === 0) {
-                    this.tccd.logLine('Refused to save display brightness 0 from ' + controller.driver);
+                    this.tccd.logLine('DisplayBacklightWorker: Refused to save display brightness 0 from ' + controller.driver);
                 } else {
                     this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
-                    this.tccd.logLine('Save display brightness ' + this.tccd.autosave.displayBrightness + '% (' + value + ') on exit');
+                    this.tccd.logLine('DisplayBacklightWorker: Save display brightness '
+                        + this.tccd.autosave.displayBrightness + '% (' + value + ') on exit');
                 }
             }
         });
