@@ -44,10 +44,18 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on('sudo-exec', (event, arg) => {
+ipcMain.on('exec-cmd-sync', (event, arg) => {
     try {
         event.returnValue = { data: child_process.execSync(arg), error: undefined };
     } catch (err) {
         event.returnValue = { data: undefined, error: err };
+    }
+});
+
+ipcMain.on('exec-cmd-async', (event, arg) => {
+    try {
+        event.reply('exec-cmd-result', { data: child_process.execSync(arg), error: undefined });
+    } catch (err) {
+        event.reply('exec-cmd-result', { data: undefined, error: err });
     }
 });

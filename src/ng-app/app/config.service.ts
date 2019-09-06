@@ -84,7 +84,7 @@ export class ConfigService {
       tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
     }
     const result = this.electron.ipcRenderer.sendSync(
-      'sudo-exec', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
+      'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
     );
     this.readFiles();
   }
@@ -121,7 +121,7 @@ export class ConfigService {
       tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
     }
     const result = this.electron.ipcRenderer.sendSync(
-      'sudo-exec', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
+      'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
     );
     return result.error === undefined;
   }
