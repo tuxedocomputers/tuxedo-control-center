@@ -47,16 +47,16 @@ export class SysFsService {
         const coreInfo: ILogicalCoreInfo = {
           index: core.coreIndex,
           online: onlineStatus,
-          scalingCurFreq: core.scalingCurFreq.readValue(),
-          scalingMinFreq: core.scalingMinFreq.readValue(),
-          scalingMaxFreq: core.scalingMaxFreq.readValue(),
-          scalingDriver: core.scalingDriver.readValue(),
-          energyPerformanceAvailablePreferences: core.energyPerformanceAvailablePreferences.readValue(),
-          energyPerformancePreference: core.energyPerformancePreference.readValue(),
-          scalingAvailableGovernors: core.scalingAvailableGovernors.readValue(),
-          scalingGovernor: core.scalingGovernor.readValue(),
-          cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValue(),
-          cpuInfoMinFreq: core.cpuinfoMinFreq.readValue()
+          scalingCurFreq: core.scalingCurFreq.readValueNT(),
+          scalingMinFreq: core.scalingMinFreq.readValueNT(),
+          scalingMaxFreq: core.scalingMaxFreq.readValueNT(),
+          scalingDriver: core.scalingDriver.readValueNT(),
+          energyPerformanceAvailablePreferences: core.energyPerformanceAvailablePreferences.readValueNT(),
+          energyPerformancePreference: core.energyPerformancePreference.readValueNT(),
+          scalingAvailableGovernors: core.scalingAvailableGovernors.readValueNT(),
+          scalingGovernor: core.scalingGovernor.readValueNT(),
+          cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValueNT(),
+          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT()
         };
         coreInfoList.push(coreInfo);
       } catch (err) {

@@ -32,7 +32,7 @@
                             of {{ cpuInfo.availableCores }}
                         </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="activeScalingMinFreqs.length > 0">
                         <th matTooltip="Minimum scaling frequency">Min frequency</th>
                         <td>{{ activeScalingMinFreqs.join(',') }} GHz</td>
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
@@ -43,7 +43,7 @@
                             <mat-slider #frmInputMinFreq formControlName="inputMinFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
                         </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="activeScalingMaxFreqs.length > 0">
                         <th matTooltip="Maximum scaling frequency">Max frequency</th>
                         <td>{{ activeScalingMaxFreqs.join(',') }} GHz</td>
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
@@ -54,7 +54,7 @@
                             <mat-slider #frmInputMaxFreq formControlName="inputMaxFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
                         </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="activeScalingGovernors.length > 0">
                         <th matTooltip="Scaling governor">Governor</th><td>{{ activeScalingGovernors.join(',') }}</td>
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.governor ? profile.cpu.governor : 'default' }}
@@ -67,7 +67,7 @@
                             <!--/mat-form-field-->
                         </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="activeEnergyPerformancePreference.length > 0">
                         <th matTooltip="Energy performance preference">Energy performance</th>
                         <td>{{ activeEnergyPerformancePreference.join(',') }}</td>
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">

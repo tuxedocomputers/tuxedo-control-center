@@ -26,7 +26,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      * Reads value from device path and tries to convert it with
      * convertStringToType. Throws error if file operation fails.
      *
-     * @returns undefined if any part fails, the value in the type otherwise
+     * @returns The value of the current type
      */
     public readValue(): T {
         try {
@@ -34,6 +34,21 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             return this.convertStringToType(readValue);
         } catch (err) {
             throw Error('Could not read value from path: ' + this.readPath);
+        }
+    }
+
+    /**
+     * Reads value from device path and tries to convert it with
+     * convertStringToType. Does not throw on error.
+     *
+     * @returns undefined if any part fails, the value in the type otherwise
+     */
+    public readValueNT(): T {
+        try {
+            const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
+            return this.convertStringToType(readValue);
+        } catch (err) {
+            return undefined;
         }
     }
 

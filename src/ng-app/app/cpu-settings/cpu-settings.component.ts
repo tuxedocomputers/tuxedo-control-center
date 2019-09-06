@@ -192,19 +192,20 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     this.activeScalingGovernors = [];
     this.activeEnergyPerformancePreference = [];
     for (const core of this.cpuCoreInfo) {
-      if (!this.activeScalingMinFreqs.includes(this.formatFrequency(core.scalingMinFreq))) {
+      if (core.scalingMinFreq !== undefined && !this.activeScalingMinFreqs.includes(this.formatFrequency(core.scalingMinFreq))) {
         this.activeScalingMinFreqs.push(this.formatFrequency(core.scalingMinFreq));
       }
-      if (!this.activeScalingMaxFreqs.includes(this.formatFrequency(core.scalingMaxFreq))) {
+      if (core.scalingMaxFreq !== undefined && !this.activeScalingMaxFreqs.includes(this.formatFrequency(core.scalingMaxFreq))) {
         this.activeScalingMaxFreqs.push(this.formatFrequency(core.scalingMaxFreq));
       }
-      if (!this.activeScalingGovernors.includes(core.scalingGovernor)) {
+      if (core.scalingGovernor !== undefined && !this.activeScalingGovernors.includes(core.scalingGovernor)) {
         this.activeScalingGovernors.push(core.scalingGovernor);
       }
-      if (!this.activeEnergyPerformancePreference.includes(core.energyPerformancePreference)) {
+      if (core.energyPerformancePreference !== undefined
+        && !this.activeEnergyPerformancePreference.includes(core.energyPerformancePreference)) {
         this.activeEnergyPerformancePreference.push(core.energyPerformancePreference);
       }
-      if (!this.activeScalingDrivers.includes(core.scalingDriver)) {
+      if (core.scalingDriver !== undefined && !this.activeScalingDrivers.includes(core.scalingDriver)) {
         this.activeScalingDrivers.push(core.scalingDriver);
       }
     }
