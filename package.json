@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "./dist/tuxedo-control-center/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
