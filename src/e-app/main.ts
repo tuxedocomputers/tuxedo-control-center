@@ -53,9 +53,15 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
 });
 
 ipcMain.on('exec-cmd-async', (event, arg) => {
-    try {
-        event.reply('exec-cmd-result', { data: child_process.execSync(arg), error: undefined });
-    } catch (err) {
-        event.reply('exec-cmd-result', { data: undefined, error: err });
-    }
+    child_process.exec(arg, (err, stdout, stderr) => {
+        if (err) {
+            event.reply('exec-cmd-result', { data: stderr, error: err });
+        } else {
+            event.reply('exec-cmd-result', { data: stdout, error: err });
+        }
+    });
+});
+
+ipcMain.on('spawn-external-async', (event, arg) => {
+    child_process.spawn(arg, { detached: true, stdio: 'ignore' });
 });

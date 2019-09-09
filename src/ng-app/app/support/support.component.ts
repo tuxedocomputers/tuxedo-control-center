@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { UtilsService } from '../utils.service';
+import { ProgramManagementService } from '../program-management.service';
 
 @Component({
   selector: 'app-support',
@@ -9,81 +9,52 @@ import { UtilsService } from '../utils.service';
 })
 export class SupportComponent implements OnInit {
 
+  public anydeskProgramName = 'anydesk';
   public anydeskInstalled: boolean;
 
   constructor(
     private electron: ElectronService,
-    private utils: UtilsService
+    private program: ProgramManagementService
   ) { }
 
   ngOnInit() {
     this.updateAnydeskInstallStatus();
   }
 
-  public updateAnydeskInstallStatus(): void {
-    this.anydeskIsInstalled().then((isInstalled) => {
-      this.anydeskInstalled = isInstalled;
-    });
-  }
-
   public openExternalUrl(url: string): void {
     this.electron.shell.openExternal(url);
   }
 
-  public buttonInstallAnydesk(): void {
-    this.installAnydesk().then((success) => {
-      if (success) {
-        this.updateAnydeskInstallStatus();
-      }
-    });
-  }
-
-  public buttonRemoveAnydesk(): void {
-    this.removeAnydesk().then((success) => {
-      if (success) {
-        this.updateAnydeskInstallStatus();
-      }
-    });
-  }
-
-  public async anydeskIsInstalled(): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
-      this.utils.execCmd('which anydesk').then(() => {
-        resolve(true);
-      }).catch(() => {
-        resolve(false);
+  public updateAnydeskInstallStatus(): void {
+    if (!this.progress().get(this.anydeskProgramName)) {
+      this.program.isInstalled(this.anydeskProgramName).then((isInstalled) => {
+        this.anydeskInstalled = isInstalled;
       });
-    });
+    }
   }
 
-  public async installAnydesk(): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
-      try {
-        if (!(await this.anydeskIsInstalled())) {
-          await this.utils.execCmd('pkexec apt install anydesk -y');
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      } catch (err) {
-        resolve(false);
-      }
-    });
+  public buttonInstallRemoveAnydesk(): void {
+    if (this.anydeskInstalled) {
+      this.program.remove(this.anydeskProgramName).then(() => {
+        this.updateAnydeskInstallStatus();
+      });
+    } else {
+      this.program.install(this.anydeskProgramName).then(() => {
+        this.updateAnydeskInstallStatus();
+      });
+    }
   }
 
-  public async removeAnydesk(): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
-      try {
-        if (await this.anydeskIsInstalled()) {
-          await this.utils.execCmd('pkexec apt remove anydesk -y');
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      } catch (err) {
-        resolve(false);
-      }
-    });
+  public buttonStartAnydesk(): void {
+    this.program.run('anydesk');
+  }
+
+  public progress(): Map<string, boolean> {
+    return this.program.isInProgress;
+  }
+
+  public progressCheck(): Map<string, boolean> {
+    return this.program.isCheckingInstallation;
   }
 
   public async runSysteminfo(): Promise<boolean> {

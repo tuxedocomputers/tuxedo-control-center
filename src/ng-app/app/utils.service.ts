@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
-import { ConfigService } from './config.service';
 import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { ElectronService } from 'ngx-electron';
 
@@ -39,7 +38,7 @@ export class UtilsService {
   public execCmd(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.once('exec-cmd-result', (event, result) => {
-        if (result.data !== undefined) {
+        if (result.error === null) {
           resolve(result.data);
         } else {
           reject(result.error);
@@ -47,5 +46,9 @@ export class UtilsService {
       });
       this.electron.ipcRenderer.send('exec-cmd-async', command);
     });
+  }
+
+  public spawnExternal(command: string): void {
+    this.electron.ipcRenderer.send('spawn-external-async', command);
   }
 }

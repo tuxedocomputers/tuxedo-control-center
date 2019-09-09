@@ -39,7 +39,13 @@
         </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
-        <button mat-raised-button (click)="buttonInstallAnydesk()" *ngIf="!anydeskInstalled">Install Anydesk</button>
-        <button mat-raised-button (click)="buttonRemoveAnydesk()" *ngIf="anydeskInstalled">Remove Anydesk</button>
+        <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
+            <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>
+            {{ !anydeskInstalled && !progressCheck().get(anydeskProgramName) ? 'Install Anydesk' : '' }}
+            {{ anydeskInstalled && !progressCheck().get(anydeskProgramName) ? 'Remove Anydesk' : '' }}
+            {{ progressCheck().get(anydeskProgramName) ? 'Checking' : '' }}
+        </button>
+        &nbsp;
+        <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled">Start Anydesk</button>
     </p>
 </mat-expansion-panel>
