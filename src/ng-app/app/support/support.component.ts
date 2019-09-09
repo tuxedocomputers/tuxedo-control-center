@@ -46,7 +46,7 @@ export class SupportComponent implements OnInit {
   }
 
   public buttonStartAnydesk(): void {
-    this.program.run('anydesk');
+    this.program.run(this.anydeskProgramName);
   }
 
   public progress(): Map<string, boolean> {
