@@ -61,6 +61,9 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
         <p>
+            Anydesk is a remote desktop type tool that can allow support to help you from afar.
+        </p>
+        <p>
             <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
                 <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>
                 {{ !anydeskInstalled && !progressCheck().get(anydeskProgramName) ? 'Install Anydesk' : '' }}
