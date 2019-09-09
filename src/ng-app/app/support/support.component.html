@@ -1,20 +1,20 @@
 
 <br />
-<mat-card>
-    <mat-card-title>
-        Support
-    </mat-card-title>
-    <mat-card-subtitle>
-        A collection of support information and links
-    </mat-card-subtitle>
-    <mat-card-content>
-        <p><button mat-stroked-button color="primary" (click)="openExternalUrl('https://www.tuxedocomputers.com/de/Kontakt.tuxedo')">TUXEDO Support Webpage</button></p>
-    </mat-card-content>
-</mat-card>
-
-<br />
 <mat-accordion class="support-accordion">
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel hideToggle [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Support
+            </mat-panel-title>
+            <mat-panel-description>
+                General support information
+                <mat-icon><img src="./assets/images/information.svg"></mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p><button mat-stroked-button color="primary" (click)="openExternalUrl('https://www.tuxedocomputers.com/de/Kontakt.tuxedo')">TUXEDO Support Webpage</button></p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle (click)="focusControl(frmInputTicketNumber)">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 systeminfo.sh
@@ -23,10 +23,22 @@
                 Download and run systeminfo.sh
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>
-            Please enter the ticket number given at support request. If you do not have a ticket
-            number yet please send an email to us and one will be sent automatically. 
-        </p>
+        <mat-vertical-stepper [linear]="true">
+            <mat-step [stepControl]="formTicketNumber" label="Ticket number">
+                <form [formGroup]="formTicketNumber">
+                    <p>
+                        Please enter the ticket number given at support request. If you do not have a ticket
+                        number yet please send an email to us and one will be sent automatically.
+                    </p>
+                    <mat-form-field>
+                        <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" placeholder="Ticket number" />
+                    </mat-form-field>
+                </form>
+            </mat-step>
+            <mat-step label="Download and run">
+                <button mat-stroked-button color="primary"></button>
+            </mat-step>
+        </mat-vertical-stepper>
     </mat-expansion-panel>
 
     <mat-expansion-panel hideToggle>

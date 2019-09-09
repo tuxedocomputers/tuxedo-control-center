@@ -28,6 +28,7 @@ import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { DecimalPipe } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -65,7 +66,8 @@ import { SupportComponent } from './support/support.component';
     MatCheckboxModule,
     MatDividerModule,
     MatSliderModule,
-    MatGridListModule
+    MatGridListModule,
+    MatStepperModule
   ],
   providers: [
     DecimalPipe

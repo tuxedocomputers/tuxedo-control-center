@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { ProgramManagementService } from '../program-management.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-support',
@@ -12,6 +13,8 @@ export class SupportComponent implements OnInit {
   public anydeskProgramName = 'anydesk';
   public anydeskInstalled: boolean;
 
+  public formTicketNumber: FormGroup;
+
   constructor(
     private electron: ElectronService,
     private program: ProgramManagementService
@@ -19,6 +22,13 @@ export class SupportComponent implements OnInit {
 
   ngOnInit() {
     this.updateAnydeskInstallStatus();
+    this.formTicketNumber = new FormGroup({
+      inputTicketNumber: new FormControl('', Validators.required)
+    });
+  }
+
+  public focusControl(control): void {
+    setImmediate(() => { control.focus(); });
   }
 
   public openExternalUrl(url: string): void {
