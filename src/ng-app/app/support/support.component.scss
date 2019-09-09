@@ -1,0 +1,14 @@
+.support-accordion {
+    mat-panel-title, mat-panel-description {
+        flex-basis: 0;
+    }
+
+    mat-panel-title {
+        font-weight: bold;
+    }
+}
+
+.support-accordion mat-panel-description {
+    justify-content: space-between;
+    align-items: center;
+}
