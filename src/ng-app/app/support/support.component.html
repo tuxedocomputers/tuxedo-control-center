@@ -4,7 +4,7 @@
     <mat-expansion-panel hideToggle [expanded]="true">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                Support
+                TUXEDO Support
             </mat-panel-title>
             <mat-panel-description>
                 General support information
@@ -25,18 +25,27 @@
         </mat-expansion-panel-header>
         <mat-vertical-stepper [linear]="true">
             <mat-step [stepControl]="formTicketNumber" label="Ticket number">
+                <ng-template matStepLabel>
+                    Ticket number{{ formTicketNumber.valid ? ': ' : '' }}
+                    <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>
+                </ng-template>
                 <form [formGroup]="formTicketNumber">
                     <p>
                         Please enter the ticket number given at support request. If you do not have a ticket
                         number yet please send an email to us and one will be sent automatically.
                     </p>
+                    <p>
+                        More information about which data the script collects can be found at
+                        <a routerLink="/support" (click)="openExternalUrl('http://systeminfo.sh')">http://systeminfo.sh</a>.
+                    </p>
                     <mat-form-field>
                         <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" placeholder="Ticket number" />
-                    </mat-form-field>
+                    </mat-form-field>&nbsp;
+                    <button mat-stroked-button matStepperNext color="primary">Next</button>
                 </form>
             </mat-step>
             <mat-step label="Download and run">
-                <button mat-stroked-button color="primary"></button>
+                <button mat-raised-button color="primary">Start</button>
             </mat-step>
         </mat-vertical-stepper>
     </mat-expansion-panel>
