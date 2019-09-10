@@ -11,7 +11,17 @@
                 <mat-icon><img src="./assets/images/information.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <p><button mat-stroked-button color="primary" (click)="openExternalUrl('https://www.tuxedocomputers.com/de/Kontakt.tuxedo')">TUXEDO Support Webpage</button></p>
+        <mat-grid-list cols="2" rowHeight="100px">
+            <mat-grid-tile>
+                <mat-icon><i class="fas fa-phone"></i></mat-icon><h3 style="padding-left: 10px">+49 (0) 8231 99 19 000</h3>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <button mat-raised-button color="primary" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                    <mat-icon>cloud</mat-icon>
+                    <strong style="padding-left: 10px">TUXEDO Online Support</strong>
+                </button>
+            </mat-grid-tile>
+        </mat-grid-list>
     </mat-expansion-panel>
 
     <mat-expansion-panel hideToggle (click)="focusControl(frmInputTicketNumber)">
