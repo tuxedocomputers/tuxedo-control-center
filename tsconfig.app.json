@@ -11,7 +11,9 @@
       "net": [ "./src/ng-app/native/net.js" ],
       "stream": [ "./src/ng-app/native/stream.js" ],
       "timers": [ "./src/ng-app/native/timers.js" ],
-      "x11": [ "./src/ng-app/native/x11.js" ]
+      "x11": [ "./src/ng-app/native/x11.js" ],
+      "http": [ "./src/ng-app/native/http.js" ],
+      "https": [ "./src/ng-app/native/https.js" ]
     }
   },
   "include": [

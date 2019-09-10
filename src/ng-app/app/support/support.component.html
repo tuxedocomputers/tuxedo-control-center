@@ -17,10 +17,10 @@
     <mat-expansion-panel hideToggle (click)="focusControl(frmInputTicketNumber)">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                systeminfo.sh
+                systeminfos.sh
             </mat-panel-title>
             <mat-panel-description>
-                Download and run systeminfo.sh
+                Download and run systeminfos.sh
             </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-vertical-stepper [linear]="true">
@@ -36,16 +36,23 @@
                     </p>
                     <p>
                         More information about which data the script collects can be found at
-                        <a routerLink="/support" (click)="openExternalUrl('http://systeminfo.sh')">http://systeminfo.sh</a>.
+                        <a routerLink="/support" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>.
                     </p>
                     <mat-form-field>
                         <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" placeholder="Ticket number" />
                     </mat-form-field>&nbsp;
-                    <button mat-stroked-button matStepperNext color="primary">Next</button>
+                    <button mat-button matStepperNext color="primary">Next</button>
                 </form>
             </mat-step>
             <mat-step label="Download and run">
-                <button mat-raised-button color="primary">Start</button>
+                <p>
+                    When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
+                </p>
+                <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
+                    <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>
+                    Start
+                </button>
+                &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
             </mat-step>
         </mat-vertical-stepper>
     </mat-expansion-panel>

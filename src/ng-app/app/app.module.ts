@@ -34,6 +34,7 @@ import { DecimalPipe } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 import { SupportComponent } from './support/support.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { SupportComponent } from './support/support.component';
     NgxElectronModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     MatSidenavModule,
     MatToolbarModule,

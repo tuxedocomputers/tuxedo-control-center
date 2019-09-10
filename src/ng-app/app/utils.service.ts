@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { ElectronService } from 'ngx-electron';
+import * as https from 'https';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +38,7 @@ export class UtilsService {
     }
   }
 
-  public execCmd(command: string): Promise<Buffer> {
+  public async execCmd(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.once('exec-cmd-result', (event, result) => {
         if (result.error === null) {
@@ -50,5 +53,65 @@ export class UtilsService {
 
   public spawnExternal(command: string): void {
     this.electron.ipcRenderer.send('spawn-external-async', command);
+  }
+
+  public async httpsGet(url: string): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      try {
+        const dataArray: Buffer[] = [];
+        const req = https.get(url, response => {
+
+          response.on('data', (data) => {
+            dataArray.push(data);
+          });
+
+          response.once('end', () => {
+            resolve(Buffer.concat(dataArray));
+          });
+
+          response.once('error', (err) => {
+            reject(err);
+          });
+
+        });
+
+        req.once('error', (err) => {
+          reject(err);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        if (!fs.existsSync(path.dirname(filePath))) {
+            fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
+        }
+        fs.writeFile(filePath, fileData, writeFileOptions, err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  public async modFile(filePath: string, mode: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      fs.chmod(filePath, mode, err => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 }
