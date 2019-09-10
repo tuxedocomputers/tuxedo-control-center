@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { ProgramManagementService } from '../program-management.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { UtilsService } from '../utils.service';
 
 @Component({
@@ -29,7 +29,7 @@ export class SupportComponent implements OnInit {
   ngOnInit() {
     this.updateAnydeskInstallStatus();
     this.formTicketNumber = new FormGroup({
-      inputTicketNumber: new FormControl('', Validators.required)
+      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')])
     });
   }
 
