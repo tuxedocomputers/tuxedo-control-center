@@ -28,17 +28,21 @@ import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { DecimalPipe } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 import { DisplaySettingsComponent } from './display-settings/display-settings.component';
+import { SupportComponent } from './support/support.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     CpuSettingsComponent,
     ProfileManagerComponent,
-    DisplaySettingsComponent
+    DisplaySettingsComponent,
+    SupportComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +50,7 @@ import { DisplaySettingsComponent } from './display-settings/display-settings.co
     NgxElectronModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     MatSidenavModule,
     MatToolbarModule,
@@ -63,7 +68,8 @@ import { DisplaySettingsComponent } from './display-settings/display-settings.co
     MatCheckboxModule,
     MatDividerModule,
     MatSliderModule,
-    MatGridListModule
+    MatGridListModule,
+    MatStepperModule
   ],
   providers: [
     DecimalPipe

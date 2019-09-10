@@ -18,7 +18,7 @@ export class DisplaySettingsComponent implements OnInit, OnDestroy {
   private updateInterval: NodeJS.Timeout;
   private updateIntervalMs = 500;
 
-  public inputBrightness = new FormControl(1);
+  public inputBrightness = new FormControl(100);
   private disableBrightnessUpdate = false;
   private lastDisableTimer: NodeJS.Timeout;
 
