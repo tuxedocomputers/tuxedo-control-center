@@ -48,6 +48,7 @@ export class CpuController {
         if (numberOfCores === undefined) { numberOfCores = this.cores.length; }
         if (numberOfCores === 0) { return; }
         for (let i = 1; i < this.cores.length; ++i) {
+            if (!this.cores[i].online.isAvailable()) { continue; }
             if (i < numberOfCores) {
                 this.cores[i].online.writeValue(true);
             } else {
@@ -63,6 +64,7 @@ export class CpuController {
      */
     public setGovernorScalingMaxFrequency(maxFrequency?: number): void {
         for (const core of this.cores) {
+            if (!core.scalingMaxFreq.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
@@ -88,6 +90,7 @@ export class CpuController {
      */
     public setGovernorScalingMinFrequency(minFrequency?: number): void {
         for (const core of this.cores) {
+            if (!core.scalingMinFreq.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
@@ -119,6 +122,7 @@ export class CpuController {
         }
 
         for (const core of this.cores) {
+            if (!core.scalingGovernor.isAvailable() || !core.scalingAvailableGovernors.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             const availableGovernors = core.scalingAvailableGovernors.readValue();
             if (availableGovernors.includes(governor)) {
@@ -144,6 +148,7 @@ export class CpuController {
         }
 
         for (const core of this.cores) {
+            if (!core.energyPerformancePreference.isAvailable() || !core.energyPerformanceAvailablePreferences.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
                 core.energyPerformancePreference.writeValue(performancePreference);
