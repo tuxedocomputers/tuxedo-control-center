@@ -28,6 +28,14 @@
 
 .main-sidenav-nav {
     width: 220px;
+
+    mat-list-item {
+        content {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
 }
 
 .main-sidenav-content {

@@ -23,14 +23,23 @@
         </mat-form-field>
       </mat-list-item>
       <mat-list-item routerLink="/display-settings" routerLinkActive="true">
-        Display
+        <content>
+          Display
+          <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
+        </content>
       </mat-list-item>      
-      <mat-list-item routerLink="/cpu-settings" routerLinkActive="true">
-        CPU
+      <mat-list-item routerLink="/cpu-settings" routerLinkActive="true" >
+        <content>
+          CPU
+          <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
+        </content>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item routerLink="/support" routerLinkActive="true">
-        Support
+        <content>
+          Support
+          <mat-icon><img src="./assets/images/contact.svg" /></mat-icon>
+        </content>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item (click)="buttonExit()">
