@@ -77,6 +77,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     public isAvailable(): boolean {
         try {
             if (fs.existsSync(this.readPath) && fs.existsSync(this.writePath)) {
+                fs.readFileSync(this.readPath);
                 return true;
             } else {
                 return false;

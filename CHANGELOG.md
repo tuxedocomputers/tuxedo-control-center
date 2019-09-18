@@ -6,6 +6,9 @@
 - CHANGELOG.md Basic changelog from start of versioning
 - Icon to main nav exit option
 
+### Changed
+- Current CPU frequency values are now periodically checked with active profile and rewritten if found not to be the same.
+
 ## [0.3.0] - 2019-09-11
 ### Added
 - Support feature

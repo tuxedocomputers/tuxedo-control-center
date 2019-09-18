@@ -3,7 +3,7 @@ import { SysFsPropertyIO } from './SysFsPropertyIO';
 export class SysFsPropertyString extends SysFsPropertyIO<string> {
 
     convertStringToType(value: string): string {
-        return value;
+        return value.trim();
     }
 
     convertTypeToString(value: string): string {
