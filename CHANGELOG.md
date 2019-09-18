@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.1] - 2019-09-18
 ### Added
 - FEATURES.md aka general feature list
 - CHANGELOG.md Basic changelog from start of versioning
