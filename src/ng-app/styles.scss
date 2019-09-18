@@ -17,3 +17,7 @@ $theme-warn: mat-palette($mat-red);
 $tuxedo-control-center-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 
 @include angular-material-theme($tuxedo-control-center-theme);
+
+[hidden] {
+    visibility: hidden !important;
+}

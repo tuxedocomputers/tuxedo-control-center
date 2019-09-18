@@ -29,6 +29,9 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
 
   public showDefaultProfiles: boolean;
   public selectedCustomProfile: string;
+  public showActiveProfile = true;
+
+  public activeProfile: ITccProfile;
 
   public formProfileEdit: FormGroup;
 
@@ -45,7 +48,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     this.updateFrequencyData();
 
     this.formProfileEdit = new FormGroup({
-      inputNumberCores: new FormControl('', [ Validators.min(1), Validators.max(this.cpuInfo.availableCores)]),
+      inputNumberCores: new FormControl('', [ Validators.required, Validators.min(1), Validators.max(this.cpuInfo.availableCores)]),
       inputMinFreq: new FormControl(),
       inputMaxFreq: new FormControl(),
       inputScalingGovernor: new FormControl(),
@@ -59,6 +62,12 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
 
     this.setCustomProfileEdit(this.config.getCurrentEditingProfile());
     this.subscriptions.add(this.config.observeEditingProfile.subscribe(editingProfile => { this.setCustomProfileEdit(editingProfile); }));
+    this.activeProfile = this.config.getActiveProfile();
+    this.subscriptions.add(this.config.observeSettings.subscribe(
+      newSettings => {
+        this.activeProfile = this.config.getProfileByName(newSettings.activeProfileName);
+      }
+    ));
   }
 
   ngOnDestroy() {
@@ -175,6 +184,13 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  public discardProfileEdit(): void {
+    this.setCustomProfileEdit(this.config.getProfileByName(this.config.getCurrentEditingProfile().name));
+    setImmediate(() => {
+      this.formProfileEdit.markAsPristine();
+    });
   }
 
   public currentlyEditingProfile(): boolean {
