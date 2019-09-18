@@ -10,6 +10,7 @@
                         <th></th>
                         <th>Active values</th>
                         <th *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">{{ profile.name }}</th>
+                        <th class="active-profile" *ngIf="showActiveProfile">{{ activeProfile.name }}</th>
                         <th class="custom-profile-edit">
                             <mat-form-field>
                                 <mat-select [(ngModel)]="selectedCustomProfile" [ngModelOptions]="{standalone: true}" placeholder="Edit custom profile" [disableOptionCentering]="true">
@@ -19,7 +20,6 @@
                                 </mat-select>
                             </mat-form-field>
                         </th>
-                        <th><button mat-stroked-button color="primary" *ngIf="formProfileEdit.dirty">Save</button></th>
                     </tr>
                     <tr>
                         <th matTooltip="Logical CPU cores in use">CPU cores</th>
@@ -27,8 +27,11 @@
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.onlineCores ? profile.cpu.onlineCores : 'default' }}
                         </td>
+                        <td class="active-profile" *ngIf="showActiveProfile">{{ activeProfile.cpu.onlineCores }} of {{ cpuInfo.availableCores }}</td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
-                            <input color="warn" style="width: 40px; " matInput formControlName="inputNumberCores" type="number" min="1" [max]="cpuInfo.availableCores" step="1" />
+                            <mat-form-field style="width: 40px">
+                                <input color="warn" style="width: 40px; " matInput formControlName="inputNumberCores" type="number" min="1" [max]="cpuInfo.availableCores" step="1" />
+                            </mat-form-field>
                             of {{ cpuInfo.availableCores }}
                         </td>
                     </tr>
@@ -38,6 +41,7 @@
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.scalingMinFrequency ? formatFrequency(profile.cpu.scalingMinFrequency) + ' GHz' : 'default' }}
                         </td>
+                        <td class="active-profile" *ngIf="showActiveProfile">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }} GHz</td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
                             {{ formatFrequency(frmInputMinFreq.value) }} GHz
                             <mat-slider #frmInputMinFreq formControlName="inputMinFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
@@ -49,6 +53,7 @@
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.scalingMaxFrequency ? formatFrequency(profile.cpu.scalingMaxFrequency) + ' GHz' : 'default' }}
                         </td>
+                        <td class="active-profile" *ngIf="showActiveProfile">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }} GHz</td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
                             {{ formatFrequency(frmInputMaxFreq.value) }} GHz
                             <mat-slider #frmInputMaxFreq formControlName="inputMaxFreq" [min]="cpuCoreInfo[0].cpuInfoMinFreq" [max]="cpuCoreInfo[0].cpuInfoMaxFreq" step="100000"></mat-slider>
@@ -59,6 +64,7 @@
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.governor ? profile.cpu.governor : 'default' }}
                         </td>
+                        <td class="active-profile" *ngIf="showActiveProfile">{{ activeProfile.cpu.governor }}</td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
                             <!--mat-form-field-->
                                 <mat-select formControlName="inputScalingGovernor" [disableOptionCentering]="true">
@@ -73,6 +79,7 @@
                         <td *ngFor="let profile of getDefaultProfilesForTable()" class="default-profiles">
                             {{ profile.cpu.energyPerformancePreference ? profile.cpu.energyPerformancePreference : 'default' }}
                         </td>
+                        <td class="active-profile" *ngIf="showActiveProfile">{{ activeProfile.cpu.energyPerformancePreference }}</td>
                         <td *ngIf="currentlyEditingProfile()" class="custom-profile-edit">
                             <!--mat-form-field-->
                                 <mat-select formControlName="inputEnergyPerformancePreference" [disableOptionCentering]="true">
@@ -85,15 +92,19 @@
             </form>
         </mat-card-content></mat-card>
         <br />
-        <mat-checkbox [(ngModel)]="showDefaultProfiles" style="margin-top: 40px">Show default profiles</mat-checkbox>
-        <br />
+        <div class="cpu-freq-table-toolbar" style="display: flex; justify-content: space-around; height: 40px; align-items: baseline;">
+            <mat-checkbox [(ngModel)]="showActiveProfile">Show active profile</mat-checkbox>
+            <mat-checkbox [(ngModel)]="showDefaultProfiles">Show default profiles</mat-checkbox>
+            <button mat-stroked-button color="primary" [hidden]="!formProfileEdit.dirty" (click)="submitProfileEdit()">Save</button>
+            <button mat-stroked-button color="warn" [hidden]="!formProfileEdit.dirty" (click)="discardProfileEdit()">Discard</button>
+        </div>
     </mat-card-content>
 </mat-card>
 <br />
 <mat-card>
-    <mat-card-title>Cores</mat-card-title>
+    <mat-card-title>Active cores</mat-card-title>
     <mat-card-subtitle>Logical CPU cores in use</mat-card-subtitle>
-    <mat-card-content>
+    <mat-card-content class="cores-detailed-view">
         <mat-chip-list>
             <mat-chip *ngFor="let core of cpuCoreInfo">
                 <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
@@ -106,7 +117,7 @@
                     <strong>Detailed view</strong>
                 </mat-panel-title>
             </mat-expansion-panel-header>
-            <table id="cores-detailed-view">
+            <table>
                 <tr>
                     <th>Nr</th>
                     <th>Current freq.</th>

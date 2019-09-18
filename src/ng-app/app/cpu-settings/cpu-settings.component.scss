@@ -1,9 +1,16 @@
-mat-card-content.cpu-frequency-info > mat-card {
-    overflow-x: auto;
-    overflow-y: hidden;
+.cpu-frequency-info {
+    > mat-card {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    mat-checkbox {
+        height: 60px;
+        margin-right: 20px;
+    }
 }
 
-table#cpu-frequency-info {
+.cpu-frequency-info table {
     >tr {
         height: 30px;
 
@@ -18,7 +25,7 @@ table#cpu-frequency-info {
             }
         }
 
-        th.default-profiles {
+        th.default-profiles, th.active-profile {
             color: gray;
             width: 70px;
         }
@@ -30,6 +37,6 @@ table#cpu-frequency-info {
     }
 }
 
-table#cores-detailed-view {
+.cores-detailed-view table {
     font-size: 0.9em;
 }

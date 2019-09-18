@@ -17,7 +17,20 @@ export class CpuWorker extends DaemonWorker {
         this.applyCpuProfile(this.tccd.getCurrentProfile());
     }
 
-    public onWork() {}
+    public onWork() {
+        // Check if current profile CPU values are actually set. If not
+        // apply profile again
+
+        try {
+            if (!this.validateCpuFreq()) {
+                this.tccd.logLine('CpuWorker: Incorrect settings, reapplying profile');
+                this.applyCpuProfile(this.tccd.getCurrentProfile());
+            }
+        } catch (err) {
+            this.tccd.logLine('CpuWorker: Error validating/reapplying profile => ' + err);
+        }
+    }
+
     public onExit() {}
 
     /**
@@ -58,5 +71,78 @@ export class CpuWorker extends DaemonWorker {
         } catch (err) {
             this.tccd.logLine('CpuWorker: Failed to set default cpu config => ' + err);
         }
+    }
+
+    private validateCpuFreq(): boolean {
+        const profile = this.tccd.getCurrentProfile();
+
+        let cpuFreqValidConfig = true;
+
+        // Check number of online cores
+        this.cpuCtrl.getAvailableLogicalCores();
+        if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores.length !== 0) {
+            const currentOnlineCores = this.cpuCtrl.online.readValue();
+            let onlineCoresProfile = profile.cpu.onlineCores;
+            if (onlineCoresProfile === undefined) { onlineCoresProfile = this.cpuCtrl.cores.length; }
+            if (currentOnlineCores.length !== onlineCoresProfile) {
+                cpuFreqValidConfig = false;
+                this.tccd.logLine('CpuWorker: onlineCores not as expected, '
+                    + currentOnlineCores.length + ' instead of ' + onlineCoresProfile);
+            }
+        }
+
+        // Check settings for each core
+        for (const core of this.cpuCtrl.cores) {
+            if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
+                const minFreq = core.scalingMinFreq.readValue();
+                let minFreqProfile = profile.cpu.scalingMinFrequency;
+                if (minFreqProfile === undefined) { minFreqProfile = core.cpuinfoMinFreq.readValue(); }
+                if (minFreq !== minFreqProfile) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' minimum scaling frequency '
+                        + ' => ' + minFreq + ' instead of ' + minFreqProfile);
+                }
+            }
+
+            if (core.scalingMaxFreq.isAvailable() && core.cpuinfoMaxFreq.isAvailable()) {
+                const maxFreq = core.scalingMaxFreq.readValue();
+                let maxFreqProfile = profile.cpu.scalingMaxFrequency;
+                if (maxFreqProfile === undefined) { maxFreqProfile = core.cpuinfoMaxFreq.readValue(); }
+                if (maxFreq !== maxFreqProfile) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' maximum scaling frequency '
+                        + ' => ' + maxFreq + ' instead of ' + maxFreqProfile);
+                }
+            }
+
+            if (core.scalingGovernor.isAvailable() && core.scalingAvailableGovernors.isAvailable()) {
+                const currentGovernor = core.scalingGovernor.readValue();
+                const governorProfile = profile.cpu.governor;
+                // Skip check if not set in profile
+                if (governorProfile !== undefined) {
+                    if (currentGovernor !== governorProfile) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' scaling governor '
+                            + ' => \'' + currentGovernor + '\' instead of \'' + governorProfile + '\'');
+                    }
+                }
+            }
+
+            if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
+                const currentPerformancePreference = core.energyPerformancePreference.readValue();
+                const performancePreferenceProfile = profile.cpu.energyPerformancePreference;
+                // Skip check if not set in profile or is 'default'
+                // note: writing 'default' tends to set another string which is considered the default
+                if (performancePreferenceProfile !== undefined && performancePreferenceProfile !== 'default') {
+                    if (currentPerformancePreference !== performancePreferenceProfile) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' energy performance preference => \''
+                            + currentPerformancePreference + '\' instead of \'' + performancePreferenceProfile + '\'');
+                    }
+                }
+            }
+        }
+
+        return cpuFreqValidConfig;
     }
 }
