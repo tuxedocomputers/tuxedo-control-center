@@ -32,7 +32,7 @@ export class CpuController {
             coreIndexToAdd.sort((a, b) => a - b );
             for (const coreIndex of coreIndexToAdd) {
                 const newCore = new LogicalCpuController(this.basePath, coreIndex);
-                if (newCore.scalingCurFreq.isAvailable()) {
+                if (coreIndex === 0 || newCore.online.isAvailable()) {
                     this.cores.push(newCore);
                 }
             }
@@ -64,8 +64,9 @@ export class CpuController {
      */
     public setGovernorScalingMaxFrequency(maxFrequency?: number): void {
         for (const core of this.cores) {
-            if (!core.scalingMaxFreq.isAvailable()) { continue; }
-            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
+            if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
+                || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
+            if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             let newMaxFrequency: number;
@@ -74,8 +75,8 @@ export class CpuController {
             } else {
                 newMaxFrequency = maxFrequency;
             }
-
-            if (newMaxFrequency <= coreMaxFrequency && newMaxFrequency >= coreMinFrequency) {
+            const currentMinFrequency = core.scalingMinFreq.readValue();
+            if (newMaxFrequency <= coreMaxFrequency && newMaxFrequency >= currentMinFrequency) {
                 core.scalingMaxFreq.writeValue(newMaxFrequency);
             } else {
                 throw Error('setGovernorScalingMaxFrequency: new frequency ' + newMaxFrequency + ' is out of range');
@@ -90,8 +91,9 @@ export class CpuController {
      */
     public setGovernorScalingMinFrequency(minFrequency?: number): void {
         for (const core of this.cores) {
-            if (!core.scalingMinFreq.isAvailable()) { continue; }
-            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
+            if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
+                || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
+            if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             let newMinFrequency: number;
@@ -101,10 +103,9 @@ export class CpuController {
                 newMinFrequency = minFrequency;
             }
 
-            if (newMinFrequency <= coreMaxFrequency && newMinFrequency >= coreMinFrequency) {
+            const currentMaxFrequency = core.scalingMaxFreq.readValue();
+            if (newMinFrequency <= currentMaxFrequency && newMinFrequency >= coreMinFrequency) {
                 core.scalingMinFreq.writeValue(newMinFrequency);
-            } else {
-                throw Error('setGovernorScalingMinFrequency: new frequency ' + newMinFrequency + ' is out of range');
             }
         }
     }

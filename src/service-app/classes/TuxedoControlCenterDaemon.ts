@@ -12,6 +12,7 @@ import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
+import { StateSwitcherWorker } from './StateSwitcherWorker';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -25,6 +26,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public settings: ITccSettings;
     public customProfiles: ITccProfile[];
     public autosave: ITccAutosave;
+
+    // Initialize to default profile, will be changed by state switcher as soon as it is started
+    public activeProfileName = 'Default';
 
     private workers: DaemonWorker[] = [];
 
@@ -54,17 +58,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles();
         this.setupSignalHandling();
 
+        this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
 
-        // Start workers
-        for (const worker of this.workers) {
-            try {
-                worker.onStart();
-            } catch (err) {
-                this.logLine(err);
-            }
-        }
+        this.startWorkers();
 
         this.started = true;
         this.logLine('Daemon started');
@@ -80,6 +78,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }, worker.timeout);
         }
 
+    }
+
+    public startWorkers(): void {
+        for (const worker of this.workers) {
+            try {
+                worker.onStart();
+            } catch (err) {
+                this.logLine(err);
+            }
+        }
     }
 
     public catchError(err: Error) {
@@ -140,6 +148,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private readOrCreateConfigurationFiles() {
         try {
             this.settings = this.config.readSettings();
+
+            if (this.settings.stateMap === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing statemap');
+                throw Error('Missing statemap');
+            }
         } catch (err) {
             this.settings = this.config.getDefaultSettings();
             try {
@@ -193,7 +207,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     getCurrentProfile() {
-        return this.getAllProfiles().find((profile) => profile.name === this.settings.activeProfileName);
+        return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
     }
 
     /**
