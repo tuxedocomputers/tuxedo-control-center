@@ -1,12 +1,9 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { PowerSupplyController } from '../../common/classes/PowerSupplyController';
 import { ProfileStates } from '../../common/models/TccSettings';
+import { determineState } from '../../common/classes/StateUtils';
 
 export class StateSwitcherWorker extends DaemonWorker {
-
-    private readonly pathAc = '/sys/class/power_supply/AC';
-    private readonly powerAc = new PowerSupplyController(this.pathAc);
 
     private currentState: ProfileStates;
 
@@ -16,7 +13,7 @@ export class StateSwitcherWorker extends DaemonWorker {
 
     public onStart(): void {
         // Check state and switch profile if appropriate
-        const newState = this.determineState();
+        const newState = determineState();
 
         if (newState !== this.currentState) {
             this.currentState = newState;
@@ -33,7 +30,7 @@ export class StateSwitcherWorker extends DaemonWorker {
 
     public onWork(): void {
         // Check state and switch profile if appropriate
-        const newState = this.determineState();
+        const newState = determineState();
 
         if (newState !== this.currentState) {
             this.currentState = newState;
@@ -53,22 +50,4 @@ export class StateSwitcherWorker extends DaemonWorker {
         // Do nothing
     }
 
-    private determineState(): ProfileStates {
-        // Default state
-        let state: ProfileStates = ProfileStates.AC;
-
-        // Attempt to find state depending on AC online status
-        try {
-            const acOnline = this.powerAc.online.readValue();
-            if (acOnline) {
-                state = ProfileStates.AC;
-            } else {
-                state = ProfileStates.BAT;
-            }
-        } catch (err) {
-            this.tccd.logLine('StateSwitcherWorker: Failed to determine state => ' + err);
-        }
-
-        return state;
-    }
 }
