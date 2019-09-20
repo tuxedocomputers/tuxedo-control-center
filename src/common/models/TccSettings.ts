@@ -1,8 +1,15 @@
+export enum ProfileStates {
+    AC = 'power_ac',
+    BAT = 'power_bat'
+}
 
 export interface ITccSettings {
-    activeProfileName: string;
+    stateMap: any;
 }
 
 export const defaultSettings: ITccSettings = {
-    activeProfileName: 'Default'
+    stateMap: {
+        power_ac: 'Default',
+        power_bat: 'Default'
+    }
 };

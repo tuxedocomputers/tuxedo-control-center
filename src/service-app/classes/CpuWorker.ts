@@ -48,11 +48,8 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.setGovernor(profile.cpu.governor);
             this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
 
-            // Check that min is not higher than max for the profile
-            if (profile.cpu.scalingMinFrequency <= profile.cpu.scalingMaxFrequency) {
-                this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
-                this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
-            }
+            this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
+            this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
 
             // Finally set the number of online cores
             this.cpuCtrl.useCores(profile.cpu.onlineCores);
@@ -64,10 +61,10 @@ export class CpuWorker extends DaemonWorker {
     private setCpuDefaultConfig(): void {
         try {
             this.cpuCtrl.useCores();
-            this.cpuCtrl.setGovernor('powersave');
-            this.cpuCtrl.setEnergyPerformancePreference('default');
             this.cpuCtrl.setGovernorScalingMinFrequency();
             this.cpuCtrl.setGovernorScalingMaxFrequency();
+            this.cpuCtrl.setGovernor('powersave');
+            this.cpuCtrl.setEnergyPerformancePreference('default');
         } catch (err) {
             this.tccd.logLine('CpuWorker: Failed to set default cpu config => ' + err);
         }

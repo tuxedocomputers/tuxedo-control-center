@@ -6,7 +6,7 @@ import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayBacklightWorker extends DaemonWorker {
 
-    private controllers: DisplayBacklightController[] = [];
+    private controllers: DisplayBacklightController[];
     private basePath = '/sys/class/backlight';
 
     constructor(tccd: TuxedoControlCenterDaemon) {
@@ -16,6 +16,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
     public onStart(): void {
         // Find drivers
         const displayDrivers = DisplayBacklightController.getDeviceList(this.basePath);
+        this.controllers = [];
         displayDrivers.forEach((driverName) => {
             this.controllers.push(new DisplayBacklightController(this.basePath, driverName));
         });
