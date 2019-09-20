@@ -9,7 +9,7 @@ export interface ITccSettings {
 
 export const defaultSettings: ITccSettings = {
     stateMap: {
-        power_ac: 'Fast and furious',
-        power_bat: 'Cool and breezy'
+        power_ac: 'Default',
+        power_bat: 'Default'
     }
 };
