@@ -1,17 +1,21 @@
 <br />
 <mat-toolbar>
-    <mat-toolbar-row *ngIf="!inputActive">
-        <span [matTooltip]="buttonActivate.tooltip()"><button mat-raised-button color="primary" (click)="buttonActivate.click()" *ngIf="buttonActivate.show()" [disabled]="buttonActivate.disable()">{{ buttonActivate.label() }}</button></span>
-        <span [matTooltip]="buttonNew.tooltip()"><button mat-raised-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()">{{ buttonNew.label() }}</button></span>
-        <span [matTooltip]="buttonCopy.tooltip()"><button mat-raised-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()">{{ buttonCopy.label() }}</button></span>
-        <span [matTooltip]="buttonEdit.tooltip()"><button mat-raised-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()">{{ buttonEdit.label() }}</button></span>
-        <span [matTooltip]="buttonDelete.tooltip()"><button mat-stroked-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()">{{ buttonDelete.label() }}</button></span>
+    <mat-toolbar-row *ngIf="!inputActive" style="padding-top: 20px; padding-bottom: 20px;">
+        <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()"><mat-icon>library_add</mat-icon></button></span>
+        <span [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
+        <span [matTooltip]="buttonEdit.tooltip()"><button mat-icon-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()"><mat-icon>edit</mat-icon></button></span>
+        <span [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
+        <span [matTooltip]="" *ngFor="let state of stateInputArray">
+            <button mat-stroked-button color="primary" [disabled]="getSettings().stateMap[state.value] === currentProfile.name" (click)="setActiveProfile(currentProfile.name, state.value)">
+                <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
+            </button>
+        </span>
     </mat-toolbar-row>
-    <mat-toolbar-row *ngIf="inputActive">
+    <mat-toolbar-row *ngIf="inputActive" style="padding-top: 20px; padding-bottom: 20px;">
         <form (ngSubmit)="onInputSubmit()">
             <mat-form-field class="profile-name-input">
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
-                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="inputActive=false" placeholder="profile name" minLength="1" maxLength="50" />
+                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="inputActive=false" placeholder="Profile name" minLength="1" maxLength="50" />
             </mat-form-field>
             <button mat-stroked-button color="primary">Save</button>
             <button mat-stroked-button color="basic" (click)="inputActive=false">Cancel</button>
@@ -21,14 +25,17 @@
 <br />
 <mat-card>
     <mat-card-title>
-        {{ currentProfile.name }}
-        <mat-chip-list style="display: inline-flex">
+        <!--mat-chip-list style="display: inline-flex">
             <mat-chip *ngIf="isCustomProfile()" color="accent" selected>Custom</mat-chip>
             <mat-chip *ngIf="!isCustomProfile()">Preset</mat-chip>
-        </mat-chip-list>
+        </mat-chip-list-->
     </mat-card-title>
     <mat-card-subtitle>
-        Profile overview
+        <mat-form-field style="width:250px; margin-left: 5px; transform: scale(1.4); transform-origin: left;">
+            <mat-select [value]="currentProfile.name" [disableOptionCentering]="true">
+                <mat-option *ngFor="let profile of getAllProfiles()" (click)="selectProfile(profile.name)" [value]="profile.name">{{ profile.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
     </mat-card-subtitle>
     <mat-card-content>
         <mat-card>

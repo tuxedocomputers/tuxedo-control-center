@@ -2,9 +2,15 @@
 
 ### Per profile control of
 
-   - CPU frequency parameters  
+   - CPU frequency parameters
 
    - Display brightness
+
+### States
+   
+   - Two available states 'Mains powered' & 'Battery powered'
+
+   - Assignment of one profile that gets activated for each state
 
 ### Save settings on shutdown / sleep
 

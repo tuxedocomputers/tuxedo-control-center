@@ -70,11 +70,11 @@ export class ConfigService {
     return this.defaultProfiles.concat(this.getCustomProfiles());
   }
 
-  public setActiveProfile(profileName: string): void {
+  public setActiveProfile(profileName: string, stateId: string): void {
     // Copy existing current settings and set name of new profile
     const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
 
-    newSettings.activeProfileName = profileName;
+    newSettings.stateMap[stateId] = profileName;
     const tmpSettingsPath = '/tmp/tmptccsettings';
     this.config.writeSettings(newSettings, tmpSettingsPath);
     let tccdExec: string;
@@ -165,10 +165,6 @@ export class ConfigService {
     } else {
       return undefined;
     }
-  }
-
-  public getActiveProfile(): ITccProfile {
-    return this.config.copyConfig<ITccProfile>(this.getAllProfiles().find(profile => profile.name === this.settings.activeProfileName));
   }
 
   /**

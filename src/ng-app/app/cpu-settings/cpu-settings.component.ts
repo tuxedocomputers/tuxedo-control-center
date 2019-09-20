@@ -7,6 +7,7 @@ import { ITccProfile } from '../../../common/models/TccProfile';
 import { ConfigService } from '../config.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
+import { StateService } from '../state.service';
 
 @Component({
   selector: 'app-cpu-settings',
@@ -39,6 +40,7 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
     private sysfs: SysFsService,
     private decimalPipe: DecimalPipe,
     private config: ConfigService,
+    private state: StateService,
     private electron: ElectronService) {
   }
 
@@ -62,10 +64,10 @@ export class CpuSettingsComponent implements OnInit, OnDestroy {
 
     this.setCustomProfileEdit(this.config.getCurrentEditingProfile());
     this.subscriptions.add(this.config.observeEditingProfile.subscribe(editingProfile => { this.setCustomProfileEdit(editingProfile); }));
-    this.activeProfile = this.config.getActiveProfile();
-    this.subscriptions.add(this.config.observeSettings.subscribe(
-      newSettings => {
-        this.activeProfile = this.config.getProfileByName(newSettings.activeProfileName);
+    this.activeProfile = this.state.getActiveProfile();
+    this.subscriptions.add(this.state.activeProfileObserver.subscribe(
+      activeProfile => {
+        this.activeProfile = activeProfile;
       }
     ));
   }
