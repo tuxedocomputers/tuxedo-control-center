@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 import { ITccProfile } from '../../../common/models/TccProfile';
@@ -8,6 +8,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { ElectronService } from 'ngx-electron';
 import { StateService } from '../state.service';
+import { Subscription } from 'rxjs';
+import { ProfileStates, ITccSettings } from 'src/common/models/TccSettings';
 
 enum InputMode {
   New, Copy, Edit
@@ -22,12 +24,18 @@ class ProfileManagerButton {
     public tooltip: () => string) {}
 }
 
+interface IStateInfo {
+  label: string;
+  icon: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-profile-manager',
   templateUrl: './profile-manager.component.html',
   styleUrls: ['./profile-manager.component.scss']
 })
-export class ProfileManagerComponent implements OnInit {
+export class ProfileManagerComponent implements OnInit, OnDestroy {
 
   public currentProfile: ITccProfile;
 
@@ -36,26 +44,18 @@ export class ProfileManagerComponent implements OnInit {
   public inputProfileName: FormControl = new FormControl('', [ Validators.required, Validators.minLength(1), Validators.maxLength(50) ]);
   public inputProfileNameLabel: string;
 
-  @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
+  private subscriptions: Subscription = new Subscription();
 
-  public buttonActivate = new ProfileManagerButton(
-    // Show
-    () => true,
-    // Disable
-    () => this.isActiveProfile(),
-    // Click
-    () => { this.setActiveProfile(this.currentProfile.name); },
-    // Label
-    () => { if (this.isActiveProfile()) { return 'Activate'; } else { return 'Activate'; } },
-    // Tooltip
-    () => this.isActiveProfile() ? 'Profile is already active' : 'Set this profile as active'
-  );
+  public stateInputMap = new Map<string, IStateInfo>();
+  public stateInputArray: IStateInfo[];
+
+  @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
 
   public buttonCopy = new ProfileManagerButton(
     // Show
-    () => this.currentProfile.name !== 'Default',
+    () => true,
     // Disable
-    () => false,
+    () => this.currentProfile.name === 'Default',
     // Click
     () => {
       this.currentInputMode = InputMode.Copy;
@@ -72,9 +72,9 @@ export class ProfileManagerComponent implements OnInit {
 
   public buttonEdit = new ProfileManagerButton(
     // Show
-    () => this.isCustomProfile(),
+    () => true,
     // Disable
-    () => this.isActiveProfile(),
+    () => this.isUsedProfile() || !this.isCustomProfile(),
     // Click
     () => {
       this.currentInputMode = InputMode.Edit;
@@ -86,7 +86,7 @@ export class ProfileManagerComponent implements OnInit {
     // Label
     () => 'Rename',
     // Tooltip
-    () => this.isActiveProfile() ? 'Can not rename active profile' : 'Rename this profile'
+    () => this.isUsedProfile() ? 'Can not rename used profile' : 'Rename this profile'
   );
 
   public buttonNew = new ProfileManagerButton(
@@ -110,16 +110,17 @@ export class ProfileManagerComponent implements OnInit {
 
   public buttonDelete = new ProfileManagerButton(
     // Show
-    () => this.isCustomProfile(),
+    () => true,
     // Disable
-    () => this.isActiveProfile() || this.config.getCustomProfiles().length === 1,
+    () => this.isUsedProfile() || this.config.getCustomProfiles().length === 1 || !this.isCustomProfile(),
     // Click
     () => { this.deleteProfile(this.currentProfile.name); },
     // Label
     () => 'Delete',
     // Tooltip
     () => {
-      if (this.isActiveProfile()) { return 'Can not delete active profile'; }
+      if (this.isUsedProfile()) { return 'Can not delete used profile'; }
+      if (!this.isCustomProfile()) { return 'Can not delete preset profiles'; }
       if (this.config.getCustomProfiles().length === 1) { return 'Can not delete last custom profile'; }
       return 'Delete this profile';
     }
@@ -148,13 +149,35 @@ export class ProfileManagerComponent implements OnInit {
       }
       this.utils.fillDefaultValuesProfile(this.currentProfile);
     });
+
+    this.stateInputMap
+      .set(ProfileStates.AC.toString(), { label: 'Mains', icon: 'power', value: ProfileStates.AC.toString() })
+      .set(ProfileStates.BAT.toString(), { label: 'Battery ', icon: 'battery_std', value: ProfileStates.BAT.toString() }
+    );
+    this.stateInputArray = Array.from(this.stateInputMap.values());
   }
 
-  public setActiveProfile(profileName: string): void {
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  public getSettings(): ITccSettings {
+    return this.config.getSettings();
+  }
+
+  public getAllProfiles(): ITccProfile[] {
+    return this.config.getAllProfiles();
+  }
+
+  public selectProfile(profileName: string): void {
     setImmediate(() => {
-      if (profileName !== this.state.getActiveProfile().name) {
-        this.config.setActiveProfile(profileName);
-      }
+      this.router.navigate(['profile-manager', profileName]);
+    });
+  }
+
+  public setActiveProfile(profileName: string, stateId: string): void {
+    setImmediate(() => {
+      this.config.setActiveProfile(profileName, stateId);
     });
   }
 
@@ -207,8 +230,8 @@ export class ProfileManagerComponent implements OnInit {
     return this.config.getCustomProfiles().find(profile => profile.name === this.currentProfile.name) !== undefined;
   }
 
-  public isActiveProfile(): boolean {
-    return this.currentProfile.name === this.state.getActiveProfile().name;
+  public isUsedProfile(): boolean {
+    return Object.values(this.config.getSettings().stateMap).includes(this.currentProfile.name)
   }
 
   public formatFrequency(frequency: number): string {

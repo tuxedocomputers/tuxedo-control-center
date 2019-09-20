@@ -46,19 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.electron.remote.getCurrentWindow().close();
   }
 
-  public getAllProfiles(): ITccProfile[] {
-    return this.config.getAllProfiles();
-  }
-
   public getSettings(): ITccSettings {
     this.activeProfileName = this.state.getActiveProfile().name;
     return this.config.getSettings();
-  }
-
-  public chooseProfile(profileName: string): void {
-    this.router.navigate(['profile-manager', profileName]);
-    setImmediate(() => {
-      this.profileSelect = '';
-    });
   }
 }
