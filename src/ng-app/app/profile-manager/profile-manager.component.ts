@@ -7,6 +7,7 @@ import { UtilsService } from '../utils.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { ElectronService } from 'ngx-electron';
+import { StateService } from '../state.service';
 
 enum InputMode {
   New, Copy, Edit
@@ -127,6 +128,7 @@ export class ProfileManagerComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private config: ConfigService,
+    private state: StateService,
     private decimalPipe: DecimalPipe,
     private utils: UtilsService,
     private router: Router,
@@ -141,7 +143,7 @@ export class ProfileManagerComponent implements OnInit {
       } else {
         this.currentProfile = this.config.getCurrentEditingProfile();
         if (this.currentProfile === undefined) {
-          this.currentProfile = this.config.getActiveProfile();
+          this.currentProfile = this.state.getActiveProfile();
         }
       }
       this.utils.fillDefaultValuesProfile(this.currentProfile);
@@ -150,7 +152,7 @@ export class ProfileManagerComponent implements OnInit {
 
   public setActiveProfile(profileName: string): void {
     setImmediate(() => {
-      if (profileName !== this.config.getSettings().activeProfileName) {
+      if (profileName !== this.state.getActiveProfile().name) {
         this.config.setActiveProfile(profileName);
       }
     });
@@ -197,7 +199,7 @@ export class ProfileManagerComponent implements OnInit {
 
   public deleteProfile(profileName): void {
     if (this.config.deleteCustomProfile(profileName)) {
-      this.router.navigate(['profile-manager', this.config.getActiveProfile().name]);
+      this.router.navigate(['profile-manager', this.state.getActiveProfile().name]);
     }
   }
 
@@ -206,7 +208,7 @@ export class ProfileManagerComponent implements OnInit {
   }
 
   public isActiveProfile(): boolean {
-    return this.currentProfile.name === this.config.getActiveProfile().name;
+    return this.currentProfile.name === this.state.getActiveProfile().name;
   }
 
   public formatFrequency(frequency: number): string {

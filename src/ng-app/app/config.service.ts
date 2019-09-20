@@ -74,7 +74,8 @@ export class ConfigService {
     // Copy existing current settings and set name of new profile
     const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
 
-    newSettings.activeProfileName = profileName;
+    // newSettings.activeProfileName = profileName;
+    throw new Error('Not implemented');
     const tmpSettingsPath = '/tmp/tmptccsettings';
     this.config.writeSettings(newSettings, tmpSettingsPath);
     let tccdExec: string;
@@ -165,10 +166,6 @@ export class ConfigService {
     } else {
       return undefined;
     }
-  }
-
-  public getActiveProfile(): ITccProfile {
-    return this.config.copyConfig<ITccProfile>(this.getAllProfiles().find(profile => profile.name === this.settings.activeProfileName));
   }
 
   /**
