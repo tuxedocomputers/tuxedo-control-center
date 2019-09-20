@@ -1,5 +1,19 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- State logic to daemon and GUI.
+- Current states are 'Mains powered' and 'Battery powered'
+- Buttons for assigning a profile to a state in profile manager
+
+### Changed
+- Single active profile setting changed to one active profile per state
+- Profile dropdown moved to profile manager
+- Buttons refreshed and labels replaced with icons in profile manager
+
+### Removed
+- Activate single state button
+
 ## [0.3.1] - 2019-09-18
 ### Added
 - FEATURES.md aka general feature list
