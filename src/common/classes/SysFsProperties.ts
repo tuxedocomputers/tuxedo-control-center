@@ -44,6 +44,17 @@ export class SysFsPropertyInteger extends SysFsPropertyIO<number> {
     }
 }
 
+export class SysFsPropertyIntegerHex extends SysFsPropertyIO<number> {
+
+    protected convertStringToType(value: string): number {
+        return parseInt(value, 16);
+    }
+
+    protected convertTypeToString(value: number): string {
+        return value.toString(16);
+    }
+}
+
 export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
 
     convertStringToType(value: string): boolean {
