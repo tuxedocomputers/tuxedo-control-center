@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- USB devices controller
+
 ## [0.4.0] - 2019-09-20
 ### Added
 - State logic to daemon and GUI.
