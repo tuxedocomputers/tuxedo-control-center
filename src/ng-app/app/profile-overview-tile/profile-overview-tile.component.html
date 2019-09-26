@@ -1,11 +1,15 @@
-<mat-card class="overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected}">
+<mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
     <mat-card-content>
         <header>
+            <span *ngFor="let state of getStateInputs()">
+                <mat-icon *ngIf="getSettings().stateMap[state.value] === profile.name" class="status-icon">{{ state.icon }}</mat-icon>
+            </span>
             <strong>{{ profile.name }}</strong>
         </header>
         <div class="status-row">
             <mat-icon class="status-icon" [ngClass]="{'active': profile.display.useBrightness}">wb_sunny</mat-icon>
+            <span *ngIf="profile.display.useBrightness">{{ profile.display.brightness }} %</span>
             {{ formatFrequency(profile.cpu.scalingMinFrequency) }}-{{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
         </div>
     </mat-card-content>
-</mat-card>            
+</mat-card>

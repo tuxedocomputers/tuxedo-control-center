@@ -1,0 +1,24 @@
+// Import library functions for theme creation.
+@import '~@angular/material/theming';
+
+@mixin profile-overview-tile-theme($theme) {
+  // Extract the palettes you need from the theme definition.
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+  // Define any styles affected by the theme.
+  /*.candy-carousel {
+    background-color: mat-color($primary);
+    border-color: mat-color($accent, A400);
+  }*/
+}
+
+@mixin profile-overview-tile-typography($config) {
+  .profile-overview-tile {
+    font: {
+      family: mat-font-family($config, body-1);
+      size: mat-font-size($config, body-1);
+      weight: mat-font-weight($config, body-1);
+    }
+  }
+}

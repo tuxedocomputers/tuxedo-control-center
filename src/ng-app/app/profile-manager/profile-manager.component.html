@@ -28,6 +28,7 @@
         *ngFor="let profile of getAllProfiles()"
         [profile]="profile"
         [hoverEffect]="true"
+        [active]="isProfileActive(profile.name)"
         [isSelected]="profile.name === currentProfile.name"
         (click)="selectProfile(profile.name)">
     </app-profile-overview-tile>

@@ -1,12 +1,6 @@
-.overview-tile{
+.profile-overview-tile{
 
-    &.hover-effect:hover {
-        background-color: lightgray;
-    }
-
-    &.selected {
-        background-color: lightgray;
-    }
+    padding: 10px;
 
     width: auto;
     height: 40px;
@@ -14,7 +8,14 @@
     user-select: none;
 
     header {
-        margin-bottom: 5px;
+        display: flex;
+        align-items: flex-start;
+        height: 20px;
+
+        .status-icon{
+            transform: scale(0.7);
+            transform-origin: top left;
+        }
     }
 
     .status-row {
@@ -29,8 +30,13 @@
         justify-content: flex-start;
         align-items: center;
 
+        >* {
+            margin-right: 4px;
+        }
+
         .status-icon {
             transform: scale(0.7);
+            transform-origin: left;
             opacity: 0.2;
 
             &.active {
