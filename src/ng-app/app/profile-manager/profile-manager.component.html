@@ -23,6 +23,16 @@
     </mat-toolbar-row>
 </mat-toolbar>
 <br />
+<div style="width: 100%; display: flex; flex-wrap: wrap">
+    <app-profile-overview-tile
+        *ngFor="let profile of getAllProfiles()"
+        [profile]="profile"
+        [hoverEffect]="true"
+        [isSelected]="profile.name === currentProfile.name"
+        (click)="selectProfile(profile.name)">
+    </app-profile-overview-tile>
+</div>
+<br />
 <mat-card>
     <mat-card-title>
         <!--mat-chip-list style="display: inline-flex">

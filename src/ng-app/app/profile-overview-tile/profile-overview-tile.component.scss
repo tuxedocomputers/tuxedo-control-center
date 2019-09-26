@@ -1,0 +1,41 @@
+.overview-tile{
+
+    &.hover-effect:hover {
+        background-color: lightgray;
+    }
+
+    &.selected {
+        background-color: lightgray;
+    }
+
+    width: auto;
+    height: 40px;
+    margin: 5px;
+    user-select: none;
+
+    header {
+        margin-bottom: 5px;
+    }
+
+    .status-row {
+
+        width: 100%;
+        transform: scale(0.8);
+        transform-origin: left;
+        margin: 0px;
+        padding: 0px;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .status-icon {
+            transform: scale(0.7);
+            opacity: 0.2;
+
+            &.active {
+                opacity: 1.0;
+            }
+        }
+    }
+}

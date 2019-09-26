@@ -130,7 +130,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private config: ConfigService,
     private state: StateService,
-    private decimalPipe: DecimalPipe,
     private utils: UtilsService,
     private router: Router,
     private electron: ElectronService) { }
@@ -235,7 +234,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
   }
 
   public formatFrequency(frequency: number): string {
-    return this.decimalPipe.transform(frequency / 1000000, '1.2-2');
+    return this.utils.formatFrequency(frequency);
   }
 
 }
