@@ -26,7 +26,7 @@
     "pack": "npm run build && ts-node ./build-src/electron-builder.ts",
     "pack-prod": "npm run build-prod && ts-node ./build-src/electron-builder.ts",
     "clean": "rm -rf ./dist",
-    "tests": "npm run test-common && npm run test-ng && npm run test-ng-e2e",
+    "tests": "npm run test-common",
     "test-common": "ts-node node_modules/jasmine/bin/jasmine --config=./src/common/jasmine.json",
     "test-ng": "ng test --watch=false",
     "test-ng-e2e": "ng e2e",
