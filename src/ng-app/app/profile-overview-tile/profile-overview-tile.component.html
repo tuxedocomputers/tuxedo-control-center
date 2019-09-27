@@ -1,15 +1,43 @@
 <mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
     <mat-card-content>
         <header>
-            <span *ngFor="let state of getStateInputs()">
-                <mat-icon *ngIf="getSettings().stateMap[state.value] === profile.name" class="status-icon">{{ state.icon }}</mat-icon>
+            <span class="profile-name">{{ profile.name }}</span>
+            <span class="state-icons">
+                <span *ngFor="let state of getStateInputs()">
+                    <mat-icon class="status-icon" *ngIf="getSettings().stateMap[state.value] === profile.name">{{ state.icon }}</mat-icon>
+                </span>
             </span>
-            <strong>{{ profile.name }}</strong>
         </header>
+        <hr />
+        <div class="status-row" [ngClass]="{'inactive': !profile.display.useBrightness}">
+            <mat-icon class="status-icon">brightness_4</mat-icon>
+            <span class="status-info">
+                {{ profile.display.brightness }} %
+            </span>
+        </div>
         <div class="status-row">
-            <mat-icon class="status-icon" [ngClass]="{'active': profile.display.useBrightness}">wb_sunny</mat-icon>
-            <span *ngIf="profile.display.useBrightness">{{ profile.display.brightness }} %</span>
-            {{ formatFrequency(profile.cpu.scalingMinFrequency) }}-{{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
+            <mat-icon class="status-icon">memory</mat-icon>
+            <span class="status-info">
+                {{ profile.cpu.onlineCores }} <span>cores</span>
+            </span>
+        </div>
+        <div class="status-row">
+            <mat-icon class="status-icon">speed</mat-icon>
+            <span class="status-info">
+                {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
+            </span>
+        </div>
+        <div class="status-row">
+            <mat-icon class="status-icon">policy</mat-icon>
+            <span class="status-info">
+                {{ profile.cpu.governor }}
+            </span>
+        </div>
+        <div class="status-row">
+            <i class="fas fa-bolt status-icon"></i>
+            <span class="status-info">
+                {{ profile.cpu.energyPerformancePreference }}
+            </span>
         </div>
     </mat-card-content>
 </mat-card>
