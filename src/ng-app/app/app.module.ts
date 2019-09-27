@@ -36,6 +36,7 @@ import { DisplaySettingsComponent } from './display-settings/display-settings.co
 import { SupportComponent } from './support/support.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
+import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-ov
     ProfileManagerComponent,
     DisplaySettingsComponent,
     SupportComponent,
-    ProfileOverviewTileComponent
+    ProfileOverviewTileComponent,
+    ProfileDetailsEditComponent
   ],
   imports: [
     BrowserModule,
