@@ -118,13 +118,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         case InputMode.New:
           if (this.config.copyProfile('Default', this.inputProfileName.value)) {
             this.inputActive = false;
-            this.router.navigate(['profile-manager', this.inputProfileName.value]);
+            this.router.navigate(['profile-manager']);
           }
           break;
         case InputMode.Copy:
           if (this.config.copyProfile(this.currentProfile.name, this.inputProfileName.value)) {
             this.inputActive = false;
-            this.router.navigate(['profile-manager', this.inputProfileName.value]);
+            this.router.navigate(['profile-manager']);
           }
           break;
         case InputMode.Edit:
@@ -152,7 +152,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
   public deleteProfile(profileName): void {
     if (this.config.deleteCustomProfile(profileName)) {
-      this.router.navigate(['profile-manager', this.state.getActiveProfile().name]);
+      this.router.navigate(['profile-manager']);
     }
   }
 
