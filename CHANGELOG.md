@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 ### Added
-- USB devices controller
+- USB devices controller (logic only)
+- Profile manager -> profiles overview tiles
+- Profile overview button
+
+### Changed
+- Profile manager selected (viewed) profile is now mainly changed through clicking the
+  overview tiles. Selected profile can be deselected via "profile overview" button.
+- Main nav "active profile" entry now links to the profile overview tiles
 
 ## [0.4.0] - 2019-09-20
 ### Added
