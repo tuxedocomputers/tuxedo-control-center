@@ -28,7 +28,7 @@ $tuxedo-control-center-theme: mat-light-theme($theme-primary, $theme-accent, $th
     // Define any styles affected by the theme.
     .profile-overview-tile {
         &.tile-active {
-            color: mat-color($accent, darker);
+            color: mat-color($primary, darker);
         }
 
         &.hover-effect:hover {

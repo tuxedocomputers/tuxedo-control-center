@@ -65,12 +65,16 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.currentProfile = this.config.getProfileByName(params.profileName);
         this.config.setCurrentEditingProfile(this.currentProfile.name);
       } else {
+        this.config.setCurrentEditingProfile(undefined);
+        /*
         this.currentProfile = this.config.getCurrentEditingProfile();
         if (this.currentProfile === undefined) {
           this.currentProfile = this.state.getActiveProfile();
-        }
+        }*/
       }
-      this.utils.fillDefaultValuesProfile(this.currentProfile);
+      if (this.currentProfile !== undefined) {
+        this.utils.fillDefaultValuesProfile(this.currentProfile);
+      }
     });
 
     this.stateInputArray = this.state.getStateInputs();
@@ -92,9 +96,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     return this.config.getAllProfiles();
   }
 
-  public selectProfile(profileName: string): void {
+  public selectProfile(profileName?: string): void {
     setImmediate(() => {
-      this.router.navigate(['profile-manager', profileName]);
+      if (profileName === undefined) {
+        this.router.navigate(['profile-manager']);
+      } else {
+        this.router.navigate(['profile-manager', profileName]);
+      }
     });
   }
 
@@ -121,7 +129,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
           break;
         case InputMode.Edit:
           if (this.config.setCurrentEditingProfile(this.currentProfile.name)) {
-            console.log(this.config.getCurrentEditingProfile());
             this.config.getCurrentEditingProfile().name = this.inputProfileName.value;
             if (this.config.writeCurrentEditingProfile()) {
               this.inputActive = false;
