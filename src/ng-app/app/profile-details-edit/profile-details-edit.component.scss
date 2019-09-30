@@ -1,14 +1,25 @@
 
-.profile-information mat-grid-tile {
+.profile-details-edit-grid {
 
     header {
         width: 100%;
         text-align: left;
     }
 
-    content {
+    content.value {
         width: 100%;
         text-align: left;
         font-weight: bold;
+    }
+
+    content.input {
+
+        mat-slider {
+            width: 200px;
+        }
+
+        mat-select {
+            width: 200px;
+        }
     }
 }

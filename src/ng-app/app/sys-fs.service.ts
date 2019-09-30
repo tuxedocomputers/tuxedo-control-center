@@ -1,14 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { CpuController } from '../../common/classes/CpuController';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SysFsService {
+export class SysFsService implements OnDestroy {
 
   private cpu: CpuController;
   private displayBacklightControllers: DisplayBacklightController[];
+
+  private updateInterval: NodeJS.Timeout;
+  private updatePeriodMs = 3000;
+  public generalCpuInfo: BehaviorSubject<IGeneralCPUInfo>;
 
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
@@ -18,6 +23,23 @@ export class SysFsService {
     this.displayBacklightControllers = [];
     for (const driverName of displayBacklightControllerNames) {
       this.displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
+    }
+
+    this.periodicUpdate();
+    this.updateInterval = setInterval(() => { this.periodicUpdate(); }, this.updatePeriodMs);
+  }
+
+  private periodicUpdate(): void {
+    if (this.generalCpuInfo === undefined) {
+      this.generalCpuInfo = new BehaviorSubject(this.getGeneralCpuInfo());
+    } else {
+      this.generalCpuInfo.next(this.getGeneralCpuInfo());
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
     }
   }
 

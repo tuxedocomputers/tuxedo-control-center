@@ -14,31 +14,88 @@
             </mat-form-field-->
         </mat-card-subtitle>
         <mat-card-content>
-            <mat-card>
-                <mat-card-subtitle>
-                    Display backlight
-                </mat-card-subtitle>
-                <mat-card-content>
-                    <mat-grid-list cols="4" rowHeight="20px" class="profile-information">
-                        <mat-grid-tile colspan="2"><header>Set fixed brightness</header></mat-grid-tile><mat-grid-tile><content>{{ profile.display.useBrightness }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                        <mat-grid-tile colspan="2"><header>Brightness value</header></mat-grid-tile><mat-grid-tile><content>{{ profile.display.brightness }}%</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                    </mat-grid-list>
-                </mat-card-content>
-            </mat-card>
-            <br />
-            <mat-card>
-                <mat-card-subtitle>
-                    CPU settings
-                </mat-card-subtitle>
-                <mat-card-content>
-                    <mat-grid-list cols="4" rowHeight="20px" class="profile-information">
-                        <mat-grid-tile colspan="2"><header>Number of logical cores</header></mat-grid-tile><mat-grid-tile><content>{{ profile.cpu.onlineCores }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                        <mat-grid-tile colspan="2"><header>Minimum scaling frequency</header></mat-grid-tile><mat-grid-tile><content>{{ formatFrequency(profile.cpu.scalingMinFrequency) }} GHz</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                        <mat-grid-tile colspan="2"><header>Maximum scaling frequency</header></mat-grid-tile><mat-grid-tile><content>{{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                        <mat-grid-tile colspan="2"><header>Scaling governor</header></mat-grid-tile><mat-grid-tile><content>{{ profile.cpu.governor }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                        <mat-grid-tile colspan="2"><header>Energy performance preference</header></mat-grid-tile><mat-grid-tile><content>{{ profile.cpu.energyPerformancePreference }}</content></mat-grid-tile><mat-grid-tile></mat-grid-tile>
-                    </mat-grid-list>
-                </mat-card-content>
-            </mat-card>
+            <form>
+                <mat-card>
+                    <mat-card-subtitle>
+                        Display backlight
+                    </mat-card-subtitle>
+                    <mat-card-content>
+                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Set fixed brightness on start/wake up</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ profile.display.useBrightness }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-checkbox (cchange)="enableBrightnessControls()"></mat-checkbox>
+                                </content>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Brightness value</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ profile.display.brightness }}%</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-slider min="1" max="100" step="5"></mat-slider>
+                                </content>
+                            </mat-grid-tile>
+
+                        </mat-grid-list>
+                    </mat-card-content>
+                </mat-card>
+                <br />
+                <mat-card>
+                    <mat-card-subtitle>
+                        CPU settings
+                    </mat-card-subtitle>
+                    <mat-card-content>
+                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Number of logical cores</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ profile.cpu.onlineCores }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-slider min="1" max="8" step="1"></mat-slider>
+                                </content>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Minimum scaling frequency</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} GHz</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-slider min="1" max="100" step="5"></mat-slider>
+                                </content>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Maximum scaling frequency</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-slider min="1" max="100" step="5"></mat-slider>
+                                </content>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Scaling governor</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ profile.cpu.governor }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-select [disableOptionCentering]="true">
+                                        <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor">{{ governor }}</mat-option>
+                                    </mat-select>
+                                </content>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ profile.cpu.energyPerformancePreference }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
+                                    <mat-select [disableOptionCentering]="true">
+                                        <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
+                                    </mat-select>
+                                </content>
+                            </mat-grid-tile>
+
+                        </mat-grid-list>
+                    </mat-card-content>
+                </mat-card>
+            </form>
         </mat-card-content>
     </mat-card>
