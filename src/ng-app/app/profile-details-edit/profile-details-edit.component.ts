@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ITccProfile } from '../../../common/models/TccProfile';
+import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-details-edit',
@@ -23,6 +24,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     inputSpan: 3
   };
 
+  public profileFormGroup: FormGroup;
+
   private subscriptions: Subscription = new Subscription();
   public cpuInfo: IGeneralCPUInfo;
   public editProfile: ITccProfile;
@@ -31,12 +34,30 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private utils: UtilsService,
     private config: ConfigService,
     private state: StateService,
-    private sysfs: SysFsService
+    private sysfs: SysFsService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit() {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => { this.cpuInfo = generalCpuInfo; }));
-    this.subscriptions.add(this.config.editingProfile.subscribe(profile => { this.editProfile = profile; }));
+    this.subscriptions.add(this.config.editingProfile.subscribe(profile => {
+
+      this.editProfile = profile;
+      let p: ITccProfile;
+      if (profile !== undefined) {
+        p = profile;
+      } else {
+        // Not displayed dummy
+        p = this.config.getDefaultProfiles()[0];
+      }
+
+      // Create form group from profile
+      this.profileFormGroup = this.fb.group({
+        name: p.name,
+        display: this.fb.group(p.display),
+        cpu: this.fb.group(p.cpu)
+      });
+    }));
   }
 
   ngOnDestroy() {

@@ -14,31 +14,33 @@
             </mat-form-field-->
         </mat-card-subtitle>
         <mat-card-content>
-            <form>
+            <form [formGroup]="profileFormGroup">
                 <mat-card>
                     <mat-card-subtitle>
                         Display backlight
                     </mat-card-subtitle>
                     <mat-card-content>
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <div formGroupName="display">
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
-                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Set fixed brightness on start/wake up</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.display.useBrightness }}</content></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
-                                    <mat-checkbox (cchange)="enableBrightnessControls()"></mat-checkbox>
-                                </content>
-                            </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Set fixed brightness on start/wake up</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.display.useBrightness }}</content></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <content class="input" *ngIf="editProfile">
+                                        <mat-checkbox formControlName="useBrightness"></mat-checkbox>
+                                    </content>
+                                </mat-grid-tile>
 
-                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Brightness value</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.display.brightness }}%</content></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
-                                    <mat-slider min="1" max="100" step="5"></mat-slider>
-                                </content>
-                            </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Brightness value</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.display.brightness }}%</content></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <content class="input" *ngIf="editProfile">
+                                        <mat-slider formControlName="brightness" min="1" max="100" step="5"></mat-slider>
+                                    </content>
+                                </mat-grid-tile>
 
-                        </mat-grid-list>
+                            </mat-grid-list>
+                        </div>
                     </mat-card-content>
                 </mat-card>
                 <br />
@@ -47,13 +49,13 @@
                         CPU settings
                     </mat-card-subtitle>
                     <mat-card-content>
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
                             <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Number of logical cores</header></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.cpu.onlineCores }}</content></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" *ngIf="editProfile">
-                                    <mat-slider min="1" max="8" step="1"></mat-slider>
+                                    <mat-slider formControlName="onlineCores" min="1" max="8" step="1"></mat-slider>
                                 </content>
                             </mat-grid-tile>
 
@@ -61,7 +63,7 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" *ngIf="editProfile">
-                                    <mat-slider min="1" max="100" step="5"></mat-slider>
+                                    <mat-slider formControlName="scalingMinFrequency" min="1" max="100" step="5"></mat-slider>
                                 </content>
                             </mat-grid-tile>
 
@@ -69,7 +71,7 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" *ngIf="editProfile">
-                                    <mat-slider min="1" max="100" step="5"></mat-slider>
+                                    <mat-slider formControlName="scalingMaxFrequency" min="1" max="100" step="5"></mat-slider>
                                 </content>
                             </mat-grid-tile>
 
@@ -77,7 +79,7 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.cpu.governor }}</content></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" *ngIf="editProfile">
-                                    <mat-select [disableOptionCentering]="true">
+                                    <mat-select formControlName="governor" [disableOptionCentering]="true">
                                         <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor">{{ governor }}</mat-option>
                                     </mat-select>
                                 </content>
@@ -87,7 +89,7 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.cpu.energyPerformancePreference }}</content></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" *ngIf="editProfile">
-                                    <mat-select [disableOptionCentering]="true">
+                                    <mat-select formControlName="energyPerformancePreference" [disableOptionCentering]="true">
                                         <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
                                     </mat-select>
                                 </content>
