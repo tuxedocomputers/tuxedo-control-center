@@ -55,6 +55,8 @@ export class SysFsService implements OnDestroy {
     try {
       cpuInfo = {
         availableCores: this.cpu.cores.length,
+        minFreq: this.cpu.cores[0].cpuinfoMinFreq.readValueNT(),
+        maxFreq: this.cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
         scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
         energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT()
       };
@@ -115,6 +117,8 @@ export class SysFsService implements OnDestroy {
 
 export interface IGeneralCPUInfo {
   availableCores: number;
+  minFreq: number;
+  maxFreq: number;
   scalingAvailableGovernors: string[];
   energyPerformanceAvailablePreferences: string[];
 }

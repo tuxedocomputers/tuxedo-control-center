@@ -52,26 +52,35 @@
                         <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
                             <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Number of logical cores</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.cpu.onlineCores }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
+                                <content class="value" [hidden]="!editProfile">{{ inputOnlineCores.value }}</content>
+                            </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
-                                    <mat-slider formControlName="onlineCores" min="1" max="8" step="1"></mat-slider>
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputOnlineCores formControlName="onlineCores" min="1" [max]="cpuInfo.availableCores" step="1"></mat-slider>
                                 </content>
                             </mat-grid-tile>
 
                             <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Minimum scaling frequency</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
+                                <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMinFrequency.value) }} GHz</content>
+                            </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
-                                    <mat-slider formControlName="scalingMinFrequency" min="1" max="100" step="5"></mat-slider>
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputScalingMinFrequency formControlName="scalingMinFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000"></mat-slider>
                                 </content>
                             </mat-grid-tile>
 
                             <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Maximum scaling frequency</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
+                                <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMaxFrequency.value) }} GHz</content>
+                            </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
-                                    <mat-slider formControlName="scalingMaxFrequency" min="1" max="100" step="5"></mat-slider>
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputScalingMaxFrequency formControlName="scalingMaxFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000"></mat-slider>
                                 </content>
                             </mat-grid-tile>
 
