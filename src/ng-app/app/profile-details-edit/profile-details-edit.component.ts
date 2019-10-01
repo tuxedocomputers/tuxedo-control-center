@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
-  @Input() profile: ITccProfile;
+  @Input() viewProfile: ITccProfile;
 
   public gridParams = {
     cols: 8,
@@ -23,9 +23,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     inputSpan: 3
   };
 
-  public cpuInfo: IGeneralCPUInfo;
-
   private subscriptions: Subscription = new Subscription();
+  public cpuInfo: IGeneralCPUInfo;
+  public editProfile: ITccProfile;
 
   constructor(
     private utils: UtilsService,
@@ -36,6 +36,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => { this.cpuInfo = generalCpuInfo; }));
+    this.subscriptions.add(this.config.editingProfile.subscribe(profile => { this.editProfile = profile; }));
   }
 
   ngOnDestroy() {

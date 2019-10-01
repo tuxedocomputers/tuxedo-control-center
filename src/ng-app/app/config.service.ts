@@ -6,7 +6,7 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -28,22 +28,24 @@ export class ConfigService {
 
   public observeEditingProfile: Observable<ITccProfile>;
   private editingProfileSubject: Subject<ITccProfile>;
+  public editingProfile: BehaviorSubject<ITccProfile>;
 
   // Exporting of relevant functions from ConfigHandler
   // public copyConfig = ConfigHandler.prototype.copyConfig;
   // public writeSettings = ConfigHandler.prototype.writeSettings;
 
-  constructor(private electron: ElectronService, utils: UtilsService) {
+  constructor(private electron: ElectronService, private utils: UtilsService) {
     this.settingsSubject = new Subject<ITccSettings>();
     this.observeSettings = this.settingsSubject.asObservable();
 
     this.editingProfileSubject = new Subject<ITccProfile>();
     this.observeEditingProfile = this.editingProfileSubject.asObservable();
+    this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
 
     this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
     this.defaultProfiles = this.config.getDefaultProfiles();
     for (const profile of this.defaultProfiles) {
-      utils.fillDefaultValuesProfile(profile);
+      this.utils.fillDefaultValuesProfile(profile);
     }
     this.readFiles();
   }
@@ -192,6 +194,7 @@ export class ConfigService {
       this.currentProfileEditIndex = -1;
       this.currentProfileEdit = undefined;
       this.editingProfileSubject.next(undefined);
+      this.editingProfile.next(undefined);
     }
     const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.name === customProfileName);
     if (index === -1) {
@@ -199,7 +202,9 @@ export class ConfigService {
     } else {
       this.currentProfileEditIndex = index;
       this.currentProfileEdit = this.config.copyConfig<ITccProfile>(this.customProfiles[index]);
+      this.utils.fillDefaultValuesProfile(this.currentProfileEdit);
       this.editingProfileSubject.next(this.currentProfileEdit);
+      this.editingProfile.next(this.currentProfileEdit);
       return true;
     }
   }

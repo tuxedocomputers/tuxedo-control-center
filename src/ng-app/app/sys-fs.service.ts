@@ -14,6 +14,7 @@ export class SysFsService implements OnDestroy {
   private updateInterval: NodeJS.Timeout;
   private updatePeriodMs = 3000;
   public generalCpuInfo: BehaviorSubject<IGeneralCPUInfo>;
+  public logicalCoreInfo: BehaviorSubject<ILogicalCoreInfo[]>;
 
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
@@ -34,6 +35,12 @@ export class SysFsService implements OnDestroy {
       this.generalCpuInfo = new BehaviorSubject(this.getGeneralCpuInfo());
     } else {
       this.generalCpuInfo.next(this.getGeneralCpuInfo());
+    }
+
+    if (this.logicalCoreInfo === undefined) {
+      this.logicalCoreInfo = new BehaviorSubject(this.getLogicalCoreInfo());
+    } else {
+      this.logicalCoreInfo.next(this.getLogicalCoreInfo());
     }
   }
 

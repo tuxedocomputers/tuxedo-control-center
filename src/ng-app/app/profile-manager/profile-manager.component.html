@@ -39,8 +39,4 @@
     </app-profile-overview-tile>
 </div>
 <br />
-<app-profile-details-edit
-    *ngIf="currentProfile"
-    [profile]="currentProfile"
->
-</app-profile-details-edit>
+<app-profile-details-edit *ngIf="currentProfile" [viewProfile]="currentProfile"></app-profile-details-edit>
