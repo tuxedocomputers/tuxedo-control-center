@@ -19,6 +19,19 @@
     }
 }
 
+.settings-group {
+    .title {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+            margin-right: 25px;
+            transform: scale(1.5);
+            transform-origin: left center;
+        }
+    }
+}
+
 .profile-details-edit-grid {
 
     .inactive {

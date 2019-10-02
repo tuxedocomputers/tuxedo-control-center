@@ -26,11 +26,12 @@
     </mat-card-subtitle>
     <mat-card-content>
         <form [formGroup]="profileFormGroup">
-            <mat-card>
-                <mat-card-subtitle>
-                    Display backlight
+            <mat-card class="settings-group">
+                <mat-card-subtitle class="title">
+                    <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
+                    Display
                 </mat-card-subtitle>
-                <mat-card-content>
+                <mat-card-content class="content">
                     <div formGroupName="display">
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
@@ -45,7 +46,7 @@
                                 </content>
                             </mat-grid-tile>
 
-                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header [ngClass]="{'inactive': !inputUseBrightness.checked}">Brightness value</header></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.headerSpan"><header [ngClass]="{'inactive': !inputUseBrightness.checked}">Backlight brightness</header></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
                                 <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ inputDisplayBrightness.value }}%</content>
@@ -61,11 +62,12 @@
                 </mat-card-content>
             </mat-card>
             <br />
-            <mat-card>
-                <mat-card-subtitle>
+            <mat-card class="settings-group">
+                <mat-card-subtitle class="title">
+                        <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
                     CPU settings
                 </mat-card-subtitle>
-                <mat-card-content>
+                <mat-card-content class="content">
                     <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
                         <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Number of logical cores</header></mat-grid-tile>
