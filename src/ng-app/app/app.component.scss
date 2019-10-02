@@ -28,6 +28,7 @@
 
 .main-sidenav-nav {
     width: 220px;
+    height: 100%;
 
     mat-list-item {
         content {
@@ -35,6 +36,12 @@
             display: flex;
             justify-content: space-between;
         }
+    }
+
+    mat-nav-list.bottom {
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
     }
 }
 

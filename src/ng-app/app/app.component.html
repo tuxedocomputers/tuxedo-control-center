@@ -10,16 +10,23 @@
 <mat-sidenav-container class="main-sidenav-container">
   <mat-sidenav mode="side" opened [disableClose]="true" class="main-sidenav-nav">
     <mat-nav-list>
-      <mat-list-item [routerLink]="'/profile-manager/'">
+      <mat-list-item [routerLink]="'/profile-manager/' + activeProfileName">
         <span matLine>Active profile</span>
         <span matLine style="font-weight: bold">{{ activeProfileName }}</span>
       </mat-list-item>
+      <mat-list-item routerLink="/profile-manager" routerLinkActive="true">
+        <content>
+          Profiles
+          <mat-icon><img src="./assets/images/userinfo.svg" /></mat-icon>
+        </content>
+      </mat-list-item>
+      <mat-divider></mat-divider>
       <mat-list-item routerLink="/display-settings" routerLinkActive="true">
         <content>
           Display
           <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
         </content>
-      </mat-list-item>      
+      </mat-list-item>
       <mat-list-item routerLink="/cpu-settings" routerLinkActive="true" >
         <content>
           CPU
@@ -27,10 +34,13 @@
         </content>
       </mat-list-item>
       <mat-divider></mat-divider>
+    </mat-nav-list>
+    <mat-nav-list class="bottom">
+        <mat-divider></mat-divider>
       <mat-list-item routerLink="/support" routerLinkActive="true">
         <content>
           Support
-          <mat-icon><img src="./assets/images/contact.svg" /></mat-icon>
+          <mat-icon><img src="./assets/images/support.svg" /></mat-icon>
         </content>
       </mat-list-item>
       <mat-divider></mat-divider>
