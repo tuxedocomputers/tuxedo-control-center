@@ -1,3 +1,23 @@
+.profile-title {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .buttons {
+        white-space: nowrap;
+        
+        button {
+            margin-right: 5px;
+        }
+    }
+}
 
 .profile-details-edit-grid {
 

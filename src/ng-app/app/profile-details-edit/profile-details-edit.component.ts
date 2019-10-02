@@ -6,7 +6,7 @@ import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 
 @Component({
@@ -26,6 +26,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   };
 
   public profileFormGroup: FormGroup;
+  public profileFormProgress = false;
 
   private subscriptions: Subscription = new Subscription();
   public cpuInfo: IGeneralCPUInfo;
@@ -54,11 +55,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
       }
 
       // Create form group from profile
-      this.profileFormGroup = this.fb.group({
-        name: p.name,
-        display: this.fb.group(p.display),
-        cpu: this.fb.group(p.cpu)
-      });
+      this.profileFormGroup = this.createProfileFormGroup(p);
     }));
   }
 
@@ -72,6 +69,54 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   public getSettings(): ITccSettings {
     return this.config.getSettings();
+  }
+
+  public submitFormInput() {
+    this.profileFormProgress = true;
+
+    if (this.profileFormGroup.valid) {
+      const formProfileData: ITccProfile = this.profileFormGroup.value;
+      this.config.writeProfile(formProfileData).then(success => {
+        if (success) {
+          this.profileFormGroup.markAsPristine();
+        }
+        this.profileFormProgress = false;
+      });
+    } else {
+      this.profileFormProgress = false;
+    }
+  }
+
+  public discardFormInput() {
+    this.profileFormGroup.reset(this.editProfile);
+  }
+
+  private createProfileFormGroup(profile: ITccProfile) {
+    const displayGroup: FormGroup = this.fb.group(profile.display);
+    const cpuGroup: FormGroup = this.fb.group(profile.cpu);
+    cpuGroup.controls.scalingMinFrequency.setValidators([ Validators.max(cpuGroup.controls.scalingMaxFrequency.value)]);
+    cpuGroup.controls.scalingMaxFrequency.setValidators([ Validators.min(cpuGroup.controls.scalingMinFrequency.value)]);
+    const fg = this.fb.group({
+      name: profile.name,
+      display: displayGroup,
+      cpu: cpuGroup
+    });
+
+    return fg;
+  }
+
+  public sliderMinFreqChange() {
+    const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+    if (cpuGroup.controls.scalingMinFrequency.value > cpuGroup.controls.scalingMaxFrequency.value) {
+      cpuGroup.controls.scalingMinFrequency.setValue(cpuGroup.controls.scalingMaxFrequency.value);
+    }
+  }
+
+  public sliderMaxFreqChange() {
+    const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+    if (cpuGroup.controls.scalingMaxFrequency.value < cpuGroup.controls.scalingMinFrequency.value) {
+      cpuGroup.controls.scalingMaxFrequency.setValue(cpuGroup.controls.scalingMinFrequency.value);
+    }
   }
 
   public inputDisplayBrightnessChange(newValue: number) {

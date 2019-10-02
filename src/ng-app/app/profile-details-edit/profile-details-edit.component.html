@@ -1,6 +1,17 @@
 <mat-card *ngIf="viewProfile">
-    <mat-card-title>
-        {{ viewProfile.name }}
+    <mat-card-title class="profile-title">
+        <span class="name">
+            {{ profileFormGroup.dirty ? '*' : '' }}{{ viewProfile.name }}
+        </span>
+        <span class="buttons">
+            <button mat-stroked-button color="primary" *ngIf="profileFormGroup.dirty" (click)="submitFormInput()" [disabled]="profileFormProgress">
+                <i class="fas fa-cog" [ngClass]="{'fa-spin': profileFormProgress}"></i>
+                Save
+            </button>
+            <button mat-stroked-button color="basic" *ngIf="profileFormGroup.dirty" (click)="discardFormInput()" [disabled]="profileFormProgress">
+                Discard
+            </button>
+        </span>
         <!--mat-chip-list style="display: inline-flex">
             <mat-chip *ngIf="isCustomProfile()" color="accent" selected>Custom</mat-chip>
             <mat-chip *ngIf="!isCustomProfile()">Preset</mat-chip>
@@ -75,7 +86,7 @@
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
-                                <mat-slider #inputScalingMinFrequency formControlName="scalingMinFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000"></mat-slider>
+                                <mat-slider #inputScalingMinFrequency formControlName="scalingMinFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000" (change)="sliderMinFreqChange()"></mat-slider>
                             </content>
                         </mat-grid-tile>
 
@@ -86,7 +97,7 @@
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
-                                <mat-slider #inputScalingMaxFrequency formControlName="scalingMaxFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000"></mat-slider>
+                                <mat-slider #inputScalingMaxFrequency formControlName="scalingMaxFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000" (change)="sliderMaxFreqChange()"></mat-slider>
                             </content>
                         </mat-grid-tile>
 

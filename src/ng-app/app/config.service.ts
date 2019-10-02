@@ -142,6 +142,42 @@ export class ConfigService {
     }
   }
 
+  private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      const tmpProfilesPath = '/tmp/tmptccprofiles';
+      this.config.writeProfiles(customProfiles, tmpProfilesPath);
+      let tccdExec: string;
+      if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+      } else {
+        tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+      }
+      this.utils.execCmd('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath).then(data => {
+        resolve(true);
+      }).catch(error => {
+        resolve(false);
+      });
+    });
+  }
+
+  public async writeProfile(profile: ITccProfile): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      const profileIndex = this.customProfiles.findIndex(p => p.name === profile.name);
+      if (profileIndex !== -1) {
+        const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+        customProfilesCopy[profileIndex] = profile;
+        this.pkexecWriteCustomProfilesAsync(customProfilesCopy).then(success => {
+          if (success) {
+            this.readFiles();
+          }
+          resolve(success);
+        });
+      } else {
+        resolve(false);
+      }
+    });
+  }
+
   /**
    * Retrieves the currently chosen profile for edit
    *
