@@ -9,7 +9,7 @@
             <mat-button-toggle value="used">In use</mat-button-toggle>
         </mat-button-toggle-group>
     </mat-toolbar-row>
-    <mat-toolbar-row *ngIf="currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
+    <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
         <!-- span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()"><mat-icon>library_add</mat-icon></button></span-->
         <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
         <span *ngIf="currentProfile" [matTooltip]="buttonEdit.tooltip()"><button mat-icon-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()"><mat-icon>edit</mat-icon></button></span>
