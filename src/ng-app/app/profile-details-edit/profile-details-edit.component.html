@@ -24,18 +24,24 @@
                             <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
                                 <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Set fixed brightness on start/wake up</header></mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.display.useBrightness }}</content></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                    <content class="value" [hidden]="editProfile">{{ viewProfile.display.useBrightness }}</content>
+                                    <content class="value" [hidden]="!editProfile">{{ inputUseBrightness.checked }}</content>
+                                </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                    <content class="input" *ngIf="editProfile">
-                                        <mat-checkbox formControlName="useBrightness"></mat-checkbox>
+                                    <content class="input" [hidden]="!editProfile">
+                                        <mat-checkbox #inputUseBrightness formControlName="useBrightness"></mat-checkbox>
                                     </content>
                                 </mat-grid-tile>
 
-                                <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Brightness value</header></mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.display.brightness }}%</content></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.headerSpan"><header [ngClass]="{'inactive': !inputUseBrightness.checked}">Brightness value</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                    <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
+                                    <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ inputDisplayBrightness.value }}%</content>
+                                </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                    <content class="input" *ngIf="editProfile">
-                                        <mat-slider formControlName="brightness" min="1" max="100" step="5"></mat-slider>
+                                    <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
+                                        <mat-slider #inputDisplayBrightness formControlName="brightness" (input)="inputDisplayBrightnessChange(inputDisplayBrightness.value)" min="0" max="100" step="5"></mat-slider>
                                     </content>
                                 </mat-grid-tile>
 
@@ -85,9 +91,12 @@
                             </mat-grid-tile>
 
                             <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Scaling governor</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.cpu.governor }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.governor }}</content>
+                                <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.governor.value }}</content>
+                            </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
+                                <content class="input" [hidden]="!editProfile">
                                     <mat-select formControlName="governor" [disableOptionCentering]="true">
                                         <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor">{{ governor }}</mat-option>
                                     </mat-select>
@@ -95,9 +104,12 @@
                             </mat-grid-tile>
 
                             <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ viewProfile.cpu.energyPerformancePreference }}</content></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.energyPerformancePreference }}</content>
+                                <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.energyPerformancePreference.value }}</content>
+                            </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input" *ngIf="editProfile">
+                                <content class="input" [hidden]="!editProfile">
                                     <mat-select formControlName="energyPerformancePreference" [disableOptionCentering]="true">
                                         <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
                                     </mat-select>

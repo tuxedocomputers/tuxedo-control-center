@@ -7,6 +7,7 @@ import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { DBusService } from '../dbus.service';
 
 @Component({
   selector: 'app-profile-details-edit',
@@ -18,9 +19,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   @Input() viewProfile: ITccProfile;
 
   public gridParams = {
-    cols: 8,
+    cols: 9,
     headerSpan: 4,
-    valueSpan: 1,
+    valueSpan: 2,
     inputSpan: 3
   };
 
@@ -35,7 +36,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private config: ConfigService,
     private state: StateService,
     private sysfs: SysFsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dbus: DBusService
   ) { }
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         p = profile;
       } else {
         // Not displayed dummy
-        p = this.config.getDefaultProfiles()[0];
+        p = this.viewProfile;
       }
 
       // Create form group from profile
@@ -70,6 +72,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   public getSettings(): ITccSettings {
     return this.config.getSettings();
+  }
+
+  public inputDisplayBrightnessChange(newValue: number) {
+    if (!this.dbus.displayBrightnessNotSupported) {
+      this.dbus.setDisplayBrightness(newValue);
+    }
   }
 
   public formatFrequency(frequency: number): string {
