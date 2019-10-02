@@ -75,4 +75,17 @@
             font-size: 0.9em;
         }
     }
+
+    mat-card-content {
+        height: 126px;
+        
+        .add-profile-content {
+            mat-icon {
+                position: relative;
+                left: 75px;
+                top: 10px;
+                font-size: 5em;
+            }
+        }
+    }
 }

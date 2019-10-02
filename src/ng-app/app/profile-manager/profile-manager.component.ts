@@ -41,6 +41,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
   public stateInputArray: IStateInfo[];
 
+  public inputProfileFilter = 'all';
+
   @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
 
   public buttonCopy: ProfileManagerButton;
@@ -98,6 +100,22 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
   public getAllProfiles(): ITccProfile[] {
     return this.config.getAllProfiles();
+  }
+
+  public getProfilesForList(): ITccProfile[] {
+    if (this.inputProfileFilter === 'all') {
+      return this.config.getAllProfiles();
+    } else if (this.inputProfileFilter === 'default') {
+      return this.config.getDefaultProfiles();
+    } else if (this.inputProfileFilter === 'custom') {
+      return this.config.getCustomProfiles();
+    } else if (this.inputProfileFilter === 'used') {
+      return this.config.getAllProfiles().filter(profile => {
+        return Object.values(this.config.getSettings().stateMap).includes(profile.name);
+      });
+    } else {
+      return [];
+    }
   }
 
   public selectProfile(profileName?: string): void {

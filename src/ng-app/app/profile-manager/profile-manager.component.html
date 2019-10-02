@@ -1,7 +1,16 @@
 <br />
 <mat-toolbar>
-    <mat-toolbar-row *ngIf="!inputActive" style="padding-top: 20px; padding-bottom: 20px;">
-        <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()"><mat-icon>library_add</mat-icon></button></span>
+    <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
+        Profiles
+        <mat-button-toggle-group [(ngModel)]="inputProfileFilter" style="transform: scale(0.7)">
+            <mat-button-toggle value="all">All</mat-button-toggle>
+            <mat-button-toggle value="default">Default</mat-button-toggle>
+            <mat-button-toggle value="custom">Custom</mat-button-toggle>
+            <mat-button-toggle value="used">In use</mat-button-toggle>
+        </mat-button-toggle-group>
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
+        <!-- span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()"><mat-icon>library_add</mat-icon></button></span-->
         <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
         <span *ngIf="currentProfile" [matTooltip]="buttonEdit.tooltip()"><button mat-icon-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()"><mat-icon>edit</mat-icon></button></span>
         <span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
@@ -31,12 +40,17 @@
 <br />
 <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
     <app-profile-overview-tile
-        *ngFor="let profile of getAllProfiles()"
+        *ngFor="let profile of getProfilesForList()"
         [profile]="profile"
         [hoverEffect]="true"
         [active]="isProfileActive(profile.name)"
         (click)="selectProfile(profile.name)">
     </app-profile-overview-tile>
+    <app-profile-overview-tile
+        [addProfileTile]="true"
+        [hoverEffect]="true"
+        (click)="buttonNew.click()"
+    ></app-profile-overview-tile>
 </div>
 <br />
 <app-profile-details-edit *ngIf="currentProfile" [viewProfile]="currentProfile"></app-profile-details-edit>

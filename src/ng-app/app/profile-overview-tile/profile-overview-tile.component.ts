@@ -18,6 +18,14 @@ export class ProfileOverviewTileComponent implements OnInit {
   @Input() visible = true;
   @Input() active = false;
 
+  /**
+   * Special input to signal that it shouldn't display a profile and just
+   * display an add symbol instead.
+   *
+   * If set to true it overrules the profile input. Defaults to false.
+   */
+  @Input() addProfileTile = false;
+
   constructor(
     private utils: UtilsService,
     private state: StateService,

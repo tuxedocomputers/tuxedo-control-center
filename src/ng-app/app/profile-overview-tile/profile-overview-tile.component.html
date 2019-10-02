@@ -1,6 +1,6 @@
 <mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
     <mat-card-content>
-        <header>
+        <header *ngIf="!addProfileTile">
             <span class="profile-name">{{ profile.name }}</span>
             <span class="state-icons">
                 <span *ngFor="let state of getStateInputs()">
@@ -8,36 +8,45 @@
                 </span>
             </span>
         </header>
+        <header *ngIf="addProfileTile">
+            <span class="profile-name">New profile</span>
+        </header>
         <hr />
-        <div class="status-row" [ngClass]="{'inactive': !profile.display.useBrightness}">
-            <mat-icon class="status-icon">brightness_4</mat-icon>
-            <span class="status-info">
-                {{ profile.display.brightness }} %
-            </span>
-        </div>
-        <div class="status-row">
-            <mat-icon class="status-icon">memory</mat-icon>
-            <span class="status-info">
-                {{ profile.cpu.onlineCores }} <span>cores</span>
-            </span>
-        </div>
-        <div class="status-row">
-            <mat-icon class="status-icon">speed</mat-icon>
-            <span class="status-info">
-                {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
-            </span>
-        </div>
-        <div class="status-row">
-            <mat-icon class="status-icon">policy</mat-icon>
-            <span class="status-info">
-                {{ profile.cpu.governor }}
-            </span>
-        </div>
-        <div class="status-row">
-            <i class="fas fa-bolt status-icon"></i>
-            <span class="status-info">
-                {{ profile.cpu.energyPerformancePreference }}
-            </span>
-        </div>
+        <span *ngIf="!addProfileTile">
+            <div class="status-row" [ngClass]="{'inactive': !profile.display.useBrightness}">
+                <mat-icon class="status-icon">brightness_4</mat-icon>
+                <span class="status-info">
+                    {{ profile.display.brightness }} %
+                </span>
+            </div>
+            <div class="status-row">
+                <mat-icon class="status-icon">memory</mat-icon>
+                <span class="status-info">
+                    {{ profile.cpu.onlineCores }} <span>cores</span>
+                </span>
+            </div>
+            <div class="status-row">
+                <mat-icon class="status-icon">speed</mat-icon>
+                <span class="status-info">
+                    {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
+                </span>
+            </div>
+            <div class="status-row">
+                <mat-icon class="status-icon">policy</mat-icon>
+                <span class="status-info">
+                    {{ profile.cpu.governor }}
+                </span>
+            </div>
+            <div class="status-row">
+                <i class="fas fa-bolt status-icon"></i>
+                <span class="status-info">
+                    {{ profile.cpu.energyPerformancePreference }}
+                </span>
+            </div>
+        </span>
+        <span *ngIf="addProfileTile" class="add-profile-content">
+            <mat-icon>add_box</mat-icon>
+            <br />
+        </span>
     </mat-card-content>
 </mat-card>
