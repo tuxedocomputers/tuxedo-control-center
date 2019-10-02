@@ -63,7 +63,11 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       this.inputActive = false;
       if (params.profileName) {
         this.currentProfile = this.config.getProfileByName(params.profileName);
-        this.config.setCurrentEditingProfile(this.currentProfile.name);
+        if (this.config.getCustomProfileByName(this.currentProfile.name) !== undefined) {
+          this.config.setCurrentEditingProfile(this.currentProfile.name);
+        } else {
+          this.config.setCurrentEditingProfile(undefined);
+        }
       } else {
         this.config.setCurrentEditingProfile(undefined);
         /*
