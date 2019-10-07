@@ -1,17 +1,22 @@
-<mat-card *ngIf="viewProfile">
+<mat-card *ngIf="viewProfile" class="profile-details-edit">
     <mat-card-title class="profile-title">
         <span class="name">
-            {{ profileFormGroup.dirty ? '*' : '' }}{{ viewProfile.name }}
+            {{ profileDirty ? '*' : '' }}{{ viewProfile.name }}
         </span>
-        <span class="buttons">
-            <button mat-stroked-button color="primary" *ngIf="profileFormGroup.dirty" (click)="submitFormInput()" [disabled]="profileFormProgress">
+        <!--span class="buttons">
+            <button mat-stroked-button color="primary" *ngIf="profileDirty" (click)="submitFormInput()" [disabled]="profileFormProgress">
                 <i class="fas fa-cog" [ngClass]="{'fa-spin': profileFormProgress}"></i>
                 Save
             </button>
-            <button mat-stroked-button color="basic" *ngIf="profileFormGroup.dirty" (click)="discardFormInput()" [disabled]="profileFormProgress">
+            <button mat-stroked-button color="basic" *ngIf="profileDirty" (click)="discardFormInput()" [disabled]="profileFormProgress">
                 Discard
             </button>
-        </span>
+        </span-->
+        <mat-button-toggle-group [formControl]="selectStateControl" matTooltip="Activate profile on chosen states" multiple style="transform: scale(0.7);">
+            <mat-button-toggle *ngFor="let state of stateInputArray" color="primary" disableRipple [disabled]="getSettings().stateMap[state.value] === viewProfile.name" [value]="state.value">
+                <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
+            </mat-button-toggle>
+        </mat-button-toggle-group>
         <!--mat-chip-list style="display: inline-flex">
             <mat-chip *ngIf="isCustomProfile()" color="accent" selected>Custom</mat-chip>
             <mat-chip *ngIf="!isCustomProfile()">Preset</mat-chip>

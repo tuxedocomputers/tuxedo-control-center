@@ -2,9 +2,11 @@
 @include mat-core();
 
 @import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
+@import './app/profile-details-edit/profile-details-edit.component-theme.scss';
 
 @mixin component-themes($theme) {
     @include profile-overview-tile-theme($theme);
+    @include profile-details-edit-theme($theme);
 }
 
 $themes-map: (

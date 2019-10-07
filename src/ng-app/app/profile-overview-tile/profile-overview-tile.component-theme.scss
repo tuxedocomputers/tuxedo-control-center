@@ -11,7 +11,7 @@
   // Define any styles affected by the theme.
   .profile-overview-tile {
       &.tile-active {
-          color: mat-color($primary, darker);
+          color: mat-color($accent);
       }
 
       &.hover-effect:hover {

@@ -6,7 +6,7 @@ import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 
 @Component({
@@ -18,6 +18,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   @Input() viewProfile: ITccProfile;
 
+  @Input()
+  get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
+
   public gridParams = {
     cols: 9,
     headerSpan: 4,
@@ -25,12 +28,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     inputSpan: 3
   };
 
+  public selectStateControl: FormControl = new FormControl();
   public profileFormGroup: FormGroup;
   public profileFormProgress = false;
 
   private subscriptions: Subscription = new Subscription();
   public cpuInfo: IGeneralCPUInfo;
   public editProfile: ITccProfile;
+
+  public stateInputArray: IStateInfo[];
 
   constructor(
     private utils: UtilsService,
@@ -42,6 +48,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    if (this.viewProfile === undefined) { return; }
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => { this.cpuInfo = generalCpuInfo; }));
     this.subscriptions.add(this.config.editingProfile.subscribe(profile => {
 
@@ -57,6 +64,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
       // Create form group from profile
       this.profileFormGroup = this.createProfileFormGroup(p);
     }));
+
+    this.stateInputArray = this.state.getStateInputs();
   }
 
   ngOnDestroy() {
@@ -76,9 +85,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     if (this.profileFormGroup.valid) {
       const formProfileData: ITccProfile = this.profileFormGroup.value;
-      this.config.writeProfile(formProfileData).then(success => {
+      console.log(formProfileData);
+      const newProfileStateAssignments: string[] = this.selectStateControl.value;
+      this.config.writeProfile(formProfileData, newProfileStateAssignments).then(success => {
         if (success) {
           this.profileFormGroup.markAsPristine();
+          this.selectStateControl.markAsPristine();
         }
         this.profileFormProgress = false;
       });
@@ -88,7 +100,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   }
 
   public discardFormInput() {
-    this.profileFormGroup.reset(this.editProfile);
+    if (this.editProfile !== undefined) {
+      this.profileFormGroup.reset(this.editProfile);
+    } else {
+      this.profileFormGroup.reset(this.viewProfile);
+    }
+    this.selectStateControl.reset();
   }
 
   private createProfileFormGroup(profile: ITccProfile) {

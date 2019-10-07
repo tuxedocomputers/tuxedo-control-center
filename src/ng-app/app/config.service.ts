@@ -160,21 +160,58 @@ export class ConfigService {
     });
   }
 
-  public async writeProfile(profile: ITccProfile): Promise<boolean> {
+  public async writeProfile(profile: ITccProfile, states?: string[]): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       const profileIndex = this.customProfiles.findIndex(p => p.name === profile.name);
+
+      // Copy custom profiles and if provided profile is one of them, overwrite with
+      // provided profile
+      const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
       if (profileIndex !== -1) {
-        const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
         customProfilesCopy[profileIndex] = profile;
-        this.pkexecWriteCustomProfilesAsync(customProfilesCopy).then(success => {
-          if (success) {
-            this.readFiles();
-          }
-          resolve(success);
-        });
       } else {
-        resolve(false);
+        if (this.defaultProfiles.find(p => p.name === profile.name) === undefined) {
+          resolve(false);
+          return;
+        }
       }
+
+      // Copy config and if states are provided, assign the chosen profile to these states
+      const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
+      if (states !== undefined) {
+        for (const stateId of states) {
+          newSettings.stateMap[stateId] = profile.name;
+        }
+      }
+
+      this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+        if (success) {
+          this.readFiles();
+        }
+        resolve(success);
+      });
+    });
+  }
+
+  private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      const tmpProfilesPath = '/tmp/tmptccprofiles';
+      const tmpSettingsPath = '/tmp/tmptccsettings';
+      this.config.writeProfiles(customProfiles, tmpProfilesPath);
+      this.config.writeSettings(settings, tmpSettingsPath);
+      let tccdExec: string;
+      if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+      } else {
+        tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+      }
+      this.utils.execCmd(
+        'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
+      ).then(data => {
+        resolve(true);
+      }).catch(error => {
+        resolve(false);
+      });
     });
   }
 
