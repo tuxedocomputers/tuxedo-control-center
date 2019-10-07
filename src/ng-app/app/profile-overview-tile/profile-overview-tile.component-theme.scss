@@ -5,20 +5,31 @@
   // Extract the palettes you need from the theme definition.
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
 
   // Define any styles affected by the theme.
-  /*.candy-carousel {
-    background-color: mat-color($primary);
-    border-color: mat-color($accent, A400);
-  }*/
+  .profile-overview-tile {
+      &.tile-active {
+          color: mat-color($primary, darker);
+      }
+
+      &.hover-effect:hover {
+          background-color: mat-color($background, hover);
+      }
+
+      &.selected {
+          background-color: mat-color($primary, lighter);
+      }
+  }
 }
 
 @mixin profile-overview-tile-typography($config) {
   .profile-overview-tile {
-    font: {
-      family: mat-font-family($config, body-1);
-      size: mat-font-size($config, body-1);
-      weight: mat-font-weight($config, body-1);
-    }
+      font: {
+          family: mat-font-family($config, body-1);
+          size: mat-font-size($config, body-1);
+          weight: mat-font-weight($config, body-1);
+      }
   }
 }
