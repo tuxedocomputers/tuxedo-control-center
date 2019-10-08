@@ -6,6 +6,7 @@
 - Profile manager -> profiles overview tiles
 - Profile overview button
 - Profile filter on All, Preset, Default and In use
+- Profile name input box on details page (activated for custom profiles)
 
 ### Changed
 - Profile manager selected (viewed) profile is now mainly changed through clicking the
@@ -14,8 +15,8 @@
 - Profile save moved to profile manager toolbar
 - Profile state choices moved away from profile manager toolbar to profile details
   similar to the profile overview tiles
-- Profile save now saves chosen state (multiple possible) at the same time as 
-  profile settings
+- Profile save now saves chosen state (multiple possible) as well
+- Profile save now saves profile name as well
 
 ## [0.4.0] - 2019-09-20
 ### Added
