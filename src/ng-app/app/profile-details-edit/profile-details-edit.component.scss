@@ -5,9 +5,18 @@
     align-items: center;
 
     .name {
+        width: 400px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        input {
+            width: 400px;
+        }
+
+        &.dirty {
+            font-style: italic;
+        }
     }
 
     .buttons {

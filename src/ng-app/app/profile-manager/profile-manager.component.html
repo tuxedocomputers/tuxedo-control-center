@@ -12,15 +12,10 @@
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
         <!-- span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()"><mat-icon>library_add</mat-icon></button></span-->
         <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
-        <span *ngIf="currentProfile" [matTooltip]="buttonEdit.tooltip()"><button mat-icon-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()"><mat-icon>edit</mat-icon></button></span>
+        <!--span *ngIf="currentProfile" [matTooltip]="buttonEdit.tooltip()"><button mat-icon-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()"><mat-icon>edit</mat-icon></button></span-->
         <span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
         <span *ngIf="currentProfile" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span>
         <span *ngIf="currentProfile" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span>
-        <!--span [matTooltip]="" *ngFor="let state of stateInputArray">
-            <button *ngIf="currentProfile" mat-stroked-button color="primary" [disabled]="getSettings().stateMap[state.value] === currentProfile.name" (click)="setActiveProfile(currentProfile.name, state.value)">
-                <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
-            </button>
-        </span-->
         <span style="flex: 1 1 auto"></span>
         <span matTooltip="Profile overview">
             <button *ngIf="currentProfile" mat-icon-button color="primary" (click)="selectProfile(undefined)">
@@ -55,4 +50,4 @@
     ></app-profile-overview-tile>
 </div>
 <br />
-<app-profile-details-edit #profileDetailsEdit [viewProfile]="currentProfile"></app-profile-details-edit>
+<app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>

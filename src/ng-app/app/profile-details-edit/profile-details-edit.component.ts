@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -8,6 +8,7 @@ import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DBusService } from '../dbus.service';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-profile-details-edit',
@@ -16,7 +17,30 @@ import { DBusService } from '../dbus.service';
 })
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
-  @Input() viewProfile: ITccProfile;
+  public viewProfile: ITccProfile;
+
+  @Input()
+  set profile(profile: ITccProfile) {
+    this.viewProfile = profile;
+
+    if (profile === undefined) { return; }
+
+    // Create form group from profile
+    if (this.profileFormGroup === undefined) {
+      this.profileFormGroup = this.createProfileFormGroup(profile);
+    } else {
+      this.profileFormGroup.reset(profile);
+    }
+
+    if (this.selectStateControl === undefined) {
+      this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.name));
+    } else {
+      this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
+    }
+
+    this.editProfile = (this.config.getCustomProfileByName(profile.name) !== undefined);
+    this.isEditingName = false;
+  }
 
   @Input()
   get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
@@ -34,9 +58,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
   public cpuInfo: IGeneralCPUInfo;
-  public editProfile: ITccProfile;
+  public editProfile: boolean;
+  public isEditingName = false;
 
   public stateInputArray: IStateInfo[];
+
+  @ViewChild('inputName', { static: false }) inputName: MatInput;
 
   constructor(
     private utils: UtilsService,
@@ -50,21 +77,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.viewProfile === undefined) { return; }
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => { this.cpuInfo = generalCpuInfo; }));
-    this.subscriptions.add(this.config.editingProfile.subscribe(profile => {
-
-      this.editProfile = profile;
-      let p: ITccProfile;
-      if (profile !== undefined) {
-        p = profile;
-      } else {
-        // Not displayed dummy
-        p = this.viewProfile;
-      }
-
-      // Create form group from profile
-      this.profileFormGroup = this.createProfileFormGroup(p);
-      this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.name));
-    }));
 
     this.stateInputArray = this.state.getStateInputs();
   }
@@ -87,10 +99,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     if (this.profileFormGroup.valid) {
       const formProfileData: ITccProfile = this.profileFormGroup.value;
       const newProfileStateAssignments: string[] = this.selectStateControl.value;
-      this.config.writeProfile(formProfileData, newProfileStateAssignments).then(success => {
+      this.config.writeProfile(this.viewProfile.name, formProfileData, newProfileStateAssignments).then(success => {
         if (success) {
           this.profileFormGroup.markAsPristine();
           this.selectStateControl.markAsPristine();
+          this.isEditingName = false;
+          this.viewProfile = formProfileData;
         }
         this.profileFormProgress = false;
       });
@@ -100,24 +114,23 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   }
 
   public discardFormInput() {
-    if (this.editProfile !== undefined) {
-      this.profileFormGroup.reset(this.editProfile);
-    } else {
-      this.profileFormGroup.reset(this.viewProfile);
-    }
+    this.profileFormGroup.reset(this.viewProfile);
     this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
+    this.isEditingName = false;
   }
 
   private createProfileFormGroup(profile: ITccProfile) {
     const displayGroup: FormGroup = this.fb.group(profile.display);
     const cpuGroup: FormGroup = this.fb.group(profile.cpu);
-    cpuGroup.controls.scalingMinFrequency.setValidators([ Validators.max(cpuGroup.controls.scalingMaxFrequency.value)]);
-    cpuGroup.controls.scalingMaxFrequency.setValidators([ Validators.min(cpuGroup.controls.scalingMinFrequency.value)]);
+    cpuGroup.controls.scalingMinFrequency.setValidators([ Validators.max(cpuGroup.controls.scalingMaxFrequency.value) ]);
+    cpuGroup.controls.scalingMaxFrequency.setValidators([ Validators.min(cpuGroup.controls.scalingMinFrequency.value) ]);
     const fg = this.fb.group({
       name: profile.name,
       display: displayGroup,
       cpu: cpuGroup
     });
+
+    fg.controls.name.setValidators([ Validators.required, Validators.minLength(1), Validators.maxLength(50) ]);
 
     return fg;
   }

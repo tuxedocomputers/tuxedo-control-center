@@ -9,7 +9,6 @@ import { ElectronService } from 'ngx-electron';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
-import { ProfileDetailsEditComponent } from '../profile-details-edit/profile-details-edit.component';
 
 enum InputMode {
   New, Copy, Edit

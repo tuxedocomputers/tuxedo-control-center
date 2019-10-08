@@ -160,9 +160,9 @@ export class ConfigService {
     });
   }
 
-  public async writeProfile(profile: ITccProfile, states?: string[]): Promise<boolean> {
+  public async writeProfile(currentProfileName: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      const profileIndex = this.customProfiles.findIndex(p => p.name === profile.name);
+      const profileIndex = this.customProfiles.findIndex(p => p.name === currentProfileName);
 
       // Copy custom profiles and if provided profile is one of them, overwrite with
       // provided profile
@@ -170,7 +170,7 @@ export class ConfigService {
       if (profileIndex !== -1) {
         customProfilesCopy[profileIndex] = profile;
       } else {
-        if (this.defaultProfiles.find(p => p.name === profile.name) === undefined) {
+        if (this.defaultProfiles.find(p => p.name === currentProfileName) === undefined) {
           resolve(false);
           return;
         }
