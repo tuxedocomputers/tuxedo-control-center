@@ -28,7 +28,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     inputSpan: 3
   };
 
-  public selectStateControl: FormControl = new FormControl();
+  public selectStateControl: FormControl;
   public profileFormGroup: FormGroup;
   public profileFormProgress = false;
 
@@ -63,6 +63,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
       // Create form group from profile
       this.profileFormGroup = this.createProfileFormGroup(p);
+      this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.name));
     }));
 
     this.stateInputArray = this.state.getStateInputs();
@@ -85,7 +86,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     if (this.profileFormGroup.valid) {
       const formProfileData: ITccProfile = this.profileFormGroup.value;
-      console.log(formProfileData);
       const newProfileStateAssignments: string[] = this.selectStateControl.value;
       this.config.writeProfile(formProfileData, newProfileStateAssignments).then(success => {
         if (success) {
@@ -105,7 +105,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     } else {
       this.profileFormGroup.reset(this.viewProfile);
     }
-    this.selectStateControl.reset();
+    this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
   }
 
   private createProfileFormGroup(profile: ITccProfile) {

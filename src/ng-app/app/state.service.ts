@@ -69,6 +69,16 @@ export class StateService implements OnDestroy {
     return this.activeProfile;
   }
 
+  /**
+   * Get the array of state names that the profile is activated for
+   */
+  public getProfileStates(profileName: string): string[] {
+    // Filter on value (profile name) and map on key (state)
+    return Object.entries(this.currentSettings.stateMap)
+            .filter(entry => entry[1] === profileName)
+            .map(entry => entry[0]);
+  }
+
   private pollActiveState(): void {
     const newState = determineState();
     if (newState !== this.activeState) {
