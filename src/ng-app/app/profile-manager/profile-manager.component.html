@@ -1,8 +1,11 @@
 <br />
 <mat-toolbar>
     <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
-        Profiles
-        <mat-button-toggle-group [(ngModel)]="inputProfileFilter" style="transform: scale(0.7)">
+        <span>
+            Profiles
+            <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span>
+        </span>
+        <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
             <mat-button-toggle value="all">All</mat-button-toggle>
             <mat-button-toggle value="default">Preset</mat-button-toggle>
             <mat-button-toggle value="custom">Custom</mat-button-toggle>
@@ -44,6 +47,7 @@
         (click)="selectProfile(profile.name)">
     </app-profile-overview-tile>
     <app-profile-overview-tile
+        *ngIf="['all', 'custom'].includes(inputProfileFilter)"
         [addProfileTile]="true"
         [hoverEffect]="true"
         (click)="buttonNew.click()"

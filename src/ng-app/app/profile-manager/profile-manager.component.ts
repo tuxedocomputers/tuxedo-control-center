@@ -140,13 +140,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         case InputMode.New:
           if (this.config.copyProfile('Default', this.inputProfileName.value)) {
             this.inputActive = false;
-            this.router.navigate(['profile-manager']);
+            this.router.navigate(['profile-manager', this.inputProfileName.value]);
           }
           break;
         case InputMode.Copy:
           if (this.config.copyProfile(this.currentProfile.name, this.inputProfileName.value)) {
             this.inputActive = false;
-            this.router.navigate(['profile-manager']);
+            this.router.navigate(['profile-manager', this.inputProfileName.value]);
           }
           break;
         case InputMode.Edit:
