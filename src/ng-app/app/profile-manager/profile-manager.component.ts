@@ -195,7 +195,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       // Show
       () => true,
       // Disable
-      () => this.currentProfile.name === 'Default',
+      () => false,
       // Click
       () => {
         this.currentInputMode = InputMode.Copy;
@@ -259,8 +259,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       () => 'Delete',
       // Tooltip
       () => {
-        if (this.isUsedProfile()) { return 'Can not delete used profile'; }
         if (!this.isCustomProfile()) { return 'Can not delete preset profiles'; }
+        if (this.isUsedProfile()) { return 'Can not delete used profile'; }
         if (this.config.getCustomProfiles().length === 1) { return 'Can not delete last custom profile'; }
         return 'Delete this profile';
       }
