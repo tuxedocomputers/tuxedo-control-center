@@ -6,9 +6,29 @@ import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
+
+function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
+  return (thisControl: AbstractControl): {[key: string]: any} | null => {
+    let errors = null;
+    if (thisControl.value < comparisonControl.value) {
+      errors = { min: comparisonControl.value, actual: thisControl.value };
+    }
+    return errors;
+  };
+}
+
+function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
+  return (thisControl: AbstractControl): {[key: string]: any} | null => {
+    let errors = null;
+    if (thisControl.value > comparisonControl.value) {
+      errors = { max: comparisonControl.value, actual: thisControl.value };
+    }
+    return errors;
+  };
+}
 
 @Component({
   selector: 'app-profile-details-edit',
@@ -125,8 +145,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   private createProfileFormGroup(profile: ITccProfile) {
     const displayGroup: FormGroup = this.fb.group(profile.display);
     const cpuGroup: FormGroup = this.fb.group(profile.cpu);
-    cpuGroup.controls.scalingMinFrequency.setValidators([ Validators.max(cpuGroup.controls.scalingMaxFrequency.value) ]);
-    cpuGroup.controls.scalingMaxFrequency.setValidators([ Validators.min(cpuGroup.controls.scalingMinFrequency.value) ]);
+    cpuGroup.controls.scalingMinFrequency.setValidators([ maxControlValidator(cpuGroup.controls.scalingMaxFrequency) ]);
+    cpuGroup.controls.scalingMaxFrequency.setValidators([ minControlValidator(cpuGroup.controls.scalingMinFrequency) ]);
     const fg = this.fb.group({
       name: profile.name,
       display: displayGroup,
