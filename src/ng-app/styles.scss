@@ -28,3 +28,15 @@ $tuxedo-control-center-theme: mat-light-theme($theme-primary, $theme-accent, $th
 [hidden] {
     visibility: hidden !important;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.blur-no-input {
+    pointer-events: none;
+    user-select: none;
+    filter: blur(1px);
+}

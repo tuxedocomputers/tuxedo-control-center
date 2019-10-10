@@ -11,6 +11,7 @@ import { ITccSettings } from '../../common/models/TccSettings';
 import { environment } from '../environments/environment';
 import { ConfigService } from './config.service';
 import { StateService } from './state.service';
+import { UtilsService } from './utils.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private config: ConfigService,
     private state: StateService,
-    private router: Router) { }
+    private utils: UtilsService) { }
 
   title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
 
@@ -40,6 +41,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  public pageDisabled(): boolean {
+    return this.utils.pageDisabled;
   }
 
   public buttonExit(): void {

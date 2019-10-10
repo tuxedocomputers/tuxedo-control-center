@@ -113,6 +113,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   public submitFormInput() {
     this.profileFormProgress = true;
+    this.utils.pageDisabled = true;
 
     if (this.profileFormGroup.valid) {
       const formProfileData: ITccProfile = this.profileFormGroup.value;
@@ -124,9 +125,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
           this.viewProfile = formProfileData;
         }
         this.profileFormProgress = false;
+        this.utils.pageDisabled = false;
       });
     } else {
       this.profileFormProgress = false;
+      this.utils.pageDisabled = false;
     }
   }
 

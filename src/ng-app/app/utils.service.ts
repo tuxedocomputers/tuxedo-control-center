@@ -12,6 +12,10 @@ import * as path from 'path';
 })
 export class UtilsService {
 
+  private blurNoInput = false;
+  get pageDisabled(): boolean { return this.blurNoInput; }
+  set pageDisabled(value: boolean) { this.blurNoInput = value; }
+
   constructor(
     private sysfs: SysFsService,
     private electron: ElectronService,
