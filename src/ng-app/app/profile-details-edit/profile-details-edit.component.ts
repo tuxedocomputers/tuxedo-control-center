@@ -39,7 +39,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     this.editProfile = (this.config.getCustomProfileByName(profile.name) !== undefined);
-    this.isEditingName = false;
   }
 
   @Input()
@@ -59,7 +58,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
   public cpuInfo: IGeneralCPUInfo;
   public editProfile: boolean;
-  public isEditingName = false;
 
   public stateInputArray: IStateInfo[];
 
@@ -103,7 +101,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (success) {
           this.profileFormGroup.markAsPristine();
           this.selectStateControl.markAsPristine();
-          this.isEditingName = false;
           this.viewProfile = formProfileData;
         }
         this.profileFormProgress = false;
@@ -116,7 +113,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   public discardFormInput() {
     this.profileFormGroup.reset(this.viewProfile);
     this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
-    this.isEditingName = false;
+    // Also restore brightness to active profile if applicable
+    if (!this.dbus.displayBrightnessNotSupported) {
+      const activeProfile = this.state.getActiveProfile();
+      if (activeProfile.display.useBrightness) {
+        this.dbus.setDisplayBrightness(activeProfile.display.brightness);
+      }
+    }
   }
 
   private createProfileFormGroup(profile: ITccProfile) {
