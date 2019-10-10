@@ -13,18 +13,11 @@
         input {
             width: 400px;
         }
-
-        &.dirty {
-            font-style: italic;
-        }
     }
 
-    .buttons {
-        white-space: nowrap;
-        
-        button {
-            margin-right: 5px;
-        }
+    mat-button-toggle-group {
+        transform: scale(0.7);
+        transform-origin: right;
     }
 }
 

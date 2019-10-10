@@ -8,6 +8,7 @@ import { ConfigService } from './config.service';
 
 export interface IStateInfo {
   label: string;
+  tooltip: string;
   icon: string;
   value: string;
 }
@@ -51,9 +52,18 @@ export class StateService implements OnDestroy {
     }, 500);
 
     this.stateInputMap
-      .set(ProfileStates.AC.toString(), { label: 'Mains', icon: 'power', value: ProfileStates.AC.toString() })
-      .set(ProfileStates.BAT.toString(), { label: 'Battery ', icon: 'battery_std', value: ProfileStates.BAT.toString() }
-    );
+      .set(ProfileStates.AC.toString(), {
+        label: 'Mains',
+        tooltip: 'Mains power adaptor',
+        icon: 'power',
+        value: ProfileStates.AC.toString()
+      })
+      .set(ProfileStates.BAT.toString(), {
+        label: 'Battery ',
+        tooltip: 'Battery powered',
+        icon: 'battery_std',
+        value: ProfileStates.BAT.toString()
+      });
     this.stateInputArray = Array.from(this.stateInputMap.values());
   }
 

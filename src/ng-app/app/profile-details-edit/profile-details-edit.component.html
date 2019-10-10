@@ -11,8 +11,21 @@
                 maxLength="50"
                 (focus)="$event.target.select()">
         </mat-form-field>
-        <mat-button-toggle-group [formControl]="selectStateControl" matTooltip="Activate profile on chosen states" multiple style="transform: scale(0.7); transform-origin: right;">
-            <mat-button-toggle *ngFor="let state of stateInputArray" disableRipple [disabled]="getSettings().stateMap[state.value] === viewProfile.name" [value]="state.value">
+        <mat-button-toggle-group
+            [formControl]="selectStateControl"
+            multiple
+            matTooltip="Activate profile on"
+            matTooltipPosition="left"
+            [matTooltipShowDelay]="1000"
+        >
+            <mat-button-toggle
+                *ngFor="let state of stateInputArray"
+                disableRipple
+                [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                [value]="state.value"
+                [matTooltip]="state.tooltip + (getSettings().stateMap[state.value] === viewProfile.name ? ' (already set)' : '')"
+                [matTooltipShowDelay]="1000"
+            >
                 <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
             </mat-button-toggle>
         </mat-button-toggle-group>
