@@ -29,12 +29,15 @@ import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { DecimalPipe } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 import { SupportComponent } from './support/support.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
+import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import { HttpClientModule } from '@angular/common/http';
     CpuSettingsComponent,
     ProfileManagerComponent,
     DisplaySettingsComponent,
-    SupportComponent
+    SupportComponent,
+    ProfileOverviewTileComponent,
+    ProfileDetailsEditComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +74,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatDividerModule,
     MatSliderModule,
     MatGridListModule,
-    MatStepperModule
+    MatStepperModule,
+    MatButtonToggleModule
   ],
   providers: [
     DecimalPipe

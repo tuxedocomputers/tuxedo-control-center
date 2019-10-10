@@ -1,0 +1,19 @@
+@import '~@angular/material/theming';
+
+@mixin profile-details-edit-theme($theme) {
+
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  
+  .profile-details-edit {
+    .mat-button-toggle {
+        opacity: 0.8;
+    }
+    .mat-button-toggle-checked, .mat-button-toggle-disabled {
+        opacity: 1.0;
+        color: mat-color($accent);
+        background: inherit;
+    }
+  }
+}

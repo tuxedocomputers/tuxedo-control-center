@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "0.4.0",
+  "version": "0.4.1-profiles.3",
   "main": "./dist/tuxedo-control-center/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -9,6 +9,7 @@
   },
   "homepage": "https://tuxedocomputers.com",
   "scripts": {
+    "ver": "sh build-src/inc-version.sh",
     "inc-version-patch": "npm version patch --no-git-tag-version && cd src && npm version patch --no-git-tag-version",
     "inc-version-minor": "npm version minor --no-git-tag-version && cd src && npm version minor --no-git-tag-version",
     "inc-version-major": "npm version major --no-git-tag-version && cd src && npm version major --no-git-tag-version",

@@ -1,0 +1,141 @@
+<mat-card *ngIf="viewProfile" class="profile-details-edit" [formGroup]="profileFormGroup">
+    <mat-card-title class="profile-title">
+        <span class="name" *ngIf="!editProfile">
+            {{ profileFormGroup.controls.name.value }}
+        </span>
+        <mat-form-field class="name" *ngIf="editProfile">
+            <input matInput #inputName="matInput"
+                formControlName="name"
+                type="text"
+                minLength="1"
+                maxLength="50"
+                (focus)="$event.target.select()">
+        </mat-form-field>
+        <mat-button-toggle-group
+            [formControl]="selectStateControl"
+            multiple
+            matTooltip="Activate profile on"
+            matTooltipPosition="left"
+            [matTooltipShowDelay]="1000"
+        >
+            <mat-button-toggle
+                *ngFor="let state of stateInputArray"
+                disableRipple
+                [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                [value]="state.value"
+                [matTooltip]="state.tooltip + (getSettings().stateMap[state.value] === viewProfile.name ? ' (already set)' : '')"
+                [matTooltipShowDelay]="1000"
+            >
+                <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-card class="settings-group">
+            <mat-card-subtitle class="title">
+                <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
+                Display
+            </mat-card-subtitle>
+            <mat-card-content class="content">
+                <div formGroupName="display">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Set fixed brightness on start/wake up</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.display.useBrightness }}</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputUseBrightness.checked }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputUseBrightness formControlName="useBrightness"></mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header [ngClass]="{'inactive': !inputUseBrightness.checked}">Backlight brightness</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ inputDisplayBrightness.value }}%</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
+                                <mat-slider #inputDisplayBrightness formControlName="brightness" (input)="inputDisplayBrightnessChange(inputDisplayBrightness.value)" min="0" max="100" step="5"></mat-slider>
+                            </content>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <br />
+        <mat-card class="settings-group">
+            <mat-card-subtitle class="title">
+                    <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
+                CPU settings
+            </mat-card-subtitle>
+            <mat-card-content class="content">
+                <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Number of logical cores</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
+                        <content class="value" [hidden]="!editProfile">{{ inputOnlineCores.value }}</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="!editProfile">
+                            <mat-slider #inputOnlineCores formControlName="onlineCores" min="1" [max]="cpuInfo.availableCores" step="1"></mat-slider>
+                        </content>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Minimum scaling frequency</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
+                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMinFrequency.value) }} GHz</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="!editProfile">
+                            <mat-slider #inputScalingMinFrequency formControlName="scalingMinFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000" (change)="sliderMinFreqChange()"></mat-slider>
+                        </content>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Maximum scaling frequency</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
+                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMaxFrequency.value) }} GHz</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="!editProfile">
+                            <mat-slider #inputScalingMaxFrequency formControlName="scalingMaxFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000" (change)="sliderMaxFreqChange()"></mat-slider>
+                        </content>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Scaling governor</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.governor }}</content>
+                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.governor.value }}</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="!editProfile">
+                            <mat-select formControlName="governor" [disableOptionCentering]="true">
+                                <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor">{{ governor }}</mat-option>
+                            </mat-select>
+                        </content>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.energyPerformancePreference }}</content>
+                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.energyPerformancePreference.value }}</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="!editProfile">
+                            <mat-select formControlName="energyPerformancePreference" [disableOptionCentering]="true">
+                                <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
+                            </mat-select>
+                        </content>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+    </mat-card-content>
+</mat-card>

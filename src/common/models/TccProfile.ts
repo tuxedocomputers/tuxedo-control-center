@@ -4,6 +4,17 @@ export interface ITccProfile {
     cpu: ITccProfileCpu;
 }
 
+export class TccProfile implements ITccProfile {
+    name: string;
+    display: ITccProfileDisplay;
+    cpu: ITccProfileCpu;
+    public constructor(init: ITccProfile) {
+        this.name = init.name;
+        this.display = JSON.parse(JSON.stringify(init.display));
+        this.cpu = JSON.parse(JSON.stringify(init.cpu));
+    }
+}
+
 interface ITccProfileDisplay {
     brightness: number;
     useBrightness: boolean;

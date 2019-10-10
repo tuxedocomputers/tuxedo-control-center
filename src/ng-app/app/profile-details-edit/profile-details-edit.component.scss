@@ -1,0 +1,64 @@
+.profile-title {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .name {
+        width: 400px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        input {
+            width: 400px;
+        }
+    }
+
+    mat-button-toggle-group {
+        transform: scale(0.7);
+        transform-origin: right;
+    }
+}
+
+.settings-group {
+    .title {
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+            margin-right: 25px;
+            transform: scale(1.5);
+            transform-origin: left center;
+        }
+    }
+}
+
+.profile-details-edit-grid {
+
+    .inactive {
+        opacity: 0.2;
+    }
+
+    header {
+        width: 100%;
+        text-align: left;
+    }
+
+    content.value {
+        width: 100%;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    content.input {
+
+        mat-slider {
+            width: 200px;
+        }
+
+        mat-select {
+            width: 200px;
+        }
+    }
+}
