@@ -137,5 +137,41 @@
                 </mat-grid-list>
             </mat-card-content>
         </mat-card>
+        <br />
+        <mat-card class="settings-group">
+            <mat-card-subtitle class="title">
+                <mat-icon>videocam</mat-icon>
+                Webcam
+            </mat-card-subtitle>
+            <mat-card-content class="content">
+                <div formGroupName="webcam">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Set webcam status on start/wakeup</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.webcam.useStatus }}</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputUseStatus.checked }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputUseStatus formControlName="useStatus"></mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header [ngClass]="{'inactive': !inputUseStatus.checked}">Webcam status (on/off)</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseStatus.checked}">{{ viewProfile.webcam.status }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseStatus.checked}">{{ inputWebcamStatus.checked }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseStatus.checked}">
+                                <mat-checkbox #inputWebcamStatus formControlName="status"></mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+            </mat-card-content>
+        </mat-card>
     </mat-card-content>
 </mat-card>

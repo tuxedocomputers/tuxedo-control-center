@@ -44,6 +44,21 @@ export class UtilsService {
     if (profile.cpu.energyPerformancePreference === undefined) {
       profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
     }
+
+    if (profile.webcam === undefined) {
+      profile.webcam = {
+        useStatus: false,
+        status: true
+      };
+    }
+
+    if (profile.webcam.useStatus === undefined) {
+      profile.webcam.useStatus = false;
+    }
+
+    if (profile.webcam.status === undefined) {
+      profile.webcam.status = true;
+    }
   }
 
   public async execCmd(command: string): Promise<Buffer> {

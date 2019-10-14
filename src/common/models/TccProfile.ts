@@ -2,16 +2,19 @@ export interface ITccProfile {
     name: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
+    webcam: ITccProfileWebCam;
 }
 
 export class TccProfile implements ITccProfile {
     name: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
+    webcam: ITccProfileWebCam;
     public constructor(init: ITccProfile) {
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
+        this.webcam = JSON.parse(JSON.stringify(init.webcam));
     }
 }
 
@@ -28,6 +31,11 @@ interface ITccProfileCpu {
     energyPerformancePreference: string;
 }
 
+interface ITccProfileWebCam {
+    status: boolean;
+    useStatus: boolean;
+}
+
 export const defaultProfiles: ITccProfile[] = [
     {
         name: 'Default',
@@ -41,6 +49,10 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: undefined,
             governor: 'powersave',
             energyPerformancePreference: 'default'
+        },
+        webcam: {
+            status: true,
+            useStatus: false
         }
     },
     {
@@ -55,6 +67,10 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: undefined,
             governor: 'performance',
             energyPerformancePreference: 'performance'
+        },
+        webcam: {
+            status: true,
+            useStatus: false
         }
     },
     {
@@ -69,6 +85,10 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: 1000000,
             governor: 'powersave',
             energyPerformancePreference: 'power'
+        },
+        webcam: {
+            status: true,
+            useStatus: false
         }
     },
     {
@@ -83,6 +103,10 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: undefined,
             governor: 'powersave',
             energyPerformancePreference: 'power'
+        },
+        webcam: {
+            status: true,
+            useStatus: false
         }
     }
 ];
@@ -99,5 +123,9 @@ export const defaultCustomProfile: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave',
         energyPerformancePreference: 'default'
+    },
+    webcam: {
+        status: true,
+        useStatus: false
     }
 };

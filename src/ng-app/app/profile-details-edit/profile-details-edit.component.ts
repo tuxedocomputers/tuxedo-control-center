@@ -146,14 +146,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   }
 
   private createProfileFormGroup(profile: ITccProfile) {
+
     const displayGroup: FormGroup = this.fb.group(profile.display);
     const cpuGroup: FormGroup = this.fb.group(profile.cpu);
+    const webcamGroup: FormGroup = this.fb.group(profile.webcam);
+
     cpuGroup.controls.scalingMinFrequency.setValidators([ maxControlValidator(cpuGroup.controls.scalingMaxFrequency) ]);
     cpuGroup.controls.scalingMaxFrequency.setValidators([ minControlValidator(cpuGroup.controls.scalingMinFrequency) ]);
+
     const fg = this.fb.group({
       name: profile.name,
       display: displayGroup,
-      cpu: cpuGroup
+      cpu: cpuGroup,
+      webcam: webcamGroup
     });
 
     fg.controls.name.setValidators([ Validators.required, Validators.minLength(1), Validators.maxLength(50) ]);
