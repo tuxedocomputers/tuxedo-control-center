@@ -13,6 +13,7 @@ import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
+import { WebcamWorker } from './WebcamWorker';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -61,6 +62,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
+        this.workers.push(new WebcamWorker(this));
 
         this.startWorkers();
 
