@@ -2,8 +2,8 @@
 
 #define COMMAND_WEBCAM      0x9c
 
-#define DATA_WEBCAM_ON      0x82
-#define DATA_WEBCAM_OFF     0x02
+#define DATA_WEBCAM_ON      0x02
+#define DATA_WEBCAM_OFF     0x82
 
 static int webcam_set(uint8_t);
 

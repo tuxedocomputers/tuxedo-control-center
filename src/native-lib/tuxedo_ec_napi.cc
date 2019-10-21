@@ -4,13 +4,20 @@
 using namespace Napi;
 
 Boolean webcamOn(const CallbackInfo &info) {
-    bool result;
+    int result;
     result = webcam_on();
-    return Boolean::New(info.Env(), result);
+    return Boolean::New(info.Env(), result == 0);
+}
+
+Boolean webcamOff(const CallbackInfo &info) {
+    int result;
+    result = webcam_off();
+    return Boolean::New(info.Env(), result == 0);
 }
 
 Object Init(Env env, Object exports) {
-    exports.Set(Boolean::New(env, "webcamOn"), Function::New(env, webcamOn));
+    exports.Set(String::New(env, "webcamOn"), Function::New(env, webcamOn));
+    exports.Set(String::New(env, "webcamOff"), Function::New(env, webcamOff));
     return exports;
 }
 
