@@ -7,6 +7,7 @@
 - Profile overview button
 - Profile filter on All, Preset, Default and In use
 - Profile name input box on details page (activated for custom profiles)
+- Webcam control (on / off) from profiles
 
 ### Changed
 - Profile manager selected (viewed) profile is now mainly changed through clicking the
