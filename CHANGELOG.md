@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1] - 2019-10-22
+### Added
+- Webcam status icon to profile overview tiles
+
+### Changed
+- Profile details true/false status strings to more meaningful values
+
 ## [0.5.0] - 2019-10-22
 ### Added
 - USB devices controller (logic only)

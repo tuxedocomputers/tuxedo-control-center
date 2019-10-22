@@ -5,6 +5,7 @@
 - ### Per profile control of
    - CPU frequency parameters
    - Display brightness
+   - Webcam status (on/off)
 
 - ### States
    - Two available states 'Mains powered' & 'Battery powered'
@@ -19,8 +20,9 @@
 ---
 
 ## Coming soon..
-- ### CPU boost (on/off) setting
-- ### Web cam (on/off) setting
 - ### Fan control integration
+- ### Per profile control of
+  - CPU boost setting (on/off)
+  - Fan speed
 
 ---
