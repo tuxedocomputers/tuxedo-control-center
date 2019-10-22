@@ -42,7 +42,7 @@ int write_data(uint8_t __data)
 {
     int timeout;
 
-    for(timeout = TIMEOUT; inb(PORT_COMMAND & 0x02) != 0  && timeout > 0; timeout--);
+    for(timeout = TIMEOUT; (inb(PORT_COMMAND) & 0x02) != 0  && timeout > 0; timeout--);
     if (timeout == 0) return -1;
 
     outb(__data, PORT_DATA);
