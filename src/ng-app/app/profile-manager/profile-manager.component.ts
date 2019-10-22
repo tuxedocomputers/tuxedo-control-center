@@ -2,14 +2,13 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 import { ITccProfile } from '../../../common/models/TccProfile';
-import { DecimalPipe } from '@angular/common';
 import { UtilsService } from '../utils.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { ElectronService } from 'ngx-electron';
-import { StateService } from '../state.service';
+import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
-import { ProfileStates, ITccSettings } from 'src/common/models/TccSettings';
+import { ITccSettings } from '../../../common/models/TccSettings';
 
 enum InputMode {
   New, Copy, Edit
@@ -22,12 +21,6 @@ class ProfileManagerButton {
     public click: () => void,
     public label: () => string,
     public tooltip: () => string) {}
-}
-
-interface IStateInfo {
-  label: string;
-  icon: string;
-  value: string;
 }
 
 @Component({
@@ -46,119 +39,59 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
-  public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
+
+  public inputProfileFilter = 'all';
 
   @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
 
-  public buttonCopy = new ProfileManagerButton(
-    // Show
-    () => true,
-    // Disable
-    () => this.currentProfile.name === 'Default',
-    // Click
-    () => {
-      this.currentInputMode = InputMode.Copy;
-      this.inputProfileName.setValue('');
-      this.inputProfileNameLabel = 'Copy this profile';
-      this.inputActive = true;
-      setImmediate( () => { this.inputFocus.focus(); });
-    },
-    // Label
-    () => 'Copy',
-    // Tooltip
-    () => 'Copy this profile'
-  );
-
-  public buttonEdit = new ProfileManagerButton(
-    // Show
-    () => true,
-    // Disable
-    () => this.isUsedProfile() || !this.isCustomProfile(),
-    // Click
-    () => {
-      this.currentInputMode = InputMode.Edit;
-      this.inputProfileName.setValue(this.currentProfile.name);
-      this.inputProfileNameLabel = 'Rename this profile';
-      this.inputActive = true;
-      setImmediate( () => { this.inputFocus.focus(); });
-    },
-    // Label
-    () => 'Rename',
-    // Tooltip
-    () => this.isUsedProfile() ? 'Can not rename used profile' : 'Rename this profile'
-  );
-
-  public buttonNew = new ProfileManagerButton(
-    // Show
-    () => true,
-    // Disable
-    () => false,
-    // Click
-    () => {
-      this.currentInputMode = InputMode.New;
-      this.inputProfileName.setValue('');
-      this.inputProfileNameLabel = 'New profile';
-      this.inputActive = true;
-      setImmediate( () => { this.inputFocus.focus(); });
-    },
-    // Label
-    () => 'New profile',
-    // Tooltip
-    () => 'Create a new profile with default settings'
-  );
-
-  public buttonDelete = new ProfileManagerButton(
-    // Show
-    () => true,
-    // Disable
-    () => this.isUsedProfile() || this.config.getCustomProfiles().length === 1 || !this.isCustomProfile(),
-    // Click
-    () => { this.deleteProfile(this.currentProfile.name); },
-    // Label
-    () => 'Delete',
-    // Tooltip
-    () => {
-      if (this.isUsedProfile()) { return 'Can not delete used profile'; }
-      if (!this.isCustomProfile()) { return 'Can not delete preset profiles'; }
-      if (this.config.getCustomProfiles().length === 1) { return 'Can not delete last custom profile'; }
-      return 'Delete this profile';
-    }
-  );
+  public buttonCopy: ProfileManagerButton;
+  public buttonEdit: ProfileManagerButton;
+  public buttonNew: ProfileManagerButton;
+  public buttonDelete: ProfileManagerButton;
 
   constructor(
     private route: ActivatedRoute,
     private config: ConfigService,
     private state: StateService,
-    private decimalPipe: DecimalPipe,
     private utils: UtilsService,
     private router: Router,
     private electron: ElectronService) { }
 
   ngOnInit() {
+    this.defineButtons();
+
     this.route.params.subscribe(params => {
       this.inputActive = false;
       if (params.profileName) {
         this.currentProfile = this.config.getProfileByName(params.profileName);
-        this.config.setCurrentEditingProfile(this.currentProfile.name);
+        if (this.config.getCustomProfileByName(this.currentProfile.name) !== undefined) {
+          this.config.setCurrentEditingProfile(this.currentProfile.name);
+        } else {
+          this.config.setCurrentEditingProfile(undefined);
+        }
       } else {
+        this.config.setCurrentEditingProfile(undefined);
+        /*
         this.currentProfile = this.config.getCurrentEditingProfile();
         if (this.currentProfile === undefined) {
           this.currentProfile = this.state.getActiveProfile();
-        }
+        }*/
       }
-      this.utils.fillDefaultValuesProfile(this.currentProfile);
+      if (this.currentProfile !== undefined) {
+        this.utils.fillDefaultValuesProfile(this.currentProfile);
+      }
     });
 
-    this.stateInputMap
-      .set(ProfileStates.AC.toString(), { label: 'Mains', icon: 'power', value: ProfileStates.AC.toString() })
-      .set(ProfileStates.BAT.toString(), { label: 'Battery ', icon: 'battery_std', value: ProfileStates.BAT.toString() }
-    );
-    this.stateInputArray = Array.from(this.stateInputMap.values());
+    this.stateInputArray = this.state.getStateInputs();
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  public isProfileActive(profileName: string): boolean {
+    return this.state.getActiveProfile().name === profileName;
   }
 
   public getSettings(): ITccSettings {
@@ -169,9 +102,29 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     return this.config.getAllProfiles();
   }
 
-  public selectProfile(profileName: string): void {
+  public getProfilesForList(): ITccProfile[] {
+    if (this.inputProfileFilter === 'all') {
+      return this.config.getAllProfiles();
+    } else if (this.inputProfileFilter === 'default') {
+      return this.config.getDefaultProfiles();
+    } else if (this.inputProfileFilter === 'custom') {
+      return this.config.getCustomProfiles();
+    } else if (this.inputProfileFilter === 'used') {
+      return this.config.getAllProfiles().filter(profile => {
+        return Object.values(this.config.getSettings().stateMap).includes(profile.name);
+      });
+    } else {
+      return [];
+    }
+  }
+
+  public selectProfile(profileName?: string): void {
     setImmediate(() => {
-      this.router.navigate(['profile-manager', profileName]);
+      if (profileName === undefined) {
+        this.router.navigate(['profile-manager']);
+      } else {
+        this.router.navigate(['profile-manager', profileName]);
+      }
     });
   }
 
@@ -198,7 +151,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
           break;
         case InputMode.Edit:
           if (this.config.setCurrentEditingProfile(this.currentProfile.name)) {
-            console.log(this.config.getCurrentEditingProfile());
             this.config.getCurrentEditingProfile().name = this.inputProfileName.value;
             if (this.config.writeCurrentEditingProfile()) {
               this.inputActive = false;
@@ -222,7 +174,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
   public deleteProfile(profileName): void {
     if (this.config.deleteCustomProfile(profileName)) {
-      this.router.navigate(['profile-manager', this.state.getActiveProfile().name]);
+      this.router.navigate(['profile-manager']);
     }
   }
 
@@ -235,7 +187,83 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
   }
 
   public formatFrequency(frequency: number): string {
-    return this.decimalPipe.transform(frequency / 1000000, '1.2-2');
+    return this.utils.formatFrequency(frequency);
   }
 
+  public defineButtons(): void {
+    this.buttonCopy = new ProfileManagerButton(
+      // Show
+      () => true,
+      // Disable
+      () => false,
+      // Click
+      () => {
+        this.currentInputMode = InputMode.Copy;
+        this.inputProfileName.setValue('');
+        this.inputProfileNameLabel = 'Copy this profile';
+        this.inputActive = true;
+        setImmediate( () => { this.inputFocus.focus(); });
+      },
+      // Label
+      () => 'Copy',
+      // Tooltip
+      () => 'Copy this profile'
+    );
+
+    this.buttonEdit = new ProfileManagerButton(
+      // Show
+      () => true,
+      // Disable
+      () => this.isUsedProfile() || !this.isCustomProfile(),
+      // Click
+      () => {
+        this.currentInputMode = InputMode.Edit;
+        this.inputProfileName.setValue(this.currentProfile.name);
+        this.inputProfileNameLabel = 'Rename this profile';
+        this.inputActive = true;
+        setImmediate( () => { this.inputFocus.focus(); });
+      },
+      // Label
+      () => 'Rename',
+      // Tooltip
+      () => this.isUsedProfile() ? 'Can not rename used profile' : 'Rename this profile'
+    );
+
+    this.buttonNew = new ProfileManagerButton(
+      // Show
+      () => true,
+      // Disable
+      () => false,
+      // Click
+      () => {
+        this.currentInputMode = InputMode.New;
+        this.inputProfileName.setValue('');
+        this.inputProfileNameLabel = 'New profile';
+        this.inputActive = true;
+        setImmediate( () => { this.inputFocus.focus(); });
+      },
+      // Label
+      () => 'New profile',
+      // Tooltip
+      () => 'Create a new profile with default settings'
+    );
+
+    this.buttonDelete = new ProfileManagerButton(
+      // Show
+      () => true,
+      // Disable
+      () => this.isUsedProfile() || this.config.getCustomProfiles().length === 1 || !this.isCustomProfile(),
+      // Click
+      () => { this.deleteProfile(this.currentProfile.name); },
+      // Label
+      () => 'Delete',
+      // Tooltip
+      () => {
+        if (!this.isCustomProfile()) { return 'Can not delete preset profiles'; }
+        if (this.isUsedProfile()) { return 'Can not delete used profile'; }
+        if (this.config.getCustomProfiles().length === 1) { return 'Can not delete last custom profile'; }
+        return 'Delete this profile';
+      }
+    );
+  }
 }

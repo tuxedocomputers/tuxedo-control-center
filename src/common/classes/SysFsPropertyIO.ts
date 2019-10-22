@@ -33,7 +33,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
         } catch (err) {
-            throw Error('Could not read value from path: ' + this.readPath);
+            throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
         }
     }
 
@@ -67,7 +67,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
                 fs.writeFileSync(this.writePath, stringValue, { flag: 'w' });
             }
         } catch (err) {
-            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath);
+            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
         }
     }
 

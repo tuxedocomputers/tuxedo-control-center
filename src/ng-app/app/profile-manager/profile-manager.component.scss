@@ -1,27 +1,25 @@
 
-.profile-information mat-grid-tile {
+mat-toolbar {
+    
+    mat-toolbar-row {
+        align-items: center;
+        button {
+            margin-right: 10px;
+        }
 
-    header {
-        width: 100%;
-        text-align: left;
+        mat-button-toggle-group {
+            transform: scale(0.7);
+            transform-origin: right;
+        }
+
+        form {
+            transform: scale(0.8);
+            transform-origin: bottom left;
+        }
     }
-
-    content {
-        width: 100%;
-        text-align: left;
-        font-weight: bold;
-    }
-}
-
-mat-toolbar button {
-    margin-right: 10px;
 }
 
 .profile-name-input {
     width: 250px;
     margin-right: 10px;
-}
-
-mat-chip {
-    transform: scale(0.8);
 }

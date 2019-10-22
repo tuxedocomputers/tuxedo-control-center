@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.5.1] - 2019-10-22
+### Added
+- Webcam status icon to profile overview tiles
+
+### Changed
+- Profile details true/false status strings to more meaningful values
+
+## [0.5.0] - 2019-10-22
+### Added
+- USB devices controller (logic only)
+- Profile manager -> profiles overview tiles
+- Profile overview button
+- Profile filter on All, Preset, Default and In use
+- Profile name input box on details page (activated for custom profiles)
+- Webcam control (on / off) from profiles
+
+### Changed
+- Profile manager selected (viewed) profile is now mainly changed through clicking the
+  overview tiles. Selected profile can be deselected via "profile overview" button.
+- Main nav "active profile" entry now links to the profile overview tiles
+- Profile save moved to profile manager toolbar
+- Profile state choices moved away from profile manager toolbar to profile details
+  similar to the profile overview tiles
+- Profile save now saves chosen state (multiple possible) as well
+- Profile save now saves profile name as well
+
 ## [0.4.0] - 2019-09-20
 ### Added
 - State logic to daemon and GUI.

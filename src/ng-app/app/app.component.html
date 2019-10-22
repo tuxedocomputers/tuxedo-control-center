@@ -1,49 +1,60 @@
+<div class="pagewrap" [ngClass]="{'blur-no-input': pageDisabled()}">
+  <mat-toolbar>
+    <mat-toolbar-row class="title-row">
+      <img src="./assets/tuxedo-control-center_256.png" id="title-logo">
+      <div id="main-title">{{ title }}</div>
+      <i class="fas fa-times" (click)="buttonExit()"></i>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
-<mat-toolbar>
-  <mat-toolbar-row class="title-row">
-    <img src="./assets/tuxedo-control-center_256.png" id="title-logo">
-    <div id="main-title">{{ title }}</div>
-    <i class="fas fa-times" (click)="buttonExit()"></i>
-  </mat-toolbar-row>
-</mat-toolbar>
-
-<mat-sidenav-container class="main-sidenav-container">
-  <mat-sidenav mode="side" opened [disableClose]="true" class="main-sidenav-nav">
-    <mat-nav-list>
-      <mat-list-item [routerLink]="'/profile-manager/' + activeProfileName">
-        <span matLine>Active profile</span>
-        <span matLine style="font-weight: bold">{{ activeProfileName }}</span>
-      </mat-list-item>
-      <mat-list-item routerLink="/display-settings" routerLinkActive="true">
-        <content>
-          Display
-          <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
-        </content>
-      </mat-list-item>      
-      <mat-list-item routerLink="/cpu-settings" routerLinkActive="true" >
-        <content>
-          CPU
-          <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
-        </content>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item routerLink="/support" routerLinkActive="true">
-        <content>
-          Support
-          <mat-icon><img src="./assets/images/contact.svg" /></mat-icon>
-        </content>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item (click)="buttonExit()">
-        <content>
-          Exit
-          <mat-icon>exit_to_app</mat-icon>
-        </content>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content class="main-sidenav-content">
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <mat-sidenav-container class="main-sidenav-container">
+    <mat-sidenav mode="side" opened [disableClose]="true" class="main-sidenav-nav">
+      <mat-nav-list>
+        <mat-list-item [routerLink]="'/profile-manager/' + activeProfileName">
+          <span matLine>Active profile</span>
+          <span matLine style="font-weight: bold">{{ activeProfileName }}</span>
+        </mat-list-item>
+        <mat-list-item routerLink="/profile-manager" routerLinkActive="true">
+          <content>
+            Profiles
+            <mat-icon><img src="./assets/images/userinfo.svg" /></mat-icon>
+          </content>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item routerLink="/display-settings" routerLinkActive="true">
+          <content>
+            Display
+            <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
+          </content>
+        </mat-list-item>
+        <mat-list-item routerLink="/cpu-settings" routerLinkActive="true" >
+          <content>
+            CPU
+            <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
+          </content>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-nav-list>
+      <mat-nav-list class="bottom">
+        <mat-divider></mat-divider>
+        <mat-list-item routerLink="/support" routerLinkActive="true">
+          <content>
+            Support
+            <mat-icon><img src="./assets/images/support.svg" /></mat-icon>
+          </content>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item (click)="buttonExit()">
+          <content>
+            Exit
+            <mat-icon>exit_to_app</mat-icon>
+          </content>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="main-sidenav-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

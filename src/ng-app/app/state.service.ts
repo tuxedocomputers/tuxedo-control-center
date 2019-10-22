@@ -2,8 +2,16 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { ITccProfile } from 'src/common/models/TccProfile';
+import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
+
+
+export interface IStateInfo {
+  label: string;
+  tooltip: string;
+  icon: string;
+  value: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +30,9 @@ export class StateService implements OnDestroy {
   private activeProfileSubject: Subject<ITccProfile>;
   public activeProfileObserver: Observable<ITccProfile>;
 
+  public stateInputMap = new Map<string, IStateInfo>();
+  public stateInputArray: IStateInfo[];
+
   constructor(private config: ConfigService) {
     this.stateSubject = new Subject<ProfileStates>();
     this.stateObserver = this.stateSubject.asObservable();
@@ -39,6 +50,25 @@ export class StateService implements OnDestroy {
     this.updateInterval = setInterval(() => {
       this.pollActiveState();
     }, 500);
+
+    this.stateInputMap
+      .set(ProfileStates.AC.toString(), {
+        label: 'Mains',
+        tooltip: 'Mains power adaptor',
+        icon: 'power',
+        value: ProfileStates.AC.toString()
+      })
+      .set(ProfileStates.BAT.toString(), {
+        label: 'Battery ',
+        tooltip: 'Battery powered',
+        icon: 'battery_std',
+        value: ProfileStates.BAT.toString()
+      });
+    this.stateInputArray = Array.from(this.stateInputMap.values());
+  }
+
+  public getStateInputs(): IStateInfo[] {
+    return this.stateInputArray;
   }
 
   public getActiveState(): ProfileStates {
@@ -47,6 +77,16 @@ export class StateService implements OnDestroy {
 
   public getActiveProfile(): ITccProfile {
     return this.activeProfile;
+  }
+
+  /**
+   * Get the array of state names that the profile is activated for
+   */
+  public getProfileStates(profileName: string): string[] {
+    // Filter on value (profile name) and map on key (state)
+    return Object.entries(this.currentSettings.stateMap)
+            .filter(entry => entry[1] === profileName)
+            .map(entry => entry[0]);
   }
 
   private pollActiveState(): void {

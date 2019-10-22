@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { ElectronService } from 'ngx-electron';
+import { DecimalPipe } from '@angular/common';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -11,7 +12,14 @@ import * as path from 'path';
 })
 export class UtilsService {
 
-  constructor(private sysfs: SysFsService, private electron: ElectronService) { }
+  private blurNoInput = false;
+  get pageDisabled(): boolean { return this.blurNoInput; }
+  set pageDisabled(value: boolean) { this.blurNoInput = value; }
+
+  constructor(
+    private sysfs: SysFsService,
+    private electron: ElectronService,
+    private decimalPipe: DecimalPipe) { }
 
   public fillDefaultValuesProfile(profile: ITccProfile): void {
     const cpuInfo = this.sysfs.getGeneralCpuInfo();
@@ -35,6 +43,21 @@ export class UtilsService {
 
     if (profile.cpu.energyPerformancePreference === undefined) {
       profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
+    }
+
+    if (profile.webcam === undefined) {
+      profile.webcam = {
+        useStatus: false,
+        status: true
+      };
+    }
+
+    if (profile.webcam.useStatus === undefined) {
+      profile.webcam.useStatus = false;
+    }
+
+    if (profile.webcam.status === undefined) {
+      profile.webcam.status = true;
     }
   }
 
@@ -113,5 +136,9 @@ export class UtilsService {
         }
       });
     });
+  }
+
+  public formatFrequency(frequency: number): string {
+    return this.decimalPipe.transform(frequency / 1000000, '1.1-2');
   }
 }

@@ -1,14 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { CpuController } from '../../common/classes/CpuController';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SysFsService {
+export class SysFsService implements OnDestroy {
 
   private cpu: CpuController;
   private displayBacklightControllers: DisplayBacklightController[];
+
+  private updateInterval: NodeJS.Timeout;
+  private updatePeriodMs = 3000;
+  public generalCpuInfo: BehaviorSubject<IGeneralCPUInfo>;
+  public logicalCoreInfo: BehaviorSubject<ILogicalCoreInfo[]>;
 
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
@@ -19,6 +25,29 @@ export class SysFsService {
     for (const driverName of displayBacklightControllerNames) {
       this.displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
     }
+
+    this.periodicUpdate();
+    this.updateInterval = setInterval(() => { this.periodicUpdate(); }, this.updatePeriodMs);
+  }
+
+  private periodicUpdate(): void {
+    if (this.generalCpuInfo === undefined) {
+      this.generalCpuInfo = new BehaviorSubject(this.getGeneralCpuInfo());
+    } else {
+      this.generalCpuInfo.next(this.getGeneralCpuInfo());
+    }
+
+    if (this.logicalCoreInfo === undefined) {
+      this.logicalCoreInfo = new BehaviorSubject(this.getLogicalCoreInfo());
+    } else {
+      this.logicalCoreInfo.next(this.getLogicalCoreInfo());
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
   }
 
   public getGeneralCpuInfo(): IGeneralCPUInfo {
@@ -26,6 +55,8 @@ export class SysFsService {
     try {
       cpuInfo = {
         availableCores: this.cpu.cores.length,
+        minFreq: this.cpu.cores[0].cpuinfoMinFreq.readValueNT(),
+        maxFreq: this.cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
         scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
         energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT()
       };
@@ -86,6 +117,8 @@ export class SysFsService {
 
 export interface IGeneralCPUInfo {
   availableCores: number;
+  minFreq: number;
+  maxFreq: number;
   scalingAvailableGovernors: string[];
   energyPerformanceAvailablePreferences: string[];
 }

@@ -1,0 +1,91 @@
+.profile-overview-tile{
+
+    user-select: none;
+
+    width: 220px;
+    height: auto;
+    margin: 5px;
+    padding: 10px;
+    padding-bottom: 15px;
+
+    hr {
+        opacity: 0.2;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: 20px;
+
+        margin-bottom: 5px;
+
+        .profile-name {
+            font-size: 1.2em;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .state-icons {
+            display: flex;
+            .status-icon {
+                font-size: 17px;
+                width: 17px;
+            }
+        }
+    }
+
+    .status-row {
+
+        width: 100%;
+        margin: 1px;
+        padding: 0px;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        &.inactive {
+            opacity: 0.2;
+        }
+        
+        .status-icon {
+            font-size: 1.3em;
+            height: 17px;
+            width: 17px;
+
+            margin-left: 0px;
+            margin-right: 10px;
+        }
+
+        // fa icon tweak
+        .fas.status-icon:before {
+            font-size: 0.8em;
+            width: 17px;
+            height: 17px;
+
+            display: inline-block;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .status-info {
+            font-size: 0.9em;
+        }
+    }
+
+    mat-card-content {
+        height: 140px;
+        
+        .add-profile-content {
+            mat-icon {
+                position: relative;
+                left: 85px;
+                top: 15px;
+                font-size: 3em;
+            }
+        }
+    }
+}

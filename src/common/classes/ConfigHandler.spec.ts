@@ -31,7 +31,6 @@ describe('ConfigHandler file IO', () => {
 
     it('should write to a settings file with mode 644', () => {
         const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
-        settings.activeProfileName = 'some profile';
         expect(() => { config.writeSettings(settings, '/etc/test.conf'); }).not.toThrow();
         expect(fs.existsSync('/etc/test.conf')).toBe(true);
         // tslint:disable-next-line: no-bitwise
@@ -40,7 +39,6 @@ describe('ConfigHandler file IO', () => {
 
     it('should create folders with mode 755 if they do not exist', () => {
         const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
-        settings.activeProfileName = 'some profile';
         expect(() => { config.writeSettings(settings, '/etc/test/test.conf'); }).not.toThrow();
         expect(fs.existsSync('/etc/test')).toBe(true);
         // tslint:disable-next-line: no-bitwise
@@ -53,12 +51,12 @@ describe('ConfigHandler file IO', () => {
 
     it('should read settings from a written file', () => {
         const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
-        settings.activeProfileName = 'profile1';
+        settings.stateMap.ac_power = 'profile1';
         expect(() => { config.writeSettings(settings); }).not.toThrow();
 
         let readSettings: ITccSettings;
         expect(() => { readSettings = config.readSettings(); }).not.toThrow();
-        expect(readSettings.activeProfileName).toEqual('profile1');
+        expect(readSettings.stateMap.ac_power).toEqual('profile1');
     });
 
     it ('should write to a profiles file with mode 644', () => {
@@ -102,6 +100,6 @@ describe('ConfigHandler file IO', () => {
         mock({'/etc/test1/test2/settings.conf': '{}'});
         let settings: ITccSettings;
         expect(() => { settings = config.readSettings('/etc/test1/test2/settings.conf'); }).not.toThrow();
-        expect(settings.activeProfileName).toBeUndefined();
+        expect(settings.stateMap).toBeUndefined();
     });
 });

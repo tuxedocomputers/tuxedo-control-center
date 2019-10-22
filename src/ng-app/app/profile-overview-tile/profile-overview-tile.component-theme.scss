@@ -1,0 +1,35 @@
+// Import library functions for theme creation.
+@import '~@angular/material/theming';
+
+@mixin profile-overview-tile-theme($theme) {
+  // Extract the palettes you need from the theme definition.
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+
+  // Define any styles affected by the theme.
+  .profile-overview-tile {
+      &.tile-active {
+          color: mat-color($accent);
+      }
+
+      &.hover-effect:hover {
+          background-color: mat-color($background, hover);
+      }
+
+      &.selected {
+          background-color: mat-color($primary, lighter);
+      }
+  }
+}
+
+@mixin profile-overview-tile-typography($config) {
+  .profile-overview-tile {
+      font: {
+          family: mat-font-family($config, body-1);
+          size: mat-font-size($config, body-1);
+          weight: mat-font-weight($config, body-1);
+      }
+  }
+}
