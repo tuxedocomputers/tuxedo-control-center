@@ -134,6 +134,17 @@
                         </content>
                     </mat-grid-tile>
 
+                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Disable turbo</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.noTurbo ? 'yes' : 'no' }}</content>
+                        <content class="value" [hidden]="!editProfile">{{ inputNoTurbo.checked ? 'yes' : 'no' }}</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="!editProfile">
+                            <mat-checkbox #inputNoTurbo formControlName="noTurbo"></mat-checkbox>
+                        </content>
+                    </mat-grid-tile>
+
                 </mat-grid-list>
             </mat-card-content>
         </mat-card>

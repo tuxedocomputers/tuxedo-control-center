@@ -45,6 +45,10 @@ export class UtilsService {
       profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
     }
 
+    if (profile.cpu.noTurbo === undefined) {
+      profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
+    }
+
     if (profile.webcam === undefined) {
       profile.webcam = {
         useStatus: false,
