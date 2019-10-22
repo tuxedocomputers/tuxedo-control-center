@@ -23,7 +23,7 @@
     "bundle-service": "pkg --target node12-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
     "build-native": "node-gyp configure && node-gyp rebuild",
     "copy-files": "npm run copy-package-json && npm run copy-dist-files && npm run copy-native",
-    "copy-native": "mkdir ./dist/tuxedo-control-center/service-app/native-lib; cp ./build/Release/TuxedoECAPI.node ./dist/tuxedo-control-center/data/service",
+    "copy-native": "(mkdir ./dist/tuxedo-control-center/service-app/native-lib || true) && cp ./build/Release/TuxedoECAPI.node ./dist/tuxedo-control-center/data/service",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
     "pack": "npm run build && ts-node ./build-src/electron-builder.ts",
@@ -34,7 +34,7 @@
     "test-ng": "ng test --watch=false",
     "test-ng-e2e": "ng e2e",
     "install-build-dep": "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - && sudo apt install nodejs autoconf automake build-essential gcc g++ make rpm",
-    "start-watch": "run-s clean build-electron build-service copy-files && npm run watch-ng-and-electron",
+    "start-watch": "run-s clean build-electron build-service build-native copy-files && npm run watch-ng-and-electron",
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
     "start-electron-watch": "electron ./dist/tuxedo-control-center --watch"
