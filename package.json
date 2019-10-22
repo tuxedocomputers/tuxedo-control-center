@@ -15,7 +15,7 @@
     "inc-version-major": "npm version major --no-git-tag-version && cd src && npm version major --no-git-tag-version",
     "start": "electron ./dist/tuxedo-control-center",
     "build": "run-s clean build-electron build-service build-native build-ng copy-files",
-    "build-prod": "run-s clean build-electron build-service build-ng-prod copy-files",
+    "build-prod": "run-s clean build-electron build-service build-native build-ng-prod copy-files",
     "build-ng": "ng build",
     "build-ng-prod": "ng build --prod",
     "build-electron": "tsc -p ./src/e-app",

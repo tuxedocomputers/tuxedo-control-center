@@ -19,10 +19,16 @@ export class WebcamWorker extends DaemonWorker {
             if (activeProfile.webcam.useStatus) {
                 if (activeProfile.webcam.status) {
                     this.tccd.logLine('Set webcam status ON');
-                    TuxedoECAPI.webcamOn();
+                    const success = TuxedoECAPI.webcamOn();
+                    if (!success) {
+                        this.tccd.logLine('WebcamWorker: Failed to activate webcam');
+                    }
                 } else {
                     this.tccd.logLine('Set webcam status OFF');
-                    TuxedoECAPI.webcamOff();
+                    const success = TuxedoECAPI.webcamOff();
+                    if (!success) {
+                        this.tccd.logLine('WebcamWorker: Failed to deactivate webcam');
+                    }
                 }
             }
         }

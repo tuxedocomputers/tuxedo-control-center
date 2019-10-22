@@ -23,14 +23,24 @@ int init_ports();
 int deinit_ports();
 
 /**
- * Write given command to command port and wait until ready
+ * Writes specified command code to the command port
+ * 
+ * 1. Waits until "ready to write" ie. the first bit is 1 (source: old ec_access.cc)
+ * 2. Writes to the command port
+ * 
+ * Returns 0 if successful, -1 in case of timeout
  */
-void write_command(uint8_t);
+int write_command(uint8_t);
 
 /**
- * Write given data to data port
+ * Writes the specified data to the data port
+ * 
+ * 1. Waits until "command set" ie. the second bit is 1 (source: old ec_access.cc)
+ * 2. Writes to the data port
+ * 
+ * Returns 0 if succesful, -1 in case of timeout
  */
-void write_data(uint8_t);
+int write_data(uint8_t);
 
 #ifdef __cplusplus
 }

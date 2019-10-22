@@ -25,8 +25,10 @@ static int webcam_set(uint8_t data_webcam)
     result = init_ports();
     if (result != 0) return result;
 
-    write_command(COMMAND_WEBCAM);
-    write_data(data_webcam);
+    result = write_command(COMMAND_WEBCAM);
+    if (result != 0) return result;
+    result = write_data(data_webcam);
+    if (result != 0) return result;
 
     result = deinit_ports();
     if (result != 0) return result;

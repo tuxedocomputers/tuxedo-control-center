@@ -42,6 +42,7 @@ async function buildDeb(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
+            distSrc + '/data/service/TuxedoECAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
@@ -95,6 +96,7 @@ async function buildSuseRpm(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
+            distSrc + '/data/service/TuxedoECAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
@@ -147,6 +149,7 @@ async function buildAppImage(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
+            distSrc + '/data/service/TuxedoECAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
