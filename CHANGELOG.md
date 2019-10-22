@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.0]
+## [0.5.0] - 2019-10-22
 ### Added
 - USB devices controller (logic only)
 - Profile manager -> profiles overview tiles
