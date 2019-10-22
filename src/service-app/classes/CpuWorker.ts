@@ -53,6 +53,12 @@ export class CpuWorker extends DaemonWorker {
 
             // Finally set the number of online cores
             this.cpuCtrl.useCores(profile.cpu.onlineCores);
+
+            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
+                if (profile.cpu.noTurbo !== undefined) {
+                    this.cpuCtrl.intelPstate.noTurbo.writeValue(profile.cpu.noTurbo);
+                }
+            }
         } catch (err) {
             this.tccd.logLine('CpuWorker: Failed to apply profile => ' + err);
         }
@@ -65,6 +71,9 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.setGovernorScalingMaxFrequency();
             this.cpuCtrl.setGovernor('powersave');
             this.cpuCtrl.setEnergyPerformancePreference('default');
+            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
+                this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
+            }
         } catch (err) {
             this.tccd.logLine('CpuWorker: Failed to set default cpu config => ' + err);
         }

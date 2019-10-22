@@ -29,6 +29,7 @@ interface ITccProfileCpu {
     scalingMaxFrequency: number;
     governor: string;
     energyPerformancePreference: string;
+    noTurbo: boolean;
 }
 
 interface ITccProfileWebCam {
@@ -48,7 +49,8 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: undefined,
             scalingMaxFrequency: undefined,
             governor: 'powersave',
-            energyPerformancePreference: 'default'
+            energyPerformancePreference: 'default',
+            noTurbo: false
         },
         webcam: {
             status: true,
@@ -66,7 +68,8 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: 2000000,
             scalingMaxFrequency: undefined,
             governor: 'performance',
-            energyPerformancePreference: 'performance'
+            energyPerformancePreference: 'performance',
+            noTurbo: false
         },
         webcam: {
             status: true,
@@ -84,7 +87,8 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: 800000,
             scalingMaxFrequency: 1000000,
             governor: 'powersave',
-            energyPerformancePreference: 'power'
+            energyPerformancePreference: 'power',
+            noTurbo: true
         },
         webcam: {
             status: true,
@@ -102,7 +106,8 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: undefined,
             scalingMaxFrequency: undefined,
             governor: 'powersave',
-            energyPerformancePreference: 'power'
+            energyPerformancePreference: 'power',
+            noTurbo: true
         },
         webcam: {
             status: true,
@@ -122,7 +127,8 @@ export const defaultCustomProfile: ITccProfile = {
         scalingMinFrequency: undefined,
         scalingMaxFrequency: undefined,
         governor: 'powersave',
-        energyPerformancePreference: 'default'
+        energyPerformancePreference: 'default',
+        noTurbo: false
     },
     webcam: {
         status: true,
