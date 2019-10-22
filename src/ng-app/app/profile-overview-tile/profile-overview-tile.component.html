@@ -19,6 +19,13 @@
                     {{ profile.display.brightness }} %
                 </span>
             </div>
+            <div class="status-row" [ngClass]="{'inactive': !profile.webcam.useStatus}">
+                <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
+                <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
+                <span class="status-info">
+                    {{ profile.webcam.status ? 'on' : 'off' }}
+                </span>
+            </div>
             <div class="status-row">
                 <mat-icon class="status-icon">memory</mat-icon>
                 <span class="status-info">

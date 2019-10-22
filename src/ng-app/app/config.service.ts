@@ -52,6 +52,9 @@ export class ConfigService {
 
   public readFiles(): void {
     this.customProfiles = this.config.getCustomProfilesNoThrow();
+    for (const profile of this.customProfiles) {
+      this.utils.fillDefaultValuesProfile(profile);
+    }
     this.settings = this.config.getSettingsNoThrow();
     this.settingsSubject.next(this.settings);
   }
