@@ -99,25 +99,27 @@ export class CpuWorker extends DaemonWorker {
 
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
-            if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
-                const minFreq = core.scalingMinFreq.readValue();
-                let minFreqProfile = profile.cpu.scalingMinFrequency;
-                if (minFreqProfile === undefined) { minFreqProfile = core.cpuinfoMinFreq.readValue(); }
-                if (minFreq !== minFreqProfile) {
-                    cpuFreqValidConfig = false;
-                    this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' minimum scaling frequency '
-                        + ' => ' + minFreq + ' instead of ' + minFreqProfile);
+            if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+                if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
+                    const minFreq = core.scalingMinFreq.readValue();
+                    let minFreqProfile = profile.cpu.scalingMinFrequency;
+                    if (minFreqProfile === undefined) { minFreqProfile = core.cpuinfoMinFreq.readValue(); }
+                    if (minFreq !== minFreqProfile) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' minimum scaling frequency '
+                            + ' => ' + minFreq + ' instead of ' + minFreqProfile);
+                    }
                 }
-            }
 
-            if (core.scalingMaxFreq.isAvailable() && core.cpuinfoMaxFreq.isAvailable()) {
-                const maxFreq = core.scalingMaxFreq.readValue();
-                let maxFreqProfile = profile.cpu.scalingMaxFrequency;
-                if (maxFreqProfile === undefined) { maxFreqProfile = core.cpuinfoMaxFreq.readValue(); }
-                if (maxFreq !== maxFreqProfile) {
-                    cpuFreqValidConfig = false;
-                    this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' maximum scaling frequency '
-                        + ' => ' + maxFreq + ' instead of ' + maxFreqProfile);
+                if (core.scalingMaxFreq.isAvailable() && core.cpuinfoMaxFreq.isAvailable()) {
+                    const maxFreq = core.scalingMaxFreq.readValue();
+                    let maxFreqProfile = profile.cpu.scalingMaxFrequency;
+                    if (maxFreqProfile === undefined) { maxFreqProfile = core.cpuinfoMaxFreq.readValue(); }
+                    if (maxFreq !== maxFreqProfile) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' maximum scaling frequency '
+                            + ' => ' + maxFreq + ' instead of ' + maxFreqProfile);
+                    }
                 }
             }
 
