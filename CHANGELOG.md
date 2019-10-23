@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.2] - 2019-10-23
+### Changed
+- Webcam control logic. Webcam control should now work more consistenly.
+- CPU frequency settings will no longer be enforced when no_turbo is activated
+  to prevent constant writing of settings.
+
 ## [0.5.1] - 2019-10-22
 ### Added
 - Webcam status icon to profile overview tiles
