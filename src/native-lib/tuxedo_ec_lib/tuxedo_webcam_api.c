@@ -17,21 +17,16 @@ int webcam_off()
     return webcam_set(DATA_WEBCAM_OFF);
 }
 
-static int webcam_set(uint8_t data_webcam)
+static int webcam_set(uint8_t __data_webcam_status)
 {
-    if (data_webcam != DATA_WEBCAM_ON && data_webcam != DATA_WEBCAM_OFF) return -1;
+    if (__data_webcam_status != DATA_WEBCAM_ON && __data_webcam_status != DATA_WEBCAM_OFF) return EC_ERROR;
 
-    int result;
-    result = init_ports();
-    if (result != 0) return result;
+    if (!init_ports()) return EC_ERROR;
 
-    result = write_command(COMMAND_WEBCAM);
-    if (result != 0) return result;
-    result = write_data(data_webcam);
-    if (result != 0) return result;
+    if (!write_command(COMMAND_WEBCAM)) return EC_ERROR;
+    if (!write_data(__data_webcam_status)) return EC_ERROR;
+    
+    if (!close_ports()) return EC_ERROR;
 
-    result = deinit_ports();
-    if (result != 0) return result;
-
-    return 0;
+    return EC_SUCCESS;
 }

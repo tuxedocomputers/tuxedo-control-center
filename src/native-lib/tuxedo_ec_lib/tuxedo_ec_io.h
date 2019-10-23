@@ -3,10 +3,14 @@
 
 #include <sys/io.h>
 #include <stdint.h>
+#include <sched.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define EC_SUCCESS      1
+#define EC_ERROR        0
 
 /**
  * Initialize ports by attempting to get port permissions
@@ -20,25 +24,25 @@ int init_ports();
  * 
  * @returns 0 on success or ioperm return code on error
  */
-int deinit_ports();
+int close_ports();
 
 /**
  * Writes specified command code to the command port
  * 
- * 1. Waits until "ready to write" ie. the first bit is 1 (source: old ec_access.cc)
+ * 1. Waits until command port signals "ready to write"
  * 2. Writes to the command port
  * 
- * Returns 0 if successful, -1 in case of timeout
+ * Returns EC_SUCCESS if successful, EC_ERROR in case of timeout
  */
 int write_command(uint8_t);
 
 /**
  * Writes the specified data to the data port
  * 
- * 1. Waits until "command set" ie. the second bit is 1 (source: old ec_access.cc)
+ * 1. Waits until the command ports signals "ready to write"
  * 2. Writes to the data port
  * 
- * Returns 0 if succesful, -1 in case of timeout
+ * Returns EC_SUCCESS if succesful, EC_ERROR in case of timeout
  */
 int write_data(uint8_t);
 

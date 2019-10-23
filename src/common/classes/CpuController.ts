@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { LogicalCpuController } from './LogicalCpuController';
 import { SysFsPropertyInteger, SysFsPropertyNumList } from './SysFsProperties';
+import { IntelPstateController } from './IntelPStateController';
 
 export class CpuController {
 
@@ -16,6 +17,8 @@ export class CpuController {
     public readonly online = new SysFsPropertyNumList(path.join(this.basePath, 'online'));
     public readonly possible = new SysFsPropertyNumList(path.join(this.basePath, 'possible'));
     public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
+
+    public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
 
     public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores
