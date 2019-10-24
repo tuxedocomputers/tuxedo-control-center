@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.3] - 2019-10-24
+### Fixed
+- Added missing enforcing of no_turbo setting
+
+### Changed
+- Phone number in support area
+
 ## [0.5.2] - 2019-10-23
 ### Changed
 - Webcam control logic. Webcam control should now work more consistenly.

@@ -151,6 +151,19 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
+        if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
+            const currentNoTurbo = this.cpuCtrl.intelPstate.noTurbo.readValue();
+            const profileNoTurbo = profile.cpu.noTurbo;
+
+            if (profileNoTurbo !== undefined) {
+                if (currentNoTurbo !== profileNoTurbo) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value noTurbo => \''
+                        + currentNoTurbo + '\' instead of \'' + profileNoTurbo + '\'');
+                }
+            }
+        }
+
         return cpuFreqValidConfig;
     }
 }
