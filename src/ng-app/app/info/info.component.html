@@ -13,11 +13,13 @@
         <p>
             TUXEDO Control Center is an application that lets you take control of your TUXEDO.
         </p>
+        <p>
+            Current version <strong>{{ appVersion }}</strong> is built upon
+        </p>
         <table class="versions" cellspacing="0">
-            <tr><td>Control Center</td><td><strong>{{ appVersion }}</strong></td>
             <tr><td>Node</td><td><strong>{{ nodeVersion }}</strong></td>
             <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
-            <tr><td>Chrome</td><td><strong>{{ chromeVersion }}</strong></td>
+            <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
         </table>
     </mat-expansion-panel>
 
@@ -27,7 +29,8 @@
                 Changelog
             </mat-panel-title>
             <mat-panel-description>
-                What has happened in each version
+                What's new? What's old?
+                <mat-icon>track_changes</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-card class="changelog">
@@ -38,9 +41,11 @@
     <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
             <mat-panel-title>
-                Impressum
+                Imprint
             </mat-panel-title>
             <mat-panel-description>
+                Legal statement
+                <mat-icon>gavel</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
         

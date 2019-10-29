@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, VERSION } from '@angular/core';
 import { UtilsService } from '../utils.service';
 
 @Component({
@@ -12,6 +12,7 @@ export class InfoComponent implements OnInit {
   public nodeVersion = this.utils.getProcessVersions().node;
   public electronVersion = this.utils.getProcessVersions().electron;
   public chromeVersion = this.utils.getProcessVersions().chrome;
+  public angularVersion = VERSION.full;
 
   constructor(
     private utils: UtilsService
