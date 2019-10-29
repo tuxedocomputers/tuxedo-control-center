@@ -44,6 +44,7 @@ async function buildDeb(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/service/TuxedoECAPI.node',
+            distSrc + '/data/CHANGELOG.md',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',

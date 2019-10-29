@@ -40,6 +40,8 @@ import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-ov
 import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
 import { InfoComponent } from './info/info.component';
 
+import { MarkdownModule } from 'ngx-markdown';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,7 +79,8 @@ import { InfoComponent } from './info/info.component';
     MatSliderModule,
     MatGridListModule,
     MatStepperModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MarkdownModule.forRoot()
   ],
   providers: [
     DecimalPipe
