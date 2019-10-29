@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private state: StateService,
     private utils: UtilsService) { }
 
-  title = 'TUXEDO Control Center v' + this.electron.remote.app.getVersion();
+  title = 'TUXEDO Control Center';
 
   public ngOnInit(): void {
     this.getSettings();

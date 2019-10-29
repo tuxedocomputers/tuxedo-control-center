@@ -145,4 +145,12 @@ export class UtilsService {
   public formatFrequency(frequency: number): string {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-2');
   }
+
+  public getAppVersion(): string {
+    return this.electron.remote.app.getVersion();
+  }
+
+  public getProcessVersions(): NodeJS.ProcessVersions {
+    return this.electron.remote.process.versions;
+  }
 }
