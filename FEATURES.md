@@ -4,6 +4,7 @@
 
 - ### Per profile control of
    - CPU frequency parameters
+   - CPU boost setting (on/off)
    - Display brightness
    - Webcam status (on/off)
 
@@ -16,13 +17,15 @@
 - ### Support area
   - systeminfos.sh download and start
   - Anydesk installation and start
+- ### Info area
+  - General info
+  - Changelog
 
 ---
 
 ## Coming soon..
 - ### Fan control integration
 - ### Per profile control of
-  - CPU boost setting (on/off)
   - Fan speed
 
 ---

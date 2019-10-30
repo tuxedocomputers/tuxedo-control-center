@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- Info area with changelog and general app version information
+
 ## [0.5.3] - 2019-10-24
 ### Fixed
 - Added missing enforcing of no_turbo setting
