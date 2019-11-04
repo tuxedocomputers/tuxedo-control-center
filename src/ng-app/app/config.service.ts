@@ -42,7 +42,12 @@ export class ConfigService {
     this.observeEditingProfile = this.editingProfileSubject.asObservable();
     this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
 
-    this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
+    this.config = new ConfigHandler(
+      TccPaths.SETTINGS_FILE,
+      TccPaths.PROFILES_FILE,
+      TccPaths.AUTOSAVE_FILE,
+      TccPaths.FANTABLES_FILE
+    );
     this.defaultProfiles = this.config.getDefaultProfiles();
     for (const profile of this.defaultProfiles) {
       this.utils.fillDefaultValuesProfile(profile);

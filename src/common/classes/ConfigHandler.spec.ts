@@ -10,7 +10,11 @@ import { TccPaths } from './TccPaths';
 
 describe('ConfigHandler file IO', () => {
 
-    const config = new ConfigHandler('/etc/test1/test2/settings.conf', '/etc/test1/test2/profiles.conf', '/etc/test1/test2/autosave.conf');
+    const config = new ConfigHandler(
+        '/etc/test1/test2/settings.conf',
+        '/etc/test1/test2/profiles.conf',
+        '/etc/test1/test2/autosave.conf',
+        '/etc/test1/test2/fantables.conf');
 
     // Mock file structure in memory
     beforeEach(() => {
