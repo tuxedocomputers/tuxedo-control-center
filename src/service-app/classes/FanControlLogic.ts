@@ -1,6 +1,6 @@
 import { ITccFanTable, ITccFanTableEntry } from 'src/common/models/TccFanTable';
 
-const TICK_DELAY = 5;
+const TICK_DELAY = 1;
 
 export class FanControlLogic {
 
@@ -9,9 +9,9 @@ export class FanControlLogic {
     private tableMaxEntry: ITccFanTableEntry;
     private tableMinEntry: ITccFanTableEntry;
 
-    private lastEntryIndex = 0;
+    private lastSpeed = 0;
 
-    private tickCount: number = 0;
+    private tickCount = 0;
 
     constructor(private fanTable: ITccFanTable) {
         fanTable.entries.sort((a, b) => a.temp - b.temp);
@@ -26,18 +26,19 @@ export class FanControlLogic {
 
     public getSpeedPercent(): number {
         const foundEntryIndex = this.findFittingEntryIndex(this.currentTemperature);
-        let chosenEntryIndex: number;
-        if (foundEntryIndex < this.lastEntryIndex) {
+        const foundEntry = this.fanTable.entries[foundEntryIndex];
+        let chosenSpeed: number;
+        if (foundEntry.speed < this.lastSpeed) {
             if (this.tickCount === 0) {
-                chosenEntryIndex = this.lastEntryIndex - 1;
+                chosenSpeed = this.lastSpeed - 1;
             } else {
-                chosenEntryIndex = this.lastEntryIndex;
+                chosenSpeed = this.lastSpeed;
             }
         } else {
-            chosenEntryIndex = foundEntryIndex;
+            chosenSpeed = foundEntry.speed;
         }
-        this.lastEntryIndex = chosenEntryIndex;
-        return this.fanTable.entries[chosenEntryIndex].speed;
+        this.lastSpeed = chosenSpeed;
+        return chosenSpeed;
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
