@@ -1,5 +1,5 @@
 #include <napi.h>
-#include "tuxedo_ec_lib/tuxedo_webcam_api.h"
+#include "tuxedo_ec_lib/headers/tuxedo_webcam_api.h"
 
 using namespace Napi;
 
