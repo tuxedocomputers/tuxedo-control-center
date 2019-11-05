@@ -12,6 +12,8 @@
    - Two available states 'Mains powered' & 'Battery powered'
    - Assignment of one profile that gets activated for each state
 
+- ### Fan control integration
+
 - ### Save settings on shutdown / sleep
 - ### Restore settings on start / wakeup
 - ### Support area
@@ -24,7 +26,6 @@
 ---
 
 ## Coming soon..
-- ### Fan control integration
 - ### Per profile control of
   - Fan speed
 

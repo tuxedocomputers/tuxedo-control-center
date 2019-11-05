@@ -3,6 +3,8 @@
 ## [Unreleased]
 ### Added
 - Info area with changelog and general app version information
+- Basic fan control integration
+- Slight fan control logic modification
 
 ## [0.5.3] - 2019-10-24
 ### Fixed
