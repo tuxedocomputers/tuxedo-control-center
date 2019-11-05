@@ -7,9 +7,9 @@ import { FanControlLogic } from './FanControlLogic';
 export class FanControlWorker extends DaemonWorker {
 
     private fans: Map<number, FanControlLogic>;
-    private cpuLogic = new FanControlLogic(this.tccd.fanTables[0]);
-    private gpu1Logic = new FanControlLogic(this.tccd.fanTables[0]);
-    private gpu2Logic = new FanControlLogic(this.tccd.fanTables[0]);
+    private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanTable());
+    private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanTable());
+    private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanTable());
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
@@ -27,6 +27,8 @@ export class FanControlWorker extends DaemonWorker {
 
     public onWork(): void {
         for (const fanNumber of this.fans.keys()) {
+            // Update fan profile
+            this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanTable());
             const fanLogic = this.fans.get(fanNumber);
             const currentTemperature = ecAPI.getFanTemperature(fanNumber);
             if (currentTemperature === -1) {

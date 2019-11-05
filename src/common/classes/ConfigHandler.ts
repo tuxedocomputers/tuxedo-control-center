@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
 import { ITccProfile, defaultProfiles, defaultCustomProfile } from '../models/TccProfile';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
-import { ITccFanTable, defaultFanTable } from '../models/TccFanTable';
+import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
 
 export class ConfigHandler {
     public settingsFileMod: number;
@@ -55,12 +55,12 @@ export class ConfigHandler {
         this.writeConfig<ITccAutosave>(autosave, filePath, { mode: this.autosaveFileMod });
     }
 
-    readFanTables(filePath: string = this.pathFanTables): ITccFanTable[] {
-        return this.readConfig<ITccFanTable[]>(filePath);
+    readFanTables(filePath: string = this.pathFanTables): ITccFanProfile[] {
+        return this.readConfig<ITccFanProfile[]>(filePath);
     }
 
-    writeFanTables(fanTables: ITccFanTable[], filePath: string = this.pathFanTables) {
-        this.writeConfig<ITccFanTable[]>(fanTables, filePath, { mode: this.fantablesFileMod });
+    writeFanTables(fanTables: ITccFanProfile[], filePath: string = this.pathFanTables) {
+        this.writeConfig<ITccFanProfile[]>(fanTables, filePath, { mode: this.fantablesFileMod });
     }
 
     public readConfig<T>(filename: string): T {
@@ -132,7 +132,7 @@ export class ConfigHandler {
         }
     }
 
-    public getDefaultFanTable(): ITccFanTable {
-        return this.copyConfig<ITccFanTable>(defaultFanTable);
+    public getDefaultFanProfiles(): ITccFanProfile[] {
+        return this.copyConfig<ITccFanProfile[]>(defaultFanProfiles);
     }
 }

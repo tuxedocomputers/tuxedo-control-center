@@ -1,6 +1,6 @@
-export interface ITccFanTable {
+export interface ITccFanProfile {
     name: string;
-    entries: ITccFanTableEntry[];
+    table: ITccFanTableEntry[];
 }
 
 export interface ITccFanTableEntry {
@@ -8,9 +8,9 @@ export interface ITccFanTableEntry {
     speed: number;
 }
 
-export const defaultFanTable = {
-    name: 'Normal',
-    entries: [
+export const defaultFanProfile = {
+    name: 'Default',
+    table: [
         { temp: 44, speed: 10 },
         { temp: 45, speed: 10 },
         { temp: 46, speed: 10 },
@@ -70,3 +70,5 @@ export const defaultFanTable = {
         { temp: 100, speed: 100 }
     ]
 };
+
+export const defaultFanProfiles = [ defaultFanProfile ];

@@ -15,7 +15,7 @@ import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
-import { ITccFanTable } from '../../common/models/TccFanTable';
+import { ITccFanProfile } from '../../common/models/TccFanTable';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -29,7 +29,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public settings: ITccSettings;
     public customProfiles: ITccProfile[];
     public autosave: ITccAutosave;
-    public fanTables: ITccFanTable[];
+    public fanTables: ITccFanProfile[];
 
     // Initialize to default profile, will be changed by state switcher as soon as it is started
     public activeProfileName = 'Default';
@@ -195,7 +195,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.autosave = this.config.getDefaultAutosave();
         }
 
-        try {
+        /*try {
             this.fanTables = this.config.readFanTables();
         } catch (err) {
             this.logLine('Failed to read fan tables: ' + this.config.pathFanTables);
@@ -206,7 +206,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } catch (err) {
                 this.logLine('Failed to write default fan tables: ' + this.config.pathFanTables);
             }
-        }
+        }*/
     }
 
     private setupSignalHandling() {
@@ -226,12 +226,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
-    getAllProfiles() {
+    getAllProfiles(): ITccProfile[] {
         return this.config.getDefaultProfiles().concat(this.customProfiles);
     }
 
-    getCurrentProfile() {
+    getCurrentProfile(): ITccProfile {
         return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
+    }
+
+    getCurrentFanTable(): ITccFanProfile {
+        return this.config.getDefaultFanProfiles()[0];
     }
 
     /**

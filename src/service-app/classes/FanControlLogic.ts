@@ -1,4 +1,4 @@
-import { ITccFanTable, ITccFanTableEntry } from '../../common/models/TccFanTable';
+import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
 
 const TICK_DELAY = 1;
 
@@ -13,10 +13,16 @@ export class FanControlLogic {
 
     private tickCount = 0;
 
-    constructor(private fanTable: ITccFanTable) {
-        fanTable.entries.sort((a, b) => a.temp - b.temp);
-        this.tableMinEntry = fanTable.entries[0];
-        this.tableMaxEntry = fanTable.entries[fanTable.entries.length - 1];
+    constructor(private fanProfile: ITccFanProfile) {
+        this.setFanProfile(fanProfile);
+    }
+
+    public setFanProfile(fanProfile: ITccFanProfile) {
+        fanProfile.table.sort((a, b) => a.temp - b.temp);
+        fanProfile.table.sort((a, b) => a.temp - b.temp);
+        this.tableMinEntry = fanProfile.table[0];
+        this.tableMaxEntry = fanProfile.table[fanProfile.table.length - 1];
+        this.fanProfile = fanProfile;
     }
 
     public reportTemperature(temperatureValue: number) {
@@ -26,7 +32,7 @@ export class FanControlLogic {
 
     public getSpeedPercent(): number {
         const foundEntryIndex = this.findFittingEntryIndex(this.currentTemperature);
-        const foundEntry = this.fanTable.entries[foundEntryIndex];
+        const foundEntry = this.fanProfile.table[foundEntryIndex];
         let chosenSpeed: number;
         if (foundEntry.speed < this.lastSpeed) {
             if (this.tickCount === 0) {
@@ -43,12 +49,12 @@ export class FanControlLogic {
 
     private findFittingEntryIndex(temperatureValue: number): number {
         if (this.currentTemperature > this.tableMaxEntry.temp) {
-            return this.fanTable.entries.length - 1;
+            return this.fanProfile.table.length - 1;
         } else if (this.currentTemperature < this.tableMinEntry.temp) {
             return 0;
         }
 
-        const foundIndex = this.fanTable.entries.findIndex(entry => entry.temp === this.currentTemperature);
+        const foundIndex = this.fanProfile.table.findIndex(entry => entry.temp === this.currentTemperature);
         if (foundIndex !== -1) {
             return foundIndex;
         } else {
