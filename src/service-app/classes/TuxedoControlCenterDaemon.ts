@@ -15,7 +15,7 @@ import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
-import { ITccFanTable } from 'src/common/models/TccFanTable';
+import { ITccFanTable } from '../../common/models/TccFanTable';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {

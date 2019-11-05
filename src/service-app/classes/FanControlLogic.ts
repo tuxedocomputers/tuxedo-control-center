@@ -1,4 +1,4 @@
-import { ITccFanTable, ITccFanTableEntry } from 'src/common/models/TccFanTable';
+import { ITccFanTable, ITccFanTableEntry } from '../../common/models/TccFanTable';
 
 const TICK_DELAY = 1;
 
