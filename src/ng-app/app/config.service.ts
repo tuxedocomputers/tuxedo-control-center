@@ -8,6 +8,7 @@ import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UtilsService } from './utils.service';
+import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
 
 @Injectable({
   providedIn: 'root'
@@ -288,5 +289,9 @@ export class ConfigService {
       this.editingProfile.next(this.currentProfileEdit);
       return true;
     }
+  }
+
+  public getFanProfiles(): ITccFanProfile[] {
+    return this.config.getDefaultFanProfiles();
   }
 }

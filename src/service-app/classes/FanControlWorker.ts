@@ -22,25 +22,48 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onStart(): void {
+        const profile = this.tccd.getCurrentProfile();
+        let useFanControl;
+        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
+            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
+        } else {
+            useFanControl = profile.fan.useControl;
+        }
 
+        if (!useFanControl) {
+            // Stop TCC fan control for all fans
+            for (const fanNumber of this.fans.keys()) {
+                ecAPI.setFanAuto(fanNumber);
+            }
+        }
     }
 
     public onWork(): void {
-        for (const fanNumber of this.fans.keys()) {
-            // Update fan profile
-            this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
-            const fanLogic = this.fans.get(fanNumber);
-            const currentTemperature = ecAPI.getFanTemperature(fanNumber);
-            if (currentTemperature === -1) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
-                continue;
+        const profile = this.tccd.getCurrentProfile();
+        let useFanControl;
+        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
+            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
+        } else {
+            useFanControl = profile.fan.useControl;
+        }
+
+        if (profile.fan.useControl) {
+            for (const fanNumber of this.fans.keys()) {
+                // Update fan profile
+                this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
+                const fanLogic = this.fans.get(fanNumber);
+                const currentTemperature = ecAPI.getFanTemperature(fanNumber);
+                if (currentTemperature === -1) {
+                    this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
+                    continue;
+                }
+                if (currentTemperature === 1) {
+                    // Probably not supported, do nothing
+                    continue;
+                }
+                fanLogic.reportTemperature(currentTemperature);
+                ecAPI.setFanSpeedPercent(fanNumber, fanLogic.getSpeedPercent());
             }
-            if (currentTemperature === 1) {
-                // Probably not supported, do nothing
-                continue;
-            }
-            fanLogic.reportTemperature(currentTemperature);
-            ecAPI.setFanSpeedPercent(fanNumber, fanLogic.getSpeedPercent());
         }
     }
 

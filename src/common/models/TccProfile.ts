@@ -41,6 +41,7 @@ interface ITccProfileWebCam {
 }
 
 interface ITccProfileFanControl {
+    useControl: boolean;
     fanProfile: string;
 }
 
@@ -64,6 +65,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
+            useControl: true,
             fanProfile: 'Balanced'
         }
     },
@@ -86,6 +88,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
+            useControl: true,
             fanProfile: 'Cool'
         }
     },
@@ -108,6 +111,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
+            useControl: true,
             fanProfile: 'Cool'
         }
     },
@@ -130,6 +134,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
+            useControl: true,
             fanProfile: 'Quiet'
         }
     }
@@ -154,6 +159,7 @@ export const defaultCustomProfile: ITccProfile = {
         useStatus: false
     },
     fan: {
+        useControl: true,
         fanProfile: 'Balanced'
     }
 };

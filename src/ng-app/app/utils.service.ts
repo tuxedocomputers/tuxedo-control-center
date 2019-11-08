@@ -63,6 +63,13 @@ export class UtilsService {
     if (profile.webcam.status === undefined) {
       profile.webcam.status = true;
     }
+
+    if (profile.fan === undefined) {
+      profile.fan = {
+        useControl: true,
+        fanProfile: 'Balanced'
+      };
+    }
   }
 
   public async execCmd(command: string): Promise<Buffer> {

@@ -226,6 +226,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
+    getDefaultProfile(): ITccProfile {
+        return this.config.getDefaultProfiles()[0];
+    }
+
     getAllProfiles(): ITccProfile[] {
         return this.config.getDefaultProfiles().concat(this.customProfiles);
     }

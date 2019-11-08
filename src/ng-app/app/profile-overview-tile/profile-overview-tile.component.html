@@ -13,19 +13,6 @@
         </header>
         <hr />
         <span *ngIf="!addProfileTile">
-            <div class="status-row" [ngClass]="{'inactive': !profile.display.useBrightness}">
-                <mat-icon class="status-icon">brightness_4</mat-icon>
-                <span class="status-info">
-                    {{ profile.display.brightness }} %
-                </span>
-            </div>
-            <div class="status-row" [ngClass]="{'inactive': !profile.webcam.useStatus}">
-                <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
-                <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
-                <span class="status-info">
-                    {{ profile.webcam.status ? 'on' : 'off' }}
-                </span>
-            </div>
             <div class="status-row">
                 <mat-icon class="status-icon">memory</mat-icon>
                 <span class="status-info">
@@ -48,6 +35,25 @@
                 <i class="fas fa-bolt status-icon"></i>
                 <span class="status-info">
                     {{ profile.cpu.energyPerformancePreference }}
+                </span>
+            </div>
+            <div class="status-row">
+                <mat-icon class="status-icon">toys</mat-icon>
+                <span class="status-info">
+                    {{ profile.fan.fanProfile }}
+                </span>
+            </div>
+            <div class="status-row" [ngClass]="{'inactive': !profile.display.useBrightness}">
+                <mat-icon class="status-icon">brightness_4</mat-icon>
+                <span class="status-info">
+                    {{ profile.display.brightness }} %
+                </span>
+            </div>
+            <div class="status-row" [ngClass]="{'inactive': !profile.webcam.useStatus}">
+                <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
+                <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
+                <span class="status-info">
+                    {{ profile.webcam.status ? 'on' : 'off' }}
                 </span>
             </div>
         </span>

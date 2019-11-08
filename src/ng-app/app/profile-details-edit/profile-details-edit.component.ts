@@ -150,6 +150,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     const displayGroup: FormGroup = this.fb.group(profile.display);
     const cpuGroup: FormGroup = this.fb.group(profile.cpu);
     const webcamGroup: FormGroup = this.fb.group(profile.webcam);
+    const fanControlGroup: FormGroup = this.fb.group(profile.fan);
 
     cpuGroup.controls.scalingMinFrequency.setValidators([ maxControlValidator(cpuGroup.controls.scalingMaxFrequency) ]);
     cpuGroup.controls.scalingMaxFrequency.setValidators([ minControlValidator(cpuGroup.controls.scalingMinFrequency) ]);
@@ -158,7 +159,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
       name: profile.name,
       display: displayGroup,
       cpu: cpuGroup,
-      webcam: webcamGroup
+      webcam: webcamGroup,
+      fan: fanControlGroup
     });
 
     fg.controls.name.setValidators([ Validators.required, Validators.minLength(1), Validators.maxLength(50) ]);
@@ -188,5 +190,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   public formatFrequency(frequency: number): string {
     return this.utils.formatFrequency(frequency);
+  }
+
+  public getFanProfileNames(): string[] {
+    return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
   }
 }
