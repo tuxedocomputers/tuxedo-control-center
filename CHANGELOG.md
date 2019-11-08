@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.6.0]
+## [0.6.1] - 2019-11-08
+### Fixed
+- Changelog asset path
+
+## [0.6.0] - 2019-11-08
 ### Added
 - Basic fan control integration
 - Slight fan control logic modification

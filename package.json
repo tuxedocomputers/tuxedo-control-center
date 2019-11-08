@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "./dist/tuxedo-control-center/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -26,7 +26,7 @@
     "copy-native": "(mkdir ./dist/tuxedo-control-center/service-app/native-lib || true) && cp ./build/Release/TuxedoECAPI.node ./dist/tuxedo-control-center/data/service",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
-    "copy-changelog": "cp CHANGELOG.md ./dist/tuxedo-control-center/data",
+    "copy-changelog": "cp CHANGELOG.md ./dist/tuxedo-control-center/ng-app/assets/",
     "pack": "npm run build && ts-node ./build-src/electron-builder.ts",
     "pack-prod": "npm run build-prod && ts-node ./build-src/electron-builder.ts",
     "clean": "rm -rf ./dist; rm -rf ./build",

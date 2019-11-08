@@ -47,7 +47,7 @@ export class FanControlWorker extends DaemonWorker {
             useFanControl = profile.fan.useControl;
         }
 
-        if (profile.fan.useControl) {
+        if (useFanControl) {
             for (const fanNumber of this.fans.keys()) {
                 // Update fan profile
                 this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
