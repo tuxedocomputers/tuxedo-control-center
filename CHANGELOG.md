@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.6.0]
 ### Added
 - Basic fan control integration
 - Slight fan control logic modification
