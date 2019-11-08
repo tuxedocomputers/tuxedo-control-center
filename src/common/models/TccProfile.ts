@@ -64,7 +64,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
-            fanProfile: 'Default'
+            fanProfile: 'Balanced'
         }
     },
     {
@@ -86,7 +86,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
-            fanProfile: 'Default'
+            fanProfile: 'Cool'
         }
     },
     {
@@ -108,7 +108,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
-            fanProfile: 'Default'
+            fanProfile: 'Cool'
         }
     },
     {
@@ -130,7 +130,7 @@ export const defaultProfiles: ITccProfile[] = [
             useStatus: false
         },
         fan: {
-            fanProfile: 'Default'
+            fanProfile: 'Quiet'
         }
     }
 ];
@@ -154,6 +154,6 @@ export const defaultCustomProfile: ITccProfile = {
         useStatus: false
     },
     fan: {
-        fanProfile: 'Default'
+        fanProfile: 'Balanced'
     }
 };

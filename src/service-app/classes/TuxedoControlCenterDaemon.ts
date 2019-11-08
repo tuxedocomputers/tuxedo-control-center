@@ -234,8 +234,31 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
     }
 
-    getCurrentFanTable(): ITccFanProfile {
-        return this.config.getDefaultFanProfiles()[0];
+    getCurrentFanProfile(): ITccFanProfile {
+        // If no fanprofile is set in tcc profile, use fallback
+        if (this.getCurrentProfile().fan === undefined || this.getCurrentProfile().fan.fanProfile === undefined) {
+            return this.getFallbackFanProfile();
+        }
+
+        // Attempt to find fan profile from tcc profile
+        let chosenFanProfile = this.config.getDefaultFanProfiles()
+            .find(fanProfile => fanProfile.name === this.getCurrentProfile().fan.fanProfile);
+
+        if (chosenFanProfile === undefined) {
+            chosenFanProfile = this.getFallbackFanProfile();
+        }
+
+        return chosenFanProfile;
+    }
+
+    getFallbackFanProfile(): ITccFanProfile {
+        // Fallback to 'Balanced'
+        let chosenFanProfile = this.config.getDefaultFanProfiles().find(fanProfile => fanProfile.name === 'Balanced');
+        // Fallback to first in list
+        if (chosenFanProfile === undefined) {
+            chosenFanProfile = this.config.getDefaultFanProfiles()[0];
+        }
+        return chosenFanProfile;
     }
 
     /**
