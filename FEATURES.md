@@ -7,6 +7,7 @@
    - CPU boost setting (on/off)
    - Display brightness
    - Webcam status (on/off)
+   - Fan profile
 
 - ### States
    - Two available states 'Mains powered' & 'Battery powered'
@@ -26,7 +27,6 @@
 ---
 
 ## Coming soon..
-- ### Per profile control of
-  - Fan speed
+- ### ???
 
 ---

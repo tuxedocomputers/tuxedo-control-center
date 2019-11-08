@@ -2,9 +2,10 @@
 
 ## [Unreleased]
 ### Added
-- Info area with changelog and general app version information
 - Basic fan control integration
 - Slight fan control logic modification
+- Fan profiles assignable to TCC profiles
+- Info area with changelog and general app version information
 
 ## [0.5.3] - 2019-10-24
 ### Fixed
