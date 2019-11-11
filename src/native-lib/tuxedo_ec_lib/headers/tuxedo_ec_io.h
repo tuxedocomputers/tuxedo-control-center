@@ -9,9 +9,6 @@
 extern "C" {
 #endif
 
-#define COMMAND_READ_EC_REGISTERS   0x80
-#define COMMAND_WRITE_EC_REGISTERS  0x81
-
 #define EC_SUCCESS      1
 #define EC_ERROR        0
 

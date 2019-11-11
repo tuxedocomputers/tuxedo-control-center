@@ -3,6 +3,7 @@ export interface ITccProfile {
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
+    fan: ITccProfileFanControl;
 }
 
 export class TccProfile implements ITccProfile {
@@ -10,11 +11,13 @@ export class TccProfile implements ITccProfile {
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
+    fan: ITccProfileFanControl;
     public constructor(init: ITccProfile) {
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
+        this.fan.fanProfile = init.fan.fanProfile;
     }
 }
 
@@ -37,6 +40,11 @@ interface ITccProfileWebCam {
     useStatus: boolean;
 }
 
+interface ITccProfileFanControl {
+    useControl: boolean;
+    fanProfile: string;
+}
+
 export const defaultProfiles: ITccProfile[] = [
     {
         name: 'Default',
@@ -55,6 +63,10 @@ export const defaultProfiles: ITccProfile[] = [
         webcam: {
             status: true,
             useStatus: false
+        },
+        fan: {
+            useControl: true,
+            fanProfile: 'Balanced'
         }
     },
     {
@@ -74,6 +86,10 @@ export const defaultProfiles: ITccProfile[] = [
         webcam: {
             status: true,
             useStatus: false
+        },
+        fan: {
+            useControl: true,
+            fanProfile: 'Cool'
         }
     },
     {
@@ -93,6 +109,10 @@ export const defaultProfiles: ITccProfile[] = [
         webcam: {
             status: true,
             useStatus: false
+        },
+        fan: {
+            useControl: true,
+            fanProfile: 'Cool'
         }
     },
     {
@@ -112,6 +132,10 @@ export const defaultProfiles: ITccProfile[] = [
         webcam: {
             status: true,
             useStatus: false
+        },
+        fan: {
+            useControl: true,
+            fanProfile: 'Quiet'
         }
     }
 ];
@@ -133,5 +157,9 @@ export const defaultCustomProfile: ITccProfile = {
     webcam: {
         status: true,
         useStatus: false
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced'
     }
 };

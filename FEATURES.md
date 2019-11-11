@@ -7,10 +7,13 @@
    - CPU boost setting (on/off)
    - Display brightness
    - Webcam status (on/off)
+   - Fan profile
 
 - ### States
    - Two available states 'Mains powered' & 'Battery powered'
    - Assignment of one profile that gets activated for each state
+
+- ### Fan control integration
 
 - ### Save settings on shutdown / sleep
 - ### Restore settings on start / wakeup
@@ -24,8 +27,6 @@
 ---
 
 ## Coming soon..
-- ### Fan control integration
-- ### Per profile control of
-  - Fan speed
+- ### ???
 
 ---
