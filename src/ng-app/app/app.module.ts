@@ -38,6 +38,9 @@ import { SupportComponent } from './support/support.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
 import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
+import { InfoComponent } from './info/info.component';
+
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,8 @@ import { ProfileDetailsEditComponent } from './profile-details-edit/profile-deta
     DisplaySettingsComponent,
     SupportComponent,
     ProfileOverviewTileComponent,
-    ProfileDetailsEditComponent
+    ProfileDetailsEditComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +79,8 @@ import { ProfileDetailsEditComponent } from './profile-details-edit/profile-deta
     MatSliderModule,
     MatGridListModule,
     MatStepperModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MarkdownModule.forRoot()
   ],
   providers: [
     DecimalPipe

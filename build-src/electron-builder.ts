@@ -34,6 +34,7 @@ process.argv.forEach((parameter, index, array) => {
 async function buildDeb(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
+        artifactName: '${productName}_${version}.${ext}',
         directories: {
             output: './dist/packages'
         },
@@ -43,6 +44,7 @@ async function buildDeb(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/service/TuxedoECAPI.node',
+            distSrc + '/data/CHANGELOG.md',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
@@ -87,6 +89,7 @@ async function buildDeb(): Promise<void> {
 async function buildSuseRpm(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
+        artifactName: '${productName}_${version}.${ext}',
         icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
@@ -140,6 +143,7 @@ async function buildSuseRpm(): Promise<void> {
 async function buildAppImage(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
+        artifactName: '${productName}_${version}.${ext}',
         icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'

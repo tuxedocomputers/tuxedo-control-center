@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.1] - 2019-11-08
+### Fixed
+- Changelog asset path
+
+## [0.6.0] - 2019-11-08
+### Added
+- Basic fan control integration
+- Slight fan control logic modification
+- Fan profiles assignable to TCC profiles
+- Info area with changelog and general app version information
+
 ## [0.5.3] - 2019-10-24
 ### Fixed
 - Added missing enforcing of no_turbo setting

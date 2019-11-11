@@ -1,0 +1,29 @@
+.info-accordion {
+    mat-panel-title, mat-panel-description {
+        flex-basis: 0;
+    }
+
+    mat-panel-title {
+        font-weight: bold;
+    }
+}
+
+.info-accordion mat-panel-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+table.versions {
+    tr {
+        td {
+            width: 250px;
+            border-bottom: 1pt solid lightgray;
+        }
+    }
+}
+
+.changelog {
+    background-color: #f8f8f8;
+    max-height: 300px;
+    overflow-y: scroll;
+}

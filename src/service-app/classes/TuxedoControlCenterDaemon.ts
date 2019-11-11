@@ -14,6 +14,8 @@ import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
+import { FanControlWorker } from './FanControlWorker';
+import { ITccFanProfile } from '../../common/models/TccFanTable';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -27,6 +29,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public settings: ITccSettings;
     public customProfiles: ITccProfile[];
     public autosave: ITccAutosave;
+    public fanTables: ITccFanProfile[];
 
     // Initialize to default profile, will be changed by state switcher as soon as it is started
     public activeProfileName = 'Default';
@@ -37,7 +40,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     constructor() {
         super(TccPaths.PID_FILE);
-        this.config = new ConfigHandler(TccPaths.SETTINGS_FILE, TccPaths.PROFILES_FILE, TccPaths.AUTOSAVE_FILE);
+        this.config = new ConfigHandler(
+            TccPaths.SETTINGS_FILE,
+            TccPaths.PROFILES_FILE,
+            TccPaths.AUTOSAVE_FILE,
+            TccPaths.FANTABLES_FILE
+        );
     }
 
     async main() {
@@ -63,6 +71,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
+        this.workers.push(new FanControlWorker(this));
 
         this.startWorkers();
 
@@ -185,6 +194,19 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // It probably doesn't exist yet so create a structure for saving
             this.autosave = this.config.getDefaultAutosave();
         }
+
+        /*try {
+            this.fanTables = this.config.readFanTables();
+        } catch (err) {
+            this.logLine('Failed to read fan tables: ' + this.config.pathFanTables);
+            this.fanTables = [ this.config.getDefaultFanTable() ];
+            try {
+                this.config.writeFanTables(this.fanTables);
+                this.logLine('Wrote default fan tables: ' + this.config.pathFanTables);
+            } catch (err) {
+                this.logLine('Failed to write default fan tables: ' + this.config.pathFanTables);
+            }
+        }*/
     }
 
     private setupSignalHandling() {
@@ -204,12 +226,43 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
-    getAllProfiles() {
+    getDefaultProfile(): ITccProfile {
+        return this.config.getDefaultProfiles()[0];
+    }
+
+    getAllProfiles(): ITccProfile[] {
         return this.config.getDefaultProfiles().concat(this.customProfiles);
     }
 
-    getCurrentProfile() {
+    getCurrentProfile(): ITccProfile {
         return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
+    }
+
+    getCurrentFanProfile(): ITccFanProfile {
+        // If no fanprofile is set in tcc profile, use fallback
+        if (this.getCurrentProfile().fan === undefined || this.getCurrentProfile().fan.fanProfile === undefined) {
+            return this.getFallbackFanProfile();
+        }
+
+        // Attempt to find fan profile from tcc profile
+        let chosenFanProfile = this.config.getDefaultFanProfiles()
+            .find(fanProfile => fanProfile.name === this.getCurrentProfile().fan.fanProfile);
+
+        if (chosenFanProfile === undefined) {
+            chosenFanProfile = this.getFallbackFanProfile();
+        }
+
+        return chosenFanProfile;
+    }
+
+    getFallbackFanProfile(): ITccFanProfile {
+        // Fallback to 'Balanced'
+        let chosenFanProfile = this.config.getDefaultFanProfiles().find(fanProfile => fanProfile.name === 'Balanced');
+        // Fallback to first in list
+        if (chosenFanProfile === undefined) {
+            chosenFanProfile = this.config.getDefaultFanProfiles()[0];
+        }
+        return chosenFanProfile;
     }
 
     /**

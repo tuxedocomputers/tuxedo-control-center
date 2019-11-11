@@ -5,6 +5,7 @@ import { CpuSettingsComponent } from './cpu-settings/cpu-settings.component';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 import { SupportComponent } from './support/support.component';
+import { InfoComponent } from './info/info.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'profile-manager', pathMatch: 'full' },
@@ -12,7 +13,8 @@ const routes: Routes = [
   { path: 'profile-manager', component: ProfileManagerComponent },
   { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
   { path: 'display-settings', component: DisplaySettingsComponent },
-  { path: 'support', component: SupportComponent }
+  { path: 'support', component: SupportComponent },
+  { path: 'info', component: InfoComponent }
 ];
 
 @NgModule({

@@ -63,6 +63,13 @@ export class UtilsService {
     if (profile.webcam.status === undefined) {
       profile.webcam.status = true;
     }
+
+    if (profile.fan === undefined) {
+      profile.fan = {
+        useControl: true,
+        fanProfile: 'Balanced'
+      };
+    }
   }
 
   public async execCmd(command: string): Promise<Buffer> {
@@ -144,5 +151,13 @@ export class UtilsService {
 
   public formatFrequency(frequency: number): string {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-2');
+  }
+
+  public getAppVersion(): string {
+    return this.electron.remote.app.getVersion();
+  }
+
+  public getProcessVersions(): NodeJS.ProcessVersions {
+    return this.electron.remote.process.versions;
   }
 }

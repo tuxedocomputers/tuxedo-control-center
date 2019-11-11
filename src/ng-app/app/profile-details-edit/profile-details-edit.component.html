@@ -31,6 +31,7 @@
         </mat-button-toggle-group>
     </mat-card-title>
     <mat-card-content>
+        <!-- Display settings -->
         <mat-card class="settings-group">
             <mat-card-subtitle class="title">
                 <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
@@ -67,6 +68,7 @@
             </mat-card-content>
         </mat-card>
         <br />
+        <!-- CPU settings -->
         <mat-card class="settings-group">
             <mat-card-subtitle class="title">
                     <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
@@ -149,6 +151,46 @@
             </mat-card-content>
         </mat-card>
         <br />
+        <!-- Fan control settings -->
+        <mat-card class="settings-group">
+            <mat-card-subtitle class="title">
+                <mat-icon>toys</mat-icon>
+                Fan control
+            </mat-card-subtitle>
+            <mat-card-content class="content">
+                <div formGroupName="fan">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Use TCC fan control</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.useControl ? 'yes' : 'no' }}</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputUseFanControl.checked ? 'yes' : 'no' }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputUseFanControl formControlName="useControl"></mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header [ngClass]="{'inactive': !inputUseFanControl.checked}">Fan profile</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">{{ viewProfile.fan.fanProfile }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">{{ profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">
+                                <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()" [value]="fanProfileName">{{ fanProfileName }}</mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <br />
+        <!-- Webcam settings -->
         <mat-card class="settings-group">
             <mat-card-subtitle class="title">
                 <mat-icon>videocam</mat-icon>

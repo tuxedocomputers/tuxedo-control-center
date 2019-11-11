@@ -1,0 +1,54 @@
+<br />
+<mat-accordion class="info-accordion">
+    <mat-expansion-panel hideToggle [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Information
+            </mat-panel-title>
+            <mat-panel-description>
+                General information
+                <mat-icon><img src="./assets/images/information.svg"></mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>
+            TUXEDO Control Center is an application that lets you take control of your TUXEDO.
+        </p>
+        <p>
+            Current version <strong>{{ appVersion }}</strong> is built upon
+        </p>
+        <table class="versions" cellspacing="0">
+            <tr><td>Node</td><td><strong>{{ nodeVersion }}</strong></td>
+            <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
+            <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
+        </table>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Changelog
+            </mat-panel-title>
+            <mat-panel-description>
+                What's new? What's old?
+                <mat-icon>track_changes</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-card class="changelog">
+            <markdown src="assets/CHANGELOG.md"></markdown>
+        </mat-card>
+    </mat-expansion-panel>
+
+    <!--mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Imprint
+            </mat-panel-title>
+            <mat-panel-description>
+                Legal statement
+                <mat-icon>gavel</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+    </mat-expansion-panel-->
+
+</mat-accordion>

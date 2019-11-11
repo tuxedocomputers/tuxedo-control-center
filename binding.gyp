@@ -2,12 +2,9 @@
     "targets": [
         {
             "target_name": "TuxedoECAPI",
-            "sources": [
-                "src/native-lib/tuxedo_ec_napi.cc",
-                "src/native-lib/tuxedo_ec_lib/tuxedo_ec_io.c",
-                "src/native-lib/tuxedo_ec_lib/tuxedo_webcam_api.c"
-            ],
-            "include_dirs": [ "<!@(node -p \"require('node-addon-api').include\")", "./src/native-lib" ],
+            "sources": [ "src/native-lib/tuxedo_ec_napi.cc" ],
+            "libraries": [ "../src/native-lib/tuxedo_ec_lib/libs/tuxedo_ec_lib.a" ],
+            "include_dirs": [ "<!@(node -p \"require('node-addon-api').include\")", "./src/native-lib/tuxedo_ec_lib/headers" ],
             "dependencies": [ "<!(node -p \"require('node-addon-api').gyp\")" ],
             "defines": [ "NAPI_DISABLE_CPP_EXCEPTIONS" ]
         }
