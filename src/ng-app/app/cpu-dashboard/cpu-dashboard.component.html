@@ -1,0 +1,19 @@
+
+<mat-card>
+    <mat-card-title>CPU frequency information</mat-card-title>
+    <mat-card-content>
+        <table>
+            <tr><td>Driver</td><td>{{ activeScalingDrivers.join(',') }}</td></tr>
+            <tr><td>No turbo</td><td *ngIf="pstateInfo.noTurbo"><strong>activated</strong></td><td *ngIf="!pstateInfo.noTurbo">deactivated</td></tr>
+            <tr><td>Active logical cores</td><td>{{ cpuCoreInfo.length }} of {{ cpuInfo.availableCores }}</td></tr>
+            <tr><td>Scaling frequency range</td><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }} to {{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
+            <tr><td>Governor</td><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
+        </table>
+        <br />
+        <mat-chip-list>
+            <mat-chip *ngFor="let core of cpuCoreInfo">
+                <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
+            </mat-chip>
+        </mat-chip-list>
+    </mat-card-content>
+</mat-card>

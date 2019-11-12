@@ -41,6 +41,7 @@ import { ProfileDetailsEditComponent } from './profile-details-edit/profile-deta
 import { InfoComponent } from './info/info.component';
 
 import { MarkdownModule } from 'ngx-markdown';
+import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { MarkdownModule } from 'ngx-markdown';
     SupportComponent,
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,
-    InfoComponent
+    InfoComponent,
+    CpuDashboardComponent
   ],
   imports: [
     BrowserModule,
