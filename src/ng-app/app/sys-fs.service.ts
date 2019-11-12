@@ -94,7 +94,11 @@ export class SysFsService implements OnDestroy {
           scalingAvailableGovernors: core.scalingAvailableGovernors.readValueNT(),
           scalingGovernor: core.scalingGovernor.readValueNT(),
           cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValueNT(),
-          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT()
+          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT(),
+          coreId: core.coreId.readValueNT(),
+          coreSiblingsList: core.coreSiblingsList.readValueNT(),
+          physicalPackageId: core.physicalPackageId.readValueNT(),
+          threadSiblingsList: core.threadSiblingsList.readValueNT()
         };
         coreInfoList.push(coreInfo);
       } catch (err) {
@@ -150,6 +154,10 @@ export interface ILogicalCoreInfo {
   scalingGovernor: string;
   cpuInfoMinFreq: number;
   cpuInfoMaxFreq: number;
+  coreId: number;
+  coreSiblingsList: number[];
+  physicalPackageId: number;
+  threadSiblingsList: number[];
 }
 
 export interface IDisplayBrightnessInfo {
