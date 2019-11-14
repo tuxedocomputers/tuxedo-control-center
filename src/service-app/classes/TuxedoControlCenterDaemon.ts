@@ -16,6 +16,7 @@ import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { TccDBusService } from './TccDBusService';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -72,6 +73,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
+        this.workers.push(new TccDBusService(this));
 
         this.startWorkers();
 

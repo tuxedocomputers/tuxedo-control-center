@@ -2,6 +2,7 @@
 rm /usr/share/applications/tuxedo-control-center.desktop
 cp /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center.desktop /usr/share/applications/tuxedo-control-center.desktop
 cp /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/de.tuxedocomputers.tcc.policy /usr/share/polkit-1/actions/de.tuxedocomputers.tcc.policy
+cp /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/com.tuxedocomputers.tccd.conf /usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf
 
 # Copy and enable services
 cp /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tccd.service /etc/systemd/system/tccd.service
