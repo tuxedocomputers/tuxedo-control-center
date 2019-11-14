@@ -17,6 +17,7 @@ import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
+import { TccDBusData } from './TccDBusInterface';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -31,6 +32,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public customProfiles: ITccProfile[];
     public autosave: ITccAutosave;
     public fanTables: ITccFanProfile[];
+
+    public dbusData = new TccDBusData();
 
     // Initialize to default profile, will be changed by state switcher as soon as it is started
     public activeProfileName = 'Default';
@@ -47,6 +50,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
+        this.dbusData.fanTemp1.data = 54;
     }
 
     async main() {
@@ -73,7 +77,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
-        this.workers.push(new TccDBusService(this));
+        this.workers.push(new TccDBusService(this, this.dbusData));
 
         this.startWorkers();
 

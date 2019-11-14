@@ -39,6 +39,9 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onWork(): void {
+        const fanValues: number[] = [];
+        const fanTimestamps: number[] = [];
+
         const profile = this.tccd.getCurrentProfile();
         let useFanControl;
         if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
@@ -53,6 +56,8 @@ export class FanControlWorker extends DaemonWorker {
                 this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
                 const fanLogic = this.fans.get(fanNumber);
                 const currentTemperature = ecAPI.getFanTemperature(fanNumber);
+                fanTimestamps.push(Date.now());
+                fanValues.push(currentTemperature);
                 if (currentTemperature === -1) {
                     this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
                     continue;
@@ -65,6 +70,8 @@ export class FanControlWorker extends DaemonWorker {
                 ecAPI.setFanSpeedPercent(fanNumber, fanLogic.getSpeedPercent());
             }
         }
+
+        this.tccd.dbusData.fanTemp1.set(fanTimestamps[0], fanValues[0]);
     }
 
     public onExit(): void {

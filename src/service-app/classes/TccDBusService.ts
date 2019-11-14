@@ -1,6 +1,6 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { TccDBusInterface } from './TccDBusInterface';
+import { TccDBusInterface, TccDBusData } from './TccDBusInterface';
 import * as dbus from 'dbus-next';
 
 export class TccDBusService extends DaemonWorker {
@@ -10,12 +10,12 @@ export class TccDBusService extends DaemonWorker {
 
     private bus: dbus.MessageBus;
 
-    constructor(tccd: TuxedoControlCenterDaemon) {
+    constructor(tccd: TuxedoControlCenterDaemon, dbusData: TccDBusData) {
         super(10000, tccd);
 
         try {
             this.bus = dbus.systemBus();
-            this.interface = new TccDBusInterface();
+            this.interface = new TccDBusInterface(dbusData);
         } catch (err) {
             this.tccd.logLine('TccDBusService: Error initializing DBus service => ' + err);
         }
