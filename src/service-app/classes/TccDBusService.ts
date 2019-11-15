@@ -10,6 +10,8 @@ export class TccDBusService extends DaemonWorker {
 
     private bus: dbus.MessageBus;
 
+    private started = false;
+
     constructor(tccd: TuxedoControlCenterDaemon, dbusData: TccDBusData) {
         super(10000, tccd);
 
@@ -22,15 +24,18 @@ export class TccDBusService extends DaemonWorker {
     }
 
     public onStart(): void {
-        this.bus.requestName('com.tuxedocomputers.tccd', 0).then(name => {
-            try {
-                this.bus.export(this.path, this.interface);
-            } catch (err) {
-                this.tccd.logLine('TccDBusService: Error exporting service => ' + err);
-            }
-        }).catch(err => {
-            this.tccd.logLine('TccDBusInterface: Failed to request bus name => ' + err);
-        });
+        if (!this.started) {
+            this.bus.requestName('com.tuxedocomputers.tccd', 0).then(name => {
+                try {
+                    this.bus.export(this.path, this.interface);
+                    this.started = true;
+                } catch (err) {
+                    this.tccd.logLine('TccDBusService: Error exporting service => ' + err);
+                }
+            }).catch(err => {
+                this.tccd.logLine('TccDBusInterface: Failed to request bus name => ' + err);
+            });
+        }
     }
 
     public onWork(): void {
