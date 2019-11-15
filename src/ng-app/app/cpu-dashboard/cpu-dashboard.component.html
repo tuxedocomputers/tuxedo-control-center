@@ -8,6 +8,8 @@
             <tr><td>Active logical cores</td><td>{{ cpuCoreInfo.length }} of {{ cpuInfo.availableCores }}</td></tr>
             <tr><td>Scaling frequency range</td><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }} to {{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
             <tr><td>Governor</td><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
+            <tr><td>Temp</td><td>{{ fanData.cpu.temp.data.value }} &deg;C</td></tr>
+            <tr><td>Fan speed</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
         </table>
         <br />
         <mat-chip-list>

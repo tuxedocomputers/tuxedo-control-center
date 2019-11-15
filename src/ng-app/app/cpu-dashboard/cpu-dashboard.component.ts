@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ILogicalCoreInfo, IGeneralCPUInfo, SysFsService, IPstateInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from '../utils.service';
+import { TccDBusClientService, IDBusFanData } from '../tcc-dbus-client.service';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -21,17 +22,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public activeScalingGovernors: string[];
   public activeEnergyPerformancePreference: string[];
 
+  public fanData: IDBusFanData;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(
     private sysfs: SysFsService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private tccdbus: TccDBusClientService
   ) { }
 
   ngOnInit() {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
+    this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => { this.fanData = fanData; }));
   }
 
   ngOnDestroy(): void {

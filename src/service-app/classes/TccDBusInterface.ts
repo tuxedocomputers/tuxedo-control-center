@@ -1,26 +1,46 @@
 import * as dbus from 'dbus-next';
 
+function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
+    const v = new dbus.Variant<T>();
+    v.signature = signature;
+    v.value = value;
+    return v;
+}
+
+function exportOwnProperties(obj: object, keys: string[]) {
+    const o = {};
+    for (const key of keys) {
+        if (obj[key].export !== undefined) {
+            o[key] = obj[key].export();
+        } else {
+            o[key] = obj[key];
+        }
+    }
+    return o;
+}
+
 /**
  * Structure for timestamped data
  */
 export class TimeData<T> {
-    constructor(public timestamp: number, public data: T) {}
-    set(timestamp: number, data: T) { this.timestamp = timestamp; this.data = data; }
-    export() { return [ this.timestamp, this.data ]; }
+    public timestamp: dbus.Variant<number>;
+    constructor(private timestampNumber: number, public data: dbus.Variant<T>) {
+        this.timestamp = dbusVariant('x', timestampNumber);
+    }
+    set(timestamp: number, data: T) { this.timestamp.value = timestamp; this.data.value = data; }
+    export() {
+        return exportOwnProperties(this, ['timestamp', 'data']);
+    }
 }
 
 /**
  * Structure for fan data
  */
 export class FanData {
-    public speed = new TimeData<number>(0, 0);
-    public temp = new TimeData<number>(0, 0);
+    public speed = new TimeData<number>(0, dbusVariant('i', 0));
+    public temp = new TimeData<number>(0, dbusVariant('i', 0));
     export() {
-        const o = {};
-        for (const key of Object.getOwnPropertyNames(this)) {
-            o[key] = this[key].export();
-        }
-        return o;
+        return exportOwnProperties(this, ['speed', 'temp']);
     }
 }
 
@@ -39,14 +59,18 @@ export class TccDBusInterface extends dbus.interface.Interface {
         super('com.tuxedocomputers.tccd');
     }
 
-    GetFanData() { return this.data.export(); }
+    GetFanDataCPU() { return this.data.fans[0].export(); }
+    GetFanDataGPU1() { return this.data.fans[1].export(); }
+    GetFanDataGPU2() { return this.data.fans[2].export(); }
 }
 
 TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
-        GetFanData: { outSignature: 'aa{s(ti)}' },
+        GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
+        GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
+        GetFanDataGPU2: { outSignature: 'a{sa{sv}}' }
     },
     signals: {}
 });
