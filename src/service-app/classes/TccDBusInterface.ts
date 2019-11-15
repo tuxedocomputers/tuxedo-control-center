@@ -10,10 +10,27 @@ export class TimeData<T> {
 }
 
 /**
+ * Structure for fan data
+ */
+export class FanData {
+    public speed = new TimeData<number>(0, 0);
+    public temp = new TimeData<number>(0, 0);
+    export() {
+        const o = {};
+        for (const key of Object.getOwnPropertyNames(this)) {
+            o[key] = this[key].export();
+        }
+        return o;
+    }
+}
+
+/**
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
-    fanTemp1 = new TimeData<number>(0, 0);
+    public fans: FanData[];
+    constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
+    export() { return this.fans.map(fan => fan.export()); }
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
@@ -22,20 +39,14 @@ export class TccDBusInterface extends dbus.interface.Interface {
         super('com.tuxedocomputers.tccd');
     }
 
-    GetFanData1() {
-        return this.data.fanTemp1.export();
-    }
+    GetFanData() { return this.data.export(); }
 }
 
 TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
-        GetFanData1: {
-            name: 'GetFanData1',
-            inSignature: '',
-            outSignature: 'ti'
-        }
+        GetFanData: { outSignature: 'aa{s(ti)}' },
     },
     signals: {}
 });

@@ -33,7 +33,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public autosave: ITccAutosave;
     public fanTables: ITccFanProfile[];
 
-    public dbusData = new TccDBusData();
+    public dbusData = new TccDBusData(3);
 
     // Initialize to default profile, will be changed by state switcher as soon as it is started
     public activeProfileName = 'Default';
@@ -50,7 +50,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
-        this.dbusData.fanTemp1.data = 54;
     }
 
     async main() {
