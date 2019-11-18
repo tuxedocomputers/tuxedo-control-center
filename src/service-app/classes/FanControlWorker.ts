@@ -51,25 +51,27 @@ export class FanControlWorker extends DaemonWorker {
             useFanControl = profile.fan.useControl;
         }
 
-        if (useFanControl) {
-            for (const fanNumber of this.fans.keys()) {
-                // Update fan profile
-                this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
-                const fanLogic = this.fans.get(fanNumber);
-                const currentTemperature = ecAPI.getFanTemperature(fanNumber);
-                fanTimestamps.push(Date.now());
-                fanTemps.push(currentTemperature);
-                if (currentTemperature === -1) {
-                    this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
-                    continue;
-                }
-                if (currentTemperature === 1) {
-                    // Probably not supported, do nothing
-                    continue;
-                }
-                fanLogic.reportTemperature(currentTemperature);
-                const currentSpeed = fanLogic.getSpeedPercent();
-                fanSpeeds.push(currentSpeed);
+        for (const fanNumber of this.fans.keys()) {
+            // Update fan profile
+            this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
+            const fanLogic = this.fans.get(fanNumber);
+            const currentTemperature = ecAPI.getFanTemperature(fanNumber);
+            let currentSpeed = ecAPI.getFanSpeedPercent(fanNumber);
+            fanTimestamps.push(Date.now());
+            fanTemps.push(currentTemperature);
+            fanSpeeds.push(currentSpeed);
+            if (currentTemperature === -1) {
+                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
+                continue;
+            }
+            if (currentTemperature === 1) {
+                // Probably not supported, do nothing
+                continue;
+            }
+            fanLogic.reportTemperature(currentTemperature);
+            currentSpeed = fanLogic.getSpeedPercent();
+            fanSpeeds[fanNumber - 1] = currentSpeed;
+            if (useFanControl) {
                 ecAPI.setFanSpeedPercent(fanNumber, currentSpeed);
             }
         }
