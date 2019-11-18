@@ -4,7 +4,8 @@
     "outDir": "../../dist/tuxedo-control-center/service-app",
     "rootDir": "../",
     "module": "commonjs",
-    "types": ["node"]
+    "types": ["node"],
+    "target": "es6"
   },
   "exclude": [
     "test.ts",

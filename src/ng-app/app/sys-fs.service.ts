@@ -15,6 +15,7 @@ export class SysFsService implements OnDestroy {
   private updatePeriodMs = 3000;
   public generalCpuInfo: BehaviorSubject<IGeneralCPUInfo>;
   public logicalCoreInfo: BehaviorSubject<ILogicalCoreInfo[]>;
+  public pstateInfo: BehaviorSubject<IPstateInfo>;
 
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
@@ -41,6 +42,12 @@ export class SysFsService implements OnDestroy {
       this.logicalCoreInfo = new BehaviorSubject(this.getLogicalCoreInfo());
     } else {
       this.logicalCoreInfo.next(this.getLogicalCoreInfo());
+    }
+
+    if (this.pstateInfo === undefined) {
+      this.pstateInfo = new BehaviorSubject(this.getPstateInfo());
+    } else {
+      this.pstateInfo.next(this.getPstateInfo());
     }
   }
 
@@ -87,7 +94,11 @@ export class SysFsService implements OnDestroy {
           scalingAvailableGovernors: core.scalingAvailableGovernors.readValueNT(),
           scalingGovernor: core.scalingGovernor.readValueNT(),
           cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValueNT(),
-          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT()
+          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT(),
+          coreId: core.coreId.readValueNT(),
+          coreSiblingsList: core.coreSiblingsList.readValueNT(),
+          physicalPackageId: core.physicalPackageId.readValueNT(),
+          threadSiblingsList: core.threadSiblingsList.readValueNT()
         };
         coreInfoList.push(coreInfo);
       } catch (err) {
@@ -95,6 +106,13 @@ export class SysFsService implements OnDestroy {
       }
     }
     return coreInfoList;
+  }
+
+  public getPstateInfo(): IPstateInfo {
+    const pstateInfo: IPstateInfo = {
+      noTurbo: this.cpu.intelPstate.noTurbo.readValueNT()
+    };
+    return pstateInfo;
   }
 
   public getDisplayBrightnessInfo(): IDisplayBrightnessInfo[] {
@@ -136,10 +154,18 @@ export interface ILogicalCoreInfo {
   scalingGovernor: string;
   cpuInfoMinFreq: number;
   cpuInfoMaxFreq: number;
+  coreId: number;
+  coreSiblingsList: number[];
+  physicalPackageId: number;
+  threadSiblingsList: number[];
 }
 
 export interface IDisplayBrightnessInfo {
   driver: string;
   brightness: number;
   maxBrightness: number;
+}
+
+export interface IPstateInfo {
+  noTurbo: boolean;
 }

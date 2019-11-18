@@ -195,4 +195,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   public getFanProfileNames(): string[] {
     return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
   }
+
+  public governorSelectionChange() {
+    const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+    if (cpuGroup.controls.governor.value === 'performance') {
+      cpuGroup.controls.energyPerformancePreference.setValue('performance');
+    } else {
+      cpuGroup.controls.energyPerformancePreference.setValue('power');
+    }
+  }
 }

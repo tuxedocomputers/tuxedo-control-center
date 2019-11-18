@@ -117,13 +117,13 @@
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
-                            <mat-select formControlName="governor" [disableOptionCentering]="true">
+                            <mat-select formControlName="governor" [disableOptionCentering]="true" (selectionChange)="governorSelectionChange()">
                                 <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor">{{ governor }}</mat-option>
                             </mat-select>
                         </content>
                     </mat-grid-tile>
 
-                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
+                    <!--mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.energyPerformancePreference }}</content>
                         <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.energyPerformancePreference.value }}</content>
@@ -134,7 +134,7 @@
                                 <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
                             </mat-select>
                         </content>
-                    </mat-grid-tile>
+                    </mat-grid-tile-->
 
                     <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Disable turbo</header></mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">

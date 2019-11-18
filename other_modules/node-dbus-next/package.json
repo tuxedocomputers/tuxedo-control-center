@@ -1,0 +1,77 @@
+{
+  "name": "dbus-next",
+  "version": "0.7.1",
+  "keywords": [
+    "dbus",
+    "dcop",
+    "d-bus",
+    "rpc",
+    "gnome",
+    "kde"
+  ],
+  "description": "The next great DBus library for Node",
+  "files": [
+    "lib/*",
+    "index.js",
+    "package.json"
+  ],
+  "directories": {
+    "lib": "lib",
+    "test": "test",
+    "examples": "examples"
+  },
+  "main": "index.js",
+  "types": "types.d.ts",
+  "maintainers": [
+    {
+      "name": "Tony Crisci",
+      "email": "tony@dubstepdish.com"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/dbusjs/node-dbus-next.git"
+  },
+  "dependencies": {
+    "event-stream": "3.3.4",
+    "hexy": "^0.2.10",
+    "jsbi": "^2.0.5",
+    "long": "^4.0.0",
+    "@nornagon/put": "0.0.8",
+    "safe-buffer": "^5.1.1",
+    "xml2js": "^0.4.17"
+  },
+  "optionalDependencies": {
+    "abstract-socket": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.5",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/plugin-syntax-bigint": "^7.2.0",
+    "@babel/plugin-transform-async-to-generator": "^7.3.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.8.0",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "commander": "^2.19.0",
+    "handlebars": "^4.1.0",
+    "jest": "^24.1.0",
+    "jsdoc": "^3.6.3"
+  },
+  "scripts": {
+    "integration": "dbus-run-session -- jest ./test/integration",
+    "coverage": "dbus-run-session -- jest --coverage",
+    "unit": "jest ./test/*.test.js",
+    "test": "dbus-run-session -- jest",
+    "doc": "jsdoc --verbose -c jsdoc.conf --readme README.md -r lib index.js -d doc"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "bail": true
+  },
+  "engine": {
+    "node": ">=6.3.0"
+  }
+}

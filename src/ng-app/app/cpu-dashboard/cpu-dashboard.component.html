@@ -1,0 +1,54 @@
+<mat-expansion-panel hideToggle [expanded]="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Active cores
+        </mat-panel-title>
+        <mat-panel-description>
+            Logical CPU cores in use
+            <mat-icon>memory</mat-icon>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-chip-list>
+        <mat-chip *ngFor="let core of cpuCoreInfo">
+            <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
+        </mat-chip>
+    </mat-chip-list>
+</mat-expansion-panel>
+<br />
+
+<mat-expansion-panel hideToggle [expanded]="true" class="cpu-thermal-info">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Thermal
+        </mat-panel-title>
+        <mat-panel-description>
+            Temperature and fan info
+            <mat-icon>toys</mat-icon>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <table>
+        <tr><th>Temp</th><th>Fan speed</th></tr>
+        <tr><td>{{ fanData.cpu.temp.data.value }} &deg;C</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
+    </table>
+</mat-expansion-panel>
+<br />
+
+<mat-expansion-panel hideToggle class="cpu-frequency-info">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Frequency
+        </mat-panel-title>
+        <mat-panel-description>
+            Cpu frequency info
+            <mat-icon>flash_on</mat-icon>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <table>
+        <tr><th>Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
+        <tr><th>No turbo</th><td *ngIf="pstateInfo.noTurbo"><strong>activated</strong></td><td *ngIf="!pstateInfo.noTurbo">deactivated</td></tr>
+        <tr><th>Active logical cores</th><td>{{ cpuCoreInfo.length }} of {{ cpuInfo.availableCores }}</td></tr>
+        <tr><th>Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }} to {{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
+        <tr><th>Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
+    </table>
+</mat-expansion-panel>
+<br />

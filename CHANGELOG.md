@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.3] - 2019-11-18
+## Fixed
+- Temperature reporting
+
+## [0.6.2] - 2019-11-18
+## Added
+- CPU dashboard
+- DBus service and client
+
+## Removed
+- Old CPU settings
+
 ## [0.6.1] - 2019-11-08
 ### Fixed
 - Changelog asset path
