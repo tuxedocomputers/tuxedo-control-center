@@ -89,7 +89,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 try {
                     worker.onWork();
                 } catch (err) {
-                    this.logLine(err);
+                    this.logLine('Failed executing onWork() => ' + err);
                 }
             }, worker.timeout);
         }
@@ -101,12 +101,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 worker.onStart();
             } catch (err) {
-                this.logLine(err);
+                this.logLine('Failed executing onStart() => ' + err);
             }
         }
     }
 
     public catchError(err: Error) {
+        this.logLine('Tccd Exception');
         const errorLine = err.name + ': ' + err.message;
         this.logLine(errorLine);
         if (this.started) {
@@ -124,7 +125,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 worker.onExit();
             } catch (err) {
-                this.logLine(err);
+                this.logLine('Failed executing onExit() => ' + err);
             }
         });
         this.config.writeAutosave(this.autosave);
@@ -136,7 +137,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (!await this.start()) {
                 throw Error('Couldn\'t start daemon. It is probably already running');
             } else {
-                this.logLine('Starting daemon v' + tccPackage.version);
+                this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
             }
         } else if (process.argv.includes('--stop')) {
             // Signal running process to stop
