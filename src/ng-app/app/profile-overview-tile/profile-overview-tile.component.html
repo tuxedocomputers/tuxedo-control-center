@@ -34,10 +34,16 @@
             <div class="status-row">
                 <i class="fas fa-bolt status-icon"></i>
                 <span class="status-info">
-                    {{ profile.cpu.energyPerformancePreference }}
+                    {{ profile.cpu.noTurbo ? 'Deactivated' : 'Activated' }}
                 </span>
             </div>
-            <div class="status-row">
+            <!--div class="status-row">
+                <i class="fas fa-bolt status-icon"></i>
+                <span class="status-info">
+                    {{ profile.cpu.energyPerformancePreference }}
+                </span>
+            </div-->
+            <div class="status-row" [ngClass]="{'inactive': !profile.fan.useControl}">
                 <mat-icon class="status-icon">toys</mat-icon>
                 <span class="status-info">
                     {{ profile.fan.fanProfile }}
