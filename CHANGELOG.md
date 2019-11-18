@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.3] - 2019-11-18
+## Fixed
+- Temperature reporting
+
 ## [0.6.2] - 2019-11-18
 ## Added
 - CPU dashboard
