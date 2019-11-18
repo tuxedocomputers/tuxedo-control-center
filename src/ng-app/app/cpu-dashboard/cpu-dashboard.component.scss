@@ -1,0 +1,42 @@
+.cpu-frequency-info table {
+    >tr {
+        height: 25px;
+
+        >th {
+            min-width: 140px;
+            text-align: right;
+            padding-right: 25px;
+
+            +th, +td {
+                min-width: 100px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+.cpu-thermal-info table {
+    width: 100%;
+
+    >tr {
+        th, td {
+            font-size: 1.25em;
+            text-align: center;
+        }
+    }
+}
+
+mat-expansion-panel {
+    mat-panel-title, mat-panel-description {
+        flex-basis: 0;
+    }
+
+    mat-panel-description {
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    mat-panel-title {
+        font-weight: bold;
+    }
+}

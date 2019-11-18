@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CpuSettingsComponent } from './cpu-settings.component';
+import { CpuDashboardComponent } from './cpu-dashboard.component';
 
-describe('CpuSettingsComponent', () => {
-  let component: CpuSettingsComponent;
-  let fixture: ComponentFixture<CpuSettingsComponent>;
+describe('CpuDashboardComponent', () => {
+  let component: CpuDashboardComponent;
+  let fixture: ComponentFixture<CpuDashboardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CpuSettingsComponent ]
+      declarations: [ CpuDashboardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CpuSettingsComponent);
+    fixture = TestBed.createComponent(CpuDashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

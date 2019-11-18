@@ -7,8 +7,6 @@ import { AppComponent } from './app.component';
 import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { CpuSettingsComponent } from './cpu-settings/cpu-settings.component';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -41,17 +39,18 @@ import { ProfileDetailsEditComponent } from './profile-details-edit/profile-deta
 import { InfoComponent } from './info/info.component';
 
 import { MarkdownModule } from 'ngx-markdown';
+import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CpuSettingsComponent,
     ProfileManagerComponent,
     DisplaySettingsComponent,
     SupportComponent,
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,
-    InfoComponent
+    InfoComponent,
+    CpuDashboardComponent
   ],
   imports: [
     BrowserModule,

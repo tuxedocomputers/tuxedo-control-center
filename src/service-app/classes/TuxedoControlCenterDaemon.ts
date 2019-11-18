@@ -16,6 +16,8 @@ import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { TccDBusService } from './TccDBusService';
+import { TccDBusData } from './TccDBusInterface';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -30,6 +32,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public customProfiles: ITccProfile[];
     public autosave: ITccAutosave;
     public fanTables: ITccFanProfile[];
+
+    public dbusData = new TccDBusData(3);
 
     // Initialize to default profile, will be changed by state switcher as soon as it is started
     public activeProfileName = 'Default';
@@ -72,6 +76,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
+        this.workers.push(new TccDBusService(this, this.dbusData));
 
         this.startWorkers();
 
@@ -84,7 +89,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 try {
                     worker.onWork();
                 } catch (err) {
-                    this.logLine(err);
+                    this.logLine('Failed executing onWork() => ' + err);
                 }
             }, worker.timeout);
         }
@@ -96,12 +101,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 worker.onStart();
             } catch (err) {
-                this.logLine(err);
+                this.logLine('Failed executing onStart() => ' + err);
             }
         }
     }
 
     public catchError(err: Error) {
+        this.logLine('Tccd Exception');
         const errorLine = err.name + ': ' + err.message;
         this.logLine(errorLine);
         if (this.started) {
@@ -119,7 +125,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 worker.onExit();
             } catch (err) {
-                this.logLine(err);
+                this.logLine('Failed executing onExit() => ' + err);
             }
         });
         this.config.writeAutosave(this.autosave);
@@ -131,7 +137,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (!await this.start()) {
                 throw Error('Couldn\'t start daemon. It is probably already running');
             } else {
-                this.logLine('Starting daemon v' + tccPackage.version);
+                this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
             }
         } else if (process.argv.includes('--stop')) {
             // Signal running process to stop

@@ -39,6 +39,10 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onWork(): void {
+        const fanTemps: number[] = [];
+        const fanSpeeds: number[] = [];
+        const fanTimestamps: number[] = [];
+
         const profile = this.tccd.getCurrentProfile();
         let useFanControl;
         if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
@@ -53,6 +57,8 @@ export class FanControlWorker extends DaemonWorker {
                 this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
                 const fanLogic = this.fans.get(fanNumber);
                 const currentTemperature = ecAPI.getFanTemperature(fanNumber);
+                fanTimestamps.push(Date.now());
+                fanTemps.push(currentTemperature);
                 if (currentTemperature === -1) {
                     this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
                     continue;
@@ -62,7 +68,17 @@ export class FanControlWorker extends DaemonWorker {
                     continue;
                 }
                 fanLogic.reportTemperature(currentTemperature);
-                ecAPI.setFanSpeedPercent(fanNumber, fanLogic.getSpeedPercent());
+                const currentSpeed = fanLogic.getSpeedPercent();
+                fanSpeeds.push(currentSpeed);
+                ecAPI.setFanSpeedPercent(fanNumber, currentSpeed);
+            }
+        }
+
+        for (const fanNumber of this.fans.keys()) {
+            const i = fanNumber - 1;
+            if (fanSpeeds[i] !== undefined) {
+                this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
+                this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], fanSpeeds[i]);
             }
         }
     }
