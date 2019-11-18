@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.6.2] - 2019-11-18
 ## Added
 - CPU dashboard
 - DBus service and client
