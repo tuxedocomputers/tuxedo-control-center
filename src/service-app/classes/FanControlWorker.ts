@@ -69,10 +69,10 @@ export class FanControlWorker extends DaemonWorker {
                 continue;
             }
             fanLogic.reportTemperature(currentTemperature);
-            currentSpeed = fanLogic.getSpeedPercent();
-            fanSpeeds[fanNumber - 1] = currentSpeed;
             if (useFanControl) {
+                currentSpeed = fanLogic.getSpeedPercent();
                 ecAPI.setFanSpeedPercent(fanNumber, currentSpeed);
+                fanSpeeds[fanNumber - 1] = currentSpeed;
             }
         }
 
