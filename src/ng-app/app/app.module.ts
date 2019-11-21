@@ -42,8 +42,9 @@ import { MarkdownModule } from 'ngx-markdown';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
-registerLocaleData(localeDe, 'de');
+registerLocaleData(localeDe, 'de', localeDeExtra);
 
 @NgModule({
   declarations: [

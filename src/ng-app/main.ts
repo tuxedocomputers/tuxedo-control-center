@@ -11,7 +11,7 @@ if (environment.production) {
 }
 
 declare const require;
-const translations = require('raw-loader!./assets/locale/lang/lang.de.xlf');
+const translations = require('raw-loader!./assets/locale/lang.de-DE.xlf');
 
 platformBrowserDynamic().bootstrapModule(AppModule, {
   providers: [

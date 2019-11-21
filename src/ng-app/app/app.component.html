@@ -11,25 +11,25 @@
     <mat-sidenav mode="side" opened [disableClose]="true" class="main-sidenav-nav">
       <mat-nav-list>
         <mat-list-item [routerLink]="'/profile-manager/' + activeProfileName">
-          <span matLine>Active profile</span>
+          <span matLine i18n="@@menuActiveProfile">Active profile</span>
           <span matLine style="font-weight: bold">{{ activeProfileName }}</span>
         </mat-list-item>
         <mat-list-item routerLink="/profile-manager" routerLinkActive="true">
           <content>
-            Profiles
+            <ng-container i18n="@@menuProfiles">Profiles</ng-container>
             <mat-icon><img src="./assets/images/userinfo.svg" /></mat-icon>
           </content>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item routerLink="/display-settings" routerLinkActive="true">
           <content>
-            Display
+            <ng-container i18n="@@menuDisplay">Screen</ng-container>
             <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
           </content>
         </mat-list-item>
         <mat-list-item routerLink="/cpu-dashboard" routerLinkActive="true">
           <content>
-            CPU
+            <ng-container i18n="@@menuCpu">CPU</ng-container>
             <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
           </content>
         </mat-list-item>
@@ -39,20 +39,20 @@
         <mat-divider></mat-divider>
         <mat-list-item routerLink="/support" routerLinkActive="true">
           <content>
-            Support
+            <ng-container i18n="@@menuSupport">Support</ng-container>
             <mat-icon><img src="./assets/images/support.svg" /></mat-icon>
           </content>
         </mat-list-item>
         <mat-list-item routerLink="/info" routerLinkActive="true">
           <content>
-            Info
+            <ng-container i18n="@@menuInfo">Info</ng-container>
             <mat-icon><img src="./assets/images/information.svg" /></mat-icon>
           </content>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item (click)="buttonExit()">
           <content>
-            Exit
+            <ng-container i18n="@@menuExit">Exit</ng-container>
             <mat-icon>exit_to_app</mat-icon>
           </content>
         </mat-list-item>
