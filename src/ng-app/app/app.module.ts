@@ -87,7 +87,7 @@ registerLocaleData(localeDe, 'de', localeDeExtra);
     MarkdownModule.forRoot()
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'de' },
+    { provide: LOCALE_ID, useValue: localStorage.getItem('localeId') },
     DecimalPipe
   ],
   bootstrap: [AppComponent]

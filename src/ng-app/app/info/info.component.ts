@@ -21,4 +21,8 @@ export class InfoComponent implements OnInit {
   ngOnInit() {
   }
 
+  changeLanguage(languageId: string) {
+    this.utils.changeLanguage(languageId);
+  }
+
 }
