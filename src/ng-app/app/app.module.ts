@@ -1,5 +1,5 @@
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,7 +29,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 import { SupportComponent } from './support/support.component';
@@ -40,6 +40,10 @@ import { InfoComponent } from './info/info.component';
 
 import { MarkdownModule } from 'ngx-markdown';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
+
+import localeDe from '@angular/common/locales/de';
+
+registerLocaleData(localeDe, 'de');
 
 @NgModule({
   declarations: [
@@ -82,6 +86,7 @@ import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
     MarkdownModule.forRoot()
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'de' },
     DecimalPipe
   ],
   bootstrap: [AppComponent]
