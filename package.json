@@ -62,6 +62,7 @@
     "@angular/compiler-cli": "~8.0.1",
     "@angular/language-service": "~8.0.1",
     "@angular/material": "^8.1.2",
+    "@ngx-translate/i18n-polyfill": "^1.0.0",
     "@types/jasmine": "^3.3.13",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.0.0",
