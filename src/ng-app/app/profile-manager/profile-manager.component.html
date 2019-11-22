@@ -2,20 +2,18 @@
 <mat-toolbar>
     <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
         <span>
-            Profiles
+            <ng-container i18n="@@cProfMgrTitle">Profiles</ng-container>
             <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span>
         </span>
         <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
-            <mat-button-toggle value="all">All</mat-button-toggle>
-            <mat-button-toggle value="default">Preset</mat-button-toggle>
-            <mat-button-toggle value="custom">Custom</mat-button-toggle>
-            <mat-button-toggle value="used">In use</mat-button-toggle>
+            <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
+            <mat-button-toggle value="default" i18n="@@cProfMgrFilterPreset">Preset</mat-button-toggle>
+            <mat-button-toggle value="custom" i18n="@@cProfMgrFilterCustom">Custom</mat-button-toggle>
+            <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
         </mat-button-toggle-group>
     </mat-toolbar-row>
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
-        <!-- span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="basic" (click)="buttonNew.click()" *ngIf="buttonNew.show()" [disabled]="buttonNew.disable()"><mat-icon>library_add</mat-icon></button></span-->
         <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
-        <!--span *ngIf="currentProfile" [matTooltip]="buttonEdit.tooltip()"><button mat-icon-button color="basic" (click)="buttonEdit.click()" *ngIf="buttonEdit.show()" [disabled]="buttonEdit.disable()"><mat-icon>edit</mat-icon></button></span-->
         <span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
         <span *ngIf="currentProfile" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span>
         <span *ngIf="currentProfile" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span>
