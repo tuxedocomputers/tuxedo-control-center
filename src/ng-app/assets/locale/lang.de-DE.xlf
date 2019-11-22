@@ -18,20 +18,12 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="menuDisplay" datatype="html">
-        <source>Screen</source>
-        <target state="translated">Bildschirm</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="menuCpu" datatype="html">
         <source>CPU</source>
         <target state="translated">CPU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuSupport" datatype="html">
@@ -39,7 +31,7 @@
         <target state="translated">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuInfo" datatype="html">
@@ -47,7 +39,7 @@
         <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuExit" datatype="html">
@@ -55,7 +47,7 @@
         <target state="translated">Beenden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
     </body>
