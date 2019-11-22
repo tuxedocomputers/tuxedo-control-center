@@ -7,7 +7,7 @@ import { InfoComponent } from './info/info.component';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'profile-manager', pathMatch: 'full' },
+  { path: '', redirectTo: 'info', pathMatch: 'full' },
   { path: 'profile-manager', component: ProfileManagerComponent },
   { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
   { path: 'support', component: SupportComponent },
