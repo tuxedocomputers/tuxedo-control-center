@@ -38,7 +38,8 @@
     "start-watch": "run-s clean build-electron build-service build-native copy-files && npm run watch-ng-and-electron",
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
-    "start-electron-watch": "electron ./dist/tuxedo-control-center --watch"
+    "start-electron-watch": "electron ./dist/tuxedo-control-center --watch",
+    "gen-lang": "ng xi18n --out-file src/ng-app/assets/locale/lang.xlf"
   },
   "private": true,
   "dependencies": {
