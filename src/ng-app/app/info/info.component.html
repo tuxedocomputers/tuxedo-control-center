@@ -1,6 +1,6 @@
 <br />
 <mat-accordion class="info-accordion">
-    <mat-expansion-panel hideToggle [expanded]="true">
+    <mat-expansion-panel hideToggle [expanded]="true" class="panel-info">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 Information
@@ -11,8 +11,25 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
         <p>
-            TUXEDO Control Center is an application that lets you take control of your TUXEDO.
+            We've created this tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
+            in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </p>
+        <p>
+            We want to give you the ultimate control over your device, the ability to squeeze out the most
+            and to be able to customize it as much as possible by yourself!
+        </p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Version
+            </mat-panel-title>
+            <mat-panel-description>
+                What's new? What's old?
+                <mat-icon>track_changes</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
         <p>
             Current version <strong>{{ appVersion }}</strong> is built upon
         </p>
@@ -21,18 +38,7 @@
             <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
             <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
         </table>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Changelog
-            </mat-panel-title>
-            <mat-panel-description>
-                What's new? What's old?
-                <mat-icon>track_changes</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
+        <br />
         <mat-card class="changelog">
             <markdown src="assets/CHANGELOG.md"></markdown>
         </mat-card>

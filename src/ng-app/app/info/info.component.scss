@@ -3,14 +3,20 @@
         flex-basis: 0;
     }
 
+    mat-panel-description {
+        justify-content: space-between;
+        align-items: center;
+    }
+
     mat-panel-title {
         font-weight: bold;
     }
 }
 
-.info-accordion mat-panel-description {
-    justify-content: space-between;
-    align-items: center;
+.info-accordion {
+    p {
+        font-size: 1.2em;;
+    }
 }
 
 table.versions {
@@ -24,6 +30,6 @@ table.versions {
 
 .changelog {
     background-color: #f8f8f8;
-    max-height: 300px;
+    max-height: 250px;
     overflow-y: scroll;
 }
