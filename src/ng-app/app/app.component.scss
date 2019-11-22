@@ -53,3 +53,15 @@
         overflow-y: scroll;
     }
 }
+
+.language-select {
+    mat-select-trigger {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        mat-icon {
+            margin-right: 16px;
+        }
+    }
+}

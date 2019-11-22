@@ -33,10 +33,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'TUXEDO Control Center';
 
+  public languagesMenu = {
+    en: { id: 'en', label: 'English', img: 'english.svg' },
+    de: { id: 'de', label: 'Deutsch', img: 'german.svg' }
+  };
+  public languagesMenuArray;
+
   public ngOnInit(): void {
     this.getSettings();
     // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
     this.subscriptions.add(this.state.activeProfileObserver.subscribe(activeProfile => { this.getSettings(); }));
+
+    this.languagesMenuArray = Object.values(this.languagesMenu);
   }
 
   public ngOnDestroy(): void {
@@ -54,5 +62,19 @@ export class AppComponent implements OnInit, OnDestroy {
   public getSettings(): ITccSettings {
     this.activeProfileName = this.state.getActiveProfile().name;
     return this.config.getSettings();
+  }
+
+  public changeLanguage(languageId: string) {
+    if (languageId !== this.getCurrentLanguageId()) {
+      this.utils.changeLanguage(languageId);
+    }
+  }
+
+  public getCurrentLanguageId(): string {
+    return this.utils.getCurrentLanguageId();
+  }
+
+  print(stuff) {
+    console.log(stuff);
   }
 }

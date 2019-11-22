@@ -160,4 +160,13 @@ export class UtilsService {
   public getProcessVersions(): NodeJS.ProcessVersions {
     return this.electron.remote.process.versions;
   }
+
+  public changeLanguage(languageId: string) {
+    localStorage.setItem('localeId', languageId);
+    location.reload();
+  }
+
+  public getCurrentLanguageId(): string {
+    return localStorage.getItem('localeId');
+  }
 }

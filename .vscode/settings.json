@@ -4,5 +4,6 @@
         "array": "c",
         "string": "c",
         "string_view": "c"
-    }
+    },
+    "xliffSync.baseFile": "lang.xlf"
 }
