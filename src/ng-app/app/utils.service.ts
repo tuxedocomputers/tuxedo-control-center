@@ -165,4 +165,8 @@ export class UtilsService {
     localStorage.setItem('localeId', languageId);
     location.reload();
   }
+
+  public getCurrentLanguageId(): string {
+    return localStorage.getItem('localeId');
+  }
 }
