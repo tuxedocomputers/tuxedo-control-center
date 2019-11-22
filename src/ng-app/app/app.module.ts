@@ -31,7 +31,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
-import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 import { SupportComponent } from './support/support.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
@@ -50,7 +49,6 @@ registerLocaleData(localeDe, 'de', localeDeExtra);
   declarations: [
     AppComponent,
     ProfileManagerComponent,
-    DisplaySettingsComponent,
     SupportComponent,
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,

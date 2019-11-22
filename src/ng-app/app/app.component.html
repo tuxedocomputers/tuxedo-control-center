@@ -21,12 +21,6 @@
           </content>
         </mat-list-item>
         <mat-divider></mat-divider>
-        <mat-list-item routerLink="/display-settings" routerLinkActive="true">
-          <content>
-            <ng-container i18n="@@menuDisplay">Screen</ng-container>
-            <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
-          </content>
-        </mat-list-item>
         <mat-list-item routerLink="/cpu-dashboard" routerLinkActive="true">
           <content>
             <ng-container i18n="@@menuCpu">CPU</ng-container>
@@ -35,7 +29,9 @@
         </mat-list-item>
         <mat-divider></mat-divider>
       </mat-nav-list>
+
       <mat-nav-list class="bottom">
+        <mat-divider></mat-divider>
         <mat-list-item>
           <mat-form-field class="language-select">
             <mat-select #selectLang [value]="getCurrentLanguageId()">
