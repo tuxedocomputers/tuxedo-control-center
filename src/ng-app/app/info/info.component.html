@@ -3,18 +3,18 @@
     <mat-expansion-panel hideToggle [expanded]="true" class="panel-info">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                Information
+                <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
             </mat-panel-title>
             <mat-panel-description>
-                General information
+                <ng-container i18n="@@cInfoInfoPanelDesc">General information</ng-container>
                 <mat-icon><img src="./assets/images/information.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>
-            We've created this tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
+        <p i18n="@@cInfoTCCInfoText1">
+            We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
             in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </p>
-        <p>
+        <p i18n="@@cInfoTCCInfoText2">
             We want to give you the ultimate control over your device, the ability to squeeze out the most
             and to be able to customize it as much as possible by yourself!
         </p>
@@ -22,16 +22,14 @@
 
     <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
-            <mat-panel-title>
-                Version
-            </mat-panel-title>
+            <mat-panel-title i18n="@@cInfoVersionPanelTitle">Version</mat-panel-title>
             <mat-panel-description>
-                What's new? What's old?
+                <ng-container i18n="@@cInfoVersionPanelDesc">What's new? What's old?</ng-container>
                 <mat-icon>track_changes</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
         <p>
-            Current version <strong>{{ appVersion }}</strong> is built upon
+            <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
         </p>
         <table class="versions" cellspacing="0">
             <tr><td>Node</td><td><strong>{{ nodeVersion }}</strong></td>
@@ -46,29 +44,27 @@
 
     <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
-            <mat-panel-title>
-                Imprint
-            </mat-panel-title>
+            <mat-panel-title i18n="@@cInfoImprintPanelTitle">Imprint</mat-panel-title>
             <mat-panel-description>
-                Legal statement
+                <ng-container i18n="@@cInfoImprintPanelDesc">Legal statement</ng-container>
                 <mat-icon>gavel</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <pre>
-            <code>
-    Alter Postweg 101
-    86159 Augsburg
-    Deutschland
+        <pre><code i18n="@@cInfoImprintText">
+TUXEDO Computers GmbH
 
-    Telefon: +49 (0) 821 / 8998 2992
-    Telefax: +49 (0) 821 / 8998 2999
-    E-Mail: tux@tuxedocomputers.com
-    USt-IdNr.: DE815420876 
-    WEEE-Reg.-Nr.: DE 93420497
-    eingetragen im Handelsregister des Amtsgerichtes Augsburg
-    Handelsregisternummer HRB 27755
-            </code>
-        </pre>
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876 
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </code></pre>
     </mat-expansion-panel>
 
 </mat-accordion>
