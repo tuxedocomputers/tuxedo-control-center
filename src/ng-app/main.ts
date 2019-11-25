@@ -21,7 +21,6 @@ translations.set('de', require('raw-loader!./assets/locale/lang.de-DE.xlf'));
 
 platformBrowserDynamic().bootstrapModule(AppModule, {
   providers: [
-    { provide: TRANSLATIONS, useValue: translations.get(localStorage.getItem('localeId')) },
-    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' }
+    { provide: TRANSLATIONS, useValue: translations.get(localStorage.getItem('localeId')) }
   ]
 }).catch(err => console.error(err));

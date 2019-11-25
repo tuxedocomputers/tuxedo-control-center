@@ -1,5 +1,5 @@
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, TRANSLATIONS_FORMAT, TRANSLATIONS } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,7 +43,13 @@ import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
 
+import { I18n } from '@ngx-translate/i18n-polyfill';
+
 registerLocaleData(localeDe, 'de', localeDeExtra);
+
+declare const require;
+const translations = new Map<string, string>();
+translations.set('de', require('raw-loader!./../assets/locale/lang.de-DE.xlf'));
 
 @NgModule({
   declarations: [
@@ -85,8 +91,14 @@ registerLocaleData(localeDe, 'de', localeDeExtra);
     MarkdownModule.forRoot()
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: localStorage.getItem('localeId') },
-    DecimalPipe
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
+    { provide: TRANSLATIONS, useFactory: () => {
+      let t = translations.get(localStorage.getItem('localeId'));
+      if (t === null || t === undefined) { t = 'en'; }
+      return t;
+    } },
+    DecimalPipe,
+    I18n
   ],
   bootstrap: [AppComponent]
 })
