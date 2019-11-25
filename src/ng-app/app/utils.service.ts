@@ -162,11 +162,16 @@ export class UtilsService {
   }
 
   public changeLanguage(languageId: string) {
-    localStorage.setItem('localeId', languageId);
+    localStorage.setItem('langId', languageId);
     location.reload();
   }
 
   public getCurrentLanguageId(): string {
-    return localStorage.getItem('localeId');
+    let langId = 'en';
+    const storedLangId = localStorage.getItem('langId');
+    if (storedLangId !== undefined && storedLangId !== null) {
+      langId = storedLangId;
+    }
+    return langId;
   }
 }

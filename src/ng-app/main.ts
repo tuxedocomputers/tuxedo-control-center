@@ -1,4 +1,4 @@
-import { enableProdMode, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core';
+import { enableProdMode, TRANSLATIONS, TRANSLATIONS_FORMAT, LOCALE_ID } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
@@ -11,16 +11,27 @@ if (environment.production) {
 }
 
 // TODO: Set localeId according to settings
-if (localStorage.getItem('localeId') === null) {
-  localStorage.setItem('localeId', 'en');
+let langId = 'en';
+if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId') !== null) {
+  langId = localStorage.getItem('langId');
 }
 
 declare const require;
-const translations = new Map<string, string>();
-translations.set('de', require('raw-loader!./assets/locale/lang.de-DE.xlf'));
+let translation;
+try {
+  translation = require('raw-loader!./assets/locale/lang.' + langId + '.xlf');
+} catch (err) {
+  translation = '';
+}
 
 platformBrowserDynamic().bootstrapModule(AppModule, {
   providers: [
-    { provide: TRANSLATIONS, useValue: translations.get(localStorage.getItem('localeId')) }
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
+    { provide: LOCALE_ID, useFactory: () => {
+      return langId;
+    }, deps: [] },
+    { provide: TRANSLATIONS, useFactory: (localeId) => {
+      return translation;
+    }, deps: [ LOCALE_ID ] }
   ]
 }).catch(err => console.error(err));

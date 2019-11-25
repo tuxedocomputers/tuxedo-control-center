@@ -47,9 +47,13 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
+// TODO: Set localeId according to settings
+let langId = 'en';
+if (localStorage.getItem('langId') !== undefined) {
+  langId = localStorage.getItem('langId');
+}
+
 declare const require;
-const translations = new Map<string, string>();
-translations.set('de', require('raw-loader!./../assets/locale/lang.de-DE.xlf'));
 
 @NgModule({
   declarations: [
@@ -92,11 +96,16 @@ translations.set('de', require('raw-loader!./../assets/locale/lang.de-DE.xlf'));
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
+    { provide: LOCALE_ID, useValue: langId },
     { provide: TRANSLATIONS, useFactory: () => {
-      let t = translations.get(localStorage.getItem('localeId'));
-      if (t === null || t === undefined) { t = 'en'; }
-      return t;
-    } },
+      let translation;
+      try {
+        translation = require('raw-loader!./../assets/locale/lang.' + langId + '.xlf');
+      } catch (err) {
+        translation = '';
+      }
+      return translation;
+    }},
     DecimalPipe,
     I18n
   ],
