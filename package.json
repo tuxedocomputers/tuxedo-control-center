@@ -39,7 +39,7 @@
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
     "start-electron-watch": "electron ./dist/tuxedo-control-center --watch",
-    "gen-lang": "ng xi18n --out-file src/ng-app/assets/locale/lang.xlf"
+    "gen-lang": "ng xi18n --out-file src/ng-app/assets/locale/lang.xlf && ngx-extractor -i \"src/ng-app/**/*.ts\" -f xlf -o src/ng-app/assets/locale/lang.xlf"
   },
   "private": true,
   "dependencies": {
