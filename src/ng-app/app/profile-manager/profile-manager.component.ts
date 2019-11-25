@@ -10,6 +10,8 @@ import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
 
+import { I18n } from '@ngx-translate/i18n-polyfill';
+
 enum InputMode {
   New, Copy, Edit
 }
@@ -56,7 +58,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     private state: StateService,
     private utils: UtilsService,
     private router: Router,
-    private electron: ElectronService) { }
+    private electron: ElectronService,
+    private i18n: I18n) { }
 
   ngOnInit() {
     this.defineButtons();
@@ -163,8 +166,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       const choice = this.electron.remote.dialog.showMessageBox(
         this.electron.remote.getCurrentWindow(),
         {
-          title: 'Invalid input',
-          message: 'A name for the profile is required',
+          title: this.i18n({ value: 'Invalid input', id: 'cProfMgrInvalidNameTitle' }),
+          message: this.i18n({ value: 'A name for the profile is required', id: 'cProfMgrInvalidNameMessage' }),
           type: 'info',
           buttons: ['ok']
         }
@@ -183,7 +186,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
   }
 
   public isUsedProfile(): boolean {
-    return Object.values(this.config.getSettings().stateMap).includes(this.currentProfile.name)
+    return Object.values(this.config.getSettings().stateMap).includes(this.currentProfile.name);
   }
 
   public formatFrequency(frequency: number): string {
@@ -200,14 +203,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       () => {
         this.currentInputMode = InputMode.Copy;
         this.inputProfileName.setValue('');
-        this.inputProfileNameLabel = 'Copy this profile';
+        this.inputProfileNameLabel = this.i18n({ value: 'Copy this profile', id: 'cProfMgrCopyProfileLabel' });
         this.inputActive = true;
         setImmediate( () => { this.inputFocus.focus(); });
       },
       // Label
-      () => 'Copy',
+      () => '',
       // Tooltip
-      () => 'Copy this profile'
+      () => this.i18n({ value: 'Copy this profile', id: 'cProfMgrCopyButtonTooltip' })
     );
 
     this.buttonEdit = new ProfileManagerButton(
@@ -219,14 +222,20 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       () => {
         this.currentInputMode = InputMode.Edit;
         this.inputProfileName.setValue(this.currentProfile.name);
-        this.inputProfileNameLabel = 'Rename this profile';
+        this.inputProfileNameLabel = this.i18n({ value: 'Rename this profile', id: 'cProfMgrRenameProfileLabel' }),
         this.inputActive = true;
         setImmediate( () => { this.inputFocus.focus(); });
       },
       // Label
-      () => 'Rename',
+      () => '',
       // Tooltip
-      () => this.isUsedProfile() ? 'Can not rename used profile' : 'Rename this profile'
+      () => {
+        if (this.isUsedProfile()) {
+          return this.i18n({ value: 'Can not rename used profile', id: 'cProfMgrRenameButtonTooltipCannot' });
+        } else {
+          return this.i18n({ value: 'Rename this profile', id: 'cProfMgrRenameButtonTooltip' });
+        }
+      }
     );
 
     this.buttonNew = new ProfileManagerButton(
@@ -238,14 +247,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       () => {
         this.currentInputMode = InputMode.New;
         this.inputProfileName.setValue('');
-        this.inputProfileNameLabel = 'New profile';
+        this.inputProfileNameLabel = this.i18n({ value: 'New profile', id: 'cProfMgrNewProfileLabel' });
         this.inputActive = true;
         setImmediate( () => { this.inputFocus.focus(); });
       },
       // Label
-      () => 'New profile',
+      () => '',
       // Tooltip
-      () => 'Create a new profile with default settings'
+      () => this.i18n({ value: 'Create a new profile with default settings', id: 'cProfMgrNewButtonTooltip' }),
     );
 
     this.buttonDelete = new ProfileManagerButton(
@@ -256,13 +265,19 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
       // Click
       () => { this.deleteProfile(this.currentProfile.name); },
       // Label
-      () => 'Delete',
+      () => '',
       // Tooltip
       () => {
-        if (!this.isCustomProfile()) { return 'Can not delete preset profiles'; }
-        if (this.isUsedProfile()) { return 'Can not delete used profile'; }
-        if (this.config.getCustomProfiles().length === 1) { return 'Can not delete last custom profile'; }
-        return 'Delete this profile';
+        if (!this.isCustomProfile()) {
+          return this.i18n({ value: 'Can not delete preset profiles', id: 'cProfMgrDeleteButtonTooltipCannotPreset' });
+        }
+        if (this.isUsedProfile()) {
+          return this.i18n({ value: 'Can not delete used profile', id: 'cProfMgrDeleteButtonTooltipCannotUsed' });
+        }
+        if (this.config.getCustomProfiles().length === 1) {
+          return this.i18n({ value: 'Can not delete last custom profile', id: 'cProfMgrDeleteButtonTooltipCannotLast' });
+        }
+        return this.i18n({ value: 'Delete this profile', id: 'cProfMgrDeleteButtonTooltip' });
       }
     );
   }
