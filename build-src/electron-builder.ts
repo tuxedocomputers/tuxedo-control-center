@@ -116,6 +116,7 @@ async function buildSuseRpm(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         rpm: {
+            depends: [],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh'
