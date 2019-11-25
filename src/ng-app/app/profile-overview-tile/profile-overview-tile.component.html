@@ -9,7 +9,7 @@
             </span>
         </header>
         <header *ngIf="addProfileTile">
-            <span class="profile-name">New profile</span>
+            <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>
         </header>
         <hr />
         <span *ngIf="!addProfileTile">
@@ -34,7 +34,8 @@
             <div class="status-row">
                 <i class="fas fa-bolt status-icon"></i>
                 <span class="status-info">
-                    {{ profile.cpu.noTurbo ? 'Deactivated' : 'Activated' }}
+                    <span *ngIf="profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOff">Off</span>
+                    <span *ngIf="!profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOn">On</span>
                 </span>
             </div>
             <!--div class="status-row">
@@ -59,7 +60,8 @@
                 <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
                 <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
                 <span class="status-info">
-                    {{ profile.webcam.status ? 'on' : 'off' }}
+                    <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">on</span>
+                    <span *ngIf="!profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">off</span>
                 </span>
             </div>
         </span>
