@@ -15,10 +15,10 @@
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
         <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
         <span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
-        <span *ngIf="currentProfile" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span>
-        <span *ngIf="currentProfile" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span>
+        <span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span>
+        <span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span>
         <span style="flex: 1 1 auto"></span>
-        <span matTooltip="Profile overview">
+        <span i18n-matTooltip="@@cProfMgrButtonProfileOverviewTooltip" matTooltip="Profile overview">
             <button *ngIf="currentProfile" mat-icon-button color="primary" (click)="selectProfile(undefined)">
                 <mat-icon>apps</mat-icon>
             </button>

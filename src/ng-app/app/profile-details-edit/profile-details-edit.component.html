@@ -14,7 +14,7 @@
         <mat-button-toggle-group
             [formControl]="selectStateControl"
             multiple
-            matTooltip="Activate profile on"
+            i18n-matTooltip="@@cProfMgrDetailsSelectStatesLabel" matTooltip="Activate profile on"
             matTooltipPosition="left"
             [matTooltipShowDelay]="1000"
         >
@@ -23,7 +23,7 @@
                 disableRipple
                 [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
                 [value]="state.value"
-                [matTooltip]="state.tooltip + (getSettings().stateMap[state.value] === viewProfile.name ? ' (already set)' : '')"
+                [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
                 [matTooltipShowDelay]="1000"
             >
                 <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
@@ -151,7 +151,9 @@
                         </content>
                     </mat-grid-tile-->
 
-                    <mat-grid-tile [colspan]="gridParams.headerSpan"><header>Turbo</header></mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <header i18n="@@cProfMgrDetailsTurboLabel">Turbo</header>
+                    </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <!--content class="value" [hidden]="editProfile">{{ viewProfile.cpu.noTurbo ? 'yes' : 'no' }}</content-->
                         <content class="value">
