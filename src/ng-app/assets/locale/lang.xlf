@@ -157,34 +157,34 @@
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskPanelTitle" datatype="html">
         <source>
-                Anydesk
+                AnyDesk
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskPanelDesc" datatype="html">
-        <source>Install and start Anydesk</source>
+        <source>Install and start AnyDesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskProgramDesc" datatype="html">
         <source>
-            Anydesk is a remote desktop type tool that can allow support to help you from afar.
+            AnyDesk is a remote desktop type tool that can allow support to help you from afar.
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskInstallButton" datatype="html">
-        <source>Install Anydesk</source>
+        <source>Install AnyDesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskRemoveButton" datatype="html">
-        <source>Remove Anydesk</source>
+        <source>Remove AnyDesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">88</context>
@@ -196,7 +196,7 @@
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskStartButton" datatype="html">
-        <source>Start Anydesk</source>
+        <source>Start AnyDesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">92</context>
@@ -465,7 +465,7 @@ Germany
 Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
 E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
+VAT No.: DE815420876
 WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755

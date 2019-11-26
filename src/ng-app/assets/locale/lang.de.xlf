@@ -182,7 +182,7 @@
                         number yet please send an email to us and one will be sent automatically.
                     </source>
         <target phase-name="approval-1" state="signed-off">
-                        Bitte geben Sie die bei der Supportanfrage angegebene Ticketnummer ein. Wenn Sie noch keine 
+                        Bitte geben Sie die bei der Supportanfrage angegebene Ticketnummer ein. Wenn Sie noch keine
                         Ticketnummer haben, senden Sie uns bitte eine E-Mail und Sie erhalten diese automatisch.
                     </target>
         <context-group purpose="location">
@@ -220,7 +220,7 @@
       </trans-unit>
       <trans-unit datatype="html" id="cSupportAnydeskPanelTitle" approved="yes">
         <source>
-                Anydesk
+                AnyDesk
             </source>
         <target phase-name="approval-1" state="signed-off">
                 AnyDesk
@@ -231,7 +231,7 @@
         </context-group>
       </trans-unit>
       <trans-unit datatype="html" id="cSupportAnydeskPanelDesc" approved="yes">
-        <source>Install and start Anydesk</source>
+        <source>Install and start AnyDesk</source>
         <target phase-name="approval-1" state="signed-off">AnyDesk starten und installieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -240,7 +240,7 @@
       </trans-unit>
       <trans-unit datatype="html" id="cSupportAnydeskProgramDesc" approved="yes">
         <source>
-            Anydesk is a remote desktop type tool that can allow support to help you from afar.
+            AnyDesk is a remote desktop type tool that can allow support to help you from afar.
         </source>
         <target phase-name="approval-1" state="signed-off">
             AnyDesk ist ein Fernwartungsprogramm, das es dem Support erlaubt, Ihnen aus der Ferne zu helfen.
@@ -251,7 +251,7 @@
         </context-group>
       </trans-unit>
       <trans-unit datatype="html" id="cSupportAnydeskInstallButton" approved="yes">
-        <source>Install Anydesk</source>
+        <source>Install AnyDesk</source>
         <target phase-name="approval-1" state="signed-off">AnyDesk installieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -259,7 +259,7 @@
         </context-group>
       </trans-unit>
       <trans-unit datatype="html" id="cSupportAnydeskRemoveButton" approved="yes">
-        <source>Remove Anydesk</source>
+        <source>Remove AnyDesk</source>
         <target phase-name="approval-1" state="signed-off">AnyDesk entfernen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -275,7 +275,7 @@
         </context-group>
       </trans-unit>
       <trans-unit datatype="html" id="cSupportAnydeskStartButton" approved="yes">
-        <source>Start Anydesk</source>
+        <source>Start AnyDesk</source>
         <target phase-name="approval-1" state="signed-off">AnyDesk starten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -552,7 +552,7 @@
             in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </source>
         <target phase-name="approval-1" state="signed-off">
-            Wir haben ein Werkzeug entwickelt, mit dem Sie alle Sicherheits-, Leistungs-, Energie-, Komfort- und 
+            Wir haben ein Werkzeug entwickelt, mit dem Sie alle Sicherheits-, Leistungs-, Energie-, Komfort- und
             Lebensdauerfunktionen Ihres TUXEDO an einem einzigen Ort steuern können! Speichern Sie alles in
             Profilen, laden Sie es einfach oder sogar automatisch, wenn sich der Nutzungsmodus ändert!
         </target>
@@ -567,7 +567,7 @@
             and to be able to customize it as much as possible by yourself!
         </source>
         <target phase-name="approval-1" state="signed-off">
-            Wir möchten Ihnen die uneingeschränkte Kontrolle über Ihr Gerät geben, die Möglichkeit, 
+            Wir möchten Ihnen die uneingeschränkte Kontrolle über Ihr Gerät geben, die Möglichkeit,
             das Beste aus Ihrem Gerät herauszuholen und es so weit wie möglich selbst anpassen zu können!
         </target>
         <context-group purpose="location">
@@ -635,7 +635,7 @@ Germany
 Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
 E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
+VAT No.: DE815420876
 WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
@@ -650,7 +650,7 @@ Deutschland
 Telefon: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
 E-Mail: tux@tuxedocomputers.com
-USt-IdNr.: DE815420876 
+USt-IdNr.: DE815420876
 WEEE-Reg.-Nr.: DE 93420497
 eingetragen im Handelsregister des Amtsgerichtes Augsburg
 Handelsregisternummer HRB 27755
