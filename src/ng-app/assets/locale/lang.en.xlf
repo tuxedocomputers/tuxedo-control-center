@@ -1,552 +1,551 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="de">
+  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
-      <trans-unit id="menuActiveProfile" datatype="html" approved="yes">
+      <trans-unit id="menuActiveProfile" datatype="html">
         <source>Active profile</source>
-        <target phase-name="approval-1" state="signed-off">Aktive Profile</target>
+        <target state="translated">Active profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
-      </trans-unit><trans-unit id="menuProfiles" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="menuProfiles" datatype="html">
         <source>Profiles</source>
-        <target phase-name="approval-1" state="signed-off">Profile</target>
+        <target state="translated">Profiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
-      </trans-unit><trans-unit id="menuCpu" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="menuCpu" datatype="html">
         <source>CPU</source>
-        <target phase-name="approval-1" state="signed-off">CPU</target>
+        <target state="translated">CPU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-      </trans-unit><trans-unit id="menuSupport" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="menuSupport" datatype="html">
         <source>Support</source>
-        <target phase-name="approval-1" state="signed-off">Support</target>
+        <target state="translated">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
-      </trans-unit><trans-unit id="menuInfo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="menuInfo" datatype="html">
         <source>Info</source>
-        <target phase-name="approval-1" state="signed-off">Informationen</target>
+        <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
-      </trans-unit><trans-unit id="menuExit" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="menuExit" datatype="html">
         <source>Exit</source>
-        <target phase-name="approval-1" state="signed-off">Beenden</target>
+        <target state="translated">Exit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">66</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrTitle" datatype="html">
         <source>Profiles</source>
-        <target phase-name="approval-1" state="signed-off">Profile</target>
+        <target state="translated">Profiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrFilterAll" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrFilterAll" datatype="html">
         <source>All</source>
-        <target phase-name="approval-1" state="signed-off">Alle</target>
+        <target state="translated">All</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrFilterPreset" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrFilterPreset" datatype="html">
         <source>Preset</source>
-        <target phase-name="approval-1" state="signed-off">Voreinstellung</target>
+        <target state="translated">Preset</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrFilterCustom" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrFilterCustom" datatype="html">
         <source>Custom</source>
-        <target phase-name="approval-1" state="signed-off">Individuell</target>
+        <target state="translated">Custom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrFilterUsed" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrFilterUsed" datatype="html">
         <source>In use</source>
-        <target phase-name="approval-1" state="signed-off">In Verwendung</target>
+        <target state="translated">In use</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrButtonSaveTooltip" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrButtonSaveTooltip" datatype="html">
         <source>Save changes</source>
-        <target phase-name="approval-1" state="signed-off">Änderungen speichern</target>
+        <target state="translated">Save changes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html">
         <source>Discard changes</source>
-        <target phase-name="approval-1" state="signed-off">Änderungen verwerfen</target>
+        <target state="translated">Discard changes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrButtonProfileOverviewTooltip" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrButtonProfileOverviewTooltip" datatype="html">
         <source>Profile overview</source>
-        <target phase-name="approval-1" state="signed-off">Profilübersicht</target>
+        <target state="translated">Profile overview</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportGeneralPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportGeneralPanelTitle" datatype="html">
         <source>
                 TUXEDO Support
             </source>
-        <target phase-name="approval-1" state="signed-off">
+        <target state="translated">
                 TUXEDO Support
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportGeneralPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportGeneralPanelDesc" datatype="html">
         <source>General support information</source>
-        <target phase-name="approval-1" state="signed-off">Allgemeine Supportinformationen</target>
+        <target state="translated">General support information</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportButtonOnline" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportButtonOnline" datatype="html">
         <source>TUXEDO Online Support</source>
-        <target phase-name="approval-1" state="signed-off">TUXEDO Onlinesupport</target>
+        <target state="translated">TUXEDO Online Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportSysInfoPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportSysInfoPanelTitle" datatype="html">
         <source>
                 systeminfos.sh
             </source>
-        <target phase-name="approval-1" state="signed-off">
+        <target state="translated">
                 systeminfos.sh
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportSysInfoPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportSysInfoPanelDesc" datatype="html">
         <source>Download and run systeminfos.sh</source>
-        <target phase-name="approval-1" state="signed-off">systeminfos.sh herunterladen und ausführen</target>
+        <target state="translated">Download and run systeminfos.sh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportTicketNumberInputLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportTicketNumberInputLabel" datatype="html">
         <source>Ticket number</source>
-        <target phase-name="approval-1" state="signed-off">Ticketnummer</target>
+        <target state="translated">Ticket number</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportTicketNumberInfo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportTicketNumberInfo" datatype="html">
         <source>
                         Please enter the ticket number given at support request. If you do not have a ticket
                         number yet please send an email to us and one will be sent automatically.
                     </source>
-        <target phase-name="approval-1" state="signed-off">
-                        Bitte geben Sie die bei der Supportanfrage angegebene Ticketnummer ein. Wenn Sie noch keine
-                        Ticketnummer haben, senden Sie uns bitte eine E-Mail und Sie erhalten diese automatisch.
+        <target state="translated">
+                        Please enter the ticket number given at support request. If you do not have a ticket
+                        number yet please send an email to us and one will be sent automatically.
                     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportScriptMoreInfo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportScriptMoreInfo" datatype="html">
         <source>More information about which data the script collects can be found at</source>
-        <target phase-name="approval-1" state="signed-off">Weitere Informationen darüber, welche Daten das Skript sammelt, finden Sie unter</target>
+        <target state="translated">More information about which data the script collects can be found at</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportScriptInfo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportScriptInfo" datatype="html">
         <source>
                     When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
                 </source>
-        <target phase-name="approval-1" state="signed-off">
-                    Bei der Ausführung sammelt das Skript die Daten und sendet sie anschließend in Verbindung mit der Ticketnummer an unseren Support.
+        <target state="translated">
+                    When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
                 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportSysInfoButtonStart" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportSysInfoButtonStart" datatype="html">
         <source>Start</source>
-        <target phase-name="approval-1" state="signed-off">Start</target>
+        <target state="translated">Start</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskPanelTitle" datatype="html">
         <source>
                 Anydesk
             </source>
-        <target phase-name="approval-1" state="needs-adaptation">
+        <target state="translated">
                 AnyDesk
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskPanelDesc" datatype="html">
         <source>Install and start Anydesk</source>
-        <target phase-name="approval-1" state="needs-adaptation">AnyDesk starten und installieren</target>
+        <target state="translated">Install and start AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskProgramDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskProgramDesc" datatype="html">
         <source>
             Anydesk is a remote desktop type tool that can allow support to help you from afar.
         </source>
-        <target phase-name="approval-1" state="needs-adaptation">
-            AnyDesk ist ein Fernwartungsprogramm, das es dem Support erlaubt, Ihnen aus der Ferne zu helfen.
+        <target state="translated">
+            AnyDesk is a remote desktop type tool that can allow support to help you from afar.
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">81</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskInstallButton" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskInstallButton" datatype="html">
         <source>Install Anydesk</source>
-        <target phase-name="approval-1" state="needs-adaptation">AnyDesk installieren</target>
+        <target state="translated">Install AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskRemoveButton" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskRemoveButton" datatype="html">
         <source>Remove Anydesk</source>
-        <target phase-name="approval-1" state="needs-adaptation">AnyDesk entfernen</target>
+        <target state="translated">Remove AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskProgressButton" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskProgressButton" datatype="html">
         <source>Checking</source>
-        <target phase-name="approval-1" state="signed-off">Überprüfe</target>
+        <target state="translated">Checking</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">89</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportAnydeskStartButton" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cSupportAnydeskStartButton" datatype="html">
         <source>Start Anydesk</source>
-        <target phase-name="approval-1" state="needs-adaptation">AnyDesk starten</target>
+        <target state="translated">Start AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
-      </trans-unit><trans-unit id="ProfMgrOverviewNewProfile" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="ProfMgrOverviewNewProfile" datatype="html">
         <source>New profile</source>
-        <target phase-name="approval-1" state="signed-off">Neues Profil</target>
+        <target state="translated">New profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrOverviewTurboOff" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrOverviewTurboOff" datatype="html">
         <source>Off</source>
-        <target phase-name="approval-1" state="signed-off">Aus</target>
+        <target state="translated">Off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrOverviewTurboOn" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrOverviewTurboOn" datatype="html">
         <source>On</source>
-        <target phase-name="approval-1" state="signed-off">An</target>
+        <target state="translated">On</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html">
         <source>on</source>
-        <target phase-name="approval-1" state="signed-off">an</target>
+        <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOff" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOff" datatype="html">
         <source>off</source>
-        <target phase-name="approval-1" state="signed-off">aus</target>
+        <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsSelectStatesLabel" datatype="html" approved="no">
+      </trans-unit><trans-unit id="cProfMgrDetailsSelectStatesLabel" datatype="html">
         <source>Activate profile on</source>
-        <target phase-name="approval-1" state="needs-review-translation">Aktiviertes Profil an</target>
+        <target state="translated">Activate profile on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsDisplayHeaderLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsDisplayHeaderLabel" datatype="html">
         <source>Display</source>
-        <target phase-name="approval-1" state="signed-off">Monitor</target>
+        <target state="translated">Display</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsUseBrightnessLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsUseBrightnessLabel" datatype="html">
         <source>Set fixed brightness on start/wake up</source>
-        <target phase-name="approval-1" state="signed-off">Helligkeit dauerhaft beim Start/Aufwachen festlegen</target>
+        <target state="translated">Set fixed brightness on start/wake up</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsUseBrightnessYes" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsUseBrightnessYes" datatype="html">
         <source>yes</source>
-        <target phase-name="approval-1" state="signed-off">ja</target>
+        <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsUseBrightnessNo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsUseBrightnessNo" datatype="html">
         <source>no</source>
-        <target phase-name="approval-1" state="signed-off">nein</target>
+        <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsBrightnessLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsBrightnessLabel" datatype="html">
         <source>Backlight brightness</source>
-        <target phase-name="approval-1" state="signed-off">Hintergrundbeleuchtung</target>
+        <target state="translated">Backlight brightness</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsCpuHeaderLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsCpuHeaderLabel" datatype="html">
         <source>CPU settings</source>
-        <target phase-name="approval-1" state="signed-off">CPU-Einstellungen</target>
+        <target state="translated">CPU settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
         <source>Number of logical cores</source>
-        <target phase-name="approval-1" state="signed-off">Anzahl der logischen Kerne</target>
+        <target state="translated">Number of logical cores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">89</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
         <source>Minimum scaling frequency</source>
-        <target phase-name="approval-1" state="signed-off">Minimale Skalierungsfrequenz</target>
+        <target state="translated">Minimum scaling frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">102</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
         <source>Maximum scaling frequency</source>
-        <target phase-name="approval-1" state="signed-off">Maximale Skalierungsfrequenz</target>
+        <target state="translated">Maximum scaling frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsGovernorLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsGovernorLabel" datatype="html">
         <source>Scaling governor</source>
-        <target phase-name="approval-1" state="signed-off">Skalierungsregler</target>
+        <target state="translated">Scaling governor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsTurboLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsTurboLabel" datatype="html">
         <source>Turbo</source>
-        <target phase-name="approval-1" state="signed-off">Turbo</target>
+        <target state="translated">Turbo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">155</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsTurboYes" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsTurboYes" datatype="html">
         <source>yes</source>
-        <target phase-name="approval-1" state="signed-off">ja</target>
+        <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">160</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsTurboNo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsTurboNo" datatype="html">
         <source>no</source>
-        <target phase-name="approval-1" state="signed-off">nein</target>
+        <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">161</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html">
         <source>Fan control</source>
-        <target phase-name="approval-1" state="signed-off">Lüftersteuerung</target>
+        <target state="translated">Fan control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">178</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlLabel" datatype="html">
         <source>Use TCC fan control</source>
-        <target phase-name="approval-1" state="signed-off">TCC-Lüftersteuerung verwenden</target>
+        <target state="translated">Use TCC fan control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">185</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlYes" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlYes" datatype="html">
         <source>yes</source>
-        <target phase-name="approval-1" state="signed-off">ja</target>
+        <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">190</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlNo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlNo" datatype="html">
         <source>no</source>
-        <target phase-name="approval-1" state="signed-off">nein</target>
+        <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">191</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html">
         <source>Fan profile</source>
-        <target phase-name="approval-1" state="signed-off">Lüfterprofil</target>
+        <target state="translated">Fan profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">201</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html">
         <source>Webcam</source>
-        <target phase-name="approval-1" state="signed-off">Webcam</target>
+        <target state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">224</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamUseStatusLabel" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamUseStatusLabel" datatype="html">
         <source>Set webcam status on start/wakeup</source>
-        <target phase-name="approval-1" state="signed-off">Status der Webcam beim Start/Aufwachen festlegen</target>
+        <target state="translated">Set webcam status on start/wakeup</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">231</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamUseStatusYes" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamUseStatusYes" datatype="html">
         <source>yes</source>
-        <target phase-name="approval-1" state="signed-off">ja</target>
+        <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">236</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamUseStatusNo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamUseStatusNo" datatype="html">
         <source>no</source>
-        <target phase-name="approval-1" state="signed-off">nein</target>
+        <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">237</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html">
         <source>Webcam status (on/off)</source>
-        <target phase-name="approval-1" state="signed-off">Status der Webcam (an/aus)</target>
+        <target state="translated">Webcam status (on/off)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">247</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html">
         <source>on</source>
-        <target phase-name="approval-1" state="signed-off">an</target>
+        <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">252</context>
         </context-group>
-      </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html">
         <source>off</source>
-        <target phase-name="approval-1" state="signed-off">aus</target>
+        <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">253</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
-        <target phase-name="approval-1" state="signed-off">Informationen</target>
+        <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoInfoPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoInfoPanelDesc" datatype="html">
         <source>General information</source>
-        <target phase-name="approval-1" state="signed-off">Allgemeine Informationen</target>
+        <target state="translated">General information</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoTCCInfoText1" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoTCCInfoText1" datatype="html">
         <source>
             We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
             in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </source>
-        <target phase-name="approval-1" state="signed-off">
-            Wir haben ein Werkzeug entwickelt, mit dem Sie alle Sicherheits-, Leistungs-, Energie-, Komfort- und
-            Lebensdauerfunktionen Ihres TUXEDO an einem einzigen Ort steuern können! Speichern Sie alles in
-            Profilen, laden Sie es einfach oder sogar automatisch, wenn sich der Nutzungsmodus ändert!
+        <target state="translated">
+            We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
+            in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoTCCInfoText2" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoTCCInfoText2" datatype="html">
         <source>
             We want to give you the ultimate control over your device, the ability to squeeze out the most
             and to be able to customize it as much as possible by yourself!
         </source>
-        <target phase-name="approval-1" state="signed-off">
-            Wir möchten Ihnen die uneingeschränkte Kontrolle über Ihr Gerät geben, die Möglichkeit,
-            das Beste aus Ihrem Gerät herauszuholen und es so weit wie möglich selbst anpassen zu können!
+        <target state="translated">
+            We want to give you the ultimate control over your device, the ability to squeeze out the most
+            and to be able to customize it as much as possible by yourself!
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoVersionPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoVersionPanelTitle" datatype="html">
         <source>Version</source>
-        <target phase-name="approval-1" state="signed-off">Version</target>
+        <target state="translated">Version</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoVersionPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoVersionPanelDesc" datatype="html">
         <source>What's new? What's old?</source>
-        <target phase-name="approval-1" state="signed-off">Was ist neu? Was gibt es schon länger?</target>
+        <target state="translated">What's new? What's old?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoCurrentVersionBefore" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoCurrentVersionBefore" datatype="html">
         <source>Current version</source>
-        <target phase-name="approval-1" state="signed-off">Aktuelle Version</target>
+        <target state="translated">Current version</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-      </trans-unit><trans-unit id="fb0abc27dce8b8870ecee2e674f711debfdaae31" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="fb0abc27dce8b8870ecee2e674f711debfdaae31" datatype="html">
         <source>is built upon</source>
-        <target phase-name="approval-1" state="signed-off">basiert auf</target>
+        <target state="translated">is built upon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
         <note priority="1" from="description">cInfoCurrentVersionAfter</note>
-      </trans-unit><trans-unit id="cInfoImprintPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoImprintPanelTitle" datatype="html">
         <source>Imprint</source>
-        <target phase-name="approval-1" state="signed-off">Impressum</target>
+        <target state="translated">Imprint</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoImprintPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoImprintPanelDesc" datatype="html">
         <source>Legal statement</source>
-        <target phase-name="approval-1" state="signed-off">Rechtliche Hinweise</target>
+        <target state="translated">Legal statement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoImprintText" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cInfoImprintText" datatype="html">
         <source>
 TUXEDO Computers GmbH
 
@@ -562,48 +561,48 @@ WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
         </source>
-        <target phase-name="approval-1" state="needs-adaptation">
+        <target state="translated">
 TUXEDO Computers GmbH
 
 Alter Postweg 101
 86159 Augsburg
-Deutschland
+Germany
 
-Telefon: +49 (0) 821 / 8998 2992
+Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-USt-IdNr.: DE815420876
-WEEE-Reg.-Nr.: DE 93420497
-eingetragen im Handelsregister des Amtsgerichtes Augsburg
-Handelsregisternummer HRB 27755
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876 
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardCoresPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardCoresPanelTitle" datatype="html">
         <source>
             Active cores
         </source>
-        <target phase-name="approval-1" state="signed-off">
-            Aktive Kerne
+        <target state="translated">
+            Active cores
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardCoresPanelDesc" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardCoresPanelDesc" datatype="html">
         <source>Logical CPU cores in use</source>
-        <target phase-name="approval-1" state="signed-off">Logische CPU-Kerne in Benutzung</target>
+        <target state="translated">Logical CPU cores in use</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardThermalPanelTitle" datatype="html" approved="no">
+      </trans-unit><trans-unit id="cCpuDashboardThermalPanelTitle" datatype="html">
         <source>
             Thermal
         </source>
-        <target phase-name="approval-1" state="needs-review-translation">
+        <target state="translated">
             Thermal
         </target>
         <context-group purpose="location">
@@ -614,26 +613,26 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardThermalTemp" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardThermalTemp" datatype="html">
         <source>Temp</source>
-        <target phase-name="approval-1" state="signed-off">Temp</target>
+        <target state="translated">Temp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardThermalFanSpeed" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardThermalFanSpeed" datatype="html">
         <source>Fan speed</source>
-        <target phase-name="approval-1" state="signed-off">Lüfterdrehzahl</target>
+        <target state="translated">Fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqPanelTitle" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqPanelTitle" datatype="html">
         <source>
             Frequency
         </source>
-        <target phase-name="approval-1" state="signed-off">
-            Frequenz
+        <target state="translated">
+            Frequency
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
@@ -643,209 +642,209 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqDriver" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqDriver" datatype="html">
         <source>Driver</source>
-        <target phase-name="approval-1" state="signed-off">Treiber</target>
+        <target state="translated">Driver</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqTurbo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqTurbo" datatype="html">
         <source>Turbo</source>
-        <target phase-name="approval-1" state="signed-off">Turbo</target>
+        <target state="translated">Turbo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqTurboOn" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqTurboOn" datatype="html">
         <source>on</source>
-        <target phase-name="approval-1" state="signed-off">an</target>
+        <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqTurboOff" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqTurboOff" datatype="html">
         <source>off</source>
-        <target phase-name="approval-1" state="signed-off">aus</target>
+        <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqCores" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqCores" datatype="html">
         <source>Active logical cores</source>
-        <target phase-name="approval-1" state="signed-off">Aktive logische Kerne</target>
+        <target state="translated">Active logical cores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqCoresOf" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqCoresOf" datatype="html">
         <source>of</source>
-        <target phase-name="approval-1" state="signed-off">von</target>
+        <target state="translated">of</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqFreq" datatype="html" approved="no">
+      </trans-unit><trans-unit id="cCpuDashboardFreqFreq" datatype="html">
         <source>Scaling frequency range</source>
-        <target phase-name="approval-1" state="needs-review-translation">Bereich der Skalierungsfrequenz</target>
+        <target state="translated">Scaling frequency range</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqFreqTo" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqFreqTo" datatype="html">
         <source>to</source>
-        <target phase-name="approval-1" state="signed-off">bis</target>
+        <target state="translated">to</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
-      </trans-unit><trans-unit id="cCpuDashboardFreqGovernor" datatype="html" approved="yes">
+      </trans-unit><trans-unit id="cCpuDashboardFreqGovernor" datatype="html">
         <source>Governor</source>
-        <target phase-name="approval-1" state="signed-off">Regler</target>
+        <target state="translated">Governor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDetailsStateSelectButtonAlreadySet" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrDetailsStateSelectButtonAlreadySet" datatype="html">
         <source> (already set)</source>
-        <target phase-name="approval-1" state="signed-off"> (bereits festgelegt)</target>
+        <target state="translated"> (already set)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrInvalidNameTitle" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrInvalidNameTitle" datatype="html">
         <source>Invalid input</source>
-        <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
+        <target state="translated">Invalid input</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrInvalidNameMessage" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrInvalidNameMessage" datatype="html">
         <source>A name for the profile is required</source>
-        <target phase-name="approval-1" state="signed-off">Ein Name für das Profil ist nötig</target>
+        <target state="translated">A name for the profile is required</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrCopyProfileLabel" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrCopyProfileLabel" datatype="html">
         <source>Copy this profile</source>
-        <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
+        <target state="translated">Copy this profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrCopyButtonTooltip" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrCopyButtonTooltip" datatype="html">
         <source>Copy this profile</source>
-        <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
+        <target state="translated">Copy this profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrRenameProfileLabel" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrRenameProfileLabel" datatype="html">
         <source>Rename this profile</source>
-        <target phase-name="approval-1" state="signed-off">Dieses Profil umbenennen</target>
+        <target state="translated">Rename this profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrRenameButtonTooltipCannot" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrRenameButtonTooltipCannot" datatype="html">
         <source>Can not rename used profile</source>
-        <target phase-name="approval-1" state="signed-off">Aktuell verwendetes Profil kann nicht umbenannt werden</target>
+        <target state="translated">Can not rename used profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrRenameButtonTooltip" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrRenameButtonTooltip" datatype="html">
         <source>Rename this profile</source>
-        <target phase-name="approval-1" state="signed-off">Dieses Profil umbenennen</target>
+        <target state="translated">Rename this profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrNewProfileLabel" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrNewProfileLabel" datatype="html">
         <source>New profile</source>
-        <target phase-name="approval-1" state="signed-off">Neues Profil</target>
+        <target state="translated">New profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrNewButtonTooltip" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrNewButtonTooltip" datatype="html">
         <source>Create a new profile with default settings</source>
-        <target phase-name="approval-1" state="signed-off">Ein neues Profil mit Standardeinstellungen erstellen</target>
+        <target state="translated">Create a new profile with default settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDeleteButtonTooltipCannotPreset" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrDeleteButtonTooltipCannotPreset" datatype="html">
         <source>Can not delete preset profiles</source>
-        <target phase-name="approval-1" state="signed-off">Voreingestellte Profile können nicht gelöscht werden</target>
+        <target state="translated">Can not delete preset profiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDeleteButtonTooltipCannotUsed" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrDeleteButtonTooltipCannotUsed" datatype="html">
         <source>Can not delete used profile</source>
-        <target phase-name="approval-1" state="signed-off">Aktuell verwendete Profile können nicht gelöscht werden</target>
+        <target state="translated">Can not delete used profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDeleteButtonTooltipCannotLast" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrDeleteButtonTooltipCannotLast" datatype="html">
         <source>Can not delete last custom profile</source>
-        <target phase-name="approval-1" state="signed-off">Letztes individuelles Profil kann nicht gelöscht werden</target>
+        <target state="translated">Can not delete last custom profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDeleteButtonTooltip" datatype="html" approved="yes">
+      <trans-unit id="cProfMgrDeleteButtonTooltip" datatype="html">
         <source>Delete this profile</source>
-        <target phase-name="approval-1" state="signed-off">Dieses Profil löschen</target>
+        <target state="translated">Delete this profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="stateLabelMains" datatype="html" approved="yes">
+      <trans-unit id="stateLabelMains" datatype="html">
         <source>Mains</source>
-        <target phase-name="approval-1" state="signed-off">Netz</target>
+        <target state="translated">Mains</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="stateTooltipMains" datatype="html" approved="no">
+      <trans-unit id="stateTooltipMains" datatype="html">
         <source>Mains power adaptor</source>
-        <target phase-name="approval-1" state="needs-review-l10n">Netzteiladapter</target>
+        <target state="translated">Mains power adaptor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="stateLabelBattery" datatype="html" approved="yes">
+      <trans-unit id="stateLabelBattery" datatype="html">
         <source>Battery </source>
-        <target phase-name="approval-1" state="signed-off">Akku</target>
+        <target state="translated">Battery </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="stateTooltipBattery" datatype="html" approved="yes">
+      <trans-unit id="stateTooltipBattery" datatype="html">
         <source>Battery powered</source>
-        <target phase-name="approval-1" state="signed-off">Im Akkubetrieb</target>
+        <target state="translated">Battery powered</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">1</context>
