@@ -49,7 +49,7 @@ registerLocaleData(localeDe, 'de', localeDeExtra);
 
 // TODO: Set localeId according to settings
 let langId = 'en';
-if (localStorage.getItem('langId') !== undefined) {
+if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId') !== null) {
   langId = localStorage.getItem('langId');
 }
 
