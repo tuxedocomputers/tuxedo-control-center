@@ -1,3 +1,21 @@
+<!--
+Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <br />
 <mat-accordion class="info-accordion">
     <mat-expansion-panel hideToggle [expanded]="true" class="panel-info">
@@ -50,11 +68,7 @@
                 <mat-icon>gavel</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <pre><code>
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under certain conditions.
-        </code></pre>
+        <mat-divider></mat-divider>
         <pre><code i18n="@@cInfoImprintText">
 TUXEDO Computers GmbH
 
@@ -70,6 +84,20 @@ WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
         </code></pre>
+        <mat-divider></mat-divider>
+        <pre><code>
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+                
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+        </code></pre>
+        <mat-divider></mat-divider>
     </mat-expansion-panel>
 
 </mat-accordion>
+<br />
