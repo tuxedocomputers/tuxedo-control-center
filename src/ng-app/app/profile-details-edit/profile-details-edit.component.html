@@ -163,7 +163,7 @@
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
-                            <mat-checkbox #inputNoTurbo formControlName="noTurbo"></mat-checkbox>
+                            <mat-checkbox #inputNoTurbo [checked]="!profileFormGroup.get('cpu').value.noTurbo" (change)="profileFormGroup.get('cpu').get('noTurbo').setValue(!$event.checked); profileFormGroup.get('cpu').get('noTurbo').markAsDirty();"></mat-checkbox>
                         </content>
                     </mat-grid-tile>
 
