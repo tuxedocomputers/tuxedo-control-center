@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# In case TFC service is active, deactivate
+systemctl stop tuxedofancontrol || true
+systemctl disable tuxedofancontrol || true
+
 rm /usr/share/applications/tuxedo-control-center.desktop || true
 cp /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center.desktop /usr/share/applications/tuxedo-control-center.desktop || true
 cp /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/de.tuxedocomputers.tcc.policy /usr/share/polkit-1/actions/de.tuxedocomputers.tcc.policy
