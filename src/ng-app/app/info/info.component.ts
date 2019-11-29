@@ -39,4 +39,21 @@ export class InfoComponent implements OnInit {
   ngOnInit() {
   }
 
+  public changeLanguage(languageId: string) {
+    if (languageId !== this.getCurrentLanguageId()) {
+      this.utils.changeLanguage(languageId);
+    }
+  }
+
+  public getCurrentLanguageId(): string {
+    return this.utils.getCurrentLanguageId();
+  }
+
+  public getLanguagesMenuArray() {
+    return this.utils.getLanguagesMenuArray();
+  }
+
+  public getLanguageData(langId: string) {
+    return this.utils.getLanguageData(langId);
+  }
 }

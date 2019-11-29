@@ -34,10 +34,21 @@ export class UtilsService {
   get pageDisabled(): boolean { return this.blurNoInput; }
   set pageDisabled(value: boolean) { this.blurNoInput = value; }
 
+  private languagesMenuArray = [
+    { id: 'en', label: 'English', img: 'english.svg' },
+    { id: 'de', label: 'Deutsch', img: 'german.svg' }
+  ];
+  private languageMap;
+
   constructor(
     private sysfs: SysFsService,
     private electron: ElectronService,
-    private decimalPipe: DecimalPipe) { }
+    private decimalPipe: DecimalPipe) {
+      this.languageMap = {};
+      for (const lang of this.getLanguagesMenuArray()) {
+        this.languageMap[lang.id] = lang;
+      }
+    }
 
   public fillDefaultValuesProfile(profile: ITccProfile): void {
     const cpuInfo = this.sysfs.getGeneralCpuInfo();
@@ -191,5 +202,13 @@ export class UtilsService {
       langId = storedLangId;
     }
     return langId;
+  }
+
+  public getLanguageData(langId: string) {
+    return this.languageMap[langId];
+  }
+
+  public getLanguagesMenuArray() {
+    return this.languagesMenuArray;
   }
 }

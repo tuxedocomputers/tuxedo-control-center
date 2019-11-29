@@ -99,5 +99,29 @@ GNU General Public License for more details.
         <mat-divider></mat-divider>
     </mat-expansion-panel>
 
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@cInfoLanguagePanelTitle">Language</mat-panel-title>
+            <mat-panel-description>
+                <ng-container i18n="@@cInfoLanguagePanelDesc">Choose language</ng-container>
+                <mat-icon>language</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+        <mat-form-field class="language-select">
+            <mat-select #selectLang [value]="getCurrentLanguageId()">
+                <mat-select-trigger>
+                    <mat-icon><img [src]="'./assets/images/' + getLanguageData(selectLang.value).img" /></mat-icon>
+                    {{ getLanguageData(selectLang.value).label }}
+                </mat-select-trigger>
+                <mat-option
+                    *ngFor="let lang of getLanguagesMenuArray()"
+                    (click)="changeLanguage(lang.id)"
+                    [value]="lang.id">
+                    <mat-icon><img [src]="'./assets/images/' + lang.img" /></mat-icon> {{ lang.label }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-expansion-panel>
 </mat-accordion>
 <br />

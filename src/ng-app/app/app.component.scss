@@ -28,8 +28,27 @@
         flex-flow: nowrap;
         align-items: center;
 
-        #title-logo {
-            max-height: 45px;
+        #title-left {
+            width: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            img {
+                &#title-logo {
+                    max-height: 45px;
+                }
+            }
+
+            #title-lang {
+                display: flex;
+                flex-flow: column nowrap;
+                -webkit-app-region: no-drag;
+                img {
+                    cursor: pointer;
+                    max-height: 20px;
+                    width: 20px;
+                }
+            }
         }
 
         i {
