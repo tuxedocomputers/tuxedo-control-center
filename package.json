@@ -7,6 +7,7 @@
     "email": "tux@tuxedocomputers.com",
     "url": "https://tuxedocomputers.com"
   },
+  "license": "GPLv3",
   "homepage": "https://tuxedocomputers.com",
   "scripts": {
     "ver": "sh build-src/inc-version.sh",
