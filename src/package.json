@@ -1,6 +1,6 @@
 {
     "name": "tuxedo-control-center",
-    "version": "0.6.3",
+    "version": "0.7.0",
     "main": "./e-app/main.js",
     "bin": "./service-app/main.js"
 }

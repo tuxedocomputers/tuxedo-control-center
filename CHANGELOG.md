@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.7.0] - 2019-11-29
 ## Added
 - Language support
 - German translation
@@ -8,6 +8,7 @@
 
 ## Changed
 - Profile setting name change "No Turbo" changed to Turbo
+- Various packaging tweaks
 
 ## [0.6.3] - 2019-11-18
 ## Fixed
