@@ -207,6 +207,12 @@
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
+      </trans-unit><trans-unit id="cProfMgrOverviewCores" datatype="html">
+        <source>cores</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
       </trans-unit><trans-unit id="cProfMgrOverviewTurboOff" datatype="html">
         <source>Off</source>
         <context-group purpose="location">
@@ -220,13 +226,13 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html">
-        <source>on</source>
+        <source>On</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOff" datatype="html">
-        <source>off</source>
+        <source>Off</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">82</context>

@@ -34,7 +34,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="status-row">
                 <mat-icon class="status-icon">memory</mat-icon>
                 <span class="status-info">
-                    {{ profile.cpu.onlineCores }} <span>cores</span>
+                    {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
                 </span>
             </div>
             <div class="status-row">
@@ -78,8 +78,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
                 <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
                 <span class="status-info">
-                    <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">on</span>
-                    <span *ngIf="!profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">off</span>
+                    <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
+                    <span *ngIf="!profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">Off</span>
                 </span>
             </div>
         </span>
