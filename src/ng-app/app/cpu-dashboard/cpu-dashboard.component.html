@@ -45,7 +45,7 @@
     </mat-expansion-panel-header>
     <table>
         <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn"><strong>on</strong></td><td *ngIf="pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOff">off</td></tr>
+        <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
         <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
         <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
         <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
