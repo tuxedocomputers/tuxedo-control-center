@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+## Added
+- Language support
+- German translation
+- Licencing GPLv3
+
+## Changed
+- Profile setting name change "No Turbo" changed to Turbo
+
 ## [0.6.3] - 2019-11-18
 ## Fixed
 - Temperature reporting

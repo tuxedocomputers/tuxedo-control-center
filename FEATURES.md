@@ -10,19 +10,16 @@
    - Fan profile
 
 - ### States
+   - Assignment of one profile that gets activated per state
    - Two available states 'Mains powered' & 'Battery powered'
-   - Assignment of one profile that gets activated for each state
 
-- ### Fan control integration
-
-- ### Save settings on shutdown / sleep
-- ### Restore settings on start / wakeup
-- ### Support area
+- ### Support
   - systeminfos.sh download and start
   - Anydesk installation and start
-- ### Info area
+- ### Info
   - General info
   - Changelog
+- ### App language support
 
 ---
 
