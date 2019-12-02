@@ -13,7 +13,7 @@ rm /etc/systemd/system/tccd-sleep.service || true
 systemctl daemon-reload || true
 
 # Remove log and config files (unless deb upgrade)
-if [ "$1" -ne "upgrade" ]; then
+if [ "$1" != "upgrade" ]; then
     rm -rf /var/log/tcc/ || true
     rm -rf /var/log/tccd/ || true
     rm -rf /etc/tcc/ || true
