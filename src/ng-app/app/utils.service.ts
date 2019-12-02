@@ -64,6 +64,8 @@ export class UtilsService {
 
     if (profile.cpu.scalingMaxFrequency === undefined) {
       profile.cpu.scalingMaxFrequency = cpuCoreInfo[0].cpuInfoMaxFreq;
+    } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
+      profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
     }
 
     if (profile.cpu.governor === undefined) {

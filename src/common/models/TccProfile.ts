@@ -88,55 +88,9 @@ export const defaultProfiles: ITccProfile[] = [
         }
     },
     {
-        name: 'Fast and furious',
-        display: {
-            brightness: 100,
-            useBrightness: true
-        },
-        cpu: {
-            onlineCores: undefined,
-            scalingMinFrequency: 2000000,
-            scalingMaxFrequency: undefined,
-            governor: 'performance',
-            energyPerformancePreference: 'performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: false
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Cool'
-        }
-    },
-    {
         name: 'Cool and breezy',
         display: {
             brightness: 50,
-            useBrightness: true
-        },
-        cpu: {
-            onlineCores: 2,
-            scalingMinFrequency: 800000,
-            scalingMaxFrequency: 1000000,
-            governor: 'powersave',
-            energyPerformancePreference: 'power',
-            noTurbo: true
-        },
-        webcam: {
-            status: true,
-            useStatus: false
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Cool'
-        }
-    },
-    {
-        name: 'All cores powersave',
-        display: {
-            brightness: 100,
             useBrightness: false
         },
         cpu: {
@@ -150,6 +104,29 @@ export const defaultProfiles: ITccProfile[] = [
         webcam: {
             status: true,
             useStatus: false
+        },
+        fan: {
+            useControl: true,
+            fanProfile: 'Cool'
+        }
+    },
+    {
+        name: 'Powersave extreme',
+        display: {
+            brightness: 60,
+            useBrightness: true
+        },
+        cpu: {
+            onlineCores: undefined,
+            scalingMinFrequency: undefined,
+            scalingMaxFrequency: 0,
+            governor: 'powersave',
+            energyPerformancePreference: 'power',
+            noTurbo: true
+        },
+        webcam: {
+            status: false,
+            useStatus: true
         },
         fan: {
             useControl: true,

@@ -90,13 +90,15 @@ export class CpuController {
             if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
+            const currentMinFrequency = core.scalingMinFreq.readValue();
             let newMaxFrequency: number;
             if (maxFrequency === undefined) {
                 newMaxFrequency = coreMaxFrequency;
+            } else if (maxFrequency < currentMinFrequency) {
+                newMaxFrequency = currentMinFrequency;
             } else {
                 newMaxFrequency = maxFrequency;
             }
-            const currentMinFrequency = core.scalingMinFreq.readValue();
             if (newMaxFrequency <= coreMaxFrequency && newMaxFrequency >= currentMinFrequency) {
                 core.scalingMaxFreq.writeValue(newMaxFrequency);
             } else {
