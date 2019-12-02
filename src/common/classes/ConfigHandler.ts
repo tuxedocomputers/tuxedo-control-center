@@ -18,7 +18,7 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
-import { ITccSettings, defaultSettings } from '../models/TccSettings';
+import { ITccSettings, defaultSettings, defaultSettingsXP1508UHD } from '../models/TccSettings';
 import { ITccProfile, defaultProfiles, defaultCustomProfile, defaultCustomProfileXP1508UHD } from '../models/TccProfile';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
@@ -113,7 +113,7 @@ export class ConfigHandler {
     }
 
     public getDefaultCustomProfile(): ITccProfile {
-        return this.copyConfig<ITccProfile>(defaultCustomProfile);
+        return this.copyConfig<ITccProfile>(defaultCustomProfileXP1508UHD);
     }
 
     public getDefaultCustomProfiles(): ITccProfile[] {
@@ -123,7 +123,7 @@ export class ConfigHandler {
     }
 
     public getDefaultSettings(): ITccSettings {
-        return this.copyConfig<ITccSettings>(defaultSettings);
+        return this.copyConfig<ITccSettings>(defaultSettingsXP1508UHD);
     }
 
     public getDefaultAutosave(): ITccAutosave {
