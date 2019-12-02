@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.2] - 2019-01-02
+## Fixed
+- Package upgrade: RPM
+- Package remove: Delete config files
+- Package upgrade: Do not delete logs
+
 ## [0.7.0] - 2019-11-29
 ## Added
 - Language support
