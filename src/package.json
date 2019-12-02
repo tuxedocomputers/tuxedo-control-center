@@ -3,5 +3,5 @@
     "version": "0.7.2",
     "main": "./e-app/main.js",
     "bin": "./service-app/main.js",
-    "license": "GPLv3"
+    "license": "GPL-3.0"
 }
