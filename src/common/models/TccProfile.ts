@@ -1,3 +1,21 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 export interface ITccProfile {
     name: string;
     display: ITccProfileDisplay;
@@ -70,55 +88,9 @@ export const defaultProfiles: ITccProfile[] = [
         }
     },
     {
-        name: 'Fast and furious',
-        display: {
-            brightness: 100,
-            useBrightness: true
-        },
-        cpu: {
-            onlineCores: undefined,
-            scalingMinFrequency: 2000000,
-            scalingMaxFrequency: undefined,
-            governor: 'performance',
-            energyPerformancePreference: 'performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: false
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Cool'
-        }
-    },
-    {
         name: 'Cool and breezy',
         display: {
             brightness: 50,
-            useBrightness: true
-        },
-        cpu: {
-            onlineCores: 2,
-            scalingMinFrequency: 800000,
-            scalingMaxFrequency: 1000000,
-            governor: 'powersave',
-            energyPerformancePreference: 'power',
-            noTurbo: true
-        },
-        webcam: {
-            status: true,
-            useStatus: false
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Cool'
-        }
-    },
-    {
-        name: 'All cores powersave',
-        display: {
-            brightness: 100,
             useBrightness: false
         },
         cpu: {
@@ -132,6 +104,29 @@ export const defaultProfiles: ITccProfile[] = [
         webcam: {
             status: true,
             useStatus: false
+        },
+        fan: {
+            useControl: true,
+            fanProfile: 'Cool'
+        }
+    },
+    {
+        name: 'Powersave extreme',
+        display: {
+            brightness: 60,
+            useBrightness: true
+        },
+        cpu: {
+            onlineCores: undefined,
+            scalingMinFrequency: undefined,
+            scalingMaxFrequency: 0,
+            governor: 'powersave',
+            energyPerformancePreference: 'power',
+            noTurbo: true
+        },
+        webcam: {
+            status: false,
+            useStatus: true
         },
         fan: {
             useControl: true,
@@ -151,8 +146,32 @@ export const defaultCustomProfile: ITccProfile = {
         scalingMinFrequency: undefined,
         scalingMaxFrequency: undefined,
         governor: 'powersave',
-        energyPerformancePreference: 'default',
+        energyPerformancePreference: 'power',
         noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: false
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced'
+    }
+};
+
+export const defaultCustomProfileXP1508UHD: ITccProfile = {
+    name: 'Custom XP1508 UHD',
+    display: {
+        brightness: 100,
+        useBrightness: false
+    },
+    cpu: {
+        onlineCores: undefined,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: 1200000,
+        governor: 'powersave',
+        energyPerformancePreference: 'power',
+        noTurbo: true
     },
     webcam: {
         status: true,

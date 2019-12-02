@@ -1,5 +1,23 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID, TRANSLATIONS_FORMAT, TRANSLATIONS } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,9 +47,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
-import { DisplaySettingsComponent } from './display-settings/display-settings.component';
 import { SupportComponent } from './support/support.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
@@ -41,11 +58,25 @@ import { InfoComponent } from './info/info.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
+
+import { I18n } from '@ngx-translate/i18n-polyfill';
+
+registerLocaleData(localeDe, 'de', localeDeExtra);
+
+// TODO: Set localeId according to settings
+let langId = 'en';
+if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId') !== null) {
+  langId = localStorage.getItem('langId');
+}
+
+declare const require;
+
 @NgModule({
   declarations: [
     AppComponent,
     ProfileManagerComponent,
-    DisplaySettingsComponent,
     SupportComponent,
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,
@@ -82,7 +113,19 @@ import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
     MarkdownModule.forRoot()
   ],
   providers: [
-    DecimalPipe
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
+    { provide: LOCALE_ID, useValue: langId },
+    { provide: TRANSLATIONS, useFactory: () => {
+      let translation;
+      try {
+        translation = require('raw-loader!./../assets/locale/lang.' + langId + '.xlf');
+      } catch (err) {
+        translation = '';
+      }
+      return translation;
+    }},
+    DecimalPipe,
+    I18n
   ],
   bootstrap: [AppComponent]
 })

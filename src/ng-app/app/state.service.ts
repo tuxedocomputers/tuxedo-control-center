@@ -1,9 +1,28 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import { Injectable, OnDestroy } from '@angular/core';
 import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
+import { I18n } from '@ngx-translate/i18n-polyfill';
 
 
 export interface IStateInfo {
@@ -33,7 +52,7 @@ export class StateService implements OnDestroy {
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
 
-  constructor(private config: ConfigService) {
+  constructor(private config: ConfigService, private i18n: I18n) {
     this.stateSubject = new Subject<ProfileStates>();
     this.stateObserver = this.stateSubject.asObservable();
 
@@ -53,14 +72,14 @@ export class StateService implements OnDestroy {
 
     this.stateInputMap
       .set(ProfileStates.AC.toString(), {
-        label: 'Mains',
-        tooltip: 'Mains power adaptor',
+        label: this.i18n({ value: 'Mains', id: 'stateLabelMains' }),
+        tooltip: this.i18n({ value: 'Mains power adaptor', id: 'stateTooltipMains' }),
         icon: 'power',
         value: ProfileStates.AC.toString()
       })
       .set(ProfileStates.BAT.toString(), {
-        label: 'Battery ',
-        tooltip: 'Battery powered',
+        label: this.i18n({ value: 'Battery ', id: 'stateLabelBattery' }),
+        tooltip: this.i18n({ value: 'Battery powered', id: 'stateTooltipBattery' }),
         icon: 'battery_std',
         value: ProfileStates.BAT.toString()
       });

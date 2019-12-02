@@ -1,10 +1,28 @@
+<!--
+Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <mat-expansion-panel hideToggle [expanded]="true">
     <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title i18n="@@cCpuDashboardCoresPanelTitle">
             Active cores
         </mat-panel-title>
         <mat-panel-description>
-            Logical CPU cores in use
+            <ng-container i18n="@@cCpuDashboardCoresPanelDesc">Logical CPU cores in use</ng-container>
             <mat-icon>memory</mat-icon>
         </mat-panel-description>
     </mat-expansion-panel-header>
@@ -18,16 +36,16 @@
 
 <mat-expansion-panel hideToggle [expanded]="true" class="cpu-thermal-info">
     <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title i18n="@@cCpuDashboardThermalPanelTitle">
             Thermal
         </mat-panel-title>
         <mat-panel-description>
-            Temperature and fan info
+            <ng-container i18n="@@cCpuDashboardThermalPanelTitle">Temperature and fan info</ng-container>
             <mat-icon>toys</mat-icon>
         </mat-panel-description>
     </mat-expansion-panel-header>
     <table>
-        <tr><th>Temp</th><th>Fan speed</th></tr>
+        <tr><th i18n="@@cCpuDashboardThermalTemp">Temp</th><th i18n="@@cCpuDashboardThermalFanSpeed">Fan speed</th></tr>
         <tr><td>{{ fanData.cpu.temp.data.value }} &deg;C</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
     </table>
 </mat-expansion-panel>
@@ -35,20 +53,20 @@
 
 <mat-expansion-panel hideToggle class="cpu-frequency-info">
     <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
             Frequency
         </mat-panel-title>
         <mat-panel-description>
-            Cpu frequency info
+            <ng-container i18n="@@cCpuDashboardFreqPanelTitle">Cpu frequency info</ng-container>
             <mat-icon>flash_on</mat-icon>
         </mat-panel-description>
     </mat-expansion-panel-header>
     <table>
-        <tr><th>Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
-        <tr><th>No turbo</th><td *ngIf="pstateInfo.noTurbo"><strong>activated</strong></td><td *ngIf="!pstateInfo.noTurbo">deactivated</td></tr>
-        <tr><th>Active logical cores</th><td>{{ cpuCoreInfo.length }} of {{ cpuInfo.availableCores }}</td></tr>
-        <tr><th>Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }} to {{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
-        <tr><th>Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
+        <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
+        <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
+        <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
+        <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
+        <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
     </table>
 </mat-expansion-panel>
 <br />

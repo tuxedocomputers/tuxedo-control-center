@@ -1,54 +1,127 @@
+<!--
+Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <br />
 <mat-accordion class="info-accordion">
-    <mat-expansion-panel hideToggle [expanded]="true">
+    <mat-expansion-panel hideToggle [expanded]="true" class="panel-info">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                Information
+                <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
             </mat-panel-title>
             <mat-panel-description>
-                General information
+                <ng-container i18n="@@cInfoInfoPanelDesc">General information</ng-container>
                 <mat-icon><img src="./assets/images/information.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>
-            TUXEDO Control Center is an application that lets you take control of your TUXEDO.
+        <p i18n="@@cInfoTCCInfoText1">
+            We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
+            in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </p>
+        <p i18n="@@cInfoTCCInfoText2">
+            We want to give you the ultimate control over your device, the ability to squeeze out the most
+            and to be able to customize it as much as possible by yourself!
+        </p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@cInfoVersionPanelTitle">Version</mat-panel-title>
+            <mat-panel-description>
+                <ng-container i18n="@@cInfoVersionPanelDesc">What's new? What's old?</ng-container>
+                <mat-icon>track_changes</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
         <p>
-            Current version <strong>{{ appVersion }}</strong> is built upon
+            <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
         </p>
         <table class="versions" cellspacing="0">
             <tr><td>Node</td><td><strong>{{ nodeVersion }}</strong></td>
             <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
             <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
         </table>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Changelog
-            </mat-panel-title>
-            <mat-panel-description>
-                What's new? What's old?
-                <mat-icon>track_changes</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
+        <br />
         <mat-card class="changelog">
             <markdown src="assets/CHANGELOG.md"></markdown>
         </mat-card>
     </mat-expansion-panel>
 
-    <!--mat-expansion-panel hideToggle>
+    <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
-            <mat-panel-title>
-                Imprint
-            </mat-panel-title>
+            <mat-panel-title i18n="@@cInfoImprintPanelTitle">Imprint</mat-panel-title>
             <mat-panel-description>
-                Legal statement
+                <ng-container i18n="@@cInfoImprintPanelDesc">Legal statement</ng-container>
                 <mat-icon>gavel</mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        
-    </mat-expansion-panel-->
+        <mat-divider></mat-divider>
+        <pre><code i18n="@@cInfoImprintText">
+TUXEDO Computers GmbH
 
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876 
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </code></pre>
+        <mat-divider></mat-divider>
+        <pre><code>
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+                
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+        </code></pre>
+        <mat-divider></mat-divider>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@cInfoLanguagePanelTitle">Language</mat-panel-title>
+            <mat-panel-description>
+                <ng-container i18n="@@cInfoLanguagePanelDesc">Choose language</ng-container>
+                <mat-icon>language</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+        <mat-form-field class="language-select">
+            <mat-select #selectLang [value]="getCurrentLanguageId()">
+                <mat-select-trigger>
+                    <mat-icon><img [src]="'./assets/images/' + getLanguageData(selectLang.value).img" /></mat-icon>
+                    {{ getLanguageData(selectLang.value).label }}
+                </mat-select-trigger>
+                <mat-option
+                    *ngFor="let lang of getLanguagesMenuArray()"
+                    (click)="changeLanguage(lang.id)"
+                    [value]="lang.id">
+                    <mat-icon><img [src]="'./assets/images/' + lang.img" /></mat-icon> {{ lang.label }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-expansion-panel>
 </mat-accordion>
+<br />

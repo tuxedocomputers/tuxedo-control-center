@@ -1,3 +1,21 @@
+<!--
+Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
     <mat-card-content>
         <header *ngIf="!addProfileTile">
@@ -9,14 +27,14 @@
             </span>
         </header>
         <header *ngIf="addProfileTile">
-            <span class="profile-name">New profile</span>
+            <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>
         </header>
         <hr />
         <span *ngIf="!addProfileTile">
             <div class="status-row">
                 <mat-icon class="status-icon">memory</mat-icon>
                 <span class="status-info">
-                    {{ profile.cpu.onlineCores }} <span>cores</span>
+                    {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
                 </span>
             </div>
             <div class="status-row">
@@ -34,7 +52,8 @@
             <div class="status-row">
                 <i class="fas fa-bolt status-icon"></i>
                 <span class="status-info">
-                    {{ profile.cpu.noTurbo ? 'Deactivated' : 'Activated' }}
+                    <span *ngIf="profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOff">Off</span>
+                    <span *ngIf="!profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOn">On</span>
                 </span>
             </div>
             <!--div class="status-row">
@@ -59,7 +78,8 @@
                 <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
                 <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
                 <span class="status-info">
-                    {{ profile.webcam.status ? 'on' : 'off' }}
+                    <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
+                    <span *ngIf="!profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">Off</span>
                 </span>
             </div>
         </span>

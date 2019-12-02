@@ -1,13 +1,30 @@
+<!--
+Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
 <br />
 <mat-accordion class="support-accordion">
     <mat-expansion-panel hideToggle [expanded]="true">
         <mat-expansion-panel-header>
-            <mat-panel-title>
+            <mat-panel-title i18n="@@cSupportGeneralPanelTitle">
                 TUXEDO Support
             </mat-panel-title>
             <mat-panel-description>
-                General support information
+                <ng-container i18n="@@cSupportGeneralPanelDesc">General support information</ng-container>
                 <mat-icon><img src="./assets/images/support.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
@@ -18,7 +35,7 @@
             <mat-grid-tile>
                 <button mat-raised-button color="primary" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
                     <mat-icon>cloud</mat-icon>
-                    <strong style="padding-left: 10px">TUXEDO Online Support</strong>
+                    <strong style="padding-left: 10px" i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
                 </button>
             </mat-grid-tile>
         </mat-grid-list>
@@ -26,28 +43,28 @@
 
     <mat-expansion-panel hideToggle (click)="focusControl(frmInputTicketNumber)">
         <mat-expansion-panel-header>
-            <mat-panel-title>
+            <mat-panel-title i18n="@@cSupportSysInfoPanelTitle">
                 systeminfos.sh
             </mat-panel-title>
             <mat-panel-description>
-                Download and run systeminfos.sh
+                <ng-container i18n="@@cSupportSysInfoPanelDesc">Download and run systeminfos.sh</ng-container>
                 <mat-icon><img src="./assets/images/systemoverview.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-vertical-stepper [linear]="true">
             <mat-step [stepControl]="formTicketNumber" label="Ticket number">
                 <ng-template matStepLabel>
-                    Ticket number{{ formTicketNumber.valid ? ': ' : '' }}
+                    <ng-container i18n="@@cSupportTicketNumberInputLabel">Ticket number</ng-container>{{ formTicketNumber.valid ? ': ' : '' }}
                     <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>
                 </ng-template>
                 <form [formGroup]="formTicketNumber">
-                    <p>
+                    <p i18n="@@cSupportTicketNumberInfo">
                         Please enter the ticket number given at support request. If you do not have a ticket
                         number yet please send an email to us and one will be sent automatically.
                     </p>
                     <p>
-                        More information about which data the script collects can be found at
-                        <a routerLink="/support" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>.
+                        <ng-container i18n="@@cSupportScriptMoreInfo">More information about which data the script collects can be found at</ng-container>
+                        &nbsp;<a routerLink="/support" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>.
                     </p>
                     <mat-form-field>
                         <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" placeholder="Ticket number" />
@@ -56,12 +73,12 @@
                 </form>
             </mat-step>
             <mat-step label="Download and run">
-                <p>
+                <p i18n="@@cSupportScriptInfo">
                     When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
                 </p>
                 <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
-                    <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>
-                    Start
+                    <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
+                    <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
                 </button>
                 &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
             </mat-step>
@@ -70,26 +87,26 @@
 
     <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
-            <mat-panel-title>
+            <mat-panel-title i18n="@@cSupportAnydeskPanelTitle">
                 Anydesk
             </mat-panel-title>
             <mat-panel-description>
-                Install and start Anydesk
+                <ng-container i18n="@@cSupportAnydeskPanelDesc">Install and start Anydesk</ng-container>
                 <mat-icon><img src="./assets/images/anydesk-logo-icon.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>
+        <p i18n="@@cSupportAnydeskProgramDesc">
             Anydesk is a remote desktop type tool that can allow support to help you from afar.
         </p>
         <p>
             <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
-                <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>
-                {{ !anydeskInstalled && !progressCheck().get(anydeskProgramName) ? 'Install Anydesk' : '' }}
-                {{ anydeskInstalled && !progressCheck().get(anydeskProgramName) ? 'Remove Anydesk' : '' }}
-                {{ progressCheck().get(anydeskProgramName) ? 'Checking' : '' }}
+                <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
+                <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
+                <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
+                <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
             </button>
             &nbsp;
-            <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled">Start Anydesk</button>
+            <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
         </p>
     </mat-expansion-panel>
 </mat-accordion>

@@ -1,3 +1,21 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
@@ -9,6 +27,7 @@ import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
+import { I18n } from '@ngx-translate/i18n-polyfill';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
   return (thisControl: AbstractControl): {[key: string]: any} | null => {
@@ -89,7 +108,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private state: StateService,
     private sysfs: SysFsService,
     private fb: FormBuilder,
-    private dbus: DBusService
+    private dbus: DBusService,
+    private i18n: I18n
   ) { }
 
   ngOnInit() {
@@ -203,5 +223,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     } else {
       cpuGroup.controls.energyPerformancePreference.setValue('power');
     }
+  }
+
+  public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
+    const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
+    return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
   }
 }

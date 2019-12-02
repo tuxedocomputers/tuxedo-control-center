@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.7.3] - 2019-01-02
+## Changed
+- Preset profile changes
+- Removed *Fast and furious*
+- *Cool and breezy* now has all cores but disabled turbo
+- *All cores powersave* is now *Powersave extreme*
+    with minimum clock and disconnected webcam
+
+## Fixed
+- Package upgrade: RPM
+- Package remove: Delete config files
+- Package upgrade: Do not delete logs
+
+## [0.7.0] - 2019-11-29
+## Added
+- Language support
+- German translation
+- Licencing GPLv3
+
+## Changed
+- Profile setting name change "No Turbo" changed to Turbo
+- Various packaging tweaks
+
 ## [0.6.3] - 2019-11-18
 ## Fixed
 - Temperature reporting

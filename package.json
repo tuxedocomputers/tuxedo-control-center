@@ -1,12 +1,13 @@
 {
   "name": "tuxedo-control-center",
-  "version": "0.6.3",
+  "version": "0.7.3",
   "main": "./dist/tuxedo-control-center/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
     "email": "tux@tuxedocomputers.com",
     "url": "https://tuxedocomputers.com"
   },
+  "license": "GPL-3.0",
   "homepage": "https://tuxedocomputers.com",
   "scripts": {
     "ver": "sh build-src/inc-version.sh",
@@ -16,13 +17,13 @@
     "start": "electron ./dist/tuxedo-control-center",
     "build": "run-s clean build-electron build-service build-native build-ng copy-files",
     "build-prod": "run-s clean build-electron build-service build-native build-ng-prod copy-files",
-    "build-ng": "ng build",
-    "build-ng-prod": "ng build --prod",
+    "build-ng": "npm run copy-changelog && ng build",
+    "build-ng-prod": "npm run copy-changelog && ng build --prod",
     "build-electron": "tsc -p ./src/e-app",
     "build-service": "tsc -p ./src/service-app && cp ./src/package.json ./dist/tuxedo-control-center/service-app/package.json && run-s bundle-service",
     "bundle-service": "pkg --target node10-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
     "build-native": "node-gyp configure && node-gyp rebuild",
-    "copy-files": "run-s copy-package-json copy-dist-files copy-native copy-changelog",
+    "copy-files": "run-s copy-package-json copy-dist-files copy-native",
     "copy-native": "(mkdir ./dist/tuxedo-control-center/service-app/native-lib || true) && cp ./build/Release/TuxedoECAPI.node ./dist/tuxedo-control-center/data/service",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
@@ -38,7 +39,8 @@
     "start-watch": "run-s clean build-electron build-service build-native copy-files && npm run watch-ng-and-electron",
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
-    "start-electron-watch": "electron ./dist/tuxedo-control-center --watch"
+    "start-electron-watch": "electron ./dist/tuxedo-control-center --watch",
+    "gen-lang": "ng xi18n --out-file src/ng-app/assets/locale/lang.xlf && ngx-extractor -i \"src/ng-app/**/*.ts\" -f xlf -o src/ng-app/assets/locale/lang.xlf"
   },
   "private": true,
   "dependencies": {
@@ -61,6 +63,7 @@
     "@angular/compiler-cli": "~8.0.1",
     "@angular/language-service": "~8.0.1",
     "@angular/material": "^8.1.2",
+    "@ngx-translate/i18n-polyfill": "^1.0.0",
     "@types/jasmine": "^3.3.13",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.0.0",

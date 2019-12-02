@@ -1,3 +1,21 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
@@ -16,10 +34,21 @@ export class UtilsService {
   get pageDisabled(): boolean { return this.blurNoInput; }
   set pageDisabled(value: boolean) { this.blurNoInput = value; }
 
+  private languagesMenuArray = [
+    { id: 'en', label: 'English', img: 'english.svg' },
+    { id: 'de', label: 'Deutsch', img: 'german.svg' }
+  ];
+  private languageMap;
+
   constructor(
     private sysfs: SysFsService,
     private electron: ElectronService,
-    private decimalPipe: DecimalPipe) { }
+    private decimalPipe: DecimalPipe) {
+      this.languageMap = {};
+      for (const lang of this.getLanguagesMenuArray()) {
+        this.languageMap[lang.id] = lang;
+      }
+    }
 
   public fillDefaultValuesProfile(profile: ITccProfile): void {
     const cpuInfo = this.sysfs.getGeneralCpuInfo();
@@ -35,6 +64,8 @@ export class UtilsService {
 
     if (profile.cpu.scalingMaxFrequency === undefined) {
       profile.cpu.scalingMaxFrequency = cpuCoreInfo[0].cpuInfoMaxFreq;
+    } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
+      profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
     }
 
     if (profile.cpu.governor === undefined) {
@@ -159,5 +190,27 @@ export class UtilsService {
 
   public getProcessVersions(): NodeJS.ProcessVersions {
     return this.electron.remote.process.versions;
+  }
+
+  public changeLanguage(languageId: string) {
+    localStorage.setItem('langId', languageId);
+    location.reload();
+  }
+
+  public getCurrentLanguageId(): string {
+    let langId = 'en';
+    const storedLangId = localStorage.getItem('langId');
+    if (storedLangId !== undefined && storedLangId !== null) {
+      langId = storedLangId;
+    }
+    return langId;
+  }
+
+  public getLanguageData(langId: string) {
+    return this.languageMap[langId];
+  }
+
+  public getLanguagesMenuArray() {
+    return this.languagesMenuArray;
   }
 }
