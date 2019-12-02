@@ -19,7 +19,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
-import { ITccProfile, defaultProfiles, defaultCustomProfile } from '../models/TccProfile';
+import { ITccProfile, defaultProfiles, defaultCustomProfile, defaultCustomProfileXP1508UHD } from '../models/TccProfile';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
 

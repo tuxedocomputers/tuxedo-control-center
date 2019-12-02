@@ -169,8 +169,32 @@ export const defaultCustomProfile: ITccProfile = {
         scalingMinFrequency: undefined,
         scalingMaxFrequency: undefined,
         governor: 'powersave',
-        energyPerformancePreference: 'default',
+        energyPerformancePreference: 'power',
         noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: false
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced'
+    }
+};
+
+export const defaultCustomProfileXP1508UHD: ITccProfile = {
+    name: 'Custom XP1508 UHD',
+    display: {
+        brightness: 100,
+        useBrightness: false
+    },
+    cpu: {
+        onlineCores: undefined,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: 1200000,
+        governor: 'powersave',
+        energyPerformancePreference: 'power',
+        noTurbo: true
     },
     webcam: {
         status: true,

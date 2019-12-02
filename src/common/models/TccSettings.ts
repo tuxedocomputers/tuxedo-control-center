@@ -31,3 +31,10 @@ export const defaultSettings: ITccSettings = {
         power_bat: 'Default'
     }
 };
+
+export const defaultSettingsXP1508UHD: ITccSettings = {
+    stateMap: {
+        power_ac: 'Default',
+        power_bat: 'Custom XP1508 UHD'
+    }
+};
