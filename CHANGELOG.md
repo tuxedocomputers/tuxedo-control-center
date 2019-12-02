@@ -1,6 +1,13 @@
 # Changelog
 
-## [0.7.2] - 2019-01-02
+## [0.7.3] - 2019-01-02
+## Changed
+- Preset profile changes
+- Removed *Fast and furious*
+- *Cool and breezy* now has all cores but disabled turbo
+- *All cores powersave* is now *Powersave extreme*
+    with minimum clock and disconnected webcam
+
 ## Fixed
 - Package upgrade: RPM
 - Package remove: Delete config files
