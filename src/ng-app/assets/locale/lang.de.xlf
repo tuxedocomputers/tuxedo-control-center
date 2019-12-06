@@ -101,10 +101,8 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportGeneralPanelTitle" datatype="html" approved="yes">
-        <source>
-                TUXEDO Support
-            </source>
-        <target phase-name="approval-1" state="signed-off">
+        <source>TUXEDO Support</source>
+        <target phase-name="approval-1" state="needs-adaptation">
                 TUXEDO Support
             </target>
         <context-group purpose="location">
@@ -116,59 +114,73 @@
         <target phase-name="approval-1" state="signed-off">Allgemeine Supportinformationen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportButtonOnline" datatype="html" approved="yes">
         <source>TUXEDO Online Support</source>
         <target phase-name="approval-1" state="signed-off">TUXEDO Onlinesupport</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportSysInfoPanelTitle" datatype="html" approved="yes">
-        <source>
-                systeminfos.sh
-            </source>
-        <target phase-name="approval-1" state="signed-off">
+        <source>System info collection</source>
+        <target phase-name="approval-1" state="needs-adaptation">
                 systeminfos.sh
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportSysInfoPanelDesc" datatype="html" approved="yes">
         <source>Download and run systeminfos.sh</source>
         <target phase-name="approval-1" state="signed-off">systeminfos.sh herunterladen und ausführen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportSysInfoNoPersonalInfo" datatype="html">
+        <source>The script does not collect any personal data and no access data!</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit><trans-unit id="cSupportTicketNumberInputLabel" datatype="html" approved="yes">
-        <source>Ticket number</source>
-        <target phase-name="approval-1" state="signed-off">Ticketnummer</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit><trans-unit id="cSupportTicketNumberInfo" datatype="html" approved="yes">
-        <source>
-                        Please enter the ticket number given at support request. If you do not have a ticket
-                        number yet please send an email to us and one will be sent automatically.
-                    </source>
-        <target phase-name="approval-1" state="signed-off">
-                        Bitte geben Sie die bei der Supportanfrage angegebene Ticketnummer ein. Wenn Sie noch keine
-                        Ticketnummer haben, senden Sie uns bitte eine E-Mail und Sie erhalten diese automatisch.
-                    </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportScriptMoreInfo" datatype="html" approved="yes">
         <source>More information about which data the script collects can be found at</source>
         <target phase-name="approval-1" state="signed-off">Weitere Informationen darüber, welche Daten das Skript sammelt, finden Sie unter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportStepTicketNumberLabel" datatype="html">
+        <source>Ticket number</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportTicketNumberFetching" datatype="html">
+        <source>Please enter the ticket number given at support request. If you do not have a ticket
+                        number yet please use the online form</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportTicketNumberInputPlaceholder" datatype="html">
+        <source>Ticket number</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportTicketStepperButtonNext" datatype="html">
+        <source>Next</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportScriptInfo" datatype="html" approved="yes">
         <source>
@@ -179,14 +191,21 @@
                 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportSysInfoButtonStart" datatype="html" approved="yes">
         <source>Start</source>
         <target phase-name="approval-1" state="signed-off">Start</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportStepDownloadAndStartLabel" datatype="html">
+        <source>Download and run</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskPanelTitle" datatype="html" approved="yes">
         <source>
@@ -197,14 +216,14 @@
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskPanelDesc" datatype="html" approved="yes">
         <source>Install and start Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk starten und installieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskProgramDesc" datatype="html" approved="yes">
         <source>
@@ -215,35 +234,35 @@
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskInstallButton" datatype="html" approved="yes">
         <source>Install Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk installieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskRemoveButton" datatype="html" approved="yes">
         <source>Remove Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk entfernen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskProgressButton" datatype="html" approved="yes">
         <source>Checking</source>
         <target phase-name="approval-1" state="signed-off">Überprüfe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskStartButton" datatype="html" approved="yes">
         <source>Start Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk starten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit><trans-unit id="ProfMgrOverviewNewProfile" datatype="html" approved="yes">
         <source>New profile</source>
@@ -393,8 +412,8 @@
           <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseFanControlLabel" datatype="html" approved="yes">
-        <source>Use TCC fan control</source>
-        <target phase-name="approval-1" state="signed-off">TCC-Lüftersteuerung verwenden</target>
+        <source>Use TUXEDO fan control</source>
+        <target phase-name="approval-1" state="needs-adaptation">TCC-Lüftersteuerung verwenden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">203</context>

@@ -20,9 +20,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <mat-accordion class="support-accordion">
     <mat-expansion-panel hideToggle [expanded]="true">
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cSupportGeneralPanelTitle">
-                TUXEDO Support
-            </mat-panel-title>
+            <mat-panel-title i18n="@@cSupportGeneralPanelTitle">TUXEDO Support</mat-panel-title>
             <mat-panel-description>
                 <ng-container i18n="@@cSupportGeneralPanelDesc">General support information</ng-container>
                 <mat-icon><img src="./assets/images/support.svg"></mat-icon>
@@ -43,36 +41,35 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <mat-expansion-panel hideToggle (click)="focusControl(frmInputTicketNumber)">
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cSupportSysInfoPanelTitle">
-                systeminfos.sh
-            </mat-panel-title>
+            <mat-panel-title i18n="@@cSupportSysInfoPanelTitle">System info collection</mat-panel-title>
             <mat-panel-description>
                 <ng-container i18n="@@cSupportSysInfoPanelDesc">Download and run systeminfos.sh</ng-container>
                 <mat-icon><img src="./assets/images/systemoverview.svg"></mat-icon>
             </mat-panel-description>
         </mat-expansion-panel-header>
+        <p i18n="@@cSupportSysInfoNoPersonalInfo">The script does not collect any personal data and no access data!</p>
+        <p>
+            <ng-container i18n="@@cSupportScriptMoreInfo">More information about which data the script collects can be found at</ng-container>
+            &nbsp;<button mat-button color="basic" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</button>.
+        </p>
         <mat-vertical-stepper [linear]="true">
             <mat-step [stepControl]="formTicketNumber" label="Ticket number">
                 <ng-template matStepLabel>
-                    <ng-container i18n="@@cSupportTicketNumberInputLabel">Ticket number</ng-container>{{ formTicketNumber.valid ? ': ' : '' }}
+                    <ng-container i18n="@@cSupportStepTicketNumberLabel">Ticket number</ng-container>{{ formTicketNumber.valid ? ': ' : '' }}
                     <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>
                 </ng-template>
                 <form [formGroup]="formTicketNumber">
-                    <p i18n="@@cSupportTicketNumberInfo">
-                        Please enter the ticket number given at support request. If you do not have a ticket
-                        number yet please send an email to us and one will be sent automatically.
-                    </p>
                     <p>
-                        <ng-container i18n="@@cSupportScriptMoreInfo">More information about which data the script collects can be found at</ng-container>
-                        &nbsp;<a routerLink="/support" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>.
+                        <ng-container i18n="@@cSupportTicketNumberFetching">Please enter the ticket number given at support request. If you do not have a ticket
+                        number yet please use the online form</ng-container>: <button mat-button color="basic" type="button" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">Support</button>
                     </p>
                     <mat-form-field>
-                        <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" placeholder="Ticket number" />
+                        <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                     </mat-form-field>&nbsp;
-                    <button mat-button matStepperNext color="primary">Next</button>
+                    <button mat-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext">Next</button>
                 </form>
             </mat-step>
-            <mat-step label="Download and run">
+            <mat-step i18n-label="@@cSupportStepDownloadAndStartLabel" label="Download and run">
                 <p i18n="@@cSupportScriptInfo">
                     When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
                 </p>
