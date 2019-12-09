@@ -6,37 +6,37 @@
         <source>Active profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit><trans-unit id="menuProfiles" datatype="html">
         <source>Profiles</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit><trans-unit id="menuCpu" datatype="html">
         <source>CPU</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit><trans-unit id="menuSupport" datatype="html">
         <source>Support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit><trans-unit id="menuInfo" datatype="html">
         <source>Info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit><trans-unit id="menuExit" datatype="html">
         <source>Exit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrTitle" datatype="html">
         <source>Profiles</source>
@@ -135,8 +135,7 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportTicketNumberFetching" datatype="html">
-        <source>Please enter the ticket number given at support request. If you do not have a ticket
-                        number yet please use the online form</source>
+        <source>Please enter the ticket number given at support request. If you do not have a ticket number yet please use the online form</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">63</context>
