@@ -25,6 +25,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
           <img [src]="'./assets/images/' + getLanguageData('en').img" (click)="changeLanguage('en')" />
           <img [src]="'./assets/images/' + getLanguageData('de').img" (click)="changeLanguage('de')" />
         </div>
+        <div id="title-theme">
+          <mat-icon (click)="buttonToggleTheme()">settings_brightness</mat-icon>
+        </div>
       </span>
       <div id="main-title">{{ title }}</div>
       <i class="fas fa-times" (click)="buttonExit()"></i>

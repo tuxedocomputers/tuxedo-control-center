@@ -29,7 +29,7 @@
         align-items: center;
 
         #title-left {
-            width: 100px;
+            width: 150px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -47,6 +47,14 @@
                     cursor: pointer;
                     max-height: 20px;
                     width: 20px;
+                }
+            }
+
+            #title-theme {
+                mat-icon {
+                    cursor: pointer;
+                    -webkit-app-region: no-drag;
+                    transform: scale(1.25);
                 }
             }
         }

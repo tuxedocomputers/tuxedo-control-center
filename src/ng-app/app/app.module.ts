@@ -63,6 +63,8 @@ import localeDeExtra from '@angular/common/locales/extra/de';
 
 import { I18n } from '@ngx-translate/i18n-polyfill';
 
+import { OverlayModule } from '@angular/cdk/overlay';
+
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
 // TODO: Set localeId according to settings
@@ -110,7 +112,8 @@ declare const require;
     MatGridListModule,
     MatStepperModule,
     MatButtonToggleModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+    OverlayModule
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },

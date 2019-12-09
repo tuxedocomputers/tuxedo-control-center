@@ -16,37 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '~@angular/material/theming';
-@include mat-core();
+$tuxedo-dark-theme-primary: mat-palette($mat-indigo);
+$tuxedo-dark-theme-accent: mat-palette($mat-blue, A200, A100, A400);
+$tuxedo-dark-theme-warn: mat-palette($mat-red);
 
-@import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
-@import './app/profile-details-edit/profile-details-edit.component-theme.scss';
+$tuxedo-control-center-dark-theme: mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn);
 
-@mixin component-themes($theme) {
-    @include profile-overview-tile-theme($theme);
-    @include profile-details-edit-theme($theme);
-}
-
-@import './themes/tuxedo-light-theme.scss';
-@import './themes/tuxedo-dark-theme.scss';
-
-// Default theme
-@include angular-material-theme($tuxedo-control-center-light-theme);
-@include component-themes($tuxedo-control-center-light-theme);
-
-
-[hidden] {
-    visibility: hidden !important;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-}
-
-.blur-no-input {
-    pointer-events: none;
-    user-select: none;
-    filter: blur(1px);
+.dark-theme {
+    @include angular-material-theme($tuxedo-control-center-dark-theme);
+    @include component-themes($tuxedo-control-center-dark-theme);
 }
