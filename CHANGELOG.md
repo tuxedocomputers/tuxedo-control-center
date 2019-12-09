@@ -1,6 +1,11 @@
 # Changelog
 
-## [0.7.3] - 2019-01-02
+## [0.7.4] - 2019-12-09
+## Added
+- Theme switching
+- Light/dark theme for testing & toggling
+
+## [0.7.3] - 2019-12-02
 ## Changed
 - Preset profile changes
 - Removed *Fast and furious*
