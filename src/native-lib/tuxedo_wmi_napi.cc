@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,17 +17,19 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <napi.h>
-
+#include "tuxedo_wmi_lib/tuxedo_wmi_api.hh"
 
 using namespace Napi;
 
 Boolean webcamOn(const CallbackInfo &info) {
-    bool result = false; // webcam_on();
+    TuxedoWmiAPI wmi;
+    bool result = wmi.setWebcam(true);
     return Boolean::New(info.Env(), result);
 }
 
 Boolean webcamOff(const CallbackInfo &info) {
-    bool result = false; // webcam_off();
+    TuxedoWmiAPI wmi;
+    bool result = wmi.setWebcam(false);
     return Boolean::New(info.Env(), result);
 }
 
