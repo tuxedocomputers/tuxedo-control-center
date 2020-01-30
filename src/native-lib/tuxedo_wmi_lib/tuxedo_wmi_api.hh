@@ -59,7 +59,7 @@ public:
     }
 
 private:
-const char *TUXEDO_WMI_DEVICE_FILE = "/dev/wmi_driver_dev";
+    const char *TUXEDO_WMI_DEVICE_FILE = "/dev/tuxedo_wmi";
     int _fileHandle = -1;
 
     void openDevice() {
