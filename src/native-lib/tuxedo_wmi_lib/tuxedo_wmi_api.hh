@@ -28,56 +28,56 @@ class TuxedoWmiAPI {
 /*public:
     TuxedoWmiAPI();
     ~TuxedoWmiAPI();
-    bool wmiAvailable();
-    bool setWebcam();
+    bool WmiAvailable();
+    bool SetWebcam(bool);
 
 private:
-    const char *TUXEDO_WMI_DEVICE_FILE = "/dev/wmi_driver_dev";
+    const char *TUXEDO_WMI_DEVICE_FILE = "/dev/tuxedo_wmi";
 
     int _fileHandle = -1;
-    void openDevice();
-    void closeDevice();
-    bool ioctlCall(unsigned long);
-    bool ioctlCall(unsigned long, int &);
+    void OpenDevice();
+    void CloseDevice();
+    bool IoctlCall(unsigned long);
+    bool IoctlCall(unsigned long, int &);
 */
 public:
     TuxedoWmiAPI() {
-        openDevice();
+        OpenDevice();
     }
 
     ~TuxedoWmiAPI() {
-        closeDevice();
+        CloseDevice();
     }
 
-    bool wmiAvailable() {
+    bool WmiAvailable() {
         return _fileHandle >= 0;
     }
 
-    bool setWebcam(bool status) {
+    bool SetWebcam(bool status) {
         int argument = status ? 1 : 0;
-        return ioctlCall(W_WEBCAM_SW, argument);
+        return IoctlCall(W_WEBCAM_SW, argument);
     }
 
 private:
     const char *TUXEDO_WMI_DEVICE_FILE = "/dev/tuxedo_wmi";
     int _fileHandle = -1;
 
-    void openDevice() {
+    void OpenDevice() {
         _fileHandle = open(TUXEDO_WMI_DEVICE_FILE, O_RDWR);
     }
 
-    void closeDevice() {
+    void CloseDevice() {
         close(_fileHandle);
     }
 
-    bool ioctlCall(unsigned long request) {
-        if (!wmiAvailable()) return false;
+    bool IoctlCall(unsigned long request) {
+        if (!WmiAvailable()) return false;
         int result = ioctl(_fileHandle, request);
         return result >= 0;
     }
 
-    bool ioctlCall(unsigned long request, int &argument) {
-        if (!wmiAvailable()) return false;
+    bool IoctlCall(unsigned long request, int &argument) {
+        if (!WmiAvailable()) return false;
         int result = ioctl(_fileHandle, request, argument);
         return result >= 0;
     }

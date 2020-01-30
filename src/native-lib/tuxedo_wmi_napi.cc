@@ -21,19 +21,19 @@
 
 using namespace Napi;
 
-Boolean webcamOn(const CallbackInfo &info) {
+Boolean WebcamOn(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
-    bool result = wmi.setWebcam(true);
+    bool result = wmi.SetWebcam(true);
     return Boolean::New(info.Env(), result);
 }
 
-Boolean webcamOff(const CallbackInfo &info) {
+Boolean WebcamOff(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
-    bool result = wmi.setWebcam(false);
+    bool result = wmi.SetWebcam(false);
     return Boolean::New(info.Env(), result);
 }
 
-Boolean setFanAuto(const CallbackInfo &info) {
+Boolean SetFanAuto(const CallbackInfo &info) {
     if (info.Length() != 1 || !info[0].IsNumber()) return Boolean::New(info.Env(), false);
     int fanNumber = info[0].As<Number>();
     if (fanNumber < 1 || fanNumber > 4) return Boolean::New(info.Env(), false);
@@ -43,7 +43,7 @@ Boolean setFanAuto(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
-Boolean setFanSpeedPercent(const CallbackInfo &info) {
+Boolean SetFanSpeedPercent(const CallbackInfo &info) {
     if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsNumber()) return Boolean::New(info.Env(), false);
     int fanNumber = info[0].As<Number>();
     int speedPercent = info[1].As<Number>();
@@ -55,7 +55,7 @@ Boolean setFanSpeedPercent(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
-Number getFanSpeedPercent(const CallbackInfo &info) {
+Number GetFanSpeedPercent(const CallbackInfo &info) {
     if (info.Length() != 1 || !info[0].IsNumber()) return Number::New(info.Env(), -1);
     int fanNumber = info[0].As<Number>();
     if (fanNumber < 1 || fanNumber > 4) return Number::New(info.Env(), -1);
@@ -65,7 +65,7 @@ Number getFanSpeedPercent(const CallbackInfo &info) {
     return Number::New(info.Env(), fanSpeedPercent);
 }
 
-Number getFanTemperature(const CallbackInfo &info) {
+Number GetFanTemperature(const CallbackInfo &info) {
     if (info.Length() != 1 || !info[0].IsNumber()) return Number::New(info.Env(), -1);
     int fanNumber = info[0].As<Number>();
     if (fanNumber < 1 || fanNumber > 4) return Number::New(info.Env(), -1);
@@ -77,14 +77,14 @@ Number getFanTemperature(const CallbackInfo &info) {
 
 Object Init(Env env, Object exports) {
     // Webcam
-    exports.Set(String::New(env, "webcamOn"), Function::New(env, webcamOn));
-    exports.Set(String::New(env, "webcamOff"), Function::New(env, webcamOff));
+    exports.Set(String::New(env, "webcamOn"), Function::New(env, WebcamOn));
+    exports.Set(String::New(env, "webcamOff"), Function::New(env, WebcamOff));
 
     // Fan control
-    exports.Set(String::New(env, "setFanAuto"), Function::New(env, setFanAuto));
-    exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, setFanSpeedPercent));
-    exports.Set(String::New(env, "getFanSpeedPercent"), Function::New(env, getFanSpeedPercent));
-    exports.Set(String::New(env, "getFanTemperature"), Function::New(env, getFanTemperature));
+    exports.Set(String::New(env, "setFanAuto"), Function::New(env, SetFanAuto));
+    exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, SetFanSpeedPercent));
+    exports.Set(String::New(env, "getFanSpeedPercent"), Function::New(env, GetFanSpeedPercent));
+    exports.Set(String::New(env, "getFanTemperature"), Function::New(env, GetFanTemperature));
 
     return exports;
 }
