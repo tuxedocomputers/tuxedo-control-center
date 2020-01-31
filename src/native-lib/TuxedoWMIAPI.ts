@@ -29,25 +29,26 @@ export interface ITuxedoWMIAPI {
     webcamOff(): boolean;
 
     /**
-     * Set standard auto fan control for specified fan
+     * Set standard auto fan control for specified fan(s)
      * @returns True if successful, false otherwise
      */
-    setFanAuto(fanNumber: number): boolean;
+    setFanAuto(fan1: boolean, fan2: boolean, fan3: boolean, fan4: boolean): boolean;
     /**
-     * Set speed of specified fan in percent
+     * Set speed of all fans as a byte value 0-255
      * @returns True if successful, false otherwise
      */
-    setFanSpeedPercent(fanNumber: number, setFanSpeedPercent: number): boolean;
+    setFanSpeedByte(speed1: number, speed2: number, speed3: number, speed4: number): boolean;
     /**
-     * Get speed of specified fan in percent
-     * @returns The percentage or -1 on error
+     * Get information from the specified fan 1-4
+     * @returns True if successful, false otherwise
      */
-    getFanSpeedPercent(fanNumber: number): number;
-    /**
-     * Get temperature of sensor for specified fan
-     * @returns Temperature in celcius or -1 on error
-     */
-    getFanTemperature(fanNumber: number): number;
+    getFanInfo(fanNumber: number, fanInfo: IFanInfo): boolean;
+}
+
+export interface IFanInfo {
+    speed: number;
+    temp1: number;
+    temp2: number;
 }
 
 export const TuxedoWMIAPI: ITuxedoWMIAPI = require('TuxedoWMIAPI');

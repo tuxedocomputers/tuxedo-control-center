@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <napi.h>
+#include <cmath>
 #include "tuxedo_wmi_lib/tuxedo_wmi_api.hh"
 
 using namespace Napi;
@@ -34,45 +35,52 @@ Boolean WebcamOff(const CallbackInfo &info) {
 }
 
 Boolean SetFanAuto(const CallbackInfo &info) {
-    if (info.Length() != 1 || !info[0].IsNumber()) return Boolean::New(info.Env(), false);
-    int fanNumber = info[0].As<Number>();
-    if (fanNumber < 1 || fanNumber > 4) return Boolean::New(info.Env(), false);
+    TuxedoWmiAPI wmi;
+    if (info.Length() != 4 || !info[0].IsBoolean() || !info[1].IsBoolean() || !info[2].IsBoolean() || !info[3].IsBoolean()) return Boolean::New(info.Env(), false);
+    bool fan1 = info[0].As<Boolean>();
+    bool fan2 = info[1].As<Boolean>();
+    bool fan3 = info[2].As<Boolean>();
+    bool fan4 = info[3].As<Boolean>();
 
-    bool result = false; // set_fan_auto(fanNumber);
-
-    return Boolean::New(info.Env(), result);
-}
-
-Boolean SetFanSpeedPercent(const CallbackInfo &info) {
-    if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsNumber()) return Boolean::New(info.Env(), false);
-    int fanNumber = info[0].As<Number>();
-    int speedPercent = info[1].As<Number>();
-    if (fanNumber < 1 || fanNumber > 4) return Boolean::New(info.Env(), false);
-    if (speedPercent < 0 || speedPercent > 100) return Boolean::New(info.Env(), false);
-
-    bool result = false; // set_fan_speed(fanNumber, speedPercent);
+    bool result = wmi.SetFanAuto(fan1, fan2, fan3, fan4);
 
     return Boolean::New(info.Env(), result);
 }
 
-Number GetFanSpeedPercent(const CallbackInfo &info) {
-    if (info.Length() != 1 || !info[0].IsNumber()) return Number::New(info.Env(), -1);
-    int fanNumber = info[0].As<Number>();
-    if (fanNumber < 1 || fanNumber > 4) return Number::New(info.Env(), -1);
+Boolean SetFanSpeedByte(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    if (info.Length() != 4 || !info[0].IsNumber() || !info[1].IsNumber() || !info[2].IsNumber() || !info[3].IsNumber()) return Boolean::New(info.Env(), false);
+    int speed1 = (int)round(info[0].As<Number>());
+    int speed2 = (int)round(info[1].As<Number>());
+    int speed3 = (int)round(info[2].As<Number>());
+    int speed4 = (int)round(info[3].As<Number>());
+    if (speed1 < 0x00 || speed1 > 0xff) return Boolean::New(info.Env(), false);
+    if (speed2 < 0x00 || speed2 > 0xff) return Boolean::New(info.Env(), false);
+    if (speed3 < 0x00 || speed3 > 0xff) return Boolean::New(info.Env(), false);
+    if (speed4 < 0x00 || speed4 > 0xff) return Boolean::New(info.Env(), false);
 
-    int fanSpeedPercent = 1; // get_fan_speed_percent(fanNumber);
+    bool result = wmi.SetFanSpeeds(speed1 & 0xff, speed2 & 0xff, speed3 & 0xff, speed4 & 0xff);
 
-    return Number::New(info.Env(), fanSpeedPercent);
+    return Boolean::New(info.Env(), result);
 }
 
-Number GetFanTemperature(const CallbackInfo &info) {
-    if (info.Length() != 1 || !info[0].IsNumber()) return Number::New(info.Env(), -1);
+Boolean GetFanInfo(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsObject()) return Boolean::New(info.Env(), false);
     int fanNumber = info[0].As<Number>();
-    if (fanNumber < 1 || fanNumber > 4) return Number::New(info.Env(), -1);
+    if (fanNumber < 1 || fanNumber > 4) return Boolean::New(info.Env(), false);;
+    Object fanInfoParameter = info[1].As<Object>();
 
-    int fanTemperature = 1; //get_fan_temperature(fanNumber);
+    int fanInfo = 0;
+    bool result = wmi.GetFanInfo(fanNumber, fanInfo);
+    int fanSpeed = fanInfo & 0xff;
+    int fanTemp1 = (fanInfo >> 0x08) & 0xff;
+    int fanTemp2 = (fanInfo >> 0x10) & 0xff;
+    fanInfoParameter.Set("speed", fanSpeed);
+    fanInfoParameter.Set("temp1", fanTemp1);
+    fanInfoParameter.Set("temp2", fanTemp2);
 
-    return Number::New(info.Env(), fanTemperature);
+    return Boolean::New(info.Env(), result);
 }
 
 Object Init(Env env, Object exports) {
@@ -82,9 +90,8 @@ Object Init(Env env, Object exports) {
 
     // Fan control
     exports.Set(String::New(env, "setFanAuto"), Function::New(env, SetFanAuto));
-    exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, SetFanSpeedPercent));
-    exports.Set(String::New(env, "getFanSpeedPercent"), Function::New(env, GetFanSpeedPercent));
-    exports.Set(String::New(env, "getFanTemperature"), Function::New(env, GetFanTemperature));
+    exports.Set(String::New(env, "setFanSpeedByte"), Function::New(env, SetFanSpeedByte));
+    exports.Set(String::New(env, "getFanInfo"), Function::New(env, GetFanInfo));
 
     return exports;
 }
