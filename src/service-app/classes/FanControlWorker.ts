@@ -73,7 +73,7 @@ export class FanControlWorker extends DaemonWorker {
             const fanLogic = this.fans.get(fanNumber);
             const fanInfo: IFanInfo = { speed: 0, temp1: 1, temp2: 1 };
             const result = wmiAPI.getFanInfo(fanNumber, fanInfo);
-            const currentTemperature = fanInfo.temp1;
+            const currentTemperature = fanInfo.temp2; // Temp2 hardcoded, note: temp1 is not used for gpu fans
             const currentSpeed = Math.round((fanInfo.speed / 0xff) * 100);
             /*const currentTemperature = ecAPI.getFanTemperature(fanNumber);
             let currentSpeed = ecAPI.getFanSpeedPercent(fanNumber);*/
