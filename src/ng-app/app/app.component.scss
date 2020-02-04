@@ -27,17 +27,24 @@
         justify-content: space-between;
         flex-flow: nowrap;
         align-items: center;
+        img {
+            &#title-logo_big {
+                width: 250px;
+                opacity: .2;
+                position: absolute;
+                left:-43px;
+                top:-55px;
+            }
+            &#title-logo {
+                max-height: 40px;
+            }
+        }
 
         #title-left {
             width: 150px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            img {
-                &#title-logo {
-                    max-height: 45px;
-                }
-            }
 
             #title-lang {
                 display: flex;
@@ -69,6 +76,15 @@
 
         .selected {
             font-weight: bold;
+        }
+
+        mat-icon {
+            transform-origin: center left;
+            transform: scale(2);
+        }
+
+        .navsubline {
+            
         }
     }
 
