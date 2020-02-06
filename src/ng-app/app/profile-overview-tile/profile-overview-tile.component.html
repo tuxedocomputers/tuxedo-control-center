@@ -18,13 +18,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
     <mat-card-content>
+        <span class="state-icons">
+            <span *ngFor="let state of getStateInputs()">
+                <mat-icon class="status-icon" *ngIf="getSettings().stateMap[state.value] === profile.name">{{ state.icon }}</mat-icon>
+            </span>
+        </span>
+        <div style="width: 90px; height:90px; margin: auto;">
+            <img src="./assets/images/icon_profile_energysaver.png" id="title-logo" style="height:90px;">
+        </div>
+        
         <header *ngIf="!addProfileTile">
             <span class="profile-name">{{ profile.name }}</span>
-            <span class="state-icons">
-                <span *ngFor="let state of getStateInputs()">
-                    <mat-icon class="status-icon" *ngIf="getSettings().stateMap[state.value] === profile.name">{{ state.icon }}</mat-icon>
-                </span>
-            </span>
         </header>
         <header *ngIf="addProfileTile">
             <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>

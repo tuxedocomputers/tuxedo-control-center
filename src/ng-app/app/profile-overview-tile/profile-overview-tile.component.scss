@@ -43,6 +43,7 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            margin:auto;
         }
 
         .state-icons {
@@ -95,7 +96,7 @@
     }
 
     mat-card-content {
-        height: 155px;
+        height: 300px;
         
         .add-profile-content {
             mat-icon {
