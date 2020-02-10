@@ -25,4 +25,7 @@ $tuxedo-control-center-dark-theme: mat-dark-theme($tuxedo-dark-theme-primary, $t
 .dark-theme {
     @include angular-material-theme($tuxedo-control-center-dark-theme);
     @include component-themes($tuxedo-control-center-dark-theme);
+
+    --icon-main: currentColor;
+    --icon-detail: #ed1c24;
 }

@@ -25,4 +25,7 @@ $tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary,
 .light-theme {
     @include angular-material-theme($tuxedo-control-center-light-theme);
     @include component-themes($tuxedo-control-center-light-theme);
+
+    --icon-main: currentColor;
+    --icon-detail: #ed1c24;
 }
