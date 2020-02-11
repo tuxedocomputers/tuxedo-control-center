@@ -82,28 +82,44 @@
             transform-origin: center left;
             transform: scale(2);
         }
-
-        .navsubline {
-            
-        }
     }
 
     .main-sidenav-nav {
         width: 220px;
         // height: 100%;
 
-        mat-list-item {
-            content {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
+        .sidenav-top {
+            mat-list-item {
+                content {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                }
             }
         }
 
-        mat-nav-list.bottom {
+        .sidenav-bottom {
             width: 100%;
             position: absolute;
             bottom: 0px;
+            overflow: hidden;
+
+            display: flex;
+
+            mat-nav-list {
+                flex: 50%;
+
+                mat-list-item {
+                    width: 110px;
+                    content {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                }
+            }
         }
     }
 
