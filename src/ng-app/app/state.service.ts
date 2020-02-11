@@ -74,13 +74,13 @@ export class StateService implements OnDestroy {
       .set(ProfileStates.AC.toString(), {
         label: this.i18n({ value: 'Mains', id: 'stateLabelMains' }),
         tooltip: this.i18n({ value: 'Mains power adaptor', id: 'stateTooltipMains' }),
-        icon: 'power',
+        icon: 'icon_plug_dark_red.svg',
         value: ProfileStates.AC.toString()
       })
       .set(ProfileStates.BAT.toString(), {
         label: this.i18n({ value: 'Battery ', id: 'stateLabelBattery' }),
         tooltip: this.i18n({ value: 'Battery powered', id: 'stateTooltipBattery' }),
-        icon: 'battery_std',
+        icon: 'icon_battery_dark_red.svg',
         value: ProfileStates.BAT.toString()
       });
     this.stateInputArray = Array.from(this.stateInputMap.values());

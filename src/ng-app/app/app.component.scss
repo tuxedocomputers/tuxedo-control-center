@@ -85,7 +85,8 @@
     }
 
     .main-sidenav-nav {
-        width: 220px;
+        --sidenav-width: 240px;
+        width: var(--sidenav-width);
         // height: 100%;
 
         .sidenav-top {
@@ -94,6 +95,13 @@
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
+
+                    .profile-name {
+                        max-width: 80%;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
                 }
             }
         }
@@ -110,7 +118,7 @@
                 flex: 50%;
 
                 mat-list-item {
-                    width: 110px;
+                    width: var(--sidenav-width) / 2;
                     content {
                         width: 100%;
                         display: flex;
