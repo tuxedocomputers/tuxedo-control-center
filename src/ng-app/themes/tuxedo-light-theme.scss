@@ -28,4 +28,8 @@ $tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary,
 
     --icon-main: currentColor;
     --icon-detail: #ed1c24;
+
+    .theme-page-title {
+        opacity: 0.7;
+    }
 }

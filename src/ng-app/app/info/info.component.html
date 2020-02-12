@@ -17,34 +17,28 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <br />
+<mat-card class="card-info">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
+    </mat-card-title>
+    <mat-divider></mat-divider>
+    <p i18n="@@cInfoTCCInfoText1">
+        We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
+        in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
+    </p>
+    <p i18n="@@cInfoTCCInfoText2">
+        We want to give you the ultimate control over your device, the ability to squeeze out the most
+        and to be able to customize it as much as possible by yourself!
+    </p>
+</mat-card>
+<br />
 <mat-accordion class="info-accordion">
-    <mat-expansion-panel hideToggle [expanded]="true" class="panel-info">
+    <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <ng-container i18n="@@cInfoVersionPanelTitle">Version</ng-container>
             </mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoInfoPanelDesc">General information</ng-container>
-                <mat-icon><img src="./assets/images/information.svg"></mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p i18n="@@cInfoTCCInfoText1">
-            We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
-            in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
-        </p>
-        <p i18n="@@cInfoTCCInfoText2">
-            We want to give you the ultimate control over your device, the ability to squeeze out the most
-            and to be able to customize it as much as possible by yourself!
-        </p>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cInfoVersionPanelTitle">Version</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoVersionPanelDesc">What's new? What's old?</ng-container>
-                <mat-icon>track_changes</mat-icon>
-            </mat-panel-description>
         </mat-expansion-panel-header>
         <p>
             <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
@@ -60,13 +54,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-card>
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel>
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cInfoLanguagePanelTitle">Language</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoLanguagePanelDesc">Choose language</ng-container>
-                <mat-icon>language</mat-icon>
-            </mat-panel-description>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <ng-container i18n="@@cInfoLanguagePanelTitle">Language</ng-container>
+            </mat-panel-title>
         </mat-expansion-panel-header>
         
         <mat-form-field class="language-select">
@@ -85,13 +78,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-form-field>
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel>
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cInfoImprintPanelTitle">Imprint</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoImprintPanelDesc">Legal statement</ng-container>
-                <mat-icon>gavel</mat-icon>
-            </mat-panel-description>
+            <mat-panel-title i18n="@@cInfoImprintPanelTitle">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <ng-container i18n="@@cInfoImprintPanelTitle">Imprint</ng-container>
+            </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-divider></mat-divider>
         <pre><code i18n="@@cInfoImprintText">
