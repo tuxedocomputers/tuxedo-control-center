@@ -16,8 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 .card-info {
+    margin-bottom: 10px;
+
     mat-card-title {
         display: flex;
         justify-content: center;
