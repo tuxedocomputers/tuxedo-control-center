@@ -17,35 +17,32 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <br />
-<mat-accordion class="support-accordion">
-    <mat-expansion-panel hideToggle [expanded]="true">
-        <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cSupportGeneralPanelTitle">TUXEDO Support</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cSupportGeneralPanelDesc">General support information</ng-container>
-                <mat-icon><img src="./assets/images/support.svg"></mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-grid-list cols="2" rowHeight="100px">
-            <mat-grid-tile>
-                <mat-icon><i class="fas fa-phone"></i></mat-icon><h3 style="padding-left: 10px">+49 (0) 821 / 8998 2992</h3>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <button mat-raised-button color="primary" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
-                    <mat-icon>cloud</mat-icon>
-                    <strong style="padding-left: 10px" i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
-                </button>
-            </mat-grid-tile>
-        </mat-grid-list>
-    </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle (click)="focusControl(frmInputTicketNumber)">
+<mat-card class="card-support">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n="@@cSupportGeneralPanelTitle">TUXEDO Support</ng-container>
+    </mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-grid-list cols="2" rowHeight="100px">
+        <mat-grid-tile>
+            <mat-icon><i class="fas fa-phone"></i></mat-icon><h3 style="padding-left: 10px">+49 (0) 821 / 8998 2992</h3>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                <mat-icon>cloud</mat-icon>
+                <strong style="padding-left: 10px" i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</mat-card>
+<br />
+<mat-accordion class="support-accordion">
+    <mat-expansion-panel (click)="focusControl(frmInputTicketNumber)">
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cSupportSysInfoPanelTitle">System info collection</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cSupportSysInfoPanelDesc">Download and run systeminfos.sh</ng-container>
-                <mat-icon><img src="./assets/images/systemoverview.svg"></mat-icon>
-            </mat-panel-description>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <ng-container i18n="@@cSupportSysInfoPanelTitle">System info collection</ng-container>
+            </mat-panel-title>
         </mat-expansion-panel-header>
         <p i18n="@@cSupportSysInfoNoPersonalInfo">The script does not collect any personal data and no access data!</p>
         <p>
@@ -82,15 +79,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-vertical-stepper>
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel>
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cSupportAnydeskPanelTitle">
-                Anydesk
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <ng-container i18n="@@cSupportAnydeskPanelTitle">Anydesk</ng-container>
             </mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cSupportAnydeskPanelDesc">Install and start Anydesk</ng-container>
-                <mat-icon><img src="./assets/images/anydesk-logo-icon.svg"></mat-icon>
-            </mat-panel-description>
         </mat-expansion-panel-header>
         <p i18n="@@cSupportAnydeskProgramDesc">
             Anydesk is a remote desktop type tool that can allow support to help you from afar.

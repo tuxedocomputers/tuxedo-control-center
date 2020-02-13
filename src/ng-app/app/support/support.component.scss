@@ -16,17 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.support-accordion {
-    mat-panel-title, mat-panel-description {
-        flex-basis: 0;
-    }
-
-    mat-panel-title {
-        font-weight: bold;
+ .card-support {
+    mat-card-title {
+        display: flex;
+        justify-content: center;
     }
 }
 
-.support-accordion mat-panel-description {
-    justify-content: space-between;
-    align-items: center;
+.support-accordion {
+    mat-panel-title {
+        flex-basis: 0;
+        justify-content: center;
+        align-items: center;
+
+        font-weight: bold;
+    }
 }
