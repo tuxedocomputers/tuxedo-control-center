@@ -50,12 +50,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-card-title>
     <mat-card-content>
         <!-- Display settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsDisplayHeaderLabel">Display</ng-container>
-            </mat-card-subtitle>
-            <mat-card-content class="content">
+        <div class="settings-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
+                    <ng-container i18n="@@cProfMgrDetailsDisplayHeaderLabel">Display</ng-container>
+                </div>
+                <hr />
+            </div>
+            <div class="content">
                 <div formGroupName="display">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
@@ -91,15 +95,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     </mat-grid-list>
                 </div>
-            </mat-card-content>
-        </mat-card>
-        <br />
+            </div>
+        </div>
+
         <!-- CPU settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsCpuHeaderLabel">CPU settings</ng-container>
-            </mat-card-subtitle>
+        <div class="settings-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
+                    <ng-container i18n="@@cProfMgrDetailsCpuHeaderLabel">CPU settings</ng-container>
+                </div>
+                <hr />
+            </div>
             <mat-card-content class="content">
                 <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
@@ -187,14 +195,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 </mat-grid-list>
             </mat-card-content>
-        </mat-card>
+        </div>
         <br />
         <!-- Fan control settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon>toys</mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
-            </mat-card-subtitle>
+        <div class="settings-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <mat-icon>toys</mat-icon>
+                    <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
+                </div>
+                <hr />
+            </div>
             <mat-card-content class="content">
                 <div formGroupName="fan">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
@@ -233,14 +245,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
             </mat-card-content>
-        </mat-card>
+        </div>
         <br />
         <!-- Webcam settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon>videocam</mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
-            </mat-card-subtitle>
+        <div class="settings-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <mat-icon>videocam</mat-icon>
+                    <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
+                </div>
+                <hr />
+            </div>
             <mat-card-content class="content">
                 <div formGroupName="webcam">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
@@ -280,6 +296,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
             </mat-card-content>
-        </mat-card>
+        </div>
     </mat-card-content>
 </mat-card>
