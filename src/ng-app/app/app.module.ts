@@ -65,6 +65,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 
 import { OverlayModule } from '@angular/cdk/overlay';
 
+import { GaugeModule } from 'angular-gauge';
+
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
 // TODO: Set localeId according to settings
@@ -113,7 +115,8 @@ declare const require;
     MatStepperModule,
     MatButtonToggleModule,
     MarkdownModule.forRoot(),
-    OverlayModule
+    OverlayModule,
+    GaugeModule.forRoot()
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
