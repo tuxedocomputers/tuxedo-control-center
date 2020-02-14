@@ -22,6 +22,37 @@
     mat-card-title {
         display: flex;
         justify-content: center;
+
+        +hr {
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.card-support {
+    .support-info-text {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .phone-info, .web-info {
+        display: flex;
+        flex-flow: column;
+        justify-content: space-evenly;
+        align-items: center;
+
+        width: 100%;
+        height: 100%;
+
+        mat-icon {
+            transform: scale(2.5);
+        }
+
+        .phone-number {
+            font-size: 1.3em;
+            color: var(--icon-detail);
+        }
     }
 }
 

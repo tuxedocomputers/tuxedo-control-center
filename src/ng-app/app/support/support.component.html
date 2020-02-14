@@ -20,16 +20,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-card-title class="theme-page-title">
         <ng-container i18n="@@cSupportGeneralPanelTitle">TUXEDO Support</ng-container>
     </mat-card-title>
-    <mat-divider></mat-divider>
+    <hr />
+    <div class="support-info-text">You have a problem with your TUXEDO device?<br />Do not hesitate to contact us by phone or use our online support.</div>
     <mat-grid-list cols="2" rowHeight="100px">
         <mat-grid-tile>
-            <mat-icon><i class="fas fa-phone"></i></mat-icon><h3 style="padding-left: 10px">+49 (0) 821 / 8998 2992</h3>
+            <div class="phone-info">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <span class="phone-number">+49 (0) 821 / 8998 2992</span>
+            </div>
         </mat-grid-tile>
         <mat-grid-tile>
-            <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
-                <mat-icon>cloud</mat-icon>
-                <strong style="padding-left: 10px" i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
-            </button>
+            <div class="web-info">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                    <strong i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
+                </button>
+            </div>
         </mat-grid-tile>
     </mat-grid-list>
 </mat-card>
