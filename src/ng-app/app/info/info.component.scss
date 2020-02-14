@@ -35,6 +35,11 @@
         align-items: center;
 
         font-weight: bold;
+
+        mat-icon {
+            transform: scale(1.5);
+            transform-origin: center right;
+        }
     }
 }
 
