@@ -44,3 +44,37 @@
         }
     }
 }
+
+.tcc-options-group {
+    .title-row {
+        display: flex;
+        justify-content: stretch;
+        align-items: center;
+
+        padding-top: 50px;
+        padding-bottom: 20px;
+
+        hr {
+            flex: 1;
+            opacity: 0.3;
+            width: 100%;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+
+            height: 50px;
+            padding-left: 30px;
+            padding-right: 30px;
+
+            font-weight: bold;
+            mat-icon {
+                transform: scale(1.5);
+                transform-origin: center bottom;
+            }
+        }
+    }
+}
