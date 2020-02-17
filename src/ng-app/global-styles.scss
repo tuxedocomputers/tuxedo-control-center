@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.card-style {
+.tcc-card {
     margin-bottom: 10px;
 
     mat-card-title {
@@ -30,7 +30,7 @@
     }
 }
 
-.accordion-style {
+.tcc-accordion {
     mat-panel-title {
         flex-basis: 0;
         justify-content: center;
