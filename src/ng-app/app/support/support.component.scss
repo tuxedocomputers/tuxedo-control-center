@@ -17,20 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 .card-support {
-    margin-bottom: 10px;
-
-    mat-card-title {
-        display: flex;
-        justify-content: center;
-
-        +hr {
-            opacity: 0.3;
-            margin-bottom: 20px;
-        }
-    }
-}
-
-.card-support {
     .support-info-text {
         text-align: center;
         margin-bottom: 20px;
@@ -52,21 +38,6 @@
         .phone-number {
             font-size: 1.3em;
             color: var(--icon-detail);
-        }
-    }
-}
-
-.support-accordion {
-    mat-panel-title {
-        flex-basis: 0;
-        justify-content: center;
-        align-items: center;
-
-        font-weight: bold;
-
-        mat-icon {
-            transform: scale(1.5);
-            transform-origin: center right;
         }
     }
 }
