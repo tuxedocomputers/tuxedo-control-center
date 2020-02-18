@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xml:space="preserve"
+   style="enable-background:new 0 0 512 512;"
+   viewBox="0 0 512 512"
+   y="0px"
+   x="0px"
+   id="Icon"
+   version="1.1"><metadata
+   id="metadata55"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs53">
+</defs>
+
+<path
+   id="icon-detailcolor"
+   d="M 250.92578 105.59961 C 182.86877 105.59961 123.21015 151.37721 105.5957 217.11523 A 8.3818377 8.3818377 0 1 0 121.78711 221.45312 C 137.45897 162.96495 190.37435 122.36133 250.92578 122.36133 C 311.3661 122.36133 364.19518 162.81754 379.97461 221.13281 L 344.93164 200.90234 A 8.3818377 8.3818377 0 0 0 340.95508 199.72461 A 8.3818377 8.3818377 0 0 0 336.55078 215.41797 L 387.81055 245.01562 A 8.3818377 8.3818377 0 0 0 400.57031 242.70312 L 430.92188 190.13086 A 8.3818377 8.3818377 0 0 0 423.79492 177.45703 A 8.3818377 8.3818377 0 0 0 416.40625 181.75 L 396.16797 216.80273 C 378.44791 151.23302 318.87436 105.59961 250.92578 105.59961 z "
+   style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:var(--icon-detail);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16.76199913;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" /><path
+   id="icon-maincolor"
+   d="M 118.81836 265.00391 A 8.3818377 8.3818377 0 0 0 116.59375 265.29492 A 8.3818377 8.3818377 0 0 0 110.75391 270.46875 L 81.078125 321.86914 A 8.3818377 8.3818377 0 1 0 95.59375 330.25 L 115.83203 295.19727 C 133.55209 360.76698 193.12564 406.40039 261.07422 406.40039 C 329.13123 406.40039 388.78985 360.62279 406.4043 294.88477 A 8.3818377 8.3818377 0 1 0 390.21289 290.54688 C 374.54103 349.03505 321.62565 389.63867 261.07422 389.63867 C 200.6339 389.63867 147.80482 349.18246 132.02539 290.86719 L 167.06836 311.09766 A 8.3818377 8.3818377 0 1 0 175.44922 296.58203 L 124.05273 266.90625 A 8.3818377 8.3818377 0 0 0 118.81836 265.00391 z "
+   style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:var(--icon-main);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16.76199913;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" /></svg>
