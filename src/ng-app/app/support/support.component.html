@@ -25,13 +25,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-grid-list cols="2" rowHeight="100px">
         <mat-grid-tile>
             <div class="phone-info">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_support.svg#Icon"></use></svg></mat-icon>
                 <span class="phone-number">+49 (0) 821 / 8998 2992</span>
             </div>
         </mat-grid-tile>
         <mat-grid-tile>
             <div class="web-info">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_online.svg#Icon"></use></svg></mat-icon>
                 <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
                     <strong i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
                 </button>
@@ -44,7 +44,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-expansion-panel (click)="focusControl(frmInputTicketNumber)">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_systemdiagnose.svg#Icon"></use></svg></mat-icon>
                 <ng-container i18n="@@cSupportSysInfoPanelTitle">System info collection</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
@@ -86,7 +86,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_help_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <img src="./assets/images/anydesk-logo-icon.svg" style="height: 20px; padding: 5px;"/>
+                <!--mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/anydesk-logo-icon.svg#Layer_1"></use></svg></mat-icon-->
                 <ng-container i18n="@@cSupportAnydeskPanelTitle">Anydesk</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
