@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,57 +16,79 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<mat-expansion-panel hideToggle [expanded]="true">
-    <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@cCpuDashboardCoresPanelTitle">
-            Active cores
-        </mat-panel-title>
-        <mat-panel-description>
-            <ng-container i18n="@@cCpuDashboardCoresPanelDesc">Logical CPU cores in use</ng-container>
-            <mat-icon>memory</mat-icon>
-        </mat-panel-description>
-    </mat-expansion-panel-header>
-    <mat-chip-list>
-        <mat-chip *ngFor="let core of cpuCoreInfo">
-            <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
-        </mat-chip>
-    </mat-chip-list>
-</mat-expansion-panel>
-<br />
+<mat-card>
+    <div class="tcc-options-group cpu-thermal-info">
+        <div class="title-row">
+            <hr />
+            <div class="title">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-icon>
+                <ng-container>System monitor</ng-container>
+            </div>
+            <hr />
+        </div>
+        <div class="content">
+            <table>
+                <tr><th i18n="@@cCpuDashboardThermalTemp">Temp</th><th i18n="@@cCpuDashboardThermalFanSpeed">Fan speed</th></tr>
+                <tr><td>{{ fanData.cpu.temp.data.value }} &deg;C</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
+            </table>
+        </div>
+    </div>
 
-<mat-expansion-panel hideToggle [expanded]="true" class="cpu-thermal-info">
-    <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@cCpuDashboardThermalPanelTitle">
-            Thermal
-        </mat-panel-title>
-        <mat-panel-description>
-            <ng-container i18n="@@cCpuDashboardThermalPanelTitle">Temperature and fan info</ng-container>
-            <mat-icon>toys</mat-icon>
-        </mat-panel-description>
-    </mat-expansion-panel-header>
-    <table>
-        <tr><th i18n="@@cCpuDashboardThermalTemp">Temp</th><th i18n="@@cCpuDashboardThermalFanSpeed">Fan speed</th></tr>
-        <tr><td>{{ fanData.cpu.temp.data.value }} &deg;C</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
-    </table>
-</mat-expansion-panel>
-<br />
+    <div class="tcc-options-group cpu-thermal-info">
+        <div class="title-row">
+            <hr />
+            <div class="title">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_settings.svg#Icon"></use></svg></mat-icon>
+                <ng-container>Profile settings</ng-container>
+            </div>
+            <hr />
+        </div>
+        <div class="content">
+        </div>
+    </div>
 
-<mat-expansion-panel hideToggle class="cpu-frequency-info">
-    <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
-            Frequency
-        </mat-panel-title>
-        <mat-panel-description>
-            <ng-container i18n="@@cCpuDashboardFreqPanelTitle">Cpu frequency info</ng-container>
-            <mat-icon>flash_on</mat-icon>
-        </mat-panel-description>
-    </mat-expansion-panel-header>
-    <table>
-        <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
-    </table>
-</mat-expansion-panel>
+    <mat-expansion-panel hideToggle class="cpu-frequency-info">
+        <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
+                Frequency
+            </mat-panel-title>
+            <mat-panel-description>
+                <ng-container i18n="@@cCpuDashboardFreqPanelTitle">Cpu frequency info</ng-container>
+                <mat-icon>flash_on</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <table>
+            <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
+        </table>
+    </mat-expansion-panel>
+
+    <div class="tcc-options-group cpu-thermal-info">
+        <div class="title-row">
+            <hr />
+            <div class="title">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <ng-container>Other</ng-container>
+            </div>
+            <hr />
+        </div>
+        <div class="content">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        More
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-chip-list>
+                    <mat-chip *ngFor="let core of cpuCoreInfo">
+                        <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
+                    </mat-chip>
+                </mat-chip-list>
+            </mat-expansion-panel>
+        </div>
+    </div>
+</mat-card>
 <br />
