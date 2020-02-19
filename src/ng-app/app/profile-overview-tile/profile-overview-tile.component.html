@@ -18,13 +18,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
     <mat-card-content>
+        <div style="text-align: right;">
+            <!-- PSEUDO-CODE: IF (active AND chosenprofile) then show green point ELSE IF (active) THEN show grey point-->
+            <div style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
+
+            <!-- PSEUDO-CODE: IF (batterychosenprofile) then show battery-icon else hide it -->
+            <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_batterymode.svg#Icon"></use></svg></mat-icon>
+        </div>
+        
         <span class="state-icons">
             <span *ngFor="let state of getStateInputs()">
                 <mat-icon class="status-icon" *ngIf="getSettings().stateMap[state.value] === profile.name">{{ state.icon }}</mat-icon>
             </span>
         </span>
-        <div style="width: 90px; height:90px; margin: auto;">
-            <img src="./assets/images/icon_profile_energysaver.png" id="title-logo" style="height:90px;">
+        <div class="profile-icons">
+            <img src="./assets/images/icon_profile_energysaver.svg">
         </div>
         
         <header *ngIf="!addProfileTile">
@@ -33,7 +41,56 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <header *ngIf="addProfileTile">
             <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>
         </header>
-        <hr />
+
+        <mat-divider></mat-divider>
+
+        <span *ngIf="!addProfileTile">
+            <div class="status-flexbox">
+                <div class="status-component">
+                    <div class="status-icon-container">
+                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg></mat-icon>
+                    </div>
+                    <span class="status-info">
+                        {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
+                    </span>
+                </div>
+                <div class="status-component">
+                    <div class="status-icon-container">
+                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg></mat-icon>
+                    </div>
+                    <span class="status-info">
+                        {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
+                    </span>
+                </div>
+                <div class="status-component">
+                    <div class="status-icon-container">
+                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_fan.svg#Icon"></use></svg></mat-icon>
+                    </div>
+                    <span class="status-info">
+                        {{ profile.cpu.governor }}
+                    </span>
+                </div>
+                <div class="status-component">
+                    <div class="status-icon-container">
+                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg></mat-icon>
+                    </div>
+                    <span class="status-info">
+                        {{ profile.display.brightness }} %
+                    </span>
+                </div>
+                <div class="status-component-lastrow">
+                    <div class="status-icon-container">
+                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg></mat-icon>
+                    </div>
+                    <span class="status-info">
+                        <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
+                        <span *ngIf="!profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">Off</span>
+                    </span>
+                </div>
+            </div>
+        </span>
+
+        <!--
         <span *ngIf="!addProfileTile">
             <div class="status-row">
                 <mat-icon class="status-icon">memory</mat-icon>
@@ -60,12 +117,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span *ngIf="!profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOn">On</span>
                 </span>
             </div>
-            <!--div class="status-row">
+
+            <div class="status-row">
                 <i class="fas fa-bolt status-icon"></i>
                 <span class="status-info">
                     {{ profile.cpu.energyPerformancePreference }}
                 </span>
-            </div-->
+            </div>
+            
             <div class="status-row" [ngClass]="{'inactive': !profile.fan.useControl}">
                 <mat-icon class="status-icon">toys</mat-icon>
                 <span class="status-info">
@@ -87,6 +146,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </span>
             </div>
         </span>
+    -->
+
         <span *ngIf="addProfileTile" class="add-profile-content">
             <mat-icon>add_box</mat-icon>
             <br />

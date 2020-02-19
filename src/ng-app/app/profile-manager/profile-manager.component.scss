@@ -40,3 +40,14 @@ mat-toolbar {
     width: 250px;
     margin-right: 10px;
 }
+
+.desc {
+    margin-top: 20px;
+    font-size: 16px;
+    opacity: 0.7;    
+}
+
+.header-divider {
+    border-bottom: 1px solid;
+    border-color: rgba($color: #000000, $alpha: 0.12);
+}

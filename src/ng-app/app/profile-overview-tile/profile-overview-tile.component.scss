@@ -55,6 +55,12 @@
         }
     }
 
+    .profile-icons {
+        width:100px;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+
     .status-row {
 
         width: 100%;
@@ -91,12 +97,34 @@
         }
 
         .status-info {
-            font-size: 0.9em;
+            font-size: 1em;
+        }
+    }
+
+    .status-flexbox {
+        display: flex;
+        flex-wrap:wrap;
+        margin-top: 20px;
+
+        .status-component {
+            width:50%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .status-component-lastrow {
+            width: 50%;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+
+        .status-icon-container {
+            margin-bottom: 10px;
         }
     }
 
     mat-card-content {
-        height: 300px;
+        height: auto;
         
         .add-profile-content {
             mat-icon {
