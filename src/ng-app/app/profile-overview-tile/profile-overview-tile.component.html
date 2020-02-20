@@ -25,12 +25,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <!-- PSEUDO-CODE: IF (batterychosenprofile) then show battery-icon else hide it -->
             <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_batterymode.svg#Icon"></use></svg></mat-icon>
         </div>
-        
+        <!--
         <span class="state-icons">
             <span *ngFor="let state of getStateInputs()">
                 <mat-icon class="status-icon" *ngIf="getSettings().stateMap[state.value] === profile.name">{{ state.icon }}</mat-icon>
             </span>
         </span>
+        -->
         <div class="profile-icons">
             <img src="./assets/images/icon_profile_energysaver.svg">
         </div>
@@ -149,8 +150,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     -->
 
         <span *ngIf="addProfileTile" class="add-profile-content">
-            <mat-icon>add_box</mat-icon>
-            <br />
+            <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
+                <span>
+                    <ng-container i18n="@@cProfMgrTitle" style="border:1px solid;">Profiles</ng-container>
+                    <span><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span>
+                </span>
+            </mat-toolbar-row>
         </span>
     </mat-card-content>
 </mat-card>

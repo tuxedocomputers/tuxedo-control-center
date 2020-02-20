@@ -50,4 +50,5 @@ mat-toolbar {
 .header-divider {
     border-bottom: 1px solid;
     border-color: rgba($color: #000000, $alpha: 0.12);
+    position: sticky;
 }
