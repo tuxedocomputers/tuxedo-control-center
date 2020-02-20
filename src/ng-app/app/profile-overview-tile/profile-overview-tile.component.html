@@ -91,6 +91,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </span>
 
+        <span *ngIf="addProfileTile" class="add-profile-content">
+            <div style="text-align: center;">
+                <button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button>
+            </div>
+            
+        </span>
+
         <!--
         <span *ngIf="!addProfileTile">
             <div class="status-row">
@@ -149,13 +156,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </span>
     -->
 
-        <span *ngIf="addProfileTile" class="add-profile-content">
-            <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
-                <span>
-                    <ng-container i18n="@@cProfMgrTitle" style="border:1px solid;">Profiles</ng-container>
-                    <span><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span>
-                </span>
-            </mat-toolbar-row>
-        </span>
+        
     </mat-card-content>
 </mat-card>

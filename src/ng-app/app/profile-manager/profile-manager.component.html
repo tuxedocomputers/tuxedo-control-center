@@ -21,8 +21,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="header-divider">
     <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
         <span>
-            <ng-container i18n="@@cProfMgrTitle" style="border:1px solid;">Profiles</ng-container>
-            <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span>
+            <ng-container i18n="@@cProfMgrTitle">Profiles</ng-container>
+            <!-- <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span> -->
         </span>
         <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
             <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
