@@ -27,10 +27,51 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
         </div>
         <div class="content">
-            <table>
-                <tr><th i18n="@@cCpuDashboardThermalTemp">Temp</th><th i18n="@@cCpuDashboardThermalFanSpeed">Fan speed</th></tr>
-                <tr><td>{{ fanData.cpu.temp.data.value }} &deg;C</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
-            </table>
+            <div class="system-monitor-gauges">
+                <div class="dashboard-gauge">
+                    <mwl-gauge
+                        [max]="120"
+                        [min]="0"
+                        [value]="fanData.cpu.temp.data.value"
+                        [dialStartAngle]="130"
+                        [dialEndAngle]="50">
+                    </mwl-gauge>
+                    <div class="unit-text">&deg;C</div>
+                    <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
+                    <div class="legend">
+                        <div class="text">CPU - Temp</div>
+                    </div>
+                </div>
+                <div class="dashboard-gauge">
+                    <mwl-gauge
+                        [max]="cpuInfo.maxFreq"
+                        [min]="cpuInfo.minFreq"
+                        [value]="avgCpuFreq"
+                        [label]="gaugeFreqFormat"
+                        [dialStartAngle]="130"
+                        [dialEndAngle]="50">
+                    </mwl-gauge>
+                    <div class="unit-text">GHz</div>
+                    <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
+                    <div class="legend">
+                        <div class="text">CPU - Frequency</div>
+                    </div>
+                </div>
+                <div class="dashboard-gauge">
+                    <mwl-gauge
+                        [max]="100"
+                        [min]="0"
+                        [value]="fanData.cpu.speed.data.value"
+                        [dialStartAngle]="130"
+                        [dialEndAngle]="50">
+                    </mwl-gauge>
+                    <div class="unit-text">%</div>
+                    <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <div class="legend">
+                        <div class="text">CPU - Fan</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -70,7 +111,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div class="title-row">
             <hr />
             <div class="title">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard_dark_red.svg#Layer_1"></use></svg></mat-icon>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-icon>
                 <ng-container>Other</ng-container>
             </div>
             <hr />

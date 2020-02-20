@@ -188,7 +188,7 @@ export class UtilsService {
   }
 
   public formatFrequency(frequency: number): string {
-    return this.decimalPipe.transform(frequency / 1000000, '1.1-2');
+    return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
   }
 
   public getAppVersion(): string {

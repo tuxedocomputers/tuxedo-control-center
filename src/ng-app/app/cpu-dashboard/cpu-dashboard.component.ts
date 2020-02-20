@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ILogicalCoreInfo, IGeneralCPUInfo, SysFsService, IPstateInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from '../utils.service';
@@ -39,6 +39,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public activeScalingDrivers: string[];
   public activeScalingGovernors: string[];
   public activeEnergyPerformancePreference: string[];
+
+  public avgCpuFreq: number;
+  public avgCpuFreqData;
 
   public fanData: IDBusFanData;
 
@@ -86,9 +89,27 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.activeScalingDrivers.push(core.scalingDriver);
       }
     }
+
+    // Calculate average frequency over the logical cores
+    const freqSum: number =
+      this.cpuCoreInfo
+      .map(info => info.scalingCurFreq)
+      .reduce((sum, currentFreq) => sum + currentFreq, 0);
+    this.avgCpuFreq = freqSum / this.cpuCoreInfo.length;
+    this.avgCpuFreqData = [{ name: 'CPU frequency', value: this.avgCpuFreq }];
   }
 
-  public formatFrequency(frequency: number): string {
+  public formatFrequency = (frequency: number): string => {
     return this.utils.formatFrequency(frequency);
   }
+
+  public gaugeFreqFormat: (value: number) => string = (value) => {
+    return this.utils.formatFrequency(value);
+  }
+
+  /*public gaugeFreqFormat(): (value: number) => string {
+    return (value) => {
+      return this.utils.formatFrequency(value);
+    };
+  }*/
 }
