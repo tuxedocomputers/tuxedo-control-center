@@ -18,7 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <br />
 <mat-toolbar>
-    <div class="header-divider">
+    <!--div class="header-divider"-->
     <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
         <span>
             <ng-container i18n="@@cProfMgrTitle" style="border:1px solid;">Profiles</ng-container>
@@ -53,11 +53,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <button mat-stroked-button color="basic" (click)="inputActive=false">Cancel</button>
         </form>
     </mat-toolbar-row>
-</div>
+    <!--/div-->
 
-<!-- Description message -->
-<!-- PSEUDO-CODE: If (currentsite == profile-overview) then show message, else hide -->
-<div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div>
+    <!-- Description message -->
+    <!-- PSEUDO-CODE: If (currentsite == profile-overview) then show message, else hide -->
+    <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
 
 </mat-toolbar>
 
