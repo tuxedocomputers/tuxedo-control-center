@@ -27,10 +27,11 @@
   .profile-details-edit {
     .mat-button-toggle {
         opacity: 0.8;
+        color: mat-color($primary, lighter);
     }
     .mat-button-toggle-checked, .mat-button-toggle-disabled {
         opacity: 1.0;
-        color: mat-color($accent);
+        color: mat-color($primary);
         background: inherit;
     }
   }
