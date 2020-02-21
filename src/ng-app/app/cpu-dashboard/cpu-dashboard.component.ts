@@ -21,6 +21,9 @@ import { ILogicalCoreInfo, IGeneralCPUInfo, SysFsService, IPstateInfo } from '..
 import { Subscription } from 'rxjs';
 import { UtilsService } from '../utils.service';
 import { TccDBusClientService, IDBusFanData } from '../tcc-dbus-client.service';
+import { ITccProfile } from 'src/common/models/TccProfile';
+import { StateService } from '../state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -45,12 +48,16 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public fanData: IDBusFanData;
 
+  public activeProfile: ITccProfile;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(
     private sysfs: SysFsService,
     private utils: UtilsService,
-    private tccdbus: TccDBusClientService
+    private tccdbus: TccDBusClientService,
+    private state: StateService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -58,6 +65,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => { this.fanData = fanData; }));
+    this.subscriptions.add(this.state.activeProfile.subscribe(profile => this.activeProfile = profile));
   }
 
   ngOnDestroy(): void {
@@ -107,9 +115,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     return this.utils.formatFrequency(value);
   }
 
-  /*public gaugeFreqFormat(): (value: number) => string {
-    return (value) => {
-      return this.utils.formatFrequency(value);
-    };
-  }*/
+  public goToProfileEdit(profile: ITccProfile): void {
+    if (profile !== undefined) {
+      this.router.navigate(['profile-manager', profile.name]);
+    }
+  }
 }

@@ -16,7 +16,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<mat-card>
+<mat-card class="tcc-card">
+    <mat-card-title class="theme-page-title">
+        {{ activeProfile.name }} <button mat-button (click)="goToProfileEdit(activeProfile)"><mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_settings.svg#Icon"></use></svg></mat-icon></button>
+    </mat-card-title>
     <div class="tcc-options-group cpu-thermal-info">
         <div class="title-row">
             <hr />
