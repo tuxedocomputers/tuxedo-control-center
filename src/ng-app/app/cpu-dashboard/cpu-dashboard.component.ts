@@ -16,11 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ILogicalCoreInfo, IGeneralCPUInfo, SysFsService, IPstateInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from '../utils.service';
 import { TccDBusClientService, IDBusFanData } from '../tcc-dbus-client.service';
+import { ITccProfile } from 'src/common/models/TccProfile';
+import { StateService } from '../state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -40,14 +43,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public activeScalingGovernors: string[];
   public activeEnergyPerformancePreference: string[];
 
+  public avgCpuFreq: number;
+  public avgCpuFreqData;
+
   public fanData: IDBusFanData;
+
+  public activeProfile: ITccProfile;
 
   private subscriptions: Subscription = new Subscription();
 
   constructor(
     private sysfs: SysFsService,
     private utils: UtilsService,
-    private tccdbus: TccDBusClientService
+    private tccdbus: TccDBusClientService,
+    private state: StateService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -55,6 +65,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => { this.fanData = fanData; }));
+    this.subscriptions.add(this.state.activeProfile.subscribe(profile => this.activeProfile = profile));
   }
 
   ngOnDestroy(): void {
@@ -86,9 +97,27 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.activeScalingDrivers.push(core.scalingDriver);
       }
     }
+
+    // Calculate average frequency over the logical cores
+    const freqSum: number =
+      this.cpuCoreInfo
+      .map(info => info.scalingCurFreq)
+      .reduce((sum, currentFreq) => sum + currentFreq, 0);
+    this.avgCpuFreq = freqSum / this.cpuCoreInfo.length;
+    this.avgCpuFreqData = [{ name: 'CPU frequency', value: this.avgCpuFreq }];
   }
 
-  public formatFrequency(frequency: number): string {
+  public formatFrequency = (frequency: number): string => {
     return this.utils.formatFrequency(frequency);
+  }
+
+  public gaugeFreqFormat: (value: number) => string = (value) => {
+    return this.utils.formatFrequency(value);
+  }
+
+  public goToProfileEdit(profile: ITccProfile): void {
+    if (profile !== undefined) {
+      this.router.navigate(['profile-manager', profile.name]);
+    }
   }
 }

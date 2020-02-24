@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,6 +16,115 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+.system-monitor-gauges {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+
+mwl-gauge {
+    width: 150px;
+    height: 150px;
+    display: block;
+}
+
+
+.dashboard-gauge {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    //display: flex;
+    //flex-flow: column;
+    //justify-content: center;
+    //align-items: center;
+
+    mwl-gauge {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        ::ng-deep {
+            .dial {
+                stroke-width: 1px;
+                stroke: gray;
+            }
+
+            .value {
+                transform: scale(0.92);
+                transform-origin: center;
+                stroke-width: 3px;
+                stroke: lightgreen;
+            }
+
+            .value-text {
+                color: currentColor;
+                transform: translateY(0px);
+                font-size: 1.8em;
+                transform-origin: center center;
+            }
+        }
+    }
+
+    .unit-text {
+        position: absolute;
+        top: 98px;
+        left: 0;
+        width: 100%;
+
+        text-align: center;
+
+        font-weight: bold;
+    }
+
+    .icon {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 35px;
+
+        --icon-detail: var(--icon-main);
+    }
+
+    .legend {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        height: 30px;
+
+        border-radius: 20px;
+        background-color: #eee;
+
+        border-width: 3px;
+        border-style: solid;
+        border-color: white;
+
+        .text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: bold;
+            opacity: 0.5;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    }
+}
+
+.gauge-cpu-clock ::ng-deep {
+    .legend-labels {
+        transform: translate(0%, -50px);
+    }
+}
+
 .cpu-frequency-info table {
     >tr {
         height: 25px;

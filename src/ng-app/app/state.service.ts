@@ -19,7 +19,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
 import { I18n } from '@ngx-translate/i18n-polyfill';
@@ -45,9 +45,13 @@ export class StateService implements OnDestroy {
   private stateSubject: Subject<ProfileStates>;
   public stateObserver: Observable<ProfileStates>;
 
-  private activeProfile: ITccProfile;
+  private activeProfileLocal: ITccProfile;
+  /** @deprecated */
   private activeProfileSubject: Subject<ITccProfile>;
+  /** @deprecated */
   public activeProfileObserver: Observable<ITccProfile>;
+
+  public activeProfile = new BehaviorSubject<ITccProfile>(undefined);
 
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
@@ -95,7 +99,7 @@ export class StateService implements OnDestroy {
   }
 
   public getActiveProfile(): ITccProfile {
-    return this.activeProfile;
+    return this.activeProfileLocal;
   }
 
   /**
@@ -119,8 +123,9 @@ export class StateService implements OnDestroy {
 
   private updateActiveProfile(): void {
     const activeProfileName = this.currentSettings.stateMap[this.activeState.toString()];
-    this.activeProfile = this.config.getProfileByName(activeProfileName);
-    this.activeProfileSubject.next(this.activeProfile);
+    this.activeProfileLocal = this.config.getProfileByName(activeProfileName);
+    this.activeProfileSubject.next(this.activeProfileLocal);
+    this.activeProfile.next(this.activeProfileLocal);
   }
 
   ngOnDestroy() {
