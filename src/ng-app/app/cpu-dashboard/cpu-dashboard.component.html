@@ -21,7 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         {{ activeProfile.name }} <button mat-button (click)="goToProfileEdit(activeProfile)"><mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg></mat-icon></button>
     </mat-card-title>
     <mat-divider style="width: 200px; right:0; margin: auto;"></mat-divider>
-    <div style="text-align: center;">Derzeit aktives Profil</div>
+    <div style="text-align: center;">Currently active profile</div>
     <div class="tcc-options-group cpu-thermal-info">
         <div class="title-row">
             <hr />
@@ -38,9 +38,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [min]="0"
                     [value]="fanData.cpu.temp.data.value"
                     [dialStartAngle]="130"
+                    [dialEndAngle]="50"
                     [animated]="true"
-                    [animationDuration]="1"
-                    [dialEndAngle]="50">
+                    [animationDuration]="1">
                 </mwl-gauge>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
@@ -55,9 +55,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [value]="avgCpuFreq"
                     [label]="gaugeFreqFormat"
                     [dialStartAngle]="130"
+                    [dialEndAngle]="50"
                     [animated]="true"
-                    [animationDuration]="1"
-                    [dialEndAngle]="50">
+                    [animationDuration]="1">
                 </mwl-gauge>
                 <div class="unit-text">GHz</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
@@ -70,10 +70,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [max]="100"
                     [min]="0"
                     [value]="fanData.cpu.speed.data.value"
-                    [animated]="true"
                     [dialStartAngle]="130"
-                    [animationDuration]="1"
-                    [dialEndAngle]="50">
+                    [dialEndAngle]="50"
+                    [animated]="true"
+                    [animationDuration]="1">
                 </mwl-gauge>
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
