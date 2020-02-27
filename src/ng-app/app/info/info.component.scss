@@ -79,3 +79,7 @@ table.versions {
         }
     }
 }
+
+.content-container mat-divider.divider-separator {
+    position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;
+}

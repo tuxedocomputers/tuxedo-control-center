@@ -39,7 +39,8 @@
         font-weight: bold;
 
         mat-icon {
-            transform: scale(2);
+            height: 40px;
+            width: 40px;
             transform-origin: center right;
         }
     }
