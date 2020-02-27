@@ -497,41 +497,105 @@
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoTCCInfoText1" datatype="html" approved="yes">
+      </trans-unit>
+      
+      <trans-unit id="cInfoTCCInfoText1" datatype="html" approved="yes">
         <source>
             We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
             in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
         </source>
         <target phase-name="approval-1" state="signed-off">
-            Wir haben ein Werkzeug entwickelt, mit dem Sie alle Sicherheits-, Leistungs-, Energie-, Komfort- und
-            Lebensdauerfunktionen Ihres TUXEDO an einem einzigen Ort steuern können! Speichern Sie alles in
-            Profilen, laden Sie es einfach oder sogar automatisch, wenn sich der Nutzungsmodus ändert!
+            Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, 
+            Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoTCCInfoText2" datatype="html" approved="yes">
+      </trans-unit>
+      
+      <trans-unit id="cInfoTCCInfoText2" datatype="html" approved="yes">
         <source>
             We want to give you the ultimate control over your device, the ability to squeeze out the most
             and to be able to customize it as much as possible by yourself!
         </source>
         <target phase-name="approval-1" state="signed-off">
-            Wir möchten Ihnen die uneingeschränkte Kontrolle über Ihr Gerät geben, die Möglichkeit,
-            das Beste aus Ihrem Gerät herauszuholen und es so weit wie möglich selbst anpassen zu können!
+            Mit 3 vorgefertigten sowie beliebig vielen Individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit
+            Ihres TUXEDO Gerätes an Ihre Bedürfnisse.
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoVersionPanelTitle" datatype="html" approved="yes">
+      </trans-unit>
+
+      <trans-unit id="cInfoTCCInstalledVersion" datatype="html" approved="yes">
+        <source>
+            Version installed:
+        </source>
+        <target phase-name="approval-1" state="signed-off">
+            Installierte Version:
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="cInfoTCCVersionDate" datatype="html" approved="yes">
+        <source>
+            Version date:
+        </source>
+        <target phase-name="approval-1" state="signed-off">
+            Versionsdatum:
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="cInfoTCCLatestVersion" datatype="html" approved="yes">
+        <source>
+            Latest version:
+        </source>
+        <target phase-name="approval-1" state="signed-off">
+            Aktuellste Version:
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="cInfoButtonInstallUpdate" datatype="html" approved="yes">
+        <source>Install update</source>
+        <target phase-name="approval-1" state="signed-off">Update installieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="cInfoButtonGeneralUpdates" datatype="html" approved="yes">
+        <source>General systemupdates</source>
+        <target phase-name="approval-1" state="signed-off">Allg. Systemupdates</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      
+      <trans-unit id="cInfoVersionPanelTitle" datatype="html" approved="yes">
         <source>Version</source>
         <target phase-name="approval-1" state="signed-off">Version</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-      </trans-unit><trans-unit id="cInfoVersionPanelDesc" datatype="html" approved="yes">
+      </trans-unit>
+      
+      <trans-unit id="cInfoVersionPanelDesc" datatype="html" approved="yes">
         <source>What's new? What's old?</source>
         <target phase-name="approval-1" state="signed-off">Was ist neu? Was gibt es schon länger?</target>
         <context-group purpose="location">

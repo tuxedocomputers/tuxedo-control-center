@@ -18,8 +18,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card class="tcc-card">
     <mat-card-title class="theme-page-title">
-        {{ activeProfile.name }} <button mat-button (click)="goToProfileEdit(activeProfile)"><mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_settings.svg#Icon"></use></svg></mat-icon></button>
+        {{ activeProfile.name }} <button mat-button (click)="goToProfileEdit(activeProfile)"><mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg></mat-icon></button>
     </mat-card-title>
+    <mat-divider style="width: 200px; right:0; margin: auto;"></mat-divider>
+    <div style="text-align: center;">Derzeit aktives Profil</div>
     <div class="tcc-options-group cpu-thermal-info">
         <div class="title-row">
             <hr />
@@ -29,7 +31,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <hr />
         </div>
-        <div class="content">
             <div class="system-monitor-gauges">
                 <div class="dashboard-gauge">
                     <mwl-gauge
@@ -75,7 +76,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 
     <div class="tcc-options-group cpu-thermal-info">
@@ -87,7 +87,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <hr />
         </div>
-        <div class="content">
+        <div style="max-width: 900px; margin:auto; text-align: center;">
+            <table border="1" style="max-width:900px;">
+                <tr>
+                    <td style="width:40%;">
+                        <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_settings.svg#Icon"></use></svg></mat-icon>
+                        <p>test</p>
+                    </td>
+                    <td style="width: 10%;"></td>
+                    <td style="width:40%;"></td>
+                </tr>
+            </table>  
         </div>
     </div>
 

@@ -21,14 +21,71 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
     </mat-card-title>
     <hr />
-    <p i18n="@@cInfoTCCInfoText1">
-        We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
-        in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
-    </p>
-    <p i18n="@@cInfoTCCInfoText2">
-        We want to give you the ultimate control over your device, the ability to squeeze out the most
-        and to be able to customize it as much as possible by yourself!
-    </p>
+    
+    <div class="content-container">
+        <svg viewBox="0 0 63.138672 43.930508" class="logo"><use href="./assets/images/tcc_logo_complete.svg#Icon"></use></svg>
+   
+        <mat-divider style="position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;"></mat-divider>
+
+        <p i18n="@@cInfoTCCInfoText1">
+            Mit dem TUXEDO Control Center...
+        </p>
+        <p i18n="@@cInfoTCCInfoText2">
+            Mit 3 vorgefertigten...
+        </p>
+
+        <mat-divider style="position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;"></mat-divider>
+
+        <table class="updates-table">
+            <tr>
+                <td i18n="@@cInfoTCCInstalledVersion">
+                    Installierte Version:
+                </td>
+                <td>
+                    VERSIONSNUMMER
+                </td>
+            </tr>
+            <tr>
+                <td i18n="@@cInfoTCCVersionDate">
+                    Versionsdatum
+                </td>
+                <td>
+                    VERSIONSDATUM
+                </td>
+            </tr>
+            <tr>
+                <td i18n="@@cInfoTCCLatestVersion">
+                    Aktuelle Version:
+                </td>
+                <td>
+                    <!-- IF (LatestVersion == Installed Version) -> primary color else red color-->
+                    VERSIONSNUMMER
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="font-weight: 600; font-size: 1.1em; text-align: center;"> 
+                    <!-- IF (LatestVersion == Installed Version) -> message1 else message2-->
+                    Es ist eine aktuellere Control Center Version für Ihr System verfügbar!
+                </td>
+            </tr>
+        </table>
+
+        <div class="update-button">
+            <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                <strong i18n="@@cInfoButtonInstallUpdate">Update installieren</strong>
+            </button>
+        </div>
+        <div class="update-button">
+            <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                <strong i18n="@@cInfoButtonGeneralUpdates">Allg. Systemupdates</strong>
+            </button>
+        </div>
+    </div>
+
 </mat-card>
 
 <mat-accordion class="tcc-accordion accordion-info">

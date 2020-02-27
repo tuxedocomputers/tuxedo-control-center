@@ -34,12 +34,11 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        height: 20px;
 
         margin-bottom: 5px;
 
         .profile-name {
-            font-size: 1.2em;
+            font-size: 20px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
