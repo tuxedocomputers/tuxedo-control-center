@@ -31,6 +31,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
         </mat-button-toggle-group>
     </mat-toolbar-row>
+    
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
         <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
         <span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
@@ -43,6 +44,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </button>
         </span>
     </mat-toolbar-row>
+
     <mat-toolbar-row *ngIf="inputActive" style="padding-top: 20px; padding-bottom: 20px;">
         <form (ngSubmit)="onInputSubmit()">
             <mat-form-field class="profile-name-input">

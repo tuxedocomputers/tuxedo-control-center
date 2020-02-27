@@ -100,14 +100,36 @@
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportGeneralPanelTitle" datatype="html" approved="yes">
+      </trans-unit>
+      
+      <trans-unit id="cSupportGeneralPanelTitle" datatype="html" approved="yes">
         <source>TUXEDO Support</source>
         <target phase-name="approval-1" state="translated">TUXEDO Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportGeneralPanelDesc" datatype="html" approved="yes">
+      </trans-unit>
+      
+      <trans-unit id="cSupportDesc1" datatype="html" approved="yes">
+        <source>You have a problem with your TUEXEDO device?</source>
+        <target phase-name="approval-1" state="translated">Sie haben ein Problem mit Ihrem TUXEDO Gerät?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="cSupportDesc2" datatype="html" approved="yes">
+        <source>Then please don't hesitate to contact us by phone or use our online support.</source>
+        <target phase-name="approval-1" state="translated">Dann kontaktieren Sie uns bitte per Telefon oder nutzen Sie unseren Onlinesupport.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      
+      <trans-unit id="cSupportGeneralPanelDesc" datatype="html" approved="yes">
         <source>General support information</source>
         <target phase-name="approval-1" state="signed-off">Allgemeine Supportinformationen</target>
         <context-group purpose="location">
@@ -135,16 +157,12 @@
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
-      </trans-unit><trans-unit id="cSupportSysInfoNoPersonalInfo" datatype="html">
-        <source>The script does not collect any personal data and no access data!</source>
-        <target state="translated">Das Script sammelt keinerlei persönliche Daten und keine Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration gesammelt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit><trans-unit id="cSupportScriptMoreInfo" datatype="html" approved="yes">
+      </trans-unit>      
+      <trans-unit id="cSupportScriptMoreInfo" datatype="html" approved="yes">
         <source>More information about which data the script collects can be found at</source>
-        <target phase-name="approval-1" state="signed-off">Weitere Informationen darüber, welche Daten das Skript sammelt, finden Sie unter</target>
+        <target phase-name="approval-1" state="signed-off">Unser Diagnoseprogramm sammelt keinerlei persönliche Daten und keine Zugangsdaten! 
+        Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.
+        Weitere Informationen erhalten sie hier.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">52</context>
@@ -204,10 +222,10 @@
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskPanelTitle" datatype="html" approved="yes">
         <source>
-                Anydesk
+                Remote support
             </source>
         <target phase-name="approval-1" state="translated">
-                AnyDesk
+                Fernwartungssupport
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>

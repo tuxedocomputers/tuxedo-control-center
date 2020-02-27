@@ -21,23 +21,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <ng-container i18n="@@cSupportGeneralPanelTitle">TUXEDO Support</ng-container>
     </mat-card-title>
     <hr />
-    <div class="support-info-text">You have a problem with your TUXEDO device?<br />Do not hesitate to contact us by phone or use our online support.</div>
-    <mat-grid-list cols="2" rowHeight="100px">
-        <mat-grid-tile>
-            <div class="phone-info">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_support.svg#Icon"></use></svg></mat-icon>
-                <span class="phone-number">+49 (0) 821 / 8998 2992</span>
-            </div>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <div class="web-info">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_online.svg#Icon"></use></svg></mat-icon>
-                <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
-                    <strong i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
-                </button>
-            </div>
-        </mat-grid-tile>
-    </mat-grid-list>
+    
+    <div class="content-container centered">
+        <p i18n="@@cSupportDesc1">You have a problem...?</p>
+        <p i18n="@@cSupportDesc2">Please don't hesitate...</p>
+    
+
+        <mat-grid-list cols="2" rowHeight="100px">
+            <mat-grid-tile>
+                <div class="phone-info">
+                    <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_support.svg#Icon"></use></svg></mat-icon>
+                    <span class="phone-number">+49 (0) 821 / 8998 2992</span>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <div class="web-info">
+                    <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_online.svg#Icon"></use></svg></mat-icon>
+                    <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                        <strong i18n="@@cSupportButtonOnline">TUXEDO Online Support</strong>
+                    </button>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
 </mat-card>
 
 <mat-accordion class="tcc-accordion">
@@ -48,62 +54,67 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <ng-container i18n="@@cSupportSysInfoPanelTitle">System info collection</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <p i18n="@@cSupportSysInfoNoPersonalInfo">The script does not collect any personal data and no access data!</p>
-        <p>
-            <ng-container i18n="@@cSupportScriptMoreInfo">More information about which data the script collects can be found at</ng-container>:
-            &nbsp;<button mat-stroked-button color="basic" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</button>
-        </p>
-        <mat-vertical-stepper [linear]="true">
-            <mat-step [stepControl]="formTicketNumber" label="Ticket number">
-                <ng-template matStepLabel>
-                    <ng-container i18n="@@cSupportStepTicketNumberLabel">Ticket number</ng-container>{{ formTicketNumber.valid ? ': ' : '' }}
-                    <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>
-                </ng-template>
-                <form [formGroup]="formTicketNumber">
-                    <p>
-                        <ng-container i18n="@@cSupportTicketNumberFetching">Please enter the ticket number given at support request. If you do not have a ticket number yet please use the online form</ng-container>:
-                        <button mat-stroked-button color="basic" type="button" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">Support</button>
+        <div class="content-container">
+            <p i18n="@@cSupportSysInfoNoPersonalInfo">For more complex problems...</p>
+            <p>
+                <ng-container i18n="@@cSupportScriptMoreInfo">More information about which data the script collects can be found at</ng-container>:
+                &nbsp;<button mat-stroked-button color="basic" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</button>
+            </p>
+        
+            <mat-vertical-stepper [linear]="true">
+                <mat-step [stepControl]="formTicketNumber" label="Ticket number">
+                    <ng-template matStepLabel>
+                        <ng-container i18n="@@cSupportStepTicketNumberLabel">Ticket number</ng-container>{{ formTicketNumber.valid ? ': ' : '' }}
+                        <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>
+                    </ng-template>
+                    <form [formGroup]="formTicketNumber">
+                        <p>
+                            <ng-container i18n="@@cSupportTicketNumberFetching">Please enter the ticket number given at support request. If you do not have a ticket number yet please use the online form</ng-container>:
+                            <button mat-stroked-button color="basic" type="button" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">Support</button>
+                        </p>
+                        <mat-form-field>
+                            <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
+                        </mat-form-field>&nbsp;
+                        <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext">Next</button>
+                    </form>
+                </mat-step>
+                <mat-step i18n-label="@@cSupportStepDownloadAndStartLabel" label="Download and run">
+                    <p i18n="@@cSupportScriptInfo">
+                        When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
                     </p>
-                    <mat-form-field>
-                        <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
-                    </mat-form-field>&nbsp;
-                    <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext">Next</button>
-                </form>
-            </mat-step>
-            <mat-step i18n-label="@@cSupportStepDownloadAndStartLabel" label="Download and run">
-                <p i18n="@@cSupportScriptInfo">
-                    When executed the script collects the data and thereafter sends it to our support associated with the ticket number.
-                </p>
-                <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
-                    <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
-                    <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
-                </button>
-                &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
-            </mat-step>
-        </mat-vertical-stepper>
+                    <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
+                        <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
+                        <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
+                    </button>
+                    &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
+                </mat-step>
+            </mat-vertical-stepper>
+        </div>
     </mat-expansion-panel>
 
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <img src="./assets/images/anydesk-logo-icon.svg" style="height: 20px; padding: 5px;"/>
-                <!--mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/anydesk-logo-icon.svg#Layer_1"></use></svg></mat-icon-->
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg></mat-icon>
                 <ng-container i18n="@@cSupportAnydeskPanelTitle">Anydesk</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <p i18n="@@cSupportAnydeskProgramDesc">
-            Anydesk is a remote desktop type tool that can allow support to help you from afar.
-        </p>
-        <p>
-            <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
-                <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
-                <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
-                <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
-                <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
-            </button>
-            &nbsp;
-            <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
-        </p>
+
+        <div class="content-container">
+            <p i18n="@@cSupportAnydeskProgramDesc">
+                Anydesk is a remote desktop type tool that can allow support to help you from afar.
+            </p>
+            <p>
+                <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
+                    <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
+                    <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
+                    <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
+                    <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
+                </button>
+                &nbsp;
+                <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
+            </p>
+        </div>
     </mat-expansion-panel>
 </mat-accordion>
 <br />

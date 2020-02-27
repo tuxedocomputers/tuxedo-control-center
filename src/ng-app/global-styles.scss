@@ -16,6 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+.content-container {
+    max-width: 900px;
+    margin:auto;
+
+    &.centered {
+        text-align: center;
+    }
+}
+
+.tcc-icons {
+    width:60px;
+}
+
 .tcc-card {
     margin-bottom: 10px;
 
@@ -39,8 +53,8 @@
         font-weight: bold;
 
         mat-icon {
-            height: 40px;
-            width: 40px;
+            height: 48px;
+            width: 48px;
             transform-origin: center right;
         }
     }
