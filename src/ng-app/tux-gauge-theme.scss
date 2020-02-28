@@ -30,7 +30,7 @@
     $gauge-legend-text-color: mat-color($foreground, disabled-text);
 
     $gauge-icon-color: mat-color($foreground, disabled-text);
-    $gauge-background-color: mat-color($background, app-bar);
+    $gauge-background-color: mat-color($background, status-bar);
 
     .tux-gauge {
         position: relative;
