@@ -50,6 +50,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public activeProfile: ITccProfile;
 
+  public fanProfileProgressValue: number;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -65,7 +67,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => { this.fanData = fanData; }));
-    this.subscriptions.add(this.state.activeProfile.subscribe(profile => this.activeProfile = profile));
+    this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
+      this.activeProfile = profile;
+    }));
   }
 
   ngOnDestroy(): void {

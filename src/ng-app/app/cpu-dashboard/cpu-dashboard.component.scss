@@ -21,9 +21,69 @@
     display: flex;
     flex-flow: row;
     justify-content: space-evenly;
+    
     padding: 10px;
-    max-width: 900px;
-    margin: auto;
+}
+
+.profile-overview {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    align-items: stretch;
+
+    .column {
+        width: 50%;
+
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+
+        .title {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+
+            .text {
+                font-weight: bold;
+            }
+
+            .tcc-icons {
+                --icon-detail: var(--icon-main);
+            }
+        }
+
+        .tux-gauge {
+            transform: scale(0.7);
+
+            ::ng-deep .value-text {
+                font-size: 1.8em;
+                transform: translateX(-10px);
+            }
+
+            .unit-text {
+                width: auto;
+                top: 50%;
+                left: 50%;
+                transform: translateX(10px);
+
+                font-size: 1.5em;
+            }
+
+            .legend {
+                bottom: 20px;
+            }
+        }
+
+        .info-box {
+            width: 200px;
+            
+            height: 30px;
+
+            border-width: 5px;
+            border-style: solid;
+            
+        }
+    }
 }
 
 .cpu-frequency-info table {

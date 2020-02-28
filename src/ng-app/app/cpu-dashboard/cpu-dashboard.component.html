@@ -22,7 +22,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-card-title>
     <mat-divider style="width: 200px; right:0; margin: auto;"></mat-divider>
     <div style="text-align: center;">Currently active profile</div>
-    <div class="tcc-options-group cpu-thermal-info">
+    
+    <div class="tcc-options-group">
         <div class="title-row">
             <hr />
             <div class="title">
@@ -31,7 +32,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <hr />
         </div>
-        <div class="system-monitor-gauges">
+        <div class="content-container system-monitor-gauges">
             <div class="tux-gauge">
                 <mwl-gauge
                     [max]="120"
@@ -84,7 +85,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </div>
 
-    <div class="tcc-options-group cpu-thermal-info">
+    <div class="tcc-options-group">
         <div class="title-row">
             <hr />
             <div class="title">
@@ -93,17 +94,54 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <hr />
         </div>
-        <div style="display:flex; max-width: 900px; margin:auto; text-align: center; justify-content: space-evenly;">
-            <div style="background-color: burlywood; display:flex; justify-content: center;">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg></mat-icon>
-                &nbsp;
-                Intel Core i7-9750H
+        <div class="content-container profile-overview">
+            <div class="column">
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                    <span class="text">CPU - Intel Core i7-9750H</span>
+                </div>
+                <div>
+                    Min {{ formatFrequency(cpuInfo.minFreq) }} GHz {{ formatFrequency(cpuInfo.maxFreq) }} Max
+                </div>
+                <div class="tux-gauge">
+                    <mwl-gauge
+                        [max]="cpuInfo.availableCores"
+                        [min]="0"
+                        [value]="cpuCoreInfo.length"
+                        [dialStartAngle]="150"
+                        [dialEndAngle]="30"
+                        [animated]="true"
+                        [animationDuration]="1">
+                    </mwl-gauge>
+                    <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
+                    <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
+                    <div class="legend">
+                        <div class="text">Active cores</div>
+                    </div>
+                </div>
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <span class="text">Fan profile</span>
+                </div>
+                <div class="tux-progress">
+                    <mat-progress-bar
+                        [value]="fanData.cpu.speed.data.value"
+                    ></mat-progress-bar>
+                </div>
+                <!--div class="info-box">
+                    {{ activeProfile.fan.fanProfile }}
+                </div-->
             </div>
-           
+            <div class="column">
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
+                    <span class="text">Display</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <mat-expansion-panel hideToggle class="cpu-frequency-info">
+    <!--mat-expansion-panel hideToggle class="cpu-frequency-info">
         <mat-expansion-panel-header>
             <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
                 Frequency
@@ -120,9 +158,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
             <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
         </table>
-    </mat-expansion-panel>
+    </mat-expansion-panel-->
 
-    <div class="tcc-options-group cpu-thermal-info">
+    <!--div class="tcc-options-group cpu-thermal-info">
         <div class="title-row">
             <hr />
             <div class="title">
@@ -145,6 +183,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-chip-list>
             </mat-expansion-panel>
         </div>
-    </div>
+    </div-->
 </mat-card>
 <br />
