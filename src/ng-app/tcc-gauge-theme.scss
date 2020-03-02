@@ -18,7 +18,7 @@
  */
 @import '~@angular/material/theming';
 
-@mixin tux-gauge-theme($theme) {
+@mixin tcc-gauge-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
@@ -32,7 +32,7 @@
     $gauge-icon-color: mat-color($foreground, disabled-text);
     $gauge-background-color: mat-color($background, status-bar);
 
-    .tux-gauge {
+    .tcc-gauge {
         position: relative;
         width: 180px;
         height: 180px;
@@ -144,7 +144,7 @@
 
     $progress-inactive-color: $tcc-info-bar-background-color;
 
-    .tux-progress {
+    .tcc-progress {
         position: relative;
 
         mat-progress-bar {

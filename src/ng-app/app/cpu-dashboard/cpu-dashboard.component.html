@@ -33,7 +33,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
         </div>
         <div class="content-container system-monitor-gauges">
-            <div class="tux-gauge">
+            <div class="tcc-gauge">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -49,7 +49,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text">CPU - Temp</div>
                 </div>
             </div>
-            <div class="tux-gauge">
+            <div class="tcc-gauge">
                 <mwl-gauge
                     [max]="cpuInfo.maxFreq"
                     [min]="cpuInfo.minFreq"
@@ -66,7 +66,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text">CPU - Frequency</div>
                 </div>
             </div>
-            <div class="tux-gauge">
+            <div class="tcc-gauge">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -103,7 +103,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="tcc-info-bar">
                     Min {{ formatFrequency(cpuInfo.minFreq) }} GHz {{ formatFrequency(cpuInfo.maxFreq) }} Max
                 </div>
-                <div class="tux-gauge small active-cores">
+                <div class="tcc-gauge small active-cores">
                     <mwl-gauge
                         [max]="cpuInfo.availableCores"
                         [min]="0"
@@ -123,7 +123,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <span class="text">Fan profile</span>
                 </div>
-                <div class="tux-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar">
                     <mat-progress-bar
                         [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
                         [ngClass]="{'disabled': !activeProfile.fan.useControl }"
@@ -144,14 +144,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
                     <span class="text">Display</span>
                 </div>
-                <div class="tux-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar">
                     <mat-progress-bar
                         [value]="activeProfile.display.brightness"
                         [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
                     </mat-progress-bar>
                     <div class="label-text">Brightness: {{ activeProfile.display.brightness }} %</div>
                 </div>
-                <div class="tux-gauge small on-off">
+                <div class="tcc-gauge small on-off">
                     <mwl-gauge
                         [max]="1"
                         [min]="0"
@@ -171,7 +171,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     <span class="text">Webcam</span>
                 </div>
-                <div class="tux-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar">
                     <mat-progress-bar
                         [value]="activeProfile.webcam.status ? 100 : 0">
                     </mat-progress-bar>

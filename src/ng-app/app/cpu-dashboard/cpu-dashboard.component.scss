@@ -52,7 +52,7 @@
             }
         }
 
-        .tux-gauge.small {
+        .tcc-gauge.small {
             transform: scale(0.7);
 
             .legend {
@@ -60,7 +60,7 @@
             }
         }
 
-        .tux-gauge.small.active-cores {
+        .tcc-gauge.small.active-cores {
             ::ng-deep .value-text {
                 font-size: 1.8em;
                 transform: translateX(-10px);
@@ -76,7 +76,7 @@
             }
         }
 
-        .tux-gauge.small.on-off {
+        .tcc-gauge.small.on-off {
             ::ng-deep .value-text {
                 font-size: 1.8em;
             }
