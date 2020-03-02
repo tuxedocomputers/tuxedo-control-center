@@ -103,9 +103,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="tcc-info-bar">
                     <div class="cpu-min-max-freq">
                         <div class="label">Min</div>
-                        <div class="value left">{{ formatFrequency(cpuInfo.minFreq) }}</div>
+                        <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
                         <div class="unit color-disabled">GHz</div>
-                        <div class="value right">{{ formatFrequency(cpuInfo.maxFreq) }}</div>
+                        <div class="value right">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
                         <div class="label">Max</div>
                     </div>
                 </div>
