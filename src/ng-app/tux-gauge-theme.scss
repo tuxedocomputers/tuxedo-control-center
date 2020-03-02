@@ -129,7 +129,8 @@
     $progress-inactive-color: $progress-border-color;
 
     .tux-progress {
-        width: 200px;
+        position: relative;
+        width: 250px;
         height: 30px;
 
         border-width: 2px;
@@ -160,6 +161,17 @@
             .mat-progress-bar-background {
                 opacity: 0;
             }
+        }
+
+        .label-text {
+            position: absolute;
+            top: calc(50% - 8px);
+            
+            width: 100%;
+
+            text-align: center;
+
+            font-weight: bold;
         }
     }
 }

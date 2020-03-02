@@ -24,6 +24,7 @@ import { TccDBusClientService, IDBusFanData } from '../tcc-dbus-client.service';
 import { ITccProfile } from 'src/common/models/TccProfile';
 import { StateService } from '../state.service';
 import { Router } from '@angular/router';
+import { ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -50,7 +51,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public activeProfile: ITccProfile;
 
-  public fanProfileProgressValue: number;
+  public fanProfileProgressMap: Map<string, number>;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -59,7 +60,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private utils: UtilsService,
     private tccdbus: TccDBusClientService,
     private state: StateService,
-    private router: Router
+    private router: Router,
+    private config: ConfigService
   ) { }
 
   ngOnInit() {
@@ -70,6 +72,15 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
       this.activeProfile = profile;
     }));
+
+    const fanProfileNames = this.config.getFanProfiles().map(fanProfile => fanProfile.name);
+    this.fanProfileProgressMap = new Map();
+    const fanProfileProgressStep = 100.0 / fanProfileNames.length;
+    let progressValue = 0;
+    for (const fanProfileName of fanProfileNames) {
+      progressValue += fanProfileProgressStep;
+      this.fanProfileProgressMap.set(fanProfileName, progressValue);
+    }
   }
 
   ngOnDestroy(): void {

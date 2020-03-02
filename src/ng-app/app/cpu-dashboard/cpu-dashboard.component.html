@@ -107,11 +107,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mwl-gauge
                         [max]="cpuInfo.availableCores"
                         [min]="0"
-                        [value]="cpuCoreInfo.length"
+                        [value]="activeProfile.cpu.onlineCores"
                         [dialStartAngle]="150"
                         [dialEndAngle]="30"
                         [animated]="true"
-                        [animationDuration]="1">
+                        [animationDuration]="0.3">
                     </mwl-gauge>
                     <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
                     <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
@@ -125,8 +125,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="tux-progress">
                     <mat-progress-bar
-                        [value]="fanData.cpu.speed.data.value"
+                        [value]="fanProfileProgressMap.get(activeProfile.fan.fanProfile)"
+                        [ngClass]="{'disabled': !activeProfile.fan.useControl }"
                     ></mat-progress-bar>
+                    <div class="label-text" *ngIf="activeProfile.fan.useControl">
+                        {{ activeProfile.fan.fanProfile }}
+                    </div>
+                    <div class="label-text" *ngIf="!activeProfile.fan.useControl">
+                        Fan control: off
+                    </div>
                 </div>
                 <!--div class="info-box">
                     {{ activeProfile.fan.fanProfile }}
@@ -138,7 +145,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span class="text">Display</span>
                 </div>
                 <div class="tux-progress">
-                    <mat-progress-bar [value]="50"></mat-progress-bar>
+                    <mat-progress-bar
+                        [value]="activeProfile.display.brightness"
+                        [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
+                    </mat-progress-bar>
+                    <div class="label-text">Brightness: {{ activeProfile.display.brightness }} %</div>
                 </div>
             </div>
         </div>
