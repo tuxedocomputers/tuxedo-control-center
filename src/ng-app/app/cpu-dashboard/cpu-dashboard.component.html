@@ -98,12 +98,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <span class="text">CPU - Intel Core i7-9750H</span>
+                    <span class="text">CPU</span>
                 </div>
-                <div>
+                <div class="tcc-info-bar">
                     Min {{ formatFrequency(cpuInfo.minFreq) }} GHz {{ formatFrequency(cpuInfo.maxFreq) }} Max
                 </div>
-                <div class="tux-gauge">
+                <div class="tux-gauge small active-cores">
                     <mwl-gauge
                         [max]="cpuInfo.availableCores"
                         [min]="0"
@@ -123,7 +123,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <span class="text">Fan profile</span>
                 </div>
-                <div class="tux-progress">
+                <div class="tux-progress tcc-info-bar">
                     <mat-progress-bar
                         [value]="fanProfileProgressMap.get(activeProfile.fan.fanProfile)"
                         [ngClass]="{'disabled': !activeProfile.fan.useControl }"
@@ -144,12 +144,28 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
                     <span class="text">Display</span>
                 </div>
-                <div class="tux-progress">
+                <div class="tux-progress tcc-info-bar">
                     <mat-progress-bar
                         [value]="activeProfile.display.brightness"
                         [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
                     </mat-progress-bar>
                     <div class="label-text">Brightness: {{ activeProfile.display.brightness }} %</div>
+                </div>
+                <div class="tux-gauge small on-off">
+                    <mwl-gauge
+                        [max]="1"
+                        [min]="0"
+                        [value]="activeProfile.display.useBrightness ? 1 : 0"
+                        [label]="gaugeOnOffFormat"
+                        [dialStartAngle]="150"
+                        [dialEndAngle]="30"
+                        [animated]="true"
+                        [animationDuration]="0.3">
+                    </mwl-gauge>
+                    <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
+                    <div class="legend">
+                        <div class="text">Fixed brightness</div>
+                    </div>
                 </div>
             </div>
         </div>

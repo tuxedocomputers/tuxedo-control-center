@@ -130,6 +130,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     return this.utils.formatFrequency(value);
   }
 
+  public gaugeOnOffFormat: (value: number) => string = (value) => {
+    if (value === 0) {
+      return "off";
+    } else {
+      return "on";
+    }
+  }
+
   public goToProfileEdit(profile: ITccProfile): void {
     if (profile !== undefined) {
       this.router.navigate(['profile-manager', profile.name]);

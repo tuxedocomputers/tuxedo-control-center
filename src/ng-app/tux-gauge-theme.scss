@@ -125,20 +125,27 @@
         }
     }
 
-    $progress-border-color: mat-color($background, status-bar);
-    $progress-inactive-color: $progress-border-color;
+    $tcc-info-bar-border-color: mat-color($background, status-bar);
+    $tcc-info-bar-background-color: mat-color($background, status-bar);
+    $tcc-info-bar-width: 250px;
+    $tcc-info-bar-height: 30px;
 
-    .tux-progress {
-        position: relative;
-        width: 250px;
-        height: 30px;
+    .tcc-info-bar {
+        width: $tcc-info-bar-width;
+        height: $tcc-info-bar-height;
 
         border-width: 2px;
         border-style: solid;
         border-radius: 20px;
-        border-color: $progress-border-color;
+        border-color: $tcc-info-bar-border-color;
 
         padding: 2px;
+    }
+
+    $progress-inactive-color: $tcc-info-bar-background-color;
+
+    .tux-progress {
+        position: relative;
 
         mat-progress-bar {
             width: 100%;

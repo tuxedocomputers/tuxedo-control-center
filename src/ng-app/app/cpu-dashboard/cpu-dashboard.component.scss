@@ -52,14 +52,18 @@
             }
         }
 
-        .tux-gauge {
+        .tux-gauge.small {
             transform: scale(0.7);
 
+            .legend {
+                bottom: 20px;
+            }
+        }
+
+        .tux-gauge.small.active-cores {
             ::ng-deep .value-text {
                 font-size: 1.8em;
                 transform: translateX(-10px);
-
-                text-anchor: right;
             }
 
             .unit-text {
@@ -70,9 +74,11 @@
 
                 font-size: 1.5em;
             }
+        }
 
-            .legend {
-                bottom: 20px;
+        .tux-gauge.small.on-off {
+            ::ng-deep .value-text {
+                font-size: 1.8em;
             }
         }
 
