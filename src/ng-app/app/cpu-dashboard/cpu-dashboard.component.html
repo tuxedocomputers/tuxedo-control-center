@@ -167,6 +167,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div class="text">Fixed brightness</div>
                     </div>
                 </div>
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
+                    <span class="text">Webcam</span>
+                </div>
+                <div class="tux-progress tcc-info-bar">
+                    <mat-progress-bar
+                        [value]="activeProfile.webcam.status ? 100 : 0">
+                    </mat-progress-bar>
+                    <div class="label-text">Webcam active: {{ activeProfile.webcam.status ? 'on' : 'off' }}</div>
+                </div>
             </div>
         </div>
     </div>
