@@ -35,7 +35,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div class="content-container system-monitor-gauges">
             <div class="tux-gauge">
                 <mwl-gauge
-                    [max]="120"
+                    [max]="100"
                     [min]="0"
                     [value]="fanData.cpu.temp.data.value"
                     [dialStartAngle]="130"
@@ -125,7 +125,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="tux-progress tcc-info-bar">
                     <mat-progress-bar
-                        [value]="fanProfileProgressMap.get(activeProfile.fan.fanProfile)"
+                        [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
                         [ngClass]="{'disabled': !activeProfile.fan.useControl }"
                     ></mat-progress-bar>
                     <div class="label-text" *ngIf="activeProfile.fan.useControl">
