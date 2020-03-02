@@ -127,6 +127,7 @@
 
     $tcc-info-bar-border-color: mat-color($background, status-bar);
     $tcc-info-bar-background-color: mat-color($background, status-bar);
+    $tcc-info-bar-color-disabled: mat-color($foreground, disabled-text);
     $tcc-info-bar-width: 250px;
     $tcc-info-bar-height: 30px;
 
@@ -140,6 +141,19 @@
         border-color: $tcc-info-bar-border-color;
 
         padding: 2px;
+
+        >* {
+            border-radius: inherit;
+            overflow: hidden;
+        }
+
+        .label {
+            background-color: $tcc-info-bar-background-color;
+        }
+
+        .color-disabled {
+            color: $tcc-info-bar-color-disabled;
+        }
     }
 
     $progress-inactive-color: $tcc-info-bar-background-color;

@@ -101,7 +101,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span class="text">CPU</span>
                 </div>
                 <div class="tcc-info-bar">
-                    Min {{ formatFrequency(cpuInfo.minFreq) }} GHz {{ formatFrequency(cpuInfo.maxFreq) }} Max
+                    <div class="cpu-min-max-freq">
+                        <div class="label">Min</div>
+                        <div class="value left">{{ formatFrequency(cpuInfo.minFreq) }}</div>
+                        <div class="unit color-disabled">GHz</div>
+                        <div class="value right">{{ formatFrequency(cpuInfo.maxFreq) }}</div>
+                        <div class="label">Max</div>
+                    </div>
                 </div>
                 <div class="tcc-gauge small active-cores">
                     <mwl-gauge
@@ -135,9 +141,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         Fan control: off
                     </div>
                 </div>
-                <!--div class="info-box">
-                    {{ activeProfile.fan.fanProfile }}
-                </div-->
             </div>
             <div class="column">
                 <div class="title">
