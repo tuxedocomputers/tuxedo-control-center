@@ -58,13 +58,15 @@
             ::ng-deep .value-text {
                 font-size: 1.8em;
                 transform: translateX(-10px);
+
+                text-anchor: right;
             }
 
             .unit-text {
                 width: auto;
                 top: 50%;
                 left: 50%;
-                transform: translateX(10px);
+                transform: translateX(10px) translateY(-7px);
 
                 font-size: 1.5em;
             }

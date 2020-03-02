@@ -126,6 +126,7 @@
     }
 
     $progress-border-color: mat-color($background, status-bar);
+    $progress-inactive-color: $progress-border-color;
 
     .tux-progress {
         width: 200px;
@@ -146,6 +147,10 @@
 
             .mat-progress-bar-fill::after {
                 background: #00E333;
+            }
+
+            &.disabled .mat-progress-bar-fill::after {
+                background: $progress-inactive-color;
             }
 
             .mat-progress-bar-buffer {
