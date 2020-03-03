@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -23,6 +23,7 @@ import { StateService, IStateInfo } from '../state.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-overview-tile',
@@ -47,6 +48,9 @@ export class ProfileOverviewTileComponent implements OnInit {
 
   public showOverlay = false;
 
+  public selectStateControl: FormControl;
+  public stateInputArray: IStateInfo[];
+
   constructor(
     private utils: UtilsService,
     private state: StateService,
@@ -55,6 +59,15 @@ export class ProfileOverviewTileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (!this.addProfileTile) {
+      if (this.selectStateControl === undefined) {
+        this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.name));
+      } else {
+        this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
+      }
+    }
+
+    this.stateInputArray = this.state.getStateInputs();
   }
 
   public getStateInputs(): IStateInfo[] {
@@ -69,6 +82,15 @@ export class ProfileOverviewTileComponent implements OnInit {
     return this.utils.formatFrequency(frequency);
   }
 
+  public activateOverlay(status: boolean): void {
+    if (!this.addProfileTile) {
+      if (status === false) {
+        this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
+      }
+      this.showOverlay = status;
+    }
+  }
+
   public selectProfile(profileName?: string): void {
     setImmediate(() => {
       if (profileName === undefined) {
@@ -77,5 +99,11 @@ export class ProfileOverviewTileComponent implements OnInit {
         this.router.navigate(['profile-manager', profileName]);
       }
     });
+  }
+
+  public saveStateSelection(): void {
+    const profileStateAssignments: string[] = this.selectStateControl.value;
+    this.config.writeProfile(this.profile.name, this.profile, profileStateAssignments);
+    this.selectStateControl.markAsPristine();
   }
 }

@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -23,20 +23,49 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         'tile-active': active
     }"
     *ngIf="visible"
-    (mouseenter)="!addProfileTile && showOverlay = true"
-    (mouseleave)="!addProfileTile && showOverlay = false">
+    (mouseenter)="activateOverlay(true)"
+    (mouseleave)="activateOverlay(false)">
 
-    <div class="overlay" [ngClass]="{'show': showOverlay}">
-        <div class="icon-bar">
-            <button mat-icon-button disableRipple>
-                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
-            </button>
-            <button mat-icon-button disableRipple (click)="selectProfile(profile.name)">
-                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-            </button>
-        </div>
-        <div class="state-selector">
-            
+    <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
+        <div class="overlay-content">
+            <div class="icon-bar">
+                <button mat-icon-button disableRipple>
+                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+                </button>
+                <button mat-icon-button disableRipple (click)="selectProfile(profile.name)">
+                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                </button>
+            </div>
+            <div class="state-selector">
+                <mat-button-toggle-group color="primary"
+                    [formControl]="selectStateControl"
+                    multiple
+                    matTooltipPosition="left">
+                    <mat-button-toggle
+                        *ngFor="let state of stateInputArray"
+                        disableRipple
+                        [disabled]="getSettings().stateMap[state.value] === profile.name"
+                        [value]="state.value"
+                    >
+                        <svg viewBox="0 0 512 512">
+                            <use attr.href="./assets/images/{{ state.icon }}"></use>
+                        </svg>
+                        <span class="label">{{ state.label }}</span>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+                <div class="state-buttons">
+                    <!--button mat-icon-button disableRipple>
+                        <mat-icon>undo</mat-icon>
+                    </button-->
+                    <button
+                        (click)="saveStateSelection()"
+                        mat-icon-button
+                        disableRipple
+                        *ngIf="selectStateControl.dirty">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
