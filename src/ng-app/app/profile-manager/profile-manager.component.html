@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -68,9 +68,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <app-profile-overview-tile
         *ngFor="let profile of getProfilesForList()"
         [profile]="profile"
-        [hoverEffect]="true"
-        [active]="isProfileActive(profile.name)"
-        (click)="selectProfile(profile.name)">
+        [hoverEffect]="false"
+        [active]="isProfileActive(profile.name)">
     </app-profile-overview-tile>
     <app-profile-overview-tile
         *ngIf="['all', 'custom'].includes(inputProfileFilter)"

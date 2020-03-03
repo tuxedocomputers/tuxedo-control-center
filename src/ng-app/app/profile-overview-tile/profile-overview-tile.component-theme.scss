@@ -25,22 +25,44 @@
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
+  $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
 
   // Define any styles affected by the theme.
-  .profile-overview-tile {
-      &.tile-active {
-          //color: mat-color($accent);
-      }
+    .profile-overview-tile {
+        &.tile-active {
+            //color: mat-color($accent);
+        }
 
-      &.hover-effect:hover {
-          background-color: mat-color($background, hover);
-      }
+        &.hover-effect:hover {
+            background-color: mat-color($background, hover);
+        }
 
-      &.selected {
-          background-color: mat-color($primary, lighter);
-      }
-  }
+        &.selected {
+            background-color: mat-color($primary, lighter);
+        }
+
+        .overlay {
+            color: mat-color($primary, default-contrast);
+            background-color: mat-color($primary, darker);
+
+            mat-button-toggle-group {
+                mat-button-toggle {
+                    color: mat-color($primary, default-contrast);
+                    background-color: mat-color($primary, darker);
+
+                    &.mat-button-toggle-disabled, &.mat-button-toggle-checked {
+                        background-color: mat-color($foreground, text);
+                    }
+
+                    .mat-button-toggle-focus-overlay {
+                        border-width: 0px;
+                        background-color: mat-color($primary, darker-contrast);
+                    }
+                }
+            }
+        }
+    }
 }
 
 @mixin profile-overview-tile-typography($config) {

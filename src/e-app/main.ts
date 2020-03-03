@@ -13,7 +13,7 @@ if (watch) {
 function createWindow() {
     win = new BrowserWindow({
         title: 'TUXEDO Control Center',
-        width: 1024,
+        width: 1040,
         height: 768,
         frame: false,
         resizable: true,
