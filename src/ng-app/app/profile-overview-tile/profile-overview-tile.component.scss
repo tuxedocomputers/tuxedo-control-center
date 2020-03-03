@@ -23,7 +23,7 @@
     user-select: none;
 
     width: 215px;
-    height: 350px;
+    height: 360px;
     margin: 8px;
     padding: 10px;
     padding-bottom: 15px;
@@ -58,10 +58,28 @@
         }*/
     }
 
-    .profile-icons {
+    .profile-icon {
         width:80px;
         margin: auto;
         margin-bottom: 5px;
+    }
+
+    .state-status-icons {
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-end;
+        align-items: center;
+
+        height: 48px;
+
+        .state-icon {
+            svg {
+                width: 48px;
+                height: 48px;
+
+                --icon-detail: var(--icon-main);
+            }
+        }
     }
 
     .status-flexbox {
