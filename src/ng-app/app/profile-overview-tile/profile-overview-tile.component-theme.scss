@@ -25,6 +25,7 @@
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
+  $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
 
   // Define any styles affected by the theme.
@@ -39,6 +40,11 @@
 
       &.selected {
           background-color: mat-color($primary, lighter);
+      }
+
+      .overlay {
+          color: mat-color($primary, lighter);
+          background-color: mat-color($primary, darker);
       }
   }
 }

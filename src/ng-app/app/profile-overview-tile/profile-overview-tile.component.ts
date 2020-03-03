@@ -22,6 +22,7 @@ import { UtilsService } from '../utils.service';
 import { StateService, IStateInfo } from '../state.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-overview-tile',
@@ -44,10 +45,13 @@ export class ProfileOverviewTileComponent implements OnInit {
    */
   @Input() addProfileTile = false;
 
+  public showOverlay = false;
+
   constructor(
     private utils: UtilsService,
     private state: StateService,
-    private config: ConfigService
+    private config: ConfigService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -63,5 +67,15 @@ export class ProfileOverviewTileComponent implements OnInit {
 
   public formatFrequency(frequency: number): string {
     return this.utils.formatFrequency(frequency);
+  }
+
+  public selectProfile(profileName?: string): void {
+    setImmediate(() => {
+      if (profileName === undefined) {
+        this.router.navigate(['profile-manager']);
+      } else {
+        this.router.navigate(['profile-manager', profileName]);
+      }
+    });
   }
 }

@@ -17,6 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 .profile-overview-tile{
+    position: relative;
+    z-index: 10;
 
     user-select: none;
 
@@ -25,6 +27,8 @@
     margin: 8px;
     padding: 10px;
     padding-bottom: 15px;
+
+    border-radius: 5px;
 
     hr {
         opacity: 0.2;
@@ -93,6 +97,43 @@
             width: 50%;
             margin-bottom: 0px;
             text-align: center;
+        }
+    }
+
+    .overlay {
+        display: none;
+        position: absolute;
+        z-index: 20;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+
+        border-radius: inherit;
+
+        opacity: 0.95;
+
+        &.show {
+            display: initial;
+        }
+
+        .icon-bar {
+            display: flex;
+            flex-flow: row;
+            justify-content: flex-end;
+            align-items: center;
+
+            padding: 10px;
+
+            svg {
+                width: 48px;
+                height: 48px;
+                --icon-detail: var(--icon-main);
+            }
+
+            button {
+                margin-left: 5px;
+            }
         }
     }
 
