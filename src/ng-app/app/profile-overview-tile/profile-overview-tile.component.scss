@@ -45,13 +45,13 @@
             margin:auto;
         }
 
-        .state-icons {
+        /*.state-icons {
             display: flex;
             .status-icon {
                 font-size: 17px;
                 width: 17px;
             }
-        }
+        }*/
     }
 
     .profile-icons {
@@ -60,65 +60,39 @@
         margin-bottom: 5px;
     }
 
-    .status-row {
-
-        width: 100%;
-        margin: 1px;
-        padding: 0px;
-
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-
-        &.inactive {
-            opacity: 0.2;
-        }
-        
-        .status-icon {
-            font-size: 1.3em;
-            height: 17px;
-            width: 17px;
-
-            margin-left: 0px;
-            margin-right: 10px;
-        }
-
-        // fa icon tweak
-        .fas.status-icon:before {
-            font-size: 0.8em;
-            width: 17px;
-            height: 17px;
-
-            display: inline-block;
-            position: relative;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .status-info {
-            font-size: 1em;
-        }
-    }
-
     .status-flexbox {
         display: flex;
-        flex-wrap:wrap;
+        flex-wrap: wrap;
         margin-top: 20px;
 
         .status-component {
-            width:50%;
-            margin-bottom: 20px;
-            text-align: center;
+            width: 50%;
+
+            display: flex;
+            flex-flow: column;
+            justify-content: flex-start;
+            align-items: center;
+
+            .status-icon-container {
+                width: 48px;
+                height: 48px;
+                svg {
+                    width: inherit;
+                    height: inherit;
+                }
+    
+                --icon-detail: var(--icon-main);
+            }
+
+            .status-info {
+                transform: translateY(-5px);
+            }
         }
 
         .status-component-lastrow {
             width: 50%;
             margin-bottom: 0px;
             text-align: center;
-        }
-
-        .status-icon-container {
-            margin-bottom: 0px;
         }
     }
 

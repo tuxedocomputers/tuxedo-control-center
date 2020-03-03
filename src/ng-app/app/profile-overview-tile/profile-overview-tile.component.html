@@ -49,7 +49,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="status-flexbox">
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
@@ -57,7 +57,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
@@ -65,7 +65,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_fan.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.cpu.governor }}
@@ -73,15 +73,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.display.brightness }} %
                     </span>
                 </div>
-                <div class="status-component-lastrow">
+                <div class="status-component lastrow">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
