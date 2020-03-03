@@ -59,7 +59,7 @@
     }
 
     .profile-icon {
-        width:80px;
+        width: 80px;
         margin: auto;
         margin-bottom: 5px;
     }
@@ -74,11 +74,16 @@
 
         .state-icon {
             svg {
-                width: 48px;
-                height: 48px;
+                width: 24px;
+                height: 24px;
 
+                transform: scale(2);
                 --icon-detail: var(--icon-main);
             }
+        }
+
+        .dot {
+            margin: 8px;
         }
     }
 
