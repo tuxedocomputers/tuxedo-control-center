@@ -91,19 +91,25 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
   }
 
-  public selectProfile(profileName?: string): void {
+  public selectProfile(): void {
     setImmediate(() => {
-      if (profileName === undefined) {
-        this.router.navigate(['profile-manager']);
-      } else {
-        this.router.navigate(['profile-manager', profileName]);
-      }
+        this.router.navigate(['profile-manager', this.profile.name]);
     });
   }
 
+  public deleteProfile(): void {
+    this.config.deleteCustomProfile(this.profile.name);
+    this.utils.pageDisabled = false;
+  }
+
   public saveStateSelection(): void {
+    this.utils.pageDisabled = true;
     const profileStateAssignments: string[] = this.selectStateControl.value;
-    this.config.writeProfile(this.profile.name, this.profile, profileStateAssignments);
-    this.selectStateControl.markAsPristine();
+    this.config.writeProfile(this.profile.name, this.profile, profileStateAssignments).then(success => {
+      if (success) {
+        this.selectStateControl.markAsPristine();
+      }
+      this.utils.pageDisabled = false;
+    });
   }
 }

@@ -29,10 +29,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
         <div class="overlay-content">
             <div class="icon-bar">
-                <button mat-icon-button disableRipple>
+                <button mat-icon-button disableRipple (click)="deleteProfile()">
                     <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
                 </button>
-                <button mat-icon-button disableRipple (click)="selectProfile(profile.name)">
+                <button mat-icon-button disableRipple (click)="selectProfile()">
                     <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
                 </button>
             </div>
