@@ -22,6 +22,7 @@
 @import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
 @import './app/profile-details-edit/profile-details-edit.component-theme.scss';
 @import './tcc-gauge-theme.scss';
+@import './tcc-changelog-theme.scss';
 
 @mixin component-themes($theme) {
     // Angular components
@@ -30,6 +31,7 @@
 
     // Other components
     @include tcc-gauge-theme($theme);
+    @include tcc-changelog-theme($theme);
 }
 
 @import './themes/tuxedo-light-theme.scss';
