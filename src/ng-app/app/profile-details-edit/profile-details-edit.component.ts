@@ -137,7 +137,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     if (this.profileFormGroup.valid) {
       const formProfileData: ITccProfile = this.profileFormGroup.value;
-      const newProfileStateAssignments: string[] = this.selectStateControl.value;
+      // Note: state selection disabled on profile edit for now
+      const newProfileStateAssignments: string[] = undefined; // this.selectStateControl.value;
       this.config.writeProfile(this.viewProfile.name, formProfileData, newProfileStateAssignments).then(success => {
         if (success) {
           this.profileFormGroup.markAsPristine();
