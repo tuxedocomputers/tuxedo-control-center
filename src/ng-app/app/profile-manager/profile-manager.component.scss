@@ -58,11 +58,15 @@ mat-toolbar {
 
 .profile-manager-content {
     position: absolute;
-    top: 100px;
+    top: 10px;
     bottom: 25px;
     right: 5px;
     left: 0px;
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
+
+    &.offset {
+        top: 100px;
+    }
 }

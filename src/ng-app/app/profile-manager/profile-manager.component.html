@@ -62,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
 
 </mat-toolbar>
-<div class="profile-manager-content">
+<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}">
     <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
         <app-profile-overview-tile
             *ngFor="let profile of getProfilesForList()"
