@@ -29,7 +29,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 maxLength="50"
                 (focus)="$event.target.select()">
         </mat-form-field>
-        <div>
+        <div *ngIf="editProfile">
             <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty"><mat-icon>undo</mat-icon></button></span>
             <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty"><mat-icon>save</mat-icon></button></span>
         </div>
