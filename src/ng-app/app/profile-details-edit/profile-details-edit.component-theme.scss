@@ -23,8 +23,13 @@
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
   
   .profile-details-edit {
+
+    .profile-title {
+      background-color: mat-color($background, card);
+    }
 
     /*.mat-button-toggle {
         opacity: 0.8;
