@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -218,6 +218,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   }
 
   public governorSelectionChange() {
+    // Energy performance preference setting chosen based on governor
     const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
     if (cpuGroup.controls.governor.value === 'performance') {
       cpuGroup.controls.energyPerformancePreference.setValue('performance');
