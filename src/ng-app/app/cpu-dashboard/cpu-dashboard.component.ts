@@ -50,6 +50,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public fanData: IDBusFanData;
 
   public activeProfile: ITccProfile;
+  public isCustomProfile: boolean;
 
   public fanProfileProgressMap: Map<string, number>;
 
@@ -71,6 +72,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => { this.fanData = fanData; }));
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
       this.activeProfile = profile;
+      this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
     }));
 
     const fanProfileNames = this.config.getFanProfiles().map(fanProfile => fanProfile.name);
