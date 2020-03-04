@@ -121,15 +121,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ profile.cpu.governor }}
                     </span>
                 </div>
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'inactive': !profile.display.useBrightness}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 512 512"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
                     </div>
-                    <span class="status-info">
+                    <span class="status-info" *ngIf="profile.display.useBrightness">
                         {{ profile.display.brightness }} %
                     </span>
                 </div>
-                <div class="status-component lastrow">
+                <div class="status-component">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 512 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>

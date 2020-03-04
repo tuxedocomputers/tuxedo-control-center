@@ -114,12 +114,10 @@
             .status-info {
                 transform: translateY(-5px);
             }
-        }
 
-        .status-component-lastrow {
-            width: 50%;
-            margin-bottom: 0px;
-            text-align: center;
+            &.inactive {
+                opacity: 0.3;
+            }
         }
     }
 
