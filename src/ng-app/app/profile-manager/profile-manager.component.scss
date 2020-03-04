@@ -55,3 +55,14 @@ mat-toolbar {
 .mat-toolbar {
     background: none;
 }
+
+.profile-manager-content {
+    position: absolute;
+    top: 100px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+}

@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -29,7 +29,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 maxLength="50"
                 (focus)="$event.target.select()">
         </mat-form-field>
-        <mat-button-toggle-group
+        <!--mat-button-toggle-group
             [formControl]="selectStateControl"
             multiple
             i18n-matTooltip="@@cProfMgrDetailsSelectStatesLabel" matTooltip="Activate profile on"
@@ -44,9 +44,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
                 [matTooltipShowDelay]="1000"
             >
-                <!--mat-icon>{{ state.icon }}</mat-icon--> {{ state.label }}
+                {{ state.label }}
             </mat-button-toggle>
-        </mat-button-toggle-group>
+        </mat-button-toggle-group-->
     </mat-card-title>
     <mat-card-content>
         <!-- Display settings -->

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,54 +16,58 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.profile-title {
-    height: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.profile-details-edit {
+    margin: 10px;
 
-    .name {
-        width: 400px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    .profile-title {
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-        input {
+        .name {
             width: 400px;
-        }
-    }
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
-    mat-button-toggle-group {
-        transform: scale(0.7);
-        transform-origin: right;
-    }
-}
-
-.profile-details-edit-grid {
-
-    .inactive {
-        opacity: 0.2;
-    }
-
-    header {
-        width: 100%;
-        text-align: left;
-    }
-
-    content.value {
-        width: 100%;
-        text-align: left;
-        font-weight: bold;
-    }
-
-    content.input {
-
-        mat-slider {
-            width: 200px;
+            input {
+                width: 400px;
+            }
         }
 
-        mat-select {
-            width: 200px;
+        /*mat-button-toggle-group {
+            transform: scale(0.7);
+            transform-origin: right;
+        }*/
+    }
+
+    .profile-details-edit-grid {
+
+        .inactive {
+            opacity: 0.2;
+        }
+
+        header {
+            width: 100%;
+            text-align: left;
+        }
+
+        content.value {
+            width: 100%;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        content.input {
+
+            mat-slider {
+                width: 200px;
+            }
+
+            mat-select {
+                width: 200px;
+            }
         }
     }
 }

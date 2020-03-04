@@ -62,22 +62,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
 
 </mat-toolbar>
-
-<br />
-<div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
-    <app-profile-overview-tile
-        *ngFor="let profile of getProfilesForList()"
-        [profile]="profile"
-        [hoverEffect]="false"
-        [active]="isProfileActive(profile.name)">
-    </app-profile-overview-tile>
-    <app-profile-overview-tile
-        *ngIf="['all', 'custom'].includes(inputProfileFilter)"
-        [addProfileTile]="true"
-        [hoverEffect]="true"
-        (click)="buttonNew.click()"
-    ></app-profile-overview-tile>
+<div class="profile-manager-content">
+    <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
+        <app-profile-overview-tile
+            *ngFor="let profile of getProfilesForList()"
+            [profile]="profile"
+            [hoverEffect]="false"
+            [active]="isProfileActive(profile.name)">
+        </app-profile-overview-tile>
+        <app-profile-overview-tile
+            *ngIf="['all', 'custom'].includes(inputProfileFilter)"
+            [addProfileTile]="true"
+            [hoverEffect]="true"
+            (click)="buttonNew.click()"
+        ></app-profile-overview-tile>
+    </div>
+    <br />
+    <app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>
+    <br />
 </div>
-<br />
-<app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>
-<br />

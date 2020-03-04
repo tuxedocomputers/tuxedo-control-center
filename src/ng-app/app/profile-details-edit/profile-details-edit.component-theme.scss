@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,7 +25,8 @@
   $warn: map-get($theme, warn);
   
   .profile-details-edit {
-    .mat-button-toggle {
+
+    /*.mat-button-toggle {
         opacity: 0.8;
         color: mat-color($primary, lighter);
     }
@@ -33,6 +34,6 @@
         opacity: 1.0;
         color: mat-color($primary);
         background: inherit;
-    }
+    }*/
   }
 }
