@@ -22,7 +22,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
             <div class="title">
                 <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg>
-                <ng-container>System monitor</ng-container>
+                <ng-container i18n>System monitor</ng-container>
             </div>
             <hr />
         </div>
@@ -32,7 +32,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <span class="text">Main processor monitor</span>
+                    <span class="text" i18n>Main processor monitor</span>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
                 <div class="legend">
-                    <div class="text">CPU - Temp</div>
+                    <div class="text" i18n>CPU - Temp</div>
                 </div>
             </div>
             <div class="tcc-gauge">
@@ -68,7 +68,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="unit-text">GHz</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                 <div class="legend">
-                    <div class="text">CPU - Frequency</div>
+                    <div class="text" i18n>CPU - Frequency</div>
                 </div>
             </div>
             <div class="tcc-gauge">
@@ -84,7 +84,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                 <div class="legend">
-                    <div class="text">CPU - Fan</div>
+                    <div class="text" i18n>CPU - Fan</div>
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
-                    <span class="text">Graphics card monitor</span>
+                    <span class="text" i18n>Graphics card monitor</span>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
                 <div class="legend">
-                    <div class="text">GPU - Temp</div>
+                    <div class="text" i18n>GPU - Temp</div>
                 </div>
             </div>
             <div class="tcc-gauge">
@@ -129,7 +129,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                 <div class="legend">
-                    <div class="text">GPU - Fan</div>
+                    <div class="text" i18n>GPU - Fan</div>
                 </div>
             </div>
         </div>
@@ -140,7 +140,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
             <div class="title">
                 <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_settings.svg#Icon"></use></svg>
-                <ng-container>Profile settings</ng-container>
+                <ng-container i18n>Profile settings</ng-container>
             </div>
             <hr />
         </div>
@@ -156,15 +156,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <span class="text">CPU</span>
+                    <span class="text" i18n>CPU</span>
                 </div>
                 <div class="tcc-info-bar">
                     <div class="cpu-min-max-freq">
-                        <div class="label">Min</div>
+                        <div class="label" i18n>Min</div>
                         <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
                         <div class="unit color-disabled">GHz</div>
                         <div class="value right">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
-                        <div class="label">Max</div>
+                        <div class="label" i18n>Max</div>
                     </div>
                 </div>
                 <div class="tcc-gauge small active-cores">
@@ -179,12 +179,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mwl-gauge>
                     <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
                     <div class="legend">
-                        <div class="text small">Active cores</div>
+                        <div class="text small" i18n>Active cores</div>
                     </div>
                 </div>
                 <div class="title">
                     <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
-                    <span class="text">Fan profile</span>
+                    <span class="text" i18n>Fan profile</span>
                 </div>
                 <div class="tcc-progress tcc-info-bar">
                     <mat-progress-bar
@@ -194,9 +194,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="label-text" *ngIf="activeProfile.fan.useControl">
                         {{ activeProfile.fan.fanProfile }}
                     </div>
-                    <div class="label-text" *ngIf="!activeProfile.fan.useControl">
-                        Fan control: off
-                    </div>
+                    <div class="label-text" *ngIf="!activeProfile.fan.useControl" i18n>Fan control: off</div>
                 </div>
             </div>
             <div class="column">
@@ -209,7 +207,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [value]="activeProfile.display.brightness"
                         [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
                     </mat-progress-bar>
-                    <div class="label-text">Brightness: {{ activeProfile.display.brightness }} %</div>
+                    <div class="label-text"><ng-container i18n>Brightness</ng-container>: {{ activeProfile.display.brightness }} %</div>
                 </div>
                 <div class="tcc-gauge small on-off">
                     <mwl-gauge
@@ -224,18 +222,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mwl-gauge>
                     <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
                     <div class="legend">
-                        <div class="text small">Fixed brightness</div>
+                        <div class="text small" i18n>Fixed brightness</div>
                     </div>
                 </div>
                 <div class="title">
                     <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
-                    <span class="text">Webcam</span>
+                    <span class="text" i18n>Webcam</span>
                 </div>
                 <div class="tcc-progress tcc-info-bar">
                     <mat-progress-bar
                         [value]="activeProfile.webcam.status ? 100 : 0">
                     </mat-progress-bar>
-                    <div class="label-text">Webcam active: {{ activeProfile.webcam.status ? 'yes' : 'no' }}</div>
+                    <div class="label-text"><ng-container i18n>Webcam active</ng-container>: <span *ngIf="activeProfile.webcam.status">yes</span><span *ngIf="!activeProfile.webcam.status">no</span></div>
                 </div>
             </div>
         </div>
