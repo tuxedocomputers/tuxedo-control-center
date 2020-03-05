@@ -36,7 +36,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
       <div id="main-title">
         <!--img src="./assets/tcc_logo.svg" id="title-logo"-->
         <svg viewBox="0 0 63.139423 29.818106" class="logo"><use href="./assets/tcc_logo.svg#Icon"></use></svg>
-        {{ title }}
+        <span class="text" i18n>TUXEDO Control Center</span>
       </div>
       <i class="fas fa-times" (click)="buttonExit()"></i>
     </mat-toolbar-row>
@@ -107,7 +107,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
           <mat-list-item routerLink="/support" routerLinkActive="true">
             <content>
               <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_language.svg#Icon"></use></svg></mat-icon>
-              <ng-container>Deutsch</ng-container>
+              <ng-container i18n="@@menuMetaCurrentLanguage">[current language]</ng-container>
             </content>
           </mat-list-item>
           <mat-divider></mat-divider>
@@ -124,14 +124,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
           <mat-list-item routerLinkActive="true" (click)="buttonToggleTheme()">
             <content>
               <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_theme.svg#Icon"></use></svg></mat-icon>
-              <ng-container>Farbschema</ng-container>
+              <ng-container i18n>Theme</ng-container>
             </content>
           </mat-list-item>
           <mat-divider></mat-divider>
           <mat-list-item routerLink="/info" routerLinkActive="true">
             <content>
               <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg></mat-icon>
-              <ng-container>Info</ng-container>
+              <ng-container i18n>Info</ng-container>
             </content>
           </mat-list-item>
         </mat-nav-list>
