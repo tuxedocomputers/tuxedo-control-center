@@ -27,7 +27,7 @@
         justify-content: space-between;
         flex-flow: nowrap;
         align-items: center;
-
+        
         #title-left {
             width: 150px;
             display: flex;
@@ -138,7 +138,7 @@
         padding: 10px;
         margin: 0;
         //bottom: 20px;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 }
 

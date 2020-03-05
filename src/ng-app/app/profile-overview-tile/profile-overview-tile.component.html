@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,23 +16,73 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<mat-card class="profile-overview-tile" [ngClass]="{'hover-effect': hoverEffect, 'selected': isSelected, 'tile-active': active}" *ngIf="visible">
-    <mat-card-content>
-        <div style="text-align: right;">
-            <!-- PSEUDO-CODE: IF (active AND chosenprofile) then show green point ELSE IF (active) THEN show grey point-->
-            <div style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
+<mat-card class="profile-overview-tile"
+    [ngClass]="{
+        'hover-effect': hoverEffect,
+        'selected': isSelected,
+        'tile-active': active
+    }"
+    *ngIf="visible"
+    (mouseenter)="activateOverlay(true)"
+    (mouseleave)="activateOverlay(false)">
 
-            <!-- PSEUDO-CODE: IF (batterychosenprofile) then show battery-icon else hide it -->
-            <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_batterymode.svg#Icon"></use></svg></mat-icon>
+    <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
+        <div class="overlay-content">
+            <div class="icon-bar">
+                <button mat-icon-button disableRipple (click)="deleteProfile()">
+                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+                </button>
+                <button mat-icon-button disableRipple (click)="selectProfile()">
+                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                </button>
+            </div>
+            <div class="state-selector">
+                <mat-button-toggle-group color="primary"
+                    [formControl]="selectStateControl"
+                    multiple
+                    matTooltipPosition="left">
+                    <mat-button-toggle
+                        *ngFor="let state of stateInputArray"
+                        disableRipple
+                        [disabled]="getSettings().stateMap[state.value] === profile.name"
+                        [value]="state.value"
+                    >
+                        <svg viewBox="0 0 512 512">
+                            <use attr.href="./assets/images/{{ state.icon }}"></use>
+                        </svg>
+                        <span class="label">{{ state.label }}</span>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+                <div class="state-buttons">
+                    <!--button mat-icon-button disableRipple>
+                        <mat-icon>undo</mat-icon>
+                    </button-->
+                    <button
+                        (click)="saveStateSelection()"
+                        mat-icon-button
+                        disableRipple
+                        *ngIf="selectStateControl.dirty">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                </div>
+            </div>
         </div>
-        <!--
-        <span class="state-icons">
-            <span *ngFor="let state of getStateInputs()">
-                <mat-icon class="status-icon" *ngIf="getSettings().stateMap[state.value] === profile.name">{{ state.icon }}</mat-icon>
-            </span>
-        </span>
-        -->
-        <div class="profile-icons">
+    </div>
+
+    <mat-card-content>
+        <div class="state-status-icons" *ngIf="!addProfileTile">
+            <!-- PSEUDO-CODE: IF (active AND chosenprofile) then show green point ELSE IF (active) THEN show grey point-->
+            <div *ngIf="active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
+            <div *ngIf="!active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
+
+            <div class="state-icon" *ngFor="let state of getStateInputs()">
+                <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">
+                    <use attr.href="./assets/images/{{ state.icon }}"></use>
+                </svg>
+            </div>
+        </div>
+
+        <div class="profile-icon">
             <img src="./assets/images/icon_profile_energysaver.svg">
         </div>
         
@@ -49,7 +99,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="status-flexbox">
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
@@ -57,7 +107,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
@@ -65,23 +115,23 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_fan.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.cpu.governor }}
                     </span>
                 </div>
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'inactive': !profile.display.useBrightness}">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
                     </div>
-                    <span class="status-info">
+                    <span class="status-info" *ngIf="profile.display.useBrightness">
                         {{ profile.display.brightness }} %
                     </span>
                 </div>
-                <div class="status-component-lastrow">
+                <div class="status-component">
                     <div class="status-icon-container">
-                        <mat-icon><svg viewBox="0 0 512 512" style="transform:scale(2);"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg></mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
@@ -93,9 +143,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <span *ngIf="addProfileTile" class="add-profile-content">
             <div style="position:relative; top:10px; text-align: center;">
-                <button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button>
+                <button mat-icon-button color="primary" style="cursor: default;"><mat-icon>add_box</mat-icon></button>
             </div>
-            
         </span>
 
         <!--

@@ -17,14 +17,18 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 .profile-overview-tile{
+    position: relative;
+    z-index: 10;
 
     user-select: none;
 
     width: 215px;
-    height: 350px;
+    height: 360px;
     margin: 8px;
     padding: 10px;
     padding-bottom: 15px;
+
+    border-radius: 5px;
 
     hr {
         opacity: 0.2;
@@ -45,80 +49,168 @@
             margin:auto;
         }
 
-        .state-icons {
+        /*.state-icons {
             display: flex;
             .status-icon {
                 font-size: 17px;
                 width: 17px;
             }
-        }
+        }*/
     }
 
-    .profile-icons {
-        width:80px;
+    .profile-icon {
+        width: 80px;
         margin: auto;
         margin-bottom: 5px;
     }
 
-    .status-row {
-
-        width: 100%;
-        margin: 1px;
-        padding: 0px;
-
+    .state-status-icons {
         display: flex;
-        justify-content: flex-start;
+        flex-flow: row;
+        justify-content: flex-end;
         align-items: center;
 
-        &.inactive {
-            opacity: 0.2;
-        }
-        
-        .status-icon {
-            font-size: 1.3em;
-            height: 17px;
-            width: 17px;
+        height: 48px;
 
-            margin-left: 0px;
-            margin-right: 10px;
-        }
+        .state-icon {
+            svg {
+                width: 24px;
+                height: 24px;
 
-        // fa icon tweak
-        .fas.status-icon:before {
-            font-size: 0.8em;
-            width: 17px;
-            height: 17px;
-
-            display: inline-block;
-            position: relative;
-            text-align: center;
-            vertical-align: middle;
+                transform: scale(2);
+                --icon-detail: var(--icon-main);
+            }
         }
 
-        .status-info {
-            font-size: 1em;
+        .dot {
+            margin: 8px;
         }
     }
 
     .status-flexbox {
         display: flex;
-        flex-wrap:wrap;
+        flex-wrap: wrap;
         margin-top: 20px;
 
         .status-component {
-            width:50%;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .status-component-lastrow {
             width: 50%;
-            margin-bottom: 0px;
-            text-align: center;
+
+            display: flex;
+            flex-flow: column;
+            justify-content: flex-start;
+            align-items: center;
+
+            .status-icon-container {
+                width: 48px;
+                height: 48px;
+                svg {
+                    width: inherit;
+                    height: inherit;
+                }
+    
+                --icon-detail: var(--icon-main);
+            }
+
+            .status-info {
+                transform: translateY(-5px);
+            }
+
+            &.inactive {
+                opacity: 0.3;
+            }
+        }
+    }
+
+    .overlay {
+        display: none;
+        position: absolute;
+        z-index: 20;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+
+        border-radius: inherit;
+
+        opacity: 0.95;
+
+        &.show {
+            display: initial;
         }
 
-        .status-icon-container {
-            margin-bottom: 0px;
+        .overlay-content {
+            display: flex;
+            flex-flow: column;
+            justify-content: flex-start;
+
+            width: 100%;
+            height: 100%;
+
+            .icon-bar {
+                display: flex;
+                flex-flow: row;
+                justify-content: flex-end;
+                align-items: center;
+
+                padding: 10px;
+
+                svg {
+                    width: 48px;
+                    height: 48px;
+                    --icon-detail: var(--icon-main);
+                }
+
+                button {
+                    margin-left: 5px;
+                }
+            }
+
+            .state-selector {
+                margin-top: 20px;
+
+                mat-button-toggle-group {
+                    flex-flow: column;
+                    width: 100%;
+
+                    border-style: none;
+
+                    mat-button-toggle {
+
+                        svg {
+                            width: 48px;
+                            height: 48px;
+
+                            --icon-detail: var(--icon-main);
+                        }
+                    }
+
+                    ::ng-deep .mat-button-toggle-label-content {
+                        display: flex;
+                        flex-flow: column;
+                        justify-content: flex-start;
+                        align-items: center;
+                    }
+                }
+
+                .state-buttons {
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: flex-end;
+                    align-items: center;
+    
+                    padding: 10px;
+    
+                    svg {
+                        width: 48px;
+                        height: 48px;
+                        --icon-detail: var(--icon-main);
+                    }
+    
+                    button {
+                        margin-left: 5px;
+                    }
+                }
+            }
         }
     }
 

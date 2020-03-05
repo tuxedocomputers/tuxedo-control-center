@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -33,16 +33,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-toolbar-row>
     
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
-        <span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span>
-        <span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span>
-        <span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span>
-        <span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span>
+        <!--span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span-->
+        <!--span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span-->
         <span style="flex: 1 1 auto"></span>
-        <span i18n-matTooltip="@@cProfMgrButtonProfileOverviewTooltip" matTooltip="Profile overview">
+        <!--span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span-->
+        <!--span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span-->
+        <!--span i18n-matTooltip="@@cProfMgrButtonProfileOverviewTooltip" matTooltip="Profile overview">
             <button *ngIf="currentProfile" mat-icon-button color="primary" (click)="selectProfile(undefined)">
                 <mat-icon>apps</mat-icon>
             </button>
-        </span>
+        </span-->
     </mat-toolbar-row>
 
     <mat-toolbar-row *ngIf="inputActive" style="padding-top: 20px; padding-bottom: 20px;">
@@ -62,23 +62,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
 
 </mat-toolbar>
-
-<br />
-<div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
-    <app-profile-overview-tile
-        *ngFor="let profile of getProfilesForList()"
-        [profile]="profile"
-        [hoverEffect]="true"
-        [active]="isProfileActive(profile.name)"
-        (click)="selectProfile(profile.name)">
-    </app-profile-overview-tile>
-    <app-profile-overview-tile
-        *ngIf="['all', 'custom'].includes(inputProfileFilter)"
-        [addProfileTile]="true"
-        [hoverEffect]="true"
-        (click)="buttonNew.click()"
-    ></app-profile-overview-tile>
+<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}">
+    <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
+        <app-profile-overview-tile
+            *ngFor="let profile of getProfilesForList()"
+            [profile]="profile"
+            [hoverEffect]="false"
+            [active]="isProfileActive(profile.name)">
+        </app-profile-overview-tile>
+        <app-profile-overview-tile
+            *ngIf="['all', 'custom'].includes(inputProfileFilter)"
+            [addProfileTile]="true"
+            [hoverEffect]="true"
+            (click)="buttonNew.click()"
+        ></app-profile-overview-tile>
+    </div>
+    <app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>
+    <br />
 </div>
-<br />
-<app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>
-<br />
