@@ -17,12 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+.sysmon-headline {
+    width:80%;
+    border-bottom: 1px solid;
+}
+
 .system-monitor-gauges {
     display: flex;
     flex-flow: row;
     justify-content: space-evenly;
     
-    padding: 10px;
+    padding: 10px 0 60px 0;
 }
 
 .profile-overview {
@@ -37,6 +42,8 @@
         display: flex;
         flex-flow: column;
         align-items: center;
+
+        
 
         .title {
             display: flex;
@@ -70,7 +77,7 @@
                 width: auto;
                 top: 50%;
                 left: 50%;
-                transform: translateX(10px) translateY(-7px);
+                transform: translateX(14px) translateY(-12px);
 
                 font-size: 1.5em;
             }
@@ -116,12 +123,12 @@
             }
 
             .value {
-                font-weight: bold;
+                //font-weight: bold;
                 font-size: 1.4em;
             }
 
             .unit, .label {
-                font-weight: bold;
+                //font-weight: bold;
             }
         }
     }

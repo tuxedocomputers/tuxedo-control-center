@@ -30,7 +30,7 @@
     $gauge-legend-text-color: mat-color($foreground, disabled-text);
 
     $gauge-icon-color: mat-color($foreground, disabled-text);
-    $gauge-background-color: mat-color($background, status-bar);
+    $gauge-background-color: mat-color($background, app-bar);
 
     .tcc-gauge {
         position: relative;
@@ -46,12 +46,12 @@
             height: 100%;
 
             .dial {
-                stroke-width: 1px;
+                stroke-width: 3px;
                 stroke: $gauge-background-color;
             }
 
             .value {
-                transform: scale(0.92);
+                //transform: scale(0.92);
                 transform-origin: center;
                 stroke-width: 3px;
                 stroke: #00E333;
@@ -121,6 +121,10 @@
 
                 color: $gauge-legend-text-color;
                 font-weight: bold;
+
+                &.small {
+                    transform:scale(1.2);
+                }
             }
         }
     }
@@ -186,13 +190,13 @@
 
         .label-text {
             position: absolute;
-            top: calc(50% - 8px);
+            top: 5px;
             
             width: 100%;
 
             text-align: center;
 
-            font-weight: bold;
+            //font-weight: bold;
         }
     }
 }
