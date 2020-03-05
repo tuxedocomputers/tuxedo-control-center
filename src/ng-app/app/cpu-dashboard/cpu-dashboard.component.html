@@ -90,7 +90,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- GPU -->
-        <div class="content-container profile-overview">
+        <div class="content-container profile-overview" *ngIf="hasGPUTemp">
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
@@ -99,12 +99,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
 
-        <div class="content-container system-monitor-gauges">
+        <div class="content-container system-monitor-gauges" *ngIf="hasGPUTemp">
             <div class="tcc-gauge">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
-                    [value]="fanData.cpu.temp.data.value"
+                    [value]="gaugeGPUTemp"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
                     [animated]="true"
@@ -118,26 +118,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <div class="tcc-gauge">
                 <mwl-gauge
-                    [max]="cpuInfo.maxFreq"
-                    [min]="cpuInfo.minFreq"
-                    [value]="avgCpuFreq"
-                    [label]="gaugeFreqFormat"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
-                </mwl-gauge>
-                <div class="unit-text">GHz</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
-                <div class="legend">
-                    <div class="text">GPU - Frequency</div>
-                </div>
-            </div>
-            <div class="tcc-gauge">
-                <mwl-gauge
                     [max]="100"
                     [min]="0"
-                    [value]="fanData.cpu.speed.data.value"
+                    [value]="gaugeGPUSpeed"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
                     [animated]="true"

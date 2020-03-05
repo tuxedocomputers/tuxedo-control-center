@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -48,6 +48,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public avgCpuFreqData;
 
   public fanData: IDBusFanData;
+  public gaugeGPUTemp: number;
+  public gaugeGPUSpeed: number;
+  public hasGPUTemp = false;
 
   public activeProfile: ITccProfile;
   public isCustomProfile: boolean;
@@ -69,7 +72,29 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
-    this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => { this.fanData = fanData; }));
+    this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => {
+      this.fanData = fanData;
+      let avgTemp: number;
+      let avgSpeed: number;
+      const temp1 = this.fanData.gpu1.temp.data.value;
+      const temp2 = this.fanData.gpu2.temp.data.value;
+      const speed1 = this.fanData.gpu1.speed.data.value;
+      const speed2 = this.fanData.gpu2.speed.data.value;
+      if (temp1 !== 1 && temp2 !== 1) {
+        avgTemp = (temp1 + temp2) / 2;
+        avgSpeed = (speed1 + speed2) / 2;
+      } else if (temp1 !== 1) {
+        avgTemp = temp1;
+        avgSpeed = speed1;
+      } else {
+        // This covers two cases, temp2 having a valid temperature, and not having GPU temperature at all
+        avgTemp = temp2;
+        avgSpeed = speed2;
+      }
+      this.hasGPUTemp = avgTemp !== 1;
+      this.gaugeGPUTemp = Math.round(avgTemp);
+      this.gaugeGPUSpeed = Math.round(avgSpeed);
+    }));
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
       this.activeProfile = profile;
       this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
