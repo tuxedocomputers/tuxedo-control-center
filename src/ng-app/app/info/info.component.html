@@ -28,62 +28,39 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <mat-divider class="divider-separator"></mat-divider>
 
         <p i18n="@@cInfoTCCInfoText1">
-            Mit dem TUXEDO Control Center...
+            Info text paragraph 1
         </p>
         <p i18n="@@cInfoTCCInfoText2">
-            Mit 3 vorgefertigten...
+            Info text paragraph 2
         </p>
 
         <mat-divider style="position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;"></mat-divider>
 
         <table class="updates-table">
             <tr>
-                <td i18n="@@cInfoTCCInstalledVersion">
-                    Installierte Version:
+                <td>
+                    <ng-container i18n>Installed version</ng-container>:
                 </td>
                 <td>
-                    VERSIONSNUMMER
-                </td>
-            </tr>
-            <tr>
-                <td i18n="@@cInfoTCCVersionDate">
-                    Versionsdatum
-                </td>
-                <td>
-                    VERSIONSDATUM
-                </td>
-            </tr>
-            <tr>
-                <td i18n="@@cInfoTCCLatestVersion">
-                    Aktuelle Version:
-                </td>
-                <td>
-                    <!-- IF (LatestVersion == Installed Version) -> primary color else red color-->
-                    VERSIONSNUMMER
+                    {{ appVersion }}
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="2" style="font-weight: 600; font-size: 1.1em; text-align: center;"> 
-                    <!-- IF (LatestVersion == Installed Version) -> message1 else message2-->
-                    Es ist eine aktuellere Control Center Version für Ihr System verfügbar!
-                </td>
             </tr>
         </table>
 
-        <div class="update-button">
+        <!--div class="update-button">
             <button mat-raised-button color="basic">
-                <strong i18n="@@cInfoButtonInstallUpdate">Update installieren</strong>
+                <strong i18n>Update installieren</strong>
             </button>
         </div>
         <div class="update-button">
             <button mat-raised-button color="basic">
-                <strong i18n="@@cInfoButtonGeneralUpdates">Allg. Systemupdates</strong>
+                <strong i18n>Allg. Systemupdates</strong>
             </button>
-        </div>
+        </div-->
     </div>
 
 </mat-card>
@@ -93,10 +70,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_logbook.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n="@@cInfoVersionPanelTitle">Version</ng-container>
+                <ng-container i18n>Changelog</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <p>
+        <!--p>
             <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
         </p>
         <table class="versions" cellspacing="0">
@@ -104,7 +81,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
             <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
         </table>
-        <br />
+        <br /-->
         <mat-card class="changelog">
             <markdown src="assets/CHANGELOG.md"></markdown>
         </mat-card>
