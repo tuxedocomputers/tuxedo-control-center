@@ -81,9 +81,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </svg>
             </div>
         </div>
+        <div class="state-status-icons" *ngIf="addProfileTile"></div>
 
         <div class="profile-icon">
-            <img src="./assets/images/icon_profile_breezy.svg">
+            <img *ngIf="!addProfileTile" src="./assets/images/{{ getProfileIcon(profile) }}">
+            <img *ngIf="addProfileTile" src="./assets/images/{{ getProfileIcon('custom') }}">
         </div>
         
         <header *ngIf="!addProfileTile">

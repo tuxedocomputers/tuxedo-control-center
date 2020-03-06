@@ -182,3 +182,9 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         fanProfile: 'Balanced'
     }
 };
+
+export const profileImageMap = new Map<string, string>();
+profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');
+profileImageMap.set(defaultProfiles[1].name, 'icon_profile_breezy.svg');
+profileImageMap.set(defaultProfiles[2].name, 'icon_profile_energysaver.svg');
+profileImageMap.set('custom', 'icon_profile_custom.svg');

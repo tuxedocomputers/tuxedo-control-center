@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit, Input } from '@angular/core';
-import { ITccProfile } from '../../../common/models/TccProfile';
+import { ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { StateService, IStateInfo } from '../state.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -111,5 +111,13 @@ export class ProfileOverviewTileComponent implements OnInit {
       }
       this.utils.pageDisabled = false;
     });
+  }
+
+  public getProfileIcon(profile: ITccProfile): string {
+    if (profileImageMap.get(profile.name) !== undefined) {
+      return profileImageMap.get(profile.name);
+    } else {
+      return profileImageMap.get('custom');
+    }
   }
 }

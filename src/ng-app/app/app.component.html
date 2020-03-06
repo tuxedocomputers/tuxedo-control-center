@@ -104,7 +104,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-form-field>
           </mat-list-item-->
           <mat-divider></mat-divider>
-          <mat-list-item routerLink="/support" routerLinkActive="true">
+          <mat-list-item routerLinkActive="true" (click)="buttonToggleLanguage()">
             <content>
               <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_language.svg#Icon"></use></svg></mat-icon>
               <ng-container i18n="@@menuMetaCurrentLanguage">[current language]</ng-container>
