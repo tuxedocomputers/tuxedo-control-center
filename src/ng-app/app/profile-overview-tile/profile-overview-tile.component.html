@@ -83,7 +83,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="profile-icon">
-            <img src="./assets/images/icon_profile_energysaver.svg">
+            <img src="./assets/images/icon_profile_breezy.svg">
         </div>
         
         <header *ngIf="!addProfileTile">
@@ -99,7 +99,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="status-flexbox">
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 320 512"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
@@ -107,7 +107,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 336 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
@@ -115,7 +115,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         {{ profile.cpu.governor }}
@@ -123,7 +123,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component" [ngClass]="{'inactive': !profile.display.useBrightness}">
                     <div class="status-icon-container">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 351 512"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info" *ngIf="profile.display.useBrightness">
                         {{ profile.display.brightness }} %
@@ -131,7 +131,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <div class="status-component">
                     <div class="status-icon-container">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 258 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
                         <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
