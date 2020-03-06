@@ -61,7 +61,7 @@ async function buildDeb(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         deb: {
-            depends: [''],
+            depends: ['tuxedo-wmi (>= 2.0.0)'],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
@@ -118,7 +118,7 @@ async function buildSuseRpm(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         rpm: {
-            depends: [],
+            depends: [ 'tuxedo-wmi >= 2.0.0' ],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh'
