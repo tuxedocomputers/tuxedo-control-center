@@ -26,6 +26,8 @@ import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 
+import { I18n } from '@ngx-translate/i18n-polyfill';
+
 @Component({
   selector: 'app-cpu-dashboard',
   templateUrl: './cpu-dashboard.component.html',
@@ -65,7 +67,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private tccdbus: TccDBusClientService,
     private state: StateService,
     private router: Router,
-    private config: ConfigService
+    private config: ConfigService,
+    private i18n: I18n
   ) { }
 
   ngOnInit() {
@@ -159,9 +162,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public gaugeOnOffFormat: (value: number) => string = (value) => {
     if (value === 0) {
-      return "off";
+      return this.i18n({ value: 'off'});
     } else {
-      return "on";
+      return this.i18n({ value: 'on'});
     }
   }
 
