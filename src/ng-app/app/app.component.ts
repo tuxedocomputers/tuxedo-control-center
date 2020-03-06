@@ -103,6 +103,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  public buttonToggleLanguage() {
+    this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
+  }
+
   public getStateInputs(): IStateInfo[] {
     return this.state.getStateInputs();
   }
