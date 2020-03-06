@@ -129,8 +129,8 @@
         }
     }
 
-    $tcc-info-bar-border-color: mat-color($background, status-bar);
-    $tcc-info-bar-background-color: mat-color($background, status-bar);
+    $tcc-info-bar-border-color: $gauge-background-color;
+    $tcc-info-bar-background-color: $gauge-background-color;
     $tcc-info-bar-color-disabled: mat-color($foreground, disabled-text);
     $tcc-info-bar-width: 250px;
     $tcc-info-bar-height: 30px;
