@@ -458,7 +458,14 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
             <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
         </source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="signed-off">
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+                Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+                Mit 3 vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>    
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">30</context>
