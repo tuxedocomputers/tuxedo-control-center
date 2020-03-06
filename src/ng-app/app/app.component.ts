@@ -28,7 +28,7 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { ITccSettings } from '../../common/models/TccSettings';
 import { environment } from '../environments/environment';
 import { ConfigService } from './config.service';
-import { StateService } from './state.service';
+import { StateService, IStateInfo } from './state.service';
 import { UtilsService } from './utils.service';
 
 @Component({
@@ -102,4 +102,17 @@ export class AppComponent implements OnInit, OnDestroy {
       this.utils.setThemeLight();
     }
   }
+
+  public buttonToggleLanguage() {
+    this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
+  }
+
+  public getStateInputs(): IStateInfo[] {
+    return this.state.getStateInputs();
+  }
+
+  public getActiveProfile(): ITccProfile {
+    return this.state.getActiveProfile();
+  }
+
 }

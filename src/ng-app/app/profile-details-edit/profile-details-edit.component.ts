@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -137,7 +137,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     if (this.profileFormGroup.valid) {
       const formProfileData: ITccProfile = this.profileFormGroup.value;
-      const newProfileStateAssignments: string[] = this.selectStateControl.value;
+      // Note: state selection disabled on profile edit for now
+      const newProfileStateAssignments: string[] = undefined; // this.selectStateControl.value;
       this.config.writeProfile(this.viewProfile.name, formProfileData, newProfileStateAssignments).then(success => {
         if (success) {
           this.profileFormGroup.markAsPristine();
@@ -217,6 +218,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
   }
 
   public governorSelectionChange() {
+    // Energy performance preference setting chosen based on governor
     const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
     if (cpuGroup.controls.governor.value === 'performance') {
       cpuGroup.controls.energyPerformancePreference.setValue('performance');

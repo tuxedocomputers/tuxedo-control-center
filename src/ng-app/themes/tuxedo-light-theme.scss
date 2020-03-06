@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-$tuxedo-light-theme-primary: mat-palette($mat-indigo);
-$tuxedo-light-theme-accent: mat-palette($mat-blue, A200, A100, A400);
+$tuxedo-light-theme-primary: mat-palette($mat-grey, 600, 400, 900);
+$tuxedo-light-theme-accent: mat-palette($mat-yellow);
 $tuxedo-light-theme-warn: mat-palette($mat-red);
 
 $tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn);
@@ -25,4 +25,12 @@ $tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary,
 .light-theme {
     @include angular-material-theme($tuxedo-control-center-light-theme);
     @include component-themes($tuxedo-control-center-light-theme);
+
+    --icon-main: currentColor;
+    --icon-detail: #e30016;
+
+    .theme-page-title {
+        opacity: 0.7;
+        font-weight: 600;
+    }
 }

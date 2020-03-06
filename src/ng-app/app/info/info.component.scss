@@ -16,22 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.info-accordion {
-    mat-panel-title, mat-panel-description {
-        flex-basis: 0;
-    }
 
-    mat-panel-description {
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    mat-panel-title {
-        font-weight: bold;
-    }
+ .logo {
+    width: 200px;
 }
 
-.info-accordion {
+.content-container {
+    max-width: 900px;
+    margin:auto;
+    text-align: center;
+}
+
+.updates-table {
+    width:300px;
+    margin:auto;
+    text-align:left;
+    margin-bottom: 20px;
+}
+
+.update-button {
+    margin-bottom: 20px;
+}
+
+.infoseparator {
+    position: static;
+    width: 200px;
+    right:0;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.accordion-info {
     p {
         font-size: 1.2em;;
     }
@@ -47,7 +63,6 @@ table.versions {
 }
 
 .changelog {
-    background-color: #f8f8f8;
     max-height: 250px;
     overflow-y: scroll;
 }
@@ -62,4 +77,8 @@ table.versions {
             margin-right: 16px;
         }
     }
+}
+
+.content-container mat-divider.divider-separator {
+    position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;
 }

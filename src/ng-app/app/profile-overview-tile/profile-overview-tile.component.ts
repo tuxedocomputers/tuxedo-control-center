@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,11 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit, Input } from '@angular/core';
-import { ITccProfile } from '../../../common/models/TccProfile';
+import { ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { StateService, IStateInfo } from '../state.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
+import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-overview-tile',
@@ -44,13 +46,28 @@ export class ProfileOverviewTileComponent implements OnInit {
    */
   @Input() addProfileTile = false;
 
+  public showOverlay = false;
+
+  public selectStateControl: FormControl;
+  public stateInputArray: IStateInfo[];
+
   constructor(
     private utils: UtilsService,
     private state: StateService,
-    private config: ConfigService
+    private config: ConfigService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    if (!this.addProfileTile) {
+      if (this.selectStateControl === undefined) {
+        this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.name));
+      } else {
+        this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
+      }
+    }
+
+    this.stateInputArray = this.state.getStateInputs();
   }
 
   public getStateInputs(): IStateInfo[] {
@@ -63,5 +80,44 @@ export class ProfileOverviewTileComponent implements OnInit {
 
   public formatFrequency(frequency: number): string {
     return this.utils.formatFrequency(frequency);
+  }
+
+  public activateOverlay(status: boolean): void {
+    if (!this.addProfileTile) {
+      if (status === false) {
+        this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
+      }
+      this.showOverlay = status;
+    }
+  }
+
+  public selectProfile(): void {
+    setImmediate(() => {
+        this.router.navigate(['profile-manager', this.profile.name]);
+    });
+  }
+
+  public deleteProfile(): void {
+    this.config.deleteCustomProfile(this.profile.name);
+    this.utils.pageDisabled = false;
+  }
+
+  public saveStateSelection(): void {
+    this.utils.pageDisabled = true;
+    const profileStateAssignments: string[] = this.selectStateControl.value;
+    this.config.writeProfile(this.profile.name, this.profile, profileStateAssignments).then(success => {
+      if (success) {
+        this.selectStateControl.markAsPristine();
+      }
+      this.utils.pageDisabled = false;
+    });
+  }
+
+  public getProfileIcon(profile: ITccProfile): string {
+    if (profileImageMap.get(profile.name) !== undefined) {
+      return profileImageMap.get(profile.name);
+    } else {
+      return profileImageMap.get('custom');
+    }
   }
 }
