@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoECAPI as ecAPI } from '../../native-lib/TuxedoECAPI';
+import { TuxedoWMIAPI as wmiAPI, IFanInfo } from '../../native-lib/TuxedoWMIAPI';
 import { FanControlLogic } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
@@ -50,9 +50,7 @@ export class FanControlWorker extends DaemonWorker {
 
         if (!useFanControl) {
             // Stop TCC fan control for all fans
-            for (const fanNumber of this.fans.keys()) {
-                ecAPI.setFanAuto(fanNumber);
-            }
+            wmiAPI.setFanAuto(true, true, true, true);
         }
     }
 
@@ -73,11 +71,19 @@ export class FanControlWorker extends DaemonWorker {
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
             const fanLogic = this.fans.get(fanNumber);
-            const currentTemperature = ecAPI.getFanTemperature(fanNumber);
-            let currentSpeed = ecAPI.getFanSpeedPercent(fanNumber);
+            const fanInfo: IFanInfo = { speed: 0, temp1: 1, temp2: 1 };
+            const result = wmiAPI.getFanInfo(fanNumber, fanInfo);
+            const currentTemperature = fanInfo.temp2; // Temp2 hardcoded, note: temp1 is not used for gpu fans
+            const currentSpeed = Math.round((fanInfo.speed / 0xff) * 100);
+            /*const currentTemperature = ecAPI.getFanTemperature(fanNumber);
+            let currentSpeed = ecAPI.getFanSpeedPercent(fanNumber);*/
             fanTimestamps.push(Date.now());
             fanTemps.push(currentTemperature);
             fanSpeeds.push(currentSpeed);
+            if (result === false) {
+                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') fan info');
+                continue;
+            }
             if (currentTemperature === -1) {
                 this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
                 continue;
@@ -88,10 +94,19 @@ export class FanControlWorker extends DaemonWorker {
             }
             fanLogic.reportTemperature(currentTemperature);
             if (useFanControl) {
-                currentSpeed = fanLogic.getSpeedPercent();
-                ecAPI.setFanSpeedPercent(fanNumber, currentSpeed);
+                fanSpeeds[fanNumber - 1] = fanLogic.getSpeedPercent();
+            } else {
                 fanSpeeds[fanNumber - 1] = currentSpeed;
             }
+        }
+
+        if (useFanControl) {
+            wmiAPI.setFanSpeedByte(
+                fanSpeeds[0] * 0xff / 100,
+                fanSpeeds[1] * 0xff / 100,
+                fanSpeeds[2] * 0xff / 100,
+                1
+            );
         }
 
         for (const fanNumber of this.fans.keys()) {
@@ -105,8 +120,6 @@ export class FanControlWorker extends DaemonWorker {
 
     public onExit(): void {
         // Stop TCC fan control for all fans
-        for (const fanNumber of this.fans.keys()) {
-            ecAPI.setFanAuto(fanNumber);
-        }
+        wmiAPI.setFanAuto(true, true, true, true);
     }
 }
