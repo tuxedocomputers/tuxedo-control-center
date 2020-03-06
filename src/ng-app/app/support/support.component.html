@@ -18,7 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card class="tcc-card card-support">
     <mat-card-title class="theme-page-title">
-        <ng-container i18n="@@cSupportGeneralPanelTitle">TUXEDO Support</ng-container>
+        <ng-container i18n>TUXEDO Support</ng-container>
     </mat-card-title>
     <hr />
     
@@ -26,7 +26,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <p i18n>You got a problem with your TUXEDO device?</p>
         <p i18n>Then please contact us by phone or use our online support.</p>
     
-
         <mat-grid-list cols="2" rowHeight="100px">
             <mat-grid-tile>
                 <div class="phone-info">
@@ -51,6 +50,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_systemdiagnose.svg#Icon"></use></svg></mat-icon>
+<<<<<<< HEAD
                 <ng-container i18n="@@cSupportSysInfoPanelTitle">System diagnostics</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
@@ -58,16 +58,37 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <p i18n="@@cSupportSysInfoNoPersonalInfo">For more complex problems it may be necessary to evaluate diagnostic data from your PC.</p>
             <p i18n="@@cSupportSysInfoNoPersonalInfo2">Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.</p>
             <p i18n="@@cSupportScriptMoreInfo">For further information please click <a href="https://www.tuxedocomputers.com/en/Notebooks-PCs-systeminfossh.tuxedo">here</a>.</p>
+=======
+                <ng-container i18n>System info collection</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="content-container">
+            <div i18n>
+                <p>For complex problems it can be necessary to evaluate system info stored on your PC.</p>
+                <p>Our program neither collects personal data nor login information.</p>
+            </div>
+            <p>
+                <ng-container i18n>More information about which data the script collects can be found at</ng-container>:
+                &nbsp;<a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
+            </p>
+>>>>>>> Support text adjustments
         
             <mat-vertical-stepper [linear]="true">
-                <mat-step [stepControl]="formTicketNumber" label="Ticket number">
+                <mat-step [stepControl]="formTicketNumber">
                     <ng-template matStepLabel>
-                        <ng-container i18n="@@cSupportStepTicketNumberLabel">Ticket number</ng-container>{{ formTicketNumber.valid ? ': ' : '' }}
-                        <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>
+                        <ng-container i18n>Step1: Input ticket number</ng-container><!--{{ formTicketNumber.valid ? ': ' : '' }}
+                        <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>-->
                     </ng-template>
                     
                     <form [formGroup]="formTicketNumber">
+<<<<<<< HEAD
                         <p i18n="@@cSupportTicketNumberFetching">Please enter the ticket number you received with your support request. If you do not have a ticket number, please contact us via our <a href="https://www.tuxedocomputers.com/en/Contact.tuxedo">online form</a>.</p>
+=======
+                        <p>
+                            <ng-container i18n="@@cSupportTicketNumberFetching">Please enter the ticket number given at support request. If you do not have a ticket number yet please use the online form</ng-container>:
+                            <a style="color: currentColor; cursor: pointer; text-decoration: underline;" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')" i18n>Support</a>
+                        </p>
+>>>>>>> Support text adjustments
                         <mat-form-field>
                             <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                         </mat-form-field> &nbsp;
@@ -75,11 +96,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </form>
 
                 </mat-step>
+<<<<<<< HEAD
 
                 <mat-step i18n-label="@@cSupportStepDownloadAndStartLabel" label="Download and run">
                     <p i18n="@@cSupportScriptInfo">
                         When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.
                     </p>
+=======
+                <mat-step i18n-label label="Step2: Download and run system info collection program">
+                    <div>
+                        <p>Please start the system info collection program with the button.</p>
+                        <p>When executed the program collects the data and thereafter sends it to our support associated with the ticket number.</p>
+                    </div>
+>>>>>>> Support text adjustments
                     <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
                         <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
                         <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
@@ -94,11 +123,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n="@@cSupportAnydeskPanelTitle">Anydesk</ng-container>
+                <ng-container i18n>Remote support</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="content-container">
+<<<<<<< HEAD
             <p i18n="@@cSupportAnydeskProgramDesc">
                 If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <i>AnyDesk</i> remote maintenance software.
             </p>
@@ -108,6 +138,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <p i18n="@@cSupportAnydeskProgramDesc3">
                 Our support gets access to your system only temporarily and in your presence. NO personal data is collected!
             </p>
+=======
+            <div i18n>
+                <p>If your problem is not solvable by the system info alone, we also offer free of charge live support through the tool <i>Anydesk</i>.</p>
+                <p>The support worker can then connect to your TUXEDO Computer and solve the problem together with you.</p>
+                <p>The access to your computer is only temporary and no personal data is collected.</p>
+            </div>
+>>>>>>> Support text adjustments
             <p>
                 <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
                     <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
