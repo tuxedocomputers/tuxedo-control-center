@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.0] - 2020-03-06
+## Added / Changed
+- New control through tuxedo-wmi module
+- Most of the new design implemented
+
 ## [0.7.4] - 2019-12-09
 ## Added
 - Theme switching
