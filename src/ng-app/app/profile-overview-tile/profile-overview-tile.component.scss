@@ -70,14 +70,13 @@
         justify-content: flex-end;
         align-items: center;
 
-        height: 48px;
+        height: 50px;
 
         .state-icon {
             svg {
-                width: 24px;
-                height: 24px;
-
-                transform: scale(2);
+                width: 40px;
+                height: 40px;
+                
                 --icon-detail: var(--icon-main);
             }
         }
@@ -197,7 +196,7 @@
                     flex-flow: row;
                     justify-content: flex-end;
                     align-items: center;
-    
+                    
                     padding: 10px;
     
                     svg {
@@ -207,7 +206,7 @@
                     }
     
                     button {
-                        margin-left: 5px;
+                       margin:30px auto auto auto;
                     }
                 }
             }
