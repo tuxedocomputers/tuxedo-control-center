@@ -20,7 +20,7 @@ import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTab
 
 class ValueBuffer {
     private bufferData: Array<number>;
-    private bufferMaxSize = 7;
+    private bufferMaxSize = 13; // Buffer max size
 
     constructor() {
         this.bufferData = new Array();
@@ -34,7 +34,9 @@ class ValueBuffer {
     }
 
     public getFilteredValue(): number {
-        const usedSize = 3; // Number of values to reduce to take average from
+        // Number of values to reduce to, to take average from
+        // Note (bufferMaxSize - usedSize) / 2 values are ignored on either side
+        const usedSize = 7;
 
         const copy = Array.from(this.bufferData);
         copy.sort((a, b) => a - b);
@@ -90,17 +92,7 @@ export class FanControlLogic {
         const effectiveTemperature = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
         const foundEntry = this.fanProfile.table[foundEntryIndex];
-        let chosenSpeed: number;
-        const allowedStep = 2; // Allowed step in speed to take when decreasing
-        if (foundEntry.speed <= (this.lastSpeed + allowedStep)) {
-            if (this.tickCount === 0) {
-                chosenSpeed = this.lastSpeed - allowedStep;
-            } else {
-                chosenSpeed = this.lastSpeed;
-            }
-        } else {
-            chosenSpeed = foundEntry.speed;
-        }
+        const chosenSpeed = foundEntry.speed;
         this.lastSpeed = chosenSpeed;
         return chosenSpeed;
     }
@@ -118,5 +110,9 @@ export class FanControlLogic {
         } else {
             return this.findFittingEntryIndex(temperatureValue + 1);
         }
+    }
+
+    public getFilteredTemp(): number {
+        return this.tempBuffer.getFilteredValue();
     }
 }
