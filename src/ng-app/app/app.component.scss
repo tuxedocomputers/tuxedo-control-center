@@ -21,7 +21,12 @@
     flex-flow: column nowrap;
     height: 100%;
 
+    .tcc-mat-toolbar {
+        min-height: 40px;
+    }
+
     .title-row {
+        height:40px;
         -webkit-app-region: drag;
         display: flex;
         justify-content: space-between;
@@ -29,10 +34,19 @@
         align-items: center;
         
         #title-left {
-            width: 150px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+
+            #title-logo {
+                height:26px;
+            }
+
+            #title-text {
+                font-size: 16px;
+                margin-left:16px;
+                color:#F5F5F5;
+            }
 
             #title-lang {
                 display: flex;
@@ -64,6 +78,13 @@
             }
         }
 
+        #title-right {
+            svg {
+                width:14px;
+                margin-left:16px;
+            }
+        }
+
         i {
             -webkit-app-region: no-drag;
         }
@@ -86,6 +107,7 @@
         --sidenav-width: 240px;
         width: var(--sidenav-width);
         // height: 100%;
+        margin-top:10px;
 
         .sidenav-top {
             mat-list-item {
