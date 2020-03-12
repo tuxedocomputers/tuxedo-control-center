@@ -60,7 +60,7 @@ const TICK_DELAY = 1;
 
 export class FanControlLogic {
 
-    private currentTemperature;
+    private latestSpeedPercent;
 
     private tempBuffer = new ValueBuffer();
 
@@ -68,8 +68,6 @@ export class FanControlLogic {
     private tableMinEntry: ITccFanTableEntry;
 
     private lastSpeed = 0;
-
-    private tickCount = 0;
 
     constructor(private fanProfile: ITccFanProfile) {
         this.setFanProfile(fanProfile);
@@ -82,19 +80,35 @@ export class FanControlLogic {
         this.fanProfile = fanProfile;
     }
 
+    /**
+     * Used to report temperature to the logic handler.
+     *
+     * @param temperatureValue New temperature sensor value in celcius
+     */
     public reportTemperature(temperatureValue: number) {
-        this.tickCount = ((this.tickCount + 1) % TICK_DELAY);
-        this.currentTemperature = temperatureValue;
         this.tempBuffer.addValue(temperatureValue);
+        this.latestSpeedPercent = this.calculateSpeedPercent();
     }
 
+    /**
+     * Get the speed in percent decided by the logic handler
+     */
     public getSpeedPercent(): number {
+        return this.latestSpeedPercent;
+    }
+
+    private calculateSpeedPercent(): number {
         const effectiveTemperature = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
         const foundEntry = this.fanProfile.table[foundEntryIndex];
-        const chosenSpeed = foundEntry.speed;
-        this.lastSpeed = chosenSpeed;
-        return chosenSpeed;
+        let newSpeed = foundEntry.speed;
+        let speedJump = newSpeed - this.lastSpeed;
+        if (speedJump <= -2) {
+            speedJump = -2;
+            newSpeed = this.lastSpeed + speedJump;
+        }
+        this.lastSpeed = newSpeed;
+        return newSpeed;
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
