@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,27 +21,25 @@
 
 @import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
 @import './app/profile-details-edit/profile-details-edit.component-theme.scss';
+@import './tcc-gauge-theme.scss';
+@import './tcc-changelog-theme.scss';
 
 @mixin component-themes($theme) {
+    // Angular components
     @include profile-overview-tile-theme($theme);
     @include profile-details-edit-theme($theme);
+
+    // Other components
+    @include tcc-gauge-theme($theme);
+    @include tcc-changelog-theme($theme);
 }
 
-$themes-map: (
-    indigo-pink: (
-        primary-base: $mat-indigo,
-        accent-base: $mat-pink
-    )
-);
+@import './themes/tuxedo-light-theme.scss';
+@import './themes/tuxedo-dark-theme.scss';
 
-$theme-primary: mat-palette($mat-indigo);
-$theme-accent: mat-palette($mat-blue, A200, A100, A400);
-$theme-warn: mat-palette($mat-red);
-
-$tuxedo-control-center-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
-
-@include angular-material-theme($tuxedo-control-center-theme);
-@include component-themes($tuxedo-control-center-theme);
+// Default theme
+@include angular-material-theme($tuxedo-control-center-light-theme);
+@include component-themes($tuxedo-control-center-light-theme);
 
 [hidden] {
     visibility: hidden !important;
@@ -58,3 +56,65 @@ body {
     user-select: none;
     filter: blur(1px);
 }
+
+@import './global-styles.scss';
+
+/* latin-ext */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: local('Titillium Web Light'), local('TitilliumWeb-Light'), url('./assets/fonts/TitilliumWeb-Light.ttf') format('truetype');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: local('Titillium Web Light'), local('TitilliumWeb-Light'), url('./assets/fonts/TitilliumWeb-Light.ttf') format('truetype');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Titillium Web Regular'), local('TitilliumWeb-Regular'), url('./assets/fonts/TitilliumWeb-Regular.ttf') format('truetype');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Titillium Web Regular'), local('TitilliumWeb-Regular'), url('./assets/fonts/TitilliumWeb-Regular.ttf') format('truetype');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: local('Titillium Web SemiBold'), local('TitilliumWeb-SemiBold'), url('./assets/fonts/TitilliumWeb-SemiBold.ttf') format('truetype');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: local('Titillium Web SemiBold'), local('TitilliumWeb-SemiBold'), url('./assets/fonts/TitilliumWeb-SemiBold.ttf') format('truetype');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+  
+$custom-typography: mat-typography-config(
+    $font-family: 'Titillium Web'
+);
+@include angular-material-typography($custom-typography);

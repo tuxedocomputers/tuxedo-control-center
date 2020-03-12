@@ -1,0 +1,36 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+$tuxedo-light-theme-primary: mat-palette($mat-grey, 600, 400, 900);
+$tuxedo-light-theme-accent: mat-palette($mat-yellow);
+$tuxedo-light-theme-warn: mat-palette($mat-red);
+
+$tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn);
+
+.light-theme {
+    @include angular-material-theme($tuxedo-control-center-light-theme);
+    @include component-themes($tuxedo-control-center-light-theme);
+
+    --icon-main: currentColor;
+    --icon-detail: #e30016;
+
+    .theme-page-title {
+        opacity: 0.7;
+        font-weight: 600;
+    }
+}

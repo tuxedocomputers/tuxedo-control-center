@@ -1,0 +1,99 @@
+/*!
+ * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.content-container {
+    max-width: 900px;
+    margin:auto;
+
+    &.centered {
+        text-align: center;
+    }
+}
+
+.tcc-icons {
+    height: 55px;
+
+    &.row {
+        margin-right:10px;
+    }
+}
+
+.tcc-card {
+    margin-bottom: 10px;
+
+    mat-card-title {
+        display: flex;
+        justify-content: center;
+
+        +hr {
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.tcc-accordion {
+    mat-panel-title {
+        flex-basis: 0;
+        justify-content: center;
+        align-items: center;
+
+        font-weight: bold;
+
+        mat-icon {
+            height: 48px;
+            width: 48px;
+            transform-origin: center right;
+        }
+    }
+}
+
+.tcc-options-group {
+    .title-row {
+        display: flex;
+        justify-content: stretch;
+        align-items: center;
+
+        //padding-top: 50px;
+        margin-bottom: 30px;
+
+        hr {
+            flex: 1;
+            opacity: 0.3;
+            width: 100%;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+
+            //height: 45px;
+            padding-left: 30px;
+            padding-right: 30px;
+
+            font-weight: bold;
+            mat-icon {
+                transform: scale(2);
+                transform-origin: center bottom;
+            }
+        }
+    }
+}

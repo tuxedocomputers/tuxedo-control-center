@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable } from '@angular/core';
+import { Injectable, HostBinding } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { ElectronService } from 'ngx-electron';
@@ -24,6 +24,10 @@ import { DecimalPipe } from '@angular/common';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { AppComponent } from './app.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,10 +44,13 @@ export class UtilsService {
   ];
   private languageMap;
 
+  public themeClass = new BehaviorSubject<string>('light-theme');
+
   constructor(
     private sysfs: SysFsService,
     private electron: ElectronService,
-    private decimalPipe: DecimalPipe) {
+    private decimalPipe: DecimalPipe,
+    public overlayContainer: OverlayContainer) {
       this.languageMap = {};
       for (const lang of this.getLanguagesMenuArray()) {
         this.languageMap[lang.id] = lang;
@@ -181,7 +188,7 @@ export class UtilsService {
   }
 
   public formatFrequency(frequency: number): string {
-    return this.decimalPipe.transform(frequency / 1000000, '1.1-2');
+    return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
   }
 
   public getAppVersion(): string {
@@ -212,5 +219,22 @@ export class UtilsService {
 
   public getLanguagesMenuArray() {
     return this.languagesMenuArray;
+  }
+
+  public getThemeClass(): string {
+    return this.themeClass.value;
+  }
+
+  public setThemeClass(className: string) {
+    this.overlayContainer.getContainerElement().classList.add(className);
+    this.themeClass.next(className);
+  }
+
+  public setThemeLight() {
+    this.setThemeClass('light-theme');
+  }
+
+  public setThemeDark() {
+    this.setThemeClass('dark-theme');
   }
 }

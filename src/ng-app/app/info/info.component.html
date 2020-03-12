@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,37 +16,68 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<br />
-<mat-accordion class="info-accordion">
-    <mat-expansion-panel hideToggle [expanded]="true" class="panel-info">
+<mat-card class="tcc-card">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
+    </mat-card-title>
+    <hr />
+    
+    <div class="content-container">
+        <svg viewBox="0 0 63.138672 43.930508" class="logo"><use href="./assets/images/tcc_logo_complete.svg#Icon"></use></svg>
+   
+        <mat-divider class="divider-separator"></mat-divider>
+
+        <div i18n>
+            <p>
+                With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
+                safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
+            </p>
+            <p>
+                With 3 premade as well as any number of individually configurable profiles, you have
+                the greatest possible control and adaptability of your TUXEDO device to your needs.
+            </p>
+        </div>
+
+        <mat-divider style="position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;"></mat-divider>
+
+        <table class="updates-table">
+            <tr>
+                <td>
+                    <ng-container i18n>Installed version</ng-container>:
+                </td>
+                <td>
+                    {{ appVersion }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+
+        <!--div class="update-button">
+            <button mat-raised-button color="basic">
+                <strong i18n>Update installieren</strong>
+            </button>
+        </div>
+        <div class="update-button">
+            <button mat-raised-button color="basic">
+                <strong i18n>Allg. Systemupdates</strong>
+            </button>
+        </div-->
+    </div>
+
+</mat-card>
+
+<mat-accordion class="tcc-accordion accordion-info">
+    <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_logbook.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n>Changelog</ng-container>
             </mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoInfoPanelDesc">General information</ng-container>
-                <mat-icon><img src="./assets/images/information.svg"></mat-icon>
-            </mat-panel-description>
         </mat-expansion-panel-header>
-        <p i18n="@@cInfoTCCInfoText1">
-            We've created a tool to let you control all safety, performance, power, comfort and lifetime features of your TUXEDO
-            in just one single place! Save everything in profiles, load them easily or even automatically when the usage mode changes!
-        </p>
-        <p i18n="@@cInfoTCCInfoText2">
-            We want to give you the ultimate control over your device, the ability to squeeze out the most
-            and to be able to customize it as much as possible by yourself!
-        </p>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cInfoVersionPanelTitle">Version</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoVersionPanelDesc">What's new? What's old?</ng-container>
-                <mat-icon>track_changes</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>
+        <!--p>
             <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
         </p>
         <table class="versions" cellspacing="0">
@@ -54,19 +85,42 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
             <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
         </table>
-        <br />
+        <br /-->
         <mat-card class="changelog">
             <markdown src="assets/CHANGELOG.md"></markdown>
         </mat-card>
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle>
+    <!--mat-expansion-panel>
         <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cInfoImprintPanelTitle">Imprint</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoImprintPanelDesc">Legal statement</ng-container>
-                <mat-icon>gavel</mat-icon>
-            </mat-panel-description>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_language.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n="@@cInfoLanguagePanelTitle">Language</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <mat-form-field class="language-select">
+            <mat-select #selectLang [value]="getCurrentLanguageId()">
+                <mat-select-trigger>
+                    <mat-icon><img [src]="'./assets/images/' + getLanguageData(selectLang.value).img" /></mat-icon>
+                    {{ getLanguageData(selectLang.value).label }}
+                </mat-select-trigger>
+                <mat-option
+                    *ngFor="let lang of getLanguagesMenuArray()"
+                    (click)="changeLanguage(lang.id)"
+                    [value]="lang.id">
+                    <mat-icon><img [src]="'./assets/images/' + lang.img" /></mat-icon> {{ lang.label }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-expansion-panel-->
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_imprint.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n="@@cInfoImprintPanelTitle">Imprint</ng-container>
+            </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-divider></mat-divider>
         <pre><code i18n="@@cInfoImprintText">
@@ -99,29 +153,5 @@ GNU General Public License for more details.
         <mat-divider></mat-divider>
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cInfoLanguagePanelTitle">Language</mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cInfoLanguagePanelDesc">Choose language</ng-container>
-                <mat-icon>language</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        
-        <mat-form-field class="language-select">
-            <mat-select #selectLang [value]="getCurrentLanguageId()">
-                <mat-select-trigger>
-                    <mat-icon><img [src]="'./assets/images/' + getLanguageData(selectLang.value).img" /></mat-icon>
-                    {{ getLanguageData(selectLang.value).label }}
-                </mat-select-trigger>
-                <mat-option
-                    *ngFor="let lang of getLanguagesMenuArray()"
-                    (click)="changeLanguage(lang.id)"
-                    [value]="lang.id">
-                    <mat-icon><img [src]="'./assets/images/' + lang.img" /></mat-icon> {{ lang.label }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </mat-expansion-panel>
 </mat-accordion>
 <br />

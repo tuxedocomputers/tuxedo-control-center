@@ -46,6 +46,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -62,6 +63,10 @@ import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
 
 import { I18n } from '@ngx-translate/i18n-polyfill';
+
+import { OverlayModule } from '@angular/cdk/overlay';
+
+import { GaugeModule } from 'angular-gauge';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -110,7 +115,10 @@ declare const require;
     MatGridListModule,
     MatStepperModule,
     MatButtonToggleModule,
-    MarkdownModule.forRoot()
+    MatProgressBarModule,
+    MarkdownModule.forRoot(),
+    OverlayModule,
+    GaugeModule.forRoot()
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },

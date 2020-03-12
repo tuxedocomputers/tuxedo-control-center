@@ -44,6 +44,7 @@ async function buildDeb(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/service/TuxedoECAPI.node',
+            distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/CHANGELOG.md',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
@@ -60,7 +61,7 @@ async function buildDeb(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         deb: {
-            depends: [''],
+            depends: ['tuxedo-wmi (>= 2.0.0)'],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
@@ -101,6 +102,7 @@ async function buildSuseRpm(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/service/TuxedoECAPI.node',
+            distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
@@ -116,7 +118,7 @@ async function buildSuseRpm(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         rpm: {
-            depends: [],
+            depends: [ 'tuxedo-wmi >= 2.0.0' ],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh'
@@ -157,6 +159,7 @@ async function buildAppImage(): Promise<void> {
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/service/TuxedoECAPI.node',
+            distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',

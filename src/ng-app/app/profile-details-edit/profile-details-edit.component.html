@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -29,7 +29,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 maxLength="50"
                 (focus)="$event.target.select()">
         </mat-form-field>
-        <mat-button-toggle-group
+        <div *ngIf="editProfile">
+            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty"><mat-icon>undo</mat-icon></button></span>
+            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty"><mat-icon>save</mat-icon></button></span>
+        </div>
+        <!--mat-button-toggle-group
             [formControl]="selectStateControl"
             multiple
             i18n-matTooltip="@@cProfMgrDetailsSelectStatesLabel" matTooltip="Activate profile on"
@@ -44,18 +48,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
                 [matTooltipShowDelay]="1000"
             >
-                <mat-icon>{{ state.icon }}</mat-icon> {{ state.label }}
+                {{ state.label }}
             </mat-button-toggle>
-        </mat-button-toggle-group>
+        </mat-button-toggle-group-->
     </mat-card-title>
     <mat-card-content>
         <!-- Display settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon><img src="./assets/images/displaylight.svg" /></mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsDisplayHeaderLabel">Display</ng-container>
-            </mat-card-subtitle>
-            <mat-card-content class="content">
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 351 512" class="tcc-icons"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsDisplayHeaderLabel">Display</ng-container>
+                </div>
+                <hr />
+            </div>
+            <div class="content">
                 <div formGroupName="display">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
@@ -72,7 +80,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputUseBrightness formControlName="useBrightness"></mat-checkbox>
+                                <mat-checkbox #inputUseBrightness
+                                    formControlName="useBrightness"
+                                    color="primary">
+                                </mat-checkbox>
                             </content>
                         </mat-grid-tile>
 
@@ -85,21 +96,32 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
-                                <mat-slider #inputDisplayBrightness formControlName="brightness" (input)="inputDisplayBrightnessChange(inputDisplayBrightness.value)" min="0" max="100" step="5"></mat-slider>
+                                <mat-slider #inputDisplayBrightness
+                                    formControlName="brightness"
+                                    (input)="inputDisplayBrightnessChange(inputDisplayBrightness.value)"
+                                    min="0"
+                                    max="100"
+                                    step="5"
+                                    color="primary">
+                                </mat-slider>
                             </content>
                         </mat-grid-tile>
 
                     </mat-grid-list>
                 </div>
-            </mat-card-content>
-        </mat-card>
-        <br />
+            </div>
+        </div>
+
         <!-- CPU settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon><img src="./assets/images/cpu.svg" /></mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsCpuHeaderLabel">CPU settings</ng-container>
-            </mat-card-subtitle>
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 320 512" class="tcc-icons"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsCpuHeaderLabel">CPU settings</ng-container>
+                </div>
+                <hr />
+            </div>
             <mat-card-content class="content">
                 <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
@@ -112,7 +134,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
-                            <mat-slider #inputOnlineCores formControlName="onlineCores" min="1" [max]="cpuInfo.availableCores" step="1"></mat-slider>
+                            <mat-slider #inputOnlineCores
+                                formControlName="onlineCores"
+                                min="1"
+                                step="1"
+                                [max]="cpuInfo.availableCores"
+                                color="primary">
+                            </mat-slider>
                         </content>
                     </mat-grid-tile>
 
@@ -125,7 +153,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
-                            <mat-slider #inputScalingMinFrequency formControlName="scalingMinFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000" (change)="sliderMinFreqChange()"></mat-slider>
+                            <mat-slider #inputScalingMinFrequency
+                                formControlName="scalingMinFrequency"
+                                [min]="cpuInfo.minFreq"
+                                [max]="cpuInfo.maxFreq"
+                                step="100000"
+                                (change)="sliderMinFreqChange()"
+                                color="primary">
+                            </mat-slider>
                         </content>
                     </mat-grid-tile>
 
@@ -138,11 +173,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
-                            <mat-slider #inputScalingMaxFrequency formControlName="scalingMaxFrequency" [min]="cpuInfo.minFreq" [max]="cpuInfo.maxFreq" step="100000" (change)="sliderMaxFreqChange()"></mat-slider>
+                            <mat-slider #inputScalingMaxFrequency
+                                formControlName="scalingMaxFrequency"
+                                [min]="cpuInfo.minFreq"
+                                [max]="cpuInfo.maxFreq"
+                                step="100000"
+                                (change)="sliderMaxFreqChange()"
+                                color="primary">
+                            </mat-slider>
                         </content>
                     </mat-grid-tile>
 
-                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                    <!-- Governor setting unconfigurable -->
+                    <!--mat-grid-tile [colspan]="gridParams.headerSpan">
                         <header i18n="@@cProfMgrDetailsGovernorLabel">Scaling governor</header></mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.governor }}</content>
@@ -151,11 +194,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
                             <mat-select formControlName="governor" [disableOptionCentering]="true" (selectionChange)="governorSelectionChange()">
-                                <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor">{{ governor }}</mat-option>
+                                <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor" color="primary">
+                                    {{ governor }}
+                                </mat-option>
                             </mat-select>
                         </content>
-                    </mat-grid-tile>
+                    </mat-grid-tile-->
 
+                    <!-- Energy performance preference setting unconfigurable -->
                     <!--mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.energyPerformancePreference }}</content>
@@ -169,11 +215,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </content>
                     </mat-grid-tile-->
 
-                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                    <!-- Turbo setting unconfigurable -->
+                    <!--mat-grid-tile [colspan]="gridParams.headerSpan">
                         <header i18n="@@cProfMgrDetailsTurboLabel">Turbo</header>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <!--content class="value" [hidden]="editProfile">{{ viewProfile.cpu.noTurbo ? 'yes' : 'no' }}</content-->
                         <content class="value">
                             <span [hidden]="!inputNoTurbo.checked" i18n="@@cProfMgrDetailsTurboYes">yes</span>
                             <span [hidden]="inputNoTurbo.checked" i18n="@@cProfMgrDetailsTurboNo">no</span>
@@ -181,29 +227,36 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
-                            <mat-checkbox #inputNoTurbo [checked]="!profileFormGroup.get('cpu').value.noTurbo" (change)="profileFormGroup.get('cpu').get('noTurbo').setValue(!$event.checked); profileFormGroup.get('cpu').get('noTurbo').markAsDirty();"></mat-checkbox>
+                            <mat-checkbox #inputNoTurbo
+                                [checked]="!profileFormGroup.get('cpu').value.noTurbo"
+                                (change)="profileFormGroup.get('cpu').get('noTurbo').setValue(!$event.checked); profileFormGroup.get('cpu').get('noTurbo').markAsDirty();"
+                                color="primary">
+                            </mat-checkbox>
                         </content>
-                    </mat-grid-tile>
+                    </mat-grid-tile-->
 
                 </mat-grid-list>
             </mat-card-content>
-        </mat-card>
-        <br />
+        </div>
+
         <!-- Fan control settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon>toys</mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
-            </mat-card-subtitle>
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
+                </div>
+                <hr />
+            </div>
             <mat-card-content class="content">
                 <div formGroupName="fan">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsUseFanControlLabel">Use TCC fan control</header>
+                            <header i18n="@@cProfMgrDetailsUseFanControlLabel">Use TUXEDO fan control</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!--content class="value" [hidden]="editProfile">{{ viewProfile.fan.useControl ? 'yes' : 'no' }}</content-->
                             <content class="value">
                                 <span [hidden]="!inputUseFanControl.checked" i18n="@@cProfMgrDetailsUseFanControlYes">yes</span>
                                 <span [hidden]="inputUseFanControl.checked" i18n="@@cProfMgrDetailsUseFanControlNo">no</span>
@@ -211,7 +264,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputUseFanControl formControlName="useControl"></mat-checkbox>
+                                <mat-checkbox #inputUseFanControl
+                                    formControlName="useControl"
+                                    color="primary">
+                                </mat-checkbox>
                             </content>
                         </mat-grid-tile>
 
@@ -225,7 +281,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">
                                 <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()" [value]="fanProfileName">{{ fanProfileName }}</mat-option>
+                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()" [value]="fanProfileName" color="primary">
+                                        {{ fanProfileName }}
+                                    </mat-option>
                                 </mat-select>
                             </content>
                         </mat-grid-tile>
@@ -233,23 +291,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
             </mat-card-content>
-        </mat-card>
-        <br />
+        </div>
+
         <!-- Webcam settings -->
-        <mat-card class="settings-group">
-            <mat-card-subtitle class="title">
-                <mat-icon>videocam</mat-icon>
-                <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
-            </mat-card-subtitle>
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                   <svg viewBox="0 0 258 512" class="tcc-icons"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
+                </div>
+                <hr />
+            </div>
             <mat-card-content class="content">
                 <div formGroupName="webcam">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <!--mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header i18n="@@cProfMgrDetailsWebcamUseStatusLabel">Set webcam status on start/wakeup</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!--content class="value" [hidden]="editProfile">{{ viewProfile.webcam.useStatus ? 'yes' : 'no' }}</content-->
                             <content class="value">
                                 <span [hidden]="!inputUseStatus.checked" i18n="@@cProfMgrDetailsWebcamUseStatusYes">yes</span>
                                 <span [hidden]="inputUseStatus.checked" i18n="@@cProfMgrDetailsWebcamUseStatusNo">no</span>
@@ -257,29 +318,35 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputUseStatus formControlName="useStatus"></mat-checkbox>
+                                <mat-checkbox #inputUseStatus
+                                    formControlName="useStatus"
+                                    color="primary">
+                                </mat-checkbox>
                             </content>
-                        </mat-grid-tile>
+                        </mat-grid-tile-->
 
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header [ngClass]="{'inactive': !inputUseStatus.checked}" i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
+                            <header i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!--content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseStatus.checked}">{{ viewProfile.webcam.status ? 'on' : 'off' }}</content-->
-                            <content class="value" [ngClass]="{'inactive': !inputUseStatus.checked}">
+                            <content class="value">
                                 <span [hidden]="!inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOn">on</span>
                                 <span [hidden]="inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOff">off</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseStatus.checked}">
-                                <mat-checkbox #inputWebcamStatus formControlName="status"></mat-checkbox>
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputWebcamStatus
+                                    formControlName="status"
+                                    color="primary">
+                                </mat-checkbox>
                             </content>
                         </mat-grid-tile>
 
                     </mat-grid-list>
                 </div>
             </mat-card-content>
-        </mat-card>
+        </div>
     </mat-card-content>
 </mat-card>
+<br />

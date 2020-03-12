@@ -1,0 +1,202 @@
+/*!
+ * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+@import '~@angular/material/theming';
+
+@mixin tcc-gauge-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+
+    $gauge-value-text-color: mat-color($foreground, text);
+    $gauge-unit-text-color: mat-color($foreground, disabled-text);
+    $gauge-legend-text-color: mat-color($foreground, disabled-text);
+
+    $gauge-icon-color: mat-color($foreground, disabled-text);
+    $gauge-background-color: mat-color($background, app-bar);
+
+    .tcc-gauge {
+        position: relative;
+        width: 180px;
+        height: 180px;
+
+        mwl-gauge {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            .dial {
+                stroke-width: 3px;
+                stroke: $gauge-background-color;
+            }
+
+            .value {
+                //transform: scale(0.92);
+                transform-origin: center;
+                stroke-width: 3px;
+                stroke: #00E333;
+                stroke-linecap: round;
+            }
+
+            .value-text {
+                fill: $gauge-value-text-color;
+                transform: translateY(0px);
+                font-size: 1.8em;
+                transform-origin: center center;
+            }
+
+        }
+
+        .unit-text {
+            position: absolute;
+            bottom: 43px;
+            left: 0;
+            width: 100%;
+
+            text-align: center;
+
+            color: $gauge-unit-text-color;
+            font-weight: bold;
+        }
+
+        .icon {
+            position: absolute;
+            top: 27px;
+            left: 0;
+            width: 100%;
+            height: 35px;
+
+            color: $gauge-icon-color;
+            --icon-detail: var(--icon-main);
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+
+            width: 100%;
+            height: 30px;
+
+            border-radius: 20px;
+            background-color: $gauge-background-color;
+            opacity: 1.0;
+
+            border-width: 5px;
+            border-style: solid;
+            border-color: mat-color($background, card);
+
+            .text {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                
+                margin-left: 10px;
+                margin-right: 10px;
+
+                color: $gauge-legend-text-color;
+                font-weight: bold;
+
+                &.small {
+                    transform:scale(1.2);
+                }
+            }
+        }
+    }
+
+    $tcc-info-bar-border-color: $gauge-background-color;
+    $tcc-info-bar-background-color: $gauge-background-color;
+    $tcc-info-bar-color-disabled: mat-color($foreground, disabled-text);
+    $tcc-info-bar-width: 250px;
+    $tcc-info-bar-height: 30px;
+
+    .tcc-info-bar {
+        width: $tcc-info-bar-width;
+        height: $tcc-info-bar-height;
+
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 20px;
+        border-color: $tcc-info-bar-border-color;
+
+        padding: 2px;
+
+        >* {
+            border-radius: inherit;
+            overflow: hidden;
+        }
+
+        .label {
+            background-color: $tcc-info-bar-background-color;
+        }
+
+        .color-disabled {
+            color: $tcc-info-bar-color-disabled;
+        }
+    }
+
+    $progress-inactive-color: $tcc-info-bar-background-color;
+
+    .tcc-progress {
+        position: relative;
+
+        mat-progress-bar {
+            width: 100%;
+            height: 100%;
+
+            border-radius: inherit;
+
+            .mat-progress-bar-fill::after {
+                background: #00E333;
+            }
+
+            &.disabled .mat-progress-bar-fill::after {
+                background: $progress-inactive-color;
+            }
+
+            .mat-progress-bar-buffer {
+                background-color: rgba(255, 255, 255, 0);
+            }
+
+            .mat-progress-bar-background {
+                opacity: 0;
+            }
+        }
+
+        .label-text {
+            position: absolute;
+            top: 5px;
+            
+            width: 100%;
+
+            text-align: center;
+
+            //font-weight: bold;
+        }
+    }
+}

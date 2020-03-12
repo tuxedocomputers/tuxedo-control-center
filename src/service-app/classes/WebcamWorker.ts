@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoECAPI } from '../../native-lib/TuxedoECAPI';
+import { TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
 
 export class WebcamWorker extends DaemonWorker {
 
@@ -37,13 +37,13 @@ export class WebcamWorker extends DaemonWorker {
             if (activeProfile.webcam.useStatus) {
                 if (activeProfile.webcam.status) {
                     this.tccd.logLine('Set webcam status ON');
-                    const success = TuxedoECAPI.webcamOn();
+                    const success = TuxedoWMIAPI.webcamOn();
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to activate webcam');
                     }
                 } else {
                     this.tccd.logLine('Set webcam status OFF');
-                    const success = TuxedoECAPI.webcamOff();
+                    const success = TuxedoWMIAPI.webcamOff();
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to deactivate webcam');
                     }

@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,57 +16,271 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<mat-expansion-panel hideToggle [expanded]="true">
-    <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@cCpuDashboardCoresPanelTitle">
-            Active cores
-        </mat-panel-title>
-        <mat-panel-description>
-            <ng-container i18n="@@cCpuDashboardCoresPanelDesc">Logical CPU cores in use</ng-container>
-            <mat-icon>memory</mat-icon>
-        </mat-panel-description>
-    </mat-expansion-panel-header>
-    <mat-chip-list>
-        <mat-chip *ngFor="let core of cpuCoreInfo">
-            <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
-        </mat-chip>
-    </mat-chip-list>
-</mat-expansion-panel>
-<br />
+<mat-card class="tcc-card">
+    <div class="tcc-options-group">
+        <div class="title-row">
+            <hr />
+            <div class="title">
+                <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg>
+                <ng-container i18n>System monitor</ng-container>
+            </div>
+            <hr />
+        </div>
+       
+        <!-- CPU -->
+        <div class="content-container profile-overview">
+            <div class="column">
+                <div class="title">
+                    <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                    <span class="text" i18n>Main processor monitor</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-container system-monitor-gauges">
+            <div class="tcc-gauge">
+                <mwl-gauge
+                    [max]="100"
+                    [min]="0"
+                    [value]="fanData.cpu.temp.data.value"
+                    [dialStartAngle]="130"
+                    [dialEndAngle]="50"
+                    [animated]="true"
+                    [animationDuration]="1">
+                </mwl-gauge>
+                <div class="unit-text">&deg;C</div>
+                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
+                <div class="legend">
+                    <div class="text" i18n>CPU - Temp</div>
+                </div>
+            </div>
+            <div class="tcc-gauge">
+                <mwl-gauge
+                    [max]="cpuInfo.maxFreq"
+                    [min]="cpuInfo.minFreq"
+                    [value]="avgCpuFreq"
+                    [label]="gaugeFreqFormat"
+                    [dialStartAngle]="130"
+                    [dialEndAngle]="50"
+                    [animated]="true"
+                    [animationDuration]="1">
+                </mwl-gauge>
+                <div class="unit-text">GHz</div>
+                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
+                <div class="legend">
+                    <div class="text" i18n>CPU - Frequency</div>
+                </div>
+            </div>
+            <div class="tcc-gauge">
+                <mwl-gauge
+                    [max]="100"
+                    [min]="0"
+                    [value]="fanData.cpu.speed.data.value"
+                    [dialStartAngle]="130"
+                    [dialEndAngle]="50"
+                    [animated]="true"
+                    [animationDuration]="1">
+                </mwl-gauge>
+                <div class="unit-text">%</div>
+                <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                <div class="legend">
+                    <div class="text" i18n>CPU - Fan</div>
+                </div>
+            </div>
+        </div>
 
-<mat-expansion-panel hideToggle [expanded]="true" class="cpu-thermal-info">
-    <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@cCpuDashboardThermalPanelTitle">
-            Thermal
-        </mat-panel-title>
-        <mat-panel-description>
-            <ng-container i18n="@@cCpuDashboardThermalPanelTitle">Temperature and fan info</ng-container>
-            <mat-icon>toys</mat-icon>
-        </mat-panel-description>
-    </mat-expansion-panel-header>
-    <table>
-        <tr><th i18n="@@cCpuDashboardThermalTemp">Temp</th><th i18n="@@cCpuDashboardThermalFanSpeed">Fan speed</th></tr>
-        <tr><td>{{ fanData.cpu.temp.data.value }} &deg;C</td><td>{{ fanData.cpu.speed.data.value }} %</td></tr>
-    </table>
-</mat-expansion-panel>
-<br />
+        <!-- GPU -->
+        <div class="content-container profile-overview" *ngIf="hasGPUTemp">
+            <div class="column">
+                <div class="title">
+                    <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
+                    <span class="text" i18n>Graphics card monitor</span>
+                </div>
+            </div>
+        </div>
 
-<mat-expansion-panel hideToggle class="cpu-frequency-info">
-    <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
-            Frequency
-        </mat-panel-title>
-        <mat-panel-description>
-            <ng-container i18n="@@cCpuDashboardFreqPanelTitle">Cpu frequency info</ng-container>
-            <mat-icon>flash_on</mat-icon>
-        </mat-panel-description>
-    </mat-expansion-panel-header>
-    <table>
-        <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
-        <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
-    </table>
-</mat-expansion-panel>
+        <div class="content-container system-monitor-gauges" *ngIf="hasGPUTemp">
+            <div class="tcc-gauge">
+                <mwl-gauge
+                    [max]="100"
+                    [min]="0"
+                    [value]="gaugeGPUTemp"
+                    [dialStartAngle]="130"
+                    [dialEndAngle]="50"
+                    [animated]="true"
+                    [animationDuration]="1">
+                </mwl-gauge>
+                <div class="unit-text">&deg;C</div>
+                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
+                <div class="legend">
+                    <div class="text" i18n>GPU - Temp</div>
+                </div>
+            </div>
+            <div class="tcc-gauge">
+                <mwl-gauge
+                    [max]="100"
+                    [min]="0"
+                    [value]="gaugeGPUSpeed"
+                    [dialStartAngle]="130"
+                    [dialEndAngle]="50"
+                    [animated]="true"
+                    [animationDuration]="1">
+                </mwl-gauge>
+                <div class="unit-text">%</div>
+                <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                <div class="legend">
+                    <div class="text" i18n>GPU - Fan</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tcc-options-group">
+        <div class="title-row">
+            <hr />
+            <div class="title">
+                <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_settings.svg#Icon"></use></svg>
+                <ng-container i18n>Profile settings</ng-container>
+            </div>
+            <hr />
+        </div>
+
+        <mat-card-title class="theme-page-title">
+            {{ activeProfile.name }} 
+            <button mat-button (click)="goToProfileEdit(activeProfile)">
+                <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+            </button>
+        </mat-card-title>
+
+        <div class="content-container profile-overview">
+            <div class="column">
+                <div class="title">
+                    <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                    <span class="text" i18n>CPU</span>
+                </div>
+                <div class="tcc-info-bar">
+                    <div class="cpu-min-max-freq">
+                        <div class="label" i18n>Min</div>
+                        <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
+                        <div class="unit color-disabled">GHz</div>
+                        <div class="value right">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
+                        <div class="label" i18n>Max</div>
+                    </div>
+                </div>
+                <div class="tcc-gauge small active-cores">
+                    <mwl-gauge
+                        [max]="cpuInfo.availableCores"
+                        [min]="0"
+                        [value]="activeProfile.cpu.onlineCores"
+                        [dialStartAngle]="150"
+                        [dialEndAngle]="30"
+                        [animated]="true"
+                        [animationDuration]="0.3">
+                    </mwl-gauge>
+                    <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
+                    <div class="legend">
+                        <div class="text small" i18n>Active cores</div>
+                    </div>
+                </div>
+                <div class="title">
+                    <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <span class="text" i18n>Fan profile</span>
+                </div>
+                <div class="tcc-progress tcc-info-bar">
+                    <mat-progress-bar
+                        [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
+                        [ngClass]="{'disabled': !activeProfile.fan.useControl }"
+                    ></mat-progress-bar>
+                    <div class="label-text" *ngIf="activeProfile.fan.useControl">
+                        {{ activeProfile.fan.fanProfile }}
+                    </div>
+                    <div class="label-text" *ngIf="!activeProfile.fan.useControl" i18n>Fan control: off</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="title">
+                    <svg viewBox="0 0 351 512" class="tcc-icons row"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
+                    <span class="text">Display</span>
+                </div>
+                <div class="tcc-progress tcc-info-bar">
+                    <mat-progress-bar
+                        [value]="activeProfile.display.brightness"
+                        [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
+                    </mat-progress-bar>
+                    <div class="label-text"><ng-container i18n>Brightness</ng-container>: {{ activeProfile.display.brightness }} %</div>
+                </div>
+                <div class="tcc-gauge small on-off">
+                    <mwl-gauge
+                        [max]="1"
+                        [min]="0"
+                        [value]="activeProfile.display.useBrightness ? 1 : 0"
+                        [label]="gaugeOnOffFormat"
+                        [dialStartAngle]="150"
+                        [dialEndAngle]="30"
+                        [animated]="true"
+                        [animationDuration]="0.3">
+                    </mwl-gauge>
+                    <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
+                    <div class="legend">
+                        <div class="text small" i18n>Fixed brightness</div>
+                    </div>
+                </div>
+                <div class="title">
+                    <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
+                    <span class="text" i18n>Webcam</span>
+                </div>
+                <div class="tcc-progress tcc-info-bar">
+                    <mat-progress-bar
+                        [value]="activeProfile.webcam.status ? 100 : 0">
+                    </mat-progress-bar>
+                    <div class="label-text"><ng-container i18n>Webcam active</ng-container>: <span *ngIf="activeProfile.webcam.status">yes</span><span *ngIf="!activeProfile.webcam.status">no</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--mat-expansion-panel hideToggle class="cpu-frequency-info">
+        <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
+                Frequency
+            </mat-panel-title>
+            <mat-panel-description>
+                <ng-container i18n="@@cCpuDashboardFreqPanelTitle">Cpu frequency info</ng-container>
+                <mat-icon>flash_on</mat-icon>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <table>
+            <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
+            <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
+        </table>
+    </mat-expansion-panel-->
+
+    <!--div class="tcc-options-group cpu-thermal-info">
+        <div class="title-row">
+            <hr />
+            <div class="title">
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-icon>
+                <ng-container>Other</ng-container>
+            </div>
+            <hr />
+        </div>
+        <div class="content">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        More
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-chip-list>
+                    <mat-chip *ngFor="let core of cpuCoreInfo">
+                        <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
+                    </mat-chip>
+                </mat-chip-list>
+            </mat-expansion-panel>
+        </div>
+    </div-->
+</mat-card>
 <br />

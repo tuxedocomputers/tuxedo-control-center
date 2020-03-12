@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -80,7 +80,7 @@ export const defaultProfiles: ITccProfile[] = [
         },
         webcam: {
             status: true,
-            useStatus: false
+            useStatus: true
         },
         fan: {
             useControl: true,
@@ -96,14 +96,14 @@ export const defaultProfiles: ITccProfile[] = [
         cpu: {
             onlineCores: undefined,
             scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
+            scalingMaxFrequency: 2000000,
             governor: 'powersave',
             energyPerformancePreference: 'power',
-            noTurbo: true
+            noTurbo: false
         },
         webcam: {
             status: true,
-            useStatus: false
+            useStatus: true
         },
         fan: {
             useControl: true,
@@ -122,10 +122,10 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: 0,
             governor: 'powersave',
             energyPerformancePreference: 'power',
-            noTurbo: true
+            noTurbo: false
         },
         webcam: {
-            status: false,
+            status: true,
             useStatus: true
         },
         fan: {
@@ -151,7 +151,7 @@ export const defaultCustomProfile: ITccProfile = {
     },
     webcam: {
         status: true,
-        useStatus: false
+        useStatus: true
     },
     fan: {
         useControl: true,
@@ -171,14 +171,20 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         scalingMaxFrequency: 1200000,
         governor: 'powersave',
         energyPerformancePreference: 'power',
-        noTurbo: true
+        noTurbo: false
     },
     webcam: {
         status: true,
-        useStatus: false
+        useStatus: true
     },
     fan: {
         useControl: true,
         fanProfile: 'Balanced'
     }
 };
+
+export const profileImageMap = new Map<string, string>();
+profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');
+profileImageMap.set(defaultProfiles[1].name, 'icon_profile_breezy.svg');
+profileImageMap.set(defaultProfiles[2].name, 'icon_profile_energysaver.svg');
+profileImageMap.set('custom', 'icon_profile_custom.svg');

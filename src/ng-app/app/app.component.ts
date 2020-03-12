@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -28,7 +28,7 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { ITccSettings } from '../../common/models/TccSettings';
 import { environment } from '../environments/environment';
 import { ConfigService } from './config.service';
-import { StateService } from './state.service';
+import { StateService, IStateInfo } from './state.service';
 import { UtilsService } from './utils.service';
 
 @Component({
@@ -49,12 +49,15 @@ export class AppComponent implements OnInit, OnDestroy {
     private state: StateService,
     private utils: UtilsService) { }
 
+  @HostBinding('class') componentThemeCssClass;
+
   title = 'TUXEDO Control Center';
 
   public ngOnInit(): void {
     this.getSettings();
     // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
     this.subscriptions.add(this.state.activeProfileObserver.subscribe(activeProfile => { this.getSettings(); }));
+    this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
   }
 
   public ngOnDestroy(): void {
@@ -91,4 +94,25 @@ export class AppComponent implements OnInit, OnDestroy {
   public getLanguageData(langId: string) {
     return this.utils.getLanguageData(langId);
   }
+
+  public buttonToggleTheme() {
+    if (this.utils.getThemeClass() === 'light-theme') {
+      this.utils.setThemeDark();
+    } else {
+      this.utils.setThemeLight();
+    }
+  }
+
+  public buttonToggleLanguage() {
+    this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
+  }
+
+  public getStateInputs(): IStateInfo[] {
+    return this.state.getStateInputs();
+  }
+
+  public getActiveProfile(): ITccProfile {
+    return this.state.getActiveProfile();
+  }
+
 }
