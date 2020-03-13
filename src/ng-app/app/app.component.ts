@@ -72,6 +72,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.electron.remote.getCurrentWindow().close();
   }
 
+  public buttonMinimize(): void {
+    this.electron.remote.getCurrentWindow().minimize();
+  }
+
   public getSettings(): ITccSettings {
     this.activeProfileName = this.state.getActiveProfile().name;
     return this.config.getSettings();
