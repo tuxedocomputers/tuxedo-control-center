@@ -17,28 +17,25 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <div class="pagewrap" [ngClass]="{'blur-no-input': pageDisabled()}">
-  <mat-toolbar>
+  <mat-toolbar class="tcc-mat-toolbar">
     <mat-toolbar-row class="title-row">
       
-      <span id="title-left">
-      <!--
-        <img src="./assets/tuxedo-control-center_256.png" id="title-logo">
-        <div id="title-lang">
-          <img [src]="'./assets/images/' + getLanguageData('en').img" (click)="changeLanguage('en')" />
-          <img [src]="'./assets/images/' + getLanguageData('de').img" (click)="changeLanguage('de')" />
-        </div>
-        <div id="title-theme">
-          <mat-icon (click)="buttonToggleTheme()">settings_brightness</mat-icon>
-        </div>
-      -->
-      </span>
+      <div id="title-left">
+        <img src="./assets/taskbar_icon_free.svg" id="title-logo">
+        <span id="title-text" i18n>TUXEDO Control Center</span>
+      </div>
     
+      <!--
       <div id="main-title">
-        <!--img src="./assets/tcc_logo.svg" id="title-logo"-->
         <svg viewBox="0 0 63.139423 29.818106" class="logo"><use href="./assets/tcc_logo.svg#Icon"></use></svg>
         <span class="text" i18n>TUXEDO Control Center</span>
       </div>
-      <i class="fas fa-times" (click)="buttonExit()"></i>
+    -->
+      <!-- <i class="fas fa-times" (click)="buttonExit()"></i> -->
+      <div id="title-right">
+        <svg viewBox="0 0 376 81" (click)="buttonExit()"><use href="./assets/images/icon_minimize.svg#Icon"></use></svg>
+        <svg viewBox="0 0 302 302" (click)="buttonExit()"><use href="./assets/images/icon_close.svg#Icon"></use></svg>
+      </div>
     </mat-toolbar-row>
   </mat-toolbar>
 
