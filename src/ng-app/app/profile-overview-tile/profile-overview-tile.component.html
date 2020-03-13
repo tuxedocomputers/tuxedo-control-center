@@ -115,12 +115,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
                     </span>
                 </div>
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
-                    <span class="status-info">
-                        {{ profile.cpu.governor }}
+                    <span class="status-info" *ngIf="profile.fan.useControl">
+                        {{ profile.fan.fanProfile }}
                     </span>
                 </div>
                 <div class="status-component" [ngClass]="{'inactive': !profile.display.useBrightness}">
