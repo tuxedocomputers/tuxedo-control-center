@@ -51,9 +51,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostBinding('class') componentThemeCssClass;
 
-  title = 'TUXEDO Control Center';
+  public buttonLanguageLabel: string;
 
   public ngOnInit(): void {
+    this.updateLanguageName();
     this.getSettings();
     // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
     this.subscriptions.add(this.state.activeProfileObserver.subscribe(activeProfile => { this.getSettings(); }));
@@ -109,6 +110,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public buttonToggleLanguage() {
     this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
+    this.updateLanguageName();
+  }
+
+  public updateLanguageName(): void {
+    this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).label;
   }
 
   public getStateInputs(): IStateInfo[] {
