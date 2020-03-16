@@ -175,7 +175,7 @@
             border-radius: inherit;
 
             .mat-progress-bar-fill::after {
-                background: #00E333;
+                background: $tcc-info-bar-background-color;
             }
 
             &.disabled .mat-progress-bar-fill::after {
