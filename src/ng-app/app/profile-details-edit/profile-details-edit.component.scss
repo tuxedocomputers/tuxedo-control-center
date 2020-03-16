@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 .profile-details-edit {
-    margin: 10px;
+    margin: 0 10px 10px 10px;
 
     .profile-title {
         position: sticky;
@@ -29,11 +29,16 @@
         justify-content: space-between;
         align-items: center;
 
+        .save-reset-buttons {
+            --icon-detail: var(--icon-main);
+        }
+
         .name {
             width: 400px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size:20px;
 
             input {
                 width: 400px;

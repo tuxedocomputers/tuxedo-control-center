@@ -29,9 +29,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 maxLength="50"
                 (focus)="$event.target.select()">
         </mat-form-field>
-        <div *ngIf="editProfile">
-            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty"><mat-icon>undo</mat-icon></button></span>
-            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty"><mat-icon>save</mat-icon></button></span>
+        <div *ngIf="editProfile" class="save-reset-buttons">
+            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_reset.svg#Icon"></use></svg></button></span>
+            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_save.svg#Icon"></use></svg></button></span>
         </div>
         <!--mat-button-toggle-group
             [formControl]="selectStateControl"

@@ -18,7 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card class="tcc-card">
     <div class="tcc-options-group">
-        <div class="title-row">
+        <div class="title-row top">
             <hr />
             <div class="title">
                 <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg>
@@ -99,7 +99,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
 
-        <div class="content-container system-monitor-gauges" *ngIf="hasGPUTemp">
+        <div class="content-container system-monitor-gauges bottom" *ngIf="hasGPUTemp">
             <div class="tcc-gauge">
                 <mwl-gauge
                     [max]="100"
