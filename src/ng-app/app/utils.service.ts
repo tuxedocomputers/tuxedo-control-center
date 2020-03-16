@@ -44,16 +44,23 @@ export class UtilsService {
   ];
   private languageMap;
 
-  public themeClass = new BehaviorSubject<string>('light-theme');
+  public themeClass: BehaviorSubject<string>;
 
   constructor(
     private sysfs: SysFsService,
     private electron: ElectronService,
     private decimalPipe: DecimalPipe,
     public overlayContainer: OverlayContainer) {
+
       this.languageMap = {};
       for (const lang of this.getLanguagesMenuArray()) {
         this.languageMap[lang.id] = lang;
+      }
+
+      if (localStorage.getItem('themeClass')) {
+        this.themeClass = new BehaviorSubject<string>(localStorage.getItem('themeClass'));
+      } else {
+        this.themeClass = new BehaviorSubject<string>('light-theme');
       }
     }
 
@@ -228,6 +235,7 @@ export class UtilsService {
   public setThemeClass(className: string) {
     this.overlayContainer.getContainerElement().classList.add(className);
     this.themeClass.next(className);
+    localStorage.setItem('themeClass', className);
   }
 
   public setThemeLight() {
