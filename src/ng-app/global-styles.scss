@@ -70,8 +70,12 @@
         justify-content: stretch;
         align-items: center;
 
-        //padding-top: 50px;
-        margin-bottom: 30px;
+        margin-top:60px;
+        margin-bottom: 20px;
+
+        &.top {
+            margin-top:0px;
+        }
 
         hr {
             flex: 1;

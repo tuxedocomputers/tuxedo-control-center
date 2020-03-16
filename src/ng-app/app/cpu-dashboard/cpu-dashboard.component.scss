@@ -27,7 +27,11 @@
     flex-flow: row;
     justify-content: space-evenly;
     
-    padding: 10px 0 60px 0;
+    margin: 10px auto 70px auto;
+
+    &.bottom {
+        margin-bottom: 30px;
+    }
 }
 
 .profile-overview {

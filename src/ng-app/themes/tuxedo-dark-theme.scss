@@ -22,9 +22,9 @@ $tuxedo-dark-theme-warn: mat-palette($mat-red);
 
 $tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn), (
     background: map-merge($mat-dark-theme-background, (
-        dialog: #202020,
-        card: #202020,
-        app-bar: #202020,
+        dialog: #212121,
+        card: #212121,
+        app-bar: #212121,
     ))
 ));
 
