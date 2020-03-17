@@ -4,10 +4,9 @@
 
 - ### Per profile control of
    - CPU frequency parameters
-   - CPU boost setting (on/off)
    - Display brightness
    - Webcam status (on/off)
-   - Fan profile
+   - Fan profiles
 
 - ### States
    - Assignment of one profile that gets activated per state

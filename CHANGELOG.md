@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.1] - 2020-03-17
+## Changed
+- Latest design adjustments
+
 ## [0.8.0] - 2020-03-06
 ## Added / Changed
 - New control through tuxedo-wmi module
