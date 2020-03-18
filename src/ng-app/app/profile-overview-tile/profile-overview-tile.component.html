@@ -72,7 +72,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
             <div *ngIf="active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
-            <div *ngIf="!active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
+            <div *ngIf="!active && used" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
 
             <div class="state-icon" *ngFor="let state of getStateInputs()">
                 <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">

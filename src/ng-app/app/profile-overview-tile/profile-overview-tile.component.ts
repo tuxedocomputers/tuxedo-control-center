@@ -37,6 +37,7 @@ export class ProfileOverviewTileComponent implements OnInit {
   @Input() isSelected = false;
   @Input() visible = true;
   @Input() active = false;
+  @Input() used = false;
 
   /**
    * Special input to signal that it shouldn't display a profile and just
