@@ -29,7 +29,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
         <div class="overlay-content">
             <div class="icon-bar">
-                <button mat-icon-button disableRipple (click)="deleteProfile()">
+                <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile">
                     <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
                 </button>
                 <button mat-icon-button disableRipple (click)="selectProfile()">
@@ -62,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         mat-icon-button
                         disableRipple
                         *ngIf="selectStateControl.dirty">
-                        <mat-icon>save</mat-icon>
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_save.svg#Icon"></use></svg>
                     </button>
                 </div>
             </div>
@@ -71,7 +71,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
-            <!-- PSEUDO-CODE: IF (active AND chosenprofile) then show green point ELSE IF (active) THEN show grey point-->
             <div *ngIf="active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
             <div *ngIf="!active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
 
@@ -115,12 +114,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
                     </span>
                 </div>
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
-                    <span class="status-info">
-                        {{ profile.cpu.governor }}
+                    <span class="status-info" *ngIf="profile.fan.useControl">
+                        {{ profile.fan.fanProfile }}
                     </span>
                 </div>
                 <div class="status-component" [ngClass]="{'inactive': !profile.display.useBrightness}">

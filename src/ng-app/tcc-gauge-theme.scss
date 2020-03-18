@@ -30,7 +30,8 @@
     $gauge-legend-text-color: mat-color($foreground, disabled-text);
 
     $gauge-icon-color: mat-color($foreground, disabled-text);
-    $gauge-background-color: mat-color($background, app-bar);
+    $gauge-background-color: mat-color($background, status-bar);
+    //$gauge-background-color: mat-color($background, background);
 
     .tcc-gauge {
         position: relative;
@@ -54,7 +55,9 @@
                 //transform: scale(0.92);
                 transform-origin: center;
                 stroke-width: 3px;
-                stroke: #00E333;
+                stroke: #e22131;
+                opacity: .7;
+                //stroke: #00E333;
                 stroke-linecap: round;
             }
 
@@ -172,7 +175,7 @@
             border-radius: inherit;
 
             .mat-progress-bar-fill::after {
-                background: #00E333;
+                background: $tcc-info-bar-background-color;
             }
 
             &.disabled .mat-progress-bar-fill::after {

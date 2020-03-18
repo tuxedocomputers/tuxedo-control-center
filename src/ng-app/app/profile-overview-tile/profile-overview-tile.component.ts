@@ -51,6 +51,8 @@ export class ProfileOverviewTileComponent implements OnInit {
   public selectStateControl: FormControl;
   public stateInputArray: IStateInfo[];
 
+  public isCustomProfile = true;
+
   constructor(
     private utils: UtilsService,
     private state: StateService,
@@ -68,6 +70,9 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
 
     this.stateInputArray = this.state.getStateInputs();
+    if (this.profile) {
+      this.isCustomProfile = this.config.getCustomProfileByName(this.profile.name) !== undefined;
+    }
   }
 
   public getStateInputs(): IStateInfo[] {
@@ -93,7 +98,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
   public selectProfile(): void {
     setImmediate(() => {
-        this.router.navigate(['profile-manager', this.profile.name]);
+      this.router.navigate(['profile-manager', this.profile.name]);
     });
   }
 

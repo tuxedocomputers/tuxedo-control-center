@@ -28,10 +28,18 @@ if (environment.production) {
   enableProdMode();
 }
 
-// TODO: Set localeId according to settings
-let langId = 'en';
+// Default language to browser language
+let langId = navigator.language;
+// If not a known language change to english
+// TODO: General (not hardcoded) language list
+if (!['en', 'de'].includes(langId)) {
+  langId = 'en';
+}
+// If language is already saved choose this language
 if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId') !== null) {
   langId = localStorage.getItem('langId');
+} else {
+  localStorage.setItem('langId', langId);
 }
 
 declare const require;

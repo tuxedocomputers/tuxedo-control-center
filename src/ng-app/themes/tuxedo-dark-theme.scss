@@ -20,7 +20,13 @@ $tuxedo-dark-theme-primary: mat-palette($mat-grey, 400, 50, 600);
 $tuxedo-dark-theme-accent: mat-palette($mat-yellow);
 $tuxedo-dark-theme-warn: mat-palette($mat-red);
 
-$tuxedo-control-center-dark-theme: mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn);
+$tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn), (
+    background: map-merge($mat-dark-theme-background, (
+        dialog: #212121,
+        card: #212121,
+        app-bar: #212121,
+    ))
+));
 
 .dark-theme {
     @include angular-material-theme($tuxedo-control-center-dark-theme);

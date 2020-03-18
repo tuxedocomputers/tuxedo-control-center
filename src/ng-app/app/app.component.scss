@@ -21,7 +21,12 @@
     flex-flow: column nowrap;
     height: 100%;
 
+    .tcc-mat-toolbar {
+        min-height: 40px;
+    }
+
     .title-row {
+        height:40px;
         -webkit-app-region: drag;
         display: flex;
         justify-content: space-between;
@@ -29,12 +34,21 @@
         align-items: center;
         
         #title-left {
-            width: 150px;
             display: flex;
             justify-content: space-between;
             align-items: center;
 
-            #title-lang {
+            #title-logo {
+                height:26px;
+            }
+
+            #title-text {
+                font-size: 16px;
+                margin-left:16px;
+                color:#F5F5F5;
+            }
+
+            /*#title-lang {
                 display: flex;
                 flex-flow: column nowrap;
                 -webkit-app-region: no-drag;
@@ -43,18 +57,10 @@
                     max-height: 20px;
                     width: 20px;
                 }
-            }
-
-            #title-theme {
-                mat-icon {
-                    cursor: pointer;
-                    -webkit-app-region: no-drag;
-                    transform: scale(1.25);
-                }
-            }
+            }*/
         }
 
-        #main-title {
+        /*#main-title {
             .logo {
                 width: 80px;
             }
@@ -62,11 +68,19 @@
             .text {
                 padding-left: 10px;
             }
+        }*/
+
+        #title-right {
+            -webkit-app-region: no-drag;
+            svg {
+                width:14px;
+                margin-left:16px;
+            }
         }
 
-        i {
+        /*i {
             -webkit-app-region: no-drag;
-        }
+        }*/
     }
 
     .main-sidenav-container {
@@ -86,6 +100,7 @@
         --sidenav-width: 240px;
         width: var(--sidenav-width);
         // height: 100%;
+        margin-top:10px;
 
         .sidenav-top {
             mat-list-item {

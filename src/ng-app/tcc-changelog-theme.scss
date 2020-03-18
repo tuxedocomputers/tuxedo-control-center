@@ -26,6 +26,6 @@
     $background: map-get($theme, background);
 
     .changelog {
-        background-color: mat-color($background, app-bar);
+        background-color: mat-color($background, background);
     }
 }

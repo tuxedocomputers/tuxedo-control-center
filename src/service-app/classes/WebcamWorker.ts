@@ -34,7 +34,7 @@ export class WebcamWorker extends DaemonWorker {
             && activeProfile.webcam.status !== undefined;
 
         if (settingsDefined) {
-            if (activeProfile.webcam.useStatus) {
+            if (true || activeProfile.webcam.useStatus) { // Always force webcam to selected setting, option to not set is removed for now
                 if (activeProfile.webcam.status) {
                     this.tccd.logLine('Set webcam status ON');
                     const success = TuxedoWMIAPI.webcamOn();
