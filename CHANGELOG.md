@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.2] - 2020-03-18
+## Changed
+- Tweaks and fixes for review
+
 ## [0.8.1] - 2020-03-17
 ## Changed
 - Latest design adjustments
