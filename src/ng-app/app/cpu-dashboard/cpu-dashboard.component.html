@@ -155,7 +155,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <span class="text" i18n>CPU</span>
+                    <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
+                    <span class="text" *ngIf="cpuModelName !== ''">{{ cpuModelName }}</span>
                 </div>
                 <div class="tcc-info-bar">
                     <div class="cpu-min-max-freq">
