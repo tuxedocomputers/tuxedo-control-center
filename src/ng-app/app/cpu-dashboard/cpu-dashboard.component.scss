@@ -34,6 +34,20 @@
     }
 }
 
+.profile-overview-title {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+
+    opacity: 0.7;
+    .text {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+}
+
 .profile-overview {
     display: flex;
     flex-flow: row;

@@ -45,8 +45,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [value]="fanData.cpu.temp.data.value"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
@@ -62,8 +62,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [label]="gaugeFreqFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">GHz</div>
                 <svg viewBox="0 0 336 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
@@ -78,8 +78,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [value]="fanData.cpu.speed.data.value"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
@@ -107,8 +107,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [value]="gaugeGPUTemp"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
@@ -123,8 +123,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [value]="gaugeGPUSpeed"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
@@ -145,13 +145,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
         </div>
 
-        <mat-card-title class="theme-page-title">
-            {{ activeProfile.name }} 
+        <div class="mat-title profile-overview-title">
+            <span class="text">{{ activeProfile.name }}</span>
             <button mat-button (click)="goToProfileEdit(activeProfile)">
                 <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
             </button>
-        </mat-card-title>
-
+        </div>
         <div class="content-container profile-overview">
             <div class="column">
                 <div class="title">
@@ -174,7 +173,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [value]="activeProfile.cpu.onlineCores"
                         [dialStartAngle]="150"
                         [dialEndAngle]="30"
-                        [animated]="true"
+                        [animated]="animatedGauges"
                         [animationDuration]="0.3">
                     </mwl-gauge>
                     <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
@@ -217,7 +216,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [label]="gaugeOnOffFormat"
                         [dialStartAngle]="150"
                         [dialEndAngle]="30"
-                        [animated]="true"
+                        [animated]="animatedGauges"
                         [animationDuration]="0.3">
                     </mwl-gauge>
                     <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->

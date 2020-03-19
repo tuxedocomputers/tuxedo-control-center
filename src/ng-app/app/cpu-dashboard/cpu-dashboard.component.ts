@@ -59,6 +59,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public fanProfileProgressMap: Map<string, number>;
 
+  public animatedGauges = true;
+  public animatedGaugesDuration = 0.5;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(
