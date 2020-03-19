@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -24,7 +24,7 @@ $tuxedo-light-theme-warn: mat-palette($mat-red);
 
 $tuxedo-control-center-light-theme: map-merge(mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn), (
     background: map-merge($mat-light-theme-background, (
-        app-bar: #212121
+
     )),
 
     foreground: map-merge($mat-light-theme-foreground, (

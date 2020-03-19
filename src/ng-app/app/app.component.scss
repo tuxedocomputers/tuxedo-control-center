@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -32,6 +32,8 @@
         justify-content: space-between;
         flex-flow: nowrap;
         align-items: center;
+
+        background-color: #252525;
         
         #title-left {
             display: flex;

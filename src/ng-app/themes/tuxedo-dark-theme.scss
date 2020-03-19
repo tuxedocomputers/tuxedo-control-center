@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -22,9 +22,9 @@ $tuxedo-dark-theme-warn: mat-palette($mat-red);
 
 $tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn), (
     background: map-merge($mat-dark-theme-background, (
-        dialog: #212121,
-        card: #212121,
-        app-bar: #212121,
+        dialog: #252525,
+        card: #252525,
+        status-bar: #151515,
     ))
 ));
 
