@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 export interface ITuxedoWMIAPI {
+    /**
+     * Check the availability of tuxedo WMI, that is, if it is possible
+     * to open the device file
+     * @returns True if it's available, false otherwise
+     */
+    wmiAvailable(): boolean;
+
     /**
      * Connect webcam
      * @returns True if successful, false otherwise
