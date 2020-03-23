@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -37,6 +37,7 @@ export class TccDBusClientService implements OnDestroy {
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
 
+  public tuxedoWmiAvailable: BehaviorSubject<boolean>;
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
   constructor() {
@@ -51,6 +52,13 @@ export class TccDBusClientService implements OnDestroy {
   private async periodicUpdate() {
     if (!this.isAvailable) {
       this.isAvailable = await this.tccDBusInterface.init();
+    }
+
+    const wmiStatus = await this.tccDBusInterface.tuxedoWmiAvailable();
+    if (this.tuxedoWmiAvailable === undefined) {
+      this.tuxedoWmiAvailable = new BehaviorSubject(wmiStatus);
+    } else {
+      this.tuxedoWmiAvailable.next(wmiStatus);
     }
 
     const fanData: IDBusFanData = {
