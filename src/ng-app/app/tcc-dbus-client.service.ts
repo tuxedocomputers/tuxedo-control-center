@@ -37,7 +37,7 @@ export class TccDBusClientService implements OnDestroy {
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
 
-  public tuxedoWmiAvailable: BehaviorSubject<boolean>;
+  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(false);;
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
   constructor() {
@@ -54,12 +54,7 @@ export class TccDBusClientService implements OnDestroy {
       this.isAvailable = await this.tccDBusInterface.init();
     }
 
-    const wmiStatus = await this.tccDBusInterface.tuxedoWmiAvailable();
-    if (this.tuxedoWmiAvailable === undefined) {
-      this.tuxedoWmiAvailable = new BehaviorSubject(wmiStatus);
-    } else {
-      this.tuxedoWmiAvailable.next(wmiStatus);
-    }
+    this.tuxedoWmiAvailable.next(await this.tccDBusInterface.tuxedoWmiAvailable());
 
     const fanData: IDBusFanData = {
       cpu: await this.tccDBusInterface.getFanDataCPU(),

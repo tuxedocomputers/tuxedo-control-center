@@ -28,6 +28,7 @@ import { ConfigService } from '../config.service';
 
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { NodeService } from '../node.service';
+import { CompatibilityService } from '../compatibility.service';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -75,6 +76,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private config: ConfigService,
     private node: NodeService,
+    public compat: CompatibilityService,
     private i18n: I18n
   ) { }
 

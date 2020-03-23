@@ -240,7 +240,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- Fan control settings -->
-        <div class="tcc-options-group">
+        <div class="tcc-options-group"
+            [ngClass]="{'not-available': !compat.hasFancontrol }"
+            [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
+
             <div class="title-row">
                 <hr />
                 <div class="title">
@@ -294,7 +297,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- Webcam settings -->
-        <div class="tcc-options-group">
+        <div class="tcc-options-group"
+            [ngClass]="{'not-available': !compat.hasWebcamControl }"
+            [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
+
             <div class="title-row">
                 <hr />
                 <div class="title">

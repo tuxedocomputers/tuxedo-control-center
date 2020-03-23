@@ -38,7 +38,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         
         <div class="content-container system-monitor-gauges">
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -71,7 +71,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>CPU - Frequency</div>
                 </div>
             </div>
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -92,7 +92,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <!-- GPU -->
         <div class="content-container profile-overview" *ngIf="hasGPUTemp">
             <div class="column">
-                <div class="title">
+                <div class="title" [ngClass]="{'not-available': !compat.hasFancontrol }">
                     <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
                     <span class="text" i18n>Graphics card monitor</span>
                 </div>
@@ -100,7 +100,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="content-container system-monitor-gauges bottom" *ngIf="hasGPUTemp">
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -116,7 +116,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>GPU - Temp</div>
                 </div>
             </div>
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -182,11 +182,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div class="text small" i18n>Active cores</div>
                     </div>
                 </div>
-                <div class="title">
+                <div class="title" [ngClass]="{'not-available': !compat.hasFancontrol }">
                     <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <span class="text" i18n>Fan profile</span>
                 </div>
-                <div class="tcc-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                     <mat-progress-bar
                         [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
                         [ngClass]="{'disabled': !activeProfile.fan.useControl }"
@@ -225,11 +225,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div class="text small" i18n>Fixed brightness</div>
                     </div>
                 </div>
-                <div class="title">
+                <div class="title" [ngClass]="{'not-available': !compat.hasWebcamControl }">
                     <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     <span class="text" i18n>Webcam</span>
                 </div>
-                <div class="tcc-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasWebcamControl }" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
                     <mat-progress-bar
                         [value]="activeProfile.webcam.status ? 100 : 0">
                     </mat-progress-bar>
