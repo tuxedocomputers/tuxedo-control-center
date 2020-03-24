@@ -16,7 +16,7 @@ export class CompatibilityService {
   }
 
   get fanControlCompatibilityMessage(): string {
-    return this.i18n({ value: 'This feature is not (yet) supported on this model.' });
+    return this.i18n({ value: 'This feature is not supported on your model.' });
   }
 
   get hasWebcamControl(): boolean {
@@ -24,6 +24,10 @@ export class CompatibilityService {
   }
 
   get webcamControlCompatibilityMessage(): string {
-    return this.i18n({ value: 'This feature is not (yet) supported on this model.' });
+    return this.i18n({ value: 'This feature is not supported on your model.' });
+  }
+
+  get tccDbusAvailable() {
+    return this.tccDbus.available;
   }
 }

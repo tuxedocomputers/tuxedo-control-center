@@ -40,6 +40,16 @@ export class TccDBusController {
         }
     }
 
+    async dbusAvailable(): Promise<boolean> {
+        try {
+            // Try one method to check connection
+            await this.interface.TuxedoWmiAvailable();
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
     async tuxedoWmiAvailable(): Promise<boolean> {
         try {
             return await this.interface.TuxedoWmiAvailable();
