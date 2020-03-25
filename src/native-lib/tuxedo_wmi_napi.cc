@@ -22,6 +22,12 @@
 
 using namespace Napi;
 
+Boolean WmiAvailable(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    bool result = wmi.WmiAvailable();
+    return Boolean::New(info.Env(), result);
+}
+
 Boolean WebcamOn(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
     bool result = wmi.SetWebcam(true);
@@ -84,6 +90,9 @@ Boolean GetFanInfo(const CallbackInfo &info) {
 }
 
 Object Init(Env env, Object exports) {
+    // General
+    exports.Set(String::New(env, "wmiAvailable"), Function::New(env, WmiAvailable));
+
     // Webcam
     exports.Set(String::New(env, "webcamOn"), Function::New(env, WebcamOn));
     exports.Set(String::New(env, "webcamOff"), Function::New(env, WebcamOff));

@@ -69,6 +69,10 @@
 
         }
 
+        &.not-available mwl-gauge .value-text {
+            visibility: hidden;
+        }
+
         .unit-text {
             position: absolute;
             bottom: 43px;
