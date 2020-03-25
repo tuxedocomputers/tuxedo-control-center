@@ -105,6 +105,9 @@
 .not-available {
     opacity: 0.7;
     filter: blur(0.11rem);
+    * {
+        pointer-events: none;
+    }
 }
 
 .mat-tooltip {
