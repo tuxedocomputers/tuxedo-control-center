@@ -70,7 +70,8 @@
         }
 
         &.not-available mwl-gauge .value-text {
-            visibility: hidden;
+            font-size: 1.2em;
+            opacity: 0.3;
         }
 
         .unit-text {

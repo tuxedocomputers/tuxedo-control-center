@@ -173,6 +173,22 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     return this.utils.formatFrequency(value);
   }
 
+  public gaugeFanTempFormat: (value: number) => string = (value) => {
+    if (this.compat.hasFancontrol) {
+      return Math.round(value).toString();
+    } else {
+      return this.i18n({ value: 'N/A'});
+    }
+  }
+
+  public gaugeFanSpeedFormat: (value: number) => string = (value) => {
+    if (this.compat.hasFancontrol) {
+      return Math.round(value).toString();
+    } else {
+      return this.i18n({ value: 'N/A'});
+    }
+  }
+
   public gaugeOnOffFormat: (value: number) => string = (value) => {
     if (value === 0) {
       return this.i18n({ value: 'off'});
