@@ -1,56 +1,65 @@
 # Changelog
 
+## [] - Unreleased
+### Added
+- Systems availability checks
+- Blending of features in backend on missing wmi control
+### Changed
+- Various size and theme color tweaks
+### Fixed
+- Inactive (but used) profile dot visibility
+
 ## [0.8.2] - 2020-03-18
-## Changed
+### Changed
 - Tweaks and fixes for review
 
 ## [0.8.1] - 2020-03-17
-## Changed
+### Changed
 - Latest design adjustments
 
 ## [0.8.0] - 2020-03-06
-## Added / Changed
+### Added / Changed
 - New control through tuxedo-wmi module
 - Most of the new design implemented
 
 ## [0.7.4] - 2019-12-09
-## Added
+### Added
 - Theme switching
 - Light/dark theme for testing & toggling
 
 ## [0.7.3] - 2019-12-02
-## Changed
+### Changed
 - Preset profile changes
 - Removed *Fast and furious*
 - *Cool and breezy* now has all cores but disabled turbo
 - *All cores powersave* is now *Powersave extreme*
     with minimum clock and disconnected webcam
 
-## Fixed
+### Fixed
 - Package upgrade: RPM
 - Package remove: Delete config files
 - Package upgrade: Do not delete logs
 
 ## [0.7.0] - 2019-11-29
-## Added
+### Added
 - Language support
 - German translation
 - Licencing GPLv3
 
-## Changed
+### Changed
 - Profile setting name change "No Turbo" changed to Turbo
 - Various packaging tweaks
 
 ## [0.6.3] - 2019-11-18
-## Fixed
+### Fixed
 - Temperature reporting
 
 ## [0.6.2] - 2019-11-18
-## Added
+### Added
 - CPU dashboard
 - DBus service and client
 
-## Removed
+### Removed
 - Old CPU settings
 
 ## [0.6.1] - 2019-11-08
