@@ -8,6 +8,7 @@
 - Various size and theme color tweaks
 ### Fixed
 - Inactive (but used) profile dot visibility
+- Disable changing inactive profile options
 
 ## [0.8.2] - 2020-03-18
 ### Changed
