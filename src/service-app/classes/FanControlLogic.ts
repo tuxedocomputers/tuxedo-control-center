@@ -18,18 +18,56 @@
  */
 import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
 
+class ValueBuffer {
+    private bufferData: Array<number>;
+    private bufferMaxSize = 13; // Buffer max size
+
+    constructor() {
+        this.bufferData = new Array();
+    }
+
+    public addValue(value: number): void {
+        this.bufferData.push(value);
+        while (this.bufferData.length > this.bufferMaxSize) {
+            this.bufferData.shift();
+        }
+    }
+
+    public getFilteredValue(): number {
+        // Number of values to reduce to, to take average from
+        // Note (bufferMaxSize - usedSize) / 2 values are ignored on either side
+        const usedSize = 7;
+
+        const copy = Array.from(this.bufferData);
+        copy.sort((a, b) => a - b);
+
+        while (copy.length >= usedSize + 2) {
+            copy.shift();
+            copy.pop();
+        }
+
+        // Calculate average from rest of array
+        const averageValue = Math.round(copy.reduce((accVal, currentValue) => accVal + currentValue) / copy.length);
+        return averageValue;
+    }
+
+    public getBufferCopy(): Array<number> {
+        return Array.from(this.bufferData);
+    }
+}
+
 const TICK_DELAY = 1;
 
 export class FanControlLogic {
 
-    private currentTemperature;
+    private latestSpeedPercent;
+
+    private tempBuffer = new ValueBuffer();
 
     private tableMaxEntry: ITccFanTableEntry;
     private tableMinEntry: ITccFanTableEntry;
 
     private lastSpeed = 0;
-
-    private tickCount = 0;
 
     constructor(private fanProfile: ITccFanProfile) {
         this.setFanProfile(fanProfile);
@@ -37,46 +75,58 @@ export class FanControlLogic {
 
     public setFanProfile(fanProfile: ITccFanProfile) {
         fanProfile.table.sort((a, b) => a.temp - b.temp);
-        fanProfile.table.sort((a, b) => a.temp - b.temp);
         this.tableMinEntry = fanProfile.table[0];
         this.tableMaxEntry = fanProfile.table[fanProfile.table.length - 1];
         this.fanProfile = fanProfile;
     }
 
+    /**
+     * Used to report temperature to the logic handler.
+     *
+     * @param temperatureValue New temperature sensor value in celcius
+     */
     public reportTemperature(temperatureValue: number) {
-        this.tickCount = ((this.tickCount + 1) % TICK_DELAY);
-        this.currentTemperature = temperatureValue;
+        this.tempBuffer.addValue(temperatureValue);
+        this.latestSpeedPercent = this.calculateSpeedPercent();
     }
 
+    /**
+     * Get the speed in percent decided by the logic handler
+     */
     public getSpeedPercent(): number {
-        const foundEntryIndex = this.findFittingEntryIndex(this.currentTemperature);
+        return this.latestSpeedPercent;
+    }
+
+    private calculateSpeedPercent(): number {
+        const effectiveTemperature = this.tempBuffer.getFilteredValue();
+        const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
         const foundEntry = this.fanProfile.table[foundEntryIndex];
-        let chosenSpeed: number;
-        if (foundEntry.speed < this.lastSpeed) {
-            if (this.tickCount === 0) {
-                chosenSpeed = this.lastSpeed - 1;
-            } else {
-                chosenSpeed = this.lastSpeed;
-            }
-        } else {
-            chosenSpeed = foundEntry.speed;
+        let newSpeed = foundEntry.speed;
+        let speedJump = newSpeed - this.lastSpeed;
+        if (speedJump <= -2) {
+            speedJump = -2;
+            newSpeed = this.lastSpeed + speedJump;
         }
-        this.lastSpeed = chosenSpeed;
-        return chosenSpeed;
+        this.lastSpeed = newSpeed;
+        return newSpeed;
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
-        if (this.currentTemperature > this.tableMaxEntry.temp) {
+        if (temperatureValue > this.tableMaxEntry.temp) {
             return this.fanProfile.table.length - 1;
-        } else if (this.currentTemperature < this.tableMinEntry.temp) {
+        } else if (temperatureValue < this.tableMinEntry.temp) {
             return 0;
         }
 
-        const foundIndex = this.fanProfile.table.findIndex(entry => entry.temp === this.currentTemperature);
+        const foundIndex = this.fanProfile.table.findIndex(entry => entry.temp === temperatureValue);
         if (foundIndex !== -1) {
             return foundIndex;
         } else {
             return this.findFittingEntryIndex(temperatureValue + 1);
         }
+    }
+
+    public getFilteredTemp(): number {
+        return this.tempBuffer.getFilteredValue();
     }
 }
