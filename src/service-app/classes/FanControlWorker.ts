@@ -93,15 +93,6 @@ export class FanControlWorker extends DaemonWorker {
             fanLogic.reportTemperature(currentTemperature);
             if (useFanControl) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
-                if (fanNumber === 1) {
-                    const filteredTemp = fanLogic.getFilteredTemp();
-                    this.tccd.logLine(
-                        'fanInfo .speed = ' + currentSpeed
-                        + ' .temp1 = ' + fanInfo.temp1
-                        + ' .temp2 = ' + fanInfo.temp2
-                        + ' | filteredTemp = ' + filteredTemp
-                        + ' => ' + calculatedSpeed + '%');
-                }
                 fanSpeeds[fanNumber - 1] = calculatedSpeed;
             } else {
                 fanSpeeds[fanNumber - 1] = currentSpeed;
