@@ -1,12 +1,14 @@
 # Changelog
 
-## [] - Unreleased
+## [0.9.0] - 2020-03-26
 ### Added
 - Systems availability checks
 - Blending of features in backend on missing wmi control
+
 ### Changed
 - Various size and theme color tweaks
 - Fan control algorithm (added sensor input filtering)
+
 ### Fixed
 - Inactive (but used) profile dot visibility
 - Disable changing inactive profile options
