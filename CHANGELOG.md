@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.1] - 2020-03-30
+### Changed
+- Renaming adjustments of tuxedo-wmi -> tuxedo-cc-wmi
+
 ## [0.9.0] - 2020-03-26
 ### Added
 - Systems availability checks
