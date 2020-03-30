@@ -36,6 +36,7 @@ import { FanControlWorker } from './FanControlWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
+import { TuxedoWMIAPI, ModuleInfo } from '../../native-lib/TuxedoWMIAPI';
 const tccPackage = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
@@ -156,6 +157,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 throw Error('Couldn\'t start daemon. It is probably already running');
             } else {
                 this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
+                const modInfo = new ModuleInfo();
+                if (TuxedoWMIAPI.wmiAvailable()) {
+                    TuxedoWMIAPI.getModuleInfo(modInfo);
+                    this.logLine('tuxedo-cc-wmi ver ' + modInfo.version);
+                } else {
+                    this.logLine('No tuxedo-cc-wmi found');
+                }
             }
         } else if (process.argv.includes('--stop')) {
             // Signal running process to stop

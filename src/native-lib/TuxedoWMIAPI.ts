@@ -18,6 +18,14 @@
  */
 export interface ITuxedoWMIAPI {
     /**
+     * Gets information about the tuxedo-cc-wmi module
+     *
+     * @param info Structure to fill with data
+     * @returns True if successful, false otherwise
+     */
+    getModuleInfo(info: ModuleInfo): boolean;
+
+    /**
      * Check the availability of tuxedo WMI, that is, if it is possible
      * to open the device file
      * @returns True if it's available, false otherwise
@@ -50,6 +58,11 @@ export interface ITuxedoWMIAPI {
      * @returns True if successful, false otherwise
      */
     getFanInfo(fanNumber: number, fanInfo: IFanInfo): boolean;
+}
+
+
+export class ModuleInfo {
+    version = '';
 }
 
 export interface IFanInfo {

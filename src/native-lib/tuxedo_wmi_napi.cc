@@ -22,6 +22,18 @@
 
 using namespace Napi;
 
+Boolean GetModuleInfo(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    if (info.Length() != 1 || !info[0].IsObject()) return Boolean::New(info.Env(), false);
+
+    Object moduleInfo = info[0].As<Object>();
+    std::string version;
+    bool result = wmi.GetModuleVersion(version);
+    moduleInfo.Set("version", version);
+
+    return Boolean::New(info.Env(), result);
+}
+
 Boolean WmiAvailable(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
     bool result = wmi.WmiAvailable();
@@ -91,6 +103,7 @@ Boolean GetFanInfo(const CallbackInfo &info) {
 
 Object Init(Env env, Object exports) {
     // General
+    exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
     exports.Set(String::New(env, "wmiAvailable"), Function::New(env, WmiAvailable));
 
     // Webcam
