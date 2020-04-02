@@ -17,14 +17,14 @@ process.argv.forEach((parameter, index, array) => {
         buildSteps.push(buildSuseRpm);
     }
 
-    if (parameter.startsWith('appimage')) {
+    /*if (parameter.startsWith('appimage')) {
         buildSteps.push(buildAppImage);
-    }
+    }*/
 
     if (parameter.startsWith('all')) {
         buildSteps.push(buildDeb);
         buildSteps.push(buildSuseRpm);
-        buildSteps.push(buildAppImage);
+        // buildSteps.push(buildAppImage);
     }
 });
 
@@ -65,7 +65,9 @@ async function buildDeb(): Promise<void> {
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
-                '--before-remove=./build-src/before_remove.sh'
+                '--before-remove=./build-src/before_remove.sh',
+                '--conflicts=tuxedofancontrol',
+                '--replaces=tuxedofancontrol'
             ]
         }
     };
@@ -121,7 +123,9 @@ async function buildSuseRpm(): Promise<void> {
             depends: [ 'tuxedo-cc-wmi >= 0.1.1' ],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
-                '--before-remove=./build-src/before_remove.sh'
+                '--before-remove=./build-src/before_remove.sh',
+                '--conflicts=tuxedofancontrol',
+                '--replaces=tuxedofancontrol'
             ]
         }
     };
