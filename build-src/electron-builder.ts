@@ -94,7 +94,6 @@ async function buildSuseRpm(): Promise<void> {
     const config: builder.Configuration = {
         appId: 'tuxedocontrolcenter',
         artifactName: '${productName}_${version}.${ext}',
-        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
@@ -152,7 +151,6 @@ async function buildAppImage(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
         artifactName: '${productName}_${version}.${ext}',
-        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
