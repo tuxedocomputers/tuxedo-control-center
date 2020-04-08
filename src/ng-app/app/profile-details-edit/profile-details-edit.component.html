@@ -145,7 +145,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
 
                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsMinFreqLabel">Minimum scaling frequency</header>
+                        <header i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
@@ -165,7 +165,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
 
                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum scaling frequency</header>
+                        <header i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
