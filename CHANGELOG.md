@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0] - 2020-04-08
+### Added
+- Packaging dependencies
+
+### Changed
+- Fix for visibility of GPU gauges on some models without GPU
+- png -> svg icon for desktop/task bar
+
 ## [0.9.1] - 2020-03-30
 ### Changed
 - Renaming adjustments of tuxedo-wmi -> tuxedo-cc-wmi
