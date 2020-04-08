@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ILogicalCoreInfo, IGeneralCPUInfo, SysFsService, IPstateInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from '../utils.service';
@@ -80,6 +80,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private i18n: I18n
   ) { }
 
+  private validTemp(tempValue: number) {
+    if (tempValue <= 1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   ngOnInit() {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
@@ -92,10 +100,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       const temp2 = this.fanData.gpu2.temp.data.value;
       const speed1 = this.fanData.gpu1.speed.data.value;
       const speed2 = this.fanData.gpu2.speed.data.value;
-      if (temp1 !== 1 && temp2 !== 1) {
+      // TODO: Validation should in the future be decided in the data layer
+      if (this.validTemp(temp1) && this.validTemp(temp2)) {
         avgTemp = (temp1 + temp2) / 2;
         avgSpeed = (speed1 + speed2) / 2;
-      } else if (temp1 !== 1) {
+      } else if (this.validTemp(temp1)) {
         avgTemp = temp1;
         avgSpeed = speed1;
       } else {
@@ -103,7 +112,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         avgTemp = temp2;
         avgSpeed = speed2;
       }
-      this.hasGPUTemp = avgTemp !== 1;
+      this.hasGPUTemp = this.validTemp(avgTemp);
       this.gaugeGPUTemp = Math.round(avgTemp);
       this.gaugeGPUSpeed = Math.round(avgSpeed);
     }));
