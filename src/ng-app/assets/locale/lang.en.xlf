@@ -137,10 +137,10 @@
         </context-group>
       </trans-unit><trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
         <source>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">57</context>
@@ -189,9 +189,9 @@
         </context-group>
       </trans-unit><trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
         <source>
-                        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
                     </source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">86</context>
@@ -219,11 +219,11 @@
         </context-group>
       </trans-unit><trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
         <source>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">108</context>
@@ -348,15 +348,15 @@
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
-        <source>Minimum scaling frequency</source>
-        <target state="translated">Minimum scaling frequency</target>
+        <source>Minimum frequency</source>
+        <target state="translated">Minimum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
-        <source>Maximum scaling frequency</source>
-        <target state="translated">Maximum scaling frequency</target>
+        <source>Maximum frequency</source>
+        <target state="translated">Maximum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">168</context>
@@ -433,22 +433,22 @@
         </context-group>
       </trans-unit><trans-unit id="cc363dec382fbe3f178f63e99e788a4bf6fb8053" datatype="html">
         <source>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
                 With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
                 safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
                 With 3 premade as well as any number of individually configurable profiles, you have
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
         </source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
                 With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
                 safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
                 With 3 premade as well as any number of individually configurable profiles, you have
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">30</context>

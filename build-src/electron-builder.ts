@@ -17,14 +17,14 @@ process.argv.forEach((parameter, index, array) => {
         buildSteps.push(buildSuseRpm);
     }
 
-    if (parameter.startsWith('appimage')) {
+    /*if (parameter.startsWith('appimage')) {
         buildSteps.push(buildAppImage);
-    }
+    }*/
 
     if (parameter.startsWith('all')) {
         buildSteps.push(buildDeb);
         buildSteps.push(buildSuseRpm);
-        buildSteps.push(buildAppImage);
+        // buildSteps.push(buildAppImage);
     }
 });
 
@@ -48,7 +48,7 @@ async function buildDeb(): Promise<void> {
             distSrc + '/data/CHANGELOG.md',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
-            distSrc + '/data/dist-data/tuxedo-control-center_256.png',
+            distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
@@ -65,7 +65,9 @@ async function buildDeb(): Promise<void> {
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
-                '--before-remove=./build-src/before_remove.sh'
+                '--before-remove=./build-src/before_remove.sh',
+                '--conflicts=tuxedofancontrol',
+                '--replaces=tuxedofancontrol'
             ]
         }
     };
@@ -89,10 +91,9 @@ async function buildDeb(): Promise<void> {
  * Function for create the Suse RPM Package
  */
 async function buildSuseRpm(): Promise<void> {
-    const config = {
+    const config: builder.Configuration = {
         appId: 'tuxedocontrolcenter',
         artifactName: '${productName}_${version}.${ext}',
-        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
@@ -105,7 +106,7 @@ async function buildSuseRpm(): Promise<void> {
             distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
-            distSrc + '/data/dist-data/tuxedo-control-center_256.png',
+            distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
@@ -121,7 +122,8 @@ async function buildSuseRpm(): Promise<void> {
             depends: [ 'tuxedo-cc-wmi >= 0.1.1' ],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
-                '--before-remove=./build-src/before_remove.sh'
+                '--before-remove=./build-src/before_remove.sh',
+                '--replaces=tuxedofancontrol <= 0.1.9',
             ]
         }
     };
@@ -149,7 +151,6 @@ async function buildAppImage(): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
         artifactName: '${productName}_${version}.${ext}',
-        icon: distSrc + '/data/dist-data/tuxedocc_256.png',
         directories: {
             output: './dist/packages'
         },
@@ -163,6 +164,7 @@ async function buildAppImage(): Promise<void> {
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.png',
+            distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'

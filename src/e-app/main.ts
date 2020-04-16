@@ -19,7 +19,7 @@ function createWindow() {
         resizable: true,
         minWidth: 1040,
         minHeight: 750,
-        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
+        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.svg'),
         webPreferences: {
             nodeIntegration: true
         }
