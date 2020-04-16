@@ -89,6 +89,8 @@
             justify-content: space-between;
             align-items: center;
 
+            font-size: 1.2em;
+
             //height: 45px;
             padding-left: 30px;
             padding-right: 30px;
@@ -100,4 +102,16 @@
             }
         }
     }
+}
+
+.not-available {
+    opacity: 0.7;
+    filter: blur(0.11rem);
+    * {
+        pointer-events: none;
+    }
+}
+
+.mat-tooltip {
+    font-size: 1.2em !important;
 }

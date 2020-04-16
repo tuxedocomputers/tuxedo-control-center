@@ -3,7 +3,8 @@
         "tuxedo_ec_io.h": "c",
         "array": "c",
         "string": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "new": "cpp"
     },
     "xliffSync.baseFile": "lang.xlf"
 }

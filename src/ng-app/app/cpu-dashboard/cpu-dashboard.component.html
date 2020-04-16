@@ -38,15 +38,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         
         <div class="content-container system-monitor-gauges">
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
                     [value]="fanData.cpu.temp.data.value"
+                    [label]="gaugeFanTempFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
@@ -62,8 +63,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [label]="gaugeFreqFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">GHz</div>
                 <svg viewBox="0 0 336 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
@@ -71,15 +72,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>CPU - Frequency</div>
                 </div>
             </div>
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
                     [value]="fanData.cpu.speed.data.value"
+                    [label]="gaugeFanSpeedFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
@@ -92,7 +94,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <!-- GPU -->
         <div class="content-container profile-overview" *ngIf="hasGPUTemp">
             <div class="column">
-                <div class="title">
+                <div class="title" [ngClass]="{'not-available': !compat.hasFancontrol }">
                     <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
                     <span class="text" i18n>Graphics card monitor</span>
                 </div>
@@ -100,15 +102,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="content-container system-monitor-gauges bottom" *ngIf="hasGPUTemp">
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
                     [value]="gaugeGPUTemp"
+                    [label]="gaugeFanTempFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
@@ -116,15 +119,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>GPU - Temp</div>
                 </div>
             </div>
-            <div class="tcc-gauge">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
                     [value]="gaugeGPUSpeed"
+                    [label]="gaugeFanSpeedFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
-                    [animated]="true"
-                    [animationDuration]="1">
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="unit-text">%</div>
                 <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
@@ -145,18 +149,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
         </div>
 
-        <mat-card-title class="theme-page-title">
-            {{ activeProfile.name }} 
+        <div class="mat-title profile-overview-title">
+            <span class="text">{{ activeProfile.name }}</span>
             <button mat-button (click)="goToProfileEdit(activeProfile)">
                 <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
             </button>
-        </mat-card-title>
-
+        </div>
         <div class="content-container profile-overview">
             <div class="column">
                 <div class="title">
                     <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <span class="text" i18n>CPU</span>
+                    <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
+                    <span class="text" *ngIf="cpuModelName !== ''">{{ cpuModelName }}</span>
                 </div>
                 <div class="tcc-info-bar">
                     <div class="cpu-min-max-freq">
@@ -174,7 +178,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [value]="activeProfile.cpu.onlineCores"
                         [dialStartAngle]="150"
                         [dialEndAngle]="30"
-                        [animated]="true"
+                        [animated]="animatedGauges"
                         [animationDuration]="0.3">
                     </mwl-gauge>
                     <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
@@ -182,11 +186,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div class="text small" i18n>Active cores</div>
                     </div>
                 </div>
-                <div class="title">
+                <div class="title" [ngClass]="{'not-available': !compat.hasFancontrol }">
                     <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <span class="text" i18n>Fan profile</span>
                 </div>
-                <div class="tcc-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                     <mat-progress-bar
                         [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
                         [ngClass]="{'disabled': !activeProfile.fan.useControl }"
@@ -217,7 +221,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [label]="gaugeOnOffFormat"
                         [dialStartAngle]="150"
                         [dialEndAngle]="30"
-                        [animated]="true"
+                        [animated]="animatedGauges"
                         [animationDuration]="0.3">
                     </mwl-gauge>
                     <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
@@ -225,11 +229,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div class="text small" i18n>Fixed brightness</div>
                     </div>
                 </div>
-                <div class="title">
+                <div class="title" [ngClass]="{'not-available': !compat.hasWebcamControl }">
                     <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     <span class="text" i18n>Webcam</span>
                 </div>
-                <div class="tcc-progress tcc-info-bar">
+                <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasWebcamControl }" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
                     <mat-progress-bar
                         [value]="activeProfile.webcam.status ? 100 : 0">
                     </mat-progress-bar>

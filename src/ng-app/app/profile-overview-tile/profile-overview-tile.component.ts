@@ -24,6 +24,7 @@ import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { CompatibilityService } from '../compatibility.service';
 
 @Component({
   selector: 'app-profile-overview-tile',
@@ -37,6 +38,7 @@ export class ProfileOverviewTileComponent implements OnInit {
   @Input() isSelected = false;
   @Input() visible = true;
   @Input() active = false;
+  @Input() used = false;
 
   /**
    * Special input to signal that it shouldn't display a profile and just
@@ -57,7 +59,8 @@ export class ProfileOverviewTileComponent implements OnInit {
     private utils: UtilsService,
     private state: StateService,
     private config: ConfigService,
-    private router: Router
+    private router: Router,
+    public compat: CompatibilityService
   ) { }
 
   ngOnInit() {

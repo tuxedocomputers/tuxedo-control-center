@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI as wmiAPI, IFanInfo } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoWMIAPI as wmiAPI, IFanInfo, TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
 import { FanControlLogic } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
@@ -28,6 +28,8 @@ export class FanControlWorker extends DaemonWorker {
     private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile());
     private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile());
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile());
+
+    private controlAvailableMessage = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
@@ -59,6 +61,19 @@ export class FanControlWorker extends DaemonWorker {
         const fanSpeeds: number[] = [];
         const fanTimestamps: number[] = [];
 
+        if (!TuxedoWMIAPI.wmiAvailable()) {
+            if (this.controlAvailableMessage === false) {
+                this.tccd.logLine('FanControlWorker: Control unavailable');
+            }
+            this.controlAvailableMessage = true;
+            return;
+        } else {
+            if (this.controlAvailableMessage === true) {
+                this.tccd.logLine('FanControlWorker: Control resumed');
+            }
+            this.controlAvailableMessage = false;
+        }
+
         const profile = this.tccd.getCurrentProfile();
         let useFanControl;
         if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
@@ -75,8 +90,6 @@ export class FanControlWorker extends DaemonWorker {
             const result = wmiAPI.getFanInfo(fanNumber, fanInfo);
             const currentTemperature = fanInfo.temp2; // Temp2 hardcoded, note: temp1 is not used for gpu fans
             const currentSpeed = Math.round((fanInfo.speed / 0xff) * 100);
-            /*const currentTemperature = ecAPI.getFanTemperature(fanNumber);
-            let currentSpeed = ecAPI.getFanSpeedPercent(fanNumber);*/
             fanTimestamps.push(Date.now());
             fanTemps.push(currentTemperature);
             fanSpeeds.push(currentSpeed);
@@ -94,7 +107,8 @@ export class FanControlWorker extends DaemonWorker {
             }
             fanLogic.reportTemperature(currentTemperature);
             if (useFanControl) {
-                fanSpeeds[fanNumber - 1] = fanLogic.getSpeedPercent();
+                const calculatedSpeed = fanLogic.getSpeedPercent();
+                fanSpeeds[fanNumber - 1] = calculatedSpeed;
             } else {
                 fanSpeeds[fanNumber - 1] = currentSpeed;
             }

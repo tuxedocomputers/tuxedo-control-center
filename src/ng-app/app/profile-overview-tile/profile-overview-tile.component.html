@@ -29,7 +29,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
         <div class="overlay-content">
             <div class="icon-bar">
-                <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile">
+                <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile && !used">
                     <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
                 </button>
                 <button mat-icon-button disableRipple (click)="selectProfile()">
@@ -72,7 +72,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
             <div *ngIf="active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
-            <div *ngIf="!active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
+            <div *ngIf="!active && used" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
 
             <div class="state-icon" *ngFor="let state of getStateInputs()">
                 <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">
@@ -114,7 +114,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
                     </span>
                 </div>
-                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl}">
+                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFancontrol}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
@@ -130,7 +130,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ profile.display.brightness }} %
                     </span>
                 </div>
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'not-available': !compat.hasWebcamControl}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 258 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>

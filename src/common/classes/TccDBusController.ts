@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -35,6 +35,24 @@ export class TccDBusController {
             const proxyObject = await this.bus.getProxyObject(this.busName, this.path);
             this.interface = proxyObject.getInterface(this.interfaceName);
             return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async dbusAvailable(): Promise<boolean> {
+        try {
+            // Try one method to check connection
+            await this.interface.TuxedoWmiAvailable();
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async tuxedoWmiAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.TuxedoWmiAvailable();
         } catch (err) {
             return false;
         }

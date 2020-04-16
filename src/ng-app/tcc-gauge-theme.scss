@@ -31,7 +31,6 @@
 
     $gauge-icon-color: mat-color($foreground, disabled-text);
     $gauge-background-color: mat-color($background, status-bar);
-    //$gauge-background-color: mat-color($background, background);
 
     .tcc-gauge {
         position: relative;
@@ -68,6 +67,11 @@
                 transform-origin: center center;
             }
 
+        }
+
+        &.not-available mwl-gauge .value-text {
+            font-size: 1.2em;
+            opacity: 0.3;
         }
 
         .unit-text {

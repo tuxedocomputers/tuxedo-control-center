@@ -75,7 +75,7 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: undefined,
             scalingMaxFrequency: undefined,
             governor: 'powersave',
-            energyPerformancePreference: 'default',
+            energyPerformancePreference: 'balance_performance',
             noTurbo: false
         },
         webcam: {
@@ -98,7 +98,7 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: undefined,
             scalingMaxFrequency: 2000000,
             governor: 'powersave',
-            energyPerformancePreference: 'power',
+            energyPerformancePreference: 'balance_performance',
             noTurbo: false
         },
         webcam: {
@@ -121,7 +121,7 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMinFrequency: undefined,
             scalingMaxFrequency: 0,
             governor: 'powersave',
-            energyPerformancePreference: 'power',
+            energyPerformancePreference: 'balance_performance',
             noTurbo: false
         },
         webcam: {
@@ -146,7 +146,7 @@ export const defaultCustomProfile: ITccProfile = {
         scalingMinFrequency: undefined,
         scalingMaxFrequency: undefined,
         governor: 'powersave',
-        energyPerformancePreference: 'power',
+        energyPerformancePreference: 'balance_performance',
         noTurbo: false
     },
     webcam: {
@@ -170,7 +170,7 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         scalingMinFrequency: undefined,
         scalingMaxFrequency: 1200000,
         governor: 'powersave',
-        energyPerformancePreference: 'power',
+        energyPerformancePreference: 'balance_performance',
         noTurbo: false
     },
     webcam: {

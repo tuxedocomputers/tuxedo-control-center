@@ -22,7 +22,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-#include "tuxedo_wmi_ioctl.h"
+#include <string>
+#include "tuxedo_cc_wmi_ioctl.h"
 
 class TuxedoWmiAPI {
 /*public:
@@ -51,6 +52,10 @@ public:
 
     bool WmiAvailable() {
         return _fileHandle >= 0;
+    }
+
+    bool GetModuleVersion(std::string &version) {
+        return IoctlCall(R_MOD_VERSION, version, 20);
     }
 
     bool SetWebcam(bool status) {
@@ -87,7 +92,7 @@ public:
         } else if (fanNr == 3) {
             result = IoctlCall(R_FANINFO3, argument);
         } else if (fanNr == 4) {
-            result = IoctlCall(R_FANINFO4, argument);
+            // result = IoctlCall(R_FANINFO4, argument);
         }
 
         fanInfo = argument;
@@ -95,7 +100,7 @@ public:
     }
 
 private:
-    const char *TUXEDO_WMI_DEVICE_FILE = "/dev/tuxedo_wmi";
+    const char *TUXEDO_WMI_DEVICE_FILE = "/dev/tuxedo_cc_wmi";
     int _fileHandle = -1;
 
     void OpenDevice() {
@@ -115,6 +120,16 @@ private:
     bool IoctlCall(unsigned long request, int &argument) {
         if (!WmiAvailable()) return false;
         int result = ioctl(_fileHandle, request, &argument);
+        return result >= 0;
+    }
+
+    bool IoctlCall(unsigned long request, std::string &argument, size_t buffer_length) {
+        if (!WmiAvailable()) return false;
+        char *buffer = new char[buffer_length];
+        int result = ioctl(_fileHandle, request, buffer);
+        argument.clear();
+        argument.append(buffer);
+        delete[] buffer;
         return result >= 0;
     }
 };

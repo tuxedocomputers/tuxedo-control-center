@@ -28,6 +28,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractC
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
+import { CompatibilityService } from '../compatibility.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
   return (thisControl: AbstractControl): {[key: string]: any} | null => {
@@ -109,6 +110,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private sysfs: SysFsService,
     private fb: FormBuilder,
     private dbus: DBusService,
+    public compat: CompatibilityService,
     private i18n: I18n
   ) { }
 

@@ -27,6 +27,8 @@ import { Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 
 import { I18n } from '@ngx-translate/i18n-polyfill';
+import { NodeService } from '../node.service';
+import { CompatibilityService } from '../compatibility.service';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -49,6 +51,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public avgCpuFreq: number;
   public avgCpuFreqData;
 
+  public cpuModelName = '';
+
   public fanData: IDBusFanData;
   public gaugeGPUTemp: number;
   public gaugeGPUSpeed: number;
@@ -59,6 +63,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public fanProfileProgressMap: Map<string, number>;
 
+  public animatedGauges = true;
+  public animatedGaugesDuration = 0.5;
+
   private subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -68,6 +75,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private state: StateService,
     private router: Router,
     private config: ConfigService,
+    private node: NodeService,
+    public compat: CompatibilityService,
     private i18n: I18n
   ) { }
 
@@ -111,6 +120,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       progressValue += fanProfileProgressStep;
       this.fanProfileProgressMap.set(fanProfileName, progressValue);
     }
+
+    /*this.cpuModelName = this.node.getOs().cpus()[0].model;
+    this.cpuModelName = this.cpuModelName.split('@')[0];
+    this.cpuModelName = this.cpuModelName.split('CPU')[0];*/
   }
 
   ngOnDestroy(): void {
@@ -158,6 +171,22 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public gaugeFreqFormat: (value: number) => string = (value) => {
     return this.utils.formatFrequency(value);
+  }
+
+  public gaugeFanTempFormat: (value: number) => string = (value) => {
+    if (this.compat.hasFancontrol) {
+      return Math.round(value).toString();
+    } else {
+      return this.i18n({ value: 'N/A'});
+    }
+  }
+
+  public gaugeFanSpeedFormat: (value: number) => string = (value) => {
+    if (this.compat.hasFancontrol) {
+      return Math.round(value).toString();
+    } else {
+      return this.i18n({ value: 'N/A'});
+    }
   }
 
   public gaugeOnOffFormat: (value: number) => string = (value) => {

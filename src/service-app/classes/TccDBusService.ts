@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,6 +21,8 @@ import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { TccDBusInterface, TccDBusData } from './TccDBusInterface';
 import * as dbus from 'dbus-next';
 
+import { TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
+
 export class TccDBusService extends DaemonWorker {
 
     private interface: TccDBusInterface;
@@ -30,8 +32,8 @@ export class TccDBusService extends DaemonWorker {
 
     private started = false;
 
-    constructor(tccd: TuxedoControlCenterDaemon, dbusData: TccDBusData) {
-        super(10000, tccd);
+    constructor(tccd: TuxedoControlCenterDaemon, private dbusData: TccDBusData) {
+        super(1500, tccd);
 
         try {
             this.bus = dbus.systemBus();
@@ -57,7 +59,8 @@ export class TccDBusService extends DaemonWorker {
     }
 
     public onWork(): void {
-
+        // Make sure wmiAvailability info is updated. Is done here until it gets its own worker.
+        this.dbusData.tuxedoWmiAvailable = TuxedoWMIAPI.wmiAvailable();
     }
 
     public onExit(): void {

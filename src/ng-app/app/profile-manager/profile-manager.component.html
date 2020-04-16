@@ -68,7 +68,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             *ngFor="let profile of getProfilesForList()"
             [profile]="profile"
             [hoverEffect]="false"
-            [active]="isProfileActive(profile.name)">
+            [active]="isProfileActive(profile.name)"
+            [used]="isProfileUsed(profile.name)">
         </app-profile-overview-tile>
         <app-profile-overview-tile
             *ngIf="['all', 'custom'].includes(inputProfileFilter)"

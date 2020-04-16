@@ -115,6 +115,10 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     return this.state.getActiveProfile().name === profileName;
   }
 
+  public isProfileUsed(profileName: string): boolean {
+    return this.state.getProfileStates(profileName).length > 0;
+  }
+
   public getSettings(): ITccSettings {
     return this.config.getSettings();
   }

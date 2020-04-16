@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,7 +18,7 @@
  */
 import { Injectable, OnDestroy } from '@angular/core';
 import { TccDBusController } from '../../common/classes/TccDBusController';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 
 export interface IDBusFanData {
@@ -37,21 +37,31 @@ export class TccDBusClientService implements OnDestroy {
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
 
+  public available = new Subject<boolean>();
+  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(false);
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
   constructor() {
     this.tccDBusInterface = new TccDBusController();
-    this.tccDBusInterface.init().then(success => {
-      this.isAvailable = success;
-      this.periodicUpdate();
-      this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
-    });
+    this.periodicUpdate();
+    this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
 
   private async periodicUpdate() {
+    const previousAvailability = this.isAvailable;
+    // Check if still available
+    if (this.isAvailable) {
+      this.isAvailable = await this.tccDBusInterface.dbusAvailable();
+    }
+    // If not available try to init again
     if (!this.isAvailable) {
       this.isAvailable = await this.tccDBusInterface.init();
     }
+    // Publish availability as necessary
+    if (this.isAvailable !== previousAvailability) { this.available.next(this.isAvailable); }
+
+    // Read and publish data (note: atm polled)
+    this.tuxedoWmiAvailable.next(await this.tccDBusInterface.tuxedoWmiAvailable());
 
     const fanData: IDBusFanData = {
       cpu: await this.tccDBusInterface.getFanDataCPU(),

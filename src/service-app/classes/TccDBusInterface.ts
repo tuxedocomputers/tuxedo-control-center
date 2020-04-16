@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -66,9 +66,10 @@ export class FanData {
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public tuxedoWmiAvailable: boolean;
     public fans: FanData[];
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
-    export() { return this.fans.map(fan => fan.export()); }
+    // export() { return this.fans.map(fan => fan.export()); }
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
@@ -77,6 +78,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
         super('com.tuxedocomputers.tccd');
     }
 
+    TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
     GetFanDataGPU1() { return this.data.fans[1].export(); }
     GetFanDataGPU2() { return this.data.fans[2].export(); }
@@ -86,6 +88,7 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        TuxedoWmiAvailable: { outSignature: 'b' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU2: { outSignature: 'a{sa{sv}}' }

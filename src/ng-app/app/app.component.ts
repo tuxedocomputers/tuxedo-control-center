@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -30,6 +30,9 @@ import { environment } from '../environments/environment';
 import { ConfigService } from './config.service';
 import { StateService, IStateInfo } from './state.service';
 import { UtilsService } from './utils.service';
+import { CompatibilityService } from './compatibility.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { I18n } from '@ngx-translate/i18n-polyfill';
 
 @Component({
   selector: 'app-root',
@@ -47,18 +50,40 @@ export class AppComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private config: ConfigService,
     private state: StateService,
-    private utils: UtilsService) { }
+    private utils: UtilsService,
+    private compat: CompatibilityService,
+    private i18n: I18n) { }
 
   @HostBinding('class') componentThemeCssClass;
 
   public buttonLanguageLabel: string;
 
   public ngOnInit(): void {
+
     this.updateLanguageName();
     this.getSettings();
     // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
     this.subscriptions.add(this.state.activeProfileObserver.subscribe(activeProfile => { this.getSettings(); }));
     this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
+
+    // Wait for the first true/false availability announcement, undefined is ignored
+    const availabilitySubscription = this.compat.tccDbusAvailable.subscribe(available => {
+      if (available === true) {
+        availabilitySubscription.unsubscribe();
+      } else if (available === false) {
+        this.electron.remote.dialog.showMessageBox(
+          this.electron.remote.getCurrentWindow(),
+          {
+            title: this.i18n({ value: 'Service unavailable' }),
+            message: this.i18n({ value: 'Communication with tccd service is unavailable, please restart service and try again.' }),
+            type: 'error',
+            buttons: ['ok']
+          }
+        );
+        this.electron.remote.getCurrentWindow().close();
+      }
+    });
+    this.subscriptions.add(availabilitySubscription);
   }
 
   public ngOnDestroy(): void {
