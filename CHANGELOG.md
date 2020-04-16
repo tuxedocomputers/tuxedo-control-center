@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.1] - 2020-04-16
+### Fixed
+- Read error for sysfs backlight path (when changed after tccd startup)
+
 ## [1.0.0] - 2020-04-08
 ### Added
 - Packaging dependencies
