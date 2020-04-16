@@ -31,13 +31,19 @@ export class DisplayBacklightWorker extends DaemonWorker {
         super(3000, tccd);
     }
 
-    public onStart(): void {
-        // Find drivers
+    /**
+     * Looks for and updates the list of available sysfs backlight drivers
+     */
+    private findDrivers(): void {
         const displayDrivers = DisplayBacklightController.getDeviceList(this.basePath);
         this.controllers = [];
         displayDrivers.forEach((driverName) => {
             this.controllers.push(new DisplayBacklightController(this.basePath, driverName));
         });
+    }
+
+    public onStart(): void {
+        this.findDrivers();
 
         const currentProfile = this.tccd.getCurrentProfile();
         // Try all possible drivers to be on the safe side, fail silently if they do not work
@@ -68,6 +74,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
     }
 
     public onWork(): void {
+        this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
+
         // Possibly save brightness regularly
         for (const controller of this.controllers) {
             let value: number;
@@ -86,6 +94,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
     }
 
     public onExit(): void {
+        this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
+
         this.controllers.forEach((controller) => {
             let value: number;
             let maxBrightness: number;
