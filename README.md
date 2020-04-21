@@ -1,4 +1,4 @@
-# TuxedoControlCenter
+# TUXEDO Control Center
 
 ## Project structure
 
@@ -55,3 +55,18 @@ tuxedo-control-center
 
 ### Debugging
 Debugging of electron main and render process is configured for vscode in .vscode/launch.json
+
+## Screenshots
+![alt text](screenshots/Systemmonitor_TCC.png "")
+
+![alt text](screenshots/DarkTheme_TCC.png "")
+
+![alt text](screenshots/lüftersteuerung_TCC.png "")
+
+![alt text](screenshots/Lüftersteuerung_2_TCC.png "")
+
+![alt text](screenshots/Akku_Netz_TCC.png "")
+
+![alt text](screenshots/Profile_TCC.png "")
+
+![alt text](screenshots/ControlCenter_TCC.png "")
