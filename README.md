@@ -1,5 +1,11 @@
 # TUXEDO Control Center
 
+This software gives TUXEDO laptop users full control over their hardware like CPU cores and fan speed. To get a more detailed description of features, plans and the ideas behind please check our [press release](https://www.tuxedocomputers.com/en/Infos/News/Everything-under-control-with-the-TUXEDO-Control-Center.tuxedo).
+
+## Using it
+
+There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.1 and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/de/Infos/Hilfe-und-Support/Anleitungen/TUXEDO-Software-Paketquellen-hinzufuegen.tuxedo).
+
 ## Project structure
 
 ```
