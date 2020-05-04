@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,11 +18,14 @@
  */
 import * as path from 'path';
 import { SysFsController } from './SysFsController';
-import { SysFsPropertyBoolean } from './SysFsProperties';
+import { SysFsPropertyBoolean, SysFsPropertyString } from './SysFsProperties';
 
-export class PowerSupplyController implements SysFsController {
+export class PowerSupplyController extends SysFsController {
 
-    constructor(public readonly basePath: string) { }
+    constructor(public readonly basePath: string) {
+        super();
+    }
 
     public readonly online = new SysFsPropertyBoolean(path.join(this.basePath, 'online'));
+    public readonly type = new SysFsPropertyString(path.join(this.basePath, 'type'));
 }
