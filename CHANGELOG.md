@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- State switching issue (failure to read power supply online value)
+
 ## [1.0.1] - 2020-04-16
 ### Fixed
 - Read error for sysfs backlight path (when changed after tccd startup)
