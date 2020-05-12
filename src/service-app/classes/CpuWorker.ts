@@ -26,6 +26,8 @@ export class CpuWorker extends DaemonWorker {
     private readonly basePath = '/sys/devices/system/cpu';
     private readonly cpuCtrl: CpuController;
 
+    private readonly preferredGovernors = [ 'powersave', 'ondemand' ];
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(3000, tccd);
         this.cpuCtrl = new CpuController(this.basePath);
@@ -52,6 +54,27 @@ export class CpuWorker extends DaemonWorker {
     public onExit() {}
 
     /**
+     * Find an available governor among preferred governors
+     *
+     * @returns The found governor or undefined on error or no match
+     */
+    public findDefaultGovernor(): string {
+        let chosenName: string;
+        try {
+            const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
+            for (const governorName of this.preferredGovernors) {
+                if (availableGovernors.includes(governorName)) {
+                    chosenName = governorName;
+                    break;
+                }
+            }
+            return chosenName;
+        } catch (err) {
+            return chosenName;
+        }
+    }
+
+    /**
      * Applies the cpu part of a profile by writing to the sysfs interface
      *
      * @param profile   Profile that contains a 'cpu' key of type ITccProfileCpu.
@@ -62,6 +85,9 @@ export class CpuWorker extends DaemonWorker {
             // Reset everything to default on all cores before applying settings
             // Set online status last so that all cores get the same settings
             this.setCpuDefaultConfig();
+
+            // Note: Hard set governor to default (not included in profiles atm)
+            profile.cpu.governor = this.findDefaultGovernor();
 
             this.cpuCtrl.setGovernor(profile.cpu.governor);
             this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
@@ -87,7 +113,7 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.useCores();
             this.cpuCtrl.setGovernorScalingMinFrequency();
             this.cpuCtrl.setGovernorScalingMaxFrequency();
-            this.cpuCtrl.setGovernor('powersave');
+            this.cpuCtrl.setGovernor(this.findDefaultGovernor());
             this.cpuCtrl.setEnergyPerformancePreference('default');
             if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
@@ -99,6 +125,9 @@ export class CpuWorker extends DaemonWorker {
 
     private validateCpuFreq(): boolean {
         const profile = this.tccd.getCurrentProfile();
+
+        // Note: Hard set governor to default (not included in profiles atm)
+        profile.cpu.governor = this.findDefaultGovernor();
 
         let cpuFreqValidConfig = true;
 
