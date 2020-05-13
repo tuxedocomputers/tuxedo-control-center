@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Fixed
 - State switching issue (failure to read power supply online value)
+- AMD GPU backlight driver read brightness workaround
 
 ## [1.0.1] - 2020-04-16
 ### Fixed
