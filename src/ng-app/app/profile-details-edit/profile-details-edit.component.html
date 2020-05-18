@@ -149,7 +149,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
-                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMinFrequency.value) }} GHz</content>
+                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
@@ -169,7 +169,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
-                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMaxFrequency.value) }} GHz</content>
+                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">

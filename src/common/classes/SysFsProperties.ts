@@ -90,11 +90,18 @@ export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
 
 export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
 
+    constructor(
+        readonly readPath: string,
+        readonly writePath: string = readPath,
+        private readonly listSeparator = ',') {
+            super(readPath, writePath);
+        }
+
     convertStringToType(value: string): number[] {
         const resultArray: number[] = [];
 
         if (value.trim() === '') { return []; }
-        const arrayRanges = value.split(',');
+        const arrayRanges = value.split(this.listSeparator);
         arrayRanges.forEach((strRange) => {
             const rangeSplit = strRange.split('-');
             if (rangeSplit.length === 1) {
