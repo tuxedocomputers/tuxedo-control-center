@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -26,7 +26,7 @@ export class CpuWorker extends DaemonWorker {
     private readonly basePath = '/sys/devices/system/cpu';
     private readonly cpuCtrl: CpuController;
 
-    private readonly preferredGovernors = [ 'powersave', 'ondemand' ];
+    private readonly preferredAcpiFreqGovernors = [ 'ondemand', 'schedutil', 'conservative' ];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(3000, tccd);
@@ -54,21 +54,34 @@ export class CpuWorker extends DaemonWorker {
     public onExit() {}
 
     /**
-     * Find an available governor among preferred governors
+     * Choose the default governor for the current system
      *
      * @returns The found governor or undefined on error or no match
      */
     public findDefaultGovernor(): string {
         let chosenName: string;
         try {
-            const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
-            for (const governorName of this.preferredGovernors) {
-                if (availableGovernors.includes(governorName)) {
-                    chosenName = governorName;
-                    break;
-                }
+            let scalingDriver: string;
+            if (this.cpuCtrl.cores[0].scalingDriver.isAvailable()) {
+                scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
-            return chosenName;
+
+            if (scalingDriver === 'intel_pstate') {
+                // Fixed 'powersave' governor for intel_pstate
+                return 'powersave';
+            } else {
+                // Preferred governors list for other driveres, mainly 'acpi-cpufreq'.
+                // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
+                // behaves as the acpi-cpufreq governors.
+                const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
+                for (const governorName of this.preferredAcpiFreqGovernors) {
+                    if (availableGovernors.includes(governorName)) {
+                        chosenName = governorName;
+                        break;
+                    }
+                }
+                return chosenName;
+            }
         } catch (err) {
             return chosenName;
         }

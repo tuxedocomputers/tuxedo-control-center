@@ -1,6 +1,10 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Default governor choice matched to the current cpufreq driver.
+  Results in better support for non-intel processors.
+
 ### Fixed
 - State switching issue (failure to read power supply online value)
 
