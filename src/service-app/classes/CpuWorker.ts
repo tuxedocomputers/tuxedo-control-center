@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,6 +25,8 @@ import { ITccProfile } from '../../common/models/TccProfile';
 export class CpuWorker extends DaemonWorker {
     private readonly basePath = '/sys/devices/system/cpu';
     private readonly cpuCtrl: CpuController;
+
+    private readonly preferredAcpiFreqGovernors = [ 'ondemand', 'schedutil', 'conservative' ];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(3000, tccd);
@@ -52,6 +54,40 @@ export class CpuWorker extends DaemonWorker {
     public onExit() {}
 
     /**
+     * Choose the default governor for the current system
+     *
+     * @returns The found governor or undefined on error or no match
+     */
+    public findDefaultGovernor(): string {
+        let chosenName: string;
+        try {
+            let scalingDriver: string;
+            if (this.cpuCtrl.cores[0].scalingDriver.isAvailable()) {
+                scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
+            }
+
+            if (scalingDriver === 'intel_pstate') {
+                // Fixed 'powersave' governor for intel_pstate
+                return 'powersave';
+            } else {
+                // Preferred governors list for other driveres, mainly 'acpi-cpufreq'.
+                // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
+                // behaves as the acpi-cpufreq governors.
+                const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
+                for (const governorName of this.preferredAcpiFreqGovernors) {
+                    if (availableGovernors.includes(governorName)) {
+                        chosenName = governorName;
+                        break;
+                    }
+                }
+                return chosenName;
+            }
+        } catch (err) {
+            return chosenName;
+        }
+    }
+
+    /**
      * Applies the cpu part of a profile by writing to the sysfs interface
      *
      * @param profile   Profile that contains a 'cpu' key of type ITccProfileCpu.
@@ -62,6 +98,9 @@ export class CpuWorker extends DaemonWorker {
             // Reset everything to default on all cores before applying settings
             // Set online status last so that all cores get the same settings
             this.setCpuDefaultConfig();
+
+            // Note: Hard set governor to default (not included in profiles atm)
+            profile.cpu.governor = this.findDefaultGovernor();
 
             this.cpuCtrl.setGovernor(profile.cpu.governor);
             this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
@@ -87,7 +126,7 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.useCores();
             this.cpuCtrl.setGovernorScalingMinFrequency();
             this.cpuCtrl.setGovernorScalingMaxFrequency();
-            this.cpuCtrl.setGovernor('powersave');
+            this.cpuCtrl.setGovernor(this.findDefaultGovernor());
             this.cpuCtrl.setEnergyPerformancePreference('default');
             if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
@@ -99,6 +138,9 @@ export class CpuWorker extends DaemonWorker {
 
     private validateCpuFreq(): boolean {
         const profile = this.tccd.getCurrentProfile();
+
+        // Note: Hard set governor to default (not included in profiles atm)
+        profile.cpu.governor = this.findDefaultGovernor();
 
         let cpuFreqValidConfig = true;
 

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -44,6 +44,7 @@ export class LogicalCpuController extends SysFsController {
     readonly scalingCurFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_cur_freq'));
     readonly scalingMinFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_min_freq'));
     readonly scalingMaxFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_max_freq'));
+    readonly scalingAvailableFrequencies = new SysFsPropertyNumList(path.join(this.cpufreqPath, 'scaling_available_frequencies'), undefined, ' ');
     readonly scalingDriver = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_driver'));
     readonly energyPerformanceAvailablePreferences = new SysFsPropertyStringList(
         path.join(this.cpufreqPath, 'energy_performance_available_preferences'));
