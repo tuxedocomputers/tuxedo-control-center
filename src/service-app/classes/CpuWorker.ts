@@ -160,10 +160,16 @@ export class CpuWorker extends DaemonWorker {
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
             if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+                const coreMinFreq = core.cpuinfoMinFreq.readValue();
+                const coreMaxFreq = core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
                     const minFreq = core.scalingMinFreq.readValue();
                     let minFreqProfile = profile.cpu.scalingMinFrequency;
-                    if (minFreqProfile === undefined) { minFreqProfile = core.cpuinfoMinFreq.readValue(); }
+                    if (minFreqProfile === undefined || minFreqProfile < coreMinFreq) {
+                        minFreqProfile = coreMinFreq;
+                    } else if (minFreqProfile > coreMaxFreq) {
+                        minFreqProfile = coreMaxFreq;
+                    }
                     if (minFreq !== minFreqProfile) {
                         cpuFreqValidConfig = false;
                         this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' minimum scaling frequency '
@@ -174,7 +180,13 @@ export class CpuWorker extends DaemonWorker {
                 if (core.scalingMaxFreq.isAvailable() && core.cpuinfoMaxFreq.isAvailable()) {
                     const maxFreq = core.scalingMaxFreq.readValue();
                     let maxFreqProfile = profile.cpu.scalingMaxFrequency;
-                    if (maxFreqProfile === undefined) { maxFreqProfile = core.cpuinfoMaxFreq.readValue(); }
+                    if (maxFreqProfile === -1) {
+                        maxFreqProfile = core.getReducedAvailableFreq();
+                    } else if (maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq) {
+                        maxFreqProfile = coreMaxFreq;
+                    } else if (maxFreqProfile < coreMinFreq) {
+                        maxFreqProfile = coreMinFreq;
+                    }
                     if (maxFreq !== maxFreqProfile) {
                         cpuFreqValidConfig = false;
                         this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' maximum scaling frequency '

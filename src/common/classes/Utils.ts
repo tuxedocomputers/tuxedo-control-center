@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -36,4 +36,19 @@ export function getFiles(source) {
     } catch (err) {
         return [];
     }
+}
+
+export function findClosestValue(value: number, array: number[]): number {
+    if (array === undefined) { return value; }
+
+    let closest: number;
+    let closestDiff: number;
+    for (const arrayNumber of array) {
+        const diff = Math.abs(value - arrayNumber);
+        if (closestDiff === undefined || diff < closestDiff) {
+            closest = arrayNumber;
+            closestDiff = diff;
+        }
+    }
+    return closest;
 }
