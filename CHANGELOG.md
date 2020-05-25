@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 ### Changed
-- Default governor choice matched to the current cpufreq driver.
-  Results in better support for non-intel processors.
+- Default governor choice matched to the current cpufreq driver
+  Results in better support for non-intel processors
 - Make use of `scaling_available_frequencies` to limit choice (of frequencies)
+- Change default profiles to take more dynamic values depending
+  on available frequencies (minor differences to existing profiles)
 
 ### Fixed
 - State switching issue (failure to read power supply online value)

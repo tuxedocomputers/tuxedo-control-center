@@ -70,7 +70,7 @@ export class CpuWorker extends DaemonWorker {
                 // Fixed 'powersave' governor for intel_pstate
                 return 'powersave';
             } else {
-                // Preferred governors list for other driveres, mainly 'acpi-cpufreq'.
+                // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
                 // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
                 // behaves as the acpi-cpufreq governors.
                 const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
