@@ -348,13 +348,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     /**
-     * Temporary test log function
+     * Basic logging functionality
      *
      * @param text Text to log
      */
     public logLine(text: string) {
         console.log(text);
-        try {
+        /*try {
             const logPath = TccPaths.TCCD_LOG_FILE;
             if (!fs.existsSync(path.dirname(logPath))) {
                 fs.mkdirSync(path.dirname(logPath), { recursive: true });
@@ -365,6 +365,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             fs.appendFileSync(logPath, strLogLine, { mode: 0o644 });
         } catch (err) {
             console.log('Can\'t write log');
-        }
+        }*/
     }
 }
