@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -24,6 +24,13 @@ export class DisplayBacklightController extends SysFsController {
 
     constructor(public readonly basePath: string, public readonly driver: string) {
         super();
+
+        // Workaround:
+        // Exception to amd backlight driver (amdgpu_bl)
+        // Do not use actual_brightness for reading until fixed
+        if (driver.includes('amdgpu_bl')) {
+            this.brightness = new SysFsPropertyInteger(path.join(this.basePath, this.driver, 'brightness'));
+        }
     }
 
     readonly brightness = new SysFsPropertyInteger(

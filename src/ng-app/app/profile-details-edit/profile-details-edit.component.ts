@@ -101,6 +101,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   public stateInputArray: IStateInfo[];
 
+  public selectableFrequencies;
+
   @ViewChild('inputName', { static: false }) inputName: MatInput;
 
   constructor(
@@ -116,7 +118,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.viewProfile === undefined) { return; }
-    this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => { this.cpuInfo = generalCpuInfo; }));
+    this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => {
+      this.cpuInfo = generalCpuInfo;
+      this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
+    }));
 
     this.stateInputArray = this.state.getStateInputs();
   }
@@ -191,17 +196,58 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     return fg;
   }
 
+  public findClosestValue(value: number, array: number[]): number {
+    if (array === undefined) { return value; }
+
+    let closest: number;
+    let closestDiff: number;
+    for (const arrayNumber of array) {
+      const diff = Math.abs(value - arrayNumber);
+      if (closestDiff === undefined || diff < closestDiff) {
+        closest = arrayNumber;
+        closestDiff = diff;
+      }
+    }
+    return closest;
+  }
+
   public sliderMinFreqChange() {
     const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
-    if (cpuGroup.controls.scalingMinFrequency.value > cpuGroup.controls.scalingMaxFrequency.value) {
-      cpuGroup.controls.scalingMinFrequency.setValue(cpuGroup.controls.scalingMaxFrequency.value);
+    let newValue: number = cpuGroup.controls.scalingMinFrequency.value;
+
+    // Ensure it's below chosen max value
+    if (newValue > cpuGroup.controls.scalingMaxFrequency.value) {
+      newValue = cpuGroup.controls.scalingMaxFrequency.value;
+    }
+
+    // If 'scaling_available_frequencies' exist, ensure it's one of them
+    if (this.selectableFrequencies !== undefined) {
+      const minSelectableFrequencies = this.selectableFrequencies.filter(value => value <= cpuGroup.controls.scalingMaxFrequency.value);
+      newValue = this.findClosestValue(newValue, minSelectableFrequencies);
+    }
+
+    if (newValue !== undefined) {
+      cpuGroup.controls.scalingMinFrequency.setValue(newValue);
     }
   }
 
   public sliderMaxFreqChange() {
     const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
-    if (cpuGroup.controls.scalingMaxFrequency.value < cpuGroup.controls.scalingMinFrequency.value) {
-      cpuGroup.controls.scalingMaxFrequency.setValue(cpuGroup.controls.scalingMinFrequency.value);
+    let newValue: number = cpuGroup.controls.scalingMaxFrequency.value;
+
+    // Ensure it's above chosen min value
+    if (newValue < cpuGroup.controls.scalingMinFrequency.value) {
+      newValue = cpuGroup.controls.scalingMinFrequency.value;
+    }
+
+    // If 'scaling_available_frequencies' exist, ensure it's one of them
+    if (this.selectableFrequencies !== undefined) {
+      const maxSelectableFrequencies = this.selectableFrequencies.filter(value => value >= cpuGroup.controls.scalingMinFrequency.value);
+      newValue = this.findClosestValue(newValue, maxSelectableFrequencies);
+    }
+
+    if (newValue !== undefined) {
+      cpuGroup.controls.scalingMaxFrequency.setValue(newValue);
     }
   }
 

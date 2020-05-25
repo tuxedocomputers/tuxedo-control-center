@@ -96,7 +96,7 @@ export const defaultProfiles: ITccProfile[] = [
         cpu: {
             onlineCores: undefined,
             scalingMinFrequency: undefined,
-            scalingMaxFrequency: 2000000,
+            scalingMaxFrequency: -1,
             governor: 'powersave',
             energyPerformancePreference: 'balance_performance',
             noTurbo: false
@@ -118,7 +118,7 @@ export const defaultProfiles: ITccProfile[] = [
         },
         cpu: {
             onlineCores: undefined,
-            scalingMinFrequency: undefined,
+            scalingMinFrequency: 0,
             scalingMaxFrequency: 0,
             governor: 'powersave',
             energyPerformancePreference: 'balance_performance',

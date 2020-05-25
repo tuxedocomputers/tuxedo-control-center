@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -72,14 +72,18 @@ export class UtilsService {
       profile.cpu.onlineCores = cpuInfo.availableCores;
     }
 
-    if (profile.cpu.scalingMinFrequency === undefined) {
+    if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < cpuCoreInfo[0].cpuInfoMinFreq) {
       profile.cpu.scalingMinFrequency = cpuCoreInfo[0].cpuInfoMinFreq;
     }
 
     if (profile.cpu.scalingMaxFrequency === undefined) {
       profile.cpu.scalingMaxFrequency = cpuCoreInfo[0].cpuInfoMaxFreq;
+    } else if (profile.cpu.scalingMaxFrequency === -1) {
+      profile.cpu.scalingMaxFrequency = cpuInfo.reducedAvailableFreq;
     } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
       profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
+    } else if (profile.cpu.scalingMaxFrequency > cpuInfo.maxFreq) {
+      profile.cpu.scalingMaxFrequency = cpuInfo.maxFreq;
     }
 
     if (profile.cpu.governor === undefined) {

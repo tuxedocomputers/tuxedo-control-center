@@ -1,4 +1,10 @@
-# TuxedoControlCenter
+# TUXEDO Control Center
+
+This software gives TUXEDO laptop users full control over their hardware like CPU cores and fan speed. To get a more detailed description of features, plans and the ideas behind please check our [press release](https://www.tuxedocomputers.com/en/Infos/News/Everything-under-control-with-the-TUXEDO-Control-Center.tuxedo).
+
+## Using it
+
+There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.1 and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/de/Infos/Hilfe-und-Support/Anleitungen/TUXEDO-Software-Paketquellen-hinzufuegen.tuxedo).
 
 ## Project structure
 
@@ -36,7 +42,15 @@ tuxedo-control-center
 
    `npm install`
 
-3. Install service file that points to development build path
+   Note: Do *not* continue with `npm audit fix`. Known to cause various issues.
+
+3. Install service file that points to development build path (or use installed service from packaged version)
+   
+   Manual instructions:
+   1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
+   2. Edit the `tccd.service` (exec start/stop) to point to `<dev path>/dist/tuxedo-control-center/data/service/tccd`.
+   3. Copy `com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
+   4. Start service `systemctl start tccd`. (And enable for autostart `systemctl enable tccd tccd-sleep`)
 
 ### NPM scripts 
 `npm run <script-name>`
@@ -55,3 +69,18 @@ tuxedo-control-center
 
 ### Debugging
 Debugging of electron main and render process is configured for vscode in .vscode/launch.json
+
+## Screenshots
+![alt text](screenshots/Systemmonitor_TCC.png "")
+
+![alt text](screenshots/DarkTheme_TCC.png "")
+
+![alt text](screenshots/lüftersteuerung_TCC.png "")
+
+![alt text](screenshots/Lüftersteuerung_2_TCC.png "")
+
+![alt text](screenshots/Akku_Netz_TCC.png "")
+
+![alt text](screenshots/Profile_TCC.png "")
+
+![alt text](screenshots/ControlCenter_TCC.png "")
