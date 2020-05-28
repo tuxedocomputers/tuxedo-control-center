@@ -4,7 +4,7 @@ This software gives TUXEDO laptop users full control over their hardware like CP
 
 ## Using it
 
-There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.1 and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/de/Infos/Hilfe-und-Support/Anleitungen/TUXEDO-Software-Paketquellen-hinzufuegen.tuxedo).
+There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.1 and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/en/Infos/Help-and-Support/Instructions/Add-TUXEDO-Computers-software-package-sources.tuxedo#).
 
 ## Project structure
 
@@ -30,13 +30,13 @@ tuxedo-control-center
    apt install -y git
 
    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-   apt-get install -y nodejs
+   apt install -y nodejs
 
    apt install -y gcc g++ make
    ```
 2. Clone & install libraries
 
-   `git clone <repository-url>`
+   `git clone https://github.com/tuxedocomputers/tuxedo-control-center.git`
 
    `cd tuxedo-control-center`
 
