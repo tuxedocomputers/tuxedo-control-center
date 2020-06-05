@@ -38,6 +38,12 @@ export interface ITuxedoWMIAPI {
     setEnableModeSet(enabled: boolean): void;
 
     /**
+     * Get number of controllable fan interfaces,
+     * not necessarily the number of actual fans
+     */
+    getNumberFans(): number;
+
+    /**
      * Set all fans to default mode
      */
     setFansAuto(): void;

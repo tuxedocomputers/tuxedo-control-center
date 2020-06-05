@@ -47,6 +47,13 @@ void SetEnableModeSet(const CallbackInfo &info) {
     wmi.SetEnableModeSet(enabled);
 }
 
+Number GetNumberFans(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    int nrFans = 0;
+    wmi.GetNumberFans(nrFans);
+    return Number::New(info.Env(), nrFans);
+}
+
 void SetFansAuto(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
     wmi.SetFansAuto();
@@ -101,6 +108,7 @@ Object Init(Env env, Object exports) {
     exports.Set(String::New(env, "setEnableModeSet"), Function::New(env, SetEnableModeSet));
 
     // Fan control
+    exports.Set(String::New(env, "getNumberFans"), Function::New(env, GetNumberFans));
     exports.Set(String::New(env, "setFansAuto"), Function::New(env, SetFansAuto));
     exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, SetFanSpeedPercent));
     exports.Set(String::New(env, "getFanSpeedPercent"), Function::New(env, GetFanSpeedPercent));
