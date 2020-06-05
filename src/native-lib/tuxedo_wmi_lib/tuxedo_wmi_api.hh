@@ -172,16 +172,16 @@ private:
     const int MAX_FAN_SPEED = 0xff;
 
     bool GetFanInfo(int fanNr, int &fanInfo) {
-        if (fanNr < 1 || fanNr > 4) return false;
+        if (fanNr < 0 || fanNr >= 3) return false;
         bool result = false;
         int argument = 0;
-        if (fanNr == 1) {
+        if (fanNr == 0) {
             result = io->IoctlCall(R_FANINFO1, argument);
-        } else if (fanNr == 2) {
+        } else if (fanNr == 1) {
             result = io->IoctlCall(R_FANINFO2, argument);
-        } else if (fanNr == 3) {
+        } else if (fanNr == 2) {
             result = io->IoctlCall(R_FANINFO3, argument);
-        } else if (fanNr == 4) {
+        } else if (fanNr == 3) {
             // result = IoctlCall(R_FANINFO4, argument);
         }
 

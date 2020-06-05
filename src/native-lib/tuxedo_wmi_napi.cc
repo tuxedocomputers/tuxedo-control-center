@@ -68,7 +68,7 @@ Number GetFanTemperature(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
     int fanNumber = info[0].As<Number>();
     int temperatureCelcius;
-    wmi.GetFanSpeedPercent(fanNumber, temperatureCelcius);
+    wmi.GetFanTemperature(fanNumber, temperatureCelcius);
     return Number::New(info.Env(), temperatureCelcius);
 }
 

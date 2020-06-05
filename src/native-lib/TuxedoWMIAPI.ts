@@ -66,10 +66,4 @@ export class ModuleInfo {
     version = '';
 }
 
-export interface IFanInfo {
-    speed: number;
-    temp1: number;
-    temp2: number;
-}
-
 export const TuxedoWMIAPI: ITuxedoWMIAPI = require('TuxedoWMIAPI');
