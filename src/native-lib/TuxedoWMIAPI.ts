@@ -33,6 +33,11 @@ export interface ITuxedoWMIAPI {
     wmiAvailable(): boolean;
 
     /**
+     * Enable/disable manual mode set (needed on some devices)
+     */
+    setEnableModeSet(enabled: boolean): void;
+
+    /**
      * Set all fans to default mode
      */
     setFansAuto(): void;

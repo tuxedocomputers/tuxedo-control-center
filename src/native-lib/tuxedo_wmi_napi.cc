@@ -40,6 +40,13 @@ Boolean WmiAvailable(const CallbackInfo &info) {
     return Boolean::New(info.Env(), availability);
 }
 
+void SetEnableModeSet(const CallbackInfo &info) {
+    if (info.Length() != 1 || info[0].IsBoolean()) { return; }
+    TuxedoWmiAPI wmi;
+    bool enabled = info[0].As<Boolean>();
+    wmi.SetEnableModeSet(enabled);
+}
+
 void SetFansAuto(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
     wmi.SetFansAuto();
@@ -90,6 +97,8 @@ Object Init(Env env, Object exports) {
     // General
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
     exports.Set(String::New(env, "wmiAvailable"), Function::New(env, WmiAvailable));
+
+    exports.Set(String::New(env, "setEnableModeSet"), Function::New(env, SetEnableModeSet));
 
     // Fan control
     exports.Set(String::New(env, "setFansAuto"), Function::New(env, SetFansAuto));

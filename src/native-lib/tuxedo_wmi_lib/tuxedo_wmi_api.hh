@@ -81,6 +81,7 @@ public:
     virtual ~DeviceInterface() { }
 
     virtual bool Identify(bool &identified) = 0;
+    virtual bool SetEnableModeSet(bool enabled) = 0;
     virtual bool GetNumberFans(int &nrFans) = 0;
     virtual bool SetFansAuto() = 0;
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) = 0;
@@ -101,6 +102,11 @@ public:
         int ret = io->IoctlCall(R_HWCHECK_CL, result);
         identified = result == 1;
         return ret;
+    }
+
+    virtual bool SetEnableModeSet(bool enabled) {
+        // Nothing to do (..yet)
+        return true;
     }
 
     virtual bool GetNumberFans(int &nrFans) {
@@ -197,6 +203,61 @@ private:
     }
 };
 
+class UniwillDevice : public DeviceInterface {
+public:
+    UniwillDevice(IO &io) : DeviceInterface(io) { }
+
+    virtual bool Identify(bool &identified) {
+        int result;
+        int ret = io->IoctlCall(R_HWCHECK_UW, result);
+        identified = result == 1;
+        return ret;
+    }
+
+    virtual bool SetEnableModeSet(bool enabled) {
+        int enabledSet = enabled ? 1 : 0;
+        return io->IoctlCall(W_UW_MODE_ENABLE, enabledSet);
+    }
+
+    virtual bool GetNumberFans(int &nrFans) {
+        nrFans = 1;
+        return true;
+    }
+
+    virtual bool SetFansAuto() {
+        // Setting the mode will return control to the firmware
+        int mode = 0xa0;
+        return io->IoctlCall(W_UW_MODE, mode);
+    }
+
+    virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
+        int fanSpeedRaw = (int) std::round(0xc8 * fanSpeedPercent / 100.0);
+        return io->IoctlCall(W_UW_FANSPEED, fanSpeedRaw);
+    }
+
+    virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) {
+        int fanSpeedRaw;
+        int ret = io->IoctlCall(R_UW_FANSPEED, fanSpeedRaw);
+        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / 0xc8);
+        return ret;
+    }
+
+    virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) {
+        // Not implemented
+        return false;
+    }
+
+    virtual bool SetWebcam(const bool status) {
+        // Not implemented
+        return false;
+    }
+
+    virtual bool GetWebcam(bool &status) {
+        // Not implemented
+        return false;
+    }
+};
+
 #define TUXEDO_WMI_DEVICE_FILE "/dev/tuxedo_cc_wmi"
 
 class TuxedoWmiAPI : public DeviceInterface {
@@ -205,6 +266,7 @@ public:
 
     TuxedoWmiAPI() : DeviceInterface(io) {
         devices.push_back(new ClevoDevice(io));
+        devices.push_back(new UniwillDevice(io));
 
         for (std::size_t i = 0; i < devices.size(); ++i) {
             bool status, identified;
@@ -233,6 +295,14 @@ public:
     virtual bool Identify(bool &identified) {
         if (activeInterface) {
             return activeInterface->Identify(identified);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool SetEnableModeSet(bool enabled) {
+        if (activeInterface) {
+            return activeInterface->SetEnableModeSet(enabled);
         } else {
             return false;
         }
