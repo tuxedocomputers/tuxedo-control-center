@@ -70,8 +70,9 @@
 
 // Read
 #define R_UW_FANSPEED       _IOR(MAGIC_READ_UW, 0x10, int32_t*)
-#define R_UW_MODE           _IOR(MAGIC_READ_UW, 0x11, int32_t*)
-#define R_UW_MODE_ENABLE    _IOR(MAGIC_READ_UW, 0x12, int32_t*)
+#define R_UW_FAN_TEMP       _IOR(MAGIC_READ_UW, 0x11, int32_t*)
+#define R_UW_MODE           _IOR(MAGIC_READ_UW, 0x12, int32_t*)
+#define R_UW_MODE_ENABLE    _IOR(MAGIC_READ_UW, 0x13, int32_t*)
 
 // Write
 #define W_UW_FANSPEED       _IOW(MAGIC_WRITE_UW, 0x10, int32_t*)

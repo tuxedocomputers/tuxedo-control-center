@@ -33,12 +33,13 @@ export class FanControlWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
+        const nrFans = wmiAPI.getNumberFans();
 
         // Map logic to fan number
         this.fans = new Map();
-        this.fans.set(1, this.cpuLogic);
-        this.fans.set(2, this.gpu1Logic);
-        this.fans.set(3, this.gpu2Logic);
+        if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
+        if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
+        if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
     }
 
     public onStart(): void {
@@ -49,6 +50,8 @@ export class FanControlWorker extends DaemonWorker {
         } else {
             useFanControl = profile.fan.useControl;
         }
+
+        wmiAPI.setEnableModeSet(true);
 
         if (!useFanControl) {
             // Stop TCC fan control for all fans
@@ -95,6 +98,9 @@ export class FanControlWorker extends DaemonWorker {
                 this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') fan info');
                 continue;
             }*/
+            if (currentTemperatureCelcius === 0 || currentSpeedPercent === 0) {
+                continue;
+            }
             if (currentTemperatureCelcius === -1) {
                 this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
                 continue;
@@ -127,5 +133,6 @@ export class FanControlWorker extends DaemonWorker {
     public onExit(): void {
         // Stop TCC fan control for all fans
         wmiAPI.setFansAuto();
+        wmiAPI.setEnableModeSet(false);
     }
 }

@@ -243,8 +243,8 @@ public:
     }
 
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) {
-        // Not implemented
-        return false;
+        if (fanNr != 1) { return false; }
+        return io->IoctlCall(R_UW_FAN_TEMP, temperatureCelcius);
     }
 
     virtual bool SetWebcam(const bool status) {
