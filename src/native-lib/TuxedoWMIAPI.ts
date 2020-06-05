@@ -33,31 +33,32 @@ export interface ITuxedoWMIAPI {
     wmiAvailable(): boolean;
 
     /**
-     * Connect webcam
-     * @returns True if successful, false otherwise
+     * Set all fans to default mode
      */
-    webcamOn(): boolean;
+    setFansAuto(): void;
     /**
-     * Disconnect webcam
-     * @returns True if successful, false otherwise
+     * Set speed of the specified fan 0-100
      */
-    webcamOff(): boolean;
-
+    setFanSpeedPercent(fanNumber: number, fanSpeedPercent: number): void;
     /**
-     * Set standard auto fan control for specified fan(s)
-     * @returns True if successful, false otherwise
+     * Get speed from the specified fan
+     * @returns Current set speed 0-100
      */
-    setFanAuto(fan1: boolean, fan2: boolean, fan3: boolean, fan4: boolean): boolean;
+    getFanSpeedPercent(fanNumber: number): number;
     /**
-     * Set speed of all fans as a byte value 0-255
-     * @returns True if successful, false otherwise
+     * Get temperature of the sensor for the specified fan
+     * @returns Temperature in celcius
      */
-    setFanSpeedByte(speed1: number, speed2: number, speed3: number, speed4: number): boolean;
+    getFanTemperature(fanNumber: number): number;
     /**
-     * Get information from the specified fan 1-4
-     * @returns True if successful, false otherwise
+     * Set webcam switch
      */
-    getFanInfo(fanNumber: number, fanInfo: IFanInfo): boolean;
+    setWebcamStatus(webcamOn: boolean);
+    /**
+     * Get webcam switch status
+     * @returns True if on, false if off
+     */
+    getWebcamStatus(): boolean;
 }
 
 
