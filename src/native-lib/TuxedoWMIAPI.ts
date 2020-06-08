@@ -34,8 +34,9 @@ export interface ITuxedoWMIAPI {
 
     /**
      * Enable/disable manual mode set (needed on some devices)
+     * @returns True if call succeeded, false otherwise
      */
-    setEnableModeSet(enabled: boolean): void;
+    setEnableModeSet(enabled: boolean): boolean;
 
     /**
      * Get number of controllable fan interfaces,
@@ -46,35 +47,41 @@ export interface ITuxedoWMIAPI {
     /**
      * Set all fans to default mode
      */
-    setFansAuto(): void;
+    setFansAuto(): boolean;
     /**
      * Set speed of the specified fan 0-100
+     * @returns True if call succeeded, false otherwise
      */
-    setFanSpeedPercent(fanNumber: number, fanSpeedPercent: number): void;
+    setFanSpeedPercent(fanNumber: number, fanSpeedPercent: number): boolean;
     /**
      * Get speed from the specified fan
      * @returns Current set speed 0-100
      */
-    getFanSpeedPercent(fanNumber: number): number;
+    getFanSpeedPercent(fanNumber: number, fanSpeedPercent: ObjWrapper<number>): boolean;
     /**
      * Get temperature of the sensor for the specified fan
-     * @returns Temperature in celcius
+     * @returns True if call succeeded, false otherwise
      */
-    getFanTemperature(fanNumber: number): number;
+    getFanTemperature(fanNumber: number, fanTemperatureCelcius: ObjWrapper<number>): boolean;
     /**
      * Set webcam switch
+     * @returns True if call succeeded, false otherwise
      */
-    setWebcamStatus(webcamOn: boolean);
+    setWebcamStatus(webcamOn: boolean): boolean;
     /**
      * Get webcam switch status
-     * @returns True if on, false if off
+     * @returns True if call succeeded, false otherwise
      */
-    getWebcamStatus(): boolean;
+    getWebcamStatus(status: ObjWrapper<boolean>): boolean;
 }
 
 
 export class ModuleInfo {
     version = '';
+}
+
+export class ObjWrapper<T> {
+    value: T;
 }
 
 export const TuxedoWMIAPI: ITuxedoWMIAPI = require('TuxedoWMIAPI');

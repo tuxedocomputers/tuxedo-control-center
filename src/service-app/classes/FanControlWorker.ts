@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI as wmiAPI, TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoWMIAPI as wmiAPI, TuxedoWMIAPI, ObjWrapper } from '../../native-lib/TuxedoWMIAPI';
 import { FanControlLogic } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
@@ -89,32 +89,34 @@ export class FanControlWorker extends DaemonWorker {
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
             const fanLogic = this.fans.get(fanNumber);
-            const currentTemperatureCelcius = wmiAPI.getFanTemperature(fanNumber - 1);
-            const currentSpeedPercent = wmiAPI.getFanSpeedPercent(fanNumber - 1);
+            const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
+            wmiAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
+            const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
+            wmiAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
             fanTimestamps.push(Date.now());
-            fanTemps.push(currentTemperatureCelcius);
-            fanSpeeds.push(currentSpeedPercent);
+            fanTemps.push(currentTemperatureCelcius.value);
+            fanSpeeds.push(currentSpeedPercent.value);
             /*if (result === false) {
                 this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') fan info');
                 continue;
             }*/
-            if (currentTemperatureCelcius === 0 || currentSpeedPercent === 0) {
+            if (currentTemperatureCelcius.value === 0 || currentSpeedPercent.value === 0) {
                 continue;
             }
-            if (currentTemperatureCelcius === -1) {
+            if (currentTemperatureCelcius.value === -1) {
                 this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
                 continue;
             }
-            if (currentTemperatureCelcius === 1) {
+            if (currentTemperatureCelcius.value === 1) {
                 // Probably not supported, do nothing
                 continue;
             }
-            fanLogic.reportTemperature(currentTemperatureCelcius);
+            fanLogic.reportTemperature(currentTemperatureCelcius.value);
             if (useFanControl) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
                 fanSpeeds[fanNumber - 1] = calculatedSpeed;
             } else {
-                fanSpeeds[fanNumber - 1] = currentSpeedPercent;
+                fanSpeeds[fanNumber - 1] = currentSpeedPercent.value;
             }
             if (useFanControl) {
                 wmiAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
