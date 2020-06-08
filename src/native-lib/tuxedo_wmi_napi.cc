@@ -41,7 +41,7 @@ Boolean WmiAvailable(const CallbackInfo &info) {
 }
 
 void SetEnableModeSet(const CallbackInfo &info) {
-    if (info.Length() != 1 || info[0].IsBoolean()) { return; }
+    if (info.Length() != 1 || !info[0].IsBoolean()) { return; }
     TuxedoWmiAPI wmi;
     bool enabled = info[0].As<Boolean>();
     wmi.SetEnableModeSet(enabled);

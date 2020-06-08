@@ -215,7 +215,7 @@ public:
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
-        int enabledSet = enabled ? 1 : 0;
+        int enabledSet = enabled ? 0x01 : 0x00;
         return io->IoctlCall(W_UW_MODE_ENABLE, enabledSet);
     }
 
@@ -243,8 +243,11 @@ public:
     }
 
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) {
-        if (fanNr != 1) { return false; }
-        return io->IoctlCall(R_UW_FAN_TEMP, temperatureCelcius);
+        if (fanNr != 0) { return false; }
+        int temp = 0;
+        int ret = io->IoctlCall(R_UW_FAN_TEMP, temp);
+        temperatureCelcius = temp;
+        return ret;
     }
 
     virtual bool SetWebcam(const bool status) {
