@@ -88,29 +88,23 @@ export class FanControlWorker extends DaemonWorker {
         for (const fanNumber of this.fans.keys()) {
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
+
             const fanLogic = this.fans.get(fanNumber);
+
             const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
-            wmiAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
+            const tempReadSuccess = wmiAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
             const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
-            wmiAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
+            const speedReadSuccess = wmiAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
+
             fanTimestamps.push(Date.now());
             fanTemps.push(currentTemperatureCelcius.value);
             fanSpeeds.push(currentSpeedPercent.value);
-            /*if (result === false) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') fan info');
-                continue;
-            }*/
-            if (currentTemperatureCelcius.value === 0 || currentSpeedPercent.value === 0) {
+
+            if (!tempReadSuccess) {
+                // Invalid sensor value or wmi interface unavailable
                 continue;
             }
-            if (currentTemperatureCelcius.value === -1) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
-                continue;
-            }
-            if (currentTemperatureCelcius.value === 1) {
-                // Probably not supported, do nothing
-                continue;
-            }
+
             fanLogic.reportTemperature(currentTemperatureCelcius.value);
             if (useFanControl) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
@@ -118,6 +112,7 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 fanSpeeds[fanNumber - 1] = currentSpeedPercent.value;
             }
+
             if (useFanControl) {
                 wmiAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
             }

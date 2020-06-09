@@ -158,9 +158,11 @@ public:
         int ret = GetFanInfo(fanNr, fanInfo);
         if (!ret) { return false; }
         // Explicitly use temp2 since more consistently implemented
-        //int fanTemp1 = (fanInfo >> 0x08) & 0xff;
-        int fanTemp2 = (fanInfo >> 0x10) & 0xff;
+        //int fanTemp1 = (int8_t) ((fanInfo >> 0x08) & 0xff);
+        int fanTemp2 = (int8_t) ((fanInfo >> 0x10) & 0xff);
         temperatureCelcius = fanTemp2;
+        // If a fan is not available a low value is read out
+        if (fanTemp2 <= 1) { ret = false; }
         return ret;
     }
 
