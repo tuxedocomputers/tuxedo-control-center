@@ -38,7 +38,7 @@ export class TccDBusClientService implements OnDestroy {
   private updateInterval = 500;
 
   public available = new Subject<boolean>();
-  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(false);
+  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
   constructor() {
@@ -61,7 +61,8 @@ export class TccDBusClientService implements OnDestroy {
     if (this.isAvailable !== previousAvailability) { this.available.next(this.isAvailable); }
 
     // Read and publish data (note: atm polled)
-    this.tuxedoWmiAvailable.next(await this.tccDBusInterface.tuxedoWmiAvailable());
+    const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
+    this.tuxedoWmiAvailable.next(wmiAvailability);
 
     const fanData: IDBusFanData = {
       cpu: await this.tccDBusInterface.getFanDataCPU(),

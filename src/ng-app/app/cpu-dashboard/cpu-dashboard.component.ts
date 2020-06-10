@@ -68,6 +68,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
+  private tweakVal = 0;
+
   constructor(
     private sysfs: SysFsService,
     private utils: UtilsService,
@@ -115,6 +117,15 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       this.hasGPUTemp = this.validTemp(avgTemp);
       this.gaugeGPUTemp = Math.round(avgTemp);
       this.gaugeGPUSpeed = Math.round(avgSpeed);
+
+      // Workaround for gauge not updating (in some cases) when the value is the same
+      this.fanData.cpu.speed.data.value += this.tweakVal;
+      this.fanData.cpu.temp.data.value += this.tweakVal;
+      if (this.tweakVal === 0) {
+        this.tweakVal = 0.0001;
+      } else {
+        this.tweakVal = 0;
+      }
     }));
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
       this.activeProfile = profile;
