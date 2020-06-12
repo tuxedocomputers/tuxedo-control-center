@@ -20,14 +20,14 @@ import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 import { TuxedoWMIAPI as wmiAPI, IFanInfo, TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
-import { FanControlLogic } from './FanControlLogic';
+import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
 
     private fans: Map<number, FanControlLogic>;
-    private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile());
-    private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile());
-    private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile());
+    private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.CPU);
+    private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
+    private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
 
