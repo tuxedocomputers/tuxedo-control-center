@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI as wmiAPI, IFanInfo, TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoWMIAPI as wmiAPI, TuxedoWMIAPI, ObjWrapper } from '../../native-lib/TuxedoWMIAPI';
 import { FanControlLogic } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
@@ -33,12 +33,13 @@ export class FanControlWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
+        const nrFans = wmiAPI.getNumberFans();
 
         // Map logic to fan number
         this.fans = new Map();
-        this.fans.set(1, this.cpuLogic);
-        this.fans.set(2, this.gpu1Logic);
-        this.fans.set(3, this.gpu2Logic);
+        if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
+        if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
+        if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
     }
 
     public onStart(): void {
@@ -50,9 +51,11 @@ export class FanControlWorker extends DaemonWorker {
             useFanControl = profile.fan.useControl;
         }
 
+        wmiAPI.setEnableModeSet(true);
+
         if (!useFanControl) {
             // Stop TCC fan control for all fans
-            wmiAPI.setFanAuto(true, true, true, true);
+            wmiAPI.setFansAuto();
         }
     }
 
@@ -85,42 +88,34 @@ export class FanControlWorker extends DaemonWorker {
         for (const fanNumber of this.fans.keys()) {
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
+
             const fanLogic = this.fans.get(fanNumber);
-            const fanInfo: IFanInfo = { speed: 0, temp1: 1, temp2: 1 };
-            const result = wmiAPI.getFanInfo(fanNumber, fanInfo);
-            const currentTemperature = fanInfo.temp2; // Temp2 hardcoded, note: temp1 is not used for gpu fans
-            const currentSpeed = Math.round((fanInfo.speed / 0xff) * 100);
+
+            const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
+            const tempReadSuccess = wmiAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
+            const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
+            const speedReadSuccess = wmiAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
+
             fanTimestamps.push(Date.now());
-            fanTemps.push(currentTemperature);
-            fanSpeeds.push(currentSpeed);
-            if (result === false) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') fan info');
+            fanTemps.push(currentTemperatureCelcius.value);
+            fanSpeeds.push(currentSpeedPercent.value);
+
+            if (!tempReadSuccess) {
+                // Invalid sensor value or wmi interface unavailable
                 continue;
             }
-            if (currentTemperature === -1) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
-                continue;
-            }
-            if (currentTemperature === 1) {
-                // Probably not supported, do nothing
-                continue;
-            }
-            fanLogic.reportTemperature(currentTemperature);
+
+            fanLogic.reportTemperature(currentTemperatureCelcius.value);
             if (useFanControl) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
                 fanSpeeds[fanNumber - 1] = calculatedSpeed;
             } else {
-                fanSpeeds[fanNumber - 1] = currentSpeed;
+                fanSpeeds[fanNumber - 1] = currentSpeedPercent.value;
             }
-        }
 
-        if (useFanControl) {
-            wmiAPI.setFanSpeedByte(
-                fanSpeeds[0] * 0xff / 100,
-                fanSpeeds[1] * 0xff / 100,
-                fanSpeeds[2] * 0xff / 100,
-                1
-            );
+            if (useFanControl) {
+                wmiAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
+            }
         }
 
         for (const fanNumber of this.fans.keys()) {
@@ -134,6 +129,7 @@ export class FanControlWorker extends DaemonWorker {
 
     public onExit(): void {
         // Stop TCC fan control for all fans
-        wmiAPI.setFanAuto(true, true, true, true);
+        wmiAPI.setFansAuto();
+        wmiAPI.setEnableModeSet(false);
     }
 }

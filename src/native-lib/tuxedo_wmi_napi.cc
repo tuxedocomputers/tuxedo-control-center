@@ -24,7 +24,7 @@ using namespace Napi;
 
 Boolean GetModuleInfo(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
-    if (info.Length() != 1 || !info[0].IsObject()) return Boolean::New(info.Env(), false);
+    if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetModuleInfo - invalid argument"); }
 
     Object moduleInfo = info[0].As<Object>();
     std::string version;
@@ -36,68 +36,78 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
 
 Boolean WmiAvailable(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
-    bool result = wmi.WmiAvailable();
+    bool availability = wmi.WmiAvailable();
+    return Boolean::New(info.Env(), availability);
+}
+
+Boolean SetEnableModeSet(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsBoolean()) { throw Napi::Error::New(info.Env(), "SetEnableModeSet - invalid argument"); }
+    TuxedoWmiAPI wmi;
+    bool enabled = info[0].As<Boolean>();
+    bool result = wmi.SetEnableModeSet(enabled);
     return Boolean::New(info.Env(), result);
 }
 
-Boolean WebcamOn(const CallbackInfo &info) {
+Number GetNumberFans(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
-    bool result = wmi.SetWebcam(true);
+    int nrFans = 0;
+    wmi.GetNumberFans(nrFans);
+    return Number::New(info.Env(), nrFans);
+}
+
+Boolean SetFansAuto(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    bool result = wmi.SetFansAuto();
     return Boolean::New(info.Env(), result);
 }
 
-Boolean WebcamOff(const CallbackInfo &info) {
+Boolean SetFanSpeedPercent(const CallbackInfo &info) {
+    if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsNumber()) { throw Napi::Error::New(info.Env(), "SetFanSpeedPercent - invalid argument"); }
     TuxedoWmiAPI wmi;
-    bool result = wmi.SetWebcam(false);
-    return Boolean::New(info.Env(), result);
-}
 
-Boolean SetFanAuto(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
-    if (info.Length() != 4 || !info[0].IsBoolean() || !info[1].IsBoolean() || !info[2].IsBoolean() || !info[3].IsBoolean()) return Boolean::New(info.Env(), false);
-    bool fan1 = info[0].As<Boolean>();
-    bool fan2 = info[1].As<Boolean>();
-    bool fan3 = info[2].As<Boolean>();
-    bool fan4 = info[3].As<Boolean>();
-
-    bool result = wmi.SetFanAuto(fan1, fan2, fan3, fan4);
-
-    return Boolean::New(info.Env(), result);
-}
-
-Boolean SetFanSpeedByte(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
-    if (info.Length() != 4 || !info[0].IsNumber() || !info[1].IsNumber() || !info[2].IsNumber() || !info[3].IsNumber()) return Boolean::New(info.Env(), false);
-    int speed1 = (int)round(info[0].As<Number>());
-    int speed2 = (int)round(info[1].As<Number>());
-    int speed3 = (int)round(info[2].As<Number>());
-    int speed4 = (int)round(info[3].As<Number>());
-    if (speed1 < 0x00 || speed1 > 0xff) return Boolean::New(info.Env(), false);
-    if (speed2 < 0x00 || speed2 > 0xff) return Boolean::New(info.Env(), false);
-    if (speed3 < 0x00 || speed3 > 0xff) return Boolean::New(info.Env(), false);
-    if (speed4 < 0x00 || speed4 > 0xff) return Boolean::New(info.Env(), false);
-
-    bool result = wmi.SetFanSpeeds(speed1 & 0xff, speed2 & 0xff, speed3 & 0xff, speed4 & 0xff);
-
-    return Boolean::New(info.Env(), result);
-}
-
-Boolean GetFanInfo(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
-    if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsObject()) return Boolean::New(info.Env(), false);
     int fanNumber = info[0].As<Number>();
-    if (fanNumber < 1 || fanNumber > 4) return Boolean::New(info.Env(), false);;
-    Object fanInfoParameter = info[1].As<Object>();
+    int fanSpeedPercent = info[1].As<Number>();
+    bool result = wmi.SetFanSpeedPercent(fanNumber, fanSpeedPercent);
+    return Boolean::New(info.Env(), result);
+}
 
-    int fanInfo = 0;
-    bool result = wmi.GetFanInfo(fanNumber, fanInfo);
-    int fanSpeed = fanInfo & 0xff;
-    int fanTemp1 = (fanInfo >> 0x08) & 0xff;
-    int fanTemp2 = (fanInfo >> 0x10) & 0xff;
-    fanInfoParameter.Set("speed", fanSpeed);
-    fanInfoParameter.Set("temp1", fanTemp1);
-    fanInfoParameter.Set("temp2", fanTemp2);
+Boolean GetFanSpeedPercent(const CallbackInfo &info) {
+    if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsObject()) { throw Napi::Error::New(info.Env(), "GetFanSpeedPercent - invalid argument"); }
+    TuxedoWmiAPI wmi;
+    int fanNumber = info[0].As<Number>();
+    int fanSpeedPercent;
+    bool result = wmi.GetFanSpeedPercent(fanNumber, fanSpeedPercent);
+    Object objWrapper = info[1].As<Object>();
+    objWrapper.Set("value", fanSpeedPercent);
+    return Boolean::New(info.Env(), result);
+}
 
+Boolean GetFanTemperature(const CallbackInfo &info) {
+    if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsObject()) { throw Napi::Error::New(info.Env(), "GetFanTemperature - invalid argument"); }
+    TuxedoWmiAPI wmi;
+    int fanNumber = info[0].As<Number>();
+    int temperatureCelcius;
+    bool result = wmi.GetFanTemperature(fanNumber, temperatureCelcius);
+    Object objWrapper = info[1].As<Object>();
+    objWrapper.Set("value", temperatureCelcius);
+    return Boolean::New(info.Env(), result);
+}
+
+Boolean SetWebcamStatus(const CallbackInfo &info) {
+    TuxedoWmiAPI wmi;
+    if (info.Length() != 1 || !info[0].IsBoolean()) { throw Napi::Error::New(info.Env(), "SetWebcamStatus - invalid argument"); }
+    bool status = info[0].As<Boolean>();
+    bool result = wmi.SetWebcam(status);
+    return Boolean::New(info.Env(), result);
+}
+
+Boolean GetWebcamStatus(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetWebcamStatus - invalid argument"); }
+    TuxedoWmiAPI wmi;
+    bool status = false;
+    bool result = wmi.GetWebcam(status);
+    Object objWrapper = info[0].As<Object>();
+    objWrapper.Set("value", status);
     return Boolean::New(info.Env(), result);
 }
 
@@ -106,14 +116,18 @@ Object Init(Env env, Object exports) {
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
     exports.Set(String::New(env, "wmiAvailable"), Function::New(env, WmiAvailable));
 
-    // Webcam
-    exports.Set(String::New(env, "webcamOn"), Function::New(env, WebcamOn));
-    exports.Set(String::New(env, "webcamOff"), Function::New(env, WebcamOff));
+    exports.Set(String::New(env, "setEnableModeSet"), Function::New(env, SetEnableModeSet));
 
     // Fan control
-    exports.Set(String::New(env, "setFanAuto"), Function::New(env, SetFanAuto));
-    exports.Set(String::New(env, "setFanSpeedByte"), Function::New(env, SetFanSpeedByte));
-    exports.Set(String::New(env, "getFanInfo"), Function::New(env, GetFanInfo));
+    exports.Set(String::New(env, "getNumberFans"), Function::New(env, GetNumberFans));
+    exports.Set(String::New(env, "setFansAuto"), Function::New(env, SetFansAuto));
+    exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, SetFanSpeedPercent));
+    exports.Set(String::New(env, "getFanSpeedPercent"), Function::New(env, GetFanSpeedPercent));
+    exports.Set(String::New(env, "getFanTemperature"), Function::New(env, GetFanTemperature));
+
+    // Webcam
+    exports.Set(String::New(env, "setWebcamStatus"), Function::New(env, SetWebcamStatus));
+    exports.Set(String::New(env, "getWebcamStatus"), Function::New(env, GetWebcamStatus));
 
     return exports;
 }
