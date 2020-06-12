@@ -106,6 +106,8 @@ Boolean GetWebcamStatus(const CallbackInfo &info) {
     TuxedoWmiAPI wmi;
     bool status = false;
     bool result = wmi.GetWebcam(status);
+    Object objWrapper = info[0].As<Object>();
+    objWrapper.Set("value", status);
     return Boolean::New(info.Env(), result);
 }
 

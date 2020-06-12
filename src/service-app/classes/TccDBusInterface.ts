@@ -68,6 +68,8 @@ export class FanData {
 export class TccDBusData {
     public tuxedoWmiAvailable: boolean;
     public fans: FanData[];
+    public webcamSwitchStatus: boolean;
+    public webcamSwitchAvailable: boolean;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -82,6 +84,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetFanDataCPU() { return this.data.fans[0].export(); }
     GetFanDataGPU1() { return this.data.fans[1].export(); }
     GetFanDataGPU2() { return this.data.fans[2].export(); }
+    WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
+    GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
 }
 
 TccDBusInterface.configureMembers({
@@ -91,7 +95,9 @@ TccDBusInterface.configureMembers({
         TuxedoWmiAvailable: { outSignature: 'b' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
-        GetFanDataGPU2: { outSignature: 'a{sa{sv}}' }
+        GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
+        WebcamSWAvailable: { outSignature: 'b' },
+        GetWebcamSWStatus: { outSignature: 'b' }
     },
     signals: {}
 });

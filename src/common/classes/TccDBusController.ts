@@ -81,4 +81,20 @@ export class TccDBusController {
             return new FanData();
         }
     }
+
+    async webcamSWAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.WebcamSWAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getWebcamSWStatus(): Promise<boolean> {
+        try {
+            return await this.interface.GetWebcamSWStatus();
+        } catch (err) {
+            return false;
+        }
+    }
 }

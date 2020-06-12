@@ -172,8 +172,10 @@ public:
     }
 
     virtual bool GetWebcam(bool &status) {
-        // Not implemented
-        return false;
+        int webcamStatus = 0;
+        int ret = io->IoctlCall(R_WEBCAM_SW, webcamStatus);
+        status = webcamStatus == 1 ? true : false;
+        return ret;
     }
 
 private:

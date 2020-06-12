@@ -41,6 +41,9 @@ export class TccDBusClientService implements OnDestroy {
   public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
+  public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
+  public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
+
   constructor() {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -48,17 +51,16 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   private async periodicUpdate() {
-    const previousAvailability = this.isAvailable;
+    const previousValue = this.isAvailable;
     // Check if still available
     if (this.isAvailable) {
       this.isAvailable = await this.tccDBusInterface.dbusAvailable();
-    }
-    // If not available try to init again
-    if (!this.isAvailable) {
+    } else {
+      // If not available try to init again
       this.isAvailable = await this.tccDBusInterface.init();
     }
     // Publish availability as necessary
-    if (this.isAvailable !== previousAvailability) { this.available.next(this.isAvailable); }
+    if (this.isAvailable !== previousValue) { this.available.next(this.isAvailable); }
 
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
@@ -70,6 +72,9 @@ export class TccDBusClientService implements OnDestroy {
       gpu2: await this.tccDBusInterface.getFanDataGPU2()
     };
     this.fanData.next(fanData);
+
+    this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
+    this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
   }
 
   ngOnDestroy() {
