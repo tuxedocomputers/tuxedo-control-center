@@ -107,7 +107,7 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Cool'
+            fanProfile: 'Quiet'
         }
     },
     {
@@ -130,7 +130,7 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Quiet'
+            fanProfile: 'Silent'
         }
     }
 ];

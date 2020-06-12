@@ -6,7 +6,9 @@
 
 ### Changed
 - Revised fan tables for existing fan profiles
-- New fan control profile *Silent*
+- New fan profile *Silent*
+- Cool & Breezy now uses the *Quiet* fan profile
+- Powersave extreme now uses the *Silent* fan profile
 
 ## [1.0.2] - 2020-05-25
 ### Changed
