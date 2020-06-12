@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3] - Unreleased
+### Added
+- Support for new devices
+
+### Changed
+- Revised fan tables for existing fan profiles
+- New fan control profile *Silent*
+
 ## [1.0.2] - 2020-05-25
 ### Changed
 - Default governor choice matched to the current cpufreq driver
