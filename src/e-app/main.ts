@@ -1,17 +1,77 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 
-let win: Electron.BrowserWindow;
+let tccWindow: Electron.BrowserWindow;
+let tray: Electron.Tray;
 
-const watch = process.argv.includes('--watch');
+const watchOption = process.argv.includes('--watch');
+const trayOnlyOption = process.argv.includes('--tray');
 
-if (watch) {
+// Ensure that only one instance of the application is running
+const applicationLock = app.requestSingleInstanceLock();
+if (!applicationLock) {
+    quitCurrentTccSession();
+}
+
+if (watchOption) {
     require('electron-reload')(path.join(__dirname, '..', 'ng-app'));
 }
 
-function createWindow() {
-    win = new BrowserWindow({
+app.on('second-instance', (event, cmdLine, workingDir) => {
+    // If triggered by a second instance, find/show/start GUI
+    activateTccGui();
+});
+
+app.whenReady().then( () => {
+    createTccTray();
+    if (!trayOnlyOption) {
+        activateTccGui();
+    }
+});
+
+app.on('will-quit', (event) => {
+    // Prevent default quit action
+    event.preventDefault();
+
+    // Close window but do not quit application unless tray is gone
+    if (tccWindow) {
+        tccWindow.close();
+        tccWindow = null;
+    }
+    if (!tray || tray.isDestroyed()) {
+        app.exit(0);
+    }
+});
+
+app.on('window-all-closed', () => {
+    if (!tray || tray.isDestroyed()) {
+        quitCurrentTccSession();
+    }
+});
+
+function activateTccGui() {
+    if (tccWindow) {
+        if (tccWindow.isMinimized()) { tccWindow.restore(); }
+        tccWindow.focus();
+    } else {
+        createTccWindow();
+    }
+}
+
+function createTccTray() {
+    tray = new Tray(path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'));
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); } },
+        { type: 'separator' },
+        { label: 'Exit', type: 'normal', click: () => { quitCurrentTccSession(); } }
+    ]);
+    tray.setToolTip('TUXEDO Control Center');
+    tray.setContextMenu(contextMenu);
+}
+
+function createTccWindow() {
+    tccWindow = new BrowserWindow({
         title: 'TUXEDO Control Center',
         width: 1040,
         height: 750,
@@ -26,25 +86,20 @@ function createWindow() {
     });
 
     const indexPath = path.join(__dirname, '..', 'ng-app', 'index.html');
-    win.loadFile(indexPath);
-    win.on('closed', () => {
-        win = null;
+    tccWindow.loadFile(indexPath);
+    tccWindow.on('closed', () => {
+        tccWindow = null;
     });
 }
 
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
+function quitCurrentTccSession() {
+    if (tray) {
+        tray.destroy();
+        tray = null;
     }
-});
 
-app.on('activate', () => {
-    if (win === null) {
-        createWindow();
-    }
-});
+    app.quit();
+}
 
 ipcMain.on('exec-cmd-sync', (event, arg) => {
     try {
