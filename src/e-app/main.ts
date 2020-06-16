@@ -24,9 +24,11 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( () => {
-    globalShortcut.register('F24', () => {
+    const success = globalShortcut.register('Super+Alt+F6', () => {
         activateTccGui();
     });
+    if (!success) { console.log('Failed to register global shortcut'); }
+
     createTccTray();
     if (!trayOnlyOption) {
         activateTccGui();
@@ -43,6 +45,8 @@ app.on('will-quit', (event) => {
         tccWindow = null;
     }
     if (!tray || tray.isDestroyed()) {
+        // Actually quit
+        globalShortcut.unregisterAll();
         app.exit(0);
     }
 });
