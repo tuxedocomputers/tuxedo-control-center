@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 
@@ -24,6 +24,9 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( () => {
+    globalShortcut.register('F24', () => {
+        activateTccGui();
+    });
     createTccTray();
     if (!trayOnlyOption) {
         activateTccGui();
