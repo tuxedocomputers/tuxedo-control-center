@@ -121,6 +121,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       // Workaround for gauge not updating (in some cases) when the value is the same
       this.fanData.cpu.speed.data.value += this.tweakVal;
       this.fanData.cpu.temp.data.value += this.tweakVal;
+      this.fanData.gpu1.speed.data.value += this.tweakVal;
+      this.fanData.gpu1.temp.data.value += this.tweakVal;
+      this.fanData.gpu2.speed.data.value += this.tweakVal;
+      this.fanData.gpu2.temp.data.value += this.tweakVal;
       if (this.tweakVal === 0) {
         this.tweakVal = 0.0001;
       } else {
