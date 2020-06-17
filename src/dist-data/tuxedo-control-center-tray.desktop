@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=TUXEDO Control Center
+Comment=Tray icon for TUXEDO Control Center
+Exec=/usr/bin/tuxedo-control-center --tray
+Terminal=false
+Type=Application
+Icon=tuxedo-control-center
+Categories=System;TrayIcon

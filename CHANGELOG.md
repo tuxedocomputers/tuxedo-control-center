@@ -3,7 +3,7 @@
 ## [1.0.3] - Unreleased
 ### Added
 - Support for new devices
-- Basic tray icon
+- Basic tray icon (optional autostart)
 - Global keyboard shortcut (Tux+Alt+F6) to start
 
 ### Changed

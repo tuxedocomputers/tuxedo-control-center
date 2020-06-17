@@ -1,6 +1,11 @@
 import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
+import * as fs from 'fs';
+import * as os from 'os';
+
+// Tweak to get correct dirname for resource files outside app.asar
+const appPath = __dirname.replace('app.asar/', '');
 
 let tccWindow: Electron.BrowserWindow;
 let tray: Electron.Tray;
@@ -67,14 +72,32 @@ function activateTccGui() {
 }
 
 function createTccTray() {
-    tray = new Tray(path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'));
+    const trayInstalled = isAutostartTrayInstalled();
+    if (!tray) {
+        tray = new Tray(path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'));
+        tray.setTitle('TUXEDO Control Center');
+        tray.setToolTip('TUXEDO Control Center');
+    }
     const contextMenu = Menu.buildFromTemplate([
         { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); } },
+        {
+                label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
+                click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
+        },
         { type: 'separator' },
         { label: 'Exit', type: 'normal', click: () => { quitCurrentTccSession(); } }
     ]);
-    tray.setToolTip('TUXEDO Control Center');
     tray.setContextMenu(contextMenu);
+}
+
+function menuInstallAutostartTray() {
+    installAutostartTray();
+    createTccTray();
+}
+
+function menuRemoveAutostartTray() {
+    removeAutostartTray();
+    createTccTray();
 }
 
 function createTccWindow() {
@@ -86,7 +109,7 @@ function createTccWindow() {
         resizable: true,
         minWidth: 1040,
         minHeight: 750,
-        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.svg'),
+        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true
         }
@@ -129,3 +152,40 @@ ipcMain.on('exec-cmd-async', (event, arg) => {
 ipcMain.on('spawn-external-async', (event, arg) => {
     child_process.spawn(arg, { detached: true, stdio: 'ignore' });
 });
+
+const autostartLocation = path.join(os.homedir(), '.config/autostart');
+const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
+
+function installAutostartTray(): boolean {
+    try {
+        fs.copyFileSync(
+            path.join(appPath, '../data/dist-data', autostartDesktopFilename),
+            path.join(autostartLocation, autostartDesktopFilename)
+        );
+        return true;
+    } catch (err) {
+        console.log('Failed to install autostart tray -> ' + err);
+        return false;
+    }
+}
+
+function removeAutostartTray(): boolean {
+    try {
+        if (fs.existsSync(path.join(autostartLocation, autostartDesktopFilename))) {
+            fs.unlinkSync(path.join(autostartLocation, autostartDesktopFilename));
+        }
+        return true;
+    } catch (err) {
+        console.log('Failed to remove autostart tray -> ' + err);
+        return false;
+    }
+}
+
+function isAutostartTrayInstalled(): boolean {
+    try {
+        return fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
+    } catch (err) {
+        console.log('Failed to check if autostart tray is installed -> ' + err);
+        return false;
+    }
+}
