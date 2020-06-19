@@ -7,6 +7,10 @@ import * as os from 'os';
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
 
+const autostartLocation = path.join(os.homedir(), '.config/autostart');
+const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
+const tccConfigDir = '.tcc';
+
 let tccWindow: Electron.BrowserWindow;
 let tray: Electron.Tray;
 
@@ -16,11 +20,20 @@ const trayOnlyOption = process.argv.includes('--tray');
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
 if (!applicationLock) {
-    quitCurrentTccSession();
+    console.log('TUXEDO Control Center is already running');
+    app.exit(0);
 }
 
 if (watchOption) {
     require('electron-reload')(path.join(__dirname, '..', 'ng-app'));
+}
+
+if (isFirstStart()) {
+    installAutostartTray();
+}
+
+if (!userConfigDirExists()) {
+    createUserConfigDir();
 }
 
 app.on('second-instance', (event, cmdLine, workingDir) => {
@@ -73,8 +86,9 @@ function activateTccGui() {
 
 function createTccTray() {
     const trayInstalled = isAutostartTrayInstalled();
+    const trayIcon =  path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png');
     if (!tray) {
-        tray = new Tray(path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'));
+        tray = new Tray(trayIcon);
         tray.setTitle('TUXEDO Control Center');
         tray.setToolTip('TUXEDO Control Center');
     }
@@ -153,9 +167,6 @@ ipcMain.on('spawn-external-async', (event, arg) => {
     child_process.spawn(arg, { detached: true, stdio: 'ignore' });
 });
 
-const autostartLocation = path.join(os.homedir(), '.config/autostart');
-const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
-
 function installAutostartTray(): boolean {
     try {
         fs.copyFileSync(
@@ -186,6 +197,27 @@ function isAutostartTrayInstalled(): boolean {
         return fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
     } catch (err) {
         console.log('Failed to check if autostart tray is installed -> ' + err);
+        return false;
+    }
+}
+
+function isFirstStart(): boolean {
+    return !userConfigDirExists();
+}
+
+function userConfigDirExists(): boolean {
+    try {
+        return fs.existsSync(path.join(os.homedir(), '.tcc'));
+    } catch (err) {
+        return false;
+    }
+}
+
+function createUserConfigDir(): boolean {
+    try {
+        fs.mkdirSync(path.join(os.homedir(), '.tcc'));
+        return true;
+    } catch (err) {
         return false;
     }
 }
