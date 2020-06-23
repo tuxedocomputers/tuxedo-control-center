@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
+
+export enum FAN_LOGIC { CPU, GPU }
 
 class ValueBuffer {
     private bufferData: Array<number>;
@@ -69,14 +71,23 @@ export class FanControlLogic {
 
     private lastSpeed = 0;
 
-    constructor(private fanProfile: ITccFanProfile) {
+    private useTable: string
+
+    constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
+        if (type === FAN_LOGIC.CPU) {
+            this.useTable = 'tableCPU';
+        } else if (type === FAN_LOGIC.GPU) {
+            this.useTable = 'tableGPU';
+        } else {
+            throw new Error('FanControlLogic: Invalid argument');
+        }
         this.setFanProfile(fanProfile);
     }
 
     public setFanProfile(fanProfile: ITccFanProfile) {
-        fanProfile.table.sort((a, b) => a.temp - b.temp);
-        this.tableMinEntry = fanProfile.table[0];
-        this.tableMaxEntry = fanProfile.table[fanProfile.table.length - 1];
+        fanProfile[this.useTable].sort((a, b) => a.temp - b.temp);
+        this.tableMinEntry = fanProfile[this.useTable][0];
+        this.tableMaxEntry = fanProfile[this.useTable][fanProfile[this.useTable].length - 1];
         this.fanProfile = fanProfile;
     }
 
@@ -100,7 +111,7 @@ export class FanControlLogic {
     private calculateSpeedPercent(): number {
         const effectiveTemperature = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
-        const foundEntry = this.fanProfile.table[foundEntryIndex];
+        const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
         let newSpeed = foundEntry.speed;
         let speedJump = newSpeed - this.lastSpeed;
         if (speedJump <= -2) {
@@ -113,12 +124,12 @@ export class FanControlLogic {
 
     private findFittingEntryIndex(temperatureValue: number): number {
         if (temperatureValue > this.tableMaxEntry.temp) {
-            return this.fanProfile.table.length - 1;
+            return this.fanProfile[this.useTable].length - 1;
         } else if (temperatureValue < this.tableMinEntry.temp) {
             return 0;
         }
 
-        const foundIndex = this.fanProfile.table.findIndex(entry => entry.temp === temperatureValue);
+        const foundIndex = this.fanProfile[this.useTable].findIndex(entry => entry.temp === temperatureValue);
         if (foundIndex !== -1) {
             return foundIndex;
         } else {

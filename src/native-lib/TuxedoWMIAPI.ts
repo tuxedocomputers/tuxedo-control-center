@@ -33,31 +33,46 @@ export interface ITuxedoWMIAPI {
     wmiAvailable(): boolean;
 
     /**
-     * Connect webcam
-     * @returns True if successful, false otherwise
+     * Enable/disable manual mode set (needed on some devices)
+     * @returns True if call succeeded, false otherwise
      */
-    webcamOn(): boolean;
-    /**
-     * Disconnect webcam
-     * @returns True if successful, false otherwise
-     */
-    webcamOff(): boolean;
+    setEnableModeSet(enabled: boolean): boolean;
 
     /**
-     * Set standard auto fan control for specified fan(s)
-     * @returns True if successful, false otherwise
+     * Get number of controllable fan interfaces,
+     * not necessarily the number of actual fans
      */
-    setFanAuto(fan1: boolean, fan2: boolean, fan3: boolean, fan4: boolean): boolean;
+    getNumberFans(): number;
+
     /**
-     * Set speed of all fans as a byte value 0-255
-     * @returns True if successful, false otherwise
+     * Set all fans to default mode
      */
-    setFanSpeedByte(speed1: number, speed2: number, speed3: number, speed4: number): boolean;
+    setFansAuto(): boolean;
     /**
-     * Get information from the specified fan 1-4
-     * @returns True if successful, false otherwise
+     * Set speed of the specified fan 0-100
+     * @returns True if call succeeded, false otherwise
      */
-    getFanInfo(fanNumber: number, fanInfo: IFanInfo): boolean;
+    setFanSpeedPercent(fanNumber: number, fanSpeedPercent: number): boolean;
+    /**
+     * Get speed from the specified fan
+     * @returns Current set speed 0-100
+     */
+    getFanSpeedPercent(fanNumber: number, fanSpeedPercent: ObjWrapper<number>): boolean;
+    /**
+     * Get temperature of the sensor for the specified fan
+     * @returns True if call succeeded, false otherwise
+     */
+    getFanTemperature(fanNumber: number, fanTemperatureCelcius: ObjWrapper<number>): boolean;
+    /**
+     * Set webcam switch
+     * @returns True if call succeeded, false otherwise
+     */
+    setWebcamStatus(webcamOn: boolean): boolean;
+    /**
+     * Get webcam switch status
+     * @returns True if call succeeded, false otherwise
+     */
+    getWebcamStatus(status: ObjWrapper<boolean>): boolean;
 }
 
 
@@ -65,10 +80,8 @@ export class ModuleInfo {
     version = '';
 }
 
-export interface IFanInfo {
-    speed: number;
-    temp1: number;
-    temp2: number;
+export class ObjWrapper<T> {
+    value: T;
 }
 
 export const TuxedoWMIAPI: ITuxedoWMIAPI = require('TuxedoWMIAPI');

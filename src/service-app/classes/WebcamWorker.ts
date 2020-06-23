@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoWMIAPI, ObjWrapper } from '../../native-lib/TuxedoWMIAPI';
 
 export class WebcamWorker extends DaemonWorker {
 
@@ -28,22 +28,32 @@ export class WebcamWorker extends DaemonWorker {
     }
 
     public onStart(): void {
+        // Use getter method to check for implemented functionality
+        const webcamStatus: ObjWrapper<boolean> = { value: undefined };
+        if (!TuxedoWMIAPI.getWebcamStatus(webcamStatus)) {
+            this.tccd.dbusData.webcamSwitchAvailable = false;
+        } else {
+            this.tccd.dbusData.webcamSwitchAvailable = true;
+        }
+
+        this.tccd.dbusData.webcamSwitchStatus = webcamStatus.value;
+
         const activeProfile = this.tccd.getCurrentProfile();
         const settingsDefined = activeProfile.webcam !== undefined
             && activeProfile.webcam.useStatus !== undefined
             && activeProfile.webcam.status !== undefined;
 
-        if (settingsDefined) {
+        if (settingsDefined && this.tccd.dbusData.webcamSwitchAvailable) {
             if (true || activeProfile.webcam.useStatus) { // Always force webcam to selected setting, option to not set is removed for now
                 if (activeProfile.webcam.status) {
                     this.tccd.logLine('Set webcam status ON');
-                    const success = TuxedoWMIAPI.webcamOn();
+                    const success = TuxedoWMIAPI.setWebcamStatus(true);
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to activate webcam');
                     }
                 } else {
                     this.tccd.logLine('Set webcam status OFF');
-                    const success = TuxedoWMIAPI.webcamOff();
+                    const success = TuxedoWMIAPI.setWebcamStatus(false);
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to deactivate webcam');
                     }
