@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.3] - Unreleased
+## [1.0.3] - 2020-06-23
 ### Added
 - Support for new devices
 - Basic tray icon (optional autostart)
