@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.3] - Unreleased
+### Added
+- Support for new devices
+- Basic tray icon (optional autostart)
+- Global keyboard shortcut (Tux+Alt+F6) to start
+
+### Changed
+- Revised fan tables for existing fan profiles
+- New fan profile *Silent*
+- New fan profile *Freezy*
+- Cool & Breezy now uses the *Quiet* fan profile
+- Powersave extreme now uses the *Silent* fan profile
+
 ## [1.0.2] - 2020-05-25
 ### Changed
 - Default governor choice matched to the current cpufreq driver
