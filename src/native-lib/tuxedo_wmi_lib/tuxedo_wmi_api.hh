@@ -81,6 +81,7 @@ public:
     virtual ~DeviceInterface() { }
 
     virtual bool Identify(bool &identified) = 0;
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) = 0;
     virtual bool SetEnableModeSet(bool enabled) = 0;
     virtual bool GetNumberFans(int &nrFans) = 0;
     virtual bool SetFansAuto() = 0;
@@ -97,11 +98,17 @@ protected:
 class ClevoDevice : public DeviceInterface {
 public:
     ClevoDevice(IO &io) : DeviceInterface(io) { }
+
     virtual bool Identify(bool &identified) {
         int result;
         int ret = io->IoctlCall(R_HWCHECK_CL, result);
         identified = result == 1;
         return ret;
+    }
+
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
+        interfaceIdStr = "clevo";
+        return true;
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
@@ -216,6 +223,11 @@ public:
         int ret = io->IoctlCall(R_HWCHECK_UW, result);
         identified = result == 1;
         return ret;
+    }
+
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
+        interfaceIdStr = "uniwill";
+        return true;
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
@@ -345,6 +357,14 @@ public:
     virtual bool Identify(bool &identified) {
         if (activeInterface) {
             return activeInterface->Identify(identified);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
+        if (activeInterface) {
+            return activeInterface->DeviceInterfaceIdStr(interfaceIdStr);
         } else {
             return false;
         }
