@@ -268,7 +268,6 @@ public:
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) {
         int fanSpeedRaw;
         bool result;
-        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / MAX_FAN_SPEED);
 
         switch (fanNr) {
             case 0:
@@ -281,6 +280,8 @@ public:
                 result = false;
                 break;
         }
+
+        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / MAX_FAN_SPEED);
 
         return result;
     }
