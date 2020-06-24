@@ -224,7 +224,7 @@ public:
     }
 
     virtual bool GetNumberFans(int &nrFans) {
-        nrFans = 1;
+        nrFans = 2;
         return true;
     }
 
@@ -236,22 +236,62 @@ public:
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
         int fanSpeedRaw = (int) std::round(MAX_FAN_SPEED * fanSpeedPercent / 100.0);
-        return io->IoctlCall(W_UW_FANSPEED, fanSpeedRaw);
+        bool result;
+
+        switch (fanNr) {
+            case 0:
+                result = io->IoctlCall(W_UW_FANSPEED, fanSpeedRaw);
+                break;
+            case 1:
+                result = io->IoctlCall(W_UW_FANSPEED2, fanSpeedRaw);
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
     }
 
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) {
         int fanSpeedRaw;
-        int ret = io->IoctlCall(R_UW_FANSPEED, fanSpeedRaw);
+        bool result;
         fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / MAX_FAN_SPEED);
-        return ret;
+
+        switch (fanNr) {
+            case 0:
+                result = io->IoctlCall(R_UW_FANSPEED, fanSpeedRaw);
+                break;
+            case 1:
+                result = io->IoctlCall(R_UW_FANSPEED2, fanSpeedRaw);
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
     }
 
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) {
-        if (fanNr != 0) { return false; }
         int temp = 0;
-        int ret = io->IoctlCall(R_UW_FAN_TEMP, temp);
+        bool result;
+
+        switch (fanNr) {
+            case 0:
+                result = io->IoctlCall(R_UW_FAN_TEMP, temp);
+                break;
+            case 1:
+                result = io->IoctlCall(R_UW_FAN_TEMP2, temp);
+                break;
+            default:
+                result = false;
+                break;
+        }
+
         temperatureCelcius = temp;
-        return ret;
+
+        return result;
     }
 
     virtual bool SetWebcam(const bool status) {
