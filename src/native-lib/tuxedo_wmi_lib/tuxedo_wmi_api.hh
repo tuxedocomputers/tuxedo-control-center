@@ -235,14 +235,14 @@ public:
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
-        int fanSpeedRaw = (int) std::round(0xc8 * fanSpeedPercent / 100.0);
+        int fanSpeedRaw = (int) std::round(MAX_FAN_SPEED * fanSpeedPercent / 100.0);
         return io->IoctlCall(W_UW_FANSPEED, fanSpeedRaw);
     }
 
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) {
         int fanSpeedRaw;
         int ret = io->IoctlCall(R_UW_FANSPEED, fanSpeedRaw);
-        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / 0xc8);
+        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / MAX_FAN_SPEED);
         return ret;
     }
 
@@ -263,6 +263,9 @@ public:
         // Not implemented
         return false;
     }
+
+private:
+    const int MAX_FAN_SPEED = 0xc8;
 };
 
 #define TUXEDO_WMI_DEVICE_FILE "/dev/tuxedo_cc_wmi"
