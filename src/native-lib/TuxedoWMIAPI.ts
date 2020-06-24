@@ -78,6 +78,7 @@ export interface ITuxedoWMIAPI {
 
 export class ModuleInfo {
     version = '';
+    activeInterface = '';
 }
 
 export class ObjWrapper<T> {

@@ -28,8 +28,16 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
 
     Object moduleInfo = info[0].As<Object>();
     std::string version;
+
     bool result = wmi.GetModuleVersion(version);
     moduleInfo.Set("version", version);
+    
+    std::string activeInterface;
+    if (wmi.DeviceInterfaceIdStr(activeInterface)) {
+        moduleInfo.Set("currentInterface", activeInterface);
+    } else {
+        moduleInfo.Set("currentInterface", "inactive");
+    }
 
     return Boolean::New(info.Env(), result);
 }
