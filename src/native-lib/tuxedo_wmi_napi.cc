@@ -34,9 +34,9 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
     
     std::string activeInterface;
     if (wmi.DeviceInterfaceIdStr(activeInterface)) {
-        moduleInfo.Set("currentInterface", activeInterface);
+        moduleInfo.Set("activeInterface", activeInterface);
     } else {
-        moduleInfo.Set("currentInterface", "inactive");
+        moduleInfo.Set("activeInterface", "inactive");
     }
 
     return Boolean::New(info.Env(), result);

@@ -137,7 +137,7 @@ export class FanControlWorker extends DaemonWorker {
             }
         }
 
-        // Publish the data on the dbus weather written by this control or values read from hw interface
+        // Publish the data on the dbus whether written by this control or values read from hw interface
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
             if (fanSpeeds[i] !== undefined) {
