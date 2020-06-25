@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4] - Unreleased
+### Added
+- Fan control support for more devices (with multiple fans)
+
 ## [1.0.3] - 2020-06-23
 ### Added
 - Support for new devices
