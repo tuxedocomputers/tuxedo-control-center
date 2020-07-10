@@ -30,8 +30,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 (focus)="$event.target.select()">
         </mat-form-field>
         <div *ngIf="editProfile" class="save-reset-buttons">
-            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_reset.svg#Icon"></use></svg></button></span>
-            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_save.svg#Icon"></use></svg></button></span>
+            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
+                <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty">
+                    <svg viewBox="0 0 512 512">
+                        <use href="./assets/images/icon_reset.svg#Icon"></use>
+                        </svg>
+                    </button>
+            </span>
+            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes">
+                <button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty">
+                    <svg viewBox="0 0 512 512">
+                        <use href="./assets/images/icon_save.svg#Icon"></use>
+                    </svg>
+                </button>
+            </span>
         </div>
         <div>
             <button mat-flat-button *ngFor="let state of stateInputArray"
@@ -61,10 +73,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n>Set brightness on profile activation</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!--content class="value" [hidden]="editProfile">
-                                <span *ngIf="viewProfile.display.useBrightness" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
-                                <span *ngIf="!viewProfile.display.useBrightness" i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
-                            </content-->
                             <content class="value">
                                 <span [hidden]="!inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
                                 <span [hidden]="inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
@@ -175,58 +183,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-slider>
                         </content>
                     </mat-grid-tile>
-
-                    <!-- Governor setting unconfigurable -->
-                    <!--mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsGovernorLabel">Scaling governor</header></mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.governor }}</content>
-                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.governor.value }}</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-select formControlName="governor" [disableOptionCentering]="true" (selectionChange)="governorSelectionChange()">
-                                <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor" color="primary">
-                                    {{ governor }}
-                                </mat-option>
-                            </mat-select>
-                        </content>
-                    </mat-grid-tile-->
-
-                    <!-- Energy performance preference setting unconfigurable -->
-                    <!--mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.energyPerformancePreference }}</content>
-                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.energyPerformancePreference.value }}</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-select formControlName="energyPerformancePreference" [disableOptionCentering]="true">
-                                <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
-                            </mat-select>
-                        </content>
-                    </mat-grid-tile-->
-
-                    <!-- Turbo setting unconfigurable -->
-                    <!--mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsTurboLabel">Turbo</header>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value">
-                            <span [hidden]="!inputNoTurbo.checked" i18n="@@cProfMgrDetailsTurboYes">yes</span>
-                            <span [hidden]="inputNoTurbo.checked" i18n="@@cProfMgrDetailsTurboNo">no</span>
-                        </content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-checkbox #inputNoTurbo
-                                [checked]="!profileFormGroup.get('cpu').value.noTurbo"
-                                (change)="profileFormGroup.get('cpu').get('noTurbo').setValue(!$event.checked); profileFormGroup.get('cpu').get('noTurbo').markAsDirty();"
-                                color="primary">
-                            </mat-checkbox>
-                        </content>
-                    </mat-grid-tile-->
-
                 </mat-grid-list>
             </mat-card-content>
         </div>
@@ -304,25 +260,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-content class="content">
                 <div formGroupName="webcam">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
-                        <!--mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsWebcamUseStatusLabel">Set webcam status on start/wakeup</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value">
-                                <span [hidden]="!inputUseStatus.checked" i18n="@@cProfMgrDetailsWebcamUseStatusYes">yes</span>
-                                <span [hidden]="inputUseStatus.checked" i18n="@@cProfMgrDetailsWebcamUseStatusNo">no</span>
-                            </content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputUseStatus
-                                    formControlName="useStatus"
-                                    color="primary">
-                                </mat-checkbox>
-                            </content>
-                        </mat-grid-tile-->
-
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
                         </mat-grid-tile>
@@ -340,7 +277,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-checkbox>
                             </content>
                         </mat-grid-tile>
-
                     </mat-grid-list>
                 </div>
             </mat-card-content>
