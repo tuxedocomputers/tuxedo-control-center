@@ -6,5 +6,7 @@
         "string_view": "c",
         "new": "cpp"
     },
-    "xliffSync.baseFile": "lang.xlf"
+    "xliffSync.baseFile": "lang.xlf",
+    "editor.tabSize": 4,
+    "editor.useTabStops": false
 }
