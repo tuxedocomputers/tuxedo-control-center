@@ -118,6 +118,8 @@ export class UtilsService {
         useControl: true,
         fanProfile: 'Balanced'
       };
+    } else {
+      profile.fan.useControl = true;
     }
   }
 
