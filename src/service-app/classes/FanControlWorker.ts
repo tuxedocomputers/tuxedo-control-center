@@ -43,13 +43,7 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        const profile = this.tccd.getCurrentProfile();
-        let useFanControl;
-        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
-            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
-        } else {
-            useFanControl = profile.fan.useControl;
-        }
+        const useFanControl = this.getFanControlStatus();
 
         wmiAPI.setEnableModeSet(true);
 
@@ -77,13 +71,7 @@ export class FanControlWorker extends DaemonWorker {
             this.controlAvailableMessage = false;
         }
 
-        const profile = this.tccd.getCurrentProfile();
-        let useFanControl;
-        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
-            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
-        } else {
-            useFanControl = profile.fan.useControl;
-        }
+        const useFanControl = this.getFanControlStatus();
 
         for (const fanNumber of this.fans.keys()) {
             // Update fan profile
@@ -131,5 +119,19 @@ export class FanControlWorker extends DaemonWorker {
         // Stop TCC fan control for all fans
         wmiAPI.setFansAuto();
         wmiAPI.setEnableModeSet(false);
+    }
+
+    private getFanControlStatus(): boolean {
+        return true;
+
+        /*const profile = this.tccd.getCurrentProfile();
+        let useFanControl: boolean;
+        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
+            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
+        } else {
+            useFanControl = profile.fan.useControl;
+        }
+
+        return useFanControl;*/
     }
 }
