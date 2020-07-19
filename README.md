@@ -1,10 +1,10 @@
 # TUXEDO Control Center
 
-This software gives TUXEDO laptop users full control over their hardware like CPU cores and fan speed. To get a more detailed description of features, plans and the ideas behind please check our [press release](https://www.tuxedocomputers.com/en/Infos/News/Everything-under-control-with-the-TUXEDO-Control-Center.tuxedo).
+This software gives TUXEDO laptop users full control over their hardware like CPU cores and fan speed. To get a more detailed description and screenshots please check our [Information page](https://www.tuxedocomputers.com/en/TUXEDO-Control-Center.tuxedo).
 
 ## Using it
 
-There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.1 and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/en/Infos/Help-and-Support/Instructions/Add-TUXEDO-Computers-software-package-sources.tuxedo#).
+There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.1/15.2 and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/en/Infos/Help-and-Support/Instructions/Add-TUXEDO-Computers-software-package-sources.tuxedo#).
 
 ## Project structure
 
@@ -69,18 +69,3 @@ tuxedo-control-center
 
 ### Debugging
 Debugging of electron main and render process is configured for vscode in .vscode/launch.json
-
-## Screenshots
-![alt text](screenshots/Systemmonitor_TCC.png "")
-
-![alt text](screenshots/DarkTheme_TCC.png "")
-
-![alt text](screenshots/lüftersteuerung_TCC.png "")
-
-![alt text](screenshots/Lüftersteuerung_2_TCC.png "")
-
-![alt text](screenshots/Akku_Netz_TCC.png "")
-
-![alt text](screenshots/Profile_TCC.png "")
-
-![alt text](screenshots/ControlCenter_TCC.png "")
