@@ -23,6 +23,13 @@
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
+      </trans-unit><trans-unit id="menuShutdown" datatype="html">
+        <source>Shutdown Timer</source>
+        <target state="translated">Shutdown Timer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
       </trans-unit><trans-unit id="menuUsedProfilesLabel" datatype="html">
         <source>Used profiles</source>
         <target state="translated">Used profiles</target>
@@ -840,6 +847,62 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Battery powered</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+        <trans-unit id="shutdowntimerHour" datatype="html" approved="yes">
+        <source>Hour</source>
+        <target phase-name="approval-1" state="signed-off">Hour</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+        <trans-unit id="shutdowntimerMinute" datatype="html" approved="yes">
+        <source>Minute</source>
+        <target phase-name="approval-1" state="signed-off">Minute</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shutdowntimerButtonSave" datatype="html" approved="yes">
+        <source>Save</source>
+        <target phase-name="approval-1" state="signed-off">Save</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shutdowntimerDeleteTimer" datatype="html" approved="yes">
+        <source>Delete Timer</source>
+        <target phase-name="approval-1" state="signed-off">Delete Timer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+              <trans-unit id="shutdowntimerInformations" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Here you can set up a shutdown timer that automatically shuts down your computer at a specific time</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+    <trans-unit id="shutdowntimerTimerActive" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">The timer is active and set to the following time:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+          <trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">The timer is currently not active</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

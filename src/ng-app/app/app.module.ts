@@ -67,6 +67,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { GaugeModule } from 'angular-gauge';
+import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -86,7 +87,8 @@ declare const require;
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,
     InfoComponent,
-    CpuDashboardComponent
+    CpuDashboardComponent,
+    ShutdownTimerComponent
   ],
   imports: [
     BrowserModule,
