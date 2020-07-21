@@ -31,14 +31,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-form-field>
         <div *ngIf="editProfile" class="save-reset-buttons">
             <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
-                <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty">
+                <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
                     <svg viewBox="0 0 512 512">
                         <use href="./assets/images/icon_reset.svg#Icon"></use>
                         </svg>
                     </button>
             </span>
             <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes">
-                <button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty">
+                <button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileDirty">
                     <svg viewBox="0 0 512 512">
                         <use href="./assets/images/icon_save.svg#Icon"></use>
                     </svg>
@@ -46,14 +46,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </span>
         </div>
         <div>
-            <button mat-flat-button *ngFor="let state of stateInputArray"
-                [disabled]="getSettings().stateMap[state.value] === viewProfile.name || profileFormGroup.dirty"
-                [value]="state.value"
-                [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
-                [matTooltipShowDelay]="100"
-                (click)="profileToActivate(state.value)">
-                {{ state.label }}
-            </button>
+            <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
+                <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
+                    [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                    [value]="state.value"
+                    [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
+                    [matTooltipShowDelay]="100">
+                        {{ state.label }}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
         </div>
     </mat-card-title>
     <mat-card-content>
