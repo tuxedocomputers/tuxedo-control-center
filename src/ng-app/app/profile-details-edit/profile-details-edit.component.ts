@@ -29,6 +29,7 @@ import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
+import { MatButton } from '@angular/material/button';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -278,17 +279,5 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
         const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
-    }
-
-    public profileToActivate(state: string) {
-        this.utils.pageDisabled = true;
-
-        console.log(this.viewProfile.name);
-        this.config.writeProfile(this.viewProfile.name, this.viewProfile, [state]).then(success => {
-            if (success) {
-                this.selectStateControl.markAsPristine();
-            }
-            this.utils.pageDisabled = false;
-        });
     }
 }
