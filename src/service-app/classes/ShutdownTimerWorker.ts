@@ -20,9 +20,8 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ConfigHandler } from "../../common/classes/ConfigHandler";
-import * as fs from "fs";
 import { TccPaths } from "../../common/classes/TccPaths";
-import { execSync } from "child_process";
+import { exec } from "child_process";
 
 export class ShutdownTimerWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon, private config: ConfigHandler) {
@@ -30,7 +29,6 @@ export class ShutdownTimerWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        
     }
 
     public async onWork() {
@@ -45,12 +43,17 @@ export class ShutdownTimerWorker extends DaemonWorker {
             let setting = this.config.getSettingsNoThrow();
             setting.shutdownTime = null;
             this.config.writeSettings(setting, TccPaths.SETTINGS_FILE);
-            
-            execSync("shutdown now")
+
+            exec("shutdown now", (err, stdout, stderr) => {
+                if (err) {
+                    this.tccd.logLine(`Error at shutdown, error: ${err.message} - ${err}`);
+                } else {
+                    
+                }
+            });
         }
     }
 
     public onExit(): void {
-        
     }
 }
