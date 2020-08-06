@@ -227,6 +227,20 @@ export class ConfigService {
         });
     }
 
+    public async saveSettings(): Promise<boolean> {
+        return new Promise<boolean>(resolve => {
+            const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+            const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
+
+            this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+                if (success) {
+                    this.readFiles();
+                }
+                resolve(success);
+            });
+        });
+    }
+
     private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const tmpProfilesPath = '/tmp/tmptccprofiles';

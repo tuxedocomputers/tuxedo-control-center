@@ -23,18 +23,21 @@ export enum ProfileStates {
 
 export interface ITccSettings {
     stateMap: any;
+    shutdownTime: string | null;
 }
 
 export const defaultSettings: ITccSettings = {
     stateMap: {
         power_ac: 'Default',
         power_bat: 'Default'
-    }
+    },
+    shutdownTime: null
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
     stateMap: {
         power_ac: 'Default',
         power_bat: 'Custom XP1508 UHD'
-    }
+    },
+    shutdownTime: null
 };
