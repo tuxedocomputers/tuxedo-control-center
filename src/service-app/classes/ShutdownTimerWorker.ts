@@ -44,9 +44,10 @@ export class ShutdownTimerWorker extends DaemonWorker {
             setting.shutdownTime = null;
             this.config.writeSettings(setting, TccPaths.SETTINGS_FILE);
 
+            this.tccd.logLine('Execute shutdown scheduled for ' + time);
             exec('shutdown now', (err, stdout, stderr) => {
                 if (err) {
-                    this.tccd.logLine(`Error at shutdown, error: ${err.message} - ${err}`);
+                    this.tccd.logLine(`ShutdownTimerWorker: Error at shutdown, error: ${err.message} - ${err}`);
                 }
             });
         }
