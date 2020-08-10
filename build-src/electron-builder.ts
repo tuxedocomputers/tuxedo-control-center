@@ -13,7 +13,7 @@ process.argv.forEach((parameter, index, array) => {
         buildSteps.push(buildDeb);
     }
 
-    if (parameter.startsWith('suse')) {
+    if (parameter.startsWith('rpm')) {
         buildSteps.push(buildSuseRpm);
     }
 
