@@ -18,6 +18,7 @@ let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
+const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
 
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
@@ -54,26 +55,28 @@ app.whenReady().then( () => {
         activateTccGui();
     }
 
-    // Regularly check if running tccd version is different to running gui version
-    const checkTccdVersionInterval = 5000;
-    setInterval(async () => {
-        if (tccDBus === undefined) {
-            tccDBus = new TccDBusController();
-            await tccDBus.init();
-        } else if (!await tccDBus.dbusAvailable()) {
-            await tccDBus.init();
-        }
-
-        if (await tccDBus.tuxedoWmiAvailable()) {
-            const tccdVersion = await tccDBus.tccdVersion();
-            if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                console.log('Other tccd version detected, restarting..');
-                app.relaunch({ args: process.argv.slice(1).concat(['--tray']) });
-                app.exit(0);
+    if (!noTccdVersionCheck) {
+        // Regularly check if running tccd version is different to running gui version
+        const tccdVersionCheckInterval = 5000;
+        setInterval(async () => {
+            if (tccDBus === undefined) {
+                tccDBus = new TccDBusController();
+                await tccDBus.init();
+            } else if (!await tccDBus.dbusAvailable()) {
+                await tccDBus.init();
             }
-        }
 
-    }, checkTccdVersionInterval);
+            if (await tccDBus.tuxedoWmiAvailable()) {
+                const tccdVersion = await tccDBus.tccdVersion();
+                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                    console.log('Other tccd version detected, restarting..');
+                    app.relaunch({ args: process.argv.slice(1).concat(['--tray']) });
+                    app.exit(0);
+                }
+            }
+
+        }, tccdVersionCheckInterval);
+    }
 });
 
 app.on('will-quit', (event) => {
