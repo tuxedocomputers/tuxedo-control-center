@@ -1,6 +1,5 @@
 {
     "files.associations": {
-        "tuxedo_ec_io.h": "c",
         "array": "c",
         "string": "c",
         "string_view": "c",
