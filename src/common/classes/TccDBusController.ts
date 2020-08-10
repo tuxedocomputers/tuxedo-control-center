@@ -58,6 +58,14 @@ export class TccDBusController {
         }
     }
 
+    async tccdVersion(): Promise<string> {
+        try {
+            return await this.interface.TccdVersion();
+        } catch (err) {
+            return '';
+        }
+    }
+
     async getFanDataCPU(): Promise<FanData> {
         try {
             return await this.interface.GetFanDataCPU();

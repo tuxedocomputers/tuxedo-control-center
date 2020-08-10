@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
+import { TccDBusController } from '../common/classes/TccDBusController';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -13,6 +14,7 @@ const tccConfigDir = '.tcc';
 
 let tccWindow: Electron.BrowserWindow;
 let tray: Electron.Tray;
+let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
@@ -51,6 +53,27 @@ app.whenReady().then( () => {
     if (!trayOnlyOption) {
         activateTccGui();
     }
+
+    // Regularly check if running tccd version is different to running gui version
+    const checkTccdVersionInterval = 5000;
+    setInterval(async () => {
+        if (tccDBus === undefined) {
+            tccDBus = new TccDBusController();
+            await tccDBus.init();
+        } else if (!await tccDBus.dbusAvailable()) {
+            await tccDBus.init();
+        }
+
+        if (await tccDBus.tuxedoWmiAvailable()) {
+            const tccdVersion = await tccDBus.tccdVersion();
+            if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                console.log('Other tccd version detected, restarting..');
+                app.relaunch({ args: process.argv.slice(1).concat(['--tray']) });
+                app.exit(0);
+            }
+        }
+
+    }, checkTccdVersionInterval);
 });
 
 app.on('will-quit', (event) => {
@@ -86,7 +109,7 @@ function activateTccGui() {
 
 function createTccTray() {
     const trayInstalled = isAutostartTrayInstalled();
-    const trayIcon =  path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png');
+    const trayIcon =  path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png');
     if (!tray) {
         tray = new Tray(trayIcon);
         tray.setTitle('TUXEDO Control Center');
@@ -123,13 +146,13 @@ function createTccWindow() {
         resizable: true,
         minWidth: 1040,
         minHeight: 750,
-        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
+        icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true
         }
     });
 
-    const indexPath = path.join(__dirname, '..', 'ng-app', 'index.html');
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
     tccWindow.loadFile(indexPath);
     tccWindow.on('closed', () => {
         tccWindow = null;
@@ -170,7 +193,7 @@ ipcMain.on('spawn-external-async', (event, arg) => {
 function installAutostartTray(): boolean {
     try {
         fs.copyFileSync(
-            path.join(appPath, '../data/dist-data', autostartDesktopFilename),
+            path.join(appPath, '../../data/dist-data', autostartDesktopFilename),
             path.join(autostartLocation, autostartDesktopFilename)
         );
         return true;

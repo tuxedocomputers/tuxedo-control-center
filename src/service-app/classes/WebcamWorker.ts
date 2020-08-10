@@ -24,19 +24,11 @@ import { TuxedoWMIAPI, ObjWrapper } from '../../native-lib/TuxedoWMIAPI';
 export class WebcamWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd);
+        super(2000, tccd);
     }
 
     public onStart(): void {
-        // Use getter method to check for implemented functionality
-        const webcamStatus: ObjWrapper<boolean> = { value: undefined };
-        if (!TuxedoWMIAPI.getWebcamStatus(webcamStatus)) {
-            this.tccd.dbusData.webcamSwitchAvailable = false;
-        } else {
-            this.tccd.dbusData.webcamSwitchAvailable = true;
-        }
-
-        this.tccd.dbusData.webcamSwitchStatus = webcamStatus.value;
+        this.updateWebcamStatuses();
 
         const activeProfile = this.tccd.getCurrentProfile();
         const settingsDefined = activeProfile.webcam !== undefined
@@ -60,14 +52,28 @@ export class WebcamWorker extends DaemonWorker {
                 }
             }
         }
+
+        this.updateWebcamStatuses();
     }
 
     public onWork(): void {
-
+        this.updateWebcamStatuses();
     }
 
     public onExit(): void {
 
     }
 
+
+    private updateWebcamStatuses(): void {
+        // Use getter method to check for implemented functionality
+        const webcamStatus: ObjWrapper<boolean> = { value: undefined };
+        if (!TuxedoWMIAPI.getWebcamStatus(webcamStatus)) {
+            this.tccd.dbusData.webcamSwitchAvailable = false;
+        } else {
+            this.tccd.dbusData.webcamSwitchAvailable = true;
+        }
+
+        this.tccd.dbusData.webcamSwitchStatus = webcamStatus.value;
+    }
 }
