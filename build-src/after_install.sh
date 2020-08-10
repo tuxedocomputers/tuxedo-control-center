@@ -17,7 +17,7 @@ cp ${DIST_DATA}/tccd.service /etc/systemd/system/tccd.service || true
 cp ${DIST_DATA}/tccd-sleep.service /etc/systemd/system/tccd-sleep.service || true
 systemctl daemon-reload
 systemctl enable tccd tccd-sleep
-systemctl start tccd
+systemctl restart tccd
 
 # chmod +x /opt/tuxedocc/resources/output/dist/data/tuxedocc-pkexec
 ln -s /opt/tuxedo-control-center/tuxedo-control-center /usr/bin/tuxedo-control-center || true
