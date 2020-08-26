@@ -23,18 +23,21 @@ import { ProfileManagerComponent } from './profile-manager/profile-manager.compo
 import { SupportComponent } from './support/support.component';
 import { InfoComponent } from './info/info.component';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
+import { ShutdownTimerComponent } from "./shutdown-timer/shutdown-timer.component";
+import { ToolsComponent } from "./tools/tool.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'cpu-dashboard', pathMatch: 'full' },
-  { path: 'profile-manager', component: ProfileManagerComponent },
-  { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
-  { path: 'support', component: SupportComponent },
-  { path: 'info', component: InfoComponent },
-  { path: 'cpu-dashboard', component: CpuDashboardComponent }
+    { path: '', redirectTo: 'cpu-dashboard', pathMatch: 'full' },
+    { path: 'profile-manager', component: ProfileManagerComponent },
+    { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
+    { path: 'support', component: SupportComponent },
+    { path: 'info', component: InfoComponent },
+    { path: 'cpu-dashboard', component: CpuDashboardComponent },
+    { path: 'tools', component: ToolsComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, { useHash: true })],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

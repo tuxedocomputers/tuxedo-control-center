@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
+import { TccDBusController } from '../common/classes/TccDBusController';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -10,12 +11,15 @@ const appPath = __dirname.replace('app.asar/', '');
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
 const tccConfigDir = '.tcc';
+const startTCCAccelerator = 'Super+Alt+F6';
 
 let tccWindow: Electron.BrowserWindow;
 let tray: Electron.Tray;
+let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
+const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
 
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
@@ -42,7 +46,7 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( () => {
-    const success = globalShortcut.register('Super+Alt+F6', () => {
+    const success = globalShortcut.register(startTCCAccelerator, () => {
         activateTccGui();
     });
     if (!success) { console.log('Failed to register global shortcut'); }
@@ -50,6 +54,29 @@ app.whenReady().then( () => {
     createTccTray();
     if (!trayOnlyOption) {
         activateTccGui();
+    }
+
+    if (!noTccdVersionCheck) {
+        // Regularly check if running tccd version is different to running gui version
+        const tccdVersionCheckInterval = 5000;
+        setInterval(async () => {
+            if (tccDBus === undefined) {
+                tccDBus = new TccDBusController();
+                await tccDBus.init();
+            } else if (!await tccDBus.dbusAvailable()) {
+                await tccDBus.init();
+            }
+
+            if (await tccDBus.tuxedoWmiAvailable()) {
+                const tccdVersion = await tccDBus.tccdVersion();
+                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                    console.log('Other tccd version detected, restarting..');
+                    app.relaunch({ args: process.argv.slice(1).concat(['--tray']) });
+                    app.exit(0);
+                }
+            }
+
+        }, tccdVersionCheckInterval);
     }
 });
 
@@ -86,18 +113,20 @@ function activateTccGui() {
 
 function createTccTray() {
     const trayInstalled = isAutostartTrayInstalled();
-    const trayIcon =  path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png');
+    const trayIcon =  path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png');
     if (!tray) {
         tray = new Tray(trayIcon);
         tray.setTitle('TUXEDO Control Center');
         tray.setToolTip('TUXEDO Control Center');
     }
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); } },
+        { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); }, },
         {
                 label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
                 click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
         },
+        { type: 'separator' },
+        { label: 'v' + app.getVersion(), type: 'normal', enabled: false },
         { type: 'separator' },
         { label: 'Exit', type: 'normal', click: () => { quitCurrentTccSession(); } }
     ]);
@@ -123,13 +152,13 @@ function createTccWindow() {
         resizable: true,
         minWidth: 1040,
         minHeight: 750,
-        icon: path.join(__dirname, '../data/dist-data/tuxedo-control-center_256.png'),
+        icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true
         }
     });
 
-    const indexPath = path.join(__dirname, '..', 'ng-app', 'index.html');
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
     tccWindow.loadFile(indexPath);
     tccWindow.on('closed', () => {
         tccWindow = null;
@@ -170,7 +199,7 @@ ipcMain.on('spawn-external-async', (event, arg) => {
 function installAutostartTray(): boolean {
     try {
         fs.copyFileSync(
-            path.join(appPath, '../data/dist-data', autostartDesktopFilename),
+            path.join(appPath, '../../data/dist-data', autostartDesktopFilename),
             path.join(autostartLocation, autostartDesktopFilename)
         );
         return true;

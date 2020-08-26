@@ -67,6 +67,7 @@ export class FanData {
  */
 export class TccDBusData {
     public tuxedoWmiAvailable: boolean;
+    public tccdVersion: string;
     public fans: FanData[];
     public webcamSwitchStatus: boolean;
     public webcamSwitchAvailable: boolean;
@@ -81,6 +82,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
+    TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
     GetFanDataGPU1() { return this.data.fans[1].export(); }
     GetFanDataGPU2() { return this.data.fans[2].export(); }
@@ -93,6 +95,7 @@ TccDBusInterface.configureMembers({
     },
     methods: {
         TuxedoWmiAvailable: { outSignature: 'b' },
+        TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
