@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.4] - Unreleased
+## [1.0.4] - 2020-08-26
 ### Added
 - New *Tools* area with shutdown timer feature
 - Reintroducing state selection at profile edit
@@ -9,6 +9,7 @@
 ### Fixed
 - Slightly changed behaviour of dashboard gauges to
   attempt to reduce CPU load
+- Restart GUI when TCC is updated
 
 ## [1.0.3] - 2020-06-23
 ### Added
