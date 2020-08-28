@@ -81,6 +81,7 @@ public:
     virtual ~DeviceInterface() { }
 
     virtual bool Identify(bool &identified) = 0;
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) = 0;
     virtual bool SetEnableModeSet(bool enabled) = 0;
     virtual bool GetNumberFans(int &nrFans) = 0;
     virtual bool SetFansAuto() = 0;
@@ -97,11 +98,17 @@ protected:
 class ClevoDevice : public DeviceInterface {
 public:
     ClevoDevice(IO &io) : DeviceInterface(io) { }
+
     virtual bool Identify(bool &identified) {
         int result;
         int ret = io->IoctlCall(R_HWCHECK_CL, result);
         identified = result == 1;
         return ret;
+    }
+
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
+        interfaceIdStr = "clevo";
+        return true;
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
@@ -218,13 +225,18 @@ public:
         return ret;
     }
 
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
+        interfaceIdStr = "uniwill";
+        return true;
+    }
+
     virtual bool SetEnableModeSet(bool enabled) {
         int enabledSet = enabled ? 0x01 : 0x00;
         return io->IoctlCall(W_UW_MODE_ENABLE, enabledSet);
     }
 
     virtual bool GetNumberFans(int &nrFans) {
-        nrFans = 1;
+        nrFans = 2;
         return true;
     }
 
@@ -235,23 +247,64 @@ public:
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
-        int fanSpeedRaw = (int) std::round(0xc8 * fanSpeedPercent / 100.0);
-        return io->IoctlCall(W_UW_FANSPEED, fanSpeedRaw);
+        int fanSpeedRaw = (int) std::round(MAX_FAN_SPEED * fanSpeedPercent / 100.0);
+        bool result;
+
+        switch (fanNr) {
+            case 0:
+                result = io->IoctlCall(W_UW_FANSPEED, fanSpeedRaw);
+                break;
+            case 1:
+                result = io->IoctlCall(W_UW_FANSPEED2, fanSpeedRaw);
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
     }
 
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) {
         int fanSpeedRaw;
-        int ret = io->IoctlCall(R_UW_FANSPEED, fanSpeedRaw);
-        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / 0xc8);
-        return ret;
+        bool result;
+
+        switch (fanNr) {
+            case 0:
+                result = io->IoctlCall(R_UW_FANSPEED, fanSpeedRaw);
+                break;
+            case 1:
+                result = io->IoctlCall(R_UW_FANSPEED2, fanSpeedRaw);
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        fanSpeedPercent = (int) std::round(fanSpeedRaw * 100.0 / MAX_FAN_SPEED);
+
+        return result;
     }
 
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) {
-        if (fanNr != 0) { return false; }
         int temp = 0;
-        int ret = io->IoctlCall(R_UW_FAN_TEMP, temp);
+        bool result;
+
+        switch (fanNr) {
+            case 0:
+                result = io->IoctlCall(R_UW_FAN_TEMP, temp);
+                break;
+            case 1:
+                result = io->IoctlCall(R_UW_FAN_TEMP2, temp);
+                break;
+            default:
+                result = false;
+                break;
+        }
+
         temperatureCelcius = temp;
-        return ret;
+
+        return result;
     }
 
     virtual bool SetWebcam(const bool status) {
@@ -263,6 +316,9 @@ public:
         // Not implemented
         return false;
     }
+
+private:
+    const int MAX_FAN_SPEED = 0xc8;
 };
 
 #define TUXEDO_WMI_DEVICE_FILE "/dev/tuxedo_cc_wmi"
@@ -302,6 +358,14 @@ public:
     virtual bool Identify(bool &identified) {
         if (activeInterface) {
             return activeInterface->Identify(identified);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
+        if (activeInterface) {
+            return activeInterface->DeviceInterfaceIdStr(interfaceIdStr);
         } else {
             return false;
         }
