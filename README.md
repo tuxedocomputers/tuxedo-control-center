@@ -32,9 +32,13 @@ tuxedo-control-center
 
    sudo apt install -y git gcc g++ make nodejs
    ```
-2. Clone & install libraries
+
+2. Install `tuxedo-cc-wmi` (can be obtained from the respositories [here](https://www.tuxedocomputers.com/en/Infos/Help-and-Support/Instructions/Add-TUXEDO-Computers-software-package-sources.tuxedo#)).
+   This package provides a driver at `/dev/tuxedo_cc_wmi`. The control center can run without this but will not be functional.
+
+3. Clone & install libraries
     ```
-    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git`
+    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git
 
     cd tuxedo-control-center
 
@@ -42,7 +46,7 @@ tuxedo-control-center
     ```
    **Note:** Do ***not*** continue with `npm audit fix`. Known to cause various issues.
 
-3. Install service file that points to development build path (or use installed service from packaged version)
+4. Install service file that points to development build path (or use installed service from packaged version)
    
    Manual instructions:
    1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
