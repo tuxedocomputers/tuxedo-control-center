@@ -21,7 +21,7 @@ import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
 import { ITccProfile, defaultProfiles, defaultCustomProfile, defaultCustomProfileXP1508UHD } from '../models/TccProfile';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
-import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
+import { ITccFanProfile } from '../models/TccFanTable';
 
 export class ConfigHandler {
     public settingsFileMod: number;
