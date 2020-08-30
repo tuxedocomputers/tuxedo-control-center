@@ -29,6 +29,8 @@ export class ConfigHandler {
     public autosaveFileMod: number;
     public fantablesFileMod: number;
 
+    private fanTables: ITccFanProfile[];
+
     private loadedCustomProfiles: ITccProfile[];
     private loadedSettings: ITccSettings;
 
@@ -38,6 +40,8 @@ export class ConfigHandler {
         this.profileFileMod = 0o644;
         this.autosaveFileMod = 0o644;
         this.fantablesFileMod = 0o644;
+
+        this.fanTables = this.readFanTables();
     }
 
     get pathSettings() { return this._pathSettings; }
@@ -73,12 +77,67 @@ export class ConfigHandler {
         this.writeConfig<ITccAutosave>(autosave, filePath, { mode: this.autosaveFileMod });
     }
 
+    private createFanProfile(name: string, rows): ITccFanProfile {
+        return {
+            name: name,
+            tableCPU: rows.map(row => ({"temp": row[0], "speed": row[1]})),
+            tableGPU: rows.map(row => ({"temp": row[0], "speed": row[2]}))
+        }
+    }
+
     readFanTables(filePath: string = this.pathFanTables): ITccFanProfile[] {
-        return this.readConfig<ITccFanProfile[]>(filePath);
+        const lines = fs.readFileSync(filePath, 'utf-8').split('\n');
+        let currentProfile = null;
+        let currentRows = [];
+        let profiles = [];
+        const blankLineRegex = /^\s*(#.*)?$/
+        const sectionLineRegex = /^\s*\[([^\]]+)\]\s*(#.*)?$/
+        const rowLineRegex = /^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(#.*)?/
+        let match
+        for(var line of lines) {
+            if(blankLineRegex.test(line)) {
+                continue;
+            } else if((match = rowLineRegex.exec(line)) !== null) {
+                if(currentProfile === null) {
+                    throw Error(`syntax error reading fan profiles from "${filePath}"`);
+                }
+                currentRows.push([parseInt(match[1]), parseInt(match[2]), parseInt(match[3])]);
+            } else if((match = sectionLineRegex.exec(line)) !== null) {
+                if(currentProfile !== null) {
+                    profiles.push(this.createFanProfile(currentProfile, currentRows));
+                    currentRows = [];
+                }
+                currentProfile = match[1];
+            } else {
+                throw Error(`syntax error reading fan profiles from "${filePath}"`);
+            }
+        }
+        if(currentProfile !== null) {
+            profiles.push(this.createFanProfile(currentProfile, currentRows));
+        }
+        return profiles;
     }
 
     writeFanTables(fanTables: ITccFanProfile[], filePath: string = this.pathFanTables) {
-        this.writeConfig<ITccFanProfile[]>(fanTables, filePath, { mode: this.fantablesFileMod });
+        let lines = [];
+        for(var profile of fanTables) {
+            lines.push(`[${profile.name}]`)
+            if(profile.tableCPU.length !== profile.tableGPU.length) {
+                throw Error("invalid fan profile. Temperatures don't match");
+            }
+            for(var i = 0; i < profile.tableCPU.length; i++) {
+                let cpu_entry = profile.tableCPU[i];
+                let gpu_entry = profile.tableGPU[i];
+                if(cpu_entry.temp !== gpu_entry.temp) {
+                    throw Error("invalid fan profile. Temperatures don't match");
+                }
+                lines.push(`${cpu_entry.temp},${cpu_entry.speed},${gpu_entry.speed}`)
+            }
+            lines.push('');
+        }
+        this.fanTables = fanTables;
+        let data = lines.join('\n');
+        this.writeFile(data, filePath, { mode: this.fantablesFileMod });
     }
 
     public readConfig<T>(filename: string): T {
@@ -93,7 +152,10 @@ export class ConfigHandler {
     }
 
     public writeConfig<T>(config: T, filePath: string, writeFileOptions): void {
-        const fileData = JSON.stringify(config);
+        this.writeFile(JSON.stringify(config), filePath, writeFileOptions);
+    }
+
+    private writeFile(fileData: string, filePath: string, writeFileOptions): void {
         try {
             if (!fs.existsSync(path.dirname(filePath))) {
                 fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
@@ -150,7 +212,8 @@ export class ConfigHandler {
         }
     }
 
-    public getDefaultFanProfiles(): ITccFanProfile[] {
-        return this.copyConfig<ITccFanProfile[]>(defaultFanProfiles);
+    public getFanProfiles(): ITccFanProfile[] {
+        return this.copyConfig<ITccFanProfile[]>(this.fanTables);
     }
+
 }

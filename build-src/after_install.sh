@@ -12,6 +12,10 @@ cp ${DIST_DATA}/tuxedo-control-center-tray.desktop /etc/skel/.config/autostart/t
 cp ${DIST_DATA}/de.tuxedocomputers.tcc.policy /usr/share/polkit-1/actions/de.tuxedocomputers.tcc.policy || true
 cp ${DIST_DATA}/com.tuxedocomputers.tccd.conf /usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf || true
 
+# Copy settings
+mkdir -p /etc/tcc
+cp ${DIST_DATA}/fantables.json /etc/tcc/fantables || true
+
 # Copy and enable services
 cp ${DIST_DATA}/tccd.service /etc/systemd/system/tccd.service || true
 cp ${DIST_DATA}/tccd-sleep.service /etc/systemd/system/tccd-sleep.service || true

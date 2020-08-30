@@ -26,7 +26,7 @@ import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
+import { ITccFanProfile } from '../../common/models/TccFanTable';
 
 @Injectable({
     providedIn: 'root'
@@ -331,6 +331,6 @@ export class ConfigService {
     }
 
     public getFanProfiles(): ITccFanProfile[] {
-        return this.config.getDefaultFanProfiles();
+        return this.config.getFanProfiles();
     }
 }
