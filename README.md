@@ -62,6 +62,7 @@ tuxedo-control-center
 | build                          | Build all apps service/electron/angular                         |
 | start                          | Normal start of electron app after build                        |
 | start-watch                    | Start GUI with automatic reload on changes to angular directory |
+| start-service                  | Start the tccd daemon                                           |
 | test-common                    | Test common files (jasmine)                                     |
 | gen-lang                       | Generate base for translation (`ng-app/assets/locale/lang.xlf`) |
 | pack-prod -- all \| deb \| rpm | Build and package for chosen target(s)                          |
