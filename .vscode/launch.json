@@ -10,7 +10,7 @@
             "windows": {
               "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "runtimeArgs": ["./dist/tuxedo-control-center"],
+            "runtimeArgs": ["./dist/tuxedo-control-center", "--debug"],
             "program": "${workspaceRoot}/src/e-app/main.ts",
             "outFiles": [
                 "${workspaceRoot}/dist/tuxedo-control-center/e-app/e-app/main.js"
