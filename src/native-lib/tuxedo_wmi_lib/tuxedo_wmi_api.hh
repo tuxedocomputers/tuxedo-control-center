@@ -304,6 +304,9 @@ public:
 
         temperatureCelcius = temp;
 
+        // Also use known set value (0x00) from tccwmi to detect no temp/fan
+        if (temp == 0) result = false;
+
         return result;
     }
 
