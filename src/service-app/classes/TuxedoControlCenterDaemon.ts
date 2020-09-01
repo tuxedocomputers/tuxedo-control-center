@@ -305,7 +305,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     getFallbackFanProfile(): ITccFanProfile {
-        let fanProfiles = this.config.readFanTables();
+        let fanProfiles = this.config.getFanProfiles();
         if(fanProfiles.length == 0) {
             throw Error("no fan profiles found");
         }

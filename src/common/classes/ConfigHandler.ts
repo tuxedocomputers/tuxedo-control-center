@@ -92,7 +92,7 @@ export class ConfigHandler {
         let profiles = [];
         const blankLineRegex = /^\s*(#.*)?$/
         const sectionLineRegex = /^\s*\[([^\]]+)\]\s*(#.*)?$/
-        const rowLineRegex = /^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(#.*)?/
+        const rowLineRegex = /^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(#.*)?$/
         let match
         for(var line of lines) {
             if(blankLineRegex.test(line)) {
