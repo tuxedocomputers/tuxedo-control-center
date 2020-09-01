@@ -71,7 +71,10 @@ tuxedo-control-center
 | inc-version-major              | Major version increase (updates package.json files)             |
 
 ### Debugging
-Debugging of electron main and render process is configured for vscode in .vscode/launch.json
+Debugging of electron main and render process is configured for vscode in `.vscode/launch.json`.
+Note that the application must be rebuilt each time a change is made. Usually `npm run build-ng` is sufficient.
+
+To debug the service, run `npm run debug-service` the launch the `Attach` target in `.vscode/launch.json`.
 
 ## Screenshots
 ### English
