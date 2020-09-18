@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,7 +19,6 @@
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 
-import * as path from 'path';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayBacklightWorker extends DaemonWorker {
@@ -47,7 +46,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
 
         const currentProfile = this.tccd.getCurrentProfile();
         // Try all possible drivers to be on the safe side, fail silently if they do not work
-        this.controllers.forEach((controller) => {
+        for (const controller of this.controllers) {
             let brightnessPercent: number;
             let brightnessRaw: number;
             try {
@@ -66,11 +65,14 @@ export class DisplayBacklightWorker extends DaemonWorker {
 
                 this.tccd.logLine('Set display brightness to '
                     + brightnessPercent + '% (' + brightnessRaw + ') on ' + controller.driver);
+
+                // Make an effort to check that what was written actually stuck
+                setTimeout(this.recheckBrightness, 2000, this.tccd, controller, brightnessRaw);
             } catch (err) {
                 this.tccd.logLine('Failed to set display brightness to '
                     + brightnessPercent + '% (' + brightnessRaw + ') on ' + controller.driver);
             }
-        });
+        }
     }
 
     public onWork(): void {
@@ -118,4 +120,22 @@ export class DisplayBacklightWorker extends DaemonWorker {
         });
     }
 
+
+    private recheckBrightness(tccd: TuxedoControlCenterDaemon,
+                              controller: DisplayBacklightController,
+                              expectedBrightnessRaw: number): void {
+
+        try {
+            const readBrightnessRaw = controller.brightness.readValue();
+            if (readBrightnessRaw !== expectedBrightnessRaw) {
+                tccd.logLine('DisplayBacklightWorker: Brightness didn\'t stick for ' + controller.driver +
+                             ', trying to apply value again..');
+                controller.brightness.writeValue(expectedBrightnessRaw);
+            }
+        } catch (err) {
+            tccd.logLine('DisplayBacklightWorker: Failed to re-check brightness (' + expectedBrightnessRaw +
+                         ') on ' + controller.driver +
+                         ' => ' + err);
+        }
+    }
 }
