@@ -85,7 +85,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
                 value = controller.brightness.readValue();
                 maxBrightness = controller.maxBrightness.readValue();
                 if (!Number.isNaN(value) && value !== 0) {
-                    this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
+                    this.tccd.autosave.displayBrightness = (value * 100) / maxBrightness;
                 }
             } catch (err) {
                 this.tccd.logLine('DisplayBacklightWorker => ' + err);
