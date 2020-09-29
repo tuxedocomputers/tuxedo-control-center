@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.x.x] - Unreleased
+### Added
+- Fan control support for more devices (with multiple fans)
+
 ## [1.0.4] - 2020-08-26
 ### Added
 - New *Tools* area with shutdown timer feature

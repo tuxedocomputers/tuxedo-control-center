@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -119,11 +119,36 @@ function createTccTray() {
         tray.setTitle('TUXEDO Control Center');
         tray.setToolTip('TUXEDO Control Center');
     }
+    const primeQuery = primeSelectQuery();
+    const messageBoxprimeSelectAccept = {
+        type: 'question',
+        buttons: ['yes', 'cancel' ],
+        message: 'Change graphics configuration and shutdown?'
+    };
     const contextMenu = Menu.buildFromTemplate([
         { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); }, },
         {
                 label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
                 click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
+        },
+        { type: 'separator', visible: primeQuery !== undefined },
+        {
+            label: 'Graphics',
+            visible: primeQuery !== undefined,
+            submenu: [
+                {
+                    label: 'Select NVIDIA',
+                    type: 'normal',
+                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); } },
+                    visible: primeQuery !== 'on'
+                },
+                {
+                    label: 'Select built-in',
+                    type: 'normal',
+                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); } },
+                    visible: primeQuery !== 'off'
+                }
+            ]
         },
         { type: 'separator' },
         { label: 'v' + app.getVersion(), type: 'normal', enabled: false },
@@ -249,4 +274,41 @@ function createUserConfigDir(): boolean {
     } catch (err) {
         return false;
     }
+}
+
+function primeSelectQuery(): string {
+    let query: string;
+    let result: string;
+    try {
+        query = child_process.execSync('prime-select query').toString();
+        if (query.includes('nvidia')) {
+            result = 'on';
+        } else if (query.includes('intel')) {
+            result = 'off';
+        } else {
+            // Not supported, result undefined
+            result = undefined;
+        }
+    } catch (err) {
+        // Doesn't exist, result undefined
+        result = undefined;
+    }
+
+    return result;
+}
+
+function primeSelectSet(status: string): boolean {
+    let result: boolean;
+    try {
+        if (status === 'on') {
+            child_process.execSync('pkexec bash -c "prime-select nvidia; shutdown -h now"');
+        } else if (status === 'off') {
+            child_process.execSync('pkexec bash -c "prime-select intel; shutdown -h now"');
+        }
+        result = true;
+    } catch (err) {
+        // Can't set, return undefined
+    }
+
+    return result;
 }
