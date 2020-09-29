@@ -137,13 +137,13 @@ function createTccTray() {
             visible: primeQuery !== undefined,
             submenu: [
                 {
-                    label: 'PRIME select discrete',
+                    label: 'Select NVIDIA',
                     type: 'normal',
                     click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); } },
                     visible: primeQuery !== 'on'
                 },
                 {
-                    label: 'PRIME select built-in',
+                    label: 'Select built-in',
                     type: 'normal',
                     click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); } },
                     visible: primeQuery !== 'off'
