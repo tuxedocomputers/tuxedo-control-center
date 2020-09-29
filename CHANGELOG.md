@@ -1,8 +1,9 @@
 # Changelog
 
-## [1.x.x] - Unreleased
+## [1.0.5] - 2020-09-29
 ### Added
-- Fan control support for more devices (with multiple fans)
+- Fan control support for more devices with multiple fans (Polaris, Pulse)
+- Added graphics selection (prime-select) tray options
 
 ## [1.0.4] - 2020-08-26
 ### Added
