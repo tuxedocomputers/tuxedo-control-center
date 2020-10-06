@@ -165,7 +165,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 const modInfo = new ModuleInfo();
                 if (TuxedoWMIAPI.wmiAvailable()) {
                     TuxedoWMIAPI.getModuleInfo(modInfo);
-                    this.logLine('tuxedo-cc-wmi ver ' + modInfo.version);
+                    this.logLine('tuxedo-cc-wmi ver ' + modInfo.version + '[ interface: ' + modInfo.activeInterface + ' ]');
                 } else {
                     this.logLine('No tuxedo-cc-wmi found');
                 }
