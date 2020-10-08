@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6] - 2020-10-08
+### Changed
+- Backlight brightness workarounds
+  - Scaling fix for amdgpu bl
+  - Tweak for slow driver loading or drivers that
+    are not ready when presenting their interface
+
 ## [1.0.5] - 2020-09-29
 ### Added
 - Fan control support for more devices with multiple fans (Polaris, Pulse)
