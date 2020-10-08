@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.6] - UNRELEASED
+## [1.0.6] - 2020-10-08
 ### Changed
 - Backlight brightness workarounds
   - Scaling fix for amdgpu bl
