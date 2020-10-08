@@ -36,7 +36,7 @@ class SysFsPropertyAmdgpuBrightness extends SysFsPropertyInteger {
         if (value === undefined) {
             return undefined;
         } else if (value > 0xff) {
-            return Math.round(value / 0xffff);
+            return Math.round(0xff * (value / 0xffff));
         } else {
             return value;
         }
