@@ -45,7 +45,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </button>
             </span>
         </div>
-        <div>
+        <div *ngIf="editProfile">
             <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
                 <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
                     [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
