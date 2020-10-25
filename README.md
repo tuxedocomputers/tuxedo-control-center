@@ -71,30 +71,30 @@ Debugging of electron main and render process is configured for vscode in .vscod
 ## Screenshots
 ### English
 
-![alt text](screenshots/en/Systemmonitor_TCC.png "Systemmonitor")
-![alt text](screenshots/en/DarkTheme_TCC.png "Dark Theme")
+<img src="screenshots/en/Systemmonitor_TCC.png" alt="Systemmonitor">
+<img src="screenshots/en/DarkTheme_TCC.png" alt="Dark Theme">
 
-![alt text](screenshots/en/Tools_TCC.png "Tools")
+<img src="screenshots/en/Tools_TCC.png" alt="Tools">
 
-![alt text](screenshots/en/Mains_Battery_TCC.png "")
+<img src="screenshots/en/Mains_Battery_TCC.png" alt="">
 
-![alt text](screenshots/en/Profiles_TCC.png "Profiles")
+<img src="screenshots/en/Profiles_TCC.png" alt="Profiles">
 
-![alt text](screenshots/en/Profile_Settings_TCC.png "Profile Settings")
+<img src="screenshots/en/Profile_Settings_TCC.png" alt="Profile Settings">
 
-![alt text](screenshots/en/ControlCenter_TCC.png "About")
+<img src="screenshots/en/ControlCenter_TCC.png" alt="About">
 
 ### German
-![alt text](screenshots/de/Systemmonitor_TCC.png "Systemmonitor")
+<img src="screenshots/de/Systemmonitor_TCC.png" alt="Systemmonitor">
 
-![alt text](screenshots/de/DarkTheme_TCC.png "Dark Theme")
+<img src="screenshots/de/DarkTheme_TCC.png" alt="Dark Theme">
 
-![alt text](screenshots/de/Tools_TCC.png "Tools")
+<img src="screenshots/de/Tools_TCC.png" alt="Tools">
 
-![alt text](screenshots/de/Akku_Netz_TCC.png "")
+<img src="screenshots/de/Akku_Netz_TCC.png" alt="">
 
-![alt text](screenshots/de/Profile_TCC.png "Profile")
+<img src="screenshots/de/Profile_TCC.png" alt="Profile">
 
-![alt text](screenshots/de/Profil_Einstellungen_TCC.png "Profil Einstellungen")
+<img src="screenshots/de/Profil_Einstellungen_TCC.png" alt="Profil Einstellungen">
 
-![alt text](screenshots/de/ControlCenter_TCC.png "")
+<img src="screenshots/de/ControlCenter_TCC.png" alt="">
