@@ -70,31 +70,31 @@ Debugging of electron main and render process is configured for vscode in .vscod
 
 ## Screenshots
 ### English
-![alt text](screenshots/en/Systemmonitor_TCC.png "")
 
-![alt text](screenshots/en/DarkTheme_TCC.png "")
+![alt text](screenshots/en/Systemmonitor_TCC.png "Systemmonitor")
+![alt text](screenshots/en/DarkTheme_TCC.png "Dark Theme")
 
-![alt text](screenshots/en/lüftersteuerung_TCC.png "")
+![alt text](screenshots/en/Tools_TCC.png "Tools")
 
-![alt text](screenshots/en/Lüftersteuerung_2_TCC.png "")
+![alt text](screenshots/en/Mains_Battery_TCC.png "")
 
-![alt text](screenshots/en/Akku_Netz_TCC.png "")
+![alt text](screenshots/en/Profiles_TCC.png "Profiles")
 
-![alt text](screenshots/en/Profile_TCC.png "")
+![alt text](screenshots/en/Profile_Settings_TCC.png "Profile Settings")
 
-![alt text](screenshots/en/ControlCenter_TCC.png "")
+![alt text](screenshots/en/ControlCenter_TCC.png "About")
 
 ### German
-![alt text](screenshots/de/Systemmonitor_TCC.png "")
+![alt text](screenshots/de/Systemmonitor_TCC.png "Systemmonitor")
 
-![alt text](screenshots/de/DarkTheme_TCC.png "")
+![alt text](screenshots/de/DarkTheme_TCC.png "Dark Theme")
 
-![alt text](screenshots/de/lüftersteuerung_TCC.png "")
-
-![alt text](screenshots/de/Lüftersteuerung_2_TCC.png "")
+![alt text](screenshots/de/Tools_TCC.png "Tools")
 
 ![alt text](screenshots/de/Akku_Netz_TCC.png "")
 
-![alt text](screenshots/de/Profile_TCC.png "")
+![alt text](screenshots/de/Profile_TCC.png "Profile")
+
+![alt text](screenshots/de/Profil_Einstellungen_TCC.png "Profil Einstellungen")
 
 ![alt text](screenshots/de/ControlCenter_TCC.png "")
