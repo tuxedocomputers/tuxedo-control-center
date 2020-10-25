@@ -1,6 +1,7 @@
 # TUXEDO Control Center
 
-This software gives TUXEDO laptop users full control over their hardware like CPU cores and fan speed. To get a more detailed description of features, plans and the ideas behind please check our press release ([english](https://www.tuxedocomputers.com/en/Infos/News/Everything-under-control-with-the-TUXEDO-Control-Center.tuxedo) | [german](https://www.tuxedocomputers.com/de/Infos/News/Alles-unter-Kontrolle-mit-dem-TUXEDO-Control-Center_1.tuxedo)) and info pages ([english](https://www.tuxedocomputers.com/en/TUXEDO-Control-Center.tuxedo#) | [german](https://www.tuxedocomputers.com/de/TUXEDO-Control-Center.tuxedo)).
+The TUXEDO Control Center (short: TCC) gives TUXEDO laptop users full control over their hardware like CPU coresm fan speed and more. \
+To get a more detailed description of features, plans and the ideas behind please check our press release ([english](https://www.tuxedocomputers.com/en/Infos/News/Everything-under-control-with-the-TUXEDO-Control-Center.tuxedo) | [german](https://www.tuxedocomputers.com/de/Infos/News/Alles-unter-Kontrolle-mit-dem-TUXEDO-Control-Center_1.tuxedo)) and info pages ([english](https://www.tuxedocomputers.com/en/TUXEDO-Control-Center.tuxedo#) | [german](https://www.tuxedocomputers.com/de/TUXEDO-Control-Center.tuxedo)).
 
 ## Using it
 
@@ -30,16 +31,15 @@ tuxedo-control-center
    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
    sudo apt install -y git gcc g++ make nodejs
-
    ```
 2. Clone & install libraries
+    ```
+    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git`
 
-   `git clone https://github.com/tuxedocomputers/tuxedo-control-center.git`
+    cd tuxedo-control-center
 
-   `cd tuxedo-control-center`
-
-   `npm install`
-
+    npm install
+    ```
    **Note:** Do ***not*** continue with `npm audit fix`. Known to cause various issues.
 
 3. Install service file that points to development build path (or use installed service from packaged version)
