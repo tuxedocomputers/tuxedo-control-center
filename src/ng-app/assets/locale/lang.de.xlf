@@ -886,7 +886,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
         <trans-unit id="shutdowntimerInformations" datatype="html" approved="yes">
         <source></source>
-        <target phase-name="approval-1" state="signed-off">Hier können Sie einen Shutdown Timer anelegen, der Ihren Rechner zu einer bestimmten Uhrzeit automtisch herunterfährt</target>
+        <target phase-name="approval-1" state="signed-off">Hier können Sie einen Shutdown Timer anlegen, der Ihren Rechner zu einer bestimmten Uhrzeit automatisch herunterfährt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">1</context>
@@ -902,7 +902,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
     <trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
         <source></source>
-        <target phase-name="approval-1" state="signed-off">Der Timer ist momentan nicht aktiv</target>
+        <target phase-name="approval-1" state="signed-off">Der Timer ist momentan nicht aktiv.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">1</context>

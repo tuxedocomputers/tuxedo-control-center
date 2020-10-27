@@ -124,6 +124,7 @@ async function buildSuseRpm(): Promise<void> {
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh',
                 '--replaces=tuxedofancontrol <= 0.1.9',
+                '--rpm-tag=%define _build_id_links none'
             ]
         }
     };

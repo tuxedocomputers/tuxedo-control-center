@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.7] - 2020-10-27
+### Fixed
+- Minor text adjustments
+- RPM packaging, files conflicting with other packages
+
 ## [1.0.6] - 2020-10-08
 ### Changed
 - Backlight brightness workarounds
