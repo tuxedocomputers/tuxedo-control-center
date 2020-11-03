@@ -70,6 +70,7 @@ import { GaugeModule } from 'angular-gauge';
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
 import { ToolsComponent } from "./tools/tool.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
+import { ProfileSwitchTimerComponent } from './profile-switch-timer/profile-switch-timer.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -92,7 +93,8 @@ declare const require;
     CpuDashboardComponent,
     ShutdownTimerComponent,
     ToolsComponent,
-    ChangeCryptPasswordComponent
+    ChangeCryptPasswordComponent,
+    ProfileSwitchTimerComponent
   ],
   imports: [
     BrowserModule,

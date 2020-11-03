@@ -1,0 +1,84 @@
+<!--
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<form [formGroup]="settingsFormGroup">
+    <div>
+        <mat-checkbox labelPosition="before" formControlName="activate" [(value)]="profileSwitchSettings.activate">Aktivieren</mat-checkbox>
+    </div>
+    <mat-form-field>
+        <mat-label>Profil Power</mat-label>
+        <mat-select formControlName="profileNameBat" >
+            <mat-option *ngFor="let profile of profiles" [value]="profile.name">
+                {{ profile.name }}
+              </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label>Profil AC</mat-label>
+        <mat-select formControlName="profileNameAC" >
+            <mat-option *ngFor="let profile of profiles" [value]="profile.name">
+                {{ profile.name }}
+              </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div>
+        <h3>Start</h3>
+        <mat-form-field appearance="fill" style="margin-right: 10px;">
+            <mat-label>Stunde</mat-label>
+            <mat-select formControlName="startTimeHour">
+                <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour.toString().length < 2 ? 0 + hour.toString() : hour.toString() }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+            <mat-label>Minuten</mat-label>
+            <mat-select formControlName="startTimeMinute" >
+                <mat-option *ngFor="let minute of minutes" [value]="minute">{{ minute.toString().length < 2 ? 0 + minute.toString() : minute.toString() }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <h3>Ende</h3>
+        <mat-form-field appearance="fill" style="margin-right: 10px;">
+            <mat-label>Stunde</mat-label>
+            <mat-select formControlName="endTimeHour">
+                <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour.toString().length < 2 ? 0 + hour.toString() : hour.toString() }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+            <mat-label>Minuten</mat-label>
+            <mat-select formControlName="endTimeMinute">
+                <mat-option *ngFor="let minute of minutes" [value]="minute">{{ minute.toString().length < 2 ? 0 + minute.toString() : minute.toString() }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="dayMo">Monday</mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="dayDi">Tuesday</mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="dayMi">Wednesday</mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="dayDo">Thursday</mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="dayFr">Friday</mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="daySa">Saturday</mat-checkbox>
+        <mat-checkbox style="margin-right: 10px;" color="primary" formControlName="daySo">Sunday</mat-checkbox>
+    </div>
+</form>
+<br>
+<button mat-stroked-button color="primary" (click)="saveSettings()" i18n>Save</button>

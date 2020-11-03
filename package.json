@@ -71,7 +71,7 @@
     "codelyzer": "^5.0.0",
     "dbus-next": "file:other_modules/node-dbus-next",
     "electron": "^9.0.4",
-    "electron-builder": "^20.44.4",
+    "electron-builder": "^22.9.1",
     "electron-reload": "^1.5.0",
     "hammerjs": "^2.0.8",
     "jasmine": "^3.4.0",

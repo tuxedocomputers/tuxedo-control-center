@@ -38,6 +38,7 @@ import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
 import { TuxedoWMIAPI, ModuleInfo } from '../../native-lib/TuxedoWMIAPI';
 import { ShutdownTimerWorker } from "./ShutdownTimerWorker";
+import { ProfileSwitchWorker } from "./ProfileSwitchWorker";
 
 const tccPackage = require('../../package.json');
 
@@ -99,6 +100,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ShutdownTimerWorker(this, this.config));
+        this.workers.push(new ProfileSwitchWorker(this, this.config));
 
         this.startWorkers();
 
@@ -169,26 +171,36 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 }
             }
         } else if (process.argv.includes('--stop')) {
-            // Signal running process to stop
-            this.logLine('Stopping daemon..');
-            if (await this.stop()) {
-                this.logLine('Daemon is stopped');
-                process.exit(0);
-            } else {
-                throw Error('Failed to stop daemon');
-            }
+            this.stopDaemon();
         } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
-            // If new config is specified, replace standard config with new config
-            const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
-            const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            // If something changed, restart running service
-            if (settingsSaved || profilesSaved) {
-                child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);
-            }
-            process.exit(0);
+            this.restartDaemon();
         } else {
             throw Error('No argument specified');
         }
+    }
+
+    public async stopDaemon() {
+        // Signal running process to stop
+        this.logLine('Stopping daemon..');
+        if (await this.stop()) {
+            this.logLine('Daemon is stopped');
+
+            process.exit(0);
+        } else {
+            throw Error('Failed to stop daemon');
+        }
+    }
+
+    public async restartDaemon() {
+        // If new config is specified, replace standard config with new config
+        const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
+        const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
+        // If something changed, restart running service
+        if (settingsSaved || profilesSaved) {
+            child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);
+        }
+
+        process.exit(0);
     }
 
     private readOrCreateConfigurationFiles() {
