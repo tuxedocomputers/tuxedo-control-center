@@ -93,6 +93,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles();
         this.setupSignalHandling();
 
+        this.dbusData.tccdVersion = tccPackage.version;
+
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
@@ -165,7 +167,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 const modInfo = new ModuleInfo();
                 if (TuxedoWMIAPI.wmiAvailable()) {
                     TuxedoWMIAPI.getModuleInfo(modInfo);
-                    this.logLine('tuxedo-cc-wmi ver ' + modInfo.version);
+                    this.logLine('tuxedo-cc-wmi ver ' + modInfo.version + '[ interface: ' + modInfo.activeInterface + ' ]');
                 } else {
                     this.logLine('No tuxedo-cc-wmi found');
                 }

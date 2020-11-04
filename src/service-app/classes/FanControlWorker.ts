@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI as wmiAPI, TuxedoWMIAPI, ObjWrapper } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoWMIAPI as wmiAPI, TuxedoWMIAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoWMIAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
@@ -30,6 +30,8 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
+
+    private modeSameSpeed = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
@@ -57,6 +59,9 @@ export class FanControlWorker extends DaemonWorker {
         const fanTemps: number[] = [];
         const fanSpeeds: number[] = [];
         const fanTimestamps: number[] = [];
+        const fanAvailable: boolean[] = [];
+
+        const moduleInfo = new ModuleInfo();
 
         if (!TuxedoWMIAPI.wmiAvailable()) {
             if (this.controlAvailableMessage === false) {
@@ -73,6 +78,15 @@ export class FanControlWorker extends DaemonWorker {
 
         const useFanControl = this.getFanControlStatus();
 
+        // Decide on a fan control approach
+        // Per default fans are controlled individually depending on temp sensor and their chosen logic
+        wmiAPI.getModuleInfo(moduleInfo);
+        // Use 'same speed' approach for uniwill devices. Necessary since the fans on some
+        // devices can not be controlled individually.
+        if (moduleInfo.activeInterface === 'uniwill') {
+            this.modeSameSpeed = true;
+        }
+
         for (const fanNumber of this.fans.keys()) {
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
@@ -84,11 +98,17 @@ export class FanControlWorker extends DaemonWorker {
             const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
             const speedReadSuccess = wmiAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
 
+            fanAvailable.push(tempReadSuccess);
             fanTimestamps.push(Date.now());
-            fanTemps.push(currentTemperatureCelcius.value);
-            fanSpeeds.push(currentSpeedPercent.value);
+            if (fanAvailable[fanNumber - 1]) {
+                fanTemps.push(currentTemperatureCelcius.value);
+                fanSpeeds.push(currentSpeedPercent.value);
+            } else {
+                fanTemps.push(0);
+                fanSpeeds.push(0);
+            }
 
-            if (!tempReadSuccess) {
+            if (!fanAvailable[fanNumber - 1]) {
                 // Invalid sensor value or wmi interface unavailable
                 continue;
             }
@@ -101,11 +121,20 @@ export class FanControlWorker extends DaemonWorker {
                 fanSpeeds[fanNumber - 1] = currentSpeedPercent.value;
             }
 
-            if (useFanControl) {
-                wmiAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
+        }
+
+        // Write fan speeds
+        if (useFanControl) {
+            const highestSpeed = fanSpeeds.reduce((prev, cur) => cur > prev ? cur : prev, 0);
+            for (const fanNumber of this.fans.keys()) {
+                if (this.modeSameSpeed) { fanSpeeds[fanNumber - 1] = highestSpeed; }
+                if (fanAvailable[fanNumber - 1]) {
+                    wmiAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
+                }
             }
         }
 
+        // Publish the data on the dbus whether written by this control or values read from hw interface
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
             if (fanSpeeds[i] !== undefined) {

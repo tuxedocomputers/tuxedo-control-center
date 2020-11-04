@@ -13,7 +13,7 @@ process.argv.forEach((parameter, index, array) => {
         buildSteps.push(buildDeb);
     }
 
-    if (parameter.startsWith('suse')) {
+    if (parameter.startsWith('rpm')) {
         buildSteps.push(buildSuseRpm);
     }
 
@@ -43,7 +43,6 @@ async function buildDeb(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
-            distSrc + '/data/service/TuxedoECAPI.node',
             distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/CHANGELOG.md',
             distSrc + '/data/dist-data/tccd.service',
@@ -103,7 +102,6 @@ async function buildSuseRpm(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
-            distSrc + '/data/service/TuxedoECAPI.node',
             distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',
@@ -162,7 +160,6 @@ async function buildAppImage(): Promise<void> {
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
-            distSrc + '/data/service/TuxedoECAPI.node',
             distSrc + '/data/service/TuxedoWMIAPI.node',
             distSrc + '/data/dist-data/tccd.service',
             distSrc + '/data/dist-data/tccd-sleep.service',

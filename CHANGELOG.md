@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.0.7] - 2020-10-27
+### Fixed
+- Minor text adjustments
+- RPM packaging, files conflicting with other packages
+
+## [1.0.6] - 2020-10-08
+### Changed
+- Backlight brightness workarounds
+  - Scaling fix for amdgpu bl
+  - Tweak for slow driver loading or drivers that
+    are not ready when presenting their interface
+
+## [1.0.5] - 2020-09-29
+### Added
+- Fan control support for more devices with multiple fans (Polaris, Pulse)
+- Added graphics selection (prime-select) tray options
+
+## [1.0.4] - 2020-08-26
+### Added
+- New *Tools* area with shutdown timer feature
+- Reintroducing state selection at profile edit
+- Reintroducing profile copy
+
+### Fixed
+- Slightly changed behaviour of dashboard gauges to
+  attempt to reduce CPU load
+- Restart GUI when TCC is updated
+
 ## [1.0.3] - 2020-06-23
 ### Added
 - Support for new devices

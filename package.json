@@ -1,7 +1,7 @@
 {
   "name": "tuxedo-control-center",
-  "version": "1.0.3",
-  "main": "./dist/tuxedo-control-center/e-app/main.js",
+  "version": "1.0.7",
+  "main": "./dist/tuxedo-control-center/e-app/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
     "email": "tux@tuxedocomputers.com",
@@ -24,7 +24,7 @@
     "bundle-service": "pkg --target node10-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
     "build-native": "node-gyp configure && node-gyp rebuild",
     "copy-files": "run-s copy-package-json copy-dist-files copy-native",
-    "copy-native": "mkdir -p ./dist/tuxedo-control-center/service-app/native-lib && cp ./build/Release/TuxedoECAPI.node ./dist/tuxedo-control-center/data/service && cp ./build/Release/TuxedoWMIAPI.node ./dist/tuxedo-control-center/data/service",
+    "copy-native": "mkdir -p ./dist/tuxedo-control-center/service-app/native-lib && cp ./build/Release/TuxedoWMIAPI.node ./dist/tuxedo-control-center/data/service",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
     "copy-changelog": "cp CHANGELOG.md ./src/ng-app/assets/",
@@ -51,6 +51,7 @@
     "@angular/platform-browser": "~8.0.1",
     "@angular/platform-browser-dynamic": "~8.0.1",
     "@angular/router": "~8.0.1",
+    "dbus-next": "^0.8.2",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
@@ -69,7 +70,6 @@
     "@types/node": "^12.0.0",
     "angular-gauge": "^3.1.2",
     "codelyzer": "^5.0.0",
-    "dbus-next": "file:other_modules/node-dbus-next",
     "electron": "^9.0.4",
     "electron-builder": "^22.9.1",
     "electron-reload": "^1.5.0",

@@ -19,9 +19,9 @@
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ConfigHandler } from "../../common/classes/ConfigHandler";
-import { TccPaths } from "../../common/classes/TccPaths";
-import { exec } from "child_process";
+import { ConfigHandler } from '../../common/classes/ConfigHandler';
+import { TccPaths } from '../../common/classes/TccPaths';
+import { exec } from 'child_process';
 
 export class ShutdownTimerWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon, private config: ConfigHandler) {
@@ -32,23 +32,22 @@ export class ShutdownTimerWorker extends DaemonWorker {
     }
 
     public async onWork() {
-        let time = this.config.getSettingsNoThrow().shutdownTime;
-        let shutdownTime = new Date(time);
+        const time = this.config.getSettingsNoThrow().shutdownTime;
+        const shutdownTime = new Date(time);
 
-        if(time == null) {
+        if (time == null) {
             return;
         }
 
-        if(shutdownTime < new Date()) {
-            let setting = this.config.getSettingsNoThrow();
+        if (shutdownTime < new Date()) {
+            const setting = this.config.getSettingsNoThrow();
             setting.shutdownTime = null;
             this.config.writeSettings(setting, TccPaths.SETTINGS_FILE);
 
-            exec("shutdown now", (err, stdout, stderr) => {
+            this.tccd.logLine('Execute shutdown scheduled for ' + time);
+            exec('shutdown now', (err, stdout, stderr) => {
                 if (err) {
-                    this.tccd.logLine(`Error at shutdown, error: ${err.message} - ${err}`);
-                } else {
-                    
+                    this.tccd.logLine(`ShutdownTimerWorker: Error at shutdown, error: ${err.message} - ${err}`);
                 }
             });
         }
