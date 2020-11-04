@@ -898,13 +898,114 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-          <trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
+      <trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
         <source></source>
         <target phase-name="approval-1" state="signed-off">The timer is currently not active</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="cryptPasswordTabTitle" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Change Cryptpassword</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordPlaceholderCryptPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Crpyt Password</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordPlaceholderNewPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">New Crpyt Password</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordPlaceholderConfirmPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Confirm New Crpyt Password</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordInputCurrentCrypt" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Please enter your current Crypt password</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordInputNewCrypt" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Please enter your new Crypt password</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordNotMatch" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Passwords do not match</target>
+      </trans-unit>
+      <trans-unit id="cryptErrorAtChanging" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Error at Changing Cryptpassword.</target>
+      </trans-unit>
+      <trans-unit id="cryptButtonSave" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Save</target>
+      </trans-unit>
+      <trans-unit id="cryptButtonShowPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Show Passwords</target>
+      </trans-unit>
+      <trans-unit id="cryptButtonHidePassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Hide Passwords</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchPasswordTabTitle" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Profile Switch Timer</target>
+      </trans-unit>
+
+      <trans-unit id="profileSwitchTimerMon" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Monday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerThu" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Tuesday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerWed" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Wednesday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerTue" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Thursday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerFri" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Friday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerSat" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Saturday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerSun" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Sunday</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchLabelHour" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Hour</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchMinute" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Minute</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchActivate" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Activated</target>
+      </trans-unit>
+     <trans-unit id="profileSwitchStart" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Start Time</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchEnd" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">End Time</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchButtonSave" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Save</target>
       </trans-unit>
     </body>
   </file>

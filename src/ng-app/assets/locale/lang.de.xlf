@@ -900,13 +900,109 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-    <trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
+      <trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
         <source></source>
         <target phase-name="approval-1" state="signed-off">Der Timer ist momentan nicht aktiv.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="cryptPasswordTabTitle" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Ändern des Verschlüsslungspasswort</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordPlaceholderCryptPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Verschlüsslungspasswort</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordPlaceholderNewPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Neues Verschlüsslungspasswort</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordPlaceholderConfirmPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Neues Verschlüsslungspasswort wiederholen</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordInputCurrentCrypt" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Bitte geben sie Ihr momentanes Verschlüsslungspasswort an</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordInputNewCrypt" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Bitte geben sie Ihr neus Verschlüsslungspasswort an</target>
+      </trans-unit>
+      <trans-unit id="cryptPasswordNotMatch" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Die Passwörter stimmen nicht überein</target>
+      </trans-unit>
+      <trans-unit id="cryptErrorAtChanging" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Fehler beim ändern das Verschlüsslungspasswort</target>
+      </trans-unit>
+      <trans-unit id="cryptButtonSave" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Speichern</target>
+      </trans-unit>
+      <trans-unit id="cryptButtonShowPassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Passwörter anzeigen</target>
+      </trans-unit>
+      <trans-unit id="cryptButtonHidePassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Passwörter verstecken</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerMon" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Montag</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerThu" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Dienstag</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerWed" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Mitwoch</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerTue" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Donnerstag</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerFri" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Freitag</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerSat" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Samstag</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchTimerSun" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Sonntag</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchLabelHour" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Stunde</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchMinute" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Minute</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchActivate" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Aktiviert</target>
+      </trans-unit>
+     <trans-unit id="profileSwitchStart" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Start Zeit</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchEnd" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">End Zeit</target>
+      </trans-unit>
+      <trans-unit id="profileSwitchButtonSave" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Speichern</target>
       </trans-unit>
     </body>
   </file>
