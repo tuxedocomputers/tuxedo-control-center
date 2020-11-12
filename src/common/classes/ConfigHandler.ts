@@ -123,7 +123,7 @@ export class ConfigHandler {
         for(var profile of fanTables) {
             lines.push(`[${profile.name}]`)
             if(profile.tableCPU.length !== profile.tableGPU.length) {
-                throw Error("invalid fan profile. Temperatures don't match");
+                throw Error("invalid fan profile. CPU and GPU table length mismatch");
             }
             for(var i = 0; i < profile.tableCPU.length; i++) {
                 let cpu_entry = profile.tableCPU[i];
