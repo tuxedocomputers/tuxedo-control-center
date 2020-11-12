@@ -135,7 +135,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public catchError(err: Error) {
         this.logLine('Tccd Exception');
         let errorLine = err.name + ': ' + err.message;
-        let stack = err.stack;
+        const stack = err.stack;
         if(stack !== undefined) {
             errorLine += '\n\nStack Trace:\n' + stack;
         }
