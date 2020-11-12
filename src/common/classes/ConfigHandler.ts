@@ -94,12 +94,12 @@ export class ConfigHandler {
         const sectionLineRegex = /^\s*\[([^\]]+)\]\s*(#.*)?$/
         const rowLineRegex = /^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(#.*)?$/
         let match
-        for(var line of lines) {
+        for(const [i, line] of lines.entries()) {
             if(blankLineRegex.test(line)) {
                 continue;
             } else if((match = rowLineRegex.exec(line)) !== null) {
                 if(currentProfile === null) {
-                    throw Error(`syntax error reading fan profiles from "${filePath}"`);
+                    throw Error(`syntax error on line ${i+1} reading fan profiles from "${filePath}"`);
                 }
                 currentRows.push([parseInt(match[1]), parseInt(match[2]), parseInt(match[3])]);
             } else if((match = sectionLineRegex.exec(line)) !== null) {
@@ -109,7 +109,7 @@ export class ConfigHandler {
                 }
                 currentProfile = match[1];
             } else {
-                throw Error(`syntax error reading fan profiles from "${filePath}"`);
+                throw Error(`syntax error on line ${i+1} reading fan profiles from "${filePath}"`);
             }
         }
         if(currentProfile !== null) {
