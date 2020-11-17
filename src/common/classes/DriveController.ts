@@ -22,6 +22,7 @@ import * as fs from 'fs';
 import * as child_process from 'child_process';
 
 import { IDrive } from "../models/IDrive";
+import { SysFsPropertyInteger } from './SysFsProperties';
 
 export class DriveController {
 
@@ -49,7 +50,8 @@ export class DriveController {
         console.log(`getDeviceInfo path: ${devicePath}`);
         
         let name = path.basename(devicePath);
-        let size = Number(fs.readFileSync(path.join(devicePath, "size"), { flag: 'r' }).toString());
+        let size = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
+        
         let isParent = !fs.existsSync(path.join(devicePath, "partition"));
         let devPath = "";
 
@@ -70,15 +72,6 @@ export class DriveController {
             size: size,
             isParent: isParent
         }
-
-        // return {
-        //     name: name,
-        //     path: devicePath,
-        //     devPath: devPath,
-        //     crypt: false,
-        //     size: size,
-        //     isParent: isParent
-        // };
     }
 
     public static async getChildDevices(devicePath: string): Promise<IDrive[]> {
