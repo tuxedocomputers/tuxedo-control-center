@@ -24,18 +24,6 @@ export enum ProfileStates {
 export interface ITccSettings {
     stateMap: any;
     shutdownTime: string | null;
-    profileSwitchSettings: ProfileSwitchSettings;
-}
-
-export interface ProfileSwitchSettings {
-    activate: boolean;
-    days: string[];
-    startTime: string| null;
-    endTime: string| null;
-    profileNameAC: string;
-    profileNameBat: string;
-    lastProfileNameAC: string;
-    lastProfileNameBat: string;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -43,17 +31,7 @@ export const defaultSettings: ITccSettings = {
         power_ac: 'Default',
         power_bat: 'Default'
     },
-    shutdownTime: null,
-    profileSwitchSettings: {
-        activate: false,
-        days: [],
-        startTime: null,
-        endTime: null,
-        profileNameAC: "",
-        profileNameBat: "",
-        lastProfileNameAC: "",
-        lastProfileNameBat: ""
-    }
+    shutdownTime: null
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -61,15 +39,5 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
         power_ac: 'Default',
         power_bat: 'Custom XP1508 UHD'
     },
-    shutdownTime: null,
-    profileSwitchSettings: {
-        activate: false,
-        days: [],
-        startTime: null,
-        endTime: null,
-        profileNameAC: "",
-        profileNameBat: "",
-        lastProfileNameAC: "",
-        lastProfileNameBat: ""
-    }
+    shutdownTime: null
 };
