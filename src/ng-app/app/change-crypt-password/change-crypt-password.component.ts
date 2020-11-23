@@ -21,7 +21,6 @@ import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { ElectronService } from 'ngx-electron';
 
 import { DriveController } from "../../../common/classes/DriveController";
-import { I18n } from '@ngx-translate/i18n-polyfill';
 
 @Component({
     selector: 'app-change-crypt-password',
@@ -33,7 +32,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     matcher = new FormErrorStateMatcher();
 
     buttonType = 'password';
-    show_password_button_text = "";
+    show_password_button_text = 'Show Password';
     errortext_cryptsetup = '';
     errortext_cryptsetup_detail = '';
 
@@ -43,34 +42,41 @@ export class ChangeCryptPasswordComponent implements OnInit {
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)])
     }, {validators: [this.confirmValidation]})
 
-    constructor(private electron: ElectronService, private i18n: I18n) { }
+    constructor(private electron: ElectronService) { }
 
     ngOnInit() {
-        this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonShowPassword' });
     }
 
     showPassword() {
         if (this.buttonType == "password") {
             this.buttonType = "text";
-            
-            this.show_password_button_text = this.i18n({ value: 'Hide Password', id: 'cryptButtonShowPassword' });
+            this.show_password_button_text = "Hide Password";
         }
         else {
             this.buttonType = "password";
-
-            this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonHidePassword' });
+            this.show_password_button_text = "Show Password";
         }
     }
 
     async changePassword() {
+        console.log("change password")
+        console.log("Crypt Password", this.passwordFormGroup.get("cryptPassword").value);
+        console.log("New Crypt Password", this.passwordFormGroup.get("newPassword").value);
+        console.log("Confirm New Crypt Password", this.passwordFormGroup.get("confirmPassword").value);
+
         let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
         let newPassword = this.passwordFormGroup.get("newPassword").value;
+
+        // const result = this.electron.ipcRenderer.sendSync(
+        //     'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
+        // );
 
         let crpyt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
         console.log("crpyt_drives");
         console.log(crpyt_drives);
 
         for(let drive of crpyt_drives) {
+            // const result = this.electron.ipcRenderer.sendSync(`echo '${oldPassword} ${newPassword} ${newPassword}' > /tmp/testtccfile.txt`);
             const result_set = this.electron.ipcRenderer.sendSync('exec-cmd-sync', `printf '%s\\n' '${oldPassword}' '${newPassword}' '${newPassword}' | pkexec /usr/sbin/cryptsetup -q luksAddKey --force-password ${drive.devPath}`);
             console.log("result_set", result_set);
             if(result_set.error === undefined) {
