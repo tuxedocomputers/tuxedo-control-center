@@ -38,7 +38,6 @@ import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
 import { TuxedoWMIAPI, ModuleInfo } from '../../native-lib/TuxedoWMIAPI';
 import { ShutdownTimerWorker } from "./ShutdownTimerWorker";
-import { ProfileSwitchWorker } from "./ProfileSwitchWorker";
 
 const tccPackage = require('../../package.json');
 
@@ -102,7 +101,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ShutdownTimerWorker(this, this.config));
-        this.workers.push(new ProfileSwitchWorker(this, this.config));
 
         this.startWorkers();
 
