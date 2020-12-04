@@ -1004,6 +1004,30 @@ Handelsregisternummer HRB 27755
         <source></source>
         <target phase-name="approval-1" state="signed-off">Speichern</target>
       </trans-unit>
+      <trans-unit id="nocryptinstall" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Wie es aussieht, benutzen sie keine Verschlüsselung für die Laufwerke. Um diese Funktion zu benutzten, installieren sie dieses System mit der Option "Crypt"</target>
+      </trans-unit>
+      <trans-unit id="listofcryptdevices" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Liste der Verschlüsselten Laufwerke</target>
+      </trans-unit>
+      <trans-unit id="cryptfinishprocess" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Abgeschlossen - Das Verschlüsslungspasswort wurde erfolgreich geändert</target>
+      </trans-unit>
+      <trans-unit id="errornewpassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Fehler beim setzen eines neuen Cryptpasswort</target>
+      </trans-unit>
+      <trans-unit id="erroroldpassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Fehler beim entfernen des alten Cryptpassworts</target>
+      </trans-unit>
+      <trans-unit id="checkinputs" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Bitte prüfen Sie ihre Eingaben</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

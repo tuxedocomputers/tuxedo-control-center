@@ -33,9 +33,11 @@ export class ChangeCryptPasswordComponent implements OnInit {
     matcher = new FormErrorStateMatcher();
 
     buttonType = 'password';
-    show_password_button_text = "";
+    show_password_button_text = '';
     errortext_cryptsetup = '';
     errortext_cryptsetup_detail = '';
+    crpyt_drives = [];
+    work_process = false;
 
     passwordFormGroup: FormGroup = new FormGroup({
         cryptPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
@@ -45,40 +47,55 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     constructor(private electron: ElectronService, private i18n: I18n) { }
 
-    ngOnInit() {
+    async ngOnInit() {
+        this.crpyt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
+        this.work_process = false;
+
+        this.buttonType = "password";
         this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonShowPassword' });
     }
 
     showPassword() {
+        console.log("Before text", this.buttonType);
         if (this.buttonType == "password") {
             this.buttonType = "text";
-            
-            this.show_password_button_text = this.i18n({ value: 'Hide Password', id: 'cryptButtonShowPassword' });
+            this.show_password_button_text = this.i18n({ value: 'Hide Password', id: 'cryptButtonHidePassword' });
         }
         else {
             this.buttonType = "password";
-
-            this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonHidePassword' });
+            this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonShowPassword' });
         }
+
+        console.log("after text", this.buttonType);
     }
 
     async changePassword() {
+        this.work_process = true;
+        
+        this.changeCryptPassword();
+
+        this.work_process = false;
+    }
+
+    private changeCryptPassword() {
+        if(!this.passwordFormGroup.valid) {
+            this.errortext_cryptsetup = this.i18n({ value: 'Error at remove old Crypt Password', id: 'checkinputs' });
+            this.errortext_cryptsetup_detail = '';
+
+            return;
+        }
+
         let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
         let newPassword = this.passwordFormGroup.get("newPassword").value;
 
-        let crpyt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
-        console.log("crpyt_drives");
-        console.log(crpyt_drives);
-
-        for(let drive of crpyt_drives) {
+        for(let drive of this.crpyt_drives) {
             const result_set = this.electron.ipcRenderer.sendSync('exec-cmd-sync', `printf '%s\\n' '${oldPassword}' '${newPassword}' '${newPassword}' | pkexec /usr/sbin/cryptsetup -q luksAddKey --force-password ${drive.devPath}`);
-            console.log("result_set", result_set);
             if(result_set.error === undefined) {
                 this.errortext_cryptsetup = '';
                 this.errortext_cryptsetup_detail = '';
             }
             else {
-                this.errortext_cryptsetup = 'Fehler beim setzen eines neuen Cryptpasswort';
+                this.errortext_cryptsetup = this.i18n({ value: 'Error at set new Crypt Password', id: 'errornewpassword' });
                 this.errortext_cryptsetup_detail = result_set.error;
                 return;
             }
@@ -90,10 +107,13 @@ export class ChangeCryptPasswordComponent implements OnInit {
                 this.errortext_cryptsetup_detail = '';
             }
             else {
-                this.errortext_cryptsetup = 'Fehler beim entfernen des alten Cryptpassworts';
+                this.errortext_cryptsetup = this.i18n({ value: 'Error at remove old Crypt Password', id: 'erroroldpassword' });
                 this.errortext_cryptsetup_detail = result_remove.error;
                 return;
             }
+
+            this.errortext_cryptsetup = this.i18n({ value: 'Finish - Crypt password was successfully changed', id: 'cryptfinishprocess' });
+            this.errortext_cryptsetup_detail = '';
         }
     }
 
@@ -101,6 +121,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
         let pass = group.get("newPassword").value;
         let confirmPass = group.get("confirmPassword").value;
 
-        return pass === confirmPass ? null : { notSame: true } 
+        return pass === confirmPass ? null : { notSame: true }
     }
 }

@@ -1007,6 +1007,30 @@ Commercial register number - Part B of the commercial register - 27755
         <source></source>
         <target phase-name="approval-1" state="signed-off">Save</target>
       </trans-unit>
+      <trans-unit id="nocryptinstall" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">It looks like they're not using any encryption on the drives. To use this function, install this system with the option "Crypt"</target>
+      </trans-unit>
+      <trans-unit id="listofcryptdevices" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">List of crypt Drives</target>
+      </trans-unit>
+      <trans-unit id="cryptfinishprocess" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Finish - Crypt password was successfully changed</target>
+      </trans-unit>
+      <trans-unit id="errornewpassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Error at set new Crypt Password</target>
+      </trans-unit>
+      <trans-unit id="erroroldpassword" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Error at remove old Crypt Password</target>
+      </trans-unit>
+      <trans-unit id="checkinputs" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Please check your inputs</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
