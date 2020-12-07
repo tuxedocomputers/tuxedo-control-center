@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
-#include "tuxedo_cc_wmi_ioctl.h"
+#include "tuxedo_io_ioctl.h"
 
 class IO {
 public:
@@ -324,13 +324,13 @@ private:
     const int MAX_FAN_SPEED = 0xc8;
 };
 
-#define TUXEDO_WMI_DEVICE_FILE "/dev/tuxedo_cc_wmi"
+#define TUXEDO_IO_DEVICE_FILE "/dev/tuxedo_io"
 
-class TuxedoWmiAPI : public DeviceInterface {
+class TuxedoIOAPI : public DeviceInterface {
 public:
-    IO io = IO(TUXEDO_WMI_DEVICE_FILE);
+    IO io = IO(TUXEDO_IO_DEVICE_FILE);
 
-    TuxedoWmiAPI() : DeviceInterface(io) {
+    TuxedoIOAPI() : DeviceInterface(io) {
         devices.push_back(new ClevoDevice(io));
         devices.push_back(new UniwillDevice(io));
 
@@ -344,7 +344,7 @@ public:
         }
     }
 
-    ~TuxedoWmiAPI() {
+    ~TuxedoIOAPI() {
         for (std::size_t i = 0; i < devices.size(); ++i) {
             delete devices[i];
         }
