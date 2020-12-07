@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-export interface ITuxedoWMIAPI {
+export interface ITuxedoIOAPI {
     /**
      * Gets information about the tuxedo-cc-wmi module
      *
@@ -85,4 +85,4 @@ export class ObjWrapper<T> {
     value: T;
 }
 
-export const TuxedoWMIAPI: ITuxedoWMIAPI = require('TuxedoWMIAPI');
+export const TuxedoIOAPI: ITuxedoIOAPI = require('TuxedoIOAPI');

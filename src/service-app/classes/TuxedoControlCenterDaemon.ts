@@ -36,7 +36,7 @@ import { FanControlWorker } from './FanControlWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoWMIAPI, ModuleInfo } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoIOAPI, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { ShutdownTimerWorker } from "./ShutdownTimerWorker";
 
 const tccPackage = require('../../package.json');
@@ -163,8 +163,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } else {
                 this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
                 const modInfo = new ModuleInfo();
-                if (TuxedoWMIAPI.wmiAvailable()) {
-                    TuxedoWMIAPI.getModuleInfo(modInfo);
+                if (TuxedoIOAPI.wmiAvailable()) {
+                    TuxedoIOAPI.getModuleInfo(modInfo);
                     this.logLine('tuxedo-cc-wmi ver ' + modInfo.version + '[ interface: ' + modInfo.activeInterface + ' ]');
                 } else {
                     this.logLine('No tuxedo-cc-wmi found');
