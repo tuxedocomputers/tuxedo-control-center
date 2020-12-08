@@ -107,8 +107,7 @@ public:
     }
 
     virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
-        interfaceIdStr = "clevo";
-        return true;
+        return io->IoctlCall(R_CL_HW_IF_STR, interfaceIdStr, 50);
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
@@ -127,7 +126,7 @@ public:
         argument |= 1 << 0x01;
         argument |= 1 << 0x02;
         argument |= 1 << 0x03;
-        return io->IoctlCall(W_FANAUTO, argument);
+        return io->IoctlCall(W_CL_FANAUTO, argument);
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
@@ -149,7 +148,7 @@ public:
         argument |= (fanSpeedRaw[0] & 0xff);
         argument |= (fanSpeedRaw[1] & 0xff) << 0x08;
         argument |= (fanSpeedRaw[2] & 0xff) << 0x10;
-        return io->IoctlCall(W_FANSPEED, argument);
+        return io->IoctlCall(W_CL_FANSPEED, argument);
     }
 
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) {
@@ -175,12 +174,12 @@ public:
 
     virtual bool SetWebcam(const bool status) {
         int argument = status ? 1 : 0;
-        return io->IoctlCall(W_WEBCAM_SW, argument);
+        return io->IoctlCall(W_CL_WEBCAM_SW, argument);
     }
 
     virtual bool GetWebcam(bool &status) {
         int webcamStatus = 0;
-        int ret = io->IoctlCall(R_WEBCAM_SW, webcamStatus);
+        int ret = io->IoctlCall(R_CL_WEBCAM_SW, webcamStatus);
         status = webcamStatus == 1 ? true : false;
         return ret;
     }
@@ -193,13 +192,13 @@ private:
         bool result = false;
         int argument = 0;
         if (fanNr == 0) {
-            result = io->IoctlCall(R_FANINFO1, argument);
+            result = io->IoctlCall(R_CL_FANINFO1, argument);
         } else if (fanNr == 1) {
-            result = io->IoctlCall(R_FANINFO2, argument);
+            result = io->IoctlCall(R_CL_FANINFO2, argument);
         } else if (fanNr == 2) {
-            result = io->IoctlCall(R_FANINFO3, argument);
+            result = io->IoctlCall(R_CL_FANINFO3, argument);
         } else if (fanNr == 3) {
-            // result = IoctlCall(R_FANINFO4, argument);
+            // result = IoctlCall(R_CL_FANINFO4, argument);
         }
 
         fanInfo = argument;
