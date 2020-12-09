@@ -111,7 +111,7 @@ export class CpuWorker extends DaemonWorker {
             // Finally set the number of online cores
             this.cpuCtrl.useCores(profile.cpu.onlineCores);
 
-            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
+            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
                 if (profile.cpu.noTurbo !== undefined) {
                     this.cpuCtrl.intelPstate.noTurbo.writeValue(profile.cpu.noTurbo);
                 }
