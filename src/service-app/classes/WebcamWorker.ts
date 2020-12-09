@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI, ObjWrapper } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoIOAPI, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 
 export class WebcamWorker extends DaemonWorker {
 
@@ -39,13 +39,13 @@ export class WebcamWorker extends DaemonWorker {
             if (true || activeProfile.webcam.useStatus) { // Always force webcam to selected setting, option to not set is removed for now
                 if (activeProfile.webcam.status) {
                     this.tccd.logLine('Set webcam status ON');
-                    const success = TuxedoWMIAPI.setWebcamStatus(true);
+                    const success = TuxedoIOAPI.setWebcamStatus(true);
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to activate webcam');
                     }
                 } else {
                     this.tccd.logLine('Set webcam status OFF');
-                    const success = TuxedoWMIAPI.setWebcamStatus(false);
+                    const success = TuxedoIOAPI.setWebcamStatus(false);
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to deactivate webcam');
                     }
@@ -68,7 +68,7 @@ export class WebcamWorker extends DaemonWorker {
     private updateWebcamStatuses(): void {
         // Use getter method to check for implemented functionality
         const webcamStatus: ObjWrapper<boolean> = { value: undefined };
-        if (!TuxedoWMIAPI.getWebcamStatus(webcamStatus)) {
+        if (!TuxedoIOAPI.getWebcamStatus(webcamStatus)) {
             this.tccd.dbusData.webcamSwitchAvailable = false;
         } else {
             this.tccd.dbusData.webcamSwitchAvailable = true;
