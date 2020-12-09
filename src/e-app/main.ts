@@ -223,6 +223,7 @@ ipcMain.on('spawn-external-async', (event, arg) => {
 
 function installAutostartTray(): boolean {
     try {
+        fs.mkdirSync(autostartLocation, { recursive: true });
         fs.copyFileSync(
             path.join(appPath, '../../data/dist-data', autostartDesktopFilename),
             path.join(autostartLocation, autostartDesktopFilename)

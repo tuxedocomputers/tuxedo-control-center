@@ -7,6 +7,7 @@
 
 ### Fixed
 - Fan control fail when tccd loads before kernel interface module
+- Tray enable autostart when config folder is missing
 
 ## [1.0.7] - 2020-10-27
 ### Fixed
