@@ -35,16 +35,24 @@ export class FanControlWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
+    }
+
+    private initFanControl(): void {
         const nrFans = ioAPI.getNumberFans();
 
-        // Map logic to fan number
-        this.fans = new Map();
-        if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
-        if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
-        if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+        if (this.fans === undefined || this.fans.size !== nrFans) {
+
+            // Map logic to fan number
+            this.fans = new Map();
+            if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
+            if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
+            if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+        }
     }
 
     public onStart(): void {
+        this.initFanControl();
+
         const useFanControl = this.getFanControlStatus();
 
         ioAPI.setEnableModeSet(true);
@@ -56,6 +64,8 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onWork(): void {
+        this.initFanControl(); // Make sure structures are up to date before doing anything
+
         const fanTemps: number[] = [];
         const fanSpeeds: number[] = [];
         const fanTimestamps: number[] = [];
