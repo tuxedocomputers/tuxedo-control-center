@@ -104,4 +104,28 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             return false;
         }
     }
+
+    /**
+     * Check if property is writable
+     */
+    public isWritable(): boolean {
+        try {
+            fs.accessSync(this.writePath, fs.constants.W_OK);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    /**
+     * Check if property is readable
+     */
+    public isReadable(): boolean {
+        try {
+            fs.accessSync(this.readPath, fs.constants.R_OK);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
 }
