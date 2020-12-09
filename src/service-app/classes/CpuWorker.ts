@@ -128,7 +128,7 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.setGovernorScalingMaxFrequency();
             this.cpuCtrl.setGovernor(this.findDefaultGovernor());
             this.cpuCtrl.setEnergyPerformancePreference('default');
-            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
+            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
             }
         } catch (err) {
@@ -223,7 +223,7 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
-        if (this.cpuCtrl.intelPstate.noTurbo.isAvailable()) {
+        if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
             const currentNoTurbo = this.cpuCtrl.intelPstate.noTurbo.readValue();
             const profileNoTurbo = profile.cpu.noTurbo;
 
