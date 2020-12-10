@@ -47,8 +47,6 @@ export class DriveController {
     }
 
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
-        console.log(`getDeviceInfo path: ${devicePath}`);
-        
         let name = path.basename(devicePath);
         let size = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
         
@@ -61,8 +59,6 @@ export class DriveController {
 
         let result = await child_process.execSync(`/usr/sbin/blkid -o value -s TYPE ${devPath}`);
         const isCrpyt = result.toString().trim() == "crypto_LUKS";
-        console.log(`device: ${devPath}, crpyt: ${isCrpyt}`);
-        console.log(result.toString().trim());
 
         return {
             name: name,
@@ -76,12 +72,10 @@ export class DriveController {
 
     public static async getChildDevices(devicePath: string): Promise<IDrive[]> {
         let childDevices: IDrive[] = [];
-        console.log(`getChildDevices of ${devicePath}`)
 
         let name = path.basename(devicePath);
         for(let f of fs.readdirSync(devicePath)) {
             if(f.startsWith(name)) {
-                console.log(`found ${f}`);
                 childDevices.push(await this.getDeviceInfo(path.join(devicePath, f)));
             }
         }
