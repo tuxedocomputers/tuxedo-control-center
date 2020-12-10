@@ -46,6 +46,13 @@ export class DriveController {
         return drives;
     }
 
+    public static async getDrivesWorkaround(includeLoopDevices: boolean = false): Promise<IDrive[]> {
+        // Workaround for suse. Suse need a first call of blkid with sudo, to create the map for normal users
+        await child_process.execSync(`pkexec /usr/sbin/blkid -o value -s TYPE`);
+
+        return this.getDrives(includeLoopDevices);
+    }
+
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
         let name = path.basename(devicePath);
         let size = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();

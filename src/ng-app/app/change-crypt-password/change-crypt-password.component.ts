@@ -48,7 +48,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     constructor(private electron: ElectronService, private i18n: I18n) { }
 
     async ngOnInit() {
-        this.crpyt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
+        this.crpyt_drives = (await DriveController.getDrivesWorkaround()).filter(x => x.crypt);
         this.work_process = false;
 
         this.buttonType = "password";
