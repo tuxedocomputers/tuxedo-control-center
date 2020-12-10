@@ -59,7 +59,7 @@ export class DriveController {
             devPath = path.join("/dev/", name);
         }
 
-        let result = await child_process.execSync(`blkid -o value -s TYPE ${devPath}`);
+        let result = await child_process.execSync(`/usr/sbin/blkid -o value -s TYPE ${devPath}`);
         const isCrpyt = result.toString().trim() == "crypto_LUKS";
         console.log(`device: ${devPath}, crpyt: ${isCrpyt}`);
         console.log(result.toString().trim());
