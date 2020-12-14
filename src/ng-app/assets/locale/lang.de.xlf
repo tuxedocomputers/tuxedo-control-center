@@ -1028,6 +1028,10 @@ Handelsregisternummer HRB 27755
         <source></source>
         <target phase-name="approval-1" state="signed-off">Bitte prüfen Sie ihre Eingaben</target>
       </trans-unit>
+      <trans-unit id="cryptUpdateDeviceList" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Laufwerkliste aktualisieren</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

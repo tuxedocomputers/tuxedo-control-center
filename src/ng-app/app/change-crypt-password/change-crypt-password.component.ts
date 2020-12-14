@@ -22,6 +22,7 @@ import { ElectronService } from 'ngx-electron';
 
 import { DriveController } from "../../../common/classes/DriveController";
 import { I18n } from '@ngx-translate/i18n-polyfill';
+import { setTimeout } from 'timers';
 
 @Component({
     selector: 'app-change-crypt-password',
@@ -48,7 +49,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     constructor(private electron: ElectronService, private i18n: I18n) { }
 
     async ngOnInit() {
-        this.crpyt_drives = (await DriveController.getDrivesWorkaround()).filter(x => x.crypt);
+        this.crpyt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
         this.work_process = false;
 
         this.buttonType = "password";
@@ -71,13 +72,32 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     async changePassword() {
         this.work_process = true;
+
+        await this.changeCryptPassword();
+
+        this.work_process = false;
         
-        this.changeCryptPassword();
+    }
+
+    testOn() {
+        this.work_process = true;
+    }
+
+    testOff() {
+        this.work_process = false;
+    }
+
+    async updateDeviceList() {
+        this.work_process = true;
+
+        this.crpyt_drives = (await DriveController.getDrivesWorkaround()).filter(x => x.crypt);
 
         this.work_process = false;
     }
 
     private changeCryptPassword() {
+        console.log("changeCryptPassword");
+
         if(!this.passwordFormGroup.valid) {
             this.errortext_cryptsetup = this.i18n({ value: 'Error at remove old Crypt Password', id: 'checkinputs' });
             this.errortext_cryptsetup_detail = '';

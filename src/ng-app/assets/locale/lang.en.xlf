@@ -1031,6 +1031,10 @@ Commercial register number - Part B of the commercial register - 27755
         <source></source>
         <target phase-name="approval-1" state="signed-off">Please check your inputs</target>
       </trans-unit>
+      <trans-unit id="cryptUpdateDeviceList" datatype="html" approved="yes">
+        <source></source>
+        <target phase-name="approval-1" state="signed-off">Update device list</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
