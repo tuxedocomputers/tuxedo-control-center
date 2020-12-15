@@ -65,4 +65,20 @@ describe('SysDevPropertyInteger', () => {
         expect( () => { dev.writeValue(1234); }).not.toThrow();
         expect(fs.readFileSync('/sys/class/backlight/intel_backlight/brightness').toString()).toBe('1234');
     });
+
+    it('should correctly identify readable properties', () => {
+        mock({ '/sys/class/backlight/intel_backlight/actual_brightness': mock.file({ content: '1234', mode: 0o444}) });
+        expect(dev.isReadable()).toBeTruthy();
+
+        mock({ '/sys/class/backlight/intel_backlight/actual_brightness': mock.file({ content: '1234', mode: 0o222}) });
+        expect(dev.isReadable()).toBeFalsy();
+    });
+
+    it('should correctly identify writable properties', () => {
+        mock({ '/sys/class/backlight/intel_backlight/brightness': mock.file({ content: '1234', mode: 0o444}) });
+        expect(dev.isWritable()).toBeFalsy();
+
+        mock({ '/sys/class/backlight/intel_backlight/brightness': mock.file({ content: '1234', mode: 0o222}) });
+        expect(dev.isWritable()).toBeTruthy();
+    });
 });

@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI as wmiAPI, TuxedoWMIAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
@@ -35,27 +35,37 @@ export class FanControlWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
-        const nrFans = wmiAPI.getNumberFans();
+    }
 
-        // Map logic to fan number
-        this.fans = new Map();
-        if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
-        if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
-        if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+    private initFanControl(): void {
+        const nrFans = ioAPI.getNumberFans();
+
+        if (this.fans === undefined || this.fans.size !== nrFans) {
+
+            // Map logic to fan number
+            this.fans = new Map();
+            if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
+            if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
+            if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+        }
     }
 
     public onStart(): void {
+        this.initFanControl();
+
         const useFanControl = this.getFanControlStatus();
 
-        wmiAPI.setEnableModeSet(true);
+        ioAPI.setEnableModeSet(true);
 
         if (!useFanControl) {
             // Stop TCC fan control for all fans
-            wmiAPI.setFansAuto();
+            ioAPI.setFansAuto();
         }
     }
 
     public onWork(): void {
+        this.initFanControl(); // Make sure structures are up to date before doing anything
+
         const fanTemps: number[] = [];
         const fanSpeeds: number[] = [];
         const fanTimestamps: number[] = [];
@@ -63,7 +73,7 @@ export class FanControlWorker extends DaemonWorker {
 
         const moduleInfo = new ModuleInfo();
 
-        if (!TuxedoWMIAPI.wmiAvailable()) {
+        if (!TuxedoIOAPI.wmiAvailable()) {
             if (this.controlAvailableMessage === false) {
                 this.tccd.logLine('FanControlWorker: Control unavailable');
             }
@@ -80,7 +90,7 @@ export class FanControlWorker extends DaemonWorker {
 
         // Decide on a fan control approach
         // Per default fans are controlled individually depending on temp sensor and their chosen logic
-        wmiAPI.getModuleInfo(moduleInfo);
+        ioAPI.getModuleInfo(moduleInfo);
         // Use 'same speed' approach for uniwill devices. Necessary since the fans on some
         // devices can not be controlled individually.
         if (moduleInfo.activeInterface === 'uniwill') {
@@ -94,9 +104,9 @@ export class FanControlWorker extends DaemonWorker {
             const fanLogic = this.fans.get(fanNumber);
 
             const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
-            const tempReadSuccess = wmiAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
+            const tempReadSuccess = ioAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
             const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
-            const speedReadSuccess = wmiAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
+            const speedReadSuccess = ioAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
 
             fanAvailable.push(tempReadSuccess);
             fanTimestamps.push(Date.now());
@@ -129,7 +139,7 @@ export class FanControlWorker extends DaemonWorker {
             for (const fanNumber of this.fans.keys()) {
                 if (this.modeSameSpeed) { fanSpeeds[fanNumber - 1] = highestSpeed; }
                 if (fanAvailable[fanNumber - 1]) {
-                    wmiAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
+                    ioAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
                 }
             }
         }
@@ -146,8 +156,8 @@ export class FanControlWorker extends DaemonWorker {
 
     public onExit(): void {
         // Stop TCC fan control for all fans
-        wmiAPI.setFansAuto();
-        wmiAPI.setEnableModeSet(false);
+        ioAPI.setFansAuto();
+        ioAPI.setEnableModeSet(false);
     }
 
     private getFanControlStatus(): boolean {

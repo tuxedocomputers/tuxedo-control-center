@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.8] - 2020-12-11
+### Changed
+- Now uses interface from the `tuxedo-io` module in `tuxedo-keyboard` package instead of `tuxedo-cc-wmi`
+- As of the transition to `tuxedo-io` newer devices like the *InfinityBook S 14 Gen6* are supported as well
+
+### Fixed
+- Fan control fail when tccd loads before kernel interface module
+- Tray enable autostart when config folder is missing
+- Writing to unwritable intel noTurbo parameter
+
 ## [1.0.7] - 2020-10-27
 ### Fixed
 - Minor text adjustments

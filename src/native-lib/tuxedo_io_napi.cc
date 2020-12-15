@@ -18,22 +18,22 @@
  */
 #include <napi.h>
 #include <cmath>
-#include "tuxedo_wmi_lib/tuxedo_wmi_api.hh"
+#include "tuxedo_io_lib/tuxedo_io_api.hh"
 
 using namespace Napi;
 
 Boolean GetModuleInfo(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetModuleInfo - invalid argument"); }
 
     Object moduleInfo = info[0].As<Object>();
     std::string version;
 
-    bool result = wmi.GetModuleVersion(version);
+    bool result = io.GetModuleVersion(version);
     moduleInfo.Set("version", version);
     
     std::string activeInterface;
-    if (wmi.DeviceInterfaceIdStr(activeInterface)) {
+    if (io.DeviceInterfaceIdStr(activeInterface)) {
         moduleInfo.Set("activeInterface", activeInterface);
     } else {
         moduleInfo.Set("activeInterface", "inactive");
@@ -43,48 +43,48 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
 }
 
 Boolean WmiAvailable(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
-    bool availability = wmi.WmiAvailable();
+    TuxedoIOAPI io;
+    bool availability = io.WmiAvailable();
     return Boolean::New(info.Env(), availability);
 }
 
 Boolean SetEnableModeSet(const CallbackInfo &info) {
     if (info.Length() != 1 || !info[0].IsBoolean()) { throw Napi::Error::New(info.Env(), "SetEnableModeSet - invalid argument"); }
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     bool enabled = info[0].As<Boolean>();
-    bool result = wmi.SetEnableModeSet(enabled);
+    bool result = io.SetEnableModeSet(enabled);
     return Boolean::New(info.Env(), result);
 }
 
 Number GetNumberFans(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     int nrFans = 0;
-    wmi.GetNumberFans(nrFans);
+    io.GetNumberFans(nrFans);
     return Number::New(info.Env(), nrFans);
 }
 
 Boolean SetFansAuto(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
-    bool result = wmi.SetFansAuto();
+    TuxedoIOAPI io;
+    bool result = io.SetFansAuto();
     return Boolean::New(info.Env(), result);
 }
 
 Boolean SetFanSpeedPercent(const CallbackInfo &info) {
     if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsNumber()) { throw Napi::Error::New(info.Env(), "SetFanSpeedPercent - invalid argument"); }
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
 
     int fanNumber = info[0].As<Number>();
     int fanSpeedPercent = info[1].As<Number>();
-    bool result = wmi.SetFanSpeedPercent(fanNumber, fanSpeedPercent);
+    bool result = io.SetFanSpeedPercent(fanNumber, fanSpeedPercent);
     return Boolean::New(info.Env(), result);
 }
 
 Boolean GetFanSpeedPercent(const CallbackInfo &info) {
     if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsObject()) { throw Napi::Error::New(info.Env(), "GetFanSpeedPercent - invalid argument"); }
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     int fanNumber = info[0].As<Number>();
     int fanSpeedPercent;
-    bool result = wmi.GetFanSpeedPercent(fanNumber, fanSpeedPercent);
+    bool result = io.GetFanSpeedPercent(fanNumber, fanSpeedPercent);
     Object objWrapper = info[1].As<Object>();
     objWrapper.Set("value", fanSpeedPercent);
     return Boolean::New(info.Env(), result);
@@ -92,28 +92,28 @@ Boolean GetFanSpeedPercent(const CallbackInfo &info) {
 
 Boolean GetFanTemperature(const CallbackInfo &info) {
     if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsObject()) { throw Napi::Error::New(info.Env(), "GetFanTemperature - invalid argument"); }
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     int fanNumber = info[0].As<Number>();
     int temperatureCelcius;
-    bool result = wmi.GetFanTemperature(fanNumber, temperatureCelcius);
+    bool result = io.GetFanTemperature(fanNumber, temperatureCelcius);
     Object objWrapper = info[1].As<Object>();
     objWrapper.Set("value", temperatureCelcius);
     return Boolean::New(info.Env(), result);
 }
 
 Boolean SetWebcamStatus(const CallbackInfo &info) {
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     if (info.Length() != 1 || !info[0].IsBoolean()) { throw Napi::Error::New(info.Env(), "SetWebcamStatus - invalid argument"); }
     bool status = info[0].As<Boolean>();
-    bool result = wmi.SetWebcam(status);
+    bool result = io.SetWebcam(status);
     return Boolean::New(info.Env(), result);
 }
 
 Boolean GetWebcamStatus(const CallbackInfo &info) {
     if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetWebcamStatus - invalid argument"); }
-    TuxedoWmiAPI wmi;
+    TuxedoIOAPI io;
     bool status = false;
-    bool result = wmi.GetWebcam(status);
+    bool result = io.GetWebcam(status);
     Object objWrapper = info[0].As<Object>();
     objWrapper.Set("value", status);
     return Boolean::New(info.Env(), result);
@@ -140,4 +140,4 @@ Object Init(Env env, Object exports) {
     return exports;
 }
 
-NODE_API_MODULE(TuxedoWMIAPI, Init);
+NODE_API_MODULE(TuxedoIOAPI, Init);
