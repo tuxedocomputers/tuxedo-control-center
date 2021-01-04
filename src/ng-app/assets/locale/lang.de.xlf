@@ -278,19 +278,26 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
+      </trans-unit><trans-unit id="cProfMgrOverviewMaxPerf" datatype="html">
+        <source>Max performance</source>
+        <target state="translated">Max. Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
       </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html" approved="yes">
         <source>On</source>
         <target phase-name="approval-1" state="translated">An</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrOverviewWebcamStatusOff" datatype="html" approved="yes">
         <source>Off</source>
         <target phase-name="approval-1" state="translated">Aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html" approved="yes">
         <source>Discard changes</source>
@@ -602,54 +609,61 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">177</context>
         </context-group>
+      </trans-unit><trans-unit id="eb4c7703af7db429c52a3c5a4f1ad6ecfc9ea3a5" datatype="html">
+        <source>Maximum performance (<x id="INTERPOLATION" equiv-text="{{ formatFrequency(cpuInfo.maxFreq) }}"/> GHz)</source>
+        <target phase-name="approval-1" state="translated">Maximale Leistung (<x id="INTERPOLATION" equiv-text="{{ formatFrequency(cpuInfo.maxFreq) }}"/> GHz)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">182</context>
+        </context-group>
       </trans-unit><trans-unit id="74f8b983dba0976dc511f7ccd9801d4ff8c48fd8" datatype="html">
         <source>Active cores</source>
         <target phase-name="approval-1" state="translated">Aktive Kerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit><trans-unit id="024aa77d8116d95643de7dd89b423a737519adee" datatype="html">
         <source>Fan profile</source>
         <target phase-name="approval-1" state="translated">Lüfterprofile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit><trans-unit id="f11dbe7a4cc27e8a49693597e745513942104db2" datatype="html">
         <source>Fan control: off</source>
         <target phase-name="approval-1" state="translated">Lüftersteuerung: aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit><trans-unit id="57b0b92e55a491b36423f7325d0c6887d8298091" datatype="html">
         <source>Brightness</source>
         <target phase-name="approval-1" state="translated">Helligkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">220</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit><trans-unit id="095e685d23a72aa3535746c429bfe9ba56a5e985" datatype="html">
         <source>Fixed brightness</source>
         <target phase-name="approval-1" state="translated">Feste Helligkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit><trans-unit id="263323eb8abde4b84da09b10be29b956b5f19933" datatype="html">
         <source>Webcam</source>
         <target phase-name="approval-1" state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit><trans-unit id="02d311a2e30798982d5f16bfd87c22a0a8d8cbbf" datatype="html">
         <source>Webcam active</source>
         <target phase-name="approval-1" state="translated">Webcam aktiv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit><trans-unit id="shutdowntimerInformations" datatype="html" approved="yes">
         <source>shutdowntimerInformations</source>
@@ -675,7 +689,6 @@ Handelsregisternummer HRB 27755
       </trans-unit><trans-unit id="shutdowntimerHour" datatype="html" approved="yes">
         <source>Stunde</source>
         <target phase-name="approval-1" state="needs-adaptation">Stunde</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">35</context>
@@ -683,7 +696,6 @@ Handelsregisternummer HRB 27755
       </trans-unit><trans-unit id="shutdowntimerMinute" datatype="html" approved="yes">
         <source>Minuten</source>
         <target phase-name="approval-1" state="needs-adaptation">Minute</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">42</context>
@@ -691,7 +703,6 @@ Handelsregisternummer HRB 27755
       </trans-unit><trans-unit id="shutdowntimerButtonSave" datatype="html" approved="yes">
         <source>Speichern</source>
         <target phase-name="approval-1" state="needs-adaptation">Speichern</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">50</context>
@@ -699,7 +710,6 @@ Handelsregisternummer HRB 27755
       </trans-unit><trans-unit id="shutdowntimerDeleteTimer" datatype="html" approved="yes">
         <source>Timer löschen</source>
         <target phase-name="approval-1" state="needs-adaptation">Timer löschen</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">51</context>
