@@ -262,7 +262,7 @@ export class CpuWorker extends DaemonWorker {
             if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
                 const currentPerformancePreference = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
-                if (profile.cpu.useMaxPerfGov) {
+                if (!profile.cpu.useMaxPerfGov) {
                     performancePreferenceProfile = profile.cpu.energyPerformancePreference
                 } else {
                     performancePreferenceProfile = "performance"
