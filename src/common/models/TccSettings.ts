@@ -24,6 +24,8 @@ export enum ProfileStates {
 export interface ITccSettings {
     stateMap: any;
     shutdownTime: string | null;
+    cpuSettingsEnabled: boolean;
+    fanControlEnabled: boolean;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -31,7 +33,9 @@ export const defaultSettings: ITccSettings = {
         power_ac: 'Default',
         power_bat: 'Default'
     },
-    shutdownTime: null
+    shutdownTime: null,
+    cpuSettingsEnabled: true,
+    fanControlEnabled: true
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -39,5 +43,7 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
         power_ac: 'Default',
         power_bat: 'Custom XP1508 UHD'
     },
-    shutdownTime: null
+    shutdownTime: null,
+    cpuSettingsEnabled: true,
+    fanControlEnabled: true
 };

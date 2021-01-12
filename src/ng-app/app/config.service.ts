@@ -27,6 +27,7 @@ import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
+import { I18n } from '@ngx-translate/i18n-polyfill';
 
 @Injectable({
     providedIn: 'root'
@@ -53,7 +54,7 @@ export class ConfigService {
     // public copyConfig = ConfigHandler.prototype.copyConfig;
     // public writeSettings = ConfigHandler.prototype.writeSettings;
 
-    constructor(private electron: ElectronService, private utils: UtilsService) {
+    constructor(private electron: ElectronService, private utils: UtilsService, private i18n: I18n) {
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
 
@@ -85,6 +86,14 @@ export class ConfigService {
 
     public getSettings(): ITccSettings {
         return this.settings;
+    }
+
+    get cpuSettingsDisabledMessage(): string {
+        return this.i18n({ value: 'CPU settings disabled in\nTools->Global Settings.' });
+    }
+
+    get fanControlDisabledMessage(): string {
+        return this.i18n({ value: 'Fan control disabled in\nTools->Global Settings.' });
     }
 
     public getCustomProfiles(): ITccProfile[] {

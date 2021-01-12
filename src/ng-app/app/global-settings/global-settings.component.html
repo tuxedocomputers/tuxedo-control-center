@@ -1,0 +1,57 @@
+<!--
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div class="content">
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
+        <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsCPUSettingsLabel">CPU Settings</header></mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.valueSpan">
+            <content class="value">
+                <span [hidden]="!inputCPUSettings.checked" i18n="@@cGlobalSettingsCPUSettingsActivated">activated</span>
+                <span [hidden]="inputCPUSettings.checked" i18n="@@cGlobalSettingsCPUSettingsDeactivated">deactivated</span>
+            </content>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.inputSpan">
+            <content class="input">
+                <mat-checkbox #inputCPUSettings
+                    color="primary"
+                    [(checked)]="cpuSettingsEnabled"
+                    (change)="onCPUSettingsEnabledChanged($event)">
+                </mat-checkbox>
+            </content>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
+        <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsFanControlLabel">Fan Control</header></mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.valueSpan">
+            <content class="value">
+                <span [hidden]="!inputFanControl.checked" i18n="@@cGlobalSettingsFanControlActivated">activated</span>
+                <span [hidden]="inputFanControl.checked" i18n="@@cGlobalSettingsFanControlDeactivated">deactivated</span>
+            </content>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.inputSpan">
+            <content class="input">
+                <mat-checkbox #inputFanControl
+                    color="primary"
+                    [(checked)]="fanControlEnabled"
+                    (change)="onFanControlEnabledChanged($event)">
+                </mat-checkbox>
+            </content>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
