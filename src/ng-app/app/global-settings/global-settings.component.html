@@ -30,7 +30,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <content class="input">
                 <mat-checkbox #inputCPUSettings
                     color="primary"
-                    [(checked)]="cpuSettingsEnabled"
+                    [(ngModel)]="cpuSettingsEnabled"
                     (change)="onCPUSettingsEnabledChanged($event)">
                 </mat-checkbox>
             </content>
@@ -48,7 +48,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <content class="input">
                 <mat-checkbox #inputFanControl
                     color="primary"
-                    [(checked)]="fanControlEnabled"
+                    [(ngModel)]="fanControlEnabled"
                     (change)="onFanControlEnabledChanged($event)">
                 </mat-checkbox>
             </content>

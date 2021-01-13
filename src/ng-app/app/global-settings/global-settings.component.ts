@@ -19,6 +19,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config.service';
+import { UtilsService } from '../utils.service';
+import { MatCheckboxChange} from '@angular/material';
 
 @Component({
     selector: 'app-global-settings',
@@ -33,10 +35,13 @@ export class GlobalSettingsComponent implements OnInit {
         inputSpan: 3
     };
 
-    public cpuSettingsEnabled: boolean;
-    public fanControlEnabled: boolean;
+    public cpuSettingsEnabled: boolean = true;
+    public fanControlEnabled: boolean = true;
 
-    constructor(private config: ConfigService) { }
+    constructor(
+        private config: ConfigService,
+        private utils: UtilsService
+    ) { }
 
     ngOnInit() {
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
@@ -44,28 +49,34 @@ export class GlobalSettingsComponent implements OnInit {
     }
 
     onCPUSettingsEnabledChanged(event: any) {
-        let checked = event.checked;
+        this.utils.pageDisabled = true;
 
-        this.config.getSettings().cpuSettingsEnabled = checked;
-
+        this.config.getSettings().cpuSettingsEnabled = event.checked;
+        
         this.config.saveSettings().then(success => {
             if (!success) {
-                this.config.getSettings().cpuSettingsEnabled = !checked;
+                this.config.getSettings().cpuSettingsEnabled = !event.checked;
             }
-            this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
+            
+            this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled
+
+            this.utils.pageDisabled = false;
         });
     }
 
     onFanControlEnabledChanged(event: any) {
-        let checked = event.checked;
+        this.utils.pageDisabled = true;
 
-        this.config.getSettings().fanControlEnabled = checked;
+        this.config.getSettings().fanControlEnabled = event.checked;
         
         this.config.saveSettings().then(success => {
             if (!success) {
-                this.config.getSettings().fanControlEnabled = !checked;
+                this.config.getSettings().fanControlEnabled = !event.checked;
             }
+
             this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
+
+            this.utils.pageDisabled = false;
         });
     }
 }
