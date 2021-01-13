@@ -35,7 +35,9 @@ export class CpuWorker extends DaemonWorker {
     }
 
     public onStart() {
-        this.applyCpuProfile(this.tccd.getCurrentProfile());
+        if (this.tccd.settings.cpuSettingsEnabled) {
+            this.applyCpuProfile(this.tccd.getCurrentProfile());
+        }
     }
 
     public onWork() {
@@ -43,7 +45,7 @@ export class CpuWorker extends DaemonWorker {
         // apply profile again
 
         try {
-            if (!this.validateCpuFreq()) {
+            if (this.tccd.settings.cpuSettingsEnabled && !this.validateCpuFreq()) {
                 this.tccd.logLine('CpuWorker: Incorrect settings, reapplying profile');
                 this.applyCpuProfile(this.tccd.getCurrentProfile());
             }

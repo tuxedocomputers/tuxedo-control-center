@@ -55,11 +55,13 @@ export class FanControlWorker extends DaemonWorker {
 
         const useFanControl = this.getFanControlStatus();
 
-        ioAPI.setEnableModeSet(true);
+        if (this.tccd.settings.fanControlEnabled) {
+            ioAPI.setEnableModeSet(true);
 
-        if (!useFanControl) {
-            // Stop TCC fan control for all fans
-            ioAPI.setFansAuto();
+            if (!useFanControl) {
+                // Stop TCC fan control for all fans
+                ioAPI.setFansAuto();
+            }
         }
     }
 
@@ -124,7 +126,7 @@ export class FanControlWorker extends DaemonWorker {
             }
 
             fanLogic.reportTemperature(currentTemperatureCelcius.value);
-            if (useFanControl) {
+            if (this.tccd.settings.fanControlEnabled && useFanControl) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
                 fanSpeeds[fanNumber - 1] = calculatedSpeed;
             } else {
@@ -134,7 +136,7 @@ export class FanControlWorker extends DaemonWorker {
         }
 
         // Write fan speeds
-        if (useFanControl) {
+        if (this.tccd.settings.fanControlEnabled && useFanControl) {
             const highestSpeed = fanSpeeds.reduce((prev, cur) => cur > prev ? cur : prev, 0);
             for (const fanNumber of this.fans.keys()) {
                 if (this.modeSameSpeed) { fanSpeeds[fanNumber - 1] = highestSpeed; }
@@ -156,8 +158,10 @@ export class FanControlWorker extends DaemonWorker {
 
     public onExit(): void {
         // Stop TCC fan control for all fans
-        ioAPI.setFansAuto();
-        ioAPI.setEnableModeSet(false);
+        if (this.tccd.settings.fanControlEnabled) {
+            ioAPI.setFansAuto();
+            ioAPI.setEnableModeSet(false);
+        }
     }
 
     private getFanControlStatus(): boolean {
