@@ -46,9 +46,10 @@ interface ITccProfileDisplay {
 
 interface ITccProfileCpu {
     onlineCores: number;
+    useMaxPerfGov: boolean;
     scalingMinFrequency: number;
     scalingMaxFrequency: number;
-    governor: string;
+    governor: string; // unused: see CpuWorker.ts->applyCpuProfile(...)
     energyPerformancePreference: string;
     noTurbo: boolean;
 }
@@ -72,9 +73,10 @@ export const defaultProfiles: ITccProfile[] = [
         },
         cpu: {
             onlineCores: undefined,
+            useMaxPerfGov: false,
             scalingMinFrequency: undefined,
             scalingMaxFrequency: undefined,
-            governor: 'powersave',
+            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
             noTurbo: false
         },
@@ -95,9 +97,10 @@ export const defaultProfiles: ITccProfile[] = [
         },
         cpu: {
             onlineCores: undefined,
+            useMaxPerfGov: false,
             scalingMinFrequency: undefined,
             scalingMaxFrequency: -1,
-            governor: 'powersave',
+            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
             noTurbo: false
         },
@@ -118,9 +121,10 @@ export const defaultProfiles: ITccProfile[] = [
         },
         cpu: {
             onlineCores: undefined,
+            useMaxPerfGov: false,
             scalingMinFrequency: 0,
             scalingMaxFrequency: 0,
-            governor: 'powersave',
+            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
             noTurbo: false
         },
@@ -143,9 +147,10 @@ export const defaultCustomProfile: ITccProfile = {
     },
     cpu: {
         onlineCores: undefined,
+        useMaxPerfGov: false,
         scalingMinFrequency: undefined,
         scalingMaxFrequency: undefined,
-        governor: 'powersave',
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
         noTurbo: false
     },
@@ -167,9 +172,10 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     },
     cpu: {
         onlineCores: undefined,
+        useMaxPerfGov: false,
         scalingMinFrequency: undefined,
         scalingMaxFrequency: 1200000,
-        governor: 'powersave',
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
         noTurbo: false
     },

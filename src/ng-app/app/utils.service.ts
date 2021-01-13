@@ -72,6 +72,10 @@ export class UtilsService {
       profile.cpu.onlineCores = cpuInfo.availableCores;
     }
 
+    if (profile.cpu.useMaxPerfGov === undefined) {
+      profile.cpu.useMaxPerfGov = false;
+    }
+
     if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < cpuCoreInfo[0].cpuInfoMinFreq) {
       profile.cpu.scalingMinFrequency = cpuCoreInfo[0].cpuInfoMinFreq;
     }

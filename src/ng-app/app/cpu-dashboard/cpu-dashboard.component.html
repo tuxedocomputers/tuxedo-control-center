@@ -168,13 +168,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
                     <span class="text" *ngIf="cpuModelName !== ''">{{ cpuModelName }}</span>
                 </div>
-                <div class="tcc-info-bar">
+                <div class="tcc-info-bar" [hidden]="activeProfile.cpu.useMaxPerfGov">
                     <div class="cpu-min-max-freq">
                         <div class="label" i18n>Min</div>
                         <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
                         <div class="unit color-disabled">GHz</div>
                         <div class="value right">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
                         <div class="label" i18n>Max</div>
+                    </div>
+                </div>
+                <div class="tcc-info-bar" [hidden]="!activeProfile.cpu.useMaxPerfGov">
+                    <div class="cpu-min-max-freq">
+                        <div class="label" i18n>Maximum performance ({{ formatFrequency(cpuInfo.maxFreq) }} GHz)</div>
                     </div>
                 </div>
                 <div class="tcc-gauge small active-cores">
