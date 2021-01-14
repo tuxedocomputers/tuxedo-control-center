@@ -36,6 +36,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </content>
         </mat-grid-tile>
     </mat-grid-list>
+    <div class=margin-bottom i18n>On deactivate, CPU settings are <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.</div>
     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsFanControlLabel">Fan Control</header></mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.valueSpan">
@@ -54,4 +55,5 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </content>
         </mat-grid-tile>
     </mat-grid-list>
+    <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
 </div>
