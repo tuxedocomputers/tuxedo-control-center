@@ -122,5 +122,31 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </p>
         </div>
     </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n>Restore system</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="content-container">
+            <div i18n>
+                <p>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.</p>
+                <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!</p>
+            </div>
+            <p>
+                <button mat-raised-button (click)="buttonInstallRemoveWebFAICreator()" [disabled]="progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName)">
+                    <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName) }"></i>&nbsp;
+                    <span *ngIf="!webFAICreatorInstalled && !progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorInstallButton">Install WebFAI Creator</span>
+                    <span *ngIf="webFAICreatorInstalled && !progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorRemoveButton">Remove WebFAI Creator</span>
+                    <span *ngIf="progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorProgressButton">Checking</span>
+                </button>
+                &nbsp;
+                <button mat-raised-button color="primary" (click)="buttonStartWebFAICreator()" *ngIf="webFAICreatorInstalled" i18n="@@cSupportWebFAICreatorStartButton">Start WebFAI Creator</button>
+            </p>
+        </div>
+    </mat-expansion-panel>
 </mat-accordion>
 <br />
