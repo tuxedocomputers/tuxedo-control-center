@@ -163,7 +163,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <div class="content-container profile-overview">
             <div class="column">
-                <div [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled}" [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage: ''">
+                <div class=item [ngClass]="{'not-available': !getCPUSettingsEnabled()}" [matTooltip]="!getCPUSettingsEnabled() ? getCPUSettingsDisabledTooltip() : ''">
                     <div class="title">
                         <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
                         <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
@@ -199,7 +199,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                 </div>
-                <div [ngClass]="{'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled}" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
+                <div class=item [ngClass]="{'not-available': !compat.hasFancontrol || !getFanControlEnabled()}" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
                     <div class="title">
                         <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                         <span class="text" i18n>Fan profile</span>

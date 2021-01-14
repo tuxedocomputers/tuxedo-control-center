@@ -89,11 +89,11 @@ export class ConfigService {
     }
 
     get cpuSettingsDisabledMessage(): string {
-        return this.i18n({ value: 'CPU settings disabled in\nTools->Global Settings.' });
+        return this.i18n({ value: 'CPU settings deactivated in Tools→Global\u00A0Settings' });
     }
 
     get fanControlDisabledMessage(): string {
-        return this.i18n({ value: 'Fan control disabled in\nTools->Global Settings.' });
+        return this.i18n({ value: 'Fan control deactivated in Tools→Global\u00A0Settings' });
     }
 
     public getCustomProfiles(): ITccProfile[] {

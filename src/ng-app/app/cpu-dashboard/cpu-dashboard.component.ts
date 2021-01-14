@@ -226,4 +226,20 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       this.router.navigate(['profile-manager', profile.name]);
     }
   }
+
+  public getCPUSettingsEnabled(): boolean {
+    return this.config.getSettings().cpuSettingsEnabled;
+  }
+
+  public getCPUSettingsDisabledTooltip(): string {
+    return this.config.cpuSettingsDisabledMessage;
+  }
+
+  public getFanControlEnabled(): boolean {
+    return this.config.getSettings().fanControlEnabled;
+  }
+
+  public getFanControlDisabledTooltip(): string {
+    return this.config.fanControlDisabledMessage;
+  }
 }

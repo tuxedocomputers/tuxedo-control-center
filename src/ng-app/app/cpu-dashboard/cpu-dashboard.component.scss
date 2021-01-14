@@ -61,7 +61,11 @@
         flex-flow: column;
         align-items: center;
 
-        
+        .item {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+        }
 
         .title {
             display: flex;
