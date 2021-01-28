@@ -144,15 +144,17 @@ export class CpuController {
             // Default to min available freq
             if (setMinFrequency === undefined) {
                 newMinFrequency = coreMinFrequency;
+            } else if (setMinFrequency === -2) {
+                newMinFrequency = coreMaxFrequency;
             } else {
                 newMinFrequency = setMinFrequency;
-            }
-
-            // Enforce min/max limits
-            if (setMinFrequency < coreMinFrequency) {
-                newMinFrequency = coreMinFrequency;
-            } else if (setMinFrequency > scalingMaxFrequency) {
-                newMinFrequency = scalingMaxFrequency;
+                
+                // Enforce min/max limits
+                if (newMinFrequency < coreMinFrequency) {
+                    newMinFrequency = coreMinFrequency;
+                } else if (newMinFrequency > scalingMaxFrequency) {
+                    newMinFrequency = scalingMaxFrequency;
+                }
             }
 
             // Additionally verify that it is one of the available frequencies

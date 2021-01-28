@@ -1,6 +1,6 @@
 {
     "name": "tuxedo-control-center",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "main": "./e-app/e-app/main.js",
     "bin": "./service-app/main.js",
     "license": "GPL-3.0"

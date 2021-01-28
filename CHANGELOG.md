@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.9] - 2021-01-28
+### Added
+- Profile CPU setting "Maximum performance" now allows governor performance use
+
 ## [1.0.8] - 2020-12-11
 ### Changed
 - Now uses interface from the `tuxedo-io` module in `tuxedo-keyboard` package instead of `tuxedo-cc-wmi`
