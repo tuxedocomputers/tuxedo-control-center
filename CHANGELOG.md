@@ -1,5 +1,9 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- More robust check for nvidia prime support
+
 ## [1.0.9] - 2021-01-28
 ### Added
 - Profile CPU setting "Maximum performance" now allows governor performance use
