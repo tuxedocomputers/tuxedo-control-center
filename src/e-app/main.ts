@@ -120,6 +120,7 @@ function createTccTray() {
         tray.setToolTip('TUXEDO Control Center');
     }
     const primeQuery = primeSelectQuery();
+    const isPrimeSupported = primeSupported();
     const messageBoxprimeSelectAccept = {
         type: 'question',
         buttons: ['yes', 'cancel' ],
@@ -131,10 +132,10 @@ function createTccTray() {
                 label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
                 click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
         },
-        { type: 'separator', visible: primeQuery !== undefined },
+        { type: 'separator', visible: isPrimeSupported },
         {
             label: 'Graphics',
-            visible: primeQuery !== undefined,
+            visible: isPrimeSupported,
             submenu: [
                 {
                     label: 'Select NVIDIA',
@@ -275,6 +276,18 @@ function createUserConfigDir(): boolean {
     } catch (err) {
         return false;
     }
+}
+
+function primeSupported(): boolean {
+    let query: string;
+    let result: boolean;
+    try {
+        query = child_process.execSync('prime-supported /dev/null').toString();
+        result = query.trim() === 'yes';
+    } catch (err) {
+        result = false;
+    }
+    return result;
 }
 
 function primeSelectQuery(): string {
