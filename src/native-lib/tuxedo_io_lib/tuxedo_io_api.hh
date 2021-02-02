@@ -85,6 +85,8 @@ public:
     virtual bool SetEnableModeSet(bool enabled) = 0;
     virtual bool GetNumberFans(int &nrFans) = 0;
     virtual bool SetFansAuto() = 0;
+    virtual bool SetFansMode(int mode) = 0;
+    virtual bool GetFansMode(int &mode) = 0;
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) = 0;
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) = 0;
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) = 0;
@@ -126,7 +128,20 @@ public:
         argument |= 1 << 0x01;
         argument |= 1 << 0x02;
         argument |= 1 << 0x03;
-        return io->IoctlCall(W_CL_FANAUTO, argument);
+        return SetFansMode(argument);
+    }
+
+    virtual bool SetFansMode(int mode) {
+        return io->IoctlCall(W_CL_FANAUTO, mode);
+    }
+
+    virtual bool GetFansMode(int &mode) {
+        mode = 0;
+        mode |= 1;
+        mode |= 1 << 0x01;
+        mode |= 1 << 0x02;
+        mode |= 1 << 0x03;
+        return true;
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
@@ -240,9 +255,20 @@ public:
     }
 
     virtual bool SetFansAuto() {
-        // Setting the mode will return control to the firmware
+        // Setting the mode will return control to the firmware using the first profile available in BIOS
+        // 0xa0 - office mode
+        // 0x40 - max fan mode
+        // 0x00 - gaming mode
         int mode = 0xa0;
+        return SetFansMode(mode);
+    }
+
+    virtual bool SetFansMode(int mode) {
         return io->IoctlCall(W_UW_MODE, mode);
+    }
+
+    virtual bool GetFansMode(int &mode) {
+        return io->IoctlCall(R_UW_MODE, mode);
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
@@ -388,9 +414,26 @@ public:
             return false;
         }
     }
+
     virtual bool SetFansAuto() {
         if (activeInterface) {
             return activeInterface->SetFansAuto();
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool SetFansMode(int mode) {
+        if (activeInterface) {
+            return activeInterface->SetFansMode(mode);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetFansMode(int &mode) {
+        if (activeInterface) {
+            return activeInterface->GetFansMode(mode);
         } else {
             return false;
         }

@@ -69,6 +69,23 @@ Boolean SetFansAuto(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Boolean SetFansMode(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsNumber()) { throw Napi::Error::New(info.Env(), "SetFansMode - invalid argument"); }
+    TuxedoIOAPI io;
+    int mode = info[0].As<Number>();
+    bool result = io.SetFansMode(mode);
+    return Boolean::New(info.Env(), result);
+}
+
+Number GetFansMode(const CallbackInfo &info) {
+    TuxedoIOAPI io;
+    int mode = 0;
+    if (!io.GetFansMode(mode)) {
+        mode = -1;
+    }
+    return Number::New(info.Env(), mode);
+}
+
 Boolean SetFanSpeedPercent(const CallbackInfo &info) {
     if (info.Length() != 2 || !info[0].IsNumber() || !info[1].IsNumber()) { throw Napi::Error::New(info.Env(), "SetFanSpeedPercent - invalid argument"); }
     TuxedoIOAPI io;
@@ -129,6 +146,8 @@ Object Init(Env env, Object exports) {
     // Fan control
     exports.Set(String::New(env, "getNumberFans"), Function::New(env, GetNumberFans));
     exports.Set(String::New(env, "setFansAuto"), Function::New(env, SetFansAuto));
+    exports.Set(String::New(env, "setFansMode"), Function::New(env, SetFansMode));
+    exports.Set(String::New(env, "getFansMode"), Function::New(env, GetFansMode));
     exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, SetFanSpeedPercent));
     exports.Set(String::New(env, "getFanSpeedPercent"), Function::New(env, GetFanSpeedPercent));
     exports.Set(String::New(env, "getFanTemperature"), Function::New(env, GetFanTemperature));

@@ -33,6 +33,8 @@ export class FanControlWorker extends DaemonWorker {
 
     private modeSameSpeed = false;
 
+    private fansModeOnStartup = -1;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
     }
@@ -55,13 +57,10 @@ export class FanControlWorker extends DaemonWorker {
 
         const useFanControl = this.getFanControlStatus();
 
-        if (this.tccd.settings.fanControlEnabled) {
+        if (this.tccd.settings.fanControlEnabled && useFanControl) {
             ioAPI.setEnableModeSet(true);
-
-            if (!useFanControl) {
-                // Stop TCC fan control for all fans
-                ioAPI.setFansAuto();
-            }
+            
+            this.fansModeOnStartup = ioAPI.getFansMode();
         }
     }
 
@@ -157,9 +156,16 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onExit(): void {
+        const useFanControl = this.getFanControlStatus();
+
         // Stop TCC fan control for all fans
-        if (this.tccd.settings.fanControlEnabled) {
-            ioAPI.setFansAuto();
+        if (this.tccd.settings.fanControlEnabled && useFanControl) {
+            if (this.fansModeOnStartup != -1) {
+                ioAPI.setFansMode(this.fansModeOnStartup);
+            }
+            else {
+                ioAPI.setFansAuto();
+            }
             ioAPI.setEnableModeSet(false);
         }
     }
