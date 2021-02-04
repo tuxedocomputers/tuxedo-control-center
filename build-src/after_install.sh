@@ -8,7 +8,10 @@ DIST_DATA=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/d
 
 rm /usr/share/applications/tuxedo-control-center.desktop || true
 cp ${DIST_DATA}/tuxedo-control-center.desktop /usr/share/applications/tuxedo-control-center.desktop || true
+
+mkdir -p /etc/skel/.config/autostart || true
 cp ${DIST_DATA}/tuxedo-control-center-tray.desktop /etc/skel/.config/autostart/tuxedo-control-center-tray.desktop || true
+
 cp ${DIST_DATA}/de.tuxedocomputers.tcc.policy /usr/share/polkit-1/actions/de.tuxedocomputers.tcc.policy || true
 cp ${DIST_DATA}/com.tuxedocomputers.tccd.conf /usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf || true
 
