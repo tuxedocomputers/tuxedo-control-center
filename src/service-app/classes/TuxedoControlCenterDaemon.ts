@@ -222,6 +222,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         } catch (err) {
             try {
+                if (this.settings === undefined) {
+                    this.settings = this.config.getDefaultSettings();
+                }
                 this.config.writeSettings(this.settings);
                 this.logLine('Filled missing settings with default: ' + this.config.pathSettings);
             } catch (err) {
