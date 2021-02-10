@@ -71,8 +71,8 @@ app.whenReady().then( () => {
                 const tccdVersion = await tccDBus.tccdVersion();
                 if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
                     console.log('Other tccd version detected, restarting..');
-                    process.on("exit", function () {
-                        require("child_process").spawn(
+                    process.on('exit', function () {
+                        child_process.spawn(
                             process.argv[0],
                             process.argv.slice(1).concat(['--tray']),
                             {
