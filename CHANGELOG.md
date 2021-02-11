@@ -3,6 +3,7 @@
 ## [] - UNRELEASED
 ### Fixed
 - More robust check for nvidia prime support
+- Install autostart for new users (and in FAI)
 
 ## [1.0.9] - 2021-01-28
 ### Added
