@@ -56,9 +56,9 @@ export class FanControlWorker extends DaemonWorker {
         const useFanControl = this.getFanControlStatus();
 
         if (this.tccd.settings.fanControlEnabled) {
-            ioAPI.setEnableModeSet(true);
+            ioAPI.setEnableModeSet(true); //FIXME Dummy function, tuxedo-io always sets the manual bit
 
-            if (!useFanControl) {
+            if (!useFanControl) { //FIXME Dummy variable, useFanControl always true
                 // Stop TCC fan control for all fans
                 ioAPI.setFansAuto();
             }
@@ -132,7 +132,6 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 fanSpeeds[fanNumber - 1] = currentSpeedPercent.value;
             }
-
         }
 
         // Write fan speeds
@@ -160,7 +159,7 @@ export class FanControlWorker extends DaemonWorker {
         // Stop TCC fan control for all fans
         if (this.tccd.settings.fanControlEnabled) {
             ioAPI.setFansAuto();
-            ioAPI.setEnableModeSet(false);
+            ioAPI.setEnableModeSet(false);  //FIXME Dummy function, tuxedo-io always sets the manual bit
         }
     }
 

@@ -240,9 +240,7 @@ public:
     }
 
     virtual bool SetFansAuto() {
-        // Setting the mode will return control to the firmware
-        int mode = 0xa0;
-        return io->IoctlCall(W_UW_MODE, mode);
+        return io->IoctlCall(W_UW_FANAUTO);
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
