@@ -45,42 +45,9 @@ export interface ITuxedoIOAPI {
     getNumberFans(): number;
 
     /**
-     * Set all fans to default mode, potentially overwriting BIOS settings on Tongfang devices
-     * 
-     * Tongfang: setFansMode(0xa0)
-     * Clevo: setFansMode(0x0f)
+     * Set all fans to default mode
      */
     setFansAuto(): boolean;
-
-    /**
-     * Set the fans mode
-     * 
-     * Tongfang
-     * 0xa0 - office mode
-     * 0x40 - max fan mode
-     * 0x00 - gaming mode
-     * 
-     * Clevo
-     * 0x0f ^= b1111 -> all fans auto
-     */
-    setFansMode(mode: number): boolean;
-
-    /**
-     * Get the current fans mode
-     * 
-     * Tongfang
-     * 0xa0 - office mode
-     * 0x40 - max fan mode
-     * 0x00 - gaming mode
-     * 
-     * Clevo
-     * 0x0f ^= b1111 -> all fans auto
-     * 
-     * Both
-     * -1 -> error while reading mode
-     */
-    getFansMode(): number;
-
     /**
      * Set speed of the specified fan 0-100
      * @returns True if call succeeded, false otherwise
