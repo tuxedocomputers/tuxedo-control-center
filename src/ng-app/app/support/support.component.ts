@@ -31,6 +31,8 @@ export class SupportComponent implements OnInit {
 
   public anydeskProgramName = 'anydesk';
   public anydeskInstalled: boolean;
+  public webFAICreatorProgramName = 'tuxedo-webfai-creator';
+  public webFAICreatorInstalled: boolean;
 
   public formTicketNumber: FormGroup;
   public systeminfoRunOutput = '';
@@ -46,6 +48,7 @@ export class SupportComponent implements OnInit {
 
   ngOnInit() {
     this.updateAnydeskInstallStatus();
+    this.updateWebFAICreatorInstallStatus();
     this.formTicketNumber = new FormGroup({
       inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')])
     });
@@ -67,6 +70,14 @@ export class SupportComponent implements OnInit {
     }
   }
 
+  public updateWebFAICreatorInstallStatus(): void {
+    if (!this.progress().get(this.webFAICreatorProgramName)) {
+      this.program.isInstalled(this.webFAICreatorProgramName).then((isInstalled) => {
+        this.webFAICreatorInstalled = isInstalled;
+      });
+    }
+  }
+
   public buttonInstallRemoveAnydesk(): void {
     if (this.anydeskInstalled) {
       this.program.remove(this.anydeskProgramName).then(() => {
@@ -79,8 +90,24 @@ export class SupportComponent implements OnInit {
     }
   }
 
+  public buttonInstallRemoveWebFAICreator(): void {
+    if (this.webFAICreatorInstalled) {
+      this.program.remove(this.webFAICreatorProgramName).then(() => {
+        this.updateWebFAICreatorInstallStatus();
+      });
+    } else {
+      this.program.install(this.webFAICreatorProgramName).then(() => {
+        this.updateWebFAICreatorInstallStatus();
+      });
+    }
+  }
+
   public buttonStartAnydesk(): void {
     this.program.run(this.anydeskProgramName);
+  }
+
+  public buttonStartWebFAICreator(): void {
+    this.program.run(this.webFAICreatorProgramName);
   }
 
   public progress(): Map<string, boolean> {

@@ -211,9 +211,9 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
 ipcMain.on('exec-cmd-async', (event, arg) => {
     child_process.exec(arg, (err, stdout, stderr) => {
         if (err) {
-            event.reply('exec-cmd-result', { data: stderr, error: err });
+            event.reply('exec-cmd-result(' + arg + ')', { data: stderr, error: err });
         } else {
-            event.reply('exec-cmd-result', { data: stdout, error: err });
+            event.reply('exec-cmd-result(' + arg + ')', { data: stdout, error: err });
         }
     });
 });
