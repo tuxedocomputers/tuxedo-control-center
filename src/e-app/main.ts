@@ -208,13 +208,15 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
     }
 });
 
-ipcMain.on('exec-cmd-async', (event, arg) => {
-    child_process.exec(arg, (err, stdout, stderr) => {
-        if (err) {
-            event.reply('exec-cmd-result(' + arg + ')', { data: stderr, error: err });
-        } else {
-            event.reply('exec-cmd-result(' + arg + ')', { data: stdout, error: err });
-        }
+ipcMain.handle('exec-cmd-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        child_process.exec(arg, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
     });
 });
 
