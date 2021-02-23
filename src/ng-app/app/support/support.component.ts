@@ -62,20 +62,16 @@ export class SupportComponent implements OnInit {
     this.electron.shell.openExternal(url);
   }
 
-  public updateAnydeskInstallStatus(): void {
-    if (!this.progress().get(this.anydeskProgramName)) {
-      this.program.isInstalled(this.anydeskProgramName).then((isInstalled) => {
-        this.anydeskInstalled = isInstalled;
-      });
-    }
+  public async updateAnydeskInstallStatus(): Promise<void> {
+    return this.program.isInstalled(this.anydeskProgramName).then((isInstalled) => {
+      this.anydeskInstalled = isInstalled;
+    });
   }
 
-  public updateWebFAICreatorInstallStatus(): void {
-    if (!this.progress().get(this.webFAICreatorProgramName)) {
-      this.program.isInstalled(this.webFAICreatorProgramName).then((isInstalled) => {
-        this.webFAICreatorInstalled = isInstalled;
-      });
-    }
+  public async updateWebFAICreatorInstallStatus(): Promise<void> {
+    return this.program.isInstalled(this.webFAICreatorProgramName).then((isInstalled) => {
+      this.webFAICreatorInstalled = isInstalled;
+    });
   }
 
   public buttonInstallRemoveAnydesk(): void {
@@ -103,11 +99,19 @@ export class SupportComponent implements OnInit {
   }
 
   public buttonStartAnydesk(): void {
-    this.program.run(this.anydeskProgramName);
+    this.updateAnydeskInstallStatus().then(() => {
+      if (this.anydeskInstalled) {
+        this.program.run(this.anydeskProgramName);
+      }
+    });
   }
 
   public buttonStartWebFAICreator(): void {
-    this.program.run(this.webFAICreatorProgramName);
+    this.updateWebFAICreatorInstallStatus().then(() => {
+      if (this.webFAICreatorInstalled) {
+        this.program.run(this.webFAICreatorProgramName);
+      }
+    });
   }
 
   public progress(): Map<string, boolean> {
