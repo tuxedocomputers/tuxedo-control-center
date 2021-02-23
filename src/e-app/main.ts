@@ -221,7 +221,10 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
 });
 
 ipcMain.on('spawn-external-async', (event, arg) => {
-    child_process.spawn(arg, { detached: true, stdio: 'ignore' });
+    child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
+        console.log("\"" + arg + "\" could not be executed.")
+        dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
+    });
 });
 
 function installAutostartTray(): boolean {
