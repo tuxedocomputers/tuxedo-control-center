@@ -240,7 +240,21 @@ public:
     }
 
     virtual bool SetFansAuto() {
-        return io->IoctlCall(W_UW_FANAUTO);
+        unsigned major = 0, minor = 0, patch = 0;
+        std::string version;
+        if (io->IoctlCall(R_MOD_VERSION, version, 20)) {
+            sscanf(version.c_str(), "%u.%u.%u", &major, &minor, &patch);
+        }
+
+        if (major > MIN_MAJOR_W_UW_FANAUTO ||
+            (major == MIN_MAJOR_W_UW_FANAUTO && minor > MIN_MINOR_W_UW_FANAUTO) ||
+            (major == MIN_MAJOR_W_UW_FANAUTO && minor == MIN_MINOR_W_UW_FANAUTO && patch >= MIN_PATCH_W_UW_FANAUTO)) {
+            return io->IoctlCall(W_UW_FANAUTO);
+        }
+        else {
+            int mode = 0x00;
+            return io->IoctlCall(W_UW_MODE, mode);
+        }
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {

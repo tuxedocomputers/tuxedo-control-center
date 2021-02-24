@@ -83,6 +83,10 @@
 #define W_UW_FANSPEED2		_IOW(MAGIC_WRITE_UW, 0x11, int32_t*)
 #define W_UW_MODE		_IOW(MAGIC_WRITE_UW, 0x12, int32_t*)
 #define W_UW_MODE_ENABLE	_IOW(MAGIC_WRITE_UW, 0x13, int32_t*)
+
+#define MIN_MAJOR_W_UW_FANAUTO 0
+#define MIN_MINOR_W_UW_FANAUTO 2
+#define MIN_PATCH_W_UW_FANAUTO 2
 #define W_UW_FANAUTO	_IO(MAGIC_WRITE_UW, 0x14) // undo all previous calls of W_UW_FANSPEED and W_UW_FANSPEED2
 
 #endif
