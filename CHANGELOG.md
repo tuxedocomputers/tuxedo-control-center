@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.11] - 2021-02-25
+### Fixed
+- More robust check for nvidia prime support
+- Install autostart for new users (and in FAI)
+- Fixed automatic restart after update having weird side effects,
+  still needs one more (manual) restart of GUI before taking effect
+
 ## [1.0.9] - 2021-01-28
 ### Added
 - Profile CPU setting "Maximum performance" now allows governor performance use
