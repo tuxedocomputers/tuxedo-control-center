@@ -47,6 +47,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material'
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -69,6 +70,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { GaugeModule } from 'angular-gauge';
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
 import { ToolsComponent } from "./tools/tool.component";
+import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -90,7 +92,8 @@ declare const require;
     InfoComponent,
     CpuDashboardComponent,
     ShutdownTimerComponent,
-    ToolsComponent
+    ToolsComponent,
+    ChangeCryptPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -120,6 +123,7 @@ declare const require;
     MatStepperModule,
     MatButtonToggleModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot()
