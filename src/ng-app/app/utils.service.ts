@@ -129,14 +129,13 @@ export class UtilsService {
 
   public async execCmd(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      this.electron.ipcRenderer.once('exec-cmd-result', (event, result) => {
+      this.electron.ipcRenderer.invoke('exec-cmd-async', command).then((result) => {
         if (result.error === null) {
           resolve(result.data);
         } else {
           reject(result.error);
         }
       });
-      this.electron.ipcRenderer.send('exec-cmd-async', command);
     });
   }
 

@@ -218,18 +218,23 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
     }
 });
 
-ipcMain.on('exec-cmd-async', (event, arg) => {
-    child_process.exec(arg, (err, stdout, stderr) => {
-        if (err) {
-            event.reply('exec-cmd-result', { data: stderr, error: err });
-        } else {
-            event.reply('exec-cmd-result', { data: stdout, error: err });
-        }
+ipcMain.handle('exec-cmd-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        child_process.exec(arg, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
     });
 });
 
 ipcMain.on('spawn-external-async', (event, arg) => {
-    child_process.spawn(arg, { detached: true, stdio: 'ignore' });
+    child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
+        console.log("\"" + arg + "\" could not be executed.")
+        dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
+    });
 });
 
 function installAutostartTray(): boolean {
