@@ -55,7 +55,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     showPassword() {
-        console.log("Before text", this.buttonType);
         if (this.buttonType == "password") {
             this.buttonType = "text";
             this.show_password_button_text = this.i18n({ value: 'Hide Passwords', id: 'cryptButtonHidePassword' });
