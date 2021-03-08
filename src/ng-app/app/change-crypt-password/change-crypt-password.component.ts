@@ -22,7 +22,6 @@ import { ElectronService } from 'ngx-electron';
 
 import { DriveController } from "../../../common/classes/DriveController";
 import { I18n } from '@ngx-translate/i18n-polyfill';
-import { setTimeout } from 'timers';
 
 @Component({
     selector: 'app-change-crypt-password',
@@ -30,11 +29,10 @@ import { setTimeout } from 'timers';
     styleUrls: ['./change-crypt-password.component.scss']
 })
 export class ChangeCryptPasswordComponent implements OnInit {
-
     matcher = new FormErrorStateMatcher();
-
     buttonType = 'password';
     show_password_button_text = '';
+    successtext_cryptsetup = '';
     errortext_cryptsetup = '';
     errortext_cryptsetup_detail = '';
     crpyt_drives = [];
@@ -44,7 +42,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
         cryptPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
         newPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)])
-    }, {validators: [this.confirmValidation]})
+    }, { validators: [this.confirmValidation] })
 
     constructor(private electron: ElectronService, private i18n: I18n) { }
 
@@ -53,53 +51,33 @@ export class ChangeCryptPasswordComponent implements OnInit {
         this.work_process = false;
 
         this.buttonType = "password";
-        this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonShowPassword' });
+        this.show_password_button_text = this.i18n({ value: 'Show Passwords', id: 'cryptButtonShowPassword' });
     }
 
     showPassword() {
         console.log("Before text", this.buttonType);
         if (this.buttonType == "password") {
             this.buttonType = "text";
-            this.show_password_button_text = this.i18n({ value: 'Hide Password', id: 'cryptButtonHidePassword' });
+            this.show_password_button_text = this.i18n({ value: 'Hide Passwords', id: 'cryptButtonHidePassword' });
         }
         else {
             this.buttonType = "password";
-            this.show_password_button_text = this.i18n({ value: 'Show Password', id: 'cryptButtonShowPassword' });
+            this.show_password_button_text = this.i18n({ value: 'Show Passwords', id: 'cryptButtonShowPassword' });
         }
-
-        console.log("after text", this.buttonType);
     }
 
     async changePassword() {
         this.work_process = true;
 
-        await this.changeCryptPassword();
+        this.changeCryptPassword();
 
         this.work_process = false;
-        
-    }
 
-    testOn() {
-        this.work_process = true;
-    }
-
-    testOff() {
-        this.work_process = false;
-    }
-
-    async updateDeviceList() {
-        this.work_process = true;
-
-        this.crpyt_drives = (await DriveController.getDrivesWorkaround()).filter(x => x.crypt);
-
-        this.work_process = false;
     }
 
     private changeCryptPassword() {
-        console.log("changeCryptPassword");
-
-        if(!this.passwordFormGroup.valid) {
-            this.errortext_cryptsetup = this.i18n({ value: 'Error at remove old Crypt Password', id: 'checkinputs' });
+        if (!this.passwordFormGroup.valid) {
+            this.errortext_cryptsetup = this.i18n({ value: 'Error: Input invalid', id: 'checkinputs' });
             this.errortext_cryptsetup_detail = '';
 
             return;
@@ -108,31 +86,23 @@ export class ChangeCryptPasswordComponent implements OnInit {
         let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
         let newPassword = this.passwordFormGroup.get("newPassword").value;
 
-        for(let drive of this.crpyt_drives) {
-            const result_set = this.electron.ipcRenderer.sendSync('exec-cmd-sync', `printf '%s\\n' '${oldPassword}' '${newPassword}' '${newPassword}' | pkexec /usr/sbin/cryptsetup -q luksAddKey --force-password ${drive.devPath}`);
-            if(result_set.error === undefined) {
+        for (let drive of this.crpyt_drives) {
+            const result_set = this.electron.ipcRenderer.sendSync('exec-cmd-sync', `printf '%s\\n' '${oldPassword}' '${newPassword}' '${newPassword}' | pkexec /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath}`);
+            if (result_set.error === undefined) {
+                this.successtext_cryptsetup = '';
                 this.errortext_cryptsetup = '';
                 this.errortext_cryptsetup_detail = '';
             }
             else {
-                this.errortext_cryptsetup = this.i18n({ value: 'Error at set new Crypt Password', id: 'errornewpassword' });
-                this.errortext_cryptsetup_detail = result_set.error;
-                return;
-            }
-
-            const result_remove = this.electron.ipcRenderer.sendSync('exec-cmd-sync', `printf '%s\\n' '${oldPassword}' | pkexec /usr/sbin/cryptsetup -q luksRemoveKey ${drive.devPath}`);
-            console.log("result", result_remove);
-            if(result_remove.error === undefined) {
-                this.errortext_cryptsetup = '';
+                this.successtext_cryptsetup = '';
+                this.errortext_cryptsetup = this.i18n({ value: 'Error: Could not change crypt password', id: 'errornewpassword' });
+                //this.errortext_cryptsetup_detail = result_set.error;
                 this.errortext_cryptsetup_detail = '';
-            }
-            else {
-                this.errortext_cryptsetup = this.i18n({ value: 'Error at remove old Crypt Password', id: 'erroroldpassword' });
-                this.errortext_cryptsetup_detail = result_remove.error;
                 return;
             }
 
-            this.errortext_cryptsetup = this.i18n({ value: 'Finish - Crypt password was successfully changed', id: 'cryptfinishprocess' });
+            this.successtext_cryptsetup = this.i18n({ value: 'Crypt password changed successfully', id: 'cryptfinishprocess' });
+            this.errortext_cryptsetup = '';
             this.errortext_cryptsetup_detail = '';
         }
     }

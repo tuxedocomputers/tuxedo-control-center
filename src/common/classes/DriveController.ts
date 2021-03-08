@@ -30,25 +30,25 @@ export class DriveController {
 
     public static async getDrives(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         let drives: IDrive[] = [];
-        
+
         let dirs = fs.readdirSync(this._sysBlockDir);
-            for(let d of dirs) {
-                let dr = await this.getChildDevices(path.join(this._sysBlockDir, d));
-                if(dr !== undefined) {
-                    for(let drive of dr) {
-                        if(!includeLoopDevices && !drive.name.startsWith("loop")) {
-                            drives.push(drive);
-                        }
+        for (let d of dirs) {
+            let dr = await this.getChildDevices(path.join(this._sysBlockDir, d));
+            if (dr !== undefined) {
+                for (let drive of dr) {
+                    if (!includeLoopDevices && !drive.name.startsWith("loop")) {
+                        drives.push(drive);
                     }
                 }
             }
+        }
 
         return drives;
     }
 
     public static async getDrivesWorkaround(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         // Workaround for suse. Suse need a first call of blkid with sudo, to create the map for normal users
-        await child_process.execSync(`pkexec /usr/sbin/blkid -o value -s TYPE`);
+        child_process.execSync(`pkexec /usr/sbin/blkid -o value -s TYPE`);
 
         return this.getDrives(includeLoopDevices);
     }
@@ -56,15 +56,15 @@ export class DriveController {
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
         let name = path.basename(devicePath);
         let size = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
-        
+
         let isParent = !fs.existsSync(path.join(devicePath, "partition"));
         let devPath = "";
 
-        if(fs.existsSync(path.join("/dev/", name))) {
+        if (fs.existsSync(path.join("/dev/", name))) {
             devPath = path.join("/dev/", name);
         }
 
-        let result = await child_process.execSync(`/usr/sbin/blkid -o value -s TYPE ${devPath}`);
+        let result = child_process.execSync(`/usr/sbin/blkid -o value -s TYPE ${devPath}`);
         const isCrpyt = result.toString().trim() == "crypto_LUKS";
 
         return {
@@ -81,8 +81,8 @@ export class DriveController {
         let childDevices: IDrive[] = [];
 
         let name = path.basename(devicePath);
-        for(let f of fs.readdirSync(devicePath)) {
-            if(f.startsWith(name)) {
+        for (let f of fs.readdirSync(devicePath)) {
+            if (f.startsWith(name)) {
                 childDevices.push(await this.getDeviceInfo(path.join(devicePath, f)));
             }
         }
