@@ -28,16 +28,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <div *ngIf="shutdownTime != null" class="content-container">
         <span i18n="@@shutdowntimerTimerActive">shutdowntimerTimerActive</span>
-        {{ selectedHour.toString().length < 2 ? 0 + selectedHour.toString() : selectedHour.toString() }}:{{ selectedMinute.toString().length < 2 ? 0 + selectedMinute.toString() : selectedMinute.toString() }}
+        <span>{{ selectedHour.toString().length < 2 ? 0 + selectedHour.toString() : selectedHour.toString() }}:{{ selectedMinute.toString().length < 2 ? 0 + selectedMinute.toString() : selectedMinute.toString() }}</span>
     </div>
-    
+
     <mat-form-field appearance="fill" style="margin-right: 10px;">
         <mat-label i18n="@@shutdowntimerHour">Stunde</mat-label>
         <mat-select [(value)]="selectedHour">
             <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour.toString().length < 2 ? 0 + hour.toString() : hour.toString() }}</mat-option>
         </mat-select>
     </mat-form-field>
-    
+
     <mat-form-field appearance="fill">
         <mat-label i18n="@@shutdowntimerMinute">Minuten</mat-label>
         <mat-select [(value)]="selectedMinute">
