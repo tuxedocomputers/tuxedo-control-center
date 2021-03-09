@@ -37,7 +37,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
     errortext_cryptsetup = '';
     errortext_cryptsetup_detail = '';
     crypt_drives = [];
-    work_process = false;
 
     passwordFormGroup: FormGroup = new FormGroup({
         cryptPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
@@ -53,7 +52,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     async ngOnInit() {
         this.crypt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
-        this.work_process = false;
 
         this.buttonType = "password";
         this.show_password_button_text = this.i18n({ value: 'Show Passwords', id: 'cryptButtonShowPassword' });
@@ -71,10 +69,10 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     async changePassword() {
-        this.work_process = true;
+        this.utils.pageDisabled = true;
 
         this.changeCryptPassword().then(() => {
-            this.work_process = false;
+            this.utils.pageDisabled = false;
         });
     }
 
