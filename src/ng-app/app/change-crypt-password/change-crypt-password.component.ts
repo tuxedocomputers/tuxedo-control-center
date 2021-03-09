@@ -19,6 +19,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { ElectronService } from 'ngx-electron';
+import { UtilsService } from '../utils.service';
 
 import { DriveController } from "../../../common/classes/DriveController";
 import { I18n } from '@ngx-translate/i18n-polyfill';
@@ -35,7 +36,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     successtext_cryptsetup = '';
     errortext_cryptsetup = '';
     errortext_cryptsetup_detail = '';
-    crpyt_drives = [];
+    crypt_drives = [];
     work_process = false;
 
     passwordFormGroup: FormGroup = new FormGroup({
@@ -44,10 +45,14 @@ export class ChangeCryptPasswordComponent implements OnInit {
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)])
     }, { validators: [this.confirmValidation] })
 
-    constructor(private electron: ElectronService, private i18n: I18n) { }
+    constructor(
+        private electron: ElectronService,
+        private i18n: I18n,
+        private utils: UtilsService
+    ) { }
 
     async ngOnInit() {
-        this.crpyt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
+        this.crypt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
         this.work_process = false;
 
         this.buttonType = "password";
@@ -68,42 +73,36 @@ export class ChangeCryptPasswordComponent implements OnInit {
     async changePassword() {
         this.work_process = true;
 
-        this.changeCryptPassword();
-
-        this.work_process = false;
-
+        this.changeCryptPassword().then(() => {
+            this.work_process = false;
+        });
     }
 
-    private changeCryptPassword() {
-        if (!this.passwordFormGroup.valid) {
-            this.errortext_cryptsetup = this.i18n({ value: 'Error: Input invalid', id: 'checkinputs' });
-            this.errortext_cryptsetup_detail = '';
+    private async changeCryptPassword() {
+        let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
+        let newPassword = this.passwordFormGroup.get("newPassword").value;
+        let confirmPassword = this.passwordFormGroup.get("confirmPassword").value;
 
+        // Just to be sure that sane values are read to not brick the encryption when gui logic failed
+        if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
             return;
         }
 
-        let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
-        let newPassword = this.passwordFormGroup.get("newPassword").value;
+        let oneliner = "";
+        for (let drive of this.crypt_drives) {
+            oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath}; `
+        }
+        console.log(oneliner);
 
-        for (let drive of this.crpyt_drives) {
-            const result_set = this.electron.ipcRenderer.sendSync('exec-cmd-sync', `printf '%s\\n' '${oldPassword}' '${newPassword}' '${newPassword}' | pkexec /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath}`);
-            if (result_set.error === undefined) {
-                this.successtext_cryptsetup = '';
-                this.errortext_cryptsetup = '';
-                this.errortext_cryptsetup_detail = '';
-            }
-            else {
-                this.successtext_cryptsetup = '';
-                this.errortext_cryptsetup = this.i18n({ value: 'Error: Could not change crypt password', id: 'errornewpassword' });
-                //this.errortext_cryptsetup_detail = result_set.error;
-                this.errortext_cryptsetup_detail = '';
-                return;
-            }
-
+        return this.utils.execCmd(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
             this.successtext_cryptsetup = this.i18n({ value: 'Crypt password changed successfully', id: 'cryptfinishprocess' });
             this.errortext_cryptsetup = '';
             this.errortext_cryptsetup_detail = '';
-        }
+        }).catch(() => {
+            this.successtext_cryptsetup = '';
+            this.errortext_cryptsetup = this.i18n({ value: 'Error: Could not change crypt password', id: 'errornewpassword' });
+            this.errortext_cryptsetup_detail = '';
+        });
     }
 
     confirmValidation(group: FormGroup) {
