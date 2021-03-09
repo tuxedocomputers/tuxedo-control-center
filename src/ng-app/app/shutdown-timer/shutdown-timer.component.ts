@@ -19,6 +19,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config.service';
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-shutdown-timer',
@@ -35,7 +36,10 @@ export class ShutdownTimerComponent implements OnInit {
 
     public shutdownTime: Date;
 
-    constructor(private config: ConfigService) { }
+    constructor(
+        private config: ConfigService,
+        private utils: UtilsService
+    ) { }
 
     ngOnInit() {
         let savedShutdown = this.config.getSettings().shutdownTime;
@@ -48,6 +52,8 @@ export class ShutdownTimerComponent implements OnInit {
     }
 
     public saveTime() {
+        this.utils.pageDisabled = true;
+
         console.log(`selectedHour: ${this.selectedHour}`);
         console.log(`selectedHour: ${this.selectedMinute}`);
 
@@ -62,7 +68,9 @@ export class ShutdownTimerComponent implements OnInit {
 
         console.log(this.shutdownTime.toISOString());
         this.config.getSettings().shutdownTime = this.shutdownTime.toISOString();
-        this.config.saveSettings();
+        this.config.saveSettings().then(() => {
+            this.utils.pageDisabled = false;
+        });
     }
 
     public deleteTimer() {
