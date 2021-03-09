@@ -39,8 +39,7 @@ export class ShutdownTimerComponent implements OnInit {
 
     ngOnInit() {
         let savedShutdown = this.config.getSettings().shutdownTime;
-        if(savedShutdown != null)
-        {
+        if (savedShutdown != null) {
             let convertDatetime = new Date(savedShutdown);
             this.selectedHour = convertDatetime.getHours();
             this.selectedMinute = convertDatetime.getMinutes();
@@ -57,6 +56,9 @@ export class ShutdownTimerComponent implements OnInit {
         this.shutdownTime.setSeconds(0);
         this.shutdownTime.setHours(this.selectedHour);
         this.shutdownTime.setMinutes(this.selectedMinute);
+        if (this.shutdownTime < new Date()) {
+            this.shutdownTime.setDate(this.shutdownTime.getDate() + 1)
+        }
 
         console.log(this.shutdownTime.toISOString());
         this.config.getSettings().shutdownTime = this.shutdownTime.toISOString();
