@@ -35,7 +35,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
     show_password_button_text = '';
     successtext_cryptsetup = '';
     errortext_cryptsetup = '';
-    errortext_cryptsetup_detail = '';
     crypt_drives = [];
 
     passwordFormGroup: FormGroup = new FormGroup({
@@ -45,7 +44,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }, { validators: [this.confirmValidation] })
 
     constructor(
-        private electron: ElectronService,
         private i18n: I18n,
         private utils: UtilsService
     ) { }
@@ -100,11 +98,9 @@ export class ChangeCryptPasswordComponent implements OnInit {
         return this.utils.execCmd(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
             this.successtext_cryptsetup = this.i18n({ value: 'Crypt password changed successfully', id: 'cryptfinishprocess' });
             this.errortext_cryptsetup = '';
-            this.errortext_cryptsetup_detail = '';
         }).catch(() => {
             this.successtext_cryptsetup = '';
-            this.errortext_cryptsetup = this.i18n({ value: 'Error: Could not change crypt password', id: 'errornewpassword' });
-            this.errortext_cryptsetup_detail = '';
+            this.errortext_cryptsetup = this.i18n({ value: 'Error: Could not change crypt password (wrong old crypt password?)', id: 'errornewpassword' });
         });
     }
 

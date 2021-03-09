@@ -394,49 +394,49 @@
         <target state="translated">Maximum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html">
         <source>Fan control</source>
         <target state="translated">Fan control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html">
         <source>Fan profile</source>
         <target state="translated">Fan profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">248</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html">
         <source>Webcam</source>
         <target state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html">
         <source>Webcam status (on/off)</source>
         <target state="translated">Webcam status (on/off)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">286</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html">
         <source>on</source>
         <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">290</context>
+          <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html">
         <source>off</source>
         <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">289</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
@@ -712,6 +712,85 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
+      </trans-unit><trans-unit id="cryptPasswordTabTitle" datatype="html">
+        <source>Change Crypt Password</source>
+        <target state="translated">Change Crypt Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit><trans-unit id="nocryptinstall" datatype="html">
+        <source>
+        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encription.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encription can only be enabled during installation of your system. If you want to use it, you have to
+            reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
+            in "Crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programms stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+    </source>
+        <target state="needs-adaptation">
+          <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encription.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
+          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encription can only be enabled during installation of your system. If you want to use it, you have to
+            reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
+            in "Crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programms stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptPasswordPlaceholderCryptPassword" datatype="html">
+        <source>Current Password</source>
+        <target state="translated">Current Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptPasswordInputCurrentCrypt" datatype="html">
+        <source>
+                    Please enter your current crypt password
+                </source>
+        <target state="needs-adaptation">Please enter your current crypt password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptPasswordPlaceholderNewPassword" datatype="html">
+        <source>New Password</source>
+        <target state="translated">New Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptPasswordInputNewCrypt" datatype="html">
+        <source>
+                    Please enter your new crypt password
+                </source>
+        <target state="needs-adaptation">Please enter your new crypt password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptPasswordPlaceholderConfirmPassword" datatype="html">
+        <source>Confirm New Password</source>
+        <target state="translated">Confirm New Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptPasswordNotMatch" datatype="html">
+        <source>
+                    Passwords do not match
+                </source>
+        <target state="needs-adaptation">Passwords do not match</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit><trans-unit id="cryptButtonSave" datatype="html">
+        <source>Save</source>
+        <target state="translated">Save</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="2d98254c9f29dc884ad9c20434da9b55b10e696c" datatype="html">
         <source>Service unavailable</source>
@@ -726,6 +805,42 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Communication with tccd service is unavailable, please restart service and try again.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cryptButtonShowPassword" datatype="html">
+        <source>Show Passwords</source>
+        <target state="translated">Show Passwords</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cryptButtonHidePassword" datatype="html">
+        <source>Hide Passwords</source>
+        <target state="translated">Hide Passwords</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cryptfinishprocess" datatype="html">
+        <source>Crypt password changed successfully</source>
+        <target state="translated">Crypt password changed successfully</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="errornewpassword" datatype="html">
+        <source>Error: Could not change crypt password (wrong old crypt password?)</source>
+        <target state="translated">Error: Could not change crypt password (wrong old crypt password?)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
