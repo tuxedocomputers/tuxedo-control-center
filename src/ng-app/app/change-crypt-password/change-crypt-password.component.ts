@@ -72,12 +72,12 @@ export class ChangeCryptPasswordComponent implements OnInit {
         this.utils.pageDisabled = true;
 
         this.changeCryptPassword().then(() => {
-            this.utils.pageDisabled = false;
             this.passwordFormGroup.setValue({
                 cryptPassword: "",
                 newPassword: "",
                 confirmPassword: ""
             });
+            this.utils.pageDisabled = false;
         });
     }
 
