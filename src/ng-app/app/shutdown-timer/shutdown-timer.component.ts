@@ -54,9 +54,6 @@ export class ShutdownTimerComponent implements OnInit {
     public saveTime() {
         this.utils.pageDisabled = true;
 
-        console.log(`selectedHour: ${this.selectedHour}`);
-        console.log(`selectedHour: ${this.selectedMinute}`);
-
         this.shutdownTime = new Date();
         this.shutdownTime.setMilliseconds(0);
         this.shutdownTime.setSeconds(0);
@@ -66,7 +63,6 @@ export class ShutdownTimerComponent implements OnInit {
             this.shutdownTime.setDate(this.shutdownTime.getDate() + 1)
         }
 
-        console.log(this.shutdownTime.toISOString());
         this.config.getSettings().shutdownTime = this.shutdownTime.toISOString();
         this.config.saveSettings().then(() => {
             this.utils.pageDisabled = false;
