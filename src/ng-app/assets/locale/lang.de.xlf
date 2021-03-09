@@ -716,7 +716,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit><trans-unit id="cryptPasswordTabTitle" datatype="html">
         <source>Change Crypt Password</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Verschlüsselungspasswort ändern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
           <context context-type="linenumber">8</context>
@@ -728,14 +728,17 @@ Handelsregisternummer HRB 27755
             reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
             in "Crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programms stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
     </source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">
+        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Wie es aussieht verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur wärend der installation ihres Systems aktiviert werden. Wenn sie die Festplattenverschlüsselung verwenden wollen, müssen sie ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "Crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn sie ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+    </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit><trans-unit id="cryptPasswordPlaceholderCryptPassword" datatype="html">
         <source>Current Password</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Aktuelles Passwort</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">38</context>
@@ -744,14 +747,14 @@ Handelsregisternummer HRB 27755
         <source>
                     Please enter your current crypt password
                 </source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Bitte geben Sie ihr aktuelles Verschlüsselungspasswort ein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit><trans-unit id="cryptPasswordPlaceholderNewPassword" datatype="html">
         <source>New Password</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Neues Passwort</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">46</context>
@@ -760,14 +763,14 @@ Handelsregisternummer HRB 27755
         <source>
                     Please enter your new crypt password
                 </source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Bitte geben Sie ihr neues Verschlüsselungspasswort ein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit><trans-unit id="cryptPasswordPlaceholderConfirmPassword" datatype="html">
         <source>Confirm New Password</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Neues Passwort bestätigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">55</context>
@@ -776,14 +779,14 @@ Handelsregisternummer HRB 27755
         <source>
                     Passwords do not match
                 </source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Passwörter stimmen nicht überein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit><trans-unit id="cryptButtonSave" datatype="html">
         <source>Save</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Speichern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">66</context>
@@ -807,7 +810,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
         <source>Show Passwords</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Passwörter anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -819,7 +822,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cryptButtonHidePassword" datatype="html">
         <source>Hide Passwords</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Passwörter verstecken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -827,7 +830,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cryptfinishprocess" datatype="html">
         <source>Crypt password changed successfully</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Verschlüsselungspasswort erfolgreich geändert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -835,7 +838,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="errornewpassword" datatype="html">
         <source>Error: Could not change crypt password (wrong old crypt password?)</source>
-        <target state="needs-translation"/>
+        <target phase-name="approval-1" state="translated">Fehler: Verschlüsselungspasswort konnte nicht geändert werden (falsches altes Verschlüsselungspasswort?)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.ts</context>
           <context context-type="linenumber">1</context>

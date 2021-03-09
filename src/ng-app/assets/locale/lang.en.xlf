@@ -747,7 +747,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>
                     Please enter your current crypt password
                 </source>
-        <target state="needs-adaptation">Please enter your current crypt password</target>
+        <target state="translated">Please enter your current crypt password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">40</context>
@@ -763,7 +763,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>
                     Please enter your new crypt password
                 </source>
-        <target state="needs-adaptation">Please enter your new crypt password</target>
+        <target state="translated">Please enter your new crypt password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">49</context>
@@ -779,7 +779,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>
                     Passwords do not match
                 </source>
-        <target state="needs-adaptation">Passwords do not match</target>
+        <target state="translated">Passwords do not match</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">58</context>
