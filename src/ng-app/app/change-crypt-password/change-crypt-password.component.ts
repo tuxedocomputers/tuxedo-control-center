@@ -91,8 +91,12 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
         let oneliner = "";
         for (let drive of this.crypt_drives) {
-            oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath}; `
+            oneliner += `printf '%s\\n' '${oldPassword}' | /usr/sbin/cryptsetup open --type luks -q --test-passphrase ${drive.devPath} && `
         }
+        for (let drive of this.crypt_drives) {
+            oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
+        }
+        oneliner = oneliner.slice(0, -4); // remove the tailing " && "
         console.log(oneliner);
 
         return this.utils.execCmd(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
