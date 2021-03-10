@@ -97,7 +97,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
             oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
         }
         oneliner = oneliner.slice(0, -4); // remove the tailing " && "
-        console.log(oneliner);
 
         return this.utils.execCmd(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
             this.successtext_cryptsetup = this.i18n({ value: 'Crypt password changed successfully', id: 'cryptfinishprocess' });
