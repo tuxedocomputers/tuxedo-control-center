@@ -18,9 +18,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
-import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
-
 import { DriveController } from "../../../common/classes/DriveController";
 import { I18n } from '@ngx-translate/i18n-polyfill';
 
