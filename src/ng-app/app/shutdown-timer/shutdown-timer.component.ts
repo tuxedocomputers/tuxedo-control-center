@@ -18,7 +18,6 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
 
 @Component({
@@ -27,52 +26,35 @@ import { UtilsService } from '../utils.service';
     styleUrls: ['./shutdown-timer.component.scss']
 })
 export class ShutdownTimerComponent implements OnInit {
-
     public hours: Array<number> = [...Array(24).keys()];
     public minutes: Array<number> = [...Array(60).keys()];
 
-    public selectedHour: number = null;
-    public selectedMinute: number = null;
-
-    public shutdownTime: Date;
+    public selectedHour: number = 0;
+    public selectedMinute: number = 0;
 
     constructor(
-        private config: ConfigService,
         private utils: UtilsService
     ) { }
 
     ngOnInit() {
-        let savedShutdown = this.config.getSettings().shutdownTime;
-        if (savedShutdown != null) {
-            let convertDatetime = new Date(savedShutdown);
-            this.selectedHour = convertDatetime.getHours();
-            this.selectedMinute = convertDatetime.getMinutes();
-            this.shutdownTime = convertDatetime;
-        }
+        // TODO read shutdown time
     }
 
     public saveTime() {
         this.utils.pageDisabled = true;
-
-        this.shutdownTime = new Date();
-        this.shutdownTime.setMilliseconds(0);
-        this.shutdownTime.setSeconds(0);
-        this.shutdownTime.setHours(this.selectedHour);
-        this.shutdownTime.setMinutes(this.selectedMinute);
-        if (this.shutdownTime < new Date()) {
-            this.shutdownTime.setDate(this.shutdownTime.getDate() + 1)
-        }
-
-        this.config.getSettings().shutdownTime = this.shutdownTime.toISOString();
-        this.config.saveSettings().then(() => {
+        this.utils.execCmd("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
+            this.utils.pageDisabled = false;
+        }).catch(() => {
             this.utils.pageDisabled = false;
         });
     }
 
-    public deleteTimer() {
-        this.shutdownTime = null;
-
-        this.config.getSettings().shutdownTime = null;
-        this.config.saveSettings();
+    public deleteTime() {
+        this.utils.pageDisabled = true;
+        this.utils.execCmd("pkexec shutdown -c").then(() => {
+            this.utils.pageDisabled = false;
+        }).catch(() => {
+            this.utils.pageDisabled = false;
+        });
     }
 }
