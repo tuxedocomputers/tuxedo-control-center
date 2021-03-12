@@ -94,7 +94,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public activateOverlay(status: boolean): void {
         if (!this.addProfileTile) {
-            if (status === false) {
+            if (status === true) {
                 this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
             }
             this.showOverlay = status;
