@@ -32,19 +32,23 @@ export class ShutdownTimerComponent implements OnInit {
     public selectedHour: number = 0;
     public selectedMinute: number = 0;
 
+    public appliedTime: string = "";
+
     constructor(
         private utils: UtilsService
     ) { }
 
     ngOnInit() {
-        // TODO read shutdown time
+        this.updateTime();
     }
 
     public saveTime() {
         this.utils.pageDisabled = true;
         this.utils.execCmd("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
+            this.updateTime();
             this.utils.pageDisabled = false;
         }).catch(() => {
+            this.updateTime();
             this.utils.pageDisabled = false;
         });
     }
@@ -52,9 +56,21 @@ export class ShutdownTimerComponent implements OnInit {
     public deleteTime() {
         this.utils.pageDisabled = true;
         this.utils.execCmd("pkexec shutdown -c").then(() => {
+            this.updateTime();
             this.utils.pageDisabled = false;
         }).catch(() => {
+            this.updateTime();
             this.utils.pageDisabled = false;
+        });
+    }
+
+    public updateTime() {
+        this.utils.execCmd("cat /run/systemd/shutdown/scheduled").then((result) => {
+            let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
+            let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
+            this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
+        }).catch(() => {
+            this.appliedTime = ""
         });
     }
 }
