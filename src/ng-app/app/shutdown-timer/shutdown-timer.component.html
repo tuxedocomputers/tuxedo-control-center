@@ -21,7 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <p i18n="@@cShutdownTimerInformations">This sets a one time shutdown time. It will be automatically cleared on next
         boot, or when selecting "Delete Time" below.</p>
 
-    <p *ngIf="appliedTime !== ''">Set shutdown time: {{ appliedTime }}</p>
+    <p *ngIf="appliedTime !== ''" i18n="@@cShutdownTimerSetTime">Set shutdown time: {{ appliedTime }}</p>
 
     <mat-form-field appearance="fill" style="margin-right: 10px;">
         <mat-label i18n="@@cShutdownTimerHour">Hour</mat-label>
