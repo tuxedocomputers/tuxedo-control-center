@@ -27,6 +27,7 @@
 #define MAGIC_READ_UW	IOCTL_MAGIC + 3
 #define MAGIC_WRITE_UW	IOCTL_MAGIC + 4
 
+#define MOD_API_MIN_VERSION "0.2.2"
 
 // General
 #define R_MOD_VERSION		_IOR(IOCTL_MAGIC, 0x00, char*)
@@ -84,9 +85,6 @@
 #define W_UW_MODE		_IOW(MAGIC_WRITE_UW, 0x12, int32_t*)
 #define W_UW_MODE_ENABLE	_IOW(MAGIC_WRITE_UW, 0x13, int32_t*)
 
-#define MIN_MAJOR_W_UW_FANAUTO 0
-#define MIN_MINOR_W_UW_FANAUTO 2
-#define MIN_PATCH_W_UW_FANAUTO 2
 #define W_UW_FANAUTO	_IO(MAGIC_WRITE_UW, 0x14) // undo all previous calls of W_UW_FANSPEED and W_UW_FANSPEED2
 
 #endif
