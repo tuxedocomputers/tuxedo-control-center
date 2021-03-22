@@ -43,18 +43,24 @@ export class ShutdownTimerComponent implements OnInit {
     }
 
     public saveTime() {
-        this.utils.execCmd("shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
+        this.utils.pageDisabled = true;
+        this.utils.execCmd("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
             this.updateTime();
+            this.utils.pageDisabled = false;
         }).catch(() => {
             this.updateTime();
+            this.utils.pageDisabled = false;
         });
     }
 
     public deleteTime() {
-        this.utils.execCmd("shutdown -c").then(() => {
+        this.utils.pageDisabled = true;
+        this.utils.execCmd("pkexec shutdown -c").then(() => {
             this.updateTime();
+            this.utils.pageDisabled = false;
         }).catch(() => {
             this.updateTime();
+            this.utils.pageDisabled = false;
         });
     }
 
