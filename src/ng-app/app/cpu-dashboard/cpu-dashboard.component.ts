@@ -132,8 +132,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       }
     }));
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
-      this.activeProfile = profile;
-      this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
+      if (profile) {
+        this.activeProfile = profile;
+        this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
+      }
     }));
 
     const fanProfileNames = this.config.getFanProfiles().map(fanProfile => fanProfile.name);

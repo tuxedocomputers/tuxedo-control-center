@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.updateLanguageName();
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
-        this.subscriptions.add(this.state.activeProfileObserver.subscribe(activeProfile => { this.getSettings(); }));
+        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Wait for the first true/false availability announcement, undefined is ignored
@@ -103,7 +103,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public getSettings(): ITccSettings {
-        this.activeProfileName = this.state.getActiveProfile().name;
+        if (this.state.getActiveProfile()) {
+            this.activeProfileName = this.state.getActiveProfile().name;
+        }
         return this.config.getSettings();
     }
 

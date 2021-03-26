@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -71,6 +71,8 @@ export class TccDBusData {
     public fans: FanData[];
     public webcamSwitchStatus: boolean;
     public webcamSwitchAvailable: boolean;
+    public tempProfileName: string;
+    public activeProfileJSON: string;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -88,6 +90,11 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetFanDataGPU2() { return this.data.fans[2].export(); }
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
+    GetActiveProfileJSON() { return this.data.activeProfileJSON; }
+    SetTempProfile(profileName: string) {
+        this.data.tempProfileName = profileName;
+        return true;
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -100,7 +107,9 @@ TccDBusInterface.configureMembers({
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
         WebcamSWAvailable: { outSignature: 'b' },
-        GetWebcamSWStatus: { outSignature: 'b' }
+        GetWebcamSWStatus: { outSignature: 'b' },
+        GetActiveProfileJSON: { outSignature: 's' },
+        SetTempProfile: { inSignature: 's',  outSignature: 'b' },
     },
     signals: {}
 });
