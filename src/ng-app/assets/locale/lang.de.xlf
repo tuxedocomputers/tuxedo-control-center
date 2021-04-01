@@ -395,49 +395,49 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="translated">Maximale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html" approved="yes">
         <source>Fan control</source>
         <target phase-name="approval-1" state="signed-off">Lüftersteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html" approved="yes">
         <source>Fan profile</source>
         <target phase-name="approval-1" state="signed-off">Lüfterprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">248</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html" approved="yes">
         <source>Webcam</source>
         <target phase-name="approval-1" state="signed-off">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
         <source>Webcam status (on/off)</source>
         <target phase-name="approval-1" state="signed-off">Status der Webcam (an/aus)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">286</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html" approved="yes">
         <source>on</source>
         <target phase-name="approval-1" state="signed-off">an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">290</context>
+          <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html" approved="yes">
         <source>off</source>
         <target phase-name="approval-1" state="signed-off">aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">289</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
         <source>Info</source>
@@ -665,54 +665,52 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">251</context>
         </context-group>
-      </trans-unit><trans-unit id="shutdowntimerInformations" datatype="html" approved="yes">
-        <source>shutdowntimerInformations</source>
-        <target phase-name="approval-1" state="signed-off">Hier können Sie einen Shutdown Timer anlegen, der Ihren Rechner zu einer bestimmten Uhrzeit automatisch herunterfährt.</target>
+      </trans-unit><trans-unit id="cShutdownTimerInformations" datatype="html">
+        <source>This sets a one time shutdown time. It will be automatically cleared on next
+        boot, or when selecting "Delete Time" below.</source>
+        <target phase-name="approval-1" state="translated">Dies setzt einen Einmalzeitpunkt zum Herunterfahren.
+        Er wird beim nächsten Hochfahren automatisch oder wenn sie unten "Zeit löschen" auswählen gelöscht.
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
-      </trans-unit><trans-unit id="shutdowntimerTimerInactive" datatype="html" approved="yes">
-        <source>shutdowntimerTimerActive</source>
-        <target phase-name="approval-1" state="signed-off">Der Timer ist momentan nicht aktiv.</target>
+      </trans-unit><trans-unit id="cShutdownTimerSetTime" datatype="html">
+        <source>Set shutdown time: <x id="INTERPOLATION" equiv-text="{{ appliedTime }}"/></source>
+        <target phase-name="approval-1" state="translated">
+        Gesetzte Zeit zum Herunterfahren: <x id="INTERPOLATION" equiv-text="{{ appliedTime }}"/>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">24</context>
         </context-group>
-      </trans-unit><trans-unit id="shutdowntimerTimerActive" datatype="html" approved="yes">
-        <source>shutdowntimerTimerActive</source>
-        <target phase-name="approval-1" state="signed-off">Der Timer ist aktiv und auf folgende Uhrzeit gestellt:</target>
+      </trans-unit><trans-unit id="cShutdownTimerHour" datatype="html">
+        <source>Hour</source>
+        <target phase-name="approval-1" state="translated">Stunde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">27</context>
         </context-group>
-      </trans-unit><trans-unit id="shutdowntimerHour" datatype="html" approved="yes">
-        <source>Stunde</source>
-        <target phase-name="approval-1" state="needs-adaptation">Stunde</target>
+      </trans-unit><trans-unit id="cShutdownTimerMinute" datatype="html">
+        <source>Minute</source>
+        <target phase-name="approval-1" state="translated">Minute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-      </trans-unit><trans-unit id="shutdowntimerMinute" datatype="html" approved="yes">
-        <source>Minuten</source>
-        <target phase-name="approval-1" state="needs-adaptation">Minute</target>
+      </trans-unit><trans-unit id="cShutdownTimerButtonDeleteTime" datatype="html">
+        <source>Delete Time</source>
+        <target phase-name="approval-1" state="translated">Zeit löschen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">44</context>
         </context-group>
-      </trans-unit><trans-unit id="shutdowntimerButtonSave" datatype="html" approved="yes">
-        <source>Speichern</source>
-        <target phase-name="approval-1" state="needs-adaptation">Speichern</target>
+      </trans-unit><trans-unit id="cShutdownTimerButtonSave" datatype="html">
+        <source>Save</source>
+        <target phase-name="approval-1" state="translated">Speichern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit><trans-unit id="shutdowntimerDeleteTimer" datatype="html" approved="yes">
-        <source>Timer löschen</source>
-        <target phase-name="approval-1" state="needs-adaptation">Timer löschen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2d98254c9f29dc884ad9c20434da9b55b10e696c" datatype="html">
