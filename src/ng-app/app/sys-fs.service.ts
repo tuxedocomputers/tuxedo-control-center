@@ -38,8 +38,6 @@ export class SysFsService implements OnDestroy {
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
 
-    console.log("Boost: " + this.cpu.boost.readValueNT() + "\n");
-
     const displayBacklightControllerBasepath = '/sys/class/backlight';
     const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
     this.displayBacklightControllers = [];
@@ -89,6 +87,11 @@ export class SysFsService implements OnDestroy {
         energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
         reducedAvailableFreq: this.cpu.cores[0].getReducedAvailableFreqNT()
       };
+      if (this.cpu.boost.readValueNT() !== undefined) {
+        // FIXME: Use actual max boost frequency
+        cpuInfo.maxFreq *= 2;
+        cpuInfo.scalingAvailableFrequencies.push(cpuInfo.maxFreq);
+      }
     } catch (err) {
       console.log(err);
     }
