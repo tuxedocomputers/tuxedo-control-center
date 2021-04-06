@@ -39,6 +39,8 @@ export class CpuController {
 
     public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
 
+    public readonly boost = new SysFsPropertyNumList(path.join(this.basePath, 'cpufreq/boost'));
+
     public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores
         this.cores = [];

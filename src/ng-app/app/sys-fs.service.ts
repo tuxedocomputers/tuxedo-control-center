@@ -38,6 +38,8 @@ export class SysFsService implements OnDestroy {
   constructor() {
     this.cpu = new CpuController('/sys/devices/system/cpu');
 
+    console.log("Boost: " + this.cpu.boost.readValueNT() + "\n");
+
     const displayBacklightControllerBasepath = '/sys/class/backlight';
     const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
     this.displayBacklightControllers = [];
