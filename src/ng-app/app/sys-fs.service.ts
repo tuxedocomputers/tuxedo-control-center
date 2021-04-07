@@ -91,7 +91,7 @@ export class SysFsService implements OnDestroy {
       if (cpuInfo.boost !== undefined) {
         // FIXME: Use actual max boost frequency
         cpuInfo.maxFreq *= 2;
-        cpuInfo.scalingAvailableFrequencies.push(cpuInfo.maxFreq);
+        cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
       }
     } catch (err) {
       console.log(err);
