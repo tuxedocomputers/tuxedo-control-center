@@ -169,14 +169,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                         <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
                         <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
-                        <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2], selectableFrequencies)) }} GHz</content>
+                        <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[2], selectableFrequencies)) }} GHz</content>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                             <mat-slider #inputScalingMinFrequency
                                 formControlName="scalingMinFrequency"
                                 [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2]"
+                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[2]"
                                 step="100000"
                                 (change)="sliderMinFreqChange()"
                                 color="primary">
@@ -185,8 +185,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                             <mat-slider #inputScalingMinFrequencyDummy
                                 [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2]"
-                                [value]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2]"
+                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[2]"
+                                [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[2]"
                                 step="100000"
                                 color="primary">
                             </mat-slider>
