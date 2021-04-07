@@ -176,7 +176,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <mat-slider #inputScalingMinFrequency
                                 formControlName="scalingMinFrequency"
                                 [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 1]"
+                                [max]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2]"
                                 step="100000"
                                 (change)="sliderMinFreqChange()"
                                 color="primary">
@@ -185,8 +185,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                             <mat-slider #inputScalingMinFrequencyDummy
                                 [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 1]"
-                                [value]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 1]"
+                                [max]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2]"
+                                [value]="cpuInfo.boost === undefined ? cpuInfo.maxFreq : selectableFrequencies[selectableFrequencies.length - 2]"
                                 step="100000"
                                 color="primary">
                             </mat-slider>
@@ -203,9 +203,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             {{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
                         <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost === undefined)" [ngClass]="{'inactive': true}">
                             {{ formatFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
-                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
+                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
                             Boost</content>
-                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">
+                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">
                             Boost</content>
                         <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost !== undefined)" [ngClass]="{'inactive': true}">
                             Boost</content>
