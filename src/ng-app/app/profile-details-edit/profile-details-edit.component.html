@@ -208,6 +208,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 [min]="cpuInfo.minFreq"
                                 [max]="cpuInfo.maxFreq"
                                 step="100000"
+                                (change)="sliderMaxFreqChange()"
                                 color="primary">
                             </mat-slider>
                         </content>
