@@ -246,6 +246,17 @@ export class CpuWorker extends DaemonWorker {
                 }
             }
 
+            if (this.cpuCtrl.boost.isAvailable()) {
+                const currentBoost = this.cpuCtrl.boost.readValue()
+                const coreMaxFreq = core.cpuinfoMaxFreq.readValue();
+                const maxFreqProfile = profile.cpu.scalingMaxFrequency;
+                if ((currentBoost && maxFreqProfile <= coreMaxFreq) || (!currentBoost && maxFreqProfile > coreMaxFreq)) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of '
+                    + (maxFreqProfile > coreMaxFreq));
+                }
+            }
+
             if (core.scalingGovernor.isAvailable() && core.scalingAvailableGovernors.isAvailable()) {
                 const currentGovernor = core.scalingGovernor.readValue();
                 const governorProfile = profile.cpu.governor;

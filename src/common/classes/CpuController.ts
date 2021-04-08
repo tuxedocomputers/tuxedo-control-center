@@ -124,6 +124,18 @@ export class CpuController {
 
             core.scalingMaxFreq.writeValue(newMaxFrequency);
         }
+
+        // AMD does not count boost frequency to coreMaxFrequency while Intel does. So on AMD a setMaxFrequency over
+        // coreMaxFrequency indicates that the boost switch should be enabled. On Intel this switch doesn't exist
+        // and boost is handled via scalingMaxFreq.
+        if (this.boost.isAvailable()) {
+            if (setMaxFrequency > this.cores[0].cpuinfoMaxFreq.readValue()) {
+                this.boost.writeValue(true);
+            }
+            else {
+                this.boost.writeValue(false);
+            }
+        }
     }
 
     /**
