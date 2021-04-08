@@ -100,9 +100,19 @@ export class CpuController {
 
             // Default to max available
             if (setMaxFrequency === undefined) {
-                newMaxFrequency = coreMaxFrequency;
+                if (this.boost === undefined) {
+                    newMaxFrequency = coreMaxFrequency;
+                }
+                else {
+                    newMaxFrequency = coreMaxFrequency * 2;
+                }
             } else if (setMaxFrequency === -1) {
-                newMaxFrequency = core.getReducedAvailableFreq();
+                if (this.boost === undefined) {
+                    newMaxFrequency = core.getReducedAvailableFreq();
+                }
+                else {
+                    newMaxFrequency = coreMaxFrequency;
+                }
             } else {
                 newMaxFrequency = setMaxFrequency;
             }
