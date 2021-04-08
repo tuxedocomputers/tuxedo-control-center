@@ -73,6 +73,7 @@ export class TccDBusData {
     public webcamSwitchAvailable: boolean;
     public tempProfileName: string;
     public activeProfileJSON: string;
+    public profilesJSON: string;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -95,6 +96,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
         this.data.tempProfileName = profileName;
         return true;
     }
+    GetProfilesJSON() { return this.data.profilesJSON; }
 }
 
 TccDBusInterface.configureMembers({
@@ -110,6 +112,7 @@ TccDBusInterface.configureMembers({
         GetWebcamSWStatus: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },
+        GetProfilesJSON: { outSignature: 's' }
     },
     signals: {}
 });

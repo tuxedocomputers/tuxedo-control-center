@@ -114,6 +114,14 @@ export class TccDBusController {
         }
     }
 
+    async getProfilesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetProfilesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async setTempProfileName(profileName: string): Promise<boolean> {
         try {
             return await this.interface.SetTempProfile(profileName);
