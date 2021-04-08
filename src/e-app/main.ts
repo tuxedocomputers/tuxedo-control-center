@@ -1,9 +1,28 @@
+/*!
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 import { TccDBusController } from '../common/classes/TccDBusController';
+import { TccProfile } from '../common/models/TccProfile';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -45,7 +64,7 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
     activateTccGui();
 });
 
-app.whenReady().then( () => {
+app.whenReady().then( async () => {
     const success = globalShortcut.register(startTCCAccelerator, () => {
         activateTccGui();
     });
@@ -121,7 +140,39 @@ function activateTccGui() {
     }
 }
 
-function createTccTray() {
+async function getProfiles(): Promise<TccProfile[]> {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    if (!await dbus.dbusAvailable()) return [];
+    try {
+        const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
+        return profiles;
+    } catch (err) {
+        console.log('Error: ' + err);
+        return [];
+    }
+}
+
+async function setTempProfile(profileName: string) {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    if (!await dbus.dbusAvailable()) return false;
+    const result = await dbus.setTempProfileName(profileName);
+    return result;
+}
+
+async function getActiveProfile(): Promise<TccProfile> {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    if (!await dbus.dbusAvailable()) return undefined;
+    try {
+        return JSON.parse(await dbus.getActiveProfileJSON());
+    } catch {
+        return undefined;
+    }
+}
+
+async function createTccTray() {
     const trayInstalled = isAutostartTrayInstalled();
     const trayIcon =  path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png');
     if (!tray) {
@@ -136,8 +187,29 @@ function createTccTray() {
         buttons: ['yes', 'cancel' ],
         message: 'Change graphics configuration and shutdown?'
     };
+
+    const activeProfile = await getActiveProfile();
+    const profiles: TccProfile[] = await getProfiles();
+    const profilesSubmenu: Object[] = profiles.map(profile => {
+        // Creation of each profile selection submenu item
+        return {
+            label: profile.name,
+            click: () => { setTempProfile(profile.name) }
+        };
+    });
+    // Add profiles submenu "header"
+    profilesSubmenu.unshift(
+        { label: 'Select temp profile', enabled: false },
+        { type: 'separator' }
+    );
+
     const contextMenu = Menu.buildFromTemplate([
         { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); }, },
+        {
+            label: 'Profiles',
+            submenu: profilesSubmenu,
+            visible: profilesSubmenu.length > 0
+        },
         {
                 label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
                 click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
