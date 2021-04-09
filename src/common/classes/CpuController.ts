@@ -100,12 +100,7 @@ export class CpuController {
 
             // Default to max available
             if (setMaxFrequency === undefined) {
-                if (this.boost === undefined) {
-                    newMaxFrequency = coreMaxFrequency;
-                }
-                else {
-                    newMaxFrequency = coreMaxFrequency * 2;
-                }
+                newMaxFrequency = coreMaxFrequency;
             } else if (setMaxFrequency === -1) {
                 if (this.boost === undefined) {
                     newMaxFrequency = core.getReducedAvailableFreq();
@@ -139,7 +134,7 @@ export class CpuController {
         // coreMaxFrequency indicates that the boost switch should be enabled. On Intel this switch doesn't exist
         // and boost is handled via scalingMaxFreq.
         if (this.boost.isAvailable()) {
-            if (setMaxFrequency > this.cores[0].cpuinfoMaxFreq.readValue()) {
+            if (setMaxFrequency === undefined || setMaxFrequency > this.cores[0].cpuinfoMaxFreq.readValue()) {
                 this.boost.writeValue(true);
             }
             else {
