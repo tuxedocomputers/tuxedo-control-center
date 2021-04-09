@@ -17,36 +17,30 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div>
-    <div>
-        <p i18n="@@shutdowntimerInformations">shutdowntimerInformations</p>
-    </div>
+<div class=content>
+    <p i18n="@@cShutdownTimerInformations">This sets a one time shutdown time. It will be automatically cleared on next
+        boot, or when selecting "Delete Time" below.</p>
 
-    <div *ngIf="shutdownTime == null" class="content-container">
-        <span i18n="@@shutdowntimerTimerInactive">shutdowntimerTimerActive</span>
-    </div>
+    <p *ngIf="appliedTime !== ''" i18n="@@cShutdownTimerSetTime">Set shutdown time: {{ appliedTime }}</p>
 
-    <div *ngIf="shutdownTime != null" class="content-container">
-        <span i18n="@@shutdowntimerTimerActive">shutdowntimerTimerActive</span>
-        {{ selectedHour.toString().length < 2 ? 0 + selectedHour.toString() : selectedHour.toString() }}:{{ selectedMinute.toString().length < 2 ? 0 + selectedMinute.toString() : selectedMinute.toString() }}
-    </div>
-    
     <mat-form-field appearance="fill" style="margin-right: 10px;">
-        <mat-label i18n="@@shutdowntimerHour">Stunde</mat-label>
+        <mat-label i18n="@@cShutdownTimerHour">Hour</mat-label>
         <mat-select [(value)]="selectedHour">
-            <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour.toString().length < 2 ? 0 + hour.toString() : hour.toString() }}</mat-option>
+            <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour.toString().length < 2 ? 0 + hour.toString() :
+                    hour.toString() }}</mat-option>
         </mat-select>
     </mat-form-field>
-    
+
     <mat-form-field appearance="fill">
-        <mat-label i18n="@@shutdowntimerMinute">Minuten</mat-label>
+        <mat-label i18n="@@cShutdownTimerMinute">Minute</mat-label>
         <mat-select [(value)]="selectedMinute">
-            <mat-option *ngFor="let minute of minutes" [value]="minute">{{ minute.toString().length < 2 ? 0 + minute.toString() : minute.toString() }}</mat-option>
+            <mat-option *ngFor="let minute of minutes" [value]="minute">{{ minute.toString().length < 2 ? 0 +
+                    minute.toString() : minute.toString() }}</mat-option>
         </mat-select>
     </mat-form-field>
 </div>
 
-<div>
-    <button mat-flat-button (click)="saveTime()" i18n="@@shutdowntimerButtonSave" style="margin-right: 15px;">Speichern</button>
-    <button mat-flat-button (click)="deleteTimer()" i18n="@@shutdowntimerDeleteTimer">Timer löschen</button>
+<div class=controls>
+    <button mat-stroked-button (click)="deleteTime()" i18n="@@cShutdownTimerButtonDeleteTime">Delete Time</button>
+    <button mat-stroked-button (click)="saveTime()" i18n="@@cShutdownTimerButtonSave">Save</button>
 </div>
