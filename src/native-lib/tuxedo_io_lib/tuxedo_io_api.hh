@@ -241,7 +241,7 @@ public:
 
     virtual bool SetFansAuto() {
         // Setting the mode will return control to the firmware
-        int mode = 0xa0;
+        int mode = 0x00;
         return io->IoctlCall(W_UW_MODE, mode);
     }
 
