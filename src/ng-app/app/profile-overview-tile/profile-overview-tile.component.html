@@ -110,7 +110,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg viewBox="0 0 336 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
-                        <span *ngIf="!profile.cpu.useMaxPerfGov">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz</span>
+                        <span *ngIf="!profile.cpu.useMaxPerfGov && (cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz</span>
+                        <span *ngIf="!profile.cpu.useMaxPerfGov && !(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - Boost</span>
                         <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </span>
                 </div>
