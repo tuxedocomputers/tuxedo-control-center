@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.12] - 2021-04-09
+### Fixed
+- *Shutdown timer* now uses standard `shutdown` functionality/logic
+- Profile edit frequency slider missing update
+- Profile overview selected profile update issue
+
+### Changed
+- Default ODM perf. profile *performance* for some devices when returning fan control to the system
+
 ## [1.0.11] - 2021-02-25
 ### Fixed
 - More robust check for nvidia prime support
