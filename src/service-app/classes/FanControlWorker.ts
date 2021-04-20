@@ -67,9 +67,10 @@ export class FanControlWorker extends DaemonWorker {
         this.initFanControl(); // Make sure structures are up to date before doing anything
 
         const fanTemps: number[] = [];
-        const fanSpeeds: number[] = [];
+        const fanSpeedsRead: number[] = [];
+        const fanSpeedsSet: number[] = new Array<number>(this.fans.size);
         const fanTimestamps: number[] = [];
-        const fanAvailable: boolean[] = [];
+        const tempSensorAvailable: boolean[] = [];
 
         const moduleInfo = new ModuleInfo();
 
@@ -98,59 +99,68 @@ export class FanControlWorker extends DaemonWorker {
         }
 
         for (const fanNumber of this.fans.keys()) {
+            const fanIndex: number = fanNumber - 1;
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
 
             const fanLogic = this.fans.get(fanNumber);
 
+            // Read and store sensor values
             const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
-            const tempReadSuccess = ioAPI.getFanTemperature(fanNumber - 1, currentTemperatureCelcius);
+            const tempReadSuccess = ioAPI.getFanTemperature(fanIndex, currentTemperatureCelcius);
             const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
-            const speedReadSuccess = ioAPI.getFanSpeedPercent(fanNumber - 1, currentSpeedPercent);
+            const speedReadSuccess = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
 
-            fanAvailable.push(tempReadSuccess);
+            tempSensorAvailable.push(tempReadSuccess);
             fanTimestamps.push(Date.now());
-            if (fanAvailable[fanNumber - 1]) {
+            fanSpeedsRead.push(currentSpeedPercent.value);
+            if (tempSensorAvailable[fanIndex]) {
                 fanTemps.push(currentTemperatureCelcius.value);
-                fanSpeeds.push(currentSpeedPercent.value);
             } else {
                 fanTemps.push(0);
-                fanSpeeds.push(0);
             }
 
-            if (!fanAvailable[fanNumber - 1]) {
-                // Invalid sensor value or wmi interface unavailable
-                continue;
-            }
-
-            fanLogic.reportTemperature(currentTemperatureCelcius.value);
-            if (useFanControl) {
+            // If there is temp sensor value report temperature to logic
+            // Also, fill fanSpeedsSet
+            if (tempSensorAvailable[fanIndex]) {
+                fanLogic.reportTemperature(currentTemperatureCelcius.value);
                 const calculatedSpeed = fanLogic.getSpeedPercent();
-                fanSpeeds[fanNumber - 1] = calculatedSpeed;
+                fanSpeedsSet[fanIndex] = calculatedSpeed;
             } else {
-                fanSpeeds[fanNumber - 1] = currentSpeedPercent.value;
+                // Non existant sensor or wmi interface unavailable
+                // Set "set speed" to zero to not affect the max value
+                fanSpeedsSet[fanIndex] = 0;
             }
 
         }
 
         // Write fan speeds
         if (useFanControl) {
-            const highestSpeed = fanSpeeds.reduce((prev, cur) => cur > prev ? cur : prev, 0);
+            
+            const highestSpeed = fanSpeedsSet.reduce((prev, cur) => cur > prev ? cur : prev, 0);
             for (const fanNumber of this.fans.keys()) {
-                if (this.modeSameSpeed) { fanSpeeds[fanNumber - 1] = highestSpeed; }
-                if (fanAvailable[fanNumber - 1]) {
-                    ioAPI.setFanSpeedPercent(fanNumber - 1, fanSpeeds[fanNumber - 1]);
+                const fanIndex = fanNumber - 1;
+                // Use highest speed decided by fan logic for current fan if "same speed" mode
+                // or there is no sensor specific to this fan
+                if (this.modeSameSpeed || !tempSensorAvailable[fanIndex]) {
+                    fanSpeedsSet[fanIndex] = highestSpeed;
                 }
+                // Always write a fan speed previously decided
+                ioAPI.setFanSpeedPercent(fanIndex, fanSpeedsSet[fanIndex]);
             }
         }
 
         // Publish the data on the dbus whether written by this control or values read from hw interface
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
-            if (fanSpeeds[i] !== undefined) {
-                this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
-                this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], fanSpeeds[i]);
+            let currentSpeed: number;
+            if (useFanControl) {
+                currentSpeed = fanSpeedsSet[i];
+            } else {
+                currentSpeed = fanSpeedsRead[i];
             }
+            this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
+            this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], currentSpeed);
         }
     }
 
