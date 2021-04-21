@@ -1,5 +1,16 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Fan control for certain devices (like XP14 version without nvidia) where
+  there is not one temp sensor per fan
+
+### Changed
+- Now using 'same speed' approach for fan control on all devices. This means
+  that the same speed will be used for all fans. The speed written will be
+  the highest decided for each individual sensor. This should better
+  share the cooling between multiple fans where available.
+
 ## [1.0.12] - 2021-04-09
 ### Fixed
 - *Shutdown timer* now uses standard `shutdown` functionality/logic
