@@ -90,14 +90,13 @@ export class FanControlWorker extends DaemonWorker {
         const useFanControl = this.getFanControlStatus();
 
         // Decide on a fan control approach
-        // Per default fans are controlled individually depending on temp sensor and their chosen logic
-        ioAPI.getModuleInfo(moduleInfo);
-        // Use 'same speed' approach for uniwill devices. Necessary since the fans on some
+        // Per default fans are controlled using the 'same speed' approach setting the same speed for all fans chosen
+        // from the max speed decided by each individual fan logic
+        // Using the 'same speed' approach is necessary for uniwill devices since the fans on some
         // devices can not be controlled individually.
-        if (moduleInfo.activeInterface === 'uniwill') {
-            this.modeSameSpeed = true;
-        }
+        this.modeSameSpeed = true;
 
+        // For each fan read and process sensor values
         for (const fanNumber of this.fans.keys()) {
             const fanIndex: number = fanNumber - 1;
             // Update fan profile
