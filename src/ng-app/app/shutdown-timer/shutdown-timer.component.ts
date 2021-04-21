@@ -18,7 +18,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-shutdown-timer',
@@ -26,47 +26,51 @@ import { ConfigService } from '../config.service';
     styleUrls: ['./shutdown-timer.component.scss']
 })
 export class ShutdownTimerComponent implements OnInit {
-
     public hours: Array<number> = [...Array(24).keys()];
     public minutes: Array<number> = [...Array(60).keys()];
 
-    public selectedHour: number = null;
-    public selectedMinute: number = null;
+    public selectedHour: number = 0;
+    public selectedMinute: number = 0;
 
-    public shutdownTime: Date;
+    public appliedTime: string = "";
 
-    constructor(private config: ConfigService) { }
+    constructor(
+        private utils: UtilsService
+    ) { }
 
     ngOnInit() {
-        let savedShutdown = this.config.getSettings().shutdownTime;
-        if(savedShutdown != null)
-        {
-            let convertDatetime = new Date(savedShutdown);
-            this.selectedHour = convertDatetime.getHours();
-            this.selectedMinute = convertDatetime.getMinutes();
-            this.shutdownTime = convertDatetime;
-        }
+        this.updateTime();
     }
 
     public saveTime() {
-        console.log(`selectedHour: ${this.selectedHour}`);
-        console.log(`selectedHour: ${this.selectedMinute}`);
-
-        this.shutdownTime = new Date();
-        this.shutdownTime.setMilliseconds(0);
-        this.shutdownTime.setSeconds(0);
-        this.shutdownTime.setHours(this.selectedHour);
-        this.shutdownTime.setMinutes(this.selectedMinute);
-
-        console.log(this.shutdownTime.toISOString());
-        this.config.getSettings().shutdownTime = this.shutdownTime.toISOString();
-        this.config.saveSettings();
+        this.utils.pageDisabled = true;
+        this.utils.execCmd("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
+            this.updateTime();
+            this.utils.pageDisabled = false;
+        }).catch(() => {
+            this.updateTime();
+            this.utils.pageDisabled = false;
+        });
     }
 
-    public deleteTimer() {
-        this.shutdownTime = null;
+    public deleteTime() {
+        this.utils.pageDisabled = true;
+        this.utils.execCmd("pkexec shutdown -c").then(() => {
+            this.updateTime();
+            this.utils.pageDisabled = false;
+        }).catch(() => {
+            this.updateTime();
+            this.utils.pageDisabled = false;
+        });
+    }
 
-        this.config.getSettings().shutdownTime = null;
-        this.config.saveSettings();
+    public updateTime() {
+        this.utils.execCmd("cat /run/systemd/shutdown/scheduled").then((result) => {
+            let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
+            let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
+            this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
+        }).catch(() => {
+            this.appliedTime = ""
+        });
     }
 }

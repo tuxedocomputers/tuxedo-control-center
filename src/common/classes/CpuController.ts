@@ -18,7 +18,7 @@
  */
 import * as path from 'path';
 import { LogicalCpuController } from './LogicalCpuController';
-import { SysFsPropertyInteger, SysFsPropertyNumList } from './SysFsProperties';
+import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean } from './SysFsProperties';
 import { IntelPstateController } from './IntelPStateController';
 import { findClosestValue } from './Utils';
 
@@ -38,6 +38,8 @@ export class CpuController {
     public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
 
     public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
+
+    public readonly boost = new SysFsPropertyBoolean(path.join(this.basePath, 'cpufreq/boost'));
 
     public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores
@@ -100,7 +102,12 @@ export class CpuController {
             if (setMaxFrequency === undefined) {
                 newMaxFrequency = coreMaxFrequency;
             } else if (setMaxFrequency === -1) {
-                newMaxFrequency = core.getReducedAvailableFreq();
+                if (this.boost === undefined) {
+                    newMaxFrequency = core.getReducedAvailableFreq();
+                }
+                else {
+                    newMaxFrequency = coreMaxFrequency;
+                }
             } else {
                 newMaxFrequency = setMaxFrequency;
             }
@@ -121,6 +128,18 @@ export class CpuController {
             }
 
             core.scalingMaxFreq.writeValue(newMaxFrequency);
+        }
+
+        // AMD does not count boost frequency to coreMaxFrequency while Intel does. So on AMD a setMaxFrequency over
+        // coreMaxFrequency indicates that the boost switch should be enabled. On Intel this switch doesn't exist
+        // and boost is handled via scalingMaxFreq.
+        if (this.boost.isAvailable()) {
+            if (setMaxFrequency === undefined || setMaxFrequency > this.cores[0].cpuinfoMaxFreq.readValue()) {
+                this.boost.writeValue(true);
+            }
+            else {
+                this.boost.writeValue(false);
+            }
         }
     }
 
@@ -214,5 +233,20 @@ export class CpuController {
                 core.energyPerformancePreference.writeValue(performancePreference);
             }
         }
+    }
+
+    /**
+     * Enables or disables CPU boost frequencies
+     * Used by AMD CPUs
+     * This switch is not available on Intel as there the CPU max frequency also applys to CPU Boost -> CPU boost on
+     * Intel is deactivated by setting max frequency = max non boost clock
+     *
+     * @param boost The choosen state for the boost setting
+     */
+    public setBoost(boost?: boolean) {
+        if (this.boost === undefined) {
+            return;
+        }
+        this.boost.writeValue(boost);
     }
 }
