@@ -114,7 +114,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- CPU settings -->
-        <div class="tcc-options-group">
+        <div class="tcc-options-group"
+            [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
+            [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage: ''">
+
             <div class="title-row">
                 <hr />
                 <div class="title">
@@ -237,8 +240,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <!-- Fan control settings -->
         <div class="tcc-options-group"
-            [ngClass]="{'not-available': !compat.hasFancontrol }"
-            [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
+            [ngClass]="{'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled }"
+            [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
             <div class="title-row">
                 <hr />

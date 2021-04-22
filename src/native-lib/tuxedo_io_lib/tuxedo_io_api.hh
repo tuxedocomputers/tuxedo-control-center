@@ -240,9 +240,7 @@ public:
     }
 
     virtual bool SetFansAuto() {
-        // Setting the mode will return control to the firmware
-        int mode = 0x00;
-        return io->IoctlCall(W_UW_MODE, mode);
+        return io->IoctlCall(W_UW_FANAUTO);
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
@@ -355,6 +353,11 @@ public:
 
     bool GetModuleVersion(std::string &version) {
         return io.IoctlCall(R_MOD_VERSION, version, 20);
+    }
+
+    bool GetModuleAPIMinVersion(std::string &version) {
+        version = MOD_API_MIN_VERSION;
+        return true;
     }
 
     virtual bool Identify(bool &identified) {

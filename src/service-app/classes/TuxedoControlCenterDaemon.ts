@@ -194,19 +194,39 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private readOrCreateConfigurationFiles() {
         try {
             this.settings = this.config.readSettings();
+            var missingSetting: boolean = false;
 
             if (this.settings.stateMap === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing statemap');
-                throw Error('Missing statemap');
+                this.settings.stateMap = this.config.getDefaultSettings().stateMap;
+                missingSetting = true;
+            }
+            if (this.settings.cpuSettingsEnabled === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing cpuSettingsEnabled setting');
+                this.settings.cpuSettingsEnabled = this.config.getDefaultSettings().cpuSettingsEnabled;
+                missingSetting = true;
+            }
+            if (this.settings.fanControlEnabled === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing fanControlEnabled setting');
+                this.settings.fanControlEnabled = this.config.getDefaultSettings().fanControlEnabled;
+                missingSetting = true;
+            }
+
+            if (missingSetting) {
+                throw Error('Missing setting');
             }
         } catch (err) {
-            this.settings = this.config.getDefaultSettings();
             try {
+                if (this.settings === undefined) {
+                    this.settings = this.config.getDefaultSettings();
+                }
                 this.config.writeSettings(this.settings);
-                this.logLine('Wrote default settings: ' + this.config.pathSettings);
+                this.logLine('Filled missing settings with default: ' + this.config.pathSettings);
             } catch (err) {
-                this.logLine('Failed to write default settings: ' + this.config.pathSettings);
+                this.logLine('Failed to fill missing settings with default: ' + this.config.pathSettings);
             }
         }
 

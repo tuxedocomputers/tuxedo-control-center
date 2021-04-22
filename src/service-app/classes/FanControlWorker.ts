@@ -55,11 +55,13 @@ export class FanControlWorker extends DaemonWorker {
 
         const useFanControl = this.getFanControlStatus();
 
-        ioAPI.setEnableModeSet(true);
+        if (this.tccd.settings.fanControlEnabled) {
+            ioAPI.setEnableModeSet(true); //FIXME Dummy function, tuxedo-io always sets the manual bit
 
-        if (!useFanControl) {
-            // Stop TCC fan control for all fans
-            ioAPI.setFansAuto();
+            if (!useFanControl) { //FIXME Dummy variable, useFanControl always true
+                // Stop TCC fan control for all fans
+                ioAPI.setFansAuto();
+            }
         }
     }
 
@@ -130,7 +132,6 @@ export class FanControlWorker extends DaemonWorker {
                 // Set "set speed" to zero to not affect the max value
                 fanSpeedsSet[fanIndex] = 0;
             }
-
         }
 
         // Write fan speeds
@@ -165,21 +166,13 @@ export class FanControlWorker extends DaemonWorker {
 
     public onExit(): void {
         // Stop TCC fan control for all fans
-        ioAPI.setFansAuto();
-        ioAPI.setEnableModeSet(false);
+        if (this.getFanControlStatus()) {
+            ioAPI.setFansAuto();
+            ioAPI.setEnableModeSet(false);  //FIXME Dummy function, tuxedo-io always sets the manual bit
+        }
     }
 
     private getFanControlStatus(): boolean {
-        return true;
-
-        /*const profile = this.tccd.getCurrentProfile();
-        let useFanControl: boolean;
-        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
-            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
-        } else {
-            useFanControl = profile.fan.useControl;
-        }
-
-        return useFanControl;*/
+        return this.tccd.settings.fanControlEnabled;
     }
 }

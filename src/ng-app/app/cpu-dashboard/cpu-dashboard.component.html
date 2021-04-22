@@ -26,7 +26,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <hr />
         </div>
-       
+
         <!-- CPU -->
         <div class="content-container profile-overview">
             <div class="column">
@@ -36,7 +36,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
-        
+
         <div class="content-container system-monitor-gauges">
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
@@ -163,55 +163,64 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <div class="content-container profile-overview">
             <div class="column">
-                <div class="title">
-                    <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
-                    <span class="text" *ngIf="cpuModelName !== ''">{{ cpuModelName }}</span>
-                </div>
-                <div class="tcc-info-bar" [hidden]="activeProfile.cpu.useMaxPerfGov">
-                    <div class="cpu-min-max-freq">
-                        <div class="label" i18n>Min</div>
-                        <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
-                        <div class="unit color-disabled">GHz</div>
-                        <div class="value right" *ngIf="cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
-                        <div class="value right" *ngIf="!(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">Boost</div>
-                        <div class="label" i18n>Max</div>
+                <div class=item [ngClass]="{'not-available': !getCPUSettingsEnabled()}" [matTooltip]="!getCPUSettingsEnabled() ? getCPUSettingsDisabledTooltip() : ''">
+                    <div class="title">
+                        <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                        <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
+                        <span class="text" *ngIf="cpuModelName !== ''">{{ cpuModelName }}</span>
+                    </div>
+                    <div class="tcc-info-bar" [hidden]="activeProfile.cpu.useMaxPerfGov">
+                        <div class="cpu-min-max-freq">
+                            <div class="label" i18n>Min</div>
+                            <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
+                            <div class="unit color-disabled">GHz</div>
+                            <div class="value right" *ngIf="cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
+                            <div class="value right" *ngIf="!(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">Boost</div>
+                            <div class="label" i18n>Max</div>
+                        </div>
+                    </div>
+                    <div class="tcc-info-bar" [hidden]="!activeProfile.cpu.useMaxPerfGov">
+                        <div class="cpu-min-max-freq">
+                            <div class="label" *ngIf="cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq" i18n>Maximum performance ({{ formatFrequency(cpuInfo.maxFreq) }} GHz)</div>
+                            <div class="label" *ngIf="!(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)" i18n>Maximum performance (Boost)</div>
+                        </div>
+                        <div class="tcc-info-bar" [hidden]="!activeProfile.cpu.useMaxPerfGov">
+                            <div class="cpu-min-max-freq">
+                                <div class="label" i18n>Maximum performance ({{ formatFrequency(cpuInfo.maxFreq) }} GHz)</div>
+                            </div>
+                        </div>
+                        <div class="tcc-gauge small active-cores">
+                            <mwl-gauge
+                                [max]="cpuInfo.availableCores"
+                                [min]="0"
+                                [value]="activeProfile.cpu.onlineCores"
+                                [dialStartAngle]="150"
+                                [dialEndAngle]="30"
+                                [animated]="animatedGauges"
+                                [animationDuration]="0.3">
+                            </mwl-gauge>
+                            <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
+                            <div class="legend">
+                                <div class="text small" i18n>Active cores</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="tcc-info-bar" [hidden]="!activeProfile.cpu.useMaxPerfGov">
-                    <div class="cpu-min-max-freq">
-                        <div class="label" *ngIf="cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq" i18n>Maximum performance ({{ formatFrequency(cpuInfo.maxFreq) }} GHz)</div>
-                        <div class="label" *ngIf="!(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)" i18n>Maximum performance (Boost)</div>
+                <div class=item [ngClass]="{'not-available': !compat.hasFancontrol || !getFanControlEnabled()}" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
+                    <div class="title">
+                        <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                        <span class="text" i18n>Fan profile</span>
                     </div>
-                </div>
-                <div class="tcc-gauge small active-cores">
-                    <mwl-gauge
-                        [max]="cpuInfo.availableCores"
-                        [min]="0"
-                        [value]="activeProfile.cpu.onlineCores"
-                        [dialStartAngle]="150"
-                        [dialEndAngle]="30"
-                        [animated]="animatedGauges"
-                        [animationDuration]="0.3">
-                    </mwl-gauge>
-                    <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
-                    <div class="legend">
-                        <div class="text small" i18n>Active cores</div>
+                    <div class="tcc-progress tcc-info-bar">
+                        <mat-progress-bar
+                            [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
+                            [ngClass]="{'disabled': !activeProfile.fan.useControl }"
+                        ></mat-progress-bar>
+                        <div class="label-text" *ngIf="activeProfile.fan.useControl">
+                            {{ activeProfile.fan.fanProfile }}
+                        </div>
+                        <div class="label-text" *ngIf="!activeProfile.fan.useControl" i18n>Fan control: off</div>
                     </div>
-                </div>
-                <div class="title" [ngClass]="{'not-available': !compat.hasFancontrol }">
-                    <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
-                    <span class="text" i18n>Fan profile</span>
-                </div>
-                <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
-                    <mat-progress-bar
-                        [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
-                        [ngClass]="{'disabled': !activeProfile.fan.useControl }"
-                    ></mat-progress-bar>
-                    <div class="label-text" *ngIf="activeProfile.fan.useControl">
-                        {{ activeProfile.fan.fanProfile }}
-                    </div>
-                    <div class="label-text" *ngIf="!activeProfile.fan.useControl" i18n>Fan control: off</div>
                 </div>
             </div>
             <div class="column">
