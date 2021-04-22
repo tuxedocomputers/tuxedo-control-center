@@ -130,7 +130,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public catchError(err: Error) {
         this.logLine('Tccd Exception');
-        const errorLine = err.name + ': ' + err.message;
+        let errorLine = err.name + ': ' + err.message;
+        const stack = err.stack;
+        if(stack !== undefined) {
+            errorLine += '\n\nStack Trace:\n' + stack;
+        }
         this.logLine(errorLine);
         if (this.started) {
             this.onExit();
@@ -280,7 +284,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         // Attempt to find fan profile from tcc profile
-        let chosenFanProfile = this.config.getDefaultFanProfiles()
+        let chosenFanProfile = this.config.getFanProfiles()
             .find(fanProfile => fanProfile.name === this.getCurrentProfile().fan.fanProfile);
 
         if (chosenFanProfile === undefined) {
@@ -291,11 +295,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     getFallbackFanProfile(): ITccFanProfile {
+        let fanProfiles = this.config.getFanProfiles();
+        if(fanProfiles.length == 0) {
+            throw Error("no fan profiles found");
+        }
         // Fallback to 'Balanced'
-        let chosenFanProfile = this.config.getDefaultFanProfiles().find(fanProfile => fanProfile.name === 'Balanced');
+        let chosenFanProfile = fanProfiles.find(fanProfile => fanProfile.name === 'Balanced');
         // Fallback to first in list
         if (chosenFanProfile === undefined) {
-            chosenFanProfile = this.config.getDefaultFanProfiles()[0];
+            chosenFanProfile = fanProfiles[0];
         }
         return chosenFanProfile;
     }

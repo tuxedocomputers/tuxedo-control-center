@@ -20,6 +20,7 @@ let tccDBus: TccDBusController;
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
+const debugModeOption = process.argv.includes('--debug');
 
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
@@ -193,6 +194,10 @@ function createTccWindow() {
             nodeIntegration: true
         }
     });
+
+    if(debugModeOption) {
+        tccWindow.webContents.openDevTools()
+    }
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
     tccWindow.loadFile(indexPath);

@@ -34,9 +34,13 @@ tuxedo-control-center
 
    sudo apt install -y git gcc g++ make nodejs
    ```
-2. Clone & install libraries
+
+2. Install `tuxedo-cc-wmi` (can be obtained from the respositories [here](https://www.tuxedocomputers.com/en/Infos/Help-and-Support/Instructions/Add-TUXEDO-Computers-software-package-sources.tuxedo#)).
+   This package provides a driver at `/dev/tuxedo_cc_wmi`. The control center can run without this but will not be functional.
+
+3. Clone & install libraries
     ```
-    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git`
+    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git
 
     cd tuxedo-control-center
 
@@ -44,7 +48,7 @@ tuxedo-control-center
     ```
    **Note:** Do ***not*** continue with `npm audit fix`. Known to cause various issues.
 
-3. Install service file that points to development build path (or use installed service from packaged version)
+4. Install service file that points to development build path (or use installed service from packaged version)
    
    Manual instructions:
    1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
@@ -60,6 +64,7 @@ tuxedo-control-center
 | build                          | Build all apps service/electron/angular                         |
 | start                          | Normal start of electron app after build                        |
 | start-watch                    | Start GUI with automatic reload on changes to angular directory |
+| start-service                  | Start the tccd daemon                                           |
 | test-common                    | Test common files (jasmine)                                     |
 | gen-lang                       | Generate base for translation (`ng-app/assets/locale/lang.xlf`) |
 | pack-prod -- all \| deb \| rpm | Build and package for chosen target(s)                          |
@@ -68,7 +73,10 @@ tuxedo-control-center
 | inc-version-major              | Major version increase (updates package.json files)             |
 
 ### Debugging
-Debugging of electron main and render process is configured for vscode in .vscode/launch.json
+Debugging of electron main and render process is configured for vscode in `.vscode/launch.json`.
+Note that the application must be rebuilt each time a change is made. Usually `npm run build-ng` is sufficient.
+
+To debug the service, run `npm run debug-service` the launch the `Attach` target in `.vscode/launch.json`.
 
 ## Screenshots
 ### English

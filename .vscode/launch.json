@@ -2,6 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Attach",
+            "port": 9229,
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        {
             "name": "Debug Main Process",
             "type": "node",
             "request": "launch",
@@ -10,7 +19,7 @@
             "windows": {
               "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "runtimeArgs": ["./dist/tuxedo-control-center"],
+            "runtimeArgs": ["./dist/tuxedo-control-center", "--debug"],
             "program": "${workspaceRoot}/src/e-app/main.ts",
             "outFiles": [
                 "${workspaceRoot}/dist/tuxedo-control-center/e-app/e-app/main.js"

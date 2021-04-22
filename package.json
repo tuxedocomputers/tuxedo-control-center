@@ -22,6 +22,8 @@
     "build-electron": "tsc -p ./src/e-app",
     "build-service": "tsc -p ./src/service-app && cp ./src/package.json ./dist/tuxedo-control-center/service-app/package.json && run-s bundle-service",
     "bundle-service": "pkg --target node10-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
+    "start-service": "sudo NODE_PATH=\"./dist/tuxedo-control-center/data/service:${NODE_PATH}\" node ./dist/tuxedo-control-center/service-app/service-app/main.js --start",
+    "debug-service": "sudo NODE_PATH=\"./dist/tuxedo-control-center/data/service:${NODE_PATH}\" node --inspect-brk ./dist/tuxedo-control-center/service-app/service-app/main.js --start",
     "build-native": "node-gyp configure && node-gyp rebuild",
     "copy-files": "run-s copy-package-json copy-dist-files copy-native",
     "copy-native": "mkdir -p ./dist/tuxedo-control-center/service-app/native-lib && cp ./build/Release/TuxedoIOAPI.node ./dist/tuxedo-control-center/data/service",
