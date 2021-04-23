@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [1.0.13] - 2021-04-23
 ### Changed
 - Max frequency for AMD CPUs clarified as 'boost' instead of max
   base frequency. Additionally now max frequency for these devices can be
@@ -10,8 +10,9 @@
   the highest decided from each individual sensor. This should better
   share the cooling between multiple fans where available.
 - Fantables updated
-  - Minimum fanspeeds now at 20% to make sure fans start better over all
-  - Freezy fan profile now even more freezy for those warm spring days
+  - Minimum 'on' fanspeeds now at 20% to make sure fans start better over all
+  - Freezy fan profile now always on and even more freezy for those
+    warm spring days
 
 ### Fixed
 - Fan control for certain devices (like XP14 version without nvidia) where
