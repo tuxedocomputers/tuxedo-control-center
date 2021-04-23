@@ -1,13 +1,31 @@
 # Changelog
 
+## [1.0.13] - 2021-04-23
+### Changed
+- Max frequency for AMD CPUs clarified as 'boost' instead of max
+  base frequency. Additionally now max frequency for these devices can be
+  set to max base frequency with or without boost.
+- Now using 'same speed' approach for fan control on all devices. This means
+  that the same speed will be used for all fans. The speed written will be
+  the highest decided from each individual sensor. This should better
+  share the cooling between multiple fans where available.
+- Fantables updated
+  - Minimum 'on' fanspeeds now at 20% to make sure fans start better over all
+  - Freezy fan profile now always on and even more freezy for those
+    warm spring days
+
+### Fixed
+- Fan control for certain devices (like XP14 version without nvidia) where
+  there is not one temp sensor per fan
+
 ## [1.0.12] - 2021-04-09
+### Changed
+- Default ODM perf. profile *performance* for some devices when returning fan control to the system
+
 ### Fixed
 - *Shutdown timer* now uses standard `shutdown` functionality/logic
 - Profile edit frequency slider missing update
 - Profile overview selected profile update issue
-
-### Changed
-- Default ODM perf. profile *performance* for some devices when returning fan control to the system
 
 ## [1.0.11] - 2021-02-25
 ### Fixed

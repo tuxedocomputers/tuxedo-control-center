@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -58,7 +58,8 @@ class ValueBuffer {
     }
 }
 
-const TICK_DELAY = 1;
+const MAX_SPEED_JUMP = 2;
+const SPEED_JUMP_THRESHOLD = 20;
 
 export class FanControlLogic {
 
@@ -114,8 +115,8 @@ export class FanControlLogic {
         const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
         let newSpeed = foundEntry.speed;
         let speedJump = newSpeed - this.lastSpeed;
-        if (speedJump <= -2) {
-            speedJump = -2;
+        if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
+            speedJump = -MAX_SPEED_JUMP;
             newSpeed = this.lastSpeed + speedJump;
         }
         this.lastSpeed = newSpeed;

@@ -85,8 +85,14 @@ export class SysFsService implements OnDestroy {
         scalingAvailableFrequencies: this.cpu.cores[0].scalingAvailableFrequencies.readValueNT(),
         scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
         energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
-        reducedAvailableFreq: this.cpu.cores[0].getReducedAvailableFreqNT()
+        reducedAvailableFreq: this.cpu.cores[0].getReducedAvailableFreqNT(),
+        boost: this.cpu.boost.readValueNT()
       };
+      if (cpuInfo.boost !== undefined) {
+        // FIXME: Use actual max boost frequency
+        cpuInfo.maxFreq *= 2;
+        cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -161,6 +167,7 @@ export interface IGeneralCPUInfo {
   scalingAvailableGovernors: string[];
   energyPerformanceAvailablePreferences: string[];
   reducedAvailableFreq: number;
+  boost: boolean;
 }
 
 export interface ILogicalCoreInfo {

@@ -76,14 +76,19 @@ export class UtilsService {
       profile.cpu.useMaxPerfGov = false;
     }
 
-    if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < cpuCoreInfo[0].cpuInfoMinFreq) {
-      profile.cpu.scalingMinFrequency = cpuCoreInfo[0].cpuInfoMinFreq;
+    if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < cpuInfo.minFreq) {
+      profile.cpu.scalingMinFrequency = cpuInfo.minFreq;
     }
 
     if (profile.cpu.scalingMaxFrequency === undefined) {
-      profile.cpu.scalingMaxFrequency = cpuCoreInfo[0].cpuInfoMaxFreq;
+      profile.cpu.scalingMaxFrequency = cpuInfo.maxFreq;
     } else if (profile.cpu.scalingMaxFrequency === -1) {
-      profile.cpu.scalingMaxFrequency = cpuInfo.reducedAvailableFreq;
+      if (cpuInfo.boost === undefined) {
+        profile.cpu.scalingMaxFrequency = cpuInfo.reducedAvailableFreq;
+      }
+      else {
+        profile.cpu.scalingMaxFrequency = cpuCoreInfo[0].cpuInfoMaxFreq;
+      }
     } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
       profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
     } else if (profile.cpu.scalingMaxFrequency > cpuInfo.maxFreq) {
