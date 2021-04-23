@@ -11,7 +11,12 @@ const appPath = __dirname.replace('app.asar/', '');
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
 const tccConfigDir = '.tcc';
-const startTCCAccelerator = 'Super+Alt+F6';
+let startTCCAccelerator;
+
+startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
+if (startTCCAccelerator === '') {
+    startTCCAccelerator = 'Super+Alt+F6'
+}
 
 let tccWindow: Electron.BrowserWindow;
 let tray: Electron.Tray;
@@ -46,10 +51,12 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( () => {
-    const success = globalShortcut.register(startTCCAccelerator, () => {
-        activateTccGui();
-    });
-    if (!success) { console.log('Failed to register global shortcut'); }
+    if (startTCCAccelerator !== 'none') {
+        const success = globalShortcut.register(startTCCAccelerator, () => {
+            activateTccGui();
+        });
+        if (!success) { console.log('Failed to register global shortcut'); }
+    }
 
     createTccTray();
     if (!trayOnlyOption) {
