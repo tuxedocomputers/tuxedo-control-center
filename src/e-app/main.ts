@@ -23,6 +23,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
+import { TccTray } from './TccTray';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -33,7 +34,7 @@ const tccConfigDir = '.tcc';
 const startTCCAccelerator = 'Super+Alt+F6';
 
 let tccWindow: Electron.BrowserWindow;
-let tray: Electron.Tray;
+const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
@@ -70,7 +71,37 @@ app.whenReady().then( async () => {
     });
     if (!success) { console.log('Failed to register global shortcut'); }
 
-    createTccTray();
+    tray.state.tccGUIVersion = 'v' + app.getVersion();
+    tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+    tray.state.primeQuery = primeSelectQuery();
+    tray.state.isPrimeSupported = primeSupported();
+    tray.state.activeProfile = await getActiveProfile();
+    tray.state.profiles = await getProfiles();
+    tray.events.startTCCClick = () => activateTccGui();
+    tray.events.exitClick = () => quitCurrentTccSession();
+    tray.events.autostartTrayToggle = () => {
+        if (tray.state.isAutostartTrayInstalled) {
+            removeAutostartTray();
+        } else {
+            installAutostartTray();
+        }
+        tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+        tray.create();
+    };
+    const messageBoxprimeSelectAccept = {
+        type: 'question',
+        buttons: [ 'yes', 'cancel' ],
+        message: 'Change graphics configuration and shutdown?'
+    };
+    tray.events.selectNvidiaClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
+    };
+    tray.events.selectBuiltInClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
+    };
+    tray.events.profileClick = (profileName: string) => { setTempProfile(profileName); };
+    tray.create();
+
     if (!trayOnlyOption) {
         activateTccGui();
     }
@@ -118,7 +149,7 @@ app.on('will-quit', (event) => {
         tccWindow.close();
         tccWindow = null;
     }
-    if (!tray || tray.isDestroyed()) {
+    if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
         app.exit(0);
@@ -126,7 +157,7 @@ app.on('will-quit', (event) => {
 });
 
 app.on('window-all-closed', () => {
-    if (!tray || tray.isDestroyed()) {
+    if (!tray.isActive()) {
         quitCurrentTccSession();
     }
 });
@@ -172,85 +203,6 @@ async function getActiveProfile(): Promise<TccProfile> {
     }
 }
 
-async function createTccTray() {
-    const trayInstalled = isAutostartTrayInstalled();
-    const trayIcon =  path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png');
-    if (!tray) {
-        tray = new Tray(trayIcon);
-        tray.setTitle('TUXEDO Control Center');
-        tray.setToolTip('TUXEDO Control Center');
-    }
-    const primeQuery = primeSelectQuery();
-    const isPrimeSupported = primeSupported();
-    const messageBoxprimeSelectAccept = {
-        type: 'question',
-        buttons: ['yes', 'cancel' ],
-        message: 'Change graphics configuration and shutdown?'
-    };
-
-    const activeProfile = await getActiveProfile();
-    const profiles: TccProfile[] = await getProfiles();
-    const profilesSubmenu: Object[] = profiles.map(profile => {
-        // Creation of each profile selection submenu item
-        return {
-            label: profile.name,
-            click: () => { setTempProfile(profile.name) }
-        };
-    });
-    // Add profiles submenu "header"
-    profilesSubmenu.unshift(
-        { label: 'Select temp profile', enabled: false },
-        { type: 'separator' }
-    );
-
-    const contextMenu = Menu.buildFromTemplate([
-        { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); }, },
-        {
-            label: 'Profiles',
-            submenu: profilesSubmenu,
-            visible: profilesSubmenu.length > 0
-        },
-        {
-                label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
-                click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
-        },
-        { type: 'separator', visible: isPrimeSupported },
-        {
-            label: 'Graphics',
-            visible: isPrimeSupported,
-            submenu: [
-                {
-                    label: 'Select NVIDIA',
-                    type: 'normal',
-                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); } },
-                    visible: primeQuery !== 'on'
-                },
-                {
-                    label: 'Select built-in',
-                    type: 'normal',
-                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); } },
-                    visible: primeQuery !== 'off'
-                }
-            ]
-        },
-        { type: 'separator' },
-        { label: 'v' + app.getVersion(), type: 'normal', enabled: false },
-        { type: 'separator' },
-        { label: 'Exit', type: 'normal', click: () => { quitCurrentTccSession(); } }
-    ]);
-    tray.setContextMenu(contextMenu);
-}
-
-function menuInstallAutostartTray() {
-    installAutostartTray();
-    createTccTray();
-}
-
-function menuRemoveAutostartTray() {
-    removeAutostartTray();
-    createTccTray();
-}
-
 function createTccWindow() {
     tccWindow = new BrowserWindow({
         title: 'TUXEDO Control Center',
@@ -274,9 +226,8 @@ function createTccWindow() {
 }
 
 function quitCurrentTccSession() {
-    if (tray) {
+    if (tray.isActive()) {
         tray.destroy();
-        tray = null;
     }
 
     app.quit();
