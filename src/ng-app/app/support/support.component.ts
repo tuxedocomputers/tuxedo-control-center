@@ -126,7 +126,7 @@ export class SupportComponent implements OnInit {
       try {
         const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
         this.systeminfoOutput('Running systeminfos.sh');
-        await this.utils.execCmd('pkexec sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
+        await this.utils.execCmd('pkexec env XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
       } catch (err) {
         reject('Failed to execute script'); return;
       }
