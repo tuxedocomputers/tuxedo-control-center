@@ -42,9 +42,32 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+static inline bool CheckMinVersionByStrings(std::string version, std::string minVersion) {
+    unsigned modVersionMajor, modVersionMinor, modVersionPatch, modAPIMinVersionMajor, modAPIMinVersionMinor, modAPIMinVersionPatch;
+    if (sscanf(version.c_str(), "%u.%u.%u", &modVersionMajor, &modVersionMinor, &modVersionPatch) < 3 ||
+            sscanf(minVersion.c_str(), "%u.%u.%u", &modAPIMinVersionMajor, &modAPIMinVersionMinor, &modAPIMinVersionPatch) < 3) {
+        return false;
+    }
+
+    if (modVersionMajor < modAPIMinVersionMajor ||
+            (modVersionMajor == modAPIMinVersionMajor && modVersionMinor < modAPIMinVersionMinor) ||
+            (modVersionMajor == modAPIMinVersionMajor && modVersionMinor == modAPIMinVersionMinor && modVersionPatch < modAPIMinVersionPatch)) {
+        return false;
+    }
+
+    return true;
+}
+
 Boolean WmiAvailable(const CallbackInfo &info) {
     TuxedoIOAPI io;
-    bool availability = io.WmiAvailable();
+
+    std::string modVersion, modAPIMinVersion;
+
+    bool availability = io.GetModuleVersion(modVersion) &&
+                        io.GetModuleAPIMinVersion(modAPIMinVersion) &&
+                        CheckMinVersionByStrings(modVersion, modAPIMinVersion) &&
+                        io.WmiAvailable();
+
     return Boolean::New(info.Env(), availability);
 }
 

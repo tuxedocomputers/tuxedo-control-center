@@ -25,6 +25,8 @@ import { ConfigService } from '../config.service';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
+import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-profile-overview-tile',
@@ -57,15 +59,22 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public isCustomProfile = true;
 
+    public cpuInfo: IGeneralCPUInfo;
+
+    private subscriptions: Subscription = new Subscription();
+
     constructor(
         private utils: UtilsService,
         private state: StateService,
         private config: ConfigService,
         private router: Router,
-        public compat: CompatibilityService
+        public compat: CompatibilityService,
+        private sysfs: SysFsService
     ) { }
 
     ngOnInit() {
+        this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
+
         if (!this.addProfileTile) {
             if (this.selectStateControl === undefined) {
                 this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.name));
@@ -94,7 +103,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public activateOverlay(status: boolean): void {
         if (!this.addProfileTile) {
-            if (status === false) {
+            if (status === true) {
                 this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
             }
             this.showOverlay = status;

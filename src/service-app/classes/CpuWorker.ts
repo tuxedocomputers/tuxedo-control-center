@@ -35,7 +35,9 @@ export class CpuWorker extends DaemonWorker {
     }
 
     public onStart() {
-        this.applyCpuProfile(this.tccd.getCurrentProfile());
+        if (this.tccd.settings.cpuSettingsEnabled) {
+            this.applyCpuProfile(this.tccd.getCurrentProfile());
+        }
     }
 
     public onWork() {
@@ -43,7 +45,7 @@ export class CpuWorker extends DaemonWorker {
         // apply profile again
 
         try {
-            if (!this.validateCpuFreq()) {
+            if (this.tccd.settings.cpuSettingsEnabled && !this.validateCpuFreq()) {
                 this.tccd.logLine('CpuWorker: Incorrect settings, reapplying profile');
                 this.applyCpuProfile(this.tccd.getCurrentProfile());
             }
@@ -232,7 +234,12 @@ export class CpuWorker extends DaemonWorker {
                     const maxFreq = core.scalingMaxFreq.readValue();
                     let maxFreqProfile = profile.cpu.scalingMaxFrequency;
                     if (maxFreqProfile === -1) {
-                        maxFreqProfile = core.getReducedAvailableFreq();
+                        if (this.cpuCtrl.boost === undefined) {
+                            maxFreqProfile = core.getReducedAvailableFreq();
+                        }
+                        else {
+                            maxFreqProfile = coreMaxFreq;
+                        }
                     } else if (maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq || profile.cpu.useMaxPerfGov) {
                         maxFreqProfile = coreMaxFreq;
                     } else if (maxFreqProfile < coreMinFreq) {
@@ -276,6 +283,25 @@ export class CpuWorker extends DaemonWorker {
                             + currentPerformancePreference + '\' instead of \'' + performancePreferenceProfile + '\'');
                     }
                 }
+            }
+        }
+
+        if (this.cpuCtrl.boost.isAvailable()) {
+            const currentBoost = this.cpuCtrl.boost.readValue()
+            const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
+            const maxFreqProfile = profile.cpu.scalingMaxFrequency;
+            if ((profile.cpu.useMaxPerfGov || maxFreqProfile === undefined) && !currentBoost) {
+                cpuFreqValidConfig = false;
+                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of true');
+            }
+            else if (maxFreqProfile === -1 && currentBoost) {
+                cpuFreqValidConfig = false;
+                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of false');
+            }
+            else if ((maxFreqProfile <= coreMaxFreq && currentBoost) || (maxFreqProfile > coreMaxFreq && !currentBoost)) {
+                cpuFreqValidConfig = false;
+                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of '
+                + (maxFreqProfile > coreMaxFreq));
             }
         }
 

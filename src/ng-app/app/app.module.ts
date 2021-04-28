@@ -68,6 +68,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { GaugeModule } from 'angular-gauge';
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
 import { ToolsComponent } from "./tools/tool.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
@@ -91,6 +92,7 @@ declare const require;
     ProfileDetailsEditComponent,
     InfoComponent,
     CpuDashboardComponent,
+    GlobalSettingsComponent,
     ShutdownTimerComponent,
     ToolsComponent,
     ChangeCryptPasswordComponent
