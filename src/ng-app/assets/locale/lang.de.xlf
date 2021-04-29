@@ -203,7 +203,6 @@
                     </source>
         <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
 Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">86</context>
@@ -521,7 +520,6 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
                 Mit 3 vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.
             <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>    
         </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">30</context>
@@ -578,7 +576,6 @@ WEEE-Reg.-Nr.: DE 93420497
 eingetragen im Handelsregister des Amtsgerichtes Augsburg
 Handelsregisternummer HRB 27755
         </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">126</context>
@@ -849,15 +846,16 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit><trans-unit id="nocryptinstall" datatype="html">
         <source>
-        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encription.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
-        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encription can only be enabled during installation of your system. If you want to use it, you have to
+        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to
             reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
-            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programms stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
     </source>
         <target phase-name="approval-1" state="needs-adaptation">
         <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Wie es aussieht verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
         <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur wärend der installation ihres Systems aktiviert werden. Wenn sie die Festplattenverschlüsselung verwenden wollen, müssen sie ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn sie ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
     </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">21</context>
