@@ -63,8 +63,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 &nbsp;<a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
             </p>
         
-            <mat-vertical-stepper [linear]="true">
-                <mat-step [stepControl]="formTicketNumber">
+            <mat-vertical-stepper [linear]="true" #systeminfoStepper>
+                <mat-step [stepControl]="formTicketNumber" state="number">
                     <ng-template matStepLabel>
                         <ng-container i18n>Step1: Input ticket number</ng-container><!--{{ formTicketNumber.valid ? ': ' : '' }}
                         <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>-->
@@ -82,15 +82,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </form>
 
                 </mat-step>
-                <mat-step i18n-label label="Step2: Download and run system info collection program">
+                <mat-step i18n-label label="Step2: Download and run system info collection program" state="execute" [completed]="systeminfosCompleted">
                     <div i18n>
                         <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                     </div>
-                    <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
+                    <button mat-raised-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
                         <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
                         <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
                     </button>
                     &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
+                </mat-step>
+                <mat-step i80n-label label="Step 3: Done" state="done">
+                    <p i18n="@@cSupportSysInfoTextDone">Information collected and sent to support with the provided ticket number.</p>
+                    <button mat-raised-button color="primary" (click)="systeminfosCompleted = false; systeminfoStepper.reset()">Reset</button>
                 </mat-step>
             </mat-vertical-stepper>
         </div>

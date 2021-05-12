@@ -19,8 +19,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { ProgramManagementService } from '../program-management.service';
-import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-support',
@@ -37,6 +38,7 @@ export class SupportComponent implements OnInit {
   public systeminfoRunProgress = false;
   public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
   public systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+  public systeminfosCompleted = false;
 
   constructor(
     private electron: ElectronService,
@@ -91,13 +93,16 @@ export class SupportComponent implements OnInit {
     return this.program.isCheckingInstallation;
   }
 
-  public buttonStartSysteminfo(): void {
+  public buttonStartSysteminfo(systeminfoStepper: MatStepper): void {
     this.systeminfoRunProgress = true;
     this.runSysteminfo().then(() => {
       this.systeminfoOutput('Done');
-      this.systeminfoRunProgress = false;
+      this.systeminfosCompleted = true;
+      systeminfoStepper.selected.completed = true;
+      systeminfoStepper.next();
     }).catch(err => {
       this.systeminfoRunOutput = err;
+    }).finally(() => {
       this.systeminfoRunProgress = false;
     });
   }
