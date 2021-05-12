@@ -64,7 +64,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </p>
         
             <mat-vertical-stepper [linear]="true" #systeminfoStepper>
-                <mat-step [stepControl]="formTicketNumber" state="number">
+                <mat-step [stepControl]="formTicketNumber">
                     <ng-template matStepLabel>
                         <ng-container i18n>Step1: Input ticket number</ng-container><!--{{ formTicketNumber.valid ? ': ' : '' }}
                         <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>-->
@@ -82,7 +82,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </form>
 
                 </mat-step>
-                <mat-step i18n-label label="Step2: Download and run system info collection program" state="execute" [completed]="systeminfosCompleted">
+                <mat-step i18n-label label="Step2: Download and run system info collection program" [completed]="systeminfosCompleted">
                     <div i18n>
                         <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                     </div>
@@ -92,10 +92,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </button>
                     &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                 </mat-step>
-                <mat-step i80n-label label="Step 3: Done" state="done">
-                    <p i18n="@@cSupportSysInfoTextDone">Information collected and sent to support with the provided ticket number.</p>
+                <mat-step i80n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
+                    <p i18n="@@cSupportSysInfoTextDone">
+                        Your system diagnostics data has been successfully sent. (We will come back to you as soon as this has been evaluated.)
+                    </p>
                     <button mat-raised-button color="primary" (click)="systeminfosCompleted = false; systeminfoStepper.reset()">Reset</button>
                 </mat-step>
+                <ng-template matStepperIcon="done">
+                    <mat-icon>done</mat-icon>
+                </ng-template>
             </mat-vertical-stepper>
         </div>
     </mat-expansion-panel>

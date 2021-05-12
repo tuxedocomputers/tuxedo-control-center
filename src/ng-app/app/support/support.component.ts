@@ -22,11 +22,18 @@ import { ProgramManagementService } from '../program-management.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
 import { MatStepper } from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-support',
   templateUrl: './support.component.html',
-  styleUrls: ['./support.component.scss']
+  styleUrls: ['./support.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false }
+    }
+  ]
 })
 export class SupportComponent implements OnInit {
 
