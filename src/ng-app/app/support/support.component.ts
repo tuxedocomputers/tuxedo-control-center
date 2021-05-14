@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -138,9 +138,12 @@ export class SupportComponent implements OnInit {
       try {
         const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
         this.systeminfoOutput('Running systeminfos.sh');
+        this.utils.pageDisabled = true;
         await this.utils.execCmd('pkexec env XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
       } catch (err) {
-        reject('Failed to execute script'); return;
+        reject('Failed to execute script');
+      } finally {
+        this.utils.pageDisabled = false;
       }
 
       resolve();
