@@ -78,7 +78,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-form-field>
                             <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                         </mat-form-field> &nbsp;
-                        <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext">Next</button>
+                        <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
                     </form>
 
                 </mat-step>
@@ -93,10 +93,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                 </mat-step>
                 <mat-step i80n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
-                    <p i18n="@@cSupportSysInfoTextDone">
-                        Your system diagnostics data has been successfully sent. (We will come back to you as soon as this has been evaluated.)
-                    </p>
-                    <button mat-raised-button color="primary" (click)="systeminfosCompleted = false; systeminfoStepper.reset()">Reset</button>
+                    <p i18n="@@cSupportSysInfoTextDone1">Your system diagnostics data has been successfully sent.</p>
+                    <p i18n="@@cSupportSysInfoTextDone2">We will come back to you as soon as this has been evaluated.</p>
                 </mat-step>
                 <ng-template matStepperIcon="done">
                     <mat-icon>done</mat-icon>
