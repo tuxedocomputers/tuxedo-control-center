@@ -144,10 +144,10 @@
         </context-group>
       </trans-unit><trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
         <source>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </source>
-        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bei komplexeren Problemstellungen kann es nötig sein Diagnosedaten Ihres PCs auszuwerten.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Unser Diagnoseprogramm sammelt KEINERLEI persönliche Daten und KEINE Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Bei komplexeren Problemstellungen kann es nötig sein Diagnosedaten Ihres PCs auszuwerten.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Unser Diagnoseprogramm sammelt KEINERLEI persönliche Daten und KEINE Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">57</context>
@@ -196,10 +196,10 @@
         </context-group>
       </trans-unit><trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
         <source>
-                        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
                     </source>
-        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
-Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
+Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">86</context>
@@ -218,51 +218,72 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
+      </trans-unit><trans-unit id="cSupportSysInfoTextDone1" datatype="html">
+        <source>Your system diagnostics data has been successfully sent.</source>
+        <target state="translated">Ihre Diagnoseinformationen wurden erfolgreich übermittelt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportSysInfoTextDone2" datatype="html">
+        <source>We will come back to you as soon as this has been evaluated.</source>
+        <target state="translated">Wir melden uns, sobald diese geprüft wurden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit><trans-unit id="cce829a702e81f886537f80d26a35c42ca490493" datatype="html">
+        <source>Step 3: Done</source>
+        <target state="translated">Schritt 3: Erledigt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
       </trans-unit><trans-unit id="05334eb54d90e0decd20459303745a36c8e2fb6e" datatype="html">
         <source>Remote support</source>
         <target phase-name="approval-1" state="translated">Fernwartungsupport</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit><trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
         <source>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </source>
-        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Lässt sich Ihr Problem mittels der Systemdiagnose nicht lösen, bieten wir Ihnen gerne eine kostenlose Live-Unterstützung per Fernwartungssoftware <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> an.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Auf diese Weise kann sich ein Supportmitarbeiter online auf Ihren TUXEDO Computer verbinden und mit Ihnen zusammen das Problem lösen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Der Support erhält ausschließlich temporär und in Ihrem Beisein Zugriff auf Ihr System. Es werden keinerlei persönliche Daten erfasst!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Lässt sich Ihr Problem mittels der Systemdiagnose nicht lösen, bieten wir Ihnen gerne eine kostenlose Live-Unterstützung per Fernwartungssoftware <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> an.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Auf diese Weise kann sich ein Supportmitarbeiter online auf Ihren TUXEDO Computer verbinden und mit Ihnen zusammen das Problem lösen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Der Support erhält ausschließlich temporär und in Ihrem Beisein Zugriff auf Ihr System. Es werden keinerlei persönliche Daten erfasst!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskInstallButton" datatype="html" approved="yes">
         <source>Install Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk installieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskRemoveButton" datatype="html" approved="yes">
         <source>Remove Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk entfernen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskProgressButton" datatype="html" approved="yes">
         <source>Checking</source>
         <target phase-name="approval-1" state="signed-off">Überprüfe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskStartButton" datatype="html" approved="yes">
         <source>Start Anydesk</source>
         <target phase-name="approval-1" state="translated">AnyDesk starten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit><trans-unit id="ProfMgrOverviewNewProfile" datatype="html" approved="yes">
         <source>New profile</source>
@@ -448,22 +469,22 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
       </trans-unit><trans-unit id="cc363dec382fbe3f178f63e99e788a4bf6fb8053" datatype="html">
         <source>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
                 safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 With 3 premade as well as any number of individually configurable profiles, you have
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </source>
         <target phase-name="approval-1" state="signed-off">
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 Mit 3 vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>    
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>    
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>

@@ -92,7 +92,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </button>
                     &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                 </mat-step>
-                <mat-step i80n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
+                <mat-step i18n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
                     <p i18n="@@cSupportSysInfoTextDone1">Your system diagnostics data has been successfully sent.</p>
                     <p i18n="@@cSupportSysInfoTextDone2">We will come back to you as soon as this has been evaluated.</p>
                 </mat-step>
