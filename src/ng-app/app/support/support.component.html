@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -63,7 +63,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 &nbsp;<a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
             </p>
         
-            <mat-vertical-stepper [linear]="true">
+            <mat-vertical-stepper [linear]="true" #systeminfoStepper>
                 <mat-step [stepControl]="formTicketNumber">
                     <ng-template matStepLabel>
                         <ng-container i18n>Step1: Input ticket number</ng-container><!--{{ formTicketNumber.valid ? ': ' : '' }}
@@ -78,20 +78,27 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-form-field>
                             <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                         </mat-form-field> &nbsp;
-                        <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext">Next</button>
+                        <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
                     </form>
 
                 </mat-step>
-                <mat-step i18n-label label="Step2: Download and run system info collection program">
+                <mat-step i18n-label label="Step2: Download and run system info collection program" [completed]="systeminfosCompleted">
                     <div i18n>
                         <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                     </div>
-                    <button mat-raised-button color="primary" (click)="buttonStartSysteminfo()" [disabled]="systeminfoRunProgress">
+                    <button mat-raised-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
                         <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
                         <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
                     </button>
                     &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                 </mat-step>
+                <mat-step i18n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
+                    <p i18n="@@cSupportSysInfoTextDone1">Your system diagnostics data has been successfully sent.</p>
+                    <p i18n="@@cSupportSysInfoTextDone2">We will come back to you as soon as this has been evaluated.</p>
+                </mat-step>
+                <ng-template matStepperIcon="done">
+                    <mat-icon>done</mat-icon>
+                </ng-template>
             </mat-vertical-stepper>
         </div>
     </mat-expansion-panel>

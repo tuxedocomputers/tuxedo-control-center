@@ -187,11 +187,29 @@
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
+      </trans-unit><trans-unit id="cSupportSysInfoTextDone1" datatype="html">
+        <source>Your system diagnostics data has been successfully sent.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit><trans-unit id="cSupportSysInfoTextDone2" datatype="html">
+        <source>We will come back to you as soon as this has been evaluated.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit><trans-unit id="cce829a702e81f886537f80d26a35c42ca490493" datatype="html">
+        <source>Step 3: Done</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
       </trans-unit><trans-unit id="05334eb54d90e0decd20459303745a36c8e2fb6e" datatype="html">
         <source>Remote support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit><trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
         <source>
@@ -201,31 +219,31 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskInstallButton" datatype="html">
         <source>Install Anydesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskRemoveButton" datatype="html">
         <source>Remove Anydesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskProgressButton" datatype="html">
         <source>Checking</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit><trans-unit id="cSupportAnydeskStartButton" datatype="html">
         <source>Start Anydesk</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit><trans-unit id="ProfMgrOverviewNewProfile" datatype="html">
         <source>New profile</source>
