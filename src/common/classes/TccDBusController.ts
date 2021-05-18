@@ -129,4 +129,8 @@ export class TccDBusController {
             return false;
         }
     }
+
+    disconnect(): void {
+        this.bus.disconnect();
+    }
 }

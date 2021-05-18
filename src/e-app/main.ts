@@ -178,33 +178,37 @@ function activateTccGui() {
 async function getProfiles(): Promise<TccProfile[]> {
     const dbus = new TccDBusController();
     await dbus.init();
+    let result = [];
     if (!await dbus.dbusAvailable()) return [];
     try {
         const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
-        return profiles;
+        result = profiles;
     } catch (err) {
         console.log('Error: ' + err);
-        return [];
     }
+    dbus.disconnect();
+    return result;
 }
 
 async function setTempProfile(profileName: string) {
     const dbus = new TccDBusController();
     await dbus.init();
-    if (!await dbus.dbusAvailable()) return false;
-    const result = await dbus.setTempProfileName(profileName);
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
+    dbus.disconnect();
     return result;
 }
 
 async function getActiveProfile(): Promise<TccProfile> {
     const dbus = new TccDBusController();
     await dbus.init();
+    let result = undefined;
     if (!await dbus.dbusAvailable()) return undefined;
     try {
-        return JSON.parse(await dbus.getActiveProfileJSON());
+        result = JSON.parse(await dbus.getActiveProfileJSON());
     } catch {
-        return undefined;
     }
+    dbus.disconnect();
+    return result;
 }
 
 function createTccWindow() {
@@ -370,13 +374,17 @@ function primeSelectSet(status: string): boolean {
 }
 
 async function updateTrayProfiles() {
-    const updatedActiveProfile = await getActiveProfile();
-    const updatedProfiles = await getProfiles();
-    if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
-        JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
-    ) {
-        tray.state.activeProfile = updatedActiveProfile;
-        tray.state.profiles = updatedProfiles;
-        await tray.create();
+    try {
+        const updatedActiveProfile = await getActiveProfile();
+        const updatedProfiles = await getProfiles();
+        if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
+            JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
+        ) {
+            tray.state.activeProfile = updatedActiveProfile;
+            tray.state.profiles = updatedProfiles;
+            await tray.create();
+        }
+    } catch (err) {
+        console.log('updateTrayProfiles() exception => ' + err);
     }
 }
