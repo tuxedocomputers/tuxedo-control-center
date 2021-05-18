@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { dialog, Menu, Tray } from "electron";
+import { Menu, Tray } from "electron";
 import { TccProfile } from "../common/models/TccProfile";
 
 export class TccTray {
@@ -52,6 +52,7 @@ export class TccTray {
                 click: () => this.events.profileClick(profile.name)
             };
         });
+        console.log('profilesSubmenu length: ' + profilesSubmenu.length);
         // Add profiles submenu "header"
         profilesSubmenu.unshift(
             { label: 'Select temp profile', enabled: false },
@@ -63,7 +64,7 @@ export class TccTray {
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
-                visible: profilesSubmenu.length > 0
+                visible: this.state.profiles.length > 0
             },
             {
                     label: 'Tray autostart', type: 'checkbox', checked: this.state.isAutostartTrayInstalled,
