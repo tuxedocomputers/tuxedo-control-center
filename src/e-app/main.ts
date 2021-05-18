@@ -41,6 +41,8 @@ const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
 
+let profilesHash;
+
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
 if (!applicationLock) {
@@ -75,8 +77,7 @@ app.whenReady().then( async () => {
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.primeQuery = primeSelectQuery();
     tray.state.isPrimeSupported = primeSupported();
-    tray.state.activeProfile = await getActiveProfile();
-    tray.state.profiles = await getProfiles();
+    await updateTrayProfiles();
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.exitClick = () => quitCurrentTccSession();
     tray.events.autostartTrayToggle = () => {
@@ -138,6 +139,9 @@ app.whenReady().then( async () => {
 
         }, tccdVersionCheckInterval);
     }
+
+    const profilesCheckInterval = 4000;
+    setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
 });
 
 app.on('will-quit', (event) => {
@@ -363,4 +367,16 @@ function primeSelectSet(status: string): boolean {
     }
 
     return result;
+}
+
+async function updateTrayProfiles() {
+    const updatedActiveProfile = await getActiveProfile();
+    const updatedProfiles = await getProfiles();
+    if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
+        JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
+    ) {
+        tray.state.activeProfile = updatedActiveProfile;
+        tray.state.profiles = updatedProfiles;
+        await tray.create();
+    }
 }

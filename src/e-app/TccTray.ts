@@ -49,13 +49,15 @@ export class TccTray {
             // Creation of each profile selection submenu item
             return {
                 label: profile.name,
-                click: () => this.events.profileClick(profile.name)
+                click: () => this.events.profileClick(profile.name),
+                type: 'radio',
+                checked: profile.name === this.state.activeProfile.name
             };
         });
-        console.log('profilesSubmenu length: ' + profilesSubmenu.length);
+
         // Add profiles submenu "header"
         profilesSubmenu.unshift(
-            { label: 'Select temp profile', enabled: false },
+            { label: 'Activate profile temporarily', enabled: false },
             { type: 'separator' }
         );
     
