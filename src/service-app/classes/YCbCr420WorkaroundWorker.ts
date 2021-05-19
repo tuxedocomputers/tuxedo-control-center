@@ -32,7 +32,6 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         if (outputPorts) {
             for (let card in outputPorts) {
                 for (let port of outputPorts[card]) {
-                    this.tccd.logLine("card" + card + "-" + port);
                     this.force_ycbcr_420_switches["card" + card + "-" + port] = new SysFsPropertyBoolean(
                                                                                         "/sys/kernel/debug/dri/" +
                                                                                         card + "/" + port +
@@ -40,7 +39,6 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
                 }
             }
         }
-        console.log(this.force_ycbcr_420_switches);
     }
 
     public onStart(): void {
