@@ -26,6 +26,7 @@ export interface ITccSettings {
     shutdownTime: string | null;
     cpuSettingsEnabled: boolean;
     fanControlEnabled: boolean;
+    ycbcr420Workaround: boolean;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -35,7 +36,8 @@ export const defaultSettings: ITccSettings = {
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
-    fanControlEnabled: true
+    fanControlEnabled: true,
+    ycbcr420Workaround: false
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -45,5 +47,6 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
-    fanControlEnabled: true
+    fanControlEnabled: true,
+    ycbcr420Workaround: false
 };

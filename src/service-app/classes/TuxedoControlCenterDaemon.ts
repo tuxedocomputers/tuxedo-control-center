@@ -33,6 +33,7 @@ import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
+import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
@@ -98,6 +99,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
+        this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
 
         this.startWorkers();

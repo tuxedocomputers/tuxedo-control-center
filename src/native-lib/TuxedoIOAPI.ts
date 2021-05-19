@@ -73,6 +73,12 @@ export interface ITuxedoIOAPI {
      * @returns True if call succeeded, false otherwise
      */
     getWebcamStatus(status: ObjWrapper<boolean>): boolean;
+
+    /**
+     * Get names of output ports
+     * @returns Array of output port names
+     */
+     getOutputPorts(): Array<Array<string>>;
 }
 
 
