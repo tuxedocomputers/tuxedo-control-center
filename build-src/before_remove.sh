@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # On RPM update don't remove anything
-if [ "$1" -gt 0 ]; then
+if [ "$1" -gt 0 2>/dev/null ]; then
     exit 0
 fi
 

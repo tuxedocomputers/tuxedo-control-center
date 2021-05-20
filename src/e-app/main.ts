@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, screen } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -187,14 +187,23 @@ function menuRemoveAutostartTray() {
 }
 
 function createTccWindow() {
+    let windowWidth = 1040;
+    let windowHeight = 750;
+    if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
+        windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
+    }
+    if (windowHeight > screen.getPrimaryDisplay().workAreaSize.height) {
+        windowHeight = screen.getPrimaryDisplay().workAreaSize.height;
+    }
+
     tccWindow = new BrowserWindow({
         title: 'TUXEDO Control Center',
-        width: 1040,
-        height: 750,
+        width: windowWidth,
+        height: windowHeight,
         frame: false,
         resizable: true,
-        minWidth: 1040,
-        minHeight: 750,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true

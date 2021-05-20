@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,13 +19,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { ProgramManagementService } from '../program-management.service';
-import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
+import { MatStepper } from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-support',
   templateUrl: './support.component.html',
-  styleUrls: ['./support.component.scss']
+  styleUrls: ['./support.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false }
+    }
+  ]
 })
 export class SupportComponent implements OnInit {
 
@@ -37,6 +45,7 @@ export class SupportComponent implements OnInit {
   public systeminfoRunProgress = false;
   public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
   public systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+  public systeminfosCompleted = false;
 
   constructor(
     private electron: ElectronService,
@@ -91,13 +100,16 @@ export class SupportComponent implements OnInit {
     return this.program.isCheckingInstallation;
   }
 
-  public buttonStartSysteminfo(): void {
+  public buttonStartSysteminfo(systeminfoStepper: MatStepper): void {
     this.systeminfoRunProgress = true;
     this.runSysteminfo().then(() => {
       this.systeminfoOutput('Done');
-      this.systeminfoRunProgress = false;
+      this.systeminfosCompleted = true;
+      systeminfoStepper.selected.completed = true;
+      systeminfoStepper.next();
     }).catch(err => {
       this.systeminfoRunOutput = err;
+    }).finally(() => {
       this.systeminfoRunProgress = false;
     });
   }
@@ -126,9 +138,12 @@ export class SupportComponent implements OnInit {
       try {
         const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
         this.systeminfoOutput('Running systeminfos.sh');
-        await this.utils.execCmd('pkexec sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
+        this.utils.pageDisabled = true;
+        await this.utils.execCmd('pkexec env XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
       } catch (err) {
-        reject('Failed to execute script'); return;
+        reject('Failed to execute script');
+      } finally {
+        this.utils.pageDisabled = false;
       }
 
       resolve();
