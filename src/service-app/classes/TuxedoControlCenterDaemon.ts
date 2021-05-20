@@ -93,6 +93,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         this.dbusData.tccdVersion = tccPackage.version;
 
+        this.dbusData.profilesJSON = JSON.stringify(this.getAllProfiles());
+
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
