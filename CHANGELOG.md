@@ -1,5 +1,18 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Systeminfo clarifications
+  - Third clear *done* step when finished sending
+  - Blurring while asking for password/working
+  - Not possible to send again without going through *step 1*
+### Fixed
+- Systeminfo environmental variable passthrough
+- Deb install message that looked like an error now hidden
+- Adjust GUI window width/height if working screen area
+  is found to be smaller than the default width/height
+- Minimize icon size
+
 ## [1.0.13] - 2021-04-23
 ### Changed
 - Max frequency for AMD CPUs clarified as 'boost' instead of max
