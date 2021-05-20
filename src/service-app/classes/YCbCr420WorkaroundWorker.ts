@@ -16,11 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+import * as fs from 'fs';
+
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
-import { SysFsPropertyBoolean } from '../../common/classes/SysFsProperties';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     private force_ycbcr_420_switches: Object = {};
@@ -32,19 +33,25 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         if (outputPorts) {
             for (let card in outputPorts) {
                 for (let port of outputPorts[card]) {
-                    this.force_ycbcr_420_switches["card" + card + "-" + port] = new SysFsPropertyBoolean(
-                                                                                        "/sys/kernel/debug/dri/" +
-                                                                                        card + "/" + port +
-                                                                                        "/force_yuv420_output");
+                    this.force_ycbcr_420_switches["card" + card + "-" + port] = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
                 }
             }
         }
     }
 
+    private isWritable(path: string): boolean {
+        try {
+            fs.accessSync(path, fs.constants.W_OK);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
     public onStart(): void {
         for (let card_port in this.force_ycbcr_420_switches) {
-            if (this.force_ycbcr_420_switches[card_port].isAvailable()) {
-                this.force_ycbcr_420_switches[card_port].writeValue(this.tccd.settings.ycbcr420Workaround);
+            if (this.isWritable(this.force_ycbcr_420_switches[card_port])) {
+                fs.appendFileSync(this.force_ycbcr_420_switches[card_port], this.tccd.settings.ycbcr420Workaround? "1" : "0");
             }
         }
     }
@@ -55,8 +62,8 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
 
     public onExit(): void {
         for (let card_port in this.force_ycbcr_420_switches) {
-            if (this.force_ycbcr_420_switches[card_port].isAvailable()) {
-                this.force_ycbcr_420_switches[card_port].writeValue(false);
+            if (this.isWritable(this.force_ycbcr_420_switches[card_port])) {
+                fs.appendFileSync(this.force_ycbcr_420_switches[card_port], "0");
             }
         }
     }
