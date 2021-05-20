@@ -1,11 +1,12 @@
 # Changelog
 
-## [] - UNRELEASED
+## [1.0.14] - 2021-05-20
 ### Added
 - Systeminfo clarifications
   - Third clear *done* step when finished sending
   - Blurring while asking for password/working
   - Not possible to send again without going through *step 1*
+
 ### Fixed
 - Systeminfo environmental variable passthrough
 - Deb install message that looked like an error now hidden
