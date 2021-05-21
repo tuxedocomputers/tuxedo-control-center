@@ -16,32 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import * as fs from 'fs';
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
-
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
-    private force_ycbcr_420_switches: Object = {};
-
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(100000, tccd);
-
-        const outputPorts: Array<Array<string>> = TuxedoIOAPI.getOutputPorts();
-        if (outputPorts) {
-            for (let card in outputPorts) {
-                for (let port of outputPorts[card]) {
-                    this.force_ycbcr_420_switches["card" + card + "-" + port] = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
-                }
-            }
-        }
     }
 
-    private isWritable(path: string): boolean {
+    private fileOK(path: string): boolean {
         try {
-            fs.accessSync(path, fs.constants.W_OK);
+            fs.accessSync(path, fs.constants.F_OK |  fs.constants.R_OK | fs.constants.W_OK);
             return true;
         } catch (err) {
             return false;
@@ -49,22 +37,34 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        for (let card_port in this.force_ycbcr_420_switches) {
-            if (this.isWritable(this.force_ycbcr_420_switches[card_port])) {
-                fs.appendFileSync(this.force_ycbcr_420_switches[card_port], this.tccd.settings.ycbcr420Workaround? "1" : "0");
+        for (let card = 0; card < this.tccd.settings.ycbcr420Workaround.length; card++) {
+            for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
+                let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
+                if (this.fileOK(path)) {
+                    let oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
+                    if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
+                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
+                        // TODO Reapply display settings so that force variable gets loaded.
+                        // Draft doing this using xrandr and awk:
+                        // export TUXEDO_RESTORE_XRANDR="xrandr $(xrandr --verbose | sed s/\+/\ /g | \
+                        //                                          awk '$2 ~ "^connected$" { \
+                        //                                            if ($3=="primary") { \
+                        //                                              printf(" --output %s --primary --mode %s --pos %sx%s --rotate %s", $1, $4, $5, $6, $8) \
+                        //                                            } else { \
+                        //                                              printf(" --output %s --mode %s --pos %sx%s --rotate %s", $1, $3, $4, $5, $7)}}')"; \
+                        // xrandr $(xrandr | awk '$2 ~ "^connected$" {printf(" --output %s --off", $1)}'); \
+                        // $TUXEDO_RESTORE_XRANDR;
+                    }
+                }
             }
         }
     }
 
     public onWork(): void {
-        // noop
+        //noop
     }
 
     public onExit(): void {
-        for (let card_port in this.force_ycbcr_420_switches) {
-            if (this.isWritable(this.force_ycbcr_420_switches[card_port])) {
-                fs.appendFileSync(this.force_ycbcr_420_switches[card_port], "0");
-            }
-        }
+        //noop
     }
 }
