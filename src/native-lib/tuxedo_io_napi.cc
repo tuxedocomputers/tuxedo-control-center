@@ -165,6 +165,16 @@ Boolean SetODMPerformanceProfile(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Boolean GetDefaultODMPerformanceProfile(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetDefaultODMPerformanceProfile - invalid argument"); }
+    Object objWrapper = info[0].As<Object>();
+    TuxedoIOAPI io;
+    std::string profileName;
+    bool result = io.GetDefaultODMPerformanceProfile(profileName);
+    objWrapper.Set("value", profileName);
+    return Boolean::New(info.Env(), result);
+}
+
 Object Init(Env env, Object exports) {
     // General
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
@@ -186,6 +196,7 @@ Object Init(Env env, Object exports) {
     // ODM Profiles
     exports.Set(String::New(env, "getAvailableODMPerformanceProfiles"), Function::New(env, GetAvailableODMPerformanceProfiles));
     exports.Set(String::New(env, "setODMPerformanceProfile"), Function::New(env, SetODMPerformanceProfile));
+    exports.Set(String::New(env, "getDefaultODMPerformanceProfile"), Function::New(env, GetDefaultODMPerformanceProfile));
 
     return exports;
 }

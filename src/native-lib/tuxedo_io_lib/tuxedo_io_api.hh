@@ -93,6 +93,7 @@ public:
     virtual bool GetWebcam(bool &status) = 0;
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) = 0;
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) = 0;
 
 protected:
     IO *io;
@@ -203,6 +204,11 @@ public:
             result = io->IoctlCall(W_CL_PERF_PROFILE, perfProfileArgument);
         }
         return result;
+    }
+
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
+        profileName = "performance";
+        return true;
     }
 
 private:
@@ -355,6 +361,11 @@ public:
         return false;
     }
 
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
+        profileName = "";
+        return false;
+    }
+
 private:
     const int MAX_FAN_SPEED = 0xc8;
 };
@@ -486,6 +497,14 @@ public:
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
         if (activeInterface) {
             return activeInterface->SetODMPerformanceProfile(performanceProfile);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
+        if (activeInterface) {
+            return activeInterface->GetDefaultODMPerformanceProfile(profileName);
         } else {
             return false;
         }

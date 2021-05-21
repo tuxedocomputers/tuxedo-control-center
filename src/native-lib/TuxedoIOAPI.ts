@@ -83,6 +83,11 @@ export interface ITuxedoIOAPI {
      *  @returns True if call succeeded, false otherwise
      */
     setODMPerformanceProfile(performanceProfile: string): boolean;
+    /**
+     *  Get the default performance profile name
+     *  @returns True if call succeeded, false otherwise
+     */
+    getDefaultODMPerformanceProfile(profileName: ObjWrapper<string>): boolean;
 }
 
 
