@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -24,6 +24,7 @@
 #include <sys/ioctl.h>
 #include <string>
 #include <vector>
+#include <map>
 #include <cmath>
 #include "tuxedo_io_ioctl.h"
 
@@ -90,6 +91,8 @@ public:
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) = 0;
     virtual bool SetWebcam(const bool status) = 0;
     virtual bool GetWebcam(bool &status) = 0;
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) = 0;
 
 protected:
     IO *io;
@@ -184,8 +187,32 @@ public:
         return ret;
     }
 
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
+        profiles.clear();
+        for (auto it = clevoPerformanceProfiles.begin(); it != clevoPerformanceProfiles.end(); ++it) {
+            profiles.push_back(it->first);
+        }
+        return true;
+    }
+
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
+        bool result = false;
+        bool perfProfileExists = clevoPerformanceProfiles.find(performanceProfile) != clevoPerformanceProfiles.end();
+        if (perfProfileExists) {
+            int perfProfileArgument = clevoPerformanceProfiles.at(performanceProfile);
+            result = io->IoctlCall(W_CL_PERF_PROFILE, perfProfileArgument);
+        }
+        return result;
+    }
+
 private:
     const int MAX_FAN_SPEED = 0xff;
+    const std::map<std::string, int> clevoPerformanceProfiles = {
+        { "quiet",          0x00 },
+        { "power_saving",   0x01 },
+        { "performance",    0x02 },
+        { "entertainment",  0x03 }
+    };
 
     bool GetFanInfo(int fanNr, int &fanInfo) {
         if (fanNr < 0 || fanNr >= 3) return false;
@@ -317,6 +344,17 @@ public:
         return false;
     }
 
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
+        // Not implemented
+        profiles.clear();
+        return false;
+    }
+
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
+        // Not implemented
+        return false;
+    }
+
 private:
     const int MAX_FAN_SPEED = 0xc8;
 };
@@ -432,6 +470,22 @@ public:
     virtual bool GetWebcam(bool &status) {
         if (activeInterface) {
             return activeInterface->GetWebcam(status);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
+        if (activeInterface) {
+            return activeInterface->GetAvailableODMPerformanceProfiles(profiles);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
+        if (activeInterface) {
+            return activeInterface->SetODMPerformanceProfile(performanceProfile);
         } else {
             return false;
         }

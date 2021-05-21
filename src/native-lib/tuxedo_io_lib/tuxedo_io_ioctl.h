@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of tuxedo-io.
  *
@@ -61,6 +61,7 @@
 #define W_CL_WEBCAM_SW		_IOW(MAGIC_WRITE_CL, 0x12, int32_t*)
 #define W_CL_FLIGHTMODE_SW	_IOW(MAGIC_WRITE_CL, 0x13, int32_t*)
 #define W_CL_TOUCHPAD_SW	_IOW(MAGIC_WRITE_CL, 0x14, int32_t*)
+#define W_CL_PERF_PROFILE	_IOW(MAGIC_WRITE_CL, 0x15, int32_t*)
 
 #ifdef DEBUG
 #define W_TF_BC			_IOW(MAGIC_WRITE_CL, 0x91, uint32_t*)

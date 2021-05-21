@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,6 +18,7 @@
  */
 #include <napi.h>
 #include <cmath>
+#include <vector>
 #include "tuxedo_io_lib/tuxedo_io_api.hh"
 
 using namespace Napi;
@@ -142,6 +143,28 @@ Boolean GetWebcamStatus(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Boolean GetAvailableODMPerformanceProfiles(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetAvailableODMPerformanceProfiles - invalid argument"); }
+    TuxedoIOAPI io;
+    Object objWrapper = info[0].As<Object>();
+    std::vector<std::string> profiles;
+    bool result = io.GetAvailableODMPerformanceProfiles(profiles);
+    auto arr = Array::New(info.Env());
+    for (std::size_t i = 0; i < profiles.size(); ++i) {
+        arr.Set(i, profiles[i]);
+    }
+    objWrapper.Set("value", arr);
+    return Boolean::New(info.Env(), result);
+}
+
+Boolean SetODMPerformanceProfile(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsString()) { throw Napi::Error::New(info.Env(), "SetODMPerformanceProfile - invalid argument"); }
+    std::string performanceProfile = info[0].As<String>();
+    TuxedoIOAPI io;
+    bool result = io.SetODMPerformanceProfile(performanceProfile);
+    return Boolean::New(info.Env(), result);
+}
+
 Object Init(Env env, Object exports) {
     // General
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
@@ -159,6 +182,10 @@ Object Init(Env env, Object exports) {
     // Webcam
     exports.Set(String::New(env, "setWebcamStatus"), Function::New(env, SetWebcamStatus));
     exports.Set(String::New(env, "getWebcamStatus"), Function::New(env, GetWebcamStatus));
+
+    // ODM Profiles
+    exports.Set(String::New(env, "getAvailableODMPerformanceProfiles"), Function::New(env, GetAvailableODMPerformanceProfiles));
+    exports.Set(String::New(env, "setODMPerformanceProfile"), Function::New(env, SetODMPerformanceProfile));
 
     return exports;
 }
