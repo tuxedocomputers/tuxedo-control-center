@@ -46,7 +46,7 @@ export class GlobalSettingsComponent implements OnInit {
     ngOnInit() {
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
-        this.ycbcr420Workaround = this.config.getSettings().ycbcr420Workaround;
+        this.ycbcr420Workaround = this.config.getSettings().ycbcr420Workaround[0]["eDP-1"];
     }
 
     onCPUSettingsEnabledChanged(event: any) {
@@ -84,14 +84,24 @@ export class GlobalSettingsComponent implements OnInit {
     onYCbCr420WorkaroundChanged(event: any) {
         this.utils.pageDisabled = true;
 
-        this.config.getSettings().ycbcr420Workaround = event.checked;
+        for (let card of this.config.getSettings().ycbcr420Workaround) {
+            for (let port in card) {
+                card[port] = event.checked;
+            }
+        }
         
         this.config.saveSettings().then(success => {
             if (!success) {
-                this.config.getSettings().ycbcr420Workaround = !event.checked;
+                for (let card of this.config.getSettings().ycbcr420Workaround) {
+                    for (let port in card) {
+                        card[port] = !event.checked;
+                    }
+                }
+                this.ycbcr420Workaround = !event.checked;
             }
-
-            this.ycbcr420Workaround = this.config.getSettings().ycbcr420Workaround;
+            else {
+                this.ycbcr420Workaround = event.checked;
+            }
 
             this.utils.pageDisabled = false;
         });

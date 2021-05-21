@@ -193,6 +193,50 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
+    private syncOutputPortsSetting() {
+        let missingSetting = false;
+
+        let outputPorts = TuxedoIOAPI.getOutputPorts();
+        // Delete additional cards from settings
+        if (this.settings.ycbcr420Workaround.length > outputPorts.length) {
+            this.logLine('Additional ycbcr420Workaround card in settings');
+            this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts.length)
+            missingSetting = true;
+        }
+        for (let card = 0; card < outputPorts.length; card++) {
+            // Add card to settings if missing
+            if (this.settings.ycbcr420Workaround.length <= card) {
+                this.logLine('Missing ycbcr420Workaround card in settings');
+                this.settings.ycbcr420Workaround[card] = {};
+                missingSetting = true;
+            }
+            // Delete additional ports from settings
+            for (let settingsPort in this.settings.ycbcr420Workaround[card]) {
+                let stillAvailable: boolean = false;
+                for (let port of outputPorts[card]) {
+                    if (settingsPort === port) {
+                        stillAvailable = true;
+                    }
+                }
+                if (!stillAvailable) {
+                    this.logLine('Additional ycbcr420Workaround port in settings');
+                    delete this.settings.ycbcr420Workaround[card][settingsPort];
+                    missingSetting = true;
+                }
+            }
+            // Add port to settings if missing
+            for (let port of outputPorts[card]) {
+                if (this.settings.ycbcr420Workaround[card][port] === undefined) {
+                    this.logLine('Missing ycbcr420Workaround port in settings');
+                    this.settings.ycbcr420Workaround[card][port] = false;
+                    missingSetting = true;
+                }
+            }
+        }
+
+        return missingSetting;
+    }
+
     private readOrCreateConfigurationFiles() {
         try {
             this.settings = this.config.readSettings();
@@ -216,6 +260,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.settings.fanControlEnabled = this.config.getDefaultSettings().fanControlEnabled;
                 missingSetting = true;
             }
+            if (this.settings.ycbcr420Workaround === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing ycbcr420Workaround setting');
+                this.settings.ycbcr420Workaround = this.config.getDefaultSettings().ycbcr420Workaround;
+                missingSetting = true;
+            }
+            missingSetting = this.syncOutputPortsSetting();
 
             if (missingSetting) {
                 throw Error('Missing setting');
@@ -224,6 +275,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 if (this.settings === undefined) {
                     this.settings = this.config.getDefaultSettings();
+                    this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
                 this.logLine('Filled missing settings with default: ' + this.config.pathSettings);
