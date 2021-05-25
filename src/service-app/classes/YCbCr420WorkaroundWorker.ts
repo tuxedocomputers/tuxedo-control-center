@@ -18,6 +18,7 @@
  */
 
 import * as fs from 'fs';
+import * as child_process from 'child_process';
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
@@ -37,26 +38,48 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
     }
 
     public onStart(): void {
+        let setting_changed: boolean = false;
+
         for (let card = 0; card < this.tccd.settings.ycbcr420Workaround.length; card++) {
             for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
                 let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
                 if (this.fileOK(path)) {
                     let oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
                     if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
+                        setting_changed = true;
                         fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
-                        // TODO Reapply display settings so that force variable gets loaded.
-                        // Draft doing this using xrandr and awk:
-                        // export TUXEDO_RESTORE_XRANDR="xrandr $(xrandr --verbose | sed s/\+/\ /g | \
-                        //                                          awk '$2 ~ "^connected$" { \
-                        //                                            if ($3=="primary") { \
-                        //                                              printf(" --output %s --primary --mode %s --pos %sx%s --rotate %s", $1, $4, $5, $6, $8) \
-                        //                                            } else { \
-                        //                                              printf(" --output %s --mode %s --pos %sx%s --rotate %s", $1, $3, $4, $5, $7)}}')"; \
-                        // xrandr $(xrandr | awk '$2 ~ "^connected$" {printf(" --output %s --off", $1)}'); \
-                        // $TUXEDO_RESTORE_XRANDR;
                     }
                 }
             }
+        }
+
+        if (setting_changed) {
+            child_process.exec('export TUXEDO_RESTORE_XRANDR="xrandr -d :0 $(xrandr -d :0 --verbose | sed s/\\+/\\ /g | \
+                                  awk \'$2 ~ "^connected$" { \
+                                    if ($3=="primary") { \
+                                      printf(" --output %s --primary --mode %s --pos %sx%s --rotate %s", $1, $4, $5, $6, $8) \
+                                    } else { \
+                                      printf(" --output %s --mode %s --pos %sx%s --rotate %s", $1, $3, $4, $5, $7)}}\')"; \
+                                xrandr -d :0 $(xrandr -d :0 | awk \'$2 ~ "^connected$" {printf(" --output %s --off", $1)}\'); \
+                                $TUXEDO_RESTORE_XRANDR;',
+                                (error, stdout, stderr) => {
+                                  if (error) {
+                                    console.error(`exec error: ${error}`);
+                                    return;
+                                  }
+                                  console.log(`stdout: ${stdout}`);
+                                  console.error(`stderr: ${stderr}`);
+                                })
+            // TODO Reapply display settings so that force variable gets loaded.
+            // Draft doing this using xrandr and awk:
+            // export TUXEDO_RESTORE_XRANDR="xrandr -d 0 $(xrandr -d 0 --verbose | sed s/\+/\ /g | \
+            //                                          awk '$2 ~ "^connected$" { \
+            //                                            if ($3=="primary") { \
+            //                                              printf(" --output %s --primary --mode %s --pos %sx%s --rotate %s", $1, $4, $5, $6, $8) \
+            //                                            } else { \
+            //                                              printf(" --output %s --mode %s --pos %sx%s --rotate %s", $1, $3, $4, $5, $7)}}')"; \
+            // xrandr -d 0 $(xrandr -d 0 | awk '$2 ~ "^connected$" {printf(" --output %s --off", $1)}'); \
+            // $TUXEDO_RESTORE_XRANDR;
         }
     }
 
