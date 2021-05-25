@@ -27,6 +27,8 @@ import { UtilsService } from '../utils.service';
     styleUrls: ['./global-settings.component.scss']
 })
 export class GlobalSettingsComponent implements OnInit {
+    Object = Object;
+
     public gridParams = {
         cols: 9,
         headerSpan: 4,
@@ -36,7 +38,7 @@ export class GlobalSettingsComponent implements OnInit {
 
     public cpuSettingsEnabled: boolean = true;
     public fanControlEnabled: boolean = true;
-    public ycbcr420Workaround: boolean = false;
+    public ycbcr420Workaround: Array<Object> = [];
 
     constructor(
         private config: ConfigService,
@@ -46,7 +48,12 @@ export class GlobalSettingsComponent implements OnInit {
     ngOnInit() {
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
-        this.ycbcr420Workaround = this.config.getSettings().ycbcr420Workaround[0]["eDP-1"];
+        for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
+            this.ycbcr420Workaround[card] = {};
+            for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
+                this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
+            }
+        }
     }
 
     onCPUSettingsEnabledChanged(event: any) {
@@ -81,27 +88,18 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onYCbCr420WorkaroundChanged(event: any) {
+    onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
         this.utils.pageDisabled = true;
 
-        for (let card of this.config.getSettings().ycbcr420Workaround) {
-            for (let port in card) {
-                card[port] = event.checked;
-            }
-        }
+        this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
         
         this.config.saveSettings().then(success => {
             if (!success) {
-                for (let card of this.config.getSettings().ycbcr420Workaround) {
-                    for (let port in card) {
-                        card[port] = !event.checked;
-                    }
-                }
-                this.ycbcr420Workaround = !event.checked;
+                this.config.getSettings().ycbcr420Workaround[card][port] = !event.checked;
+                this.ycbcr420Workaround[card][port] = !event.checked;
             }
-            else {
-                this.ycbcr420Workaround = event.checked;
-            }
+
+            this.ycbcr420Workaround = this.config.getSettings().ycbcr420Workaround[card][port];
 
             this.utils.pageDisabled = false;
         });

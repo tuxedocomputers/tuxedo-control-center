@@ -58,23 +58,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-grid-list>
     <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
     
-    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
-        <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Force Chroma Subsampling (Y'CbCr 4:2:0) if available</header></mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.valueSpan">
-            <content class="value">
-                <span [hidden]="!inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundActivated">activated</span>
-                <span [hidden]="inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundDeactivated">deactivated</span>
-            </content>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.inputSpan">
-            <content class="input">
-                <mat-checkbox #inputYCbCr420Workaround
-                    color="primary"
-                    [(ngModel)]="ycbcr420Workaround"
-                    (change)="onYCbCr420WorkaroundChanged($event)">
-                </mat-checkbox>
-            </content>
-        </mat-grid-tile>
-    </mat-grid-list>
-    <div i18n>*Explanation text*</div>
+    <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index"> <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
+        <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
+            <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Force Chroma Subsampling (Y'CbCr 4:2:0) for port {{port}} of card {{i}} if available</header></mat-grid-tile>
+            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                <content class="value">
+                    <span [hidden]="!inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundActivated">activated</span>
+                    <span [hidden]="inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundDeactivated">deactivated</span>
+                </content>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                <content class="input">
+                    <mat-checkbox #inputYCbCr420Workaround
+                        color="primary"
+                        [(ngModel)]="ycbcr420Workaround"
+                        (change)="onYCbCr420WorkaroundChanged($event, card, port)">
+                    </mat-checkbox>
+                </content>
+            </mat-grid-tile>
+        </mat-grid-list>
+        <div i18n>*Explanation text*</div>
+    </ng-template>
 </div>
