@@ -18,7 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <div class="content">
-    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsCPUSettingsLabel">CPU Settings</header></mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.valueSpan">
             <content class="value">
@@ -38,7 +38,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-grid-list>
     <div class=margin-bottom i18n>On deactivate, CPU settings are <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.</div>
     
-    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsFanControlLabel">Fan Control</header></mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.valueSpan">
             <content class="value">
@@ -59,7 +59,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
     
     <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index"> <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
-        <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="30px" class="global-settings-grid">
+        <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
             <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Force Chroma Subsampling (Y'CbCr 4:2:0) for port {{port}} of card {{i}} if available</header></mat-grid-tile>
             <mat-grid-tile [colspan]="gridParams.valueSpan">
                 <content class="value">
@@ -71,12 +71,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <content class="input">
                     <mat-checkbox #inputYCbCr420Workaround
                         color="primary"
-                        [(ngModel)]="ycbcr420Workaround"
-                        (change)="onYCbCr420WorkaroundChanged($event, card, port)">
+                        [(ngModel)]="ycbcr420Workaround[i][port]"
+                        (change)="onYCbCr420WorkaroundChanged($event, i, port)">
                     </mat-checkbox>
                 </content>
             </mat-grid-tile>
         </mat-grid-list>
-        <div i18n>*Explanation text*</div>
     </ng-template>
 </div>

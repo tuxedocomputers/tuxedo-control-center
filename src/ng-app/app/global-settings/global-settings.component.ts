@@ -54,6 +54,8 @@ export class GlobalSettingsComponent implements OnInit {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
             }
         }
+        console.log(this.config.getSettings().ycbcr420Workaround);
+        console.log(this.ycbcr420Workaround);
     }
 
     onCPUSettingsEnabledChanged(event: any) {
@@ -91,6 +93,10 @@ export class GlobalSettingsComponent implements OnInit {
     onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
         this.utils.pageDisabled = true;
 
+        console.log(event);
+        console.log(card);
+        console.log(port);
+
         this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
         
         this.config.saveSettings().then(success => {
@@ -99,7 +105,7 @@ export class GlobalSettingsComponent implements OnInit {
                 this.ycbcr420Workaround[card][port] = !event.checked;
             }
 
-            this.ycbcr420Workaround = this.config.getSettings().ycbcr420Workaround[card][port];
+            this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
 
             this.utils.pageDisabled = false;
         });
