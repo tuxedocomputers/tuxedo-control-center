@@ -61,6 +61,10 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     public onExit(): void {
-
+        // Attempt to set default profile on exit
+        const defaultProfileName: ObjWrapper<string> = { value: '' };
+        if (ioAPI.getDefaultODMPerformanceProfile(defaultProfileName)) {
+            ioAPI.setODMPerformanceProfile(defaultProfileName.value);
+        }
     }
 }
