@@ -288,18 +288,21 @@ export class CpuWorker extends DaemonWorker {
             const currentBoost = this.cpuCtrl.boost.readValue()
             const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
             const maxFreqProfile = profile.cpu.scalingMaxFrequency;
-            if ((profile.cpu.useMaxPerfGov || maxFreqProfile === undefined) && !currentBoost) {
-                cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of true');
+            if (profile.cpu.useMaxPerfGov) {
+                if (!currentBoost) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
+                }
             }
-            else if (maxFreqProfile === -1 && currentBoost) {
-                cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of false');
-            }
-            else if ((maxFreqProfile <= coreMaxFreq && currentBoost) || (maxFreqProfile > coreMaxFreq && !currentBoost)) {
-                cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of '
-                + (maxFreqProfile > coreMaxFreq));
+            else {
+                if ((maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq) && !currentBoost) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
+                }
+                else if ((maxFreqProfile === -1 || maxFreqProfile <= coreMaxFreq) && currentBoost) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => true instead of false');
+                }
             }
         }
 
