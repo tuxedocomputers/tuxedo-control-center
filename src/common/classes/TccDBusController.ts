@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -114,6 +114,14 @@ export class TccDBusController {
         }
     }
 
+    async setTempProfileName(profileName: string): Promise<boolean> {
+        try {
+            return await this.interface.SetTempProfile(profileName);
+        } catch (err) {
+            return false;
+        }
+    }
+
     async getProfilesJSON(): Promise<string> {
         try {
             return await this.interface.GetProfilesJSON();
@@ -122,11 +130,19 @@ export class TccDBusController {
         }
     }
 
-    async setTempProfileName(profileName: string): Promise<boolean> {
+    async getCustomProfilesJSON(): Promise<string> {
         try {
-            return await this.interface.SetTempProfile(profileName);
+            return await this.interface.GetCustomProfilesJSON();
         } catch (err) {
-            return false;
+            return undefined;
+        }
+    }
+
+    async getDefaultProfilesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetDefaultProfilesJSON();
+        } catch (err) {
+            return undefined;
         }
     }
 
