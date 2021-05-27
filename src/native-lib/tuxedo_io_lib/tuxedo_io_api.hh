@@ -190,17 +190,18 @@ public:
 
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
         profiles.clear();
-        for (auto it = clevoPerformanceProfiles.begin(); it != clevoPerformanceProfiles.end(); ++it) {
-            profiles.push_back(it->first);
-        }
+        profiles.push_back(PERF_PROF_STR_QUIET);
+        profiles.push_back(PERF_PROF_STR_POWERSAVE);
+        profiles.push_back(PERF_PROF_STR_ENTERTAINMENT);
+        profiles.push_back(PERF_PROF_STR_PERFORMANCE);
         return true;
     }
 
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
         bool result = false;
-        bool perfProfileExists = clevoPerformanceProfiles.find(performanceProfile) != clevoPerformanceProfiles.end();
+        bool perfProfileExists = clevoPerformanceProfilesToArgument.find(performanceProfile) != clevoPerformanceProfilesToArgument.end();
         if (perfProfileExists) {
-            int perfProfileArgument = clevoPerformanceProfiles.at(performanceProfile);
+            int perfProfileArgument = clevoPerformanceProfilesToArgument.at(performanceProfile);
             result = io->IoctlCall(W_CL_PERF_PROFILE, perfProfileArgument);
         }
         return result;
@@ -213,7 +214,12 @@ public:
 
 private:
     const int MAX_FAN_SPEED = 0xff;
-    const std::map<std::string, int> clevoPerformanceProfiles = {
+    const std::string PERF_PROF_STR_QUIET = "quiet";
+    const std::string PERF_PROF_STR_POWERSAVE = "power_saving";
+    const std::string PERF_PROF_STR_PERFORMANCE = "performance";
+    const std::string PERF_PROF_STR_ENTERTAINMENT = "entertainment";
+
+    const std::map<std::string, int> clevoPerformanceProfilesToArgument = {
         { "quiet",          0x00 },
         { "power_saving",   0x01 },
         { "performance",    0x02 },

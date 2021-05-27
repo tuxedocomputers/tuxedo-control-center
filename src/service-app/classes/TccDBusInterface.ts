@@ -76,6 +76,7 @@ export class TccDBusData {
     public profilesJSON: string;
     public customProfilesJSON: string;
     public defaultProfilesJSON: string;
+    public odmProfilesAvailable: string[];
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -101,6 +102,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetProfilesJSON() { return this.data.profilesJSON; }
     GetCustomProfilesJSON() { return this.data.customProfilesJSON; }
     GetDefaultProfilesJSON() { return this.data.defaultProfilesJSON; }
+    ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
 }
 
 TccDBusInterface.configureMembers({
@@ -118,7 +120,8 @@ TccDBusInterface.configureMembers({
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },
         GetProfilesJSON: { outSignature: 's' },
         GetCustomProfilesJSON: { outSignature: 's' },
-        GetDefaultProfilesJSON: { outSignature: 's' }
+        GetDefaultProfilesJSON: { outSignature: 's' },
+        ODMProfilesAvailable: { outSignature: 'as' },
     },
     signals: {}
 });

@@ -29,7 +29,8 @@ export class ODMProfileWorker extends DaemonWorker {
 
     public onStart(): void {
         const availableProfiles: ObjWrapper<string[]> = { value: [] };
-        if (ioAPI.getAvailableODMPerformanceProfiles(availableProfiles)) {
+        const odmProfilesAvailable = ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
+        if (odmProfilesAvailable) {
             const odmProfileSettings = this.tccd.getCurrentProfile().odmProfile;
             let chosenODMProfileName;
             if (odmProfileSettings !== undefined) {
@@ -54,6 +55,8 @@ export class ODMProfileWorker extends DaemonWorker {
                 this.tccd.logLine('ODMProfileWorker: Unexpected error, default profile name \'' + chosenODMProfileName + '\' not valid');
             }
         }
+
+        this.tccd.dbusData.odmProfilesAvailable = availableProfiles.value;
     }
 
     public onWork(): void {
