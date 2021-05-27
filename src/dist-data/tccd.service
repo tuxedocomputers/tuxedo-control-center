@@ -1,5 +1,6 @@
 [Unit]
 Description=TUXEDO Control Center Service
+Before=display-manager.service
 
 [Service]
 Type=simple

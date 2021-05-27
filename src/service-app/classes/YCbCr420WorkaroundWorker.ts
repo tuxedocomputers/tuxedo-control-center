@@ -18,7 +18,6 @@
  */
 
 import * as fs from 'fs';
-import * as child_process from 'child_process';
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
@@ -38,31 +37,13 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        let setting_changed: boolean = false;
-
         for (let card = 0; card < this.tccd.settings.ycbcr420Workaround.length; card++) {
             for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
                 let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
                 if (this.fileOK(path)) {
-                    let oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
-                    if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
-                        setting_changed = true;
-                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
-                    }
+                    fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
                 }
             }
-        }
-
-        console.log(setting_changed);
-
-        if (setting_changed) {
-            child_process.exec('xset dpms -d :0 force off && xset dpms -d :0 force on', (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`exec error: ${error}`);
-                }
-                console.log(`stdout: ${stdout}`);
-                console.error(`stderr: ${stderr}`);
-            });
         }
     }
 
