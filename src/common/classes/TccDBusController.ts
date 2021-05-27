@@ -146,6 +146,14 @@ export class TccDBusController {
         }
     }
 
+    async odmProfilesAvailable(): Promise<string[]> {
+        try {
+            return await this.interface.ODMProfilesAvailable();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     disconnect(): void {
         this.bus.disconnect();
     }

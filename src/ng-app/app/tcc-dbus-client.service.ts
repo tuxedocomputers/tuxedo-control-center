@@ -46,6 +46,8 @@ export class TccDBusClientService implements OnDestroy {
   public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
   public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
 
+  public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
+
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
 
   constructor(private utils: UtilsService) {
@@ -79,6 +81,8 @@ export class TccDBusClientService implements OnDestroy {
 
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
+
+    this.odmProfilesAvailable.next(await this.tccDBusInterface.odmProfilesAvailable());
 
     // Retrieve and parse active profile
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
