@@ -203,7 +203,6 @@
                     </source>
         <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
 Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">86</context>
@@ -521,7 +520,6 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
                 Mit 3 vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.
             <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>    
         </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">30</context>
@@ -578,7 +576,6 @@ WEEE-Reg.-Nr.: DE 93420497
 eingetragen im Handelsregister des Amtsgerichtes Augsburg
 Handelsregisternummer HRB 27755
         </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">126</context>
@@ -786,26 +783,57 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
-      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundLabel" datatype="html">
-        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) for port <x id="INTERPOLATION" equiv-text="{{port}}"/> of card <x id="INTERPOLATION_1" equiv-text="{{i}}"/> if available</source>
-        <target phase-name="approval-1" state="translated">Erzwinge Chroma Subsampling (Y'CbCr 4:2:0) für Port <x id="INTERPOLATION" equiv-text="{{port}}"/> der Karte <x id="INTERPOLATION_1" equiv-text="{{i}}"/> wenn verfügbar</target>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundHeader" datatype="html">
+        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</source>
+        <target phase-name="approval-1" state="translated">Erzwinge Chroma Subsampling (Y'CbCr 4:2:0) wenn verfügbar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundLabel" datatype="html">
+        <source>Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/></source>
+        <target phase-name="approval-1" state="translated">
+            Port <x id="INTERPOLATION" equiv-text="{{port}}"/> der Karte <x id="INTERPOLATION_1" equiv-text="{{i}}"/>
+        </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundActivated" datatype="html">
         <source>activated</source>
         <target phase-name="approval-1" state="translated">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundDeactivated" datatype="html">
         <source>deactivated</source>
         <target phase-name="approval-1" state="translated">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation1" datatype="html">
+        <source>This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</source>
+        <target phase-name="approval-1" state="translated">Diese Einstellung kann Flackern bei bestimmten HDMI-Kabeln bei 4k@60Hz beheben. Dafür wird eine verlustbehaftete Kompremierung verwendet um die Datenrate über das Kabel zu senken.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation2" datatype="html">
+        <source>To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</source>
+        <target phase-name="approval-1" state="translated">Um sicherzugehen, dass die Einstellung übernommen wird müssen Sie den Monitor ab- und wieder einstecken oder den Computer neu starten.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation3" datatype="html">
+        <source>On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</source>
+        <target phase-name="approval-1" state="translated">Auf manchen Geräten werden die HDMI-Ports intern auch DisplayPort oder DP gennant und sind deswegen auch hier so gelistet.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit><trans-unit id="cShutdownTimerInformations" datatype="html">
         <source>This sets a one time shutdown time. It will be automatically cleared on next
@@ -856,7 +884,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit><trans-unit id="9ad6cb3f49ff69d3715e3a31461ca3a196c1a0c9" datatype="html">
         <source>Global Settings</source>
-        <target phase-name="approval-1" state="needs-adaptation">Globale Einstellungen</target>
+        <target phase-name="approval-1" state="translated">Globale Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
           <context context-type="linenumber">6</context>

@@ -58,9 +58,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-grid-list>
     <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
     
+    <header class=margin-top i18n="@@cGlobalSettingsYCbCr420WorkaroundHeader">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</header>
     <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index"> <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
         <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-            <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Force Chroma Subsampling (Y'CbCr 4:2:0) for port {{port}} of card {{i}} if available</header></mat-grid-tile>
+            <mat-grid-tile class=margin-left [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Port {{port}} of Card {{i}}</header></mat-grid-tile>
             <mat-grid-tile [colspan]="gridParams.valueSpan">
                 <content class="value">
                     <span [hidden]="!inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundActivated">activated</span>
@@ -78,4 +79,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-grid-tile>
         </mat-grid-list>
     </ng-template>
+    <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation1">This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</div>
+    <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation2">To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</div>
+    <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation3">On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</div>
 </div>

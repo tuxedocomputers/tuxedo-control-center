@@ -204,7 +204,6 @@
         <target state="needs-adaptation">
                 <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">86</context>
@@ -521,7 +520,6 @@
                 With 3 premade as well as any number of individually configurable profiles, you have
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
             <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">30</context>
@@ -578,7 +576,6 @@ WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
         </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">126</context>
@@ -786,26 +783,57 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
-      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundLabel" datatype="html">
-        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) for port <x id="INTERPOLATION" equiv-text="{{port}}"/> of card <x id="INTERPOLATION_1" equiv-text="{{i}}"/> if available</source>
-        <target state="translated">Force Chroma Subsampling (Y'CbCr 4:2:0) for port <x id="INTERPOLATION" equiv-text="{{port}}"/> of card <x id="INTERPOLATION_1" equiv-text="{{i}}"/> if available</target>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundHeader" datatype="html">
+        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</source>
+        <target state="translated">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundLabel" datatype="html">
+        <source>Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/></source>
+        <target state="translated">
+            Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/>
+        </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundActivated" datatype="html">
         <source>activated</source>
         <target state="translated">activated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundDeactivated" datatype="html">
         <source>deactivated</source>
         <target state="translated">deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation1" datatype="html">
+        <source>This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</source>
+        <target state="translated">This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation2" datatype="html">
+        <source>To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</source>
+        <target state="translated">To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation3" datatype="html">
+        <source>On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</source>
+        <target state="translated">On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit><trans-unit id="cShutdownTimerInformations" datatype="html">
         <source>This sets a one time shutdown time. It will be automatically cleared on next
@@ -855,7 +883,7 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit><trans-unit id="9ad6cb3f49ff69d3715e3a31461ca3a196c1a0c9" datatype="html">
         <source>Global Settings</source>
-        <target phase-name="translated" state="needs-adaptation">Global Settings</target>
+        <target state="translated">Global Settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
           <context context-type="linenumber">6</context>
