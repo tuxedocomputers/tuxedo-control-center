@@ -347,7 +347,6 @@ export class ConfigService implements OnDestroy {
         } else {
             this.currentProfileEditIndex = index;
             this.currentProfileEdit = this.config.copyConfig<ITccProfile>(this.customProfiles[index]);
-            this.utils.fillDefaultValuesProfile(this.currentProfileEdit);
             this.editingProfileSubject.next(this.currentProfileEdit);
             this.editingProfile.next(this.currentProfileEdit);
             return true;
