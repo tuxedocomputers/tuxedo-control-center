@@ -277,6 +277,43 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card-content>
         </div>
 
+        <!-- ODM control settings -->
+        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl">
+
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsODMProfileControlHeaderLabel">ODM Profile</ng-container>
+                </div>
+                <hr />
+            </div>
+            <mat-card-content class="content">
+                <div formGroupName="odmProfile">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsODMProfileLabel">ODM Profile</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ profileFormGroup.controls.odmProfile.controls.name.value }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                <mat-select formControlName="name" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let odmProfileName of getODMProfileNames()" [value]="odmProfileName" color="primary">
+                                        {{ odmProfileName }}
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+            </mat-card-content>
+        </div>
+
         <!-- Webcam settings -->
         <div class="tcc-options-group"
             [ngClass]="{'not-available': !compat.hasWebcamControl }"

@@ -330,6 +330,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return chosenFanProfile;
     }
 
+    updateDBusActiveProfileData(): void {
+        this.dbusData.activeProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(this.getCurrentProfile()));
+    }
+
     fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
         const cpu: CpuController = new CpuController('/sys/devices/system/cpu');

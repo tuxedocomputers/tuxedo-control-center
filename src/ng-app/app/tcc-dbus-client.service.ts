@@ -20,7 +20,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { TccDBusController } from '../../common/classes/TccDBusController';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
-import { TccProfile } from '../../common/models/TccProfile';
+import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 
 export interface IDBusFanData {
@@ -48,7 +48,13 @@ export class TccDBusClientService implements OnDestroy {
 
   public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
 
+  public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
+  public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
+  private previousCustomProfilesJSON = '';
+  private previousDefaultProfilesJSON = '';
+
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
+  private previousActiveProfileJSON = '';
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -84,15 +90,36 @@ export class TccDBusClientService implements OnDestroy {
 
     this.odmProfilesAvailable.next(await this.tccDBusInterface.odmProfilesAvailable());
 
-    // Retrieve and parse active profile
+    // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
-    if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
-    try {
-        const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
-        this.utils.fillDefaultValuesProfile(activeProfile);
-        this.activeProfile.next(activeProfile);
-    } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
+    if (activeProfileJSON !== undefined) {
+        if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
+        try {
+            const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
+            // this.utils.fillDefaultValuesProfile(activeProfile);
+            if (this.previousActiveProfileJSON !== activeProfileJSON) {
+                this.activeProfile.next(activeProfile);
+                this.previousActiveProfileJSON = activeProfileJSON;
+            }
+        } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
+    }
 
+    const defaultProfilesJSON: string = await this.tccDBusInterface.getDefaultProfilesJSON();
+    const customProfilesJSON: string = await this.tccDBusInterface.getCustomProfilesJSON();
+    if (defaultProfilesJSON !== undefined && customProfilesJSON !== undefined) {
+        try {
+            if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
+                this.defaultProfiles.next(JSON.parse(defaultProfilesJSON));
+                this.previousDefaultProfilesJSON = defaultProfilesJSON;
+            }
+            if (this.previousCustomProfilesJSON !== customProfilesJSON) {
+                this.customProfiles.next(JSON.parse(customProfilesJSON));
+                this.previousCustomProfilesJSON = customProfilesJSON;
+            }
+        } catch (err) {
+            console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
+        }
+    }
   }
 
   ngOnDestroy() {

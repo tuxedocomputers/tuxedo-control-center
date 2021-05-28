@@ -43,7 +43,7 @@ export class StateSwitcherWorker extends DaemonWorker {
                 this.tccd.activeProfileName = newActiveProfileName;
             }
 
-            this.tccd.dbusData.activeProfileJSON = JSON.stringify(this.tccd.getCurrentProfile());
+            this.tccd.updateDBusActiveProfileData();
 
             // Note: No need to manually run other workers on fresh start
         }
@@ -75,7 +75,7 @@ export class StateSwitcherWorker extends DaemonWorker {
             }
         }
 
-        this.tccd.dbusData.activeProfileJSON = JSON.stringify(this.tccd.getCurrentProfile());
+        this.tccd.updateDBusActiveProfileData();
 
         // Run worker start procedure / application of profile
         // if the profile changed
