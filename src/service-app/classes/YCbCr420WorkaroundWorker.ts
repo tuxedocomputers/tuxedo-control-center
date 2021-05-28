@@ -25,6 +25,11 @@ import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(100000, tccd);
+
+        let card: number = 0;
+        let port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
+        let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
+        this.tccd.dbusData.forceYUV420OutputSwitchAvailable = this.fileOK(path);
     }
 
     private fileOK(path: string): boolean {

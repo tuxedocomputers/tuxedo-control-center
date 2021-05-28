@@ -105,4 +105,12 @@ export class TccDBusController {
             return false;
         }
     }
+
+    async getForceYUV420OutputSwitchAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.GetForceYUV420OutputSwitchAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
 }

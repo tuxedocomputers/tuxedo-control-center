@@ -44,6 +44,8 @@ export class TccDBusClientService implements OnDestroy {
   public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
   public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
 
+  public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
+
   constructor() {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -75,6 +77,8 @@ export class TccDBusClientService implements OnDestroy {
 
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
+
+    this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
   }
 
   ngOnDestroy() {

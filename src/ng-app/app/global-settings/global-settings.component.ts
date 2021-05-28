@@ -20,6 +20,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
+import { Subscription } from 'rxjs';
+import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 @Component({
     selector: 'app-global-settings',
@@ -38,14 +40,22 @@ export class GlobalSettingsComponent implements OnInit {
 
     public cpuSettingsEnabled: boolean = true;
     public fanControlEnabled: boolean = true;
+    public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
+
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private config: ConfigService,
-        private utils: UtilsService
+        private utils: UtilsService,
+        private tccdbus: TccDBusClientService
     ) { }
 
     ngOnInit() {
+        this.subscriptions.add(this.tccdbus.forceYUV420OutputSwitchAvailable.subscribe(
+            forceYUV420OutputSwitchAvailable => { this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable; }
+        ));
+
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
         for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
