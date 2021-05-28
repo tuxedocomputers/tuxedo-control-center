@@ -101,23 +101,25 @@ export class GlobalSettingsComponent implements OnInit {
     }
 
     onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
-        this.utils.pageDisabled = true;
+        if (this.config.getSettings().ycbcr420Workaround.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
+            this.utils.pageDisabled = true;
 
-        console.log(event);
-        console.log(card);
-        console.log(port);
+            console.log(event);
+            console.log(card);
+            console.log(port);
 
-        this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
-        
-        this.config.saveSettings().then(success => {
-            if (!success) {
-                this.config.getSettings().ycbcr420Workaround[card][port] = !event.checked;
-                this.ycbcr420Workaround[card][port] = !event.checked;
-            }
+            this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
 
-            this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
+            this.config.saveSettings().then(success => {
+                if (!success) {
+                    this.config.getSettings().ycbcr420Workaround[card][port] = !event.checked;
+                    this.ycbcr420Workaround[card][port] = !event.checked;
+                }
 
-            this.utils.pageDisabled = false;
-        });
+                this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
+
+                this.utils.pageDisabled = false;
+            });
+        }
     }
 }
