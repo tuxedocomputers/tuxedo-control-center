@@ -220,10 +220,10 @@ private:
     const std::string PERF_PROF_STR_ENTERTAINMENT = "entertainment";
 
     const std::map<std::string, int> clevoPerformanceProfilesToArgument = {
-        { "quiet",          0x00 },
-        { "power_saving",   0x01 },
-        { "performance",    0x02 },
-        { "entertainment",  0x03 }
+        { PERF_PROF_STR_QUIET,          0x00 },
+        { PERF_PROF_STR_POWERSAVE,      0x01 },
+        { PERF_PROF_STR_PERFORMANCE,    0x02 },
+        { PERF_PROF_STR_ENTERTAINMENT,  0x03 }
     };
 
     bool GetFanInfo(int fanNr, int &fanInfo) {
