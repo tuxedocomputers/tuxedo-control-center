@@ -84,11 +84,18 @@ app.whenReady().then( () => {
             }, tccdVersionCheckInterval);
         }
 
-        tccDBus.onModeReapplyPendingChanged(() => {
-            if (tccDBus.consumeModeReapplyPending) {
-                console.log("Run XSET");
+        tccDBus.consumeModeReapplyPending().then((result) => {
+            if (result) {
+                child_process.exec("xset dpms force off && xset dpms force on");
             }
-        })
+        });
+        tccDBus.onModeReapplyPendingChanged(() => {
+            tccDBus.consumeModeReapplyPending().then((result) => {
+                if (result) {
+                    child_process.exec("xset dpms force off && xset dpms force on");
+                }
+            });
+        });
     });
 });
 
