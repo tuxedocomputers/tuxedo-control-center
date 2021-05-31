@@ -1,9 +1,29 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog } from 'electron';
+/*!
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 import { TccDBusController } from '../common/classes/TccDBusController';
+import { TccProfile } from '../common/models/TccProfile';
+import { TccTray } from './TccTray';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -14,12 +34,14 @@ const tccConfigDir = '.tcc';
 const startTCCAccelerator = 'Super+Alt+F6';
 
 let tccWindow: Electron.BrowserWindow;
-let tray: Electron.Tray;
+const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
+
+let profilesHash;
 
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
@@ -45,13 +67,42 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
     activateTccGui();
 });
 
-app.whenReady().then( () => {
+app.whenReady().then( async () => {
     const success = globalShortcut.register(startTCCAccelerator, () => {
         activateTccGui();
     });
     if (!success) { console.log('Failed to register global shortcut'); }
 
-    createTccTray();
+    tray.state.tccGUIVersion = 'v' + app.getVersion();
+    tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+    tray.state.primeQuery = primeSelectQuery();
+    tray.state.isPrimeSupported = primeSupported();
+    await updateTrayProfiles();
+    tray.events.startTCCClick = () => activateTccGui();
+    tray.events.exitClick = () => quitCurrentTccSession();
+    tray.events.autostartTrayToggle = () => {
+        if (tray.state.isAutostartTrayInstalled) {
+            removeAutostartTray();
+        } else {
+            installAutostartTray();
+        }
+        tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+        tray.create();
+    };
+    const messageBoxprimeSelectAccept = {
+        type: 'question',
+        buttons: [ 'yes', 'cancel' ],
+        message: 'Change graphics configuration and shutdown?'
+    };
+    tray.events.selectNvidiaClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
+    };
+    tray.events.selectBuiltInClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
+    };
+    tray.events.profileClick = (profileName: string) => { setTempProfile(profileName); };
+    tray.create();
+
     if (!trayOnlyOption) {
         activateTccGui();
     }
@@ -80,7 +131,6 @@ app.whenReady().then( () => {
                         process.exit();
                     }
                 }
-
             }, tccdVersionCheckInterval);
         }
 
@@ -97,6 +147,9 @@ app.whenReady().then( () => {
             });
         });
     });
+
+    const profilesCheckInterval = 4000;
+    setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
 });
 
 app.on('will-quit', (event) => {
@@ -108,7 +161,7 @@ app.on('will-quit', (event) => {
         tccWindow.close();
         tccWindow = null;
     }
-    if (!tray || tray.isDestroyed()) {
+    if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
         app.exit(0);
@@ -116,7 +169,7 @@ app.on('will-quit', (event) => {
 });
 
 app.on('window-all-closed', () => {
-    if (!tray || tray.isDestroyed()) {
+    if (!tray.isActive()) {
         quitCurrentTccSession();
     }
 });
@@ -130,62 +183,40 @@ function activateTccGui() {
     }
 }
 
-function createTccTray() {
-    const trayInstalled = isAutostartTrayInstalled();
-    const trayIcon =  path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png');
-    if (!tray) {
-        tray = new Tray(trayIcon);
-        tray.setTitle('TUXEDO Control Center');
-        tray.setToolTip('TUXEDO Control Center');
+async function getProfiles(): Promise<TccProfile[]> {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    let result = [];
+    if (!await dbus.dbusAvailable()) return [];
+    try {
+        const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
+        result = profiles;
+    } catch (err) {
+        console.log('Error: ' + err);
     }
-    const primeQuery = primeSelectQuery();
-    const isPrimeSupported = primeSupported();
-    const messageBoxprimeSelectAccept = {
-        type: 'question',
-        buttons: ['yes', 'cancel' ],
-        message: 'Change graphics configuration and shutdown?'
-    };
-    const contextMenu = Menu.buildFromTemplate([
-        { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); }, },
-        {
-                label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
-                click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
-        },
-        { type: 'separator', visible: isPrimeSupported },
-        {
-            label: 'Graphics',
-            visible: isPrimeSupported,
-            submenu: [
-                {
-                    label: 'Select NVIDIA',
-                    type: 'normal',
-                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); } },
-                    visible: primeQuery !== 'on'
-                },
-                {
-                    label: 'Select built-in',
-                    type: 'normal',
-                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); } },
-                    visible: primeQuery !== 'off'
-                }
-            ]
-        },
-        { type: 'separator' },
-        { label: 'v' + app.getVersion(), type: 'normal', enabled: false },
-        { type: 'separator' },
-        { label: 'Exit', type: 'normal', click: () => { quitCurrentTccSession(); } }
-    ]);
-    tray.setContextMenu(contextMenu);
+    dbus.disconnect();
+    return result;
 }
 
-function menuInstallAutostartTray() {
-    installAutostartTray();
-    createTccTray();
+async function setTempProfile(profileName: string) {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
+    dbus.disconnect();
+    return result;
 }
 
-function menuRemoveAutostartTray() {
-    removeAutostartTray();
-    createTccTray();
+async function getActiveProfile(): Promise<TccProfile> {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    let result = undefined;
+    if (!await dbus.dbusAvailable()) return undefined;
+    try {
+        result = JSON.parse(await dbus.getActiveProfileJSON());
+    } catch {
+    }
+    dbus.disconnect();
+    return result;
 }
 
 function createTccWindow() {
@@ -211,9 +242,8 @@ function createTccWindow() {
 }
 
 function quitCurrentTccSession() {
-    if (tray) {
+    if (tray.isActive()) {
         tray.destroy();
-        tray = null;
     }
 
     app.quit();
@@ -349,4 +379,20 @@ function primeSelectSet(status: string): boolean {
     }
 
     return result;
+}
+
+async function updateTrayProfiles() {
+    try {
+        const updatedActiveProfile = await getActiveProfile();
+        const updatedProfiles = await getProfiles();
+        if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
+            JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
+        ) {
+            tray.state.activeProfile = updatedActiveProfile;
+            tray.state.profiles = updatedProfiles;
+            await tray.create();
+        }
+    } catch (err) {
+        console.log('updateTrayProfiles() exception => ' + err);
+    }
 }

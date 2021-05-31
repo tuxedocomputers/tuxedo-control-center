@@ -57,6 +57,16 @@ body {
     filter: blur(1px);
 }
 
+.global-spinner {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    font-size: 8rem;
+    color: rgb(133, 133, 133);
+}
+
 @import './global-styles.scss';
 
 /* latin-ext */

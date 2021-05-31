@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -73,6 +73,9 @@ export class TccDBusData {
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
     public modeReapplyPending: boolean;
+    public tempProfileName: string;
+    public activeProfileJSON: string;
+    public profilesJSON: string;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -99,6 +102,12 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }
         return false;
     }
+    GetActiveProfileJSON() { return this.data.activeProfileJSON; }
+    SetTempProfile(profileName: string) {
+        this.data.tempProfileName = profileName;
+        return true;
+    }
+    GetProfilesJSON() { return this.data.profilesJSON; }
 
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
@@ -117,7 +126,10 @@ TccDBusInterface.configureMembers({
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
-        ConsumeModeReapplyPending: { outSignature: 'b' }
+        ConsumeModeReapplyPending: { outSignature: 'b' },
+        GetActiveProfileJSON: { outSignature: 's' },
+        SetTempProfile: { inSignature: 's',  outSignature: 'b' },
+        GetProfilesJSON: { outSignature: 's' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

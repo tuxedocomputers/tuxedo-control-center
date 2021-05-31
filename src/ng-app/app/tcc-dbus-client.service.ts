@@ -20,6 +20,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { TccDBusController } from '../../common/classes/TccDBusController';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
+import { TccProfile } from '../../common/models/TccProfile';
+import { UtilsService } from './utils.service';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -46,7 +48,9 @@ export class TccDBusClientService implements OnDestroy {
 
   public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
 
-  constructor() {
+  public activeProfile = new BehaviorSubject<TccProfile>(undefined);
+
+  constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
@@ -79,6 +83,15 @@ export class TccDBusClientService implements OnDestroy {
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
 
     this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
+
+    // Retrieve and parse active profile
+    const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
+    if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
+    try {
+        const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
+        this.utils.fillDefaultValuesProfile(activeProfile);
+        this.activeProfile.next(activeProfile);
+    } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
   }
 
   ngOnDestroy() {

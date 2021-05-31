@@ -122,7 +122,35 @@ export class TccDBusController {
         }
     }
 
+    async getActiveProfileJSON(): Promise<string> {
+        try {
+            return await this.interface.GetActiveProfileJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getProfilesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetProfilesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setTempProfileName(profileName: string): Promise<boolean> {
+        try {
+            return await this.interface.SetTempProfile(profileName);
+        } catch (err) {
+            return false;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
+    }
+
+    disconnect(): void {
+        this.bus.disconnect();
     }
 }
