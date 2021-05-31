@@ -72,12 +72,12 @@ export class TccDBusData {
     public webcamSwitchAvailable: boolean;
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
+    public modeReapplyPending: boolean;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
-
     constructor(private data: TccDBusData) {
         super('com.tuxedocomputers.tccd');
     }
@@ -90,6 +90,19 @@ export class TccDBusInterface extends dbus.interface.Interface {
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
+    ConsumeModeReapplyPending() {
+        // Unlikely, but possible race condition.
+        // However no harmful impact, it will just cause the screen to flicker twice instead of once.
+        if (this.data.modeReapplyPending) {
+            this.data.modeReapplyPending = false;
+            return true;
+        }
+        return false;
+    }
+
+    ModeReapplyPendingChanged() {
+        return this.data.modeReapplyPending;
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -103,7 +116,10 @@ TccDBusInterface.configureMembers({
         GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
-        GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' }
+        GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
+        ConsumeModeReapplyPending: { outSignature: 'b' }
     },
-    signals: {}
+    signals: {
+        ModeReapplyPendingChanged: { signature: 'b' }
+    }
 });

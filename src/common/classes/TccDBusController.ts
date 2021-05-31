@@ -113,4 +113,16 @@ export class TccDBusController {
             return false;
         }
     }
+
+    async consumeModeReapplyPending(): Promise<boolean> {
+        try {
+            return await this.interface.ConsumeModeReapplyPending();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    onModeReapplyPendingChanged(callback_function) {
+        this.interface.on('ModeReapplyPendingChanged', callback_function);
+    }
 }

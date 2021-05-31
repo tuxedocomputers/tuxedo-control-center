@@ -42,13 +42,23 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
     }
 
     public onStart(): void {
+        let settings_changed: boolean = false;
+
         for (let card = 0; card < this.tccd.settings.ycbcr420Workaround.length; card++) {
             for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
                 let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
                 if (this.fileOK(path)) {
-                    fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
+                    let oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
+                    if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
+                        settings_changed = true;
+                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
+                    }
                 }
             }
+        }
+
+        if (settings_changed) {
+            this.tccd.dbusData.modeReapplyPending = true;
         }
     }
 
