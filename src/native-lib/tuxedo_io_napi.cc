@@ -17,7 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <napi.h>
+#include <string>
 #include <cmath>
+#include <libudev.h>
 #include "tuxedo_io_lib/tuxedo_io_api.hh"
 
 using namespace Napi;
@@ -142,12 +144,54 @@ Boolean GetWebcamStatus(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Array GetOutputPorts(const CallbackInfo &info) {
+    Array result;
+
+    struct udev *udev_context = udev_new();
+    if (!udev_context) {
+        // Placeholder for error log output
+    }
+    else {
+        struct udev_enumerate *drm_devices = udev_enumerate_new(udev_context);
+        if (!drm_devices) {
+            // Placeholder for error log output
+        }
+        else {
+            struct udev_list_entry *drm_devices_iterator, *drm_devices_entry;
+            if (udev_enumerate_add_match_subsystem(drm_devices, "drm") < 0
+                    || udev_enumerate_add_match_sysname(drm_devices, "card*-*-*") < 0
+                    || udev_enumerate_scan_devices(drm_devices) < 0
+                    || (drm_devices_iterator = udev_enumerate_get_list_entry(drm_devices)) == NULL) {
+                // Placeholder for error log output
+            }
+            else {
+                result = Array::New(info.Env());
+
+                udev_list_entry_foreach(drm_devices_entry, drm_devices_iterator) {
+                    std::string path = udev_list_entry_get_name(drm_devices_entry);
+                    std::string name = path.substr(path.rfind("/")+1);
+                    int card_number = std::stoi(name.substr(4, name.find("-") - 4));
+                    if (!result.Has(card_number)) {
+                        result[card_number] = Array::New(info.Env());
+                    }
+                    result.Get(card_number).As<Array>()[result.Get(card_number).As<Array>().Length()] = name.substr(name.find("-")+1);
+                }
+            }
+            udev_enumerate_unref(drm_devices);
+        }
+        udev_unref(udev_context);
+    }
+
+    return result;
+}
+
 Object Init(Env env, Object exports) {
     // General
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
     exports.Set(String::New(env, "wmiAvailable"), Function::New(env, WmiAvailable));
 
     exports.Set(String::New(env, "setEnableModeSet"), Function::New(env, SetEnableModeSet));
+    exports.Set(String::New(env, "getOutputPorts"), Function::New(env, GetOutputPorts));
 
     // Fan control
     exports.Set(String::New(env, "getNumberFans"), Function::New(env, GetNumberFans));

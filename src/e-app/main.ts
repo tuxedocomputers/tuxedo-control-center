@@ -107,38 +107,46 @@ app.whenReady().then( async () => {
         activateTccGui();
     }
 
-    if (!noTccdVersionCheck) {
-        // Regularly check if running tccd version is different to running gui version
-        const tccdVersionCheckInterval = 5000;
-        setInterval(async () => {
-            if (tccDBus === undefined) {
-                tccDBus = new TccDBusController();
-                await tccDBus.init();
-            } else if (!await tccDBus.dbusAvailable()) {
-                await tccDBus.init();
-            }
-
-            if (await tccDBus.tuxedoWmiAvailable()) {
-                const tccdVersion = await tccDBus.tccdVersion();
-                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                    console.log('Other tccd version detected, restarting..');
-                    process.on('exit', function () {
-                        child_process.spawn(
-                            process.argv[0],
-                            process.argv.slice(1).concat(['--tray']),
-                            {
-                                cwd: process.cwd(),
-                                detached : true,
-                                stdio: "inherit"
-                            }
-                        );
-                    });
-                    process.exit();
+    tccDBus = new TccDBusController();
+    tccDBus.init().then(() => {
+        if (!noTccdVersionCheck) {
+            // Regularly check if running tccd version is different to running gui version
+            const tccdVersionCheckInterval = 5000;
+            setInterval(async () => {
+                if (await tccDBus.tuxedoWmiAvailable()) {
+                    const tccdVersion = await tccDBus.tccdVersion();
+                    if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                        console.log('Other tccd version detected, restarting..');
+                        process.on('exit', function () {
+                            child_process.spawn(
+                                process.argv[0],
+                                process.argv.slice(1).concat(['--tray']),
+                                {
+                                    cwd: process.cwd(),
+                                    detached : true,
+                                    stdio: "inherit"
+                                }
+                            );
+                        });
+                        process.exit();
+                    }
                 }
-            }
+            }, tccdVersionCheckInterval);
+        }
 
-        }, tccdVersionCheckInterval);
-    }
+        tccDBus.consumeModeReapplyPending().then((result) => {
+            if (result) {
+                child_process.exec("xset dpms force off && xset dpms force on");
+            }
+        });
+        tccDBus.onModeReapplyPendingChanged(() => {
+            tccDBus.consumeModeReapplyPending().then((result) => {
+                if (result) {
+                    child_process.exec("xset dpms force off && xset dpms force on");
+                }
+            });
+        });
+    });
 
     const profilesCheckInterval = 4000;
     setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);

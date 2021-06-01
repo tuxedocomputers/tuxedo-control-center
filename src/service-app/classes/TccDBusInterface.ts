@@ -69,8 +69,10 @@ export class TccDBusData {
     public tuxedoWmiAvailable: boolean;
     public tccdVersion: string;
     public fans: FanData[];
-    public webcamSwitchStatus: boolean;
     public webcamSwitchAvailable: boolean;
+    public webcamSwitchStatus: boolean;
+    public forceYUV420OutputSwitchAvailable: boolean;
+    public modeReapplyPending: boolean;
     public tempProfileName: string;
     public activeProfileJSON: string;
     public profilesJSON: string;
@@ -79,7 +81,6 @@ export class TccDBusData {
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
-
     constructor(private data: TccDBusData) {
         super('com.tuxedocomputers.tccd');
     }
@@ -91,12 +92,26 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetFanDataGPU2() { return this.data.fans[2].export(); }
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
+    GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
+    ConsumeModeReapplyPending() {
+        // Unlikely, but possible race condition.
+        // However no harmful impact, it will just cause the screen to flicker twice instead of once.
+        if (this.data.modeReapplyPending) {
+            this.data.modeReapplyPending = false;
+            return true;
+        }
+        return false;
+    }
     GetActiveProfileJSON() { return this.data.activeProfileJSON; }
     SetTempProfile(profileName: string) {
         this.data.tempProfileName = profileName;
         return true;
     }
     GetProfilesJSON() { return this.data.profilesJSON; }
+
+    ModeReapplyPendingChanged() {
+        return this.data.modeReapplyPending;
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -110,9 +125,13 @@ TccDBusInterface.configureMembers({
         GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
+        GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
+        ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },
         GetProfilesJSON: { outSignature: 's' }
     },
-    signals: {}
+    signals: {
+        ModeReapplyPendingChanged: { signature: 'b' }
+    }
 });

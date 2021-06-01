@@ -106,6 +106,22 @@ export class TccDBusController {
         }
     }
 
+    async getForceYUV420OutputSwitchAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.GetForceYUV420OutputSwitchAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async consumeModeReapplyPending(): Promise<boolean> {
+        try {
+            return await this.interface.ConsumeModeReapplyPending();
+        } catch (err) {
+            return false;
+        }
+    }
+
     async getActiveProfileJSON(): Promise<string> {
         try {
             return await this.interface.GetActiveProfileJSON();
@@ -128,6 +144,10 @@ export class TccDBusController {
         } catch (err) {
             return false;
         }
+    }
+
+    onModeReapplyPendingChanged(callback_function) {
+        this.interface.on('ModeReapplyPendingChanged', callback_function);
     }
 
     disconnect(): void {

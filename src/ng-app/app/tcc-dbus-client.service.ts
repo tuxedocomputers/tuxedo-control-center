@@ -46,6 +46,8 @@ export class TccDBusClientService implements OnDestroy {
   public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
   public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
 
+  public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
+
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
 
   constructor(private utils: UtilsService) {
@@ -80,6 +82,8 @@ export class TccDBusClientService implements OnDestroy {
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
 
+    this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
+
     // Retrieve and parse active profile
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
     if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
@@ -88,7 +92,6 @@ export class TccDBusClientService implements OnDestroy {
         this.utils.fillDefaultValuesProfile(activeProfile);
         this.activeProfile.next(activeProfile);
     } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
-
   }
 
   ngOnDestroy() {
