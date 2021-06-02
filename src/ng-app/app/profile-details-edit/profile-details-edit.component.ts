@@ -105,6 +105,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public selectableFrequencies;
 
+    public odmProfileNames: string[] = [];
+    public odmProfileToName: Map<string, string> = new Map();
+
     @ViewChild('inputName', { static: false }) inputName: MatInput;
 
     constructor(
@@ -127,6 +130,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }));
 
         this.stateInputArray = this.state.getStateInputs();
+
+        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+            this.odmProfileNames = nextAvailableODMProfiles;
+
+            // Update ODM profile name map
+            this.odmProfileToName.clear();
+            for (const profileName of this.odmProfileNames) {
+                if (profileName.length > 0) {
+                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                }
+            }
+        }));
     }
 
     ngOnDestroy() {
@@ -268,10 +283,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public getFanProfileNames(): string[] {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
-    }
-
-    public getODMProfileNames(): string[] {
-        return this.tccDBus.odmProfilesAvailable.value;
     }
 
     public governorSelectionChange() {

@@ -134,13 +134,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ profileFormGroup.controls.odmProfile.controls.name.value }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                 <mat-select formControlName="name" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let odmProfileName of getODMProfileNames()" [value]="odmProfileName" color="primary">
-                                        {{ odmProfileName }}
+                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                        {{ odmProfileToName.get(odmProfileName) }}
                                     </mat-option>
                                 </mat-select>
                             </content>
