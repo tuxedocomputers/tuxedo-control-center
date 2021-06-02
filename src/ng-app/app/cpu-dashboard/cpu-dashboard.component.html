@@ -163,7 +163,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <div class="content-container profile-overview">
             <div class="column">
-                <div class=item [ngClass]="{'not-available': !getCPUSettingsEnabled()}" [matTooltip]="!getCPUSettingsEnabled() ? getCPUSettingsDisabledTooltip() : ''">
+                <div class="item" [ngClass]="{'not-available': !getCPUSettingsEnabled()}" [matTooltip]="!getCPUSettingsEnabled() ? getCPUSettingsDisabledTooltip() : ''">
                     <div class="title">
                         <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
                         <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
@@ -201,7 +201,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                 </div>
-                <div class=item [ngClass]="{'not-available': !compat.hasFancontrol || !getFanControlEnabled()}" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
+                <div class="item" [ngClass]="{'not-available': !compat.hasFancontrol || !getFanControlEnabled()}" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
                     <div class="title">
                         <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                         <span class="text" i18n>Fan profile</span>
@@ -219,42 +219,43 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </div>
             <div class="column">
-                <div class="title">
-                    <svg viewBox="0 0 351 512" class="tcc-icons row"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
-                    <span class="text">Display</span>
-                </div>
-                <div class="tcc-progress tcc-info-bar">
-                    <mat-progress-bar
-                        [value]="activeProfile.display.brightness"
-                        [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
-                    </mat-progress-bar>
-                    <div class="label-text"><ng-container i18n>Brightness</ng-container>: {{ activeProfile.display.brightness }} %</div>
-                </div>
-                <div class="tcc-gauge small on-off">
-                    <mwl-gauge
-                        [max]="1"
-                        [min]="0"
-                        [value]="activeProfile.display.useBrightness ? 1 : 0"
-                        [label]="gaugeOnOffFormat"
-                        [dialStartAngle]="150"
-                        [dialEndAngle]="30"
-                        [animated]="animatedGauges"
-                        [animationDuration]="0.3">
-                    </mwl-gauge>
-                    <!--svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg-->
-                    <div class="legend">
-                        <div class="text small" i18n>Fixed brightness</div>
+                <div class="item">
+                    <div class="title">
+                        <svg viewBox="0 0 351 512" class="tcc-icons row"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
+                        <span class="text">Display</span>
+                    </div>
+                    <div class="tcc-progress tcc-info-bar">
+                        <mat-progress-bar
+                            [value]="activeProfile.display.brightness"
+                            [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
+                        </mat-progress-bar>
+                        <div class="label-text" *ngIf="activeProfile.display.useBrightness"><ng-container i18n>Brightness</ng-container>: {{ activeProfile.display.brightness }} %</div>
+                        <div class="label-text" *ngIf="!activeProfile.display.useBrightness"><ng-container i18n>Fixed brightness off</ng-container></div>
                     </div>
                 </div>
-                <div class="title" [ngClass]="{'not-available': !compat.hasWebcamControl }">
-                    <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
-                    <span class="text" i18n>Webcam</span>
+                <div class="item" [hidden]="!compat.hasODMProfileControl">
+                    <div class="title">
+                        <svg viewBox="0 0 512 512" class="tcc-icons row"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                        <span class="text" i18n>System profile</span>
+                    </div>
+                    <div class="tcc-progress tcc-info-bar">
+                        <mat-progress-bar [value]="odmProfileProgressMap.get(activeProfile.odmProfile.name)"></mat-progress-bar>
+                        <div class="label-text" *ngIf="activeProfile.fan.useControl">
+                            {{ odmProfileToName.get(activeProfile.odmProfile.name) }}
+                        </div>
+                    </div>
                 </div>
-                <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasWebcamControl }" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
-                    <mat-progress-bar
-                        [value]="activeProfile.webcam.status ? 100 : 0">
-                    </mat-progress-bar>
-                    <div class="label-text"><ng-container i18n>Webcam active</ng-container>: <span *ngIf="activeProfile.webcam.status">yes</span><span *ngIf="!activeProfile.webcam.status">no</span></div>
+                <div class="item">
+                    <div class="title" [ngClass]="{'not-available': !compat.hasWebcamControl }">
+                        <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
+                        <span class="text" i18n>Webcam</span>
+                    </div>
+                    <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasWebcamControl }" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
+                        <mat-progress-bar
+                            [value]="activeProfile.webcam.status ? 100 : 0">
+                        </mat-progress-bar>
+                        <div class="label-text"><ng-container i18n>Webcam active</ng-container>: <span *ngIf="activeProfile.webcam.status">yes</span><span *ngIf="!activeProfile.webcam.status">no</span></div>
+                    </div>
                 </div>
             </div>
         </div>
