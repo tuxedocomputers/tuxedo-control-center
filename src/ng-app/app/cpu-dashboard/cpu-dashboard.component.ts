@@ -156,7 +156,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.cpuModelName = this.cpuModelName.split('CPU')[0];*/
 
     this.subscriptions.add(this.tccdbus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
-        if (nextAvailableODMProfiles === undefined) { return; }
         this.odmProfileNames = nextAvailableODMProfiles;
 
         // Update ODM profile name map

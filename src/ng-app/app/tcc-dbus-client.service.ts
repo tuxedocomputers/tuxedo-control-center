@@ -88,7 +88,8 @@ export class TccDBusClientService implements OnDestroy {
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
 
-    this.odmProfilesAvailable.next(await this.tccDBusInterface.odmProfilesAvailable());
+    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable()
+    this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
 
     // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
