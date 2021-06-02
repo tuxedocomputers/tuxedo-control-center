@@ -115,6 +115,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </span>
                 </div>
+                <div class="status-component" *ngIf="compat.hasODMProfileControl">
+                    <div class="status-icon-container">
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                    </div>
+                    <span class="status-info">
+                        {{ odmProfileToName.get(profile.odmProfile.name) }}
+                    </span>
+                </div>
                 <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
