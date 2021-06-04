@@ -65,6 +65,7 @@ interface ITccProfileWebCam {
 interface ITccProfileFanControl {
     useControl: boolean;
     fanProfile: string;
+    minimumFanspeed: number;
 }
 
 interface ITccODMProfile {
@@ -93,7 +94,8 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Balanced'
+            fanProfile: 'Balanced',
+            minimumFanspeed: 0
         },
         odmProfile: { name: undefined }
     },
@@ -118,7 +120,8 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Quiet'
+            fanProfile: 'Quiet',
+            minimumFanspeed: 0
         },
         odmProfile: { name: undefined }
     },
@@ -143,7 +146,8 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Silent'
+            fanProfile: 'Silent',
+            minimumFanspeed: 0
         },
         odmProfile: { name: undefined }
     }
@@ -170,7 +174,8 @@ export const defaultCustomProfile: ITccProfile = {
     },
     fan: {
         useControl: true,
-        fanProfile: 'Balanced'
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0
     },
     odmProfile: { name: undefined }
 };
@@ -196,7 +201,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     },
     fan: {
         useControl: true,
-        fanProfile: 'Balanced'
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0
     },
     odmProfile: { name: undefined }
 };

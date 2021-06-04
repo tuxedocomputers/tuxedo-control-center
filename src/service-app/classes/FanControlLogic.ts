@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -73,6 +73,20 @@ export class FanControlLogic {
 
     private useTable: string
 
+    private _minimumFanspeed: number = 0;
+    get minimumFanspeed() { return this._minimumFanspeed; }
+    set minimumFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._minimumFanspeed = 0;
+        } else if (speed < 0) {
+            this._minimumFanspeed = 0;
+        } else if (speed > 100) {
+            this._minimumFanspeed = 100;
+        } else {
+            this._minimumFanspeed = speed;
+        }
+    }
+
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
             this.useTable = 'tableCPU';
@@ -98,7 +112,15 @@ export class FanControlLogic {
      */
     public reportTemperature(temperatureValue: number) {
         this.tempBuffer.addValue(temperatureValue);
-        this.latestSpeedPercent = this.calculateSpeedPercent();
+
+        // Calculate filtered table speed
+        let nextSpeedPercent = this.calculateSpeedPercent();
+
+        // Adjust for minimum speed parameter
+        if (nextSpeedPercent < this.minimumFanspeed) {
+            nextSpeedPercent = this.minimumFanspeed;
+        }
+        this.latestSpeedPercent = nextSpeedPercent;
     }
 
     /**
