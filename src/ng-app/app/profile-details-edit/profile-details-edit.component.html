@@ -113,6 +113,45 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
 
+        <!-- System (aka ODM) control settings -->
+        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl">
+
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsSystemControlHeaderLabel">System control</ng-container>
+                </div>
+                <hr />
+            </div>
+            <mat-card-content class="content">
+                
+                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                    <div formGroupName="odmProfile">
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsODMProfileLabel">System profile</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                <mat-select formControlName="name" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                        {{ odmProfileToName.get(odmProfileName) }}
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
+                    </div>
+
+                </mat-grid-list>
+            
+            </mat-card-content>
+        </div>
+
         <!-- CPU settings -->
         <div class="tcc-options-group"
             [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"

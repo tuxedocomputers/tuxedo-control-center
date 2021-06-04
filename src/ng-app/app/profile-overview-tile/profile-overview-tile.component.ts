@@ -27,6 +27,7 @@ import { FormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
 import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
+import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 @Component({
     selector: 'app-profile-overview-tile',
@@ -63,13 +64,17 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
+    public odmProfileNames: string[] = [];
+    public odmProfileToName: Map<string, string> = new Map();
+
     constructor(
         private utils: UtilsService,
         private state: StateService,
         private config: ConfigService,
         private router: Router,
         public compat: CompatibilityService,
-        private sysfs: SysFsService
+        private sysfs: SysFsService,
+        private tccDBus: TccDBusClientService
     ) { }
 
     ngOnInit() {
@@ -87,6 +92,18 @@ export class ProfileOverviewTileComponent implements OnInit {
         if (this.profile) {
             this.isCustomProfile = this.config.getCustomProfileByName(this.profile.name) !== undefined;
         }
+
+        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+            this.odmProfileNames = nextAvailableODMProfiles;
+
+            // Update ODM profile name map
+            this.odmProfileToName.clear();
+            for (const profileName of this.odmProfileNames) {
+                if (profileName.length > 0) {
+                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                }
+            }
+        }));
     }
 
     public getStateInputs(): IStateInfo[] {

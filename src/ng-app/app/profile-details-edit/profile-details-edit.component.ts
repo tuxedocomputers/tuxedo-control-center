@@ -30,6 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
 import { MatButton } from '@angular/material/button';
+import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -104,6 +105,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public selectableFrequencies;
 
+    public odmProfileNames: string[] = [];
+    public odmProfileToName: Map<string, string> = new Map();
+
     @ViewChild('inputName', { static: false }) inputName: MatInput;
 
     constructor(
@@ -113,6 +117,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private sysfs: SysFsService,
         private fb: FormBuilder,
         private dbus: DBusService,
+        private tccDBus: TccDBusClientService,
         public compat: CompatibilityService,
         private i18n: I18n
     ) { }
@@ -125,6 +130,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }));
 
         this.stateInputArray = this.state.getStateInputs();
+
+        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+            this.odmProfileNames = nextAvailableODMProfiles;
+
+            // Update ODM profile name map
+            this.odmProfileToName.clear();
+            for (const profileName of this.odmProfileNames) {
+                if (profileName.length > 0) {
+                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                }
+            }
+        }));
     }
 
     ngOnDestroy() {
@@ -180,6 +197,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const cpuGroup: FormGroup = this.fb.group(profile.cpu);
         const webcamGroup: FormGroup = this.fb.group(profile.webcam);
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
+        const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
 
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
@@ -189,7 +207,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             display: displayGroup,
             cpu: cpuGroup,
             webcam: webcamGroup,
-            fan: fanControlGroup
+            fan: fanControlGroup,
+            odmProfile: odmProfileGroup
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);

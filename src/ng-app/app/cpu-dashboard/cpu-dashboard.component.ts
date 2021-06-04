@@ -70,6 +70,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   private tweakVal = 0;
 
+  public odmProfileNames: string[] = [];
+  public odmProfileToName: Map<string, string> = new Map();
+  public odmProfileProgressMap: Map<string, number> = new Map();
+
   constructor(
     private sysfs: SysFsService,
     private utils: UtilsService,
@@ -150,6 +154,25 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     /*this.cpuModelName = this.node.getOs().cpus()[0].model;
     this.cpuModelName = this.cpuModelName.split('@')[0];
     this.cpuModelName = this.cpuModelName.split('CPU')[0];*/
+
+    this.subscriptions.add(this.tccdbus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+        this.odmProfileNames = nextAvailableODMProfiles;
+
+        // Update ODM profile name map
+        this.odmProfileToName.clear();
+        this.odmProfileProgressMap.clear();
+        let odmProfileProgressValue = 0;
+        if (this.odmProfileNames.length > 0) {
+            const odmProfileProgressStep = 100.0 / (this.odmProfileNames.length - 1);
+            for (const profileName of this.odmProfileNames) {
+                if (profileName.length > 0) {
+                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                    this.odmProfileProgressMap.set(profileName, odmProfileProgressValue);
+                    odmProfileProgressValue += odmProfileProgressStep;
+                }
+            }
+        }
+    }));
   }
 
   ngOnDestroy(): void {

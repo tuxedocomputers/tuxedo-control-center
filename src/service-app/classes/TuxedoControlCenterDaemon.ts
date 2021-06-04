@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,7 +25,7 @@ import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
@@ -37,7 +37,9 @@ import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { ODMProfileWorker } from './ODMProfileWorker';
+import { CpuController } from '../../common/classes/CpuController';
 
 const tccPackage = require('../../package.json');
 
@@ -94,7 +96,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         this.dbusData.tccdVersion = tccPackage.version;
 
-        this.dbusData.profilesJSON = JSON.stringify(this.getAllProfiles());
+        // Fill exported profile lists (for GUI)
+        const defaultProfilesFilled = this.config.getDefaultProfiles().map(this.fillDeviceSpecificDefaults)
+        const customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+        this.dbusData.profilesJSON = JSON.stringify(defaultProfilesFilled.concat(customProfilesFilled));
+        this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
+        this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
 
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
@@ -103,6 +110,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
+        this.workers.push(new ODMProfileWorker(this));
 
         this.startWorkers();
 
@@ -374,6 +382,95 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             chosenFanProfile = this.config.getDefaultFanProfiles()[0];
         }
         return chosenFanProfile;
+    }
+
+    updateDBusActiveProfileData(): void {
+        this.dbusData.activeProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(this.getCurrentProfile()));
+    }
+
+    fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
+        const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+        const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
+        if (profile.cpu.onlineCores === undefined) {
+            profile.cpu.onlineCores = cpu.cores.length;
+        }
+    
+        if (profile.cpu.useMaxPerfGov === undefined) {
+            profile.cpu.useMaxPerfGov = false;
+        }
+    
+        const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
+            profile.cpu.scalingMinFrequency = minFreq;
+        }
+    
+        const maxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        const boost = cpu.boost.readValueNT();
+        const reducedAvailableFreq = cpu.cores[0].getReducedAvailableFreqNT();
+        if (profile.cpu.scalingMaxFrequency === undefined) {
+            profile.cpu.scalingMaxFrequency = maxFreq;
+        } else if (profile.cpu.scalingMaxFrequency === -1) {
+            if (boost === undefined) {
+                profile.cpu.scalingMaxFrequency = reducedAvailableFreq;
+            }
+            else {
+                profile.cpu.scalingMaxFrequency = maxFreq;
+            }
+        } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
+            profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
+        } else if (profile.cpu.scalingMaxFrequency > maxFreq) {
+            profile.cpu.scalingMaxFrequency = maxFreq;
+        }
+    
+        if (profile.cpu.governor === undefined) {
+            profile.cpu.governor = defaultCustomProfile.cpu.governor;
+        }
+    
+        if (profile.cpu.energyPerformancePreference === undefined) {
+            profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
+        }
+    
+        if (profile.cpu.noTurbo === undefined) {
+            profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
+        }
+    
+        if (profile.webcam === undefined) {
+            profile.webcam = {
+                useStatus: false,
+                status: true
+            };
+        }
+    
+        if (profile.webcam.useStatus === undefined) {
+            profile.webcam.useStatus = false;
+        }
+    
+        if (profile.webcam.status === undefined) {
+            profile.webcam.status = true;
+        }
+    
+        if (profile.fan === undefined) {
+            profile.fan = {
+                useControl: true,
+                fanProfile: 'Balanced'
+            };
+        } else {
+            profile.fan.useControl = true;
+        }
+
+        const defaultODMProfileName: ObjWrapper<string> = { value: '' };
+        TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
+        if (profile.odmProfile === undefined) {
+            profile.odmProfile = {
+                name: defaultODMProfileName.value
+            };
+        }
+
+        if (profile.odmProfile.name === undefined) {
+            profile.odmProfile.name = defaultODMProfileName.value;
+        }
+
+        return profile;
     }
 
     /**

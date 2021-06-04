@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ITccSettings } from '../../common/models/TccSettings';
@@ -24,15 +24,16 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
 import { I18n } from '@ngx-translate/i18n-polyfill';
+import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ConfigService {
+export class ConfigService implements OnDestroy {
 
     private config: ConfigHandler;
 
@@ -50,11 +51,17 @@ export class ConfigService {
     private editingProfileSubject: Subject<ITccProfile>;
     public editingProfile: BehaviorSubject<ITccProfile>;
 
+    private subscriptions: Subscription = new Subscription();
+
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;
     // public writeSettings = ConfigHandler.prototype.writeSettings;
 
-    constructor(private electron: ElectronService, private utils: UtilsService, private i18n: I18n) {
+    constructor(
+        private electron: ElectronService,
+        private utils: UtilsService,
+        private dbus: TccDBusClientService,
+        private i18n: I18n) {
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
 
@@ -68,18 +75,26 @@ export class ConfigService {
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
-        this.defaultProfiles = this.config.getDefaultProfiles();
-        for (const profile of this.defaultProfiles) {
-            this.utils.fillDefaultValuesProfile(profile);
-        }
-        this.readFiles();
+        this.defaultProfiles = this.dbus.defaultProfiles.value;
+        this.updateConfigData();
+        this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
+            this.customProfiles = nextCustomProfiles;
+        }));
+        this.subscriptions.add(this.dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
+            this.defaultProfiles = nextDefaultProfiles;
+        }));
     }
 
-    public readFiles(): void {
-        this.customProfiles = this.config.getCustomProfilesNoThrow();
-        for (const profile of this.customProfiles) {
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    public updateConfigData(): void {
+        // this.customProfiles = this.config.getCustomProfilesNoThrow();
+        this.customProfiles = this.dbus.customProfiles.value;
+        /*for (const profile of this.customProfiles) {
             this.utils.fillDefaultValuesProfile(profile);
-        }
+        }*/
         this.settings = this.config.getSettingsNoThrow();
         this.settingsSubject.next(this.settings);
     }
@@ -127,7 +142,7 @@ export class ConfigService {
             'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
         );
         
-        this.readFiles();
+        this.updateConfigData();
     }
 
     public copyProfile(profileName: string, newProfileName: string): boolean {
@@ -144,7 +159,7 @@ export class ConfigService {
         newProfile.name = newProfileName;
         const newProfileList = this.getCustomProfiles().concat(newProfile);
         const result = this.pkexecWriteCustomProfiles(newProfileList);
-        if (result) { this.readFiles(); }
+        if (result) { this.updateConfigData(); }
         return result;
     }
 
@@ -152,7 +167,7 @@ export class ConfigService {
         const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.name !== profileNameToDelete);
         if (newProfileList.length === this.getCustomProfiles().length) { return false; }
         const result = this.pkexecWriteCustomProfiles(newProfileList);
-        if (result) { this.readFiles(); }
+        if (result) { this.updateConfigData(); }
         return result;
     }
 
@@ -177,7 +192,7 @@ export class ConfigService {
             changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
 
             const result = this.pkexecWriteCustomProfiles(changedCustomProfiles);
-            if (result) { this.readFiles(); }
+            if (result) { this.updateConfigData(); }
 
             return result;
         } else {
@@ -229,7 +244,7 @@ export class ConfigService {
 
             this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
                 if (success) {
-                    this.readFiles();
+                    this.updateConfigData();
                 }
                 resolve(success);
             });
@@ -243,7 +258,7 @@ export class ConfigService {
 
             this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
                 if (success) {
-                    this.readFiles();
+                    this.updateConfigData();
                 }
                 resolve(success);
             });
@@ -332,7 +347,6 @@ export class ConfigService {
         } else {
             this.currentProfileEditIndex = index;
             this.currentProfileEdit = this.config.copyConfig<ITccProfile>(this.customProfiles[index]);
-            this.utils.fillDefaultValuesProfile(this.currentProfileEdit);
             this.editingProfileSubject.next(this.currentProfileEdit);
             this.editingProfile.next(this.currentProfileEdit);
             return true;

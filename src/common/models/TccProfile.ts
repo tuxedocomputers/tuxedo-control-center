@@ -22,6 +22,7 @@ export interface ITccProfile {
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
+    odmProfile: ITccODMProfile;
 }
 
 export class TccProfile implements ITccProfile {
@@ -30,12 +31,14 @@ export class TccProfile implements ITccProfile {
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
+    odmProfile: ITccODMProfile;
     public constructor(init: ITccProfile) {
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
-        this.fan.fanProfile = init.fan.fanProfile;
+        this.fan = JSON.parse(JSON.stringify(init.fan));
+        this.odmProfile = JSON.parse(JSON.stringify(init.odmProfile));
     }
 }
 
@@ -64,6 +67,10 @@ interface ITccProfileFanControl {
     fanProfile: string;
 }
 
+interface ITccODMProfile {
+    name: string
+}
+
 export const defaultProfiles: ITccProfile[] = [
     {
         name: 'Default',
@@ -87,7 +94,8 @@ export const defaultProfiles: ITccProfile[] = [
         fan: {
             useControl: true,
             fanProfile: 'Balanced'
-        }
+        },
+        odmProfile: { name: undefined }
     },
     {
         name: 'Cool and breezy',
@@ -111,7 +119,8 @@ export const defaultProfiles: ITccProfile[] = [
         fan: {
             useControl: true,
             fanProfile: 'Quiet'
-        }
+        },
+        odmProfile: { name: undefined }
     },
     {
         name: 'Powersave extreme',
@@ -135,7 +144,8 @@ export const defaultProfiles: ITccProfile[] = [
         fan: {
             useControl: true,
             fanProfile: 'Silent'
-        }
+        },
+        odmProfile: { name: undefined }
     }
 ];
 
@@ -161,7 +171,8 @@ export const defaultCustomProfile: ITccProfile = {
     fan: {
         useControl: true,
         fanProfile: 'Balanced'
-    }
+    },
+    odmProfile: { name: undefined }
 };
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
@@ -186,7 +197,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     fan: {
         useControl: true,
         fanProfile: 'Balanced'
-    }
+    },
+    odmProfile: { name: undefined }
 };
 
 export const profileImageMap = new Map<string, string>();
