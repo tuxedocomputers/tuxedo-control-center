@@ -73,6 +73,9 @@ export class FanControlLogic {
 
     private useTable: string
 
+    /**
+     * Minimum fan speed returned by logic
+     */
     private _minimumFanspeed: number = 0;
     get minimumFanspeed() { return this._minimumFanspeed; }
     set minimumFanspeed(speed: number) {
@@ -84,6 +87,23 @@ export class FanControlLogic {
             this._minimumFanspeed = 100;
         } else {
             this._minimumFanspeed = speed;
+        }
+    }
+
+    /**
+     * Number added to table value providing an offset fan table lookup
+     */
+    private _addedFanspeed: number = 0;
+    get addedFanspeed() { return this._addedFanspeed; }
+    set addedFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._addedFanspeed = 0;
+        } else if (speed < -100) {
+            this._addedFanspeed = -100;
+        } else if (speed > 100) {
+            this._addedFanspeed = 100;
+        } else {
+            this._addedFanspeed = speed;
         }
     }
 
@@ -134,7 +154,20 @@ export class FanControlLogic {
         const effectiveTemperature = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
         const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
+        
         let newSpeed = foundEntry.speed;
+        
+        // Alter lookup value by addedFanspeed parameter (aka apply offset)
+        const offsetDisableCondition = this.addedFanspeed < 0 && effectiveTemperature > 57;
+        if (!offsetDisableCondition) {
+            newSpeed += this.addedFanspeed;
+            if (newSpeed > 100) {
+                newSpeed = 100;
+            } else if (newSpeed < 0) {
+                newSpeed = 0;
+            }
+        }
+        
         let speedJump = newSpeed - this.lastSpeed;
         if (speedJump <= -2) {
             speedJump = -2;

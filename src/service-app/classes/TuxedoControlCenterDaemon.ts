@@ -453,12 +453,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.fan = {
                 useControl: true,
                 fanProfile: 'Balanced',
-                minimumFanspeed: 0
+                minimumFanspeed: 0,
+                addedFanspeed: 0
             };
         } else {
             profile.fan.useControl = true;
             if (profile.fan.minimumFanspeed === undefined) {
                 profile.fan.minimumFanspeed = 0;
+            }
+            if (profile.fan.addedFanspeed === undefined) {
+                profile.fan.addedFanspeed = 0;
             }
         }
 

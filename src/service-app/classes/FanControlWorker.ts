@@ -104,6 +104,7 @@ export class FanControlWorker extends DaemonWorker {
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
             this.fans.get(fanNumber).minimumFanspeed = this.tccd.getCurrentProfile().fan.minimumFanspeed;
+            this.fans.get(fanNumber).addedFanspeed = this.tccd.getCurrentProfile().fan.addedFanspeed;
 
             const fanLogic = this.fans.get(fanNumber);
 

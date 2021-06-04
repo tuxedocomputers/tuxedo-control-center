@@ -66,6 +66,7 @@ interface ITccProfileFanControl {
     useControl: boolean;
     fanProfile: string;
     minimumFanspeed: number;
+    addedFanspeed: number;
 }
 
 interface ITccODMProfile {
@@ -95,7 +96,8 @@ export const defaultProfiles: ITccProfile[] = [
         fan: {
             useControl: true,
             fanProfile: 'Balanced',
-            minimumFanspeed: 0
+            minimumFanspeed: 0,
+            addedFanspeed: 0
         },
         odmProfile: { name: undefined }
     },
@@ -121,7 +123,8 @@ export const defaultProfiles: ITccProfile[] = [
         fan: {
             useControl: true,
             fanProfile: 'Quiet',
-            minimumFanspeed: 0
+            minimumFanspeed: 0,
+            addedFanspeed: 0
         },
         odmProfile: { name: undefined }
     },
@@ -147,7 +150,8 @@ export const defaultProfiles: ITccProfile[] = [
         fan: {
             useControl: true,
             fanProfile: 'Silent',
-            minimumFanspeed: 0
+            minimumFanspeed: 0,
+            addedFanspeed: 0
         },
         odmProfile: { name: undefined }
     }
@@ -175,7 +179,8 @@ export const defaultCustomProfile: ITccProfile = {
     fan: {
         useControl: true,
         fanProfile: 'Balanced',
-        minimumFanspeed: 0
+        minimumFanspeed: 0,
+        addedFanspeed: 0
     },
     odmProfile: { name: undefined }
 };
@@ -202,7 +207,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     fan: {
         useControl: true,
         fanProfile: 'Balanced',
-        minimumFanspeed: 0
+        minimumFanspeed: 0,
+        addedFanspeed: 0
     },
     odmProfile: { name: undefined }
 };
