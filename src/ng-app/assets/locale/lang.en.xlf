@@ -481,33 +481,47 @@
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">298</context>
         </context-group>
+      </trans-unit><trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
+        <source>Minimum fan speed</source>
+        <target state="translated">Minimum fan speed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">315</context>
+        </context-group>
+      </trans-unit><trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
+        <source>Offset fan speed</source>
+        <target state="translated">Offset fan speed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">334</context>
+        </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html">
         <source>Webcam</source>
         <target state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">328</context>
+          <context context-type="linenumber">366</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html">
         <source>Webcam status (on/off)</source>
         <target state="translated">Webcam status (on/off)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">336</context>
+          <context context-type="linenumber">374</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html">
         <source>on</source>
         <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">340</context>
+          <context context-type="linenumber">378</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html">
         <source>off</source>
         <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">341</context>
+          <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
@@ -706,47 +720,69 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">207</context>
         </context-group>
+      </trans-unit><trans-unit id="cDashboardMinFanSpeedLabel" datatype="html">
+        <source>
+                                Min
+                            </source>
+        <target state="translated">
+                                Min
+                            </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit><trans-unit id="cDashboardOffsetFanSpeedLabel" datatype="html">
+        <source>
+                                Offset
+                            </source>
+        <target state="translated">
+                                Offset
+                            </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
       </trans-unit><trans-unit id="f11dbe7a4cc27e8a49693597e745513942104db2" datatype="html">
         <source>Fan control: off</source>
         <target state="translated">Fan control: off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit><trans-unit id="57b0b92e55a491b36423f7325d0c6887d8298091" datatype="html">
         <source>Brightness</source>
         <target state="translated">Brightness</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit><trans-unit id="2e843735a8019b9e71113785b9223ab500fcd429" datatype="html">
         <source>Fixed brightness off</source>
         <target state="translated">Fixed brightness off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit><trans-unit id="b88335949bb1616e9a70b3f3810001cf0a57085a" datatype="html">
         <source>System profile</source>
         <target state="translated">System profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit><trans-unit id="263323eb8abde4b84da09b10be29b956b5f19933" datatype="html">
         <source>Webcam</source>
         <target state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit><trans-unit id="02d311a2e30798982d5f16bfd87c22a0a8d8cbbf" datatype="html">
         <source>Webcam active</source>
         <target state="translated">Webcam active</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsCPUSettingsLabel" datatype="html">
         <source>CPU Settings</source>
@@ -809,52 +845,51 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundLabel" datatype="html">
         <source>Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/></source>
         <target state="translated">
             Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/>
         </target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundActivated" datatype="html">
         <source>activated</source>
         <target state="translated">activated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundDeactivated" datatype="html">
         <source>deactivated</source>
         <target state="translated">deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation1" datatype="html">
         <source>This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</source>
         <target state="translated">This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation2" datatype="html">
         <source>To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</source>
         <target state="translated">To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation3" datatype="html">
         <source>On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</source>
         <target state="translated">On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit><trans-unit id="cShutdownTimerInformations" datatype="html">
         <source>This sets a one time shutdown time. It will be automatically cleared on next

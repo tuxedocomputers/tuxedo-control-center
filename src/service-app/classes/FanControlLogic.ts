@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -73,6 +73,40 @@ export class FanControlLogic {
 
     private useTable: string
 
+    /**
+     * Minimum fan speed returned by logic
+     */
+    private _minimumFanspeed: number = 0;
+    get minimumFanspeed() { return this._minimumFanspeed; }
+    set minimumFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._minimumFanspeed = 0;
+        } else if (speed < 0) {
+            this._minimumFanspeed = 0;
+        } else if (speed > 100) {
+            this._minimumFanspeed = 100;
+        } else {
+            this._minimumFanspeed = speed;
+        }
+    }
+
+    /**
+     * Number added to table value providing an offset fan table lookup
+     */
+    private _offsetFanspeed: number = 0;
+    get offsetFanspeed() { return this._offsetFanspeed; }
+    set offsetFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._offsetFanspeed = 0;
+        } else if (speed < -100) {
+            this._offsetFanspeed = -100;
+        } else if (speed > 100) {
+            this._offsetFanspeed = 100;
+        } else {
+            this._offsetFanspeed = speed;
+        }
+    }
+
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
             this.useTable = 'tableCPU';
@@ -98,7 +132,11 @@ export class FanControlLogic {
      */
     public reportTemperature(temperatureValue: number) {
         this.tempBuffer.addValue(temperatureValue);
-        this.latestSpeedPercent = this.calculateSpeedPercent();
+
+        // Calculate filtered table speed
+        let nextSpeedPercent = this.calculateSpeedPercent();
+
+        this.latestSpeedPercent = nextSpeedPercent;
     }
 
     /**
@@ -112,7 +150,25 @@ export class FanControlLogic {
         const effectiveTemperature = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
         const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
+        
         let newSpeed = foundEntry.speed;
+        
+        // Alter lookup value by offsetFanspeed parameter (aka apply offset)
+        const offsetDisableCondition = this.offsetFanspeed < 0 && effectiveTemperature > 57;
+        if (!offsetDisableCondition) {
+            newSpeed += this.offsetFanspeed;
+            if (newSpeed > 100) {
+                newSpeed = 100;
+            } else if (newSpeed < 0) {
+                newSpeed = 0;
+            }
+        }
+
+        // Adjust for minimum speed parameter
+        if (newSpeed < this.minimumFanspeed) {
+            newSpeed = this.minimumFanspeed;
+        }
+        
         let speedJump = newSpeed - this.lastSpeed;
         if (speedJump <= -2) {
             speedJump = -2;

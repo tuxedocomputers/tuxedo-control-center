@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -206,15 +206,36 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                         <span class="text" i18n>Fan profile</span>
                     </div>
-                    <div class="tcc-progress tcc-info-bar">
-                        <mat-progress-bar
-                            [value]="activeProfile.fan.useControl ? fanProfileProgressMap.get(activeProfile.fan.fanProfile) : 0"
-                            [ngClass]="{'disabled': !activeProfile.fan.useControl }"
-                        ></mat-progress-bar>
-                        <div class="label-text" *ngIf="activeProfile.fan.useControl">
-                            {{ activeProfile.fan.fanProfile }}
+                    <div class="tcc-info-bar" *ngIf="activeProfile.fan.useControl">
+                        <div class="fan-profile-parameters">
+                            <div
+                                class="label"
+                                i18n="@@cDashboardMinFanSpeedLabel"
+                                [hidden]="activeProfile.fan.minimumFanspeed === 0">
+                                Min
+                            </div>
+                            <div
+                                class="value left color-disabled"
+                                [hidden]="activeProfile.fan.minimumFanspeed === 0">
+                                {{ activeProfile.fan.minimumFanspeed }}%
+                            </div>
+                            <div class="text-center">{{ activeProfile.fan.fanProfile }}</div>
+                            <div
+                                class="value right color-disabled"
+                                [hidden]="activeProfile.fan.offsetFanspeed === 0">
+                                {{ activeProfile.fan.offsetFanspeed > 0 ? '+' + activeProfile.fan.offsetFanspeed : activeProfile.fan.offsetFanspeed }}%
+                            </div>
+                            <div
+                                class="label"
+                                i18n="@@cDashboardOffsetFanSpeedLabel"
+                                [hidden]="activeProfile.fan.offsetFanspeed === 0">
+                                Offset
+                            </div>
                         </div>
-                        <div class="label-text" *ngIf="!activeProfile.fan.useControl" i18n>Fan control: off</div>
+                    </div>
+                    <div class="tcc-progress tcc-info-bar" *ngIf="!activeProfile.fan.useControl">
+                        <mat-progress-bar [value]="0" class="disabled"></mat-progress-bar>
+                        <div class="label-text" i18n>Fan control: off</div>
                     </div>
                 </div>
             </div>

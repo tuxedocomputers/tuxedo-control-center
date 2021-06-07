@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -60,8 +60,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public activeProfile: ITccProfile;
   public isCustomProfile: boolean;
-
-  public fanProfileProgressMap: Map<string, number>;
 
   public animatedGauges = true;
   public animatedGaugesDuration = 0.1;
@@ -141,15 +139,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
       }
     }));
-
-    const fanProfileNames = this.config.getFanProfiles().map(fanProfile => fanProfile.name);
-    this.fanProfileProgressMap = new Map();
-    const fanProfileProgressStep = 100.0 / fanProfileNames.length;
-    let progressValue = 0;
-    for (const fanProfileName of fanProfileNames) {
-      progressValue += fanProfileProgressStep;
-      this.fanProfileProgressMap.set(fanProfileName, progressValue);
-    }
 
     /*this.cpuModelName = this.node.getOs().cpus()[0].model;
     this.cpuModelName = this.cpuModelName.split('@')[0];
