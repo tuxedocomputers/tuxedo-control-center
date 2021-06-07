@@ -136,10 +136,6 @@ export class FanControlLogic {
         // Calculate filtered table speed
         let nextSpeedPercent = this.calculateSpeedPercent();
 
-        // Adjust for minimum speed parameter
-        if (nextSpeedPercent < this.minimumFanspeed) {
-            nextSpeedPercent = this.minimumFanspeed;
-        }
         this.latestSpeedPercent = nextSpeedPercent;
     }
 
@@ -166,6 +162,11 @@ export class FanControlLogic {
             } else if (newSpeed < 0) {
                 newSpeed = 0;
             }
+        }
+
+        // Adjust for minimum speed parameter
+        if (newSpeed < this.minimumFanspeed) {
+            newSpeed = this.minimumFanspeed;
         }
         
         let speedJump = newSpeed - this.lastSpeed;
