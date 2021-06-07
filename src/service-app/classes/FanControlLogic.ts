@@ -93,17 +93,17 @@ export class FanControlLogic {
     /**
      * Number added to table value providing an offset fan table lookup
      */
-    private _addedFanspeed: number = 0;
-    get addedFanspeed() { return this._addedFanspeed; }
-    set addedFanspeed(speed: number) {
+    private _offsetFanspeed: number = 0;
+    get offsetFanspeed() { return this._offsetFanspeed; }
+    set offsetFanspeed(speed: number) {
         if (speed === undefined) {
-            this._addedFanspeed = 0;
+            this._offsetFanspeed = 0;
         } else if (speed < -100) {
-            this._addedFanspeed = -100;
+            this._offsetFanspeed = -100;
         } else if (speed > 100) {
-            this._addedFanspeed = 100;
+            this._offsetFanspeed = 100;
         } else {
-            this._addedFanspeed = speed;
+            this._offsetFanspeed = speed;
         }
     }
 
@@ -157,10 +157,10 @@ export class FanControlLogic {
         
         let newSpeed = foundEntry.speed;
         
-        // Alter lookup value by addedFanspeed parameter (aka apply offset)
-        const offsetDisableCondition = this.addedFanspeed < 0 && effectiveTemperature > 57;
+        // Alter lookup value by offsetFanspeed parameter (aka apply offset)
+        const offsetDisableCondition = this.offsetFanspeed < 0 && effectiveTemperature > 57;
         if (!offsetDisableCondition) {
-            newSpeed += this.addedFanspeed;
+            newSpeed += this.offsetFanspeed;
             if (newSpeed > 100) {
                 newSpeed = 100;
             } else if (newSpeed < 0) {
