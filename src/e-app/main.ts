@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { app, BrowserWindow, ipcMain, globalShortcut, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -31,7 +31,12 @@ const appPath = __dirname.replace('app.asar/', '');
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
 const tccConfigDir = '.tcc';
-const startTCCAccelerator = 'Super+Alt+F6';
+let startTCCAccelerator;
+
+startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
+if (startTCCAccelerator === '') {
+    startTCCAccelerator = 'Super+Alt+F6'
+}
 
 let tccWindow: Electron.BrowserWindow;
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
@@ -68,10 +73,12 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( async () => {
-    const success = globalShortcut.register(startTCCAccelerator, () => {
-        activateTccGui();
-    });
-    if (!success) { console.log('Failed to register global shortcut'); }
+    if (startTCCAccelerator !== 'none') {
+        const success = globalShortcut.register(startTCCAccelerator, () => {
+            activateTccGui();
+        });
+        if (!success) { console.log('Failed to register global shortcut'); }
+    }
 
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
@@ -220,14 +227,23 @@ async function getActiveProfile(): Promise<TccProfile> {
 }
 
 function createTccWindow() {
+    let windowWidth = 1040;
+    let windowHeight = 750;
+    if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
+        windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
+    }
+    if (windowHeight > screen.getPrimaryDisplay().workAreaSize.height) {
+        windowHeight = screen.getPrimaryDisplay().workAreaSize.height;
+    }
+
     tccWindow = new BrowserWindow({
         title: 'TUXEDO Control Center',
-        width: 1040,
-        height: 750,
+        width: windowWidth,
+        height: windowHeight,
         frame: false,
         resizable: true,
-        minWidth: 1040,
-        minHeight: 750,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true

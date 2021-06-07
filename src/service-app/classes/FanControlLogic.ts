@@ -58,7 +58,8 @@ class ValueBuffer {
     }
 }
 
-const TICK_DELAY = 1;
+const MAX_SPEED_JUMP = 2;
+const SPEED_JUMP_THRESHOLD = 20;
 
 export class FanControlLogic {
 
@@ -170,8 +171,8 @@ export class FanControlLogic {
         }
         
         let speedJump = newSpeed - this.lastSpeed;
-        if (speedJump <= -2) {
-            speedJump = -2;
+        if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
+            speedJump = -MAX_SPEED_JUMP;
             newSpeed = this.lastSpeed + speedJump;
         }
         this.lastSpeed = newSpeed;
