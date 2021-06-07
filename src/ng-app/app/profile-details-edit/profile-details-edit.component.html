@@ -334,8 +334,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header i18n="@@cProfMgrDetailsOffsetFanSpeedLabel">Offset fan speed</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed }} %</content>
-                            <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value }} %</content>
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ? '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' + inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
