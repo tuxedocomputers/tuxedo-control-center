@@ -487,33 +487,40 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">315</context>
         </context-group>
+      </trans-unit><trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
+        <source>Offset fan speed</source>
+        <target state="translated">Offset-Lüftergeschwindigkeit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">334</context>
+        </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html" approved="yes">
         <source>Webcam</source>
         <target phase-name="approval-1" state="signed-off">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">366</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
         <source>Webcam status (on/off)</source>
         <target phase-name="approval-1" state="signed-off">Status der Webcam (an/aus)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">355</context>
+          <context context-type="linenumber">374</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html" approved="yes">
         <source>on</source>
         <target phase-name="approval-1" state="signed-off">an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">359</context>
+          <context context-type="linenumber">378</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html" approved="yes">
         <source>off</source>
         <target phase-name="approval-1" state="signed-off">aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">360</context>
+          <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
         <source>Info</source>
