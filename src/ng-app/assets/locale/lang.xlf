@@ -595,41 +595,57 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">207</context>
         </context-group>
+      </trans-unit><trans-unit id="cDashboardMinFanSpeedLabel" datatype="html">
+        <source>
+                                Min
+                            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit><trans-unit id="cDashboardOffsetFanSpeedLabel" datatype="html">
+        <source>
+                                Offset
+                            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
       </trans-unit><trans-unit id="f11dbe7a4cc27e8a49693597e745513942104db2" datatype="html">
         <source>Fan control: off</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit><trans-unit id="57b0b92e55a491b36423f7325d0c6887d8298091" datatype="html">
         <source>Brightness</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit><trans-unit id="2e843735a8019b9e71113785b9223ab500fcd429" datatype="html">
         <source>Fixed brightness off</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit><trans-unit id="b88335949bb1616e9a70b3f3810001cf0a57085a" datatype="html">
         <source>System profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit><trans-unit id="263323eb8abde4b84da09b10be29b956b5f19933" datatype="html">
         <source>Webcam</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit><trans-unit id="02d311a2e30798982d5f16bfd87c22a0a8d8cbbf" datatype="html">
         <source>Webcam active</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsCPUSettingsLabel" datatype="html">
         <source>CPU Settings</source>
