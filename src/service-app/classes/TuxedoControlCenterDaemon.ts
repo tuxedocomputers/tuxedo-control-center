@@ -404,8 +404,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.scalingMinFrequency = minFreq;
         }
     
-        const maxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        let maxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
         const boost = cpu.boost.readValueNT();
+        if (boost !== undefined) {
+            maxFreq *= 2;
+        }
         const reducedAvailableFreq = cpu.cores[0].getReducedAvailableFreqNT();
         if (profile.cpu.scalingMaxFrequency === undefined) {
             profile.cpu.scalingMaxFrequency = maxFreq;
