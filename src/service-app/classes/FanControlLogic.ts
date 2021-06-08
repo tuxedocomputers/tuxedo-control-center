@@ -155,7 +155,7 @@ export class FanControlLogic {
         let newSpeed = foundEntry.speed;
         
         // Alter lookup value by offsetFanspeed parameter (aka apply offset)
-        const offsetDisableCondition = this.offsetFanspeed < 0 && effectiveTemperature > 57;
+        const offsetDisableCondition = this.offsetFanspeed < 0 && effectiveTemperature > 75;
         if (!offsetDisableCondition) {
             newSpeed += this.offsetFanspeed;
             if (newSpeed > 100) {
@@ -170,6 +170,7 @@ export class FanControlLogic {
             newSpeed = this.minimumFanspeed;
         }
         
+        // Limit falling speed change
         let speedJump = newSpeed - this.lastSpeed;
         if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
             speedJump = -MAX_SPEED_JUMP;
