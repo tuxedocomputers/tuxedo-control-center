@@ -275,7 +275,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-progress-bar
                             [value]="activeProfile.webcam.status ? 100 : 0">
                         </mat-progress-bar>
-                        <div class="label-text"><ng-container i18n>Webcam active</ng-container>: <span *ngIf="activeProfile.webcam.status">yes</span><span *ngIf="!activeProfile.webcam.status">no</span></div>
+                        <div class="label-text">
+                            <span *ngIf="activeProfile.webcam.status" i18n="@@cDashboardWebcamOnLabel">Webcam: on</span>
+                            <span *ngIf="!activeProfile.webcam.status" i18n="@@cDashboardWebcamOffLabel">Webcam: off</span>
+                        </div>
                     </div>
                 </div>
             </div>
