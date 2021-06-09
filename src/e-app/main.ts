@@ -240,7 +240,7 @@ function createTccWindow() {
         title: 'TUXEDO Control Center',
         width: windowWidth,
         height: windowHeight,
-        frame: false,
+        frame: true,
         resizable: true,
         minWidth: windowWidth,
         minHeight: windowHeight,
@@ -249,6 +249,11 @@ function createTccWindow() {
             nodeIntegration: true
         }
     });
+
+    // Hide menu bar
+    tccWindow.setMenuBarVisibility(false);
+    // Workaround to menu bar appearing after full screen state
+    tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
     tccWindow.loadFile(indexPath);

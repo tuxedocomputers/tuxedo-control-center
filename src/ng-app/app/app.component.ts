@@ -46,6 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    public useTCCTitleBar = false;
+
     constructor(
         private electron: ElectronService,
         private config: ConfigService,

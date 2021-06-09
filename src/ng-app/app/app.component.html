@@ -21,9 +21,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <i class="fas fa-cog fa-spin"></i>
 </div>
 <div class="pagewrap" [ngClass]="{'blur-no-input': pageDisabled()}">
-    <mat-toolbar class="tcc-mat-toolbar">
+    <mat-toolbar class="tcc-mat-toolbar" *ngIf="useTCCTitleBar">
         <mat-toolbar-row class="title-row">
-
             <div id="title-left">
                 <img src="./assets/taskbar_icon_free.svg" id="title-logo">
                 <span id="title-text" i18n>TUXEDO Control Center</span>
