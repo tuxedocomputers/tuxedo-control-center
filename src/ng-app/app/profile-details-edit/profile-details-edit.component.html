@@ -192,7 +192,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <!-- Webcam settings -->
         <div class="tcc-options-group"
-            [ngClass]="{'not-available': !compat.hasWebcamControl }"
+            [hidden]="!compat.hasWebcamControl"
             [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
 
             <div class="title-row">
