@@ -267,11 +267,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                 </div>
                 <div class="item">
-                    <div class="title" [ngClass]="{'not-available': !compat.hasWebcamControl }">
+                    <div class="title" [hidden]="!compat.hasWebcamControl">
                         <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                         <span class="text" i18n>Webcam</span>
                     </div>
-                    <div class="tcc-progress tcc-info-bar" [ngClass]="{'not-available': !compat.hasWebcamControl }" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
+                    <div class="tcc-progress tcc-info-bar" [hidden]="!compat.hasWebcamControl" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
                         <mat-progress-bar
                             [value]="activeProfile.webcam.status ? 100 : 0">
                         </mat-progress-bar>
