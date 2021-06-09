@@ -139,7 +139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ profile.display.brightness }} %
                     </span>
                 </div>
-                <div class="status-component" [ngClass]="{'not-available': !compat.hasWebcamControl}">
+                <div class="status-component" *ngIf="compat.hasWebcamControl">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 258 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>
