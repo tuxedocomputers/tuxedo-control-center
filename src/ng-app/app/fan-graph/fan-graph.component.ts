@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { ITccFanProfile } from 'src/common/models/TccFanTable';
+import { defaultFanProfiles, ITccFanProfile } from 'src/common/models/TccFanTable';
 
 @Component({
     selector: 'app-fan-graph',
@@ -11,25 +11,35 @@ import { ITccFanProfile } from 'src/common/models/TccFanTable';
 export class FanGraphComponent implements OnInit {
 
     private _fanProfile: ITccFanProfile;
-    @Input() set fanProfile(nextProfile: ITccFanProfile) {
-        this._fanProfile = nextProfile;
-        // TODO: fill graph axis
+    @Input() set fanProfile(nextProfile: string) {
+        const nextProfileIndex = defaultFanProfiles.findIndex(profile => profile.name === nextProfile);
+        if (nextProfileIndex !== -1) {
+            this._fanProfile = defaultFanProfiles[nextProfileIndex];
+            this.updateDatasets();
+        }
     }
     get fanProfile() {
-        return this._fanProfile;
+        return this._fanProfile.name;
     }
 
     @Input() minFanspeed: number = 0;
     @Input() offsetFanspeed: number = 0;
 
     // Graph data
-    public tempsLabels: Label[] = [ ];
-    public fantableDatasets: ChartDataSets[] = [];
+    public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => e.toString());
+    public fantableDatasets: ChartDataSets[] = [
+        { label: 'CPU Fan', data: [], spanGaps: true, lineTension: 0.1 },
+        { label: 'GPU Fan', data: [], spanGaps: true, lineTension: 0.1 }
+    ];
     public graphType = 'line';
     public graphColors: Color[] = [
         {
             borderColor: 'black',
-            // backgroundColor: 'rgba(255, 0, 0, 0.3)'
+            backgroundColor: 'rgba(0, 0, 0, 0.3)'
+        },
+        {
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.3)'
         }
     ];
 
@@ -41,6 +51,24 @@ export class FanGraphComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    private updateDatasets(): void {
+        if (this._fanProfile === undefined) return;
+
+        const cpuData: number[] = [];
+        for (const tableEntry of this._fanProfile.tableCPU) {
+            cpuData.push(tableEntry.speed);
+        }
+
+        const gpuData: number[] = [];
+        for (const tableEntry of this._fanProfile.tableGPU) {
+            gpuData.push(tableEntry.speed);
+        }
+
+        const nullDupes = data => data.map((x, i) => (data[i - 1] === x && ((i + 1) < data.length && data[i + 1] === x)) ? null : x);
+        this.fantableDatasets[0].data = nullDupes(cpuData);
+        this.fantableDatasets[1].data = nullDupes(gpuData);
     }
 
 }

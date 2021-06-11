@@ -188,6 +188,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
                 <app-fan-graph
+                    [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
                     [minFanspeed]="inputMinimumFanspeed.value"
                     [offsetFanspeed]="inputOffsetFanspeed.value">
                 </app-fan-graph>
