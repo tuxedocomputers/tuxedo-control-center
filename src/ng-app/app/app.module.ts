@@ -74,6 +74,8 @@ import { ToolsComponent } from "./tools/tool.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
+import { ChartsModule } from 'ng2-charts';
+
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
 // TODO: Set localeId according to settings
@@ -130,7 +132,8 @@ declare const require;
     MatProgressSpinnerModule,
     MarkdownModule.forRoot(),
     OverlayModule,
-    GaugeModule.forRoot()
+    GaugeModule.forRoot(),
+    ChartsModule
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
