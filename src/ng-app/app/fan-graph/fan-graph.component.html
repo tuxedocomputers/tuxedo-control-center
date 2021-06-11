@@ -1,1 +1,10 @@
-<p>fan-graph params, min: {{ minFanspeed }}, offset: {{ offsetFanspeed }} </p>
+<div *ngIf="fantableDatasets.length > 0"
+    style="display: block; width: 400px; height: 200px">
+    <canvas baseChart
+        [chartType]="graphType"
+        [datasets]="fantableDatasets"
+        [labels]="tempsLabels"
+        [colors]="graphColors"
+        [options]="graphOptions">
+    </canvas>
+</div>

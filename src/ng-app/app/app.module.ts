@@ -74,7 +74,7 @@ import { ToolsComponent } from "./tools/tool.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
-import { ChartsModule } from 'ng2-charts';
+import { ChartsModule, ThemeService } from 'ng2-charts';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -148,7 +148,8 @@ declare const require;
       return translation;
     }},
     DecimalPipe,
-    I18n
+    I18n,
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })
