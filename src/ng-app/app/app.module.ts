@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -72,6 +72,7 @@ import { GlobalSettingsComponent } from './global-settings/global-settings.compo
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
 import { ToolsComponent } from "./tools/tool.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
+import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -95,7 +96,8 @@ declare const require;
     GlobalSettingsComponent,
     ShutdownTimerComponent,
     ToolsComponent,
-    ChangeCryptPasswordComponent
+    ChangeCryptPasswordComponent,
+    FanGraphComponent
   ],
   imports: [
     BrowserModule,
