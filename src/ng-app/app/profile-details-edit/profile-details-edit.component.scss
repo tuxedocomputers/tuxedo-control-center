@@ -76,6 +76,10 @@
 
             mat-slider {
                 width: 200px;
+
+                &.slider-offset-fanspeed {
+                    width: 140px;
+                }
             }
 
             mat-select {

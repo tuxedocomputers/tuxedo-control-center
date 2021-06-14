@@ -175,13 +175,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
+                                <button mat-icon-button color="primary" (click)="inputOffsetFanspeed.value = inputOffsetFanspeed.value - 1">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
                                 <mat-slider #inputOffsetFanspeed
+                                    class="slider-offset-fanspeed"
                                     formControlName="offsetFanspeed"
                                     [min]="-100"
                                     [max]="100"
                                     step="1"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button color="primary" (click)="inputOffsetFanspeed.value = inputOffsetFanspeed.value + 1">
+                                    <mat-icon>add</mat-icon>
+                                </button>
                             </content>
                         </mat-grid-tile>
 

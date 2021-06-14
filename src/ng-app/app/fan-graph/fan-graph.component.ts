@@ -45,14 +45,18 @@ export class FanGraphComponent implements OnInit {
             data: [],
             spanGaps: true,
             lineTension: 0.1,
-            steppedLine: true
+            steppedLine: true,
+            showLine: true,
+            pointRadius: 2
         },
         {
             label: 'GPU Fan',
             data: [],
             spanGaps: true,
             lineTension: 0.1,
-            steppedLine: true
+            steppedLine: true,
+            showLine: true,
+            pointRadius: 2
         }
     ];
     public graphType = 'line';
@@ -68,6 +72,9 @@ export class FanGraphComponent implements OnInit {
     ];
 
     public graphOptions: ChartOptions = {
+        animation: {
+            duration: 300
+        },
         responsive: true,
         maintainAspectRatio: false,
         tooltips: {
