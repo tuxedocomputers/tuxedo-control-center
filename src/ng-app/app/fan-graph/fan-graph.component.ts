@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { defaultFanProfiles, ITccFanProfile } from 'src/common/models/TccFanTable';
+import { defaultFanProfiles, ITccFanProfile, ITccFanTableEntry } from 'src/common/models/TccFanTable';
 
 @Component({
     selector: 'app-fan-graph',
@@ -23,8 +23,19 @@ export class FanGraphComponent implements OnInit {
         return this._fanProfile.name;
     }
 
-    @Input() minFanspeed: number = 0;
-    @Input() offsetFanspeed: number = 0;
+    private _minFanspeed:number = 0;
+    @Input() set minFanspeed(value: number) {
+        this._minFanspeed = value;
+        this.updateDatasets();
+    }
+    get minFanspeed() { return this._minFanspeed; }
+
+    private _offsetFanspeed: number = 0;
+    @Input() set offsetFanspeed(value: number) {
+        this._offsetFanspeed = value;
+        this.updateDatasets();
+    }
+    get offsetFanspeed() { return this._offsetFanspeed; }
 
     // Graph data
     public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => this.formatTemp(e));
@@ -109,17 +120,46 @@ export class FanGraphComponent implements OnInit {
 
         const cpuData: number[] = [];
         for (const tableEntry of this._fanProfile.tableCPU) {
-            cpuData.push(tableEntry.speed);
+            cpuData.push(this.applyParameters(tableEntry));
         }
 
         const gpuData: number[] = [];
         for (const tableEntry of this._fanProfile.tableGPU) {
-            gpuData.push(tableEntry.speed);
+            gpuData.push(this.applyParameters(tableEntry));
         }
 
         // const nullDupes = data => data.map((x, i) => (!this.interestingTemps.includes(i) && data[i - 1] === x && ((i + 1) < data.length && data[i + 1] === x)) ? null : x);
         this.fantableDatasets[0].data = cpuData; //nullDupes(cpuData);
         this.fantableDatasets[1].data = gpuData; //nullDupes(gpuData);
+    }
+
+    /**
+     * Applies min and offset parameters and returns the resulting speed
+     * Ref. FanControlLogic.ts: calculateSpeedPercent()
+     * 
+     * @param entry Fan table entry to be evaluated
+     * @returns Resulting speed
+     */
+    private applyParameters(entry: ITccFanTableEntry): number {
+        // Apply offset
+        let newSpeed = entry.speed;
+
+        const offsetDisableCondition = this.offsetFanspeed < 0 && entry.temp > 75;
+        if (!offsetDisableCondition) {
+            newSpeed += this.offsetFanspeed;
+            if (newSpeed > 100) {
+                newSpeed = 100;
+            } else if (newSpeed < 0) {
+                newSpeed = 0;
+            }
+        }
+
+        // Adjust for minimum speed parameter
+        if (newSpeed < this.minFanspeed) {
+            newSpeed = this.minFanspeed;
+        }
+
+        return newSpeed;
     }
 
     private formatTemp(value: number | string): string {
