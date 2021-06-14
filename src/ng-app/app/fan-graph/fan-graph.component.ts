@@ -27,10 +27,22 @@ export class FanGraphComponent implements OnInit {
     @Input() offsetFanspeed: number = 0;
 
     // Graph data
-    public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => e.toString());
+    public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => this.formatTemp(e));
     public fantableDatasets: ChartDataSets[] = [
-        { label: 'CPU Fan', data: [], spanGaps: true, lineTension: 0.1, steppedLine: true },
-        { label: 'GPU Fan', data: [], spanGaps: true, lineTension: 0.1, steppedLine: true }
+        {
+            label: 'CPU Fan',
+            data: [],
+            spanGaps: true,
+            lineTension: 0.1,
+            steppedLine: true
+        },
+        {
+            label: 'GPU Fan',
+            data: [],
+            spanGaps: true,
+            lineTension: 0.1,
+            steppedLine: true
+        }
     ];
     public graphType = 'line';
     public graphColors: Color[] = [
@@ -46,7 +58,45 @@ export class FanGraphComponent implements OnInit {
 
     public graphOptions: ChartOptions = {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+            callbacks: {
+                label: (item, data) => {
+                    return data.datasets[item.datasetIndex].label + ' ' + this.formatSpeed(item.yLabel);
+                }
+            }
+        },
+        scales: {
+            yAxes: [
+                {
+                    ticks: {
+                        beginAtZero: true,
+                        callback: (value: number) => {
+                            if (value % 20 === 0) {
+                                return this.formatSpeed(value);
+                            } else {
+                                return null;
+                            }
+                        }
+                    }
+                }
+            ],
+            xAxes: [
+                {
+                    ticks: {
+                        beginAtZero: true,
+                        autoSkip: false,
+                        callback: (value, index) => {
+                            if (index % 5 === 0) {
+                                return value;
+                            } else {
+                                return null;
+                            }
+                        }
+                    }
+                }
+            ]
+        },
     };
 
     constructor() { }
@@ -72,4 +122,11 @@ export class FanGraphComponent implements OnInit {
         this.fantableDatasets[1].data = gpuData; //nullDupes(gpuData);
     }
 
+    private formatTemp(value: number | string): string {
+        return `${value} °C`;
+    }
+    
+    private formatSpeed(value: number | string): string {
+        return `${value} %`;
+    }
 }
