@@ -10,6 +10,7 @@ import { defaultFanProfiles, ITccFanProfile } from 'src/common/models/TccFanTabl
 })
 export class FanGraphComponent implements OnInit {
 
+    // Inputs
     private _fanProfile: ITccFanProfile;
     @Input() set fanProfile(nextProfile: string) {
         const nextProfileIndex = defaultFanProfiles.findIndex(profile => profile.name === nextProfile);
@@ -28,8 +29,8 @@ export class FanGraphComponent implements OnInit {
     // Graph data
     public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => e.toString());
     public fantableDatasets: ChartDataSets[] = [
-        { label: 'CPU Fan', data: [], spanGaps: true, lineTension: 0.1 },
-        { label: 'GPU Fan', data: [], spanGaps: true, lineTension: 0.1 }
+        { label: 'CPU Fan', data: [], spanGaps: true, lineTension: 0.1, steppedLine: true },
+        { label: 'GPU Fan', data: [], spanGaps: true, lineTension: 0.1, steppedLine: true }
     ];
     public graphType = 'line';
     public graphColors: Color[] = [
@@ -66,9 +67,9 @@ export class FanGraphComponent implements OnInit {
             gpuData.push(tableEntry.speed);
         }
 
-        const nullDupes = data => data.map((x, i) => (data[i - 1] === x && ((i + 1) < data.length && data[i + 1] === x)) ? null : x);
-        this.fantableDatasets[0].data = nullDupes(cpuData);
-        this.fantableDatasets[1].data = nullDupes(gpuData);
+        // const nullDupes = data => data.map((x, i) => (!this.interestingTemps.includes(i) && data[i - 1] === x && ((i + 1) < data.length && data[i + 1] === x)) ? null : x);
+        this.fantableDatasets[0].data = cpuData; //nullDupes(cpuData);
+        this.fantableDatasets[1].data = gpuData; //nullDupes(gpuData);
     }
 
 }
