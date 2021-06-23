@@ -153,6 +153,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile">{{ viewProfile.fan.minimumFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }} %</content>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputMinimumFanspeed, -1); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();" [hidden]="!editProfile">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputMinimumFanspeed, +1); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();" [hidden]="!editProfile">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
@@ -163,6 +169,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     step="1"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button color="primary" (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset()" [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                         </mat-grid-tile>
                         <!-- Offset fan speed -->
@@ -172,12 +181,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ? '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' + inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputOffsetFanspeed, -1); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();" [hidden]="!editProfile">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputOffsetFanspeed, +1); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty()" [hidden]="!editProfile">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
-                                <button mat-icon-button color="primary" (click)="inputOffsetFanspeed.value = inputOffsetFanspeed.value - 1">
-                                    <mat-icon>remove</mat-icon>
-                                </button>
                                 <mat-slider #inputOffsetFanspeed
                                     class="slider-offset-fanspeed"
                                     formControlName="offsetFanspeed"
@@ -186,8 +198,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     step="1"
                                     color="primary">
                                 </mat-slider>
-                                <button mat-icon-button color="primary" (click)="inputOffsetFanspeed.value = inputOffsetFanspeed.value + 1">
-                                    <mat-icon>add</mat-icon>
+                                <button mat-icon-button color="primary" (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset();" [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
+                                    <mat-icon>undo</mat-icon>
                                 </button>
                             </content>
                         </mat-grid-tile>

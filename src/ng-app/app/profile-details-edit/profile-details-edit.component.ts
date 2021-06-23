@@ -299,4 +299,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
     }
+
+    public modifySliderInput(slider, offset: number) {
+        let newValue = slider.value += offset;
+        if (newValue < slider.min) {
+            newValue = slider.min;
+        } else if (newValue > slider.max) {
+            newValue = slider.max;
+        }
+
+        slider.value = newValue;
+    }
 }
