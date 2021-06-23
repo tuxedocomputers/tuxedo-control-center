@@ -1,6 +1,7 @@
 <div *ngIf="fantableDatasets.length > 0"
     style="display: block; height: 200px">
     <canvas baseChart
+        class="tcc-charts"
         [chartType]="graphType"
         [datasets]="fantableDatasets"
         [labels]="tempsLabels"
@@ -8,3 +9,6 @@
         [options]="graphOptions">
     </canvas>
 </div>
+
+<!-- Dummy objects for basic theme color workaround -->
+<div class="tcc-charts-text" #chartTextE style="display: none"></div>

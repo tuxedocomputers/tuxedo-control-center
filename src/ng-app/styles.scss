@@ -23,6 +23,7 @@
 @import './app/profile-details-edit/profile-details-edit.component-theme.scss';
 @import './tcc-gauge-theme.scss';
 @import './tcc-changelog-theme.scss';
+@import './tcc-charts-theme.scss';
 
 @mixin component-themes($theme) {
     // Angular components
@@ -32,6 +33,7 @@
     // Other components
     @include tcc-gauge-theme($theme);
     @include tcc-changelog-theme($theme);
+    @include tcc-charts-theme($theme);
 }
 
 @import './themes/tuxedo-light-theme.scss';

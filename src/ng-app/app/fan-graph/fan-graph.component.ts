@@ -1,14 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
+import { Color, Label, ThemeService } from 'ng2-charts';
+import { Subscription } from 'rxjs';
 import { defaultFanProfiles, ITccFanProfile, ITccFanTableEntry } from 'src/common/models/TccFanTable';
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-fan-graph',
     templateUrl: './fan-graph.component.html',
     styleUrls: ['./fan-graph.component.scss']
 })
-export class FanGraphComponent implements OnInit {
+export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Inputs
     private _fanProfile: ITccFanProfile;
@@ -62,12 +64,12 @@ export class FanGraphComponent implements OnInit {
     public graphType = 'line';
     public graphColors: Color[] = [
         {
-            borderColor: 'black',
-            backgroundColor: 'rgba(0, 0, 0, 0.3)'
+            borderColor: 'rgba(120, 120, 120, 0.4)',
+            backgroundColor: 'rgba(10, 10, 10, 0.4)'
         },
         {
-            borderColor: 'red',
-            backgroundColor: 'rgba(255, 0, 0, 0.3)'
+            borderColor: 'rgba(227, 0, 22, 0.3)',
+            backgroundColor: 'rgba(227, 0, 22, 0.3)'
         }
     ];
 
@@ -117,9 +119,34 @@ export class FanGraphComponent implements OnInit {
         },
     };
 
-    constructor() { }
+    @ViewChild('chartTextE', { static: false }) chartTextE: ElementRef;
+    public get chartTextColor(): string { return this.elementColor(this.chartTextE); };
+
+    initDone = false;
+
+    private subscriptions: Subscription = new Subscription();
+
+    constructor(
+        private utils: UtilsService,
+        private cdref: ChangeDetectorRef,
+        private themeService: ThemeService) { }
+
+    ngAfterViewInit(): void {
+        this.initDone = true;
+        this.cdref.detectChanges();
+    }
 
     ngOnInit() {
+        // Workaround for applying theme overrides
+        this.subscriptions.add(this.utils.themeClass.subscribe( (next) => {
+            setTimeout( () => {
+                this.updateTheme();
+            }, 100);
+        }));
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     private updateDatasets(): void {
@@ -176,4 +203,33 @@ export class FanGraphComponent implements OnInit {
     private formatSpeed(value: number | string): string {
         return `${value} %`;
     }
+
+    private elementColor(element: ElementRef): string {
+        if (element !== undefined && this.initDone) {
+            return getComputedStyle(element.nativeElement).color;
+        } else {
+            return '';
+        }
+    }
+
+    private updateTheme() {
+        let overrides: ChartOptions;
+        overrides = {
+            legend: {
+                labels: { fontColor: this.chartTextColor }
+            },
+            scales: {
+                xAxes: [{
+                    ticks: { fontColor: this.chartTextColor },
+                    gridLines: { color: `rgba(${this.chartTextColor.slice(4, -1)}, 0.2)` }
+                }],
+                yAxes: [{
+                    ticks: { fontColor: this.chartTextColor },
+                    gridLines: { color: `rgba(${this.chartTextColor.slice(4, -1)}, 0.2)` }
+                }]
+            }
+        };
+        this.themeService.setColorschemesOptions(overrides);
+    }
+
 }
