@@ -61,15 +61,17 @@ export class IntelRAPLController {
     public setPowerLimit(setPowerLimit?: number): void {
         let maxPower = this.getMaxPower();
 
-        if (setPowerLimit === undefined) {
-            // TODO error handling
-            this.constraint_0_power_limit_uw.writeValue(maxPower);
+        try {
+            if (setPowerLimit === undefined) {
+                this.constraint_0_power_limit_uw.writeValue(maxPower);
+            }
+            else {
+                this.constraint_0_power_limit_uw.writeValue(Math.max(maxPower/2, Math.min(setPowerLimit, maxPower)))
+            }
+            this.enabled.writeValue(true);
         }
-        else {
-            // TODO error handling
-            this.constraint_0_power_limit_uw.writeValue(Math.max(maxPower/2, Math.min(setPowerLimit, maxPower)))
+        catch (err) {
+            console.log("IntelRAPLController: Failed to set power limit.");
         }
-        // TODO error handling
-        this.enabled.writeValue(true);
     }
 }
