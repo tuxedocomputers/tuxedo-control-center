@@ -210,7 +210,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="fan-graph-container">
                     <button mat-stroked-button
                         (click)="toggleFanGraphs()">
-                        Toggle fan table chart <mat-icon>bar_chart</mat-icon>
+                        <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container> <mat-icon>bar_chart</mat-icon>
                     </button>
                     <app-fan-graph
                         *ngIf="showFanGraphs"

@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { I18n } from '@ngx-translate/i18n-polyfill';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label, ThemeService } from 'ng2-charts';
 import { Subscription } from 'rxjs';
@@ -43,7 +44,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => this.formatTemp(e));
     public fantableDatasets: ChartDataSets[] = [
         {
-            label: 'CPU Fan',
+            label: this.i18n({ value: 'CPU Fan', id: 'cProfMgrDetailsFanChartCPULabel' }),
             data: [],
             spanGaps: true,
             lineTension: 0.1,
@@ -52,7 +53,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
             pointRadius: 2
         },
         {
-            label: 'GPU Fan',
+            label: this.i18n({ value: 'GPU Fan', id: 'cProfMgrDetailsFanChartGPULabel' }),
             data: [],
             spanGaps: true,
             lineTension: 0.1,
@@ -129,7 +130,8 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         private utils: UtilsService,
         private cdref: ChangeDetectorRef,
-        private themeService: ThemeService) { }
+        private themeService: ThemeService,
+        private i18n: I18n) { }
 
     ngAfterViewInit(): void {
         this.initDone = true;
