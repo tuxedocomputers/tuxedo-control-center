@@ -114,7 +114,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- Fan control settings -->
-        <div class="tcc-options-group"
+        <div #fancontrolHeader
+            class="tcc-options-group"
             [ngClass]="{'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled }"
             [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
@@ -153,6 +154,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile">{{ viewProfile.fan.minimumFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }} %</content>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputMinimumFanspeed, -1); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();" [hidden]="!editProfile">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputMinimumFanspeed, +1); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();" [hidden]="!editProfile">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
@@ -163,6 +170,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     step="1"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button color="primary" (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset()" [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                         </mat-grid-tile>
                         <!-- Offset fan speed -->
@@ -172,20 +182,42 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ? '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' + inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputOffsetFanspeed, -1); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();" [hidden]="!editProfile">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputOffsetFanspeed, +1); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty()" [hidden]="!editProfile">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
                                 <mat-slider #inputOffsetFanspeed
+                                    class="slider-offset-fanspeed"
                                     formControlName="offsetFanspeed"
                                     [min]="-100"
                                     [max]="100"
                                     step="1"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button color="primary" (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset();" [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                         </mat-grid-tile>
 
                     </mat-grid-list>
+                </div>
+                <div class="fan-graph-container">
+                    <button mat-stroked-button
+                        (click)="toggleFanGraphs()">
+                        <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container> <mat-icon>bar_chart</mat-icon>
+                    </button>
+                    <app-fan-graph
+                        *ngIf="showFanGraphs"
+                        [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
+                        [minFanspeed]="inputMinimumFanspeed.value"
+                        [offsetFanspeed]="inputOffsetFanspeed.value">
+                    </app-fan-graph>
                 </div>
             </mat-card-content>
         </div>

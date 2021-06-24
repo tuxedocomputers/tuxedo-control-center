@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -29,7 +29,6 @@ import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
-import { MatButton } from '@angular/material/button';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
@@ -86,6 +85,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     @Input()
     get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
 
+    @Output() scrollTo = new EventEmitter<number>();
+
     public gridParams = {
         cols: 9,
         headerSpan: 4,
@@ -107,6 +108,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
+
+    public showFanGraphs = false;
 
     @ViewChild('inputName', { static: false }) inputName: MatInput;
 
@@ -298,5 +301,26 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
         const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
+    }
+
+    public modifySliderInput(slider, offset: number) {
+        let newValue = slider.value += offset;
+        if (newValue < slider.min) {
+            newValue = slider.min;
+        } else if (newValue > slider.max) {
+            newValue = slider.max;
+        }
+
+        slider.value = newValue;
+    }
+
+    @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;
+    public toggleFanGraphs() {
+        if (!this.showFanGraphs) {
+            this.showFanGraphs = true;
+            this.scrollTo.emit(this.fancontrolHeaderE.nativeElement.offsetTop - 50);
+        } else {
+            this.showFanGraphs = false;
+        }
     }
 }
