@@ -139,6 +139,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit() {
         // Workaround for applying theme overrides
         this.subscriptions.add(this.utils.themeClass.subscribe( (next) => {
+            if (!this.initDone) { return; }
             setTimeout( () => {
                 this.updateTheme();
             }, 100);

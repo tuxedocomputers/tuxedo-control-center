@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -29,7 +29,6 @@ import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
-import { MatButton } from '@angular/material/button';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
@@ -86,6 +85,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     @Input()
     get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
 
+    @Output() scrollTo = new EventEmitter<number>();
+
     public gridParams = {
         cols: 9,
         headerSpan: 4,
@@ -107,6 +108,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
+
+    public showFanGraphs = false;
 
     @ViewChild('inputName', { static: false }) inputName: MatInput;
 
@@ -309,5 +312,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         slider.value = newValue;
+    }
+
+    @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;
+    public toggleFanGraphs() {
+        if (!this.showFanGraphs) {
+            this.showFanGraphs = true;
+            this.scrollTo.emit(this.fancontrolHeaderE.nativeElement.offsetTop - 50);
+        } else {
+            this.showFanGraphs = false;
+        }
     }
 }

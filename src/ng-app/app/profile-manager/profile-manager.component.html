@@ -52,7 +52,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
 
 </mat-toolbar>
-<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}">
+<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}" #profileManagerContent>
     <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
         <app-profile-overview-tile
             *ngFor="let profile of getProfilesForList()"
@@ -69,6 +69,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             (click)="buttonNew.click()">
         </app-profile-overview-tile>
     </div>
-    <app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>
+    <app-profile-details-edit #profileDetailsEdit
+        [profile]="currentProfile"
+        (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
+    </app-profile-details-edit>
     <br />
 </div>

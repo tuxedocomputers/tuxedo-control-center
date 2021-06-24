@@ -114,7 +114,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- Fan control settings -->
-        <div class="tcc-options-group"
+        <div #fancontrolHeader
+            class="tcc-options-group"
             [ngClass]="{'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled }"
             [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
@@ -206,11 +207,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     </mat-grid-list>
                 </div>
-                <app-fan-graph
-                    [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
-                    [minFanspeed]="inputMinimumFanspeed.value"
-                    [offsetFanspeed]="inputOffsetFanspeed.value">
-                </app-fan-graph>
+                <div class="fan-graph-container">
+                    <button mat-stroked-button
+                        (click)="toggleFanGraphs()">
+                        Toggle fan table chart <mat-icon>bar_chart</mat-icon>
+                    </button>
+                    <app-fan-graph
+                        *ngIf="showFanGraphs"
+                        [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
+                        [minFanspeed]="inputMinimumFanspeed.value"
+                        [offsetFanspeed]="inputOffsetFanspeed.value">
+                    </app-fan-graph>
+                </div>
             </mat-card-content>
         </div>
 
