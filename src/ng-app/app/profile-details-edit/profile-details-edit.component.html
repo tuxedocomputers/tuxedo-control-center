@@ -170,7 +170,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     step="1"
                                     color="primary">
                                 </mat-slider>
-                                <button mat-icon-button color="primary" (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset()" [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
+                                    [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
                                     <mat-icon>undo</mat-icon>
                                 </button>
                             </content>
@@ -192,14 +195,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
                                 <mat-slider #inputOffsetFanspeed
-                                    class="slider-offset-fanspeed"
                                     formControlName="offsetFanspeed"
                                     [min]="-100"
                                     [max]="100"
                                     step="1"
                                     color="primary">
                                 </mat-slider>
-                                <button mat-icon-button color="primary" (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset();" [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
+                                    [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
                                     <mat-icon>undo</mat-icon>
                                 </button>
                             </content>
