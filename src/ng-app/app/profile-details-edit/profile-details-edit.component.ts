@@ -303,15 +303,36 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
     }
 
-    public modifySliderInput(slider, offset: number) {
-        let newValue = slider.value += offset;
-        if (newValue < slider.min) {
-            newValue = slider.min;
-        } else if (newValue > slider.max) {
-            newValue = slider.max;
-        }
+    private buttonRepeatTimer: NodeJS.Timeout;
+    public buttonRepeatDown(action: () => void) {
+        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
+        const repeatDelayMS = 120;
 
-        slider.value = newValue;
+        action();
+        
+        this.buttonRepeatTimer = setInterval(() => {
+            action();
+        }, repeatDelayMS);
+    }
+
+    public buttonRepeatUp() {
+        clearInterval(this.buttonRepeatTimer);
+    }
+
+    public modifySliderInputFunc(slider, offset: number) {
+        return () => {
+            this.modifySliderInput(slider, offset);
+        }
+    }
+
+    public modifySliderInput(slider, offset: number) {
+            let newValue = slider.value += offset;
+            if (newValue < slider.min) {
+                newValue = slider.min;
+            } else if (newValue > slider.max) {
+                newValue = slider.max;
+            }
+            slider.value = newValue;
     }
 
     @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;

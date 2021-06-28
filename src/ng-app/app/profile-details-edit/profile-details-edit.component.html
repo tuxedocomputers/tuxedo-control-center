@@ -154,10 +154,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile">{{ viewProfile.fan.minimumFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }} %</content>
-                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputMinimumFanspeed, -1); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();" [hidden]="!editProfile">
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(inputMinimumFanspeed, -1)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
                                 <mat-icon>remove</mat-icon>
                             </button>
-                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputMinimumFanspeed, +1); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();" [hidden]="!editProfile">
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(inputMinimumFanspeed, +1)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
                                 <mat-icon>add</mat-icon>
                             </button>
                         </mat-grid-tile>
@@ -185,10 +193,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ? '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' + inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
-                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputOffsetFanspeed, -1); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();" [hidden]="!editProfile">
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(inputOffsetFanspeed, -1)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
                                 <mat-icon>remove</mat-icon>
                             </button>
-                            <button mat-icon-button color="primary" (click)="modifySliderInput(inputOffsetFanspeed, +1); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty()" [hidden]="!editProfile">
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(inputOffsetFanspeed, +1)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
                                 <mat-icon>add</mat-icon>
                             </button>
                         </mat-grid-tile>
