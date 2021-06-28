@@ -280,6 +280,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public inputDisplayBrightnessOffsetFunc(slider, offset: number) {
+        return () => {
+            let newValue = slider.value + offset;
+            if (newValue < 0) {
+                newValue = 0;
+            } else if (newValue > 100) {
+                newValue = 100;
+            }
+            slider.value = newValue;
+            this.inputDisplayBrightnessChange(newValue);
+        }
+    }
+
     public formatFrequency(frequency: number): string {
         return this.utils.formatFrequency(frequency);
     }

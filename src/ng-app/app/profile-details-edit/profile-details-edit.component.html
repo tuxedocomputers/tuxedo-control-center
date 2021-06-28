@@ -94,6 +94,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
                             <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ inputDisplayBrightness.value }}%</content>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(inputDisplayBrightness, -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(inputDisplayBrightness, +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
@@ -105,6 +119,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     step="5"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('display').get('brightness').reset(viewProfile.display.brightness); inputDisplayBrightnessChange(inputDisplayBrightness.value);"
+                                    [hidden]="!profileFormGroup.get('display').get('brightness').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                         </mat-grid-tile>
 
