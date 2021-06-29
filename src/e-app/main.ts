@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -47,6 +47,8 @@ const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
 
 let profilesHash;
+
+let powersaveBlockerId = undefined;
 
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
@@ -109,6 +111,17 @@ app.whenReady().then( async () => {
     };
     tray.events.profileClick = (profileName: string) => { setTempProfile(profileName); };
     tray.create();
+
+    tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
+    tray.events.powersaveBlockerClick = () => {
+        if (powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId)) {
+            powerSaveBlocker.stop(powersaveBlockerId);
+        } else {
+            powersaveBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+        }
+        tray.state.powersaveBlockerActive = powerSaveBlocker.isStarted(powersaveBlockerId);
+        tray.create();
+    }
 
     if (!trayOnlyOption) {
         activateTccGui();
