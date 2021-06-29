@@ -72,6 +72,12 @@ export class TccTray {
                     label: 'Tray autostart', type: 'checkbox', checked: this.state.isAutostartTrayInstalled,
                     click: () => this.events.autostartTrayToggle()
             },
+            {
+                label: 'Power save blocker',
+                type: 'checkbox',
+                click: () => { this.events.powersaveBlockerClick(); },
+                checked: this.state.powersaveBlockerActive
+            },
             { type: 'separator', visible: this.state.isPrimeSupported },
             {
                 label: 'Graphics',
@@ -107,6 +113,7 @@ export class TrayState {
     primeQuery: string;
     activeProfile: TccProfile;
     profiles: TccProfile[];
+    powersaveBlockerActive: boolean
 };
 
 export class TrayEvents {
@@ -116,4 +123,5 @@ export class TrayEvents {
     selectNvidiaClick: () => void;
     selectBuiltInClick: () => void;
     profileClick: (profileName: string) => void;
+    powersaveBlockerClick: () => void;
 }
