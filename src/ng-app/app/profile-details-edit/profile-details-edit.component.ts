@@ -288,7 +288,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             } else if (newValue > 100) {
                 newValue = 100;
             }
-            slider.value = newValue;
+            slider.setValue(newValue);
             this.inputDisplayBrightnessChange(newValue);
         }
     }
@@ -332,20 +332,20 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifySliderInputFunc(slider, offset: number) {
+    public modifySliderInputFunc(slider, offset: number, min: number, max: number) {
         return () => {
-            this.modifySliderInput(slider, offset);
+            this.modifySliderInput(slider, offset, min, max);
         }
     }
 
-    public modifySliderInput(slider, offset: number) {
+    public modifySliderInput(slider, offset: number, min: number, max: number) {
             let newValue = slider.value += offset;
-            if (newValue < slider.min) {
-                newValue = slider.min;
-            } else if (newValue > slider.max) {
-                newValue = slider.max;
+            if (newValue < min) {
+                newValue = min;
+            } else if (newValue > max) {
+                newValue = max;
             }
-            slider.value = newValue;
+            slider.setValue(newValue);
     }
 
     @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;
