@@ -319,7 +319,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private buttonRepeatTimer: NodeJS.Timeout;
     public buttonRepeatDown(action: () => void) {
         if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
-        const repeatDelayMS = 120;
+        const repeatDelayMS = 200;
 
         action();
         
