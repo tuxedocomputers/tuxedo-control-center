@@ -32,7 +32,7 @@ if (environment.production) {
 let langId = navigator.language;
 // If not a known language change to english
 // TODO: General (not hardcoded) language list
-if (!['en', 'de'].includes(langId)) {
+if (!['en', 'de', 'nl'].includes(langId)) {
   langId = 'en';
 }
 // If language is already saved choose this language

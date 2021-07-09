@@ -62,6 +62,9 @@ import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
 
+import localeNl from '@angular/common/locales/nl';
+import localeNlExtra from '@angular/common/locales/extra/nl';
+
 import { I18n } from '@ngx-translate/i18n-polyfill';
 
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -71,6 +74,7 @@ import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.componen
 import { ToolsComponent } from "./tools/tool.component";
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
+registerLocaleData(localeNl, 'nl', localeNlExtra);
 
 // TODO: Set localeId according to settings
 let langId = 'en';
