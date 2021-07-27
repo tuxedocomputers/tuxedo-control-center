@@ -144,6 +144,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.logLine('Tccd Exception');
         const errorLine = err.name + ': ' + err.message;
         this.logLine(errorLine);
+        if (err.stack !== undefined) {
+            this.logLine(err.stack);
+        }
         if (this.started) {
             this.onExit();
         }
