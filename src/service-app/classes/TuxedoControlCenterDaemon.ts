@@ -410,19 +410,19 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         let maxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
         const boost = cpu.boost.readValueNT();
         if (boost !== undefined) {
-            maxFreq *= 2;
+            maxFreq += 1000000;
         }
-        const reducedAvailableFreq = cpu.cores[0].getReducedAvailableFreqNT();
+        const reducedAvailableFreq = boost === undefined ?
+                                         cpu.cores[0].getReducedAvailableFreqNT() :
+                                         cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        // Handle defaults
         if (profile.cpu.scalingMaxFrequency === undefined) {
             profile.cpu.scalingMaxFrequency = maxFreq;
         } else if (profile.cpu.scalingMaxFrequency === -1) {
-            if (boost === undefined) {
-                profile.cpu.scalingMaxFrequency = reducedAvailableFreq;
-            }
-            else {
-                profile.cpu.scalingMaxFrequency = maxFreq;
-            }
-        } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
+            profile.cpu.scalingMaxFrequency = reducedAvailableFreq;
+        }
+        // Enforce boundaries
+        if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
             profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
         } else if (profile.cpu.scalingMaxFrequency > maxFreq) {
             profile.cpu.scalingMaxFrequency = maxFreq;
