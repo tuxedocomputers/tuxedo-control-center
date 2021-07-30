@@ -90,7 +90,7 @@ export class SysFsService implements OnDestroy {
       };
       if (cpuInfo.boost !== undefined) {
         // FIXME: Use actual max boost frequency
-        cpuInfo.maxFreq *= 2;
+        cpuInfo.maxFreq += 1000000;
         cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
       }
     } catch (err) {
