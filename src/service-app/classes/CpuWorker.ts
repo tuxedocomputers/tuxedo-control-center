@@ -213,8 +213,9 @@ export class CpuWorker extends DaemonWorker {
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
             if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+                const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValue();
                 const coreMinFreq = core.cpuinfoMinFreq.readValue();
-                const coreMaxFreq = core.cpuinfoMaxFreq.readValue();
+                const coreMaxFreq = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
                     const minFreq = core.scalingMinFreq.readValue();
                     let minFreqProfile = profile.cpu.scalingMinFrequency;

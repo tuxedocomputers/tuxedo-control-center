@@ -88,6 +88,9 @@ export class SysFsService implements OnDestroy {
         reducedAvailableFreq: this.cpu.cores[0].getReducedAvailableFreqNT(),
         boost: this.cpu.boost.readValueNT()
       };
+      if (cpuInfo.scalingAvailableFrequencies !== undefined) {
+        cpuInfo.maxFreq = cpuInfo.scalingAvailableFrequencies[0];
+      }
       if (cpuInfo.boost !== undefined) {
         // FIXME: Use actual max boost frequency
         cpuInfo.maxFreq *= 2;
