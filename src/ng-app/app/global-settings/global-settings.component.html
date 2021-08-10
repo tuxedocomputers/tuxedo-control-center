@@ -16,72 +16,117 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
+<mat-card class="tcc-card card-global-settings">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n="@@globalSettingsHeaderLabel">Settings</ng-container>
+    </mat-card-title>
+    <hr />
+    <div class="content-container centered">
+        <p i18n="@@globalSettingsHeaderDescription">
+            The settings area contains GUI settings and settings that affects all profiles.
+        </p>
+    </div>
+</mat-card>
 
-<div class="content">
-    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-        <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsCPUSettingsLabel">CPU Settings</header></mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.valueSpan">
-            <content class="value">
-                <span [hidden]="!inputCPUSettings.checked" i18n="@@cGlobalSettingsCPUSettingsActivated">activated</span>
-                <span [hidden]="inputCPUSettings.checked" i18n="@@cGlobalSettingsCPUSettingsDeactivated">deactivated</span>
-            </content>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.inputSpan">
-            <content class="input">
-                <mat-checkbox #inputCPUSettings
-                    color="primary"
-                    [(ngModel)]="cpuSettingsEnabled"
-                    (change)="onCPUSettingsEnabledChanged($event)">
-                </mat-checkbox>
-            </content>
-        </mat-grid-tile>
-    </mat-grid-list>
-    <div class=margin-bottom i18n>On deactivate, CPU settings are <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.</div>
+<mat-accordion class="tcc-accordion">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_settings.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n>Global profile settings</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-        <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsFanControlLabel">Fan Control</header></mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.valueSpan">
-            <content class="value">
-                <span [hidden]="!inputFanControl.checked" i18n="@@cGlobalSettingsFanControlActivated">activated</span>
-                <span [hidden]="inputFanControl.checked" i18n="@@cGlobalSettingsFanControlDeactivated">deactivated</span>
-            </content>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.inputSpan">
-            <content class="input">
-                <mat-checkbox #inputFanControl
-                    color="primary"
-                    [(ngModel)]="fanControlEnabled"
-                    (change)="onFanControlEnabledChanged($event)">
-                </mat-checkbox>
-            </content>
-        </mat-grid-tile>
-    </mat-grid-list>
-    <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
-
-    <div [hidden]=!forceYUV420OutputSwitchAvailable>
-        <header class=margin-top i18n="@@cGlobalSettingsYCbCr420WorkaroundHeader">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</header>
-        <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index"> <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
-            <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-                <mat-grid-tile class=margin-left [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Port {{port}} of Card {{i}}</header></mat-grid-tile>
+        <div class="content">
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsCPUSettingsLabel">CPU Settings</header></mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                     <content class="value">
-                        <span [hidden]="!inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundActivated">activated</span>
-                        <span [hidden]="inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundDeactivated">deactivated</span>
+                        <span [hidden]="!inputCPUSettings.checked" i18n="@@cGlobalSettingsCPUSettingsActivated">activated</span>
+                        <span [hidden]="inputCPUSettings.checked" i18n="@@cGlobalSettingsCPUSettingsDeactivated">deactivated</span>
                     </content>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.inputSpan">
                     <content class="input">
-                        <mat-checkbox #inputYCbCr420Workaround
+                        <mat-checkbox #inputCPUSettings
                             color="primary"
-                            [(ngModel)]="ycbcr420Workaround[i][port]"
-                            (change)="onYCbCr420WorkaroundChanged($event, i, port)">
+                            [(ngModel)]="cpuSettingsEnabled"
+                            (change)="onCPUSettingsEnabledChanged($event)">
                         </mat-checkbox>
                     </content>
                 </mat-grid-tile>
             </mat-grid-list>
-        </ng-template>
-        <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation1">This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</div>
-        <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation2">To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</div>
-        <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation3">On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</div>
-    </div>
-</div>
+            <div class=margin-bottom i18n>On deactivate, CPU settings are <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.</div>
+    
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsFanControlLabel">Fan Control</header></mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                    <content class="value">
+                        <span [hidden]="!inputFanControl.checked" i18n="@@cGlobalSettingsFanControlActivated">activated</span>
+                        <span [hidden]="inputFanControl.checked" i18n="@@cGlobalSettingsFanControlDeactivated">deactivated</span>
+                    </content>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                    <content class="input">
+                        <mat-checkbox #inputFanControl
+                            color="primary"
+                            [(ngModel)]="fanControlEnabled"
+                            (change)="onFanControlEnabledChanged($event)">
+                        </mat-checkbox>
+                    </content>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
+        </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="forceYUV420OutputSwitchAvailable">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n>Chroma subsampling</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="content">
+            <div [hidden]=!forceYUV420OutputSwitchAvailable>
+                <header class=margin-top i18n="@@cGlobalSettingsYCbCr420WorkaroundHeader">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</header>
+                <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index"> <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
+                    <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                        <mat-grid-tile class=margin-left [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Port {{port}} of Card {{i}}</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value">
+                                <span [hidden]="!inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundActivated">activated</span>
+                                <span [hidden]="inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsYCbCr420WorkaroundDeactivated">deactivated</span>
+                            </content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input">
+                                <mat-checkbox #inputYCbCr420Workaround
+                                    color="primary"
+                                    [(ngModel)]="ycbcr420Workaround[i][port]"
+                                    (change)="onYCbCr420WorkaroundChanged($event, i, port)">
+                                </mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </ng-template>
+                <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation1">This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</div>
+                <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation2">To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</div>
+                <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation3">On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</div>
+            </div>
+        </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_theme.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n>Theme</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="theme-settings-content">
+            <button mat-raised-button (click)="buttonToggleTheme()" i18n>Light/Dark theme</button>
+        </div>
+    </mat-expansion-panel>
+
+</mat-accordion>

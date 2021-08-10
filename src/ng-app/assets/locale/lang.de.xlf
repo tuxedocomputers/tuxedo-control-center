@@ -44,9 +44,9 @@
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">111</context>
         </context-group>
-      </trans-unit><trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
-        <source>Theme</source>
-        <target phase-name="approval-1" state="signed-off">Farbschema</target>
+      </trans-unit><trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
+        <source>Settings</source>
+        <target state="translated">Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
           <context context-type="linenumber">123</context>
@@ -429,126 +429,126 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Lüftersteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html" approved="yes">
         <source>Fan profile</source>
         <target phase-name="approval-1" state="signed-off">Lüfterprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
         <source>Minimum fan speed</source>
         <target state="translated">Minimale Lüftergeschwindigkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
         <source>Offset fan speed</source>
         <target state="translated">Offset-Lüftergeschwindigkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsToggleFanChartsLabel" datatype="html">
         <source>Toggle fan table chart</source>
         <target state="translated">Lüftertabellendiagramm umschalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html" approved="yes">
         <source>Webcam</source>
         <target phase-name="approval-1" state="signed-off">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
         <source>Webcam status (on/off)</source>
         <target phase-name="approval-1" state="signed-off">Status der Webcam (an/aus)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html" approved="yes">
         <source>on</source>
         <target phase-name="approval-1" state="signed-off">an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html" approved="yes">
         <source>off</source>
         <target phase-name="approval-1" state="signed-off">aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
         <source>System control</source>
         <target state="translated">Systemsteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">270</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsODMProfileLabel" datatype="html">
         <source>System profile</source>
         <target state="translated">Systemprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">280</context>
+          <context context-type="linenumber">321</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsCpuHeaderLabel" datatype="html" approved="yes">
         <source>CPU settings</source>
         <target phase-name="approval-1" state="signed-off">CPU-Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">311</context>
+          <context context-type="linenumber">352</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html" approved="yes">
         <source>Number of logical cores</source>
         <target phase-name="approval-1" state="signed-off">Anzahl der logischen Kerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">319</context>
+          <context context-type="linenumber">360</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
         <source>Maximum performance</source>
         <target phase-name="approval-1" state="signed-off">Maximale Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">338</context>
+          <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
         <source>yes</source>
         <target phase-name="approval-1" state="signed-off">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">342</context>
+          <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
         <source>no</source>
         <target phase-name="approval-1" state="signed-off">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">343</context>
+          <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html" approved="yes">
         <source>Minimum frequency</source>
         <target phase-name="approval-1" state="translated">Minimale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html" approved="yes">
         <source>Maximum frequency</source>
         <target phase-name="approval-1" state="translated">Maximale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">386</context>
+          <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
         <source>Info</source>
@@ -819,68 +819,98 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">280</context>
         </context-group>
+      </trans-unit><trans-unit id="globalSettingsHeaderLabel" datatype="html">
+        <source>Settings</source>
+        <target state="translated">Einstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit><trans-unit id="globalSettingsHeaderDescription" datatype="html">
+        <source>
+            The settings area contains GUI settings and settings that affects all profiles.
+        </source>
+        <target state="translated">Der Einstellungsbereich enthält GUI-Einstellungen und Einstellungen, die sich auf all Profile auswirken.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit><trans-unit id="3a8495c30203624d57bcab938a7ddf4d0a02970d" datatype="html">
+        <source>Global profile settings</source>
+        <target state="translated">Globale Profileinstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsCPUSettingsLabel" datatype="html">
         <source>CPU Settings</source>
         <target phase-name="approval-1" state="translated">CPU-Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsCPUSettingsActivated" datatype="html">
         <source>activated</source>
         <target phase-name="approval-1" state="translated">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsCPUSettingsDeactivated" datatype="html">
         <source>deactivated</source>
         <target phase-name="approval-1" state="translated">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit><trans-unit id="243c85168792d2dacd3e7a9868767d947b7df7ac" datatype="html">
         <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
         <target phase-name="approval-1" state="translated">Beim Deaktivieren werden die CPU-Einstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsFanControlLabel" datatype="html">
         <source>Fan Control</source>
         <target phase-name="approval-1" state="translated">Lüftersteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsFanControlActivated" datatype="html">
         <source>activated</source>
         <target phase-name="approval-1" state="translated">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsFanControlDeactivated" datatype="html">
         <source>deactivated</source>
         <target phase-name="approval-1" state="translated">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit><trans-unit id="9e83642b4db54975444db5b67e6056038afc27a9" datatype="html">
         <source>On deactivate, the default automatic fan control is restored directly.</source>
         <target phase-name="approval-1" state="translated">Beim Deaktivieren wird unmittelbar die automatische standard Lüftersteuerung wiederhergestellt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit><trans-unit id="7fef6532d9612cea6b6a9afc2bb23f0f059ba08f" datatype="html">
+        <source>Chroma subsampling</source>
+        <target state="translated">Chroma-Subsampling</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundHeader" datatype="html">
         <source>Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</source>
         <target phase-name="approval-1" state="translated">Erzwinge Chroma Subsampling (Y'CbCr 4:2:0) wenn verfügbar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundLabel" datatype="html">
         <source>Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/></source>
@@ -889,42 +919,56 @@ Handelsregisternummer HRB 27755
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundActivated" datatype="html">
         <source>activated</source>
         <target phase-name="approval-1" state="translated">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundDeactivated" datatype="html">
         <source>deactivated</source>
         <target phase-name="approval-1" state="translated">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation1" datatype="html">
         <source>This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</source>
         <target phase-name="approval-1" state="translated">Diese Einstellung kann Flackern bei bestimmten HDMI-Kabeln bei 4k@60Hz beheben. Dafür wird eine verlustbehaftete Kompremierung verwendet um die Datenrate über das Kabel zu senken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation2" datatype="html">
         <source>To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer.</source>
         <target phase-name="approval-1" state="translated">Um sicherzugehen, dass die Einstellung übernommen wird müssen Sie den Monitor ab- und wieder einstecken oder den Computer neu starten.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit><trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation3" datatype="html">
         <source>On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</source>
         <target phase-name="approval-1" state="translated">Auf manchen Geräten werden die HDMI-Ports intern auch DisplayPort oder DP gennant und sind deswegen auch hier so gelistet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit><trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
+        <source>Theme</source>
+        <target phase-name="approval-1" state="signed-off">Farbschema</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit><trans-unit id="411a2a734bf65023e9d3b14a71d2e08ddf4032df" datatype="html">
+        <source>Light/Dark theme</source>
+        <target state="translated">Farbschema Hell/Dunkel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit><trans-unit id="cShutdownTimerInformations" datatype="html">
         <source>This sets a one time shutdown time. It will be automatically cleared on next
@@ -973,19 +1017,12 @@ Handelsregisternummer HRB 27755
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
-      </trans-unit><trans-unit id="9ad6cb3f49ff69d3715e3a31461ca3a196c1a0c9" datatype="html">
-        <source>Global Settings</source>
-        <target phase-name="approval-1" state="translated">Globale Einstellungen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
       </trans-unit><trans-unit id="cryptPasswordTabTitle" datatype="html">
         <source>Change Crypt Password</source>
         <target phase-name="approval-1" state="translated">Verschlüsselungspasswort ändern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit><trans-unit id="nocryptinstall" datatype="html">
         <source>

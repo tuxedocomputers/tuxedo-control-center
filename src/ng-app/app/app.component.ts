@@ -129,14 +129,6 @@ export class AppComponent implements OnInit, OnDestroy {
         return this.utils.getLanguageData(langId);
     }
 
-    public buttonToggleTheme() {
-        if (this.utils.getThemeClass() === 'light-theme') {
-            this.utils.setThemeDark();
-        } else {
-            this.utils.setThemeLight();
-        }
-    }
-
     public buttonToggleLanguage() {
         this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
         this.updateLanguageName();

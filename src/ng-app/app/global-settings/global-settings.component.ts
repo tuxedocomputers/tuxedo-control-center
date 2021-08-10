@@ -122,4 +122,12 @@ export class GlobalSettingsComponent implements OnInit {
             });
         }
     }
+
+    public buttonToggleTheme() {
+        if (this.utils.getThemeClass() === 'light-theme') {
+            this.utils.setThemeDark();
+        } else {
+            this.utils.setThemeLight();
+        }
+    }
 }
