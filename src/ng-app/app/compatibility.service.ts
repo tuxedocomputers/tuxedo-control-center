@@ -45,6 +45,12 @@ export class CompatibilityService {
     return this.i18n({ value: 'This feature is not supported on your model.' });
   }
 
+  get hasODMProfileControl(): boolean {
+      return this.tccDbus.tuxedoWmiAvailable.value &&
+        this.tccDbus.odmProfilesAvailable.value !== undefined &&
+        this.tccDbus.odmProfilesAvailable.value.length > 0;
+  }
+
   get tccDbusAvailable() {
     return this.tccDbus.available;
   }

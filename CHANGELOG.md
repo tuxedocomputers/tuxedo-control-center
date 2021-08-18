@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.1.0] - UNRELEASED
+### Added
+- Profiles: *System profile* selection for TCC profiles for certain devices (more to come).
+  The system profiles usually affect power allowance and sometimes fan control when not
+  using the TCC fan control.
+- Profiles: Fan control parameter *Minimum fan speed* applied to existing fan curves.
+- Profiles: Fan control parameter *Offset fan speed* applied to existing fan curves.
+- Togglable visualization of fan curves.
+- AMD (amdgpu): Chroma subsampling activation for external displays (experimental).
+  Usable on many AMD CPU devices without discrete graphics card.
+- Tray: Menu option to activate a profile temporarily.
+- Tray: Menu option to toggle temporary powersave prevention.
+- Tools: GUI for changing crypt password.
+- Option to turn off TCC fan control in global settings.
+- Option to turn off TCC CPU control in global settings.
+
+### Changed
+- TCC GUI title now using window manager default title.
+- Better hiding of not available options for clarity both regarding
+  available devices and features for these.
+- Theme selection moved to settings.
+- *Settings* button moved from tools to menu side.
+
+### Fixed
+- *Cool and breezy*/*Extreme powersave* profiles that in certain cases did not apply
+  the CPU limits properly.
+- Unreliable CPU info max freq for AMD devices sometimes yields max non boost freq
+  sometimes boost freq and sometimes a seemingly random number depending on which
+  kernel used around 5.11. Now changed to consistently use available freqs.
+
 ## [1.0.14] - 2021-05-20
 ### Added
 - Systeminfo clarifications

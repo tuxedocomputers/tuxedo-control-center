@@ -1,9 +1,29 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, screen } from 'electron';
+/*!
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 import { TccDBusController } from '../common/classes/TccDBusController';
+import { TccProfile } from '../common/models/TccProfile';
+import { TccTray } from './TccTray';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -19,12 +39,16 @@ if (startTCCAccelerator === '') {
 }
 
 let tccWindow: Electron.BrowserWindow;
-let tray: Electron.Tray;
+const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
+
+let profilesHash;
+
+let powersaveBlockerId = undefined;
 
 // Ensure that only one instance of the application is running
 const applicationLock = app.requestSingleInstanceLock();
@@ -50,7 +74,7 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
     activateTccGui();
 });
 
-app.whenReady().then( () => {
+app.whenReady().then( async () => {
     if (startTCCAccelerator !== 'none') {
         const success = globalShortcut.register(startTCCAccelerator, () => {
             activateTccGui();
@@ -58,43 +82,94 @@ app.whenReady().then( () => {
         if (!success) { console.log('Failed to register global shortcut'); }
     }
 
-    createTccTray();
+    tray.state.tccGUIVersion = 'v' + app.getVersion();
+    tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+    tray.state.primeQuery = primeSelectQuery();
+    tray.state.isPrimeSupported = primeSupported();
+    await updateTrayProfiles();
+    tray.events.startTCCClick = () => activateTccGui();
+    tray.events.exitClick = () => quitCurrentTccSession();
+    tray.events.autostartTrayToggle = () => {
+        if (tray.state.isAutostartTrayInstalled) {
+            removeAutostartTray();
+        } else {
+            installAutostartTray();
+        }
+        tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+        tray.create();
+    };
+    const messageBoxprimeSelectAccept = {
+        type: 'question',
+        buttons: [ 'yes', 'cancel' ],
+        message: 'Change graphics configuration and shutdown?'
+    };
+    tray.events.selectNvidiaClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
+    };
+    tray.events.selectBuiltInClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
+    };
+    tray.events.profileClick = (profileName: string) => { setTempProfile(profileName); };
+    tray.create();
+
+    tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
+    tray.events.powersaveBlockerClick = () => {
+        if (powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId)) {
+            powerSaveBlocker.stop(powersaveBlockerId);
+        } else {
+            powersaveBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+        }
+        tray.state.powersaveBlockerActive = powerSaveBlocker.isStarted(powersaveBlockerId);
+        tray.create();
+    }
+
     if (!trayOnlyOption) {
         activateTccGui();
     }
 
-    if (!noTccdVersionCheck) {
-        // Regularly check if running tccd version is different to running gui version
-        const tccdVersionCheckInterval = 5000;
-        setInterval(async () => {
-            if (tccDBus === undefined) {
-                tccDBus = new TccDBusController();
-                await tccDBus.init();
-            } else if (!await tccDBus.dbusAvailable()) {
-                await tccDBus.init();
-            }
-
-            if (await tccDBus.tuxedoWmiAvailable()) {
-                const tccdVersion = await tccDBus.tccdVersion();
-                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                    console.log('Other tccd version detected, restarting..');
-                    process.on('exit', function () {
-                        child_process.spawn(
-                            process.argv[0],
-                            process.argv.slice(1).concat(['--tray']),
-                            {
-                                cwd: process.cwd(),
-                                detached : true,
-                                stdio: "inherit"
-                            }
-                        );
-                    });
-                    process.exit();
+    tccDBus = new TccDBusController();
+    tccDBus.init().then(() => {
+        if (!noTccdVersionCheck) {
+            // Regularly check if running tccd version is different to running gui version
+            const tccdVersionCheckInterval = 5000;
+            setInterval(async () => {
+                if (await tccDBus.tuxedoWmiAvailable()) {
+                    const tccdVersion = await tccDBus.tccdVersion();
+                    if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                        console.log('Other tccd version detected, restarting..');
+                        process.on('exit', function () {
+                            child_process.spawn(
+                                process.argv[0],
+                                process.argv.slice(1).concat(['--tray']),
+                                {
+                                    cwd: process.cwd(),
+                                    detached : true,
+                                    stdio: "inherit"
+                                }
+                            );
+                        });
+                        process.exit();
+                    }
                 }
-            }
+            }, tccdVersionCheckInterval);
+        }
 
-        }, tccdVersionCheckInterval);
-    }
+        tccDBus.consumeModeReapplyPending().then((result) => {
+            if (result) {
+                child_process.exec("xset dpms force off && xset dpms force on");
+            }
+        });
+        tccDBus.onModeReapplyPendingChanged(() => {
+            tccDBus.consumeModeReapplyPending().then((result) => {
+                if (result) {
+                    child_process.exec("xset dpms force off && xset dpms force on");
+                }
+            });
+        });
+    });
+
+    const profilesCheckInterval = 4000;
+    setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
 });
 
 app.on('will-quit', (event) => {
@@ -106,7 +181,7 @@ app.on('will-quit', (event) => {
         tccWindow.close();
         tccWindow = null;
     }
-    if (!tray || tray.isDestroyed()) {
+    if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
         app.exit(0);
@@ -114,7 +189,7 @@ app.on('will-quit', (event) => {
 });
 
 app.on('window-all-closed', () => {
-    if (!tray || tray.isDestroyed()) {
+    if (!tray.isActive()) {
         quitCurrentTccSession();
     }
 });
@@ -128,62 +203,40 @@ function activateTccGui() {
     }
 }
 
-function createTccTray() {
-    const trayInstalled = isAutostartTrayInstalled();
-    const trayIcon =  path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png');
-    if (!tray) {
-        tray = new Tray(trayIcon);
-        tray.setTitle('TUXEDO Control Center');
-        tray.setToolTip('TUXEDO Control Center');
+async function getProfiles(): Promise<TccProfile[]> {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    let result = [];
+    if (!await dbus.dbusAvailable()) return [];
+    try {
+        const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
+        result = profiles;
+    } catch (err) {
+        console.log('Error: ' + err);
     }
-    const primeQuery = primeSelectQuery();
-    const isPrimeSupported = primeSupported();
-    const messageBoxprimeSelectAccept = {
-        type: 'question',
-        buttons: ['yes', 'cancel' ],
-        message: 'Change graphics configuration and shutdown?'
-    };
-    const contextMenu = Menu.buildFromTemplate([
-        { label: 'TUXEDO Control Center', type: 'normal', click: () => { activateTccGui(); }, },
-        {
-                label: 'Tray autostart', type: 'checkbox', checked: trayInstalled,
-                click: () => trayInstalled ? menuRemoveAutostartTray() : menuInstallAutostartTray()
-        },
-        { type: 'separator', visible: isPrimeSupported },
-        {
-            label: 'Graphics',
-            visible: isPrimeSupported,
-            submenu: [
-                {
-                    label: 'Select NVIDIA',
-                    type: 'normal',
-                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); } },
-                    visible: primeQuery !== 'on'
-                },
-                {
-                    label: 'Select built-in',
-                    type: 'normal',
-                    click: () => { if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); } },
-                    visible: primeQuery !== 'off'
-                }
-            ]
-        },
-        { type: 'separator' },
-        { label: 'v' + app.getVersion(), type: 'normal', enabled: false },
-        { type: 'separator' },
-        { label: 'Exit', type: 'normal', click: () => { quitCurrentTccSession(); } }
-    ]);
-    tray.setContextMenu(contextMenu);
+    dbus.disconnect();
+    return result;
 }
 
-function menuInstallAutostartTray() {
-    installAutostartTray();
-    createTccTray();
+async function setTempProfile(profileName: string) {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
+    dbus.disconnect();
+    return result;
 }
 
-function menuRemoveAutostartTray() {
-    removeAutostartTray();
-    createTccTray();
+async function getActiveProfile(): Promise<TccProfile> {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    let result = undefined;
+    if (!await dbus.dbusAvailable()) return undefined;
+    try {
+        result = JSON.parse(await dbus.getActiveProfileJSON());
+    } catch {
+    }
+    dbus.disconnect();
+    return result;
 }
 
 function createTccWindow() {
@@ -200,7 +253,7 @@ function createTccWindow() {
         title: 'TUXEDO Control Center',
         width: windowWidth,
         height: windowHeight,
-        frame: false,
+        frame: true,
         resizable: true,
         minWidth: windowWidth,
         minHeight: windowHeight,
@@ -210,6 +263,11 @@ function createTccWindow() {
         }
     });
 
+    // Hide menu bar
+    tccWindow.setMenuBarVisibility(false);
+    // Workaround to menu bar appearing after full screen state
+    tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
+
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
     tccWindow.loadFile(indexPath);
     tccWindow.on('closed', () => {
@@ -218,9 +276,8 @@ function createTccWindow() {
 }
 
 function quitCurrentTccSession() {
-    if (tray) {
+    if (tray.isActive()) {
         tray.destroy();
-        tray = null;
     }
 
     app.quit();
@@ -234,18 +291,23 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
     }
 });
 
-ipcMain.on('exec-cmd-async', (event, arg) => {
-    child_process.exec(arg, (err, stdout, stderr) => {
-        if (err) {
-            event.reply('exec-cmd-result', { data: stderr, error: err });
-        } else {
-            event.reply('exec-cmd-result', { data: stdout, error: err });
-        }
+ipcMain.handle('exec-cmd-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        child_process.exec(arg, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
     });
 });
 
 ipcMain.on('spawn-external-async', (event, arg) => {
-    child_process.spawn(arg, { detached: true, stdio: 'ignore' });
+    child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
+        console.log("\"" + arg + "\" could not be executed.")
+        dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
+    });
 });
 
 function installAutostartTray(): boolean {
@@ -351,4 +413,20 @@ function primeSelectSet(status: string): boolean {
     }
 
     return result;
+}
+
+async function updateTrayProfiles() {
+    try {
+        const updatedActiveProfile = await getActiveProfile();
+        const updatedProfiles = await getProfiles();
+        if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
+            JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
+        ) {
+            tray.state.activeProfile = updatedActiveProfile;
+            tray.state.profiles = updatedProfiles;
+            await tray.create();
+        }
+    } catch (err) {
+        console.log('updateTrayProfiles() exception => ' + err);
+    }
 }

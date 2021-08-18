@@ -22,6 +22,7 @@ export interface ITccProfile {
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
+    odmProfile: ITccODMProfile;
 }
 
 export class TccProfile implements ITccProfile {
@@ -30,12 +31,14 @@ export class TccProfile implements ITccProfile {
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
+    odmProfile: ITccODMProfile;
     public constructor(init: ITccProfile) {
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
-        this.fan.fanProfile = init.fan.fanProfile;
+        this.fan = JSON.parse(JSON.stringify(init.fan));
+        this.odmProfile = JSON.parse(JSON.stringify(init.odmProfile));
     }
 }
 
@@ -62,6 +65,12 @@ interface ITccProfileWebCam {
 interface ITccProfileFanControl {
     useControl: boolean;
     fanProfile: string;
+    minimumFanspeed: number;
+    offsetFanspeed: number;
+}
+
+interface ITccODMProfile {
+    name: string
 }
 
 export const defaultProfiles: ITccProfile[] = [
@@ -86,8 +95,11 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Balanced'
-        }
+            fanProfile: 'Balanced',
+            minimumFanspeed: 0,
+            offsetFanspeed: 0
+        },
+        odmProfile: { name: undefined }
     },
     {
         name: 'Cool and breezy',
@@ -110,8 +122,11 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Quiet'
-        }
+            fanProfile: 'Quiet',
+            minimumFanspeed: 0,
+            offsetFanspeed: 0
+        },
+        odmProfile: { name: undefined }
     },
     {
         name: 'Powersave extreme',
@@ -134,8 +149,11 @@ export const defaultProfiles: ITccProfile[] = [
         },
         fan: {
             useControl: true,
-            fanProfile: 'Silent'
-        }
+            fanProfile: 'Silent',
+            minimumFanspeed: 0,
+            offsetFanspeed: 0
+        },
+        odmProfile: { name: undefined }
     }
 ];
 
@@ -160,8 +178,11 @@ export const defaultCustomProfile: ITccProfile = {
     },
     fan: {
         useControl: true,
-        fanProfile: 'Balanced'
-    }
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined }
 };
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
@@ -185,8 +206,11 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     },
     fan: {
         useControl: true,
-        fanProfile: 'Balanced'
-    }
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined }
 };
 
 export const profileImageMap = new Map<string, string>();

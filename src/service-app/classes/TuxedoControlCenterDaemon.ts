@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,7 +25,7 @@ import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
@@ -33,10 +33,13 @@ import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
+import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { ODMProfileWorker } from './ODMProfileWorker';
+import { CpuController } from '../../common/classes/CpuController';
 
 const tccPackage = require('../../package.json');
 
@@ -93,12 +96,21 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         this.dbusData.tccdVersion = tccPackage.version;
 
+        // Fill exported profile lists (for GUI)
+        const defaultProfilesFilled = this.config.getDefaultProfiles().map(this.fillDeviceSpecificDefaults)
+        const customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+        this.dbusData.profilesJSON = JSON.stringify(defaultProfilesFilled.concat(customProfilesFilled));
+        this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
+        this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
+
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
+        this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
+        this.workers.push(new ODMProfileWorker(this));
 
         this.startWorkers();
 
@@ -132,6 +144,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.logLine('Tccd Exception');
         const errorLine = err.name + ': ' + err.message;
         this.logLine(errorLine);
+        if (err.stack !== undefined) {
+            this.logLine(err.stack);
+        }
         if (this.started) {
             this.onExit();
         }
@@ -191,22 +206,94 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
+    private syncOutputPortsSetting() {
+        let missingSetting = false;
+
+        let outputPorts = TuxedoIOAPI.getOutputPorts();
+        // Delete additional cards from settings
+        if (this.settings.ycbcr420Workaround.length > outputPorts.length) {
+            this.logLine('Additional ycbcr420Workaround card in settings');
+            this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts.length)
+            missingSetting = true;
+        }
+        for (let card = 0; card < outputPorts.length; card++) {
+            // Add card to settings if missing
+            if (this.settings.ycbcr420Workaround.length <= card) {
+                this.logLine('Missing ycbcr420Workaround card in settings');
+                this.settings.ycbcr420Workaround[card] = {};
+                missingSetting = true;
+            }
+            // Delete additional ports from settings
+            for (let settingsPort in this.settings.ycbcr420Workaround[card]) {
+                let stillAvailable: boolean = false;
+                for (let port of outputPorts[card]) {
+                    if (settingsPort === port) {
+                        stillAvailable = true;
+                    }
+                }
+                if (!stillAvailable) {
+                    this.logLine('Additional ycbcr420Workaround port in settings');
+                    delete this.settings.ycbcr420Workaround[card][settingsPort];
+                    missingSetting = true;
+                }
+            }
+            // Add port to settings if missing
+            for (let port of outputPorts[card]) {
+                if (this.settings.ycbcr420Workaround[card][port] === undefined) {
+                    this.logLine('Missing ycbcr420Workaround port in settings');
+                    this.settings.ycbcr420Workaround[card][port] = false;
+                    missingSetting = true;
+                }
+            }
+        }
+
+        return missingSetting;
+    }
+
     private readOrCreateConfigurationFiles() {
         try {
             this.settings = this.config.readSettings();
+            var missingSetting: boolean = false;
 
             if (this.settings.stateMap === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing statemap');
-                throw Error('Missing statemap');
+                this.settings.stateMap = this.config.getDefaultSettings().stateMap;
+                missingSetting = true;
+            }
+            if (this.settings.cpuSettingsEnabled === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing cpuSettingsEnabled setting');
+                this.settings.cpuSettingsEnabled = this.config.getDefaultSettings().cpuSettingsEnabled;
+                missingSetting = true;
+            }
+            if (this.settings.fanControlEnabled === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing fanControlEnabled setting');
+                this.settings.fanControlEnabled = this.config.getDefaultSettings().fanControlEnabled;
+                missingSetting = true;
+            }
+            if (this.settings.ycbcr420Workaround === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing ycbcr420Workaround setting');
+                this.settings.ycbcr420Workaround = this.config.getDefaultSettings().ycbcr420Workaround;
+                missingSetting = true;
+            }
+            missingSetting = this.syncOutputPortsSetting();
+
+            if (missingSetting) {
+                throw Error('Missing setting');
             }
         } catch (err) {
-            this.settings = this.config.getDefaultSettings();
             try {
+                if (this.settings === undefined) {
+                    this.settings = this.config.getDefaultSettings();
+                    this.syncOutputPortsSetting();
+                }
                 this.config.writeSettings(this.settings);
-                this.logLine('Wrote default settings: ' + this.config.pathSettings);
+                this.logLine('Filled missing settings with default: ' + this.config.pathSettings);
             } catch (err) {
-                this.logLine('Failed to write default settings: ' + this.config.pathSettings);
+                this.logLine('Failed to fill missing settings with default: ' + this.config.pathSettings);
             }
         }
 
@@ -298,6 +385,107 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             chosenFanProfile = this.config.getDefaultFanProfiles()[0];
         }
         return chosenFanProfile;
+    }
+
+    updateDBusActiveProfileData(): void {
+        this.dbusData.activeProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(this.getCurrentProfile()));
+    }
+
+    fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
+        const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+        const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
+        if (profile.cpu.onlineCores === undefined) {
+            profile.cpu.onlineCores = cpu.cores.length;
+        }
+    
+        if (profile.cpu.useMaxPerfGov === undefined) {
+            profile.cpu.useMaxPerfGov = false;
+        }
+    
+        const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
+            profile.cpu.scalingMinFrequency = minFreq;
+        }
+    
+        const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT()
+        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        const boost = cpu.boost.readValueNT();
+        if (boost !== undefined) {
+            maxFreq += 1000000;
+        }
+        const reducedAvailableFreq = boost === undefined ?
+                                         cpu.cores[0].getReducedAvailableFreqNT() :
+                                         cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        // Handle defaults
+        if (profile.cpu.scalingMaxFrequency === undefined) {
+            profile.cpu.scalingMaxFrequency = maxFreq;
+        } else if (profile.cpu.scalingMaxFrequency === -1) {
+            profile.cpu.scalingMaxFrequency = reducedAvailableFreq;
+        }
+        // Enforce boundaries
+        if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
+            profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
+        } else if (profile.cpu.scalingMaxFrequency > maxFreq) {
+            profile.cpu.scalingMaxFrequency = maxFreq;
+        }
+    
+        if (profile.cpu.governor === undefined) {
+            profile.cpu.governor = defaultCustomProfile.cpu.governor;
+        }
+    
+        if (profile.cpu.energyPerformancePreference === undefined) {
+            profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
+        }
+    
+        if (profile.cpu.noTurbo === undefined) {
+            profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
+        }
+    
+        if (profile.webcam === undefined) {
+            profile.webcam = {
+                useStatus: false,
+                status: true
+            };
+        }
+    
+        if (profile.webcam.useStatus === undefined) {
+            profile.webcam.useStatus = false;
+        }
+    
+        if (profile.webcam.status === undefined) {
+            profile.webcam.status = true;
+        }
+    
+        if (profile.fan === undefined) {
+            profile.fan = {
+                useControl: true,
+                fanProfile: 'Balanced',
+                minimumFanspeed: 0,
+                offsetFanspeed: 0
+            };
+        } else {
+            profile.fan.useControl = true;
+            if (profile.fan.minimumFanspeed === undefined) {
+                profile.fan.minimumFanspeed = 0;
+            }
+            if (profile.fan.offsetFanspeed === undefined) {
+                profile.fan.offsetFanspeed = 0;
+            }
+        }
+
+        const defaultODMProfileName: ObjWrapper<string> = { value: '' };
+        TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
+        if (profile.odmProfile === undefined) {
+            profile.odmProfile = {
+                name: defaultODMProfileName.value
+            };
+        }
+
+        if (profile.odmProfile.name === undefined) {
+            profile.odmProfile.name = defaultODMProfileName.value;
+        }
+
+        return profile;
     }
 
     /**

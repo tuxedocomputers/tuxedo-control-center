@@ -35,7 +35,9 @@ export class CpuWorker extends DaemonWorker {
     }
 
     public onStart() {
-        this.applyCpuProfile(this.tccd.getCurrentProfile());
+        if (this.tccd.settings.cpuSettingsEnabled) {
+            this.applyCpuProfile(this.tccd.getCurrentProfile());
+        }
     }
 
     public onWork() {
@@ -43,7 +45,7 @@ export class CpuWorker extends DaemonWorker {
         // apply profile again
 
         try {
-            if (!this.validateCpuFreq()) {
+            if (this.tccd.settings.cpuSettingsEnabled && !this.validateCpuFreq()) {
                 this.tccd.logLine('CpuWorker: Incorrect settings, reapplying profile');
                 this.applyCpuProfile(this.tccd.getCurrentProfile());
             }
@@ -211,8 +213,9 @@ export class CpuWorker extends DaemonWorker {
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
             if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+                const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 const coreMinFreq = core.cpuinfoMinFreq.readValue();
-                const coreMaxFreq = core.cpuinfoMaxFreq.readValue();
+                const coreMaxFreq = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
                     const minFreq = core.scalingMinFreq.readValue();
                     let minFreqProfile = profile.cpu.scalingMinFrequency;

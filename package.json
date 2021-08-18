@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "1.0.14",
+  "version": "1.1.0",
   "main": "./dist/tuxedo-control-center/e-app/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -51,7 +51,9 @@
     "@angular/platform-browser": "~8.0.1",
     "@angular/platform-browser-dynamic": "~8.0.1",
     "@angular/router": "~8.0.1",
+    "chart.js": "^2.9.3",
     "dbus-next": "^0.8.2",
+    "ng2-charts": "^2.4.2",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

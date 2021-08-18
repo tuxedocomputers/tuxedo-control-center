@@ -2,6 +2,18 @@
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512">
+                        <use href="./assets/images/icon_changecryptpassword.svg#Icon"></use>
+                    </svg></mat-icon>
+                <ng-container i18n="@@cryptPasswordTabTitle">Change Crypt Password</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-change-crypt-password></app-change-crypt-password>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
                 <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_stopwatch.svg#Icon"></use></svg></mat-icon>
                 <ng-container>Shutdown Timer</ng-container>
             </mat-panel-title>

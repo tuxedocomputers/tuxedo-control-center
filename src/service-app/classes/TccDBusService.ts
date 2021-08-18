@@ -61,6 +61,10 @@ export class TccDBusService extends DaemonWorker {
     public onWork(): void {
         // Make sure wmiAvailability info is updated. Is done here until it gets its own worker.
         this.dbusData.tuxedoWmiAvailable = TuxedoIOAPI.wmiAvailable();
+
+        if (this.dbusData.modeReapplyPending) {
+            this.interface.ModeReapplyPendingChanged();
+        }
     }
 
     public onExit(): void {

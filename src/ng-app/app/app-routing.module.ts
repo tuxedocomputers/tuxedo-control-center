@@ -25,6 +25,7 @@ import { InfoComponent } from './info/info.component';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 import { ShutdownTimerComponent } from "./shutdown-timer/shutdown-timer.component";
 import { ToolsComponent } from "./tools/tool.component";
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'cpu-dashboard', pathMatch: 'full' },
@@ -33,7 +34,8 @@ const routes: Routes = [
     { path: 'support', component: SupportComponent },
     { path: 'info', component: InfoComponent },
     { path: 'cpu-dashboard', component: CpuDashboardComponent },
-    { path: 'tools', component: ToolsComponent }
+    { path: 'tools', component: ToolsComponent },
+    { path: 'global-settings', component: GlobalSettingsComponent }
 ];
 
 @NgModule({

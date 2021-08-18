@@ -88,16 +88,17 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             this.inputActive = false;
             if (params.profileName) {
                 this.currentProfile = this.config.getProfileByName(params.profileName);
-                if (this.config.getCustomProfileByName(this.currentProfile.name) !== undefined) {
+                if (this.currentProfile === undefined) {
+                    this.config.setCurrentEditingProfile(undefined);
+                    this.router.navigate(['profile-manager']);
+                } else if (this.config.getCustomProfileByName(this.currentProfile.name) !== undefined) {
                     this.config.setCurrentEditingProfile(this.currentProfile.name);
                 } else {
                     this.config.setCurrentEditingProfile(undefined);
                 }
             } else {
                 this.config.setCurrentEditingProfile(undefined);
-            }
-            if (this.currentProfile !== undefined) {
-                this.utils.fillDefaultValuesProfile(this.currentProfile);
+                this.router.navigate(['profile-manager']);
             }
         });
 

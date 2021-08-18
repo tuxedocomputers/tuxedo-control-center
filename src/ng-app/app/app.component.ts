@@ -46,6 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    public useTCCTitleBar = false;
+
     constructor(
         private electron: ElectronService,
         private config: ConfigService,
@@ -63,7 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.updateLanguageName();
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
-        this.subscriptions.add(this.state.activeProfileObserver.subscribe(activeProfile => { this.getSettings(); }));
+        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Wait for the first true/false availability announcement, undefined is ignored
@@ -103,7 +105,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public getSettings(): ITccSettings {
-        this.activeProfileName = this.state.getActiveProfile().name;
+        if (this.state.getActiveProfile()) {
+            this.activeProfileName = this.state.getActiveProfile().name;
+        }
         return this.config.getSettings();
     }
 
@@ -123,14 +127,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public getLanguageData(langId: string) {
         return this.utils.getLanguageData(langId);
-    }
-
-    public buttonToggleTheme() {
-        if (this.utils.getThemeClass() === 'light-theme') {
-            this.utils.setThemeDark();
-        } else {
-            this.utils.setThemeLight();
-        }
     }
 
     public buttonToggleLanguage() {

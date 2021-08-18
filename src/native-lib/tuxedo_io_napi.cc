@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,7 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <napi.h>
+#include <string>
 #include <cmath>
+#include <libudev.h>
+#include <vector>
 #include "tuxedo_io_lib/tuxedo_io_api.hh"
 
 using namespace Napi;
@@ -42,9 +45,32 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+static inline bool CheckMinVersionByStrings(std::string version, std::string minVersion) {
+    unsigned modVersionMajor, modVersionMinor, modVersionPatch, modAPIMinVersionMajor, modAPIMinVersionMinor, modAPIMinVersionPatch;
+    if (sscanf(version.c_str(), "%u.%u.%u", &modVersionMajor, &modVersionMinor, &modVersionPatch) < 3 ||
+            sscanf(minVersion.c_str(), "%u.%u.%u", &modAPIMinVersionMajor, &modAPIMinVersionMinor, &modAPIMinVersionPatch) < 3) {
+        return false;
+    }
+
+    if (modVersionMajor < modAPIMinVersionMajor ||
+            (modVersionMajor == modAPIMinVersionMajor && modVersionMinor < modAPIMinVersionMinor) ||
+            (modVersionMajor == modAPIMinVersionMajor && modVersionMinor == modAPIMinVersionMinor && modVersionPatch < modAPIMinVersionPatch)) {
+        return false;
+    }
+
+    return true;
+}
+
 Boolean WmiAvailable(const CallbackInfo &info) {
     TuxedoIOAPI io;
-    bool availability = io.WmiAvailable();
+
+    std::string modVersion, modAPIMinVersion;
+
+    bool availability = io.GetModuleVersion(modVersion) &&
+                        io.GetModuleAPIMinVersion(modAPIMinVersion) &&
+                        CheckMinVersionByStrings(modVersion, modAPIMinVersion) &&
+                        io.WmiAvailable();
+
     return Boolean::New(info.Env(), availability);
 }
 
@@ -119,12 +145,86 @@ Boolean GetWebcamStatus(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Array GetOutputPorts(const CallbackInfo &info) {
+    Array result;
+
+    struct udev *udev_context = udev_new();
+    if (!udev_context) {
+        // Placeholder for error log output
+    }
+    else {
+        struct udev_enumerate *drm_devices = udev_enumerate_new(udev_context);
+        if (!drm_devices) {
+            // Placeholder for error log output
+        }
+        else {
+            struct udev_list_entry *drm_devices_iterator, *drm_devices_entry;
+            if (udev_enumerate_add_match_subsystem(drm_devices, "drm") < 0
+                    || udev_enumerate_add_match_sysname(drm_devices, "card*-*-*") < 0
+                    || udev_enumerate_scan_devices(drm_devices) < 0
+                    || (drm_devices_iterator = udev_enumerate_get_list_entry(drm_devices)) == NULL) {
+                // Placeholder for error log output
+            }
+            else {
+                result = Array::New(info.Env());
+
+                udev_list_entry_foreach(drm_devices_entry, drm_devices_iterator) {
+                    std::string path = udev_list_entry_get_name(drm_devices_entry);
+                    std::string name = path.substr(path.rfind("/")+1);
+                    int card_number = std::stoi(name.substr(4, name.find("-") - 4));
+                    if (!result.Has(card_number)) {
+                        result[card_number] = Array::New(info.Env());
+                    }
+                    result.Get(card_number).As<Array>()[result.Get(card_number).As<Array>().Length()] = name.substr(name.find("-")+1);
+                }
+            }
+            udev_enumerate_unref(drm_devices);
+        }
+        udev_unref(udev_context);
+    }
+
+    return result;
+}
+
+Boolean GetAvailableODMPerformanceProfiles(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetAvailableODMPerformanceProfiles - invalid argument"); }
+    TuxedoIOAPI io;
+    Object objWrapper = info[0].As<Object>();
+    std::vector<std::string> profiles;
+    bool result = io.GetAvailableODMPerformanceProfiles(profiles);
+    auto arr = Array::New(info.Env());
+    for (std::size_t i = 0; i < profiles.size(); ++i) {
+        arr.Set(i, profiles[i]);
+    }
+    objWrapper.Set("value", arr);
+    return Boolean::New(info.Env(), result);
+}
+
+Boolean SetODMPerformanceProfile(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsString()) { throw Napi::Error::New(info.Env(), "SetODMPerformanceProfile - invalid argument"); }
+    std::string performanceProfile = info[0].As<String>();
+    TuxedoIOAPI io;
+    bool result = io.SetODMPerformanceProfile(performanceProfile);
+    return Boolean::New(info.Env(), result);
+}
+
+Boolean GetDefaultODMPerformanceProfile(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsObject()) { throw Napi::Error::New(info.Env(), "GetDefaultODMPerformanceProfile - invalid argument"); }
+    Object objWrapper = info[0].As<Object>();
+    TuxedoIOAPI io;
+    std::string profileName;
+    bool result = io.GetDefaultODMPerformanceProfile(profileName);
+    objWrapper.Set("value", profileName);
+    return Boolean::New(info.Env(), result);
+}
+
 Object Init(Env env, Object exports) {
     // General
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
     exports.Set(String::New(env, "wmiAvailable"), Function::New(env, WmiAvailable));
 
     exports.Set(String::New(env, "setEnableModeSet"), Function::New(env, SetEnableModeSet));
+    exports.Set(String::New(env, "getOutputPorts"), Function::New(env, GetOutputPorts));
 
     // Fan control
     exports.Set(String::New(env, "getNumberFans"), Function::New(env, GetNumberFans));
@@ -136,6 +236,11 @@ Object Init(Env env, Object exports) {
     // Webcam
     exports.Set(String::New(env, "setWebcamStatus"), Function::New(env, SetWebcamStatus));
     exports.Set(String::New(env, "getWebcamStatus"), Function::New(env, GetWebcamStatus));
+
+    // ODM Profiles
+    exports.Set(String::New(env, "getAvailableODMPerformanceProfiles"), Function::New(env, GetAvailableODMPerformanceProfiles));
+    exports.Set(String::New(env, "setODMPerformanceProfile"), Function::New(env, SetODMPerformanceProfile));
+    exports.Set(String::New(env, "getDefaultODMPerformanceProfile"), Function::New(env, GetDefaultODMPerformanceProfile));
 
     return exports;
 }

@@ -36,8 +36,8 @@ export class ProgramManagementService {
     this.isCheckingInstallation.set(name, true);
     return new Promise<boolean>(async (resolve) => {
       this.utils.execCmd('which ' + name).then((result) => {
-        resolve(true);
         this.isCheckingInstallation.set(name, false);
+        resolve(true);
       }).catch(() => {
         this.isCheckingInstallation.set(name, false);
         resolve(false);

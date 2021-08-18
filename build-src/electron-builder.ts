@@ -61,7 +61,7 @@ async function buildDeb(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         deb: {
-            depends: ['tuxedo-keyboard (>= 3.0.0)', 'libappindicator3-1'],
+            depends: ['tuxedo-keyboard (>= 3.0.6)', 'libappindicator3-1'],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
@@ -119,7 +119,7 @@ async function buildSuseRpm(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         rpm: {
-            depends: [ 'tuxedo-keyboard >= 3.0.0', 'libappindicator3-1' ],
+            depends: [ 'tuxedo-keyboard >= 3.0.6', 'libappindicator3-1' ],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh',
