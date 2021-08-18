@@ -830,7 +830,7 @@ Handelsregisternummer HRB 27755
         <source>
             The settings area contains GUI settings and settings that affects all profiles.
         </source>
-        <target state="translated">Der Einstellungsbereich enthält GUI-Einstellungen und Einstellungen, die sich auf all Profile auswirken.</target>
+        <target state="translated">Der Einstellungsbereich enthält GUI-Einstellungen und Einstellungen, die sich auf alle Profile auswirken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">25</context>
