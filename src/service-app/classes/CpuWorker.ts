@@ -235,10 +235,9 @@ export class CpuWorker extends DaemonWorker {
                     const maxFreq = core.scalingMaxFreq.readValue();
                     let maxFreqProfile = profile.cpu.scalingMaxFrequency;
                     if (maxFreqProfile === -1) {
-                        if (this.cpuCtrl.boost === undefined) {
+                        if (!this.cpuCtrl.boost.isAvailable()) {
                             maxFreqProfile = core.getReducedAvailableFreq();
-                        }
-                        else {
+                        } else {
                             maxFreqProfile = coreMaxFreq;
                         }
                     } else if (maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq || profile.cpu.useMaxPerfGov) {
