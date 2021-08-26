@@ -32,7 +32,7 @@ tuxedo-control-center
    ```
    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
-   sudo apt install -y git gcc g++ make nodejs
+   sudo apt install -y git gcc g++ make nodejs npm
    ```
 2. Clone & install libraries
     ```
