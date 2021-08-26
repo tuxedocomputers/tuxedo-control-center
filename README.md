@@ -36,7 +36,7 @@ tuxedo-control-center
    ```
 2. Clone & install libraries
     ```
-    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git`
+    git clone https://github.com/tuxedocomputers/tuxedo-control-center.git
 
     cd tuxedo-control-center
 
