@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - UNRELEASED
+## [1.1.0] - 2021-08-26
 ### Added
 - Profiles: *System profile* selection for TCC profiles for certain devices (more to come).
   The system profiles usually affect power allowance and sometimes fan control when not
