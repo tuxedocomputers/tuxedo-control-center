@@ -29,6 +29,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
         <div class="overlay-content">
             <div class="icon-bar">
+                <button mat-icon-button disableRipple (click)="copyProfile(profile)">
+                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
+                </button>
                 <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile && !used">
                     <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
                 </button>
@@ -45,8 +48,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         *ngFor="let state of stateInputArray"
                         disableRipple
                         [disabled]="getSettings().stateMap[state.value] === profile.name"
-                        [value]="state.value"
-                    >
+                        [value]="state.value">
                         <svg viewBox="0 0 512 512">
                             <use attr.href="./assets/images/{{ state.icon }}"></use>
                         </svg>
@@ -54,9 +56,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-button-toggle>
                 </mat-button-toggle-group>
                 <div class="state-buttons">
-                    <!--button mat-icon-button disableRipple>
-                        <mat-icon>undo</mat-icon>
-                    </button-->
                     <button
                         (click)="saveStateSelection()"
                         mat-icon-button
@@ -98,7 +97,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <span *ngIf="!addProfileTile">
             <div class="status-flexbox">
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 320 512"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
                     </div>
@@ -106,15 +105,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
                     </span>
                 </div>
-                <div class="status-component">
+                <div class="status-component" [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 336 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
-                        {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
+                        <span *ngIf="!profile.cpu.useMaxPerfGov && (cpuInfo.boost === undefined || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz</span>
+                        <span *ngIf="!profile.cpu.useMaxPerfGov && !(cpuInfo.boost === undefined || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - Boost</span>
+                        <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </span>
                 </div>
-                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFancontrol}">
+                <div class="status-component" *ngIf="compat.hasODMProfileControl">
+                    <div class="status-icon-container">
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                    </div>
+                    <span class="status-info">
+                        {{ odmProfileToName.get(profile.odmProfile.name) }}
+                    </span>
+                </div>
+                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
@@ -130,7 +139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ profile.display.brightness }} %
                     </span>
                 </div>
-                <div class="status-component" [ngClass]="{'not-available': !compat.hasWebcamControl}">
+                <div class="status-component" *ngIf="compat.hasWebcamControl">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 258 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
                     </div>
@@ -147,65 +156,5 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <button mat-icon-button color="primary" style="cursor: default;"><mat-icon>add_box</mat-icon></button>
             </div>
         </span>
-
-        <!--
-        <span *ngIf="!addProfileTile">
-            <div class="status-row">
-                <mat-icon class="status-icon">memory</mat-icon>
-                <span class="status-info">
-                    {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span>
-                </span>
-            </div>
-            <div class="status-row">
-                <mat-icon class="status-icon">speed</mat-icon>
-                <span class="status-info">
-                    {{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz
-                </span>
-            </div>
-            <div class="status-row">
-                <mat-icon class="status-icon">policy</mat-icon>
-                <span class="status-info">
-                    {{ profile.cpu.governor }}
-                </span>
-            </div>
-            <div class="status-row">
-                <i class="fas fa-bolt status-icon"></i>
-                <span class="status-info">
-                    <span *ngIf="profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOff">Off</span>
-                    <span *ngIf="!profile.cpu.noTurbo" i18n="@@cProfMgrOverviewTurboOn">On</span>
-                </span>
-            </div>
-
-            <div class="status-row">
-                <i class="fas fa-bolt status-icon"></i>
-                <span class="status-info">
-                    {{ profile.cpu.energyPerformancePreference }}
-                </span>
-            </div>
-            
-            <div class="status-row" [ngClass]="{'inactive': !profile.fan.useControl}">
-                <mat-icon class="status-icon">toys</mat-icon>
-                <span class="status-info">
-                    {{ profile.fan.fanProfile }}
-                </span>
-            </div>
-            <div class="status-row" [ngClass]="{'inactive': !profile.display.useBrightness}">
-                <mat-icon class="status-icon">brightness_4</mat-icon>
-                <span class="status-info">
-                    {{ profile.display.brightness }} %
-                </span>
-            </div>
-            <div class="status-row" [ngClass]="{'inactive': !profile.webcam.useStatus}">
-                <mat-icon class="status-icon" *ngIf="profile.webcam.status">videocam</mat-icon>
-                <mat-icon class="status-icon" *ngIf="!profile.webcam.status">videocam_off</mat-icon>
-                <span class="status-info">
-                    <span *ngIf="profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</span>
-                    <span *ngIf="!profile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">Off</span>
-                </span>
-            </div>
-        </span>
-    -->
-
-        
     </mat-card-content>
 </mat-card>

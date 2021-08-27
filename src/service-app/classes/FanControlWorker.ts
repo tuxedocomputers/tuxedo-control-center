@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,49 +19,64 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoWMIAPI as wmiAPI, IFanInfo, TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
-import { FanControlLogic } from './FanControlLogic';
+import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
+import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
 
 export class FanControlWorker extends DaemonWorker {
 
     private fans: Map<number, FanControlLogic>;
-    private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile());
-    private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile());
-    private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile());
+    private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.CPU);
+    private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
+    private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
 
+    private modeSameSpeed = false;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
+    }
 
-        // Map logic to fan number
-        this.fans = new Map();
-        this.fans.set(1, this.cpuLogic);
-        this.fans.set(2, this.gpu1Logic);
-        this.fans.set(3, this.gpu2Logic);
+    private initFanControl(): void {
+        const nrFans = ioAPI.getNumberFans();
+
+        if (this.fans === undefined || this.fans.size !== nrFans) {
+
+            // Map logic to fan number
+            this.fans = new Map();
+            if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
+            if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
+            if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+        }
     }
 
     public onStart(): void {
-        const profile = this.tccd.getCurrentProfile();
-        let useFanControl;
-        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
-            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
-        } else {
-            useFanControl = profile.fan.useControl;
-        }
+        this.initFanControl();
 
-        if (!useFanControl) {
-            // Stop TCC fan control for all fans
-            wmiAPI.setFanAuto(true, true, true, true);
+        const useFanControl = this.getFanControlStatus();
+
+        if (this.tccd.settings.fanControlEnabled) {
+            ioAPI.setEnableModeSet(true); //FIXME Dummy function, tuxedo-io always sets the manual bit
+
+            if (!useFanControl) { //FIXME Dummy variable, useFanControl always true
+                // Stop TCC fan control for all fans
+                ioAPI.setFansAuto();
+            }
         }
     }
 
     public onWork(): void {
-        const fanTemps: number[] = [];
-        const fanSpeeds: number[] = [];
-        const fanTimestamps: number[] = [];
+        this.initFanControl(); // Make sure structures are up to date before doing anything
 
-        if (!TuxedoWMIAPI.wmiAvailable()) {
+        const fanTemps: number[] = [];
+        const fanSpeedsRead: number[] = [];
+        const fanSpeedsSet: number[] = new Array<number>(this.fans.size);
+        const fanTimestamps: number[] = [];
+        const tempSensorAvailable: boolean[] = [];
+
+        const moduleInfo = new ModuleInfo();
+
+        if (!TuxedoIOAPI.wmiAvailable()) {
             if (this.controlAvailableMessage === false) {
                 this.tccd.logLine('FanControlWorker: Control unavailable');
             }
@@ -74,66 +89,92 @@ export class FanControlWorker extends DaemonWorker {
             this.controlAvailableMessage = false;
         }
 
-        const profile = this.tccd.getCurrentProfile();
-        let useFanControl;
-        if (profile.fan === undefined || profile.fan.useControl === undefined || profile.fan.fanProfile === undefined) {
-            useFanControl = this.tccd.getDefaultProfile().fan.useControl;
-        } else {
-            useFanControl = profile.fan.useControl;
-        }
+        const useFanControl = this.getFanControlStatus();
 
+        // Decide on a fan control approach
+        // Per default fans are controlled using the 'same speed' approach setting the same speed for all fans chosen
+        // from the max speed decided by each individual fan logic
+        // Using the 'same speed' approach is necessary for uniwill devices since the fans on some
+        // devices can not be controlled individually.
+        this.modeSameSpeed = true;
+
+        // For each fan read and process sensor values
         for (const fanNumber of this.fans.keys()) {
+            const fanIndex: number = fanNumber - 1;
             // Update fan profile
             this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
+            this.fans.get(fanNumber).minimumFanspeed = this.tccd.getCurrentProfile().fan.minimumFanspeed;
+            this.fans.get(fanNumber).offsetFanspeed = this.tccd.getCurrentProfile().fan.offsetFanspeed;
+
             const fanLogic = this.fans.get(fanNumber);
-            const fanInfo: IFanInfo = { speed: 0, temp1: 1, temp2: 1 };
-            const result = wmiAPI.getFanInfo(fanNumber, fanInfo);
-            const currentTemperature = fanInfo.temp2; // Temp2 hardcoded, note: temp1 is not used for gpu fans
-            const currentSpeed = Math.round((fanInfo.speed / 0xff) * 100);
+
+            // Read and store sensor values
+            const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
+            const tempReadSuccess = ioAPI.getFanTemperature(fanIndex, currentTemperatureCelcius);
+            const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
+            const speedReadSuccess = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
+
+            tempSensorAvailable.push(tempReadSuccess);
             fanTimestamps.push(Date.now());
-            fanTemps.push(currentTemperature);
-            fanSpeeds.push(currentSpeed);
-            if (result === false) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') fan info');
-                continue;
-            }
-            if (currentTemperature === -1) {
-                this.tccd.logLine('FanControlWorker: Failed to read fan (' + fanNumber + ') temperature');
-                continue;
-            }
-            if (currentTemperature === 1) {
-                // Probably not supported, do nothing
-                continue;
-            }
-            fanLogic.reportTemperature(currentTemperature);
-            if (useFanControl) {
-                const calculatedSpeed = fanLogic.getSpeedPercent();
-                fanSpeeds[fanNumber - 1] = calculatedSpeed;
+            fanSpeedsRead.push(currentSpeedPercent.value);
+            if (tempSensorAvailable[fanIndex]) {
+                fanTemps.push(currentTemperatureCelcius.value);
             } else {
-                fanSpeeds[fanNumber - 1] = currentSpeed;
+                fanTemps.push(0);
+            }
+
+            // If there is temp sensor value report temperature to logic
+            // Also, fill fanSpeedsSet
+            if (tempSensorAvailable[fanIndex]) {
+                fanLogic.reportTemperature(currentTemperatureCelcius.value);
+                const calculatedSpeed = fanLogic.getSpeedPercent();
+                fanSpeedsSet[fanIndex] = calculatedSpeed;
+            } else {
+                // Non existant sensor or wmi interface unavailable
+                // Set "set speed" to zero to not affect the max value
+                fanSpeedsSet[fanIndex] = 0;
             }
         }
 
+        // Write fan speeds
         if (useFanControl) {
-            wmiAPI.setFanSpeedByte(
-                fanSpeeds[0] * 0xff / 100,
-                fanSpeeds[1] * 0xff / 100,
-                fanSpeeds[2] * 0xff / 100,
-                1
-            );
+            
+            const highestSpeed = fanSpeedsSet.reduce((prev, cur) => cur > prev ? cur : prev, 0);
+            for (const fanNumber of this.fans.keys()) {
+                const fanIndex = fanNumber - 1;
+                // Use highest speed decided by fan logic for current fan if "same speed" mode
+                // or there is no sensor specific to this fan
+                if (this.modeSameSpeed || !tempSensorAvailable[fanIndex]) {
+                    fanSpeedsSet[fanIndex] = highestSpeed;
+                }
+                // Always write a fan speed previously decided
+                ioAPI.setFanSpeedPercent(fanIndex, fanSpeedsSet[fanIndex]);
+            }
         }
 
+        // Publish the data on the dbus whether written by this control or values read from hw interface
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
-            if (fanSpeeds[i] !== undefined) {
-                this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
-                this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], fanSpeeds[i]);
+            let currentSpeed: number;
+            if (useFanControl) {
+                currentSpeed = fanSpeedsSet[i];
+            } else {
+                currentSpeed = fanSpeedsRead[i];
             }
+            this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
+            this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], currentSpeed);
         }
     }
 
     public onExit(): void {
         // Stop TCC fan control for all fans
-        wmiAPI.setFanAuto(true, true, true, true);
+        if (this.getFanControlStatus()) {
+            ioAPI.setFansAuto();
+            ioAPI.setEnableModeSet(false);  //FIXME Dummy function, tuxedo-io always sets the manual bit
+        }
+    }
+
+    private getFanControlStatus(): boolean {
+        return this.tccd.settings.fanControlEnabled;
     }
 }

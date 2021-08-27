@@ -74,6 +74,25 @@
             opacity: 0.3;
         }
 
+        .custom-value-text {
+            position: absolute;
+            bottom: 57px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+
+            fill: $gauge-value-text-color;
+            // transform: translateY(0px);
+            font-size: 3.2em;
+            // transform-origin: center center;
+        }
+
+        &.not-available .custom-value-text {
+            bottom: 70px;
+            font-size: 2.0em;
+            opacity: 0.3;
+        }
+
         .unit-text {
             position: absolute;
             bottom: 43px;
@@ -139,7 +158,7 @@
     $tcc-info-bar-border-color: $gauge-background-color;
     $tcc-info-bar-background-color: $gauge-background-color;
     $tcc-info-bar-color-disabled: mat-color($foreground, disabled-text);
-    $tcc-info-bar-width: 250px;
+    $tcc-info-bar-width: 270px;
     $tcc-info-bar-height: 30px;
 
     .tcc-info-bar {

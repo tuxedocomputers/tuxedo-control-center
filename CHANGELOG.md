@@ -1,5 +1,150 @@
 # Changelog
 
+## [1.1.0] - 2021-08-26
+### Added
+- Profiles: *System profile* selection for TCC profiles for certain devices (more to come).
+  The system profiles usually affect power allowance and sometimes fan control when not
+  using the TCC fan control.
+- Profiles: Fan control parameter *Minimum fan speed* applied to existing fan curves.
+- Profiles: Fan control parameter *Offset fan speed* applied to existing fan curves.
+- Togglable visualization of fan curves.
+- AMD (amdgpu): Chroma subsampling activation for external displays (experimental).
+  Usable on many AMD CPU devices without discrete graphics card.
+- Tray: Menu option to activate a profile temporarily.
+- Tray: Menu option to toggle temporary powersave prevention.
+- Tools: GUI for changing crypt password.
+- Option to turn off TCC fan control in global settings.
+- Option to turn off TCC CPU control in global settings.
+
+### Changed
+- TCC GUI title now using window manager default title.
+- Better hiding of not available options for clarity both regarding
+  available devices and features for these.
+- Theme selection moved to settings.
+- *Settings* button moved from tools to menu side.
+
+### Fixed
+- *Cool and breezy*/*Extreme powersave* profiles that in certain cases did not apply
+  the CPU limits properly.
+- Unreliable CPU info max freq for AMD devices sometimes yields max non boost freq
+  sometimes boost freq and sometimes a seemingly random number depending on which
+  kernel used around 5.11. Now changed to consistently use available freqs.
+
+## [1.0.14] - 2021-05-20
+### Added
+- Systeminfo clarifications
+  - Third clear *done* step when finished sending
+  - Blurring while asking for password/working
+  - Not possible to send again without going through *step 1*
+
+### Fixed
+- Systeminfo environmental variable passthrough
+- Deb install message that looked like an error now hidden
+- Adjust GUI window width/height if working screen area
+  is found to be smaller than the default width/height
+- Minimize icon size
+
+## [1.0.13] - 2021-04-23
+### Changed
+- Max frequency for AMD CPUs clarified as 'boost' instead of max
+  base frequency. Additionally now max frequency for these devices can be
+  set to max base frequency with or without boost.
+- Now using 'same speed' approach for fan control on all devices. This means
+  that the same speed will be used for all fans. The speed written will be
+  the highest decided from each individual sensor. This should better
+  share the cooling between multiple fans where available.
+- Fantables updated
+  - Minimum 'on' fanspeeds now at 20% to make sure fans start better over all
+  - Freezy fan profile now always on and even more freezy for those
+    warm spring days
+
+### Fixed
+- Fan control for certain devices (like XP14 version without nvidia) where
+  there is not one temp sensor per fan
+
+## [1.0.12] - 2021-04-09
+### Changed
+- Default ODM perf. profile *performance* for some devices when returning fan control to the system
+
+### Fixed
+- *Shutdown timer* now uses standard `shutdown` functionality/logic
+- Profile edit frequency slider missing update
+- Profile overview selected profile update issue
+
+## [1.0.11] - 2021-02-25
+### Fixed
+- More robust check for nvidia prime support
+- Install autostart for new users (and in FAI)
+- Fixed automatic restart after update having weird side effects,
+  still needs one more (manual) restart of GUI before taking effect
+
+## [1.0.9] - 2021-01-28
+### Added
+- Profile CPU setting "Maximum performance" now allows governor performance use
+
+## [1.0.8] - 2020-12-11
+### Changed
+- Now uses interface from the `tuxedo-io` module in `tuxedo-keyboard` package instead of `tuxedo-cc-wmi`
+- As of the transition to `tuxedo-io` newer devices like the *InfinityBook S 14 Gen6* are supported as well
+
+### Fixed
+- Fan control fail when tccd loads before kernel interface module
+- Tray enable autostart when config folder is missing
+- Writing to unwritable intel noTurbo parameter
+
+## [1.0.7] - 2020-10-27
+### Fixed
+- Minor text adjustments
+- RPM packaging, files conflicting with other packages
+
+## [1.0.6] - 2020-10-08
+### Changed
+- Backlight brightness workarounds
+  - Scaling fix for amdgpu bl
+  - Tweak for slow driver loading or drivers that
+    are not ready when presenting their interface
+
+## [1.0.5] - 2020-09-29
+### Added
+- Fan control support for more devices with multiple fans (Polaris, Pulse)
+- Added graphics selection (prime-select) tray options
+
+## [1.0.4] - 2020-08-26
+### Added
+- New *Tools* area with shutdown timer feature
+- Reintroducing state selection at profile edit
+- Reintroducing profile copy
+
+### Fixed
+- Slightly changed behaviour of dashboard gauges to
+  attempt to reduce CPU load
+- Restart GUI when TCC is updated
+
+## [1.0.3] - 2020-06-23
+### Added
+- Support for new devices
+- Basic tray icon (optional autostart)
+- Global keyboard shortcut (Tux+Alt+F6) to start
+
+### Changed
+- Revised fan tables for existing fan profiles
+- New fan profile *Silent*
+- New fan profile *Freezy*
+- Cool & Breezy now uses the *Quiet* fan profile
+- Powersave extreme now uses the *Silent* fan profile
+
+## [1.0.2] - 2020-05-25
+### Changed
+- Default governor choice matched to the current cpufreq driver
+  Results in better support for non-intel processors
+- Make use of `scaling_available_frequencies` to limit choice (of frequencies)
+- Change default profiles to take more dynamic values depending
+  on available frequencies (minor differences to existing default profiles)
+
+### Fixed
+- State switching issue (failure to read power supply online value)
+- AMD GPU backlight driver read brightness workaround
+
 ## [1.0.1] - 2020-04-16
 ### Fixed
 - Read error for sysfs backlight path (when changed after tccd startup)

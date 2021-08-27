@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
+
+export enum FAN_LOGIC { CPU, GPU }
 
 class ValueBuffer {
     private bufferData: Array<number>;
@@ -56,7 +58,8 @@ class ValueBuffer {
     }
 }
 
-const TICK_DELAY = 1;
+const MAX_SPEED_JUMP = 2;
+const SPEED_JUMP_THRESHOLD = 20;
 
 export class FanControlLogic {
 
@@ -69,14 +72,57 @@ export class FanControlLogic {
 
     private lastSpeed = 0;
 
-    constructor(private fanProfile: ITccFanProfile) {
+    private useTable: string
+
+    /**
+     * Minimum fan speed returned by logic
+     */
+    private _minimumFanspeed: number = 0;
+    get minimumFanspeed() { return this._minimumFanspeed; }
+    set minimumFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._minimumFanspeed = 0;
+        } else if (speed < 0) {
+            this._minimumFanspeed = 0;
+        } else if (speed > 100) {
+            this._minimumFanspeed = 100;
+        } else {
+            this._minimumFanspeed = speed;
+        }
+    }
+
+    /**
+     * Number added to table value providing an offset fan table lookup
+     */
+    private _offsetFanspeed: number = 0;
+    get offsetFanspeed() { return this._offsetFanspeed; }
+    set offsetFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._offsetFanspeed = 0;
+        } else if (speed < -100) {
+            this._offsetFanspeed = -100;
+        } else if (speed > 100) {
+            this._offsetFanspeed = 100;
+        } else {
+            this._offsetFanspeed = speed;
+        }
+    }
+
+    constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
+        if (type === FAN_LOGIC.CPU) {
+            this.useTable = 'tableCPU';
+        } else if (type === FAN_LOGIC.GPU) {
+            this.useTable = 'tableGPU';
+        } else {
+            throw new Error('FanControlLogic: Invalid argument');
+        }
         this.setFanProfile(fanProfile);
     }
 
     public setFanProfile(fanProfile: ITccFanProfile) {
-        fanProfile.table.sort((a, b) => a.temp - b.temp);
-        this.tableMinEntry = fanProfile.table[0];
-        this.tableMaxEntry = fanProfile.table[fanProfile.table.length - 1];
+        fanProfile[this.useTable].sort((a, b) => a.temp - b.temp);
+        this.tableMinEntry = fanProfile[this.useTable][0];
+        this.tableMaxEntry = fanProfile[this.useTable][fanProfile[this.useTable].length - 1];
         this.fanProfile = fanProfile;
     }
 
@@ -87,7 +133,11 @@ export class FanControlLogic {
      */
     public reportTemperature(temperatureValue: number) {
         this.tempBuffer.addValue(temperatureValue);
-        this.latestSpeedPercent = this.calculateSpeedPercent();
+
+        // Calculate filtered table speed
+        let nextSpeedPercent = this.calculateSpeedPercent();
+
+        this.latestSpeedPercent = nextSpeedPercent;
     }
 
     /**
@@ -100,11 +150,30 @@ export class FanControlLogic {
     private calculateSpeedPercent(): number {
         const effectiveTemperature = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
-        const foundEntry = this.fanProfile.table[foundEntryIndex];
+        const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
+        
         let newSpeed = foundEntry.speed;
+        
+        // Alter lookup value by offsetFanspeed parameter (aka apply offset)
+        const offsetDisableCondition = this.offsetFanspeed < 0 && effectiveTemperature > 75;
+        if (!offsetDisableCondition) {
+            newSpeed += this.offsetFanspeed;
+            if (newSpeed > 100) {
+                newSpeed = 100;
+            } else if (newSpeed < 0) {
+                newSpeed = 0;
+            }
+        }
+
+        // Adjust for minimum speed parameter
+        if (newSpeed < this.minimumFanspeed) {
+            newSpeed = this.minimumFanspeed;
+        }
+        
+        // Limit falling speed change
         let speedJump = newSpeed - this.lastSpeed;
-        if (speedJump <= -2) {
-            speedJump = -2;
+        if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
+            speedJump = -MAX_SPEED_JUMP;
             newSpeed = this.lastSpeed + speedJump;
         }
         this.lastSpeed = newSpeed;
@@ -113,12 +182,12 @@ export class FanControlLogic {
 
     private findFittingEntryIndex(temperatureValue: number): number {
         if (temperatureValue > this.tableMaxEntry.temp) {
-            return this.fanProfile.table.length - 1;
+            return this.fanProfile[this.useTable].length - 1;
         } else if (temperatureValue < this.tableMinEntry.temp) {
             return 0;
         }
 
-        const foundIndex = this.fanProfile.table.findIndex(entry => entry.temp === temperatureValue);
+        const foundIndex = this.fanProfile[this.useTable].findIndex(entry => entry.temp === temperatureValue);
         if (foundIndex !== -1) {
             return foundIndex;
         } else {

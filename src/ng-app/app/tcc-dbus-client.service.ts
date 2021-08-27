@@ -20,6 +20,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { TccDBusController } from '../../common/classes/TccDBusController';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
+import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
+import { UtilsService } from './utils.service';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -38,30 +40,45 @@ export class TccDBusClientService implements OnDestroy {
   private updateInterval = 500;
 
   public available = new Subject<boolean>();
-  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(false);
+  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
-  constructor() {
+  public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
+  public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
+
+  public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
+
+  public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
+
+  public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
+  public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
+  private previousCustomProfilesJSON = '';
+  private previousDefaultProfilesJSON = '';
+
+  public activeProfile = new BehaviorSubject<TccProfile>(undefined);
+  private previousActiveProfileJSON = '';
+
+  constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
 
   private async periodicUpdate() {
-    const previousAvailability = this.isAvailable;
+    const previousValue = this.isAvailable;
     // Check if still available
     if (this.isAvailable) {
       this.isAvailable = await this.tccDBusInterface.dbusAvailable();
-    }
-    // If not available try to init again
-    if (!this.isAvailable) {
+    } else {
+      // If not available try to init again
       this.isAvailable = await this.tccDBusInterface.init();
     }
     // Publish availability as necessary
-    if (this.isAvailable !== previousAvailability) { this.available.next(this.isAvailable); }
+    if (this.isAvailable !== previousValue) { this.available.next(this.isAvailable); }
 
     // Read and publish data (note: atm polled)
-    this.tuxedoWmiAvailable.next(await this.tccDBusInterface.tuxedoWmiAvailable());
+    const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
+    this.tuxedoWmiAvailable.next(wmiAvailability);
 
     const fanData: IDBusFanData = {
       cpu: await this.tccDBusInterface.getFanDataCPU(),
@@ -69,6 +86,45 @@ export class TccDBusClientService implements OnDestroy {
       gpu2: await this.tccDBusInterface.getFanDataGPU2()
     };
     this.fanData.next(fanData);
+
+    this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
+    this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
+
+    this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
+
+    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable()
+    this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
+
+    // Retrieve and parse profiles
+    const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
+    if (activeProfileJSON !== undefined) {
+        if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
+        try {
+            const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
+            // this.utils.fillDefaultValuesProfile(activeProfile);
+            if (this.previousActiveProfileJSON !== activeProfileJSON) {
+                this.activeProfile.next(activeProfile);
+                this.previousActiveProfileJSON = activeProfileJSON;
+            }
+        } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
+    }
+
+    const defaultProfilesJSON: string = await this.tccDBusInterface.getDefaultProfilesJSON();
+    const customProfilesJSON: string = await this.tccDBusInterface.getCustomProfilesJSON();
+    if (defaultProfilesJSON !== undefined && customProfilesJSON !== undefined) {
+        try {
+            if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
+                this.defaultProfiles.next(JSON.parse(defaultProfilesJSON));
+                this.previousDefaultProfilesJSON = defaultProfilesJSON;
+            }
+            if (this.previousCustomProfilesJSON !== customProfilesJSON) {
+                this.customProfiles.next(JSON.parse(customProfilesJSON));
+                this.previousCustomProfilesJSON = customProfilesJSON;
+            }
+        } catch (err) {
+            console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
+        }
+    }
   }
 
   ngOnDestroy() {

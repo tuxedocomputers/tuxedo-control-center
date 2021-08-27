@@ -30,27 +30,32 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 (focus)="$event.target.select()">
         </mat-form-field>
         <div *ngIf="editProfile" class="save-reset-buttons">
-            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileFormGroup.dirty"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_reset.svg#Icon"></use></svg></button></span>
-            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileFormGroup.dirty"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_save.svg#Icon"></use></svg></button></span>
+            <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
+                <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
+                    <svg viewBox="0 0 512 512">
+                        <use href="./assets/images/icon_reset.svg#Icon"></use>
+                        </svg>
+                    </button>
+            </span>
+            <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes">
+                <button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileDirty">
+                    <svg viewBox="0 0 512 512">
+                        <use href="./assets/images/icon_save.svg#Icon"></use>
+                    </svg>
+                </button>
+            </span>
         </div>
-        <!--mat-button-toggle-group
-            [formControl]="selectStateControl"
-            multiple
-            i18n-matTooltip="@@cProfMgrDetailsSelectStatesLabel" matTooltip="Activate profile on"
-            matTooltipPosition="left"
-            [matTooltipShowDelay]="1000"
-        >
-            <mat-button-toggle
-                *ngFor="let state of stateInputArray"
-                disableRipple
-                [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
-                [value]="state.value"
-                [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
-                [matTooltipShowDelay]="1000"
-            >
-                {{ state.label }}
-            </mat-button-toggle>
-        </mat-button-toggle-group-->
+        <div *ngIf="editProfile">
+            <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
+                <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
+                    [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                    [value]="state.value"
+                    [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
+                    [matTooltipShowDelay]="100">
+                        {{ state.label }}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
     </mat-card-title>
     <mat-card-content>
         <!-- Display settings -->
@@ -69,10 +74,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n>Set brightness on profile activation</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!--content class="value" [hidden]="editProfile">
-                                <span *ngIf="viewProfile.display.useBrightness" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
-                                <span *ngIf="!viewProfile.display.useBrightness" i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
-                            </content-->
                             <content class="value">
                                 <span [hidden]="!inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
                                 <span [hidden]="inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
@@ -93,6 +94,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
                             <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ inputDisplayBrightness.value }}%</content>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
@@ -104,6 +119,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     step="5"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('display').get('brightness').reset(viewProfile.display.brightness); inputDisplayBrightnessChange(inputDisplayBrightness.value);"
+                                    [hidden]="!profileFormGroup.get('display').get('brightness').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                         </mat-grid-tile>
 
@@ -112,8 +133,218 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
 
+        <!-- Fan control settings -->
+        <div #fancontrolHeader
+            class="tcc-options-group"
+            [ngClass]="{'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled }"
+            [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
+
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
+                </div>
+                <hr />
+            </div>
+            <mat-card-content class="content">
+                <div formGroupName="fan">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <!-- Fan profile -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsFanProfileLabel">Fan profile</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.fan.fanProfile }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()" [value]="fanProfileName" color="primary">
+                                        {{ fanProfileName }}
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
+                        <!-- Minimum fan speed -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cProfMgrDetailsMinFanSpeedLabel">Minimum fan speed</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.minimumFanspeed }} %</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }} %</content>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-slider #inputMinimumFanspeed
+                                    formControlName="minimumFanspeed"
+                                    [min]="0"
+                                    [max]="100"
+                                    step="1"
+                                    color="primary">
+                                </mat-slider>
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
+                                    [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
+                            </content>
+                        </mat-grid-tile>
+                        <!-- Offset fan speed -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cProfMgrDetailsOffsetFanSpeedLabel">Offset fan speed</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ? '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' + inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-slider #inputOffsetFanspeed
+                                    formControlName="offsetFanspeed"
+                                    [min]="-100"
+                                    [max]="100"
+                                    step="1"
+                                    color="primary">
+                                </mat-slider>
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
+                                    [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
+                            </content>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+                <div class="fan-graph-container">
+                    <button mat-stroked-button
+                        (click)="toggleFanGraphs()">
+                        <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container> <mat-icon>bar_chart</mat-icon>
+                    </button>
+                    <app-fan-graph
+                        *ngIf="showFanGraphs"
+                        [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
+                        [minFanspeed]="inputMinimumFanspeed.value"
+                        [offsetFanspeed]="inputOffsetFanspeed.value">
+                    </app-fan-graph>
+                </div>
+            </mat-card-content>
+        </div>
+
+        <!-- Webcam settings -->
+        <div class="tcc-options-group"
+            [hidden]="!compat.hasWebcamControl"
+            [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
+
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                   <svg viewBox="0 0 258 512" class="tcc-icons"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
+                </div>
+                <hr />
+            </div>
+            <mat-card-content class="content">
+                <div formGroupName="webcam">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value">
+                                <span [hidden]="!inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOn">on</span>
+                                <span [hidden]="inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOff">off</span>
+                            </content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputWebcamStatus
+                                    formControlName="status"
+                                    color="primary">
+                                </mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-card-content>
+        </div>
+
+        <!-- System (aka ODM) control settings -->
+        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl">
+
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsSystemControlHeaderLabel">System control</ng-container>
+                </div>
+                <hr />
+            </div>
+            <mat-card-content class="content">
+                
+                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
+                    <div formGroupName="odmProfile">
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsODMProfileLabel">System profile</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                <mat-select formControlName="name" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                        {{ odmProfileToName.get(odmProfileName) }}
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
+                    </div>
+
+                </mat-grid-list>
+            
+            </mat-card-content>
+        </div>
+
         <!-- CPU settings -->
-        <div class="tcc-options-group">
+        <div class="tcc-options-group"
+            [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
+            [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage: ''">
+
             <div class="title-row">
                 <hr />
                 <div class="title">
@@ -145,34 +376,72 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-tile>
 
                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
+                        <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
                     </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
-                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMinFrequency.value) }} GHz</content>
+                    <mat-grid-tile class="value" [colspan]="gridParams.valueSpan">
+                        <content class="value">
+                            <span [hidden]="!inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovYes">yes</span>
+                            <span [hidden]="inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovNo">no</span>
+                        </content>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                         <content class="input" [hidden]="!editProfile">
+                            <mat-checkbox #inputUseMaxPerfGov
+                                formControlName="useMaxPerfGov"
+                                color="primary">
+                            </mat-checkbox>
+                        </content>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
+                        <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
+                        <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                             <mat-slider #inputScalingMinFrequency
                                 formControlName="scalingMinFrequency"
                                 [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.maxFreq"
+                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                 step="100000"
                                 (change)="sliderMinFreqChange()"
+                                color="primary">
+                            </mat-slider>
+                        </content>
+                        <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
+                            <mat-slider #inputScalingMinFrequencyDummy
+                                [min]="cpuInfo.minFreq"
+                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                step="100000"
                                 color="primary">
                             </mat-slider>
                         </content>
                     </mat-grid-tile>
 
                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
+                        <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
-                        <content class="value" [hidden]="!editProfile">{{ formatFrequency(inputScalingMaxFrequency.value) }} GHz</content>
+                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (cpuInfo.boost === undefined || (cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
+                            {{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
+                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (cpuInfo.boost === undefined || (cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
+                            {{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
+                        <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost === undefined)" [ngClass]="{'inactive': true}">
+                            {{ formatFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
+                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
+                            Boost</content>
+                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">
+                            Boost</content>
+                        <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost !== undefined)" [ngClass]="{'inactive': true}">
+                            Boost</content>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
+                        <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                             <mat-slider #inputScalingMaxFrequency
                                 formControlName="scalingMaxFrequency"
                                 [min]="cpuInfo.minFreq"
@@ -182,177 +451,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 color="primary">
                             </mat-slider>
                         </content>
-                    </mat-grid-tile>
-
-                    <!-- Governor setting unconfigurable -->
-                    <!--mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsGovernorLabel">Scaling governor</header></mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.governor }}</content>
-                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.governor.value }}</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-select formControlName="governor" [disableOptionCentering]="true" (selectionChange)="governorSelectionChange()">
-                                <mat-option *ngFor="let governor of cpuInfo.scalingAvailableGovernors" [value]="governor" color="primary">
-                                    {{ governor }}
-                                </mat-option>
-                            </mat-select>
-                        </content>
-                    </mat-grid-tile-->
-
-                    <!-- Energy performance preference setting unconfigurable -->
-                    <!--mat-grid-tile [colspan]="gridParams.headerSpan"><header>Energy performance preference</header></mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.energyPerformancePreference }}</content>
-                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.controls.cpu.controls.energyPerformancePreference.value }}</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-select formControlName="energyPerformancePreference" [disableOptionCentering]="true">
-                                <mat-option *ngFor="let energyPreference of cpuInfo.energyPerformanceAvailablePreferences" [value]="energyPreference">{{ energyPreference }}</mat-option>
-                            </mat-select>
-                        </content>
-                    </mat-grid-tile-->
-
-                    <!-- Turbo setting unconfigurable -->
-                    <!--mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsTurboLabel">Turbo</header>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value">
-                            <span [hidden]="!inputNoTurbo.checked" i18n="@@cProfMgrDetailsTurboYes">yes</span>
-                            <span [hidden]="inputNoTurbo.checked" i18n="@@cProfMgrDetailsTurboNo">no</span>
-                        </content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-checkbox #inputNoTurbo
-                                [checked]="!profileFormGroup.get('cpu').value.noTurbo"
-                                (change)="profileFormGroup.get('cpu').get('noTurbo').setValue(!$event.checked); profileFormGroup.get('cpu').get('noTurbo').markAsDirty();"
+                        <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
+                            <mat-slider #inputScalingMaxFrequencyDummy
+                                [min]="cpuInfo.minFreq"
+                                [max]="cpuInfo.maxFreq"
+                                [value]="cpuInfo.maxFreq"
+                                step="100000"
                                 color="primary">
-                            </mat-checkbox>
+                            </mat-slider>
                         </content>
-                    </mat-grid-tile-->
-
+                    </mat-grid-tile>
                 </mat-grid-list>
             </mat-card-content>
         </div>
 
-        <!-- Fan control settings -->
-        <div class="tcc-options-group"
-            [ngClass]="{'not-available': !compat.hasFancontrol }"
-            [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
-
-            <div class="title-row">
-                <hr />
-                <div class="title">
-                    <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
-                    <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
-                </div>
-                <hr />
-            </div>
-            <mat-card-content class="content">
-                <div formGroupName="fan">
-                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsUseFanControlLabel">Use TUXEDO fan control</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value">
-                                <span [hidden]="!inputUseFanControl.checked" i18n="@@cProfMgrDetailsUseFanControlYes">yes</span>
-                                <span [hidden]="inputUseFanControl.checked" i18n="@@cProfMgrDetailsUseFanControlNo">no</span>
-                            </content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputUseFanControl
-                                    formControlName="useControl"
-                                    color="primary">
-                                </mat-checkbox>
-                            </content>
-                        </mat-grid-tile>
-
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header [ngClass]="{'inactive': !inputUseFanControl.checked}" i18n="@@cProfMgrDetailsFanProfileLabel">Fan profile</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">{{ viewProfile.fan.fanProfile }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">{{ profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseFanControl.checked}">
-                                <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()" [value]="fanProfileName" color="primary">
-                                        {{ fanProfileName }}
-                                    </mat-option>
-                                </mat-select>
-                            </content>
-                        </mat-grid-tile>
-
-                    </mat-grid-list>
-                </div>
-            </mat-card-content>
-        </div>
-
-        <!-- Webcam settings -->
-        <div class="tcc-options-group"
-            [ngClass]="{'not-available': !compat.hasWebcamControl }"
-            [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
-
-            <div class="title-row">
-                <hr />
-                <div class="title">
-                   <svg viewBox="0 0 258 512" class="tcc-icons"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
-                    <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
-                </div>
-                <hr />
-            </div>
-            <mat-card-content class="content">
-                <div formGroupName="webcam">
-                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
-                        <!--mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsWebcamUseStatusLabel">Set webcam status on start/wakeup</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value">
-                                <span [hidden]="!inputUseStatus.checked" i18n="@@cProfMgrDetailsWebcamUseStatusYes">yes</span>
-                                <span [hidden]="inputUseStatus.checked" i18n="@@cProfMgrDetailsWebcamUseStatusNo">no</span>
-                            </content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputUseStatus
-                                    formControlName="useStatus"
-                                    color="primary">
-                                </mat-checkbox>
-                            </content>
-                        </mat-grid-tile-->
-
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value">
-                                <span [hidden]="!inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOn">on</span>
-                                <span [hidden]="inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOff">off</span>
-                            </content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile">
-                                <mat-checkbox #inputWebcamStatus
-                                    formControlName="status"
-                                    color="primary">
-                                </mat-checkbox>
-                            </content>
-                        </mat-grid-tile>
-
-                    </mat-grid-list>
-                </div>
-            </mat-card-content>
-        </div>
     </mat-card-content>
 </mat-card>
 <br />

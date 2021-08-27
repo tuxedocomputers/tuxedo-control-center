@@ -21,7 +21,7 @@ import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { TccDBusInterface, TccDBusData } from './TccDBusInterface';
 import * as dbus from 'dbus-next';
 
-import { TuxedoWMIAPI } from '../../native-lib/TuxedoWMIAPI';
+import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
 
 export class TccDBusService extends DaemonWorker {
 
@@ -60,7 +60,11 @@ export class TccDBusService extends DaemonWorker {
 
     public onWork(): void {
         // Make sure wmiAvailability info is updated. Is done here until it gets its own worker.
-        this.dbusData.tuxedoWmiAvailable = TuxedoWMIAPI.wmiAvailable();
+        this.dbusData.tuxedoWmiAvailable = TuxedoIOAPI.wmiAvailable();
+
+        if (this.dbusData.modeReapplyPending) {
+            this.interface.ModeReapplyPendingChanged();
+        }
     }
 
     public onExit(): void {

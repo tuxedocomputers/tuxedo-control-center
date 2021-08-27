@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,8 +18,9 @@
  */
 import * as path from 'path';
 import { LogicalCpuController } from './LogicalCpuController';
-import { SysFsPropertyInteger, SysFsPropertyNumList } from './SysFsProperties';
+import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean } from './SysFsProperties';
 import { IntelPstateController } from './IntelPStateController';
+import { findClosestValue } from './Utils';
 
 export class CpuController {
 
@@ -37,6 +38,8 @@ export class CpuController {
     public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
 
     public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
+
+    public readonly boost = new SysFsPropertyBoolean(path.join(this.basePath, 'cpufreq/boost'));
 
     public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores
@@ -81,28 +84,60 @@ export class CpuController {
     /**
      * Sets the scaling_max_freq parameter for the current governor for all available logical cores
      *
-     * @param maxFrequency Maximum scaling frequency value to set, defaults to max value for core
+     * @param setMaxFrequency Maximum scaling frequency value to set, defaults to max value for core
      */
-    public setGovernorScalingMaxFrequency(maxFrequency?: number): void {
+    public setGovernorScalingMaxFrequency(setMaxFrequency?: number): void {
         for (const core of this.cores) {
             if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
                 || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
-            const currentMinFrequency = core.scalingMinFreq.readValue();
+            const scalingMinFrequency = core.scalingMinFreq.readValue();
+            let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
             let newMaxFrequency: number;
-            if (maxFrequency === undefined) {
+
+
+            // Default to max available
+            if (setMaxFrequency === undefined) {
                 newMaxFrequency = coreMaxFrequency;
-            } else if (maxFrequency < currentMinFrequency) {
-                newMaxFrequency = currentMinFrequency;
+            } else if (setMaxFrequency === -1) {
+                if (!this.boost.isAvailable()) {
+                    newMaxFrequency = core.getReducedAvailableFreq();
+                } else {
+                    newMaxFrequency = coreMaxFrequency;
+                }
             } else {
-                newMaxFrequency = maxFrequency;
+                newMaxFrequency = setMaxFrequency;
             }
-            if (newMaxFrequency <= coreMaxFrequency && newMaxFrequency >= currentMinFrequency) {
-                core.scalingMaxFreq.writeValue(newMaxFrequency);
-            } else {
-                throw Error('setGovernorScalingMaxFrequency: new frequency ' + newMaxFrequency + ' is out of range');
+
+            // Enforce min/max limits
+            if (newMaxFrequency > coreMaxFrequency) {
+                newMaxFrequency = coreMaxFrequency;
+            } else if (newMaxFrequency < scalingMinFrequency) {
+                newMaxFrequency = scalingMinFrequency;
+            }
+
+            // Additionally verify that it is one of the available frequencies
+            // ..if available frequencies are defined
+            if (availableFrequencies !== undefined) {
+                availableFrequencies = availableFrequencies.filter(value => value >= scalingMinFrequency);
+                if (availableFrequencies.length === 0) { continue; }
+                newMaxFrequency = findClosestValue(newMaxFrequency, availableFrequencies);
+            }
+
+            core.scalingMaxFreq.writeValue(newMaxFrequency);
+        }
+
+        // AMD does not count boost frequency to coreMaxFrequency while Intel does. So on AMD a setMaxFrequency over
+        // coreMaxFrequency indicates that the boost switch should be enabled. On Intel this switch doesn't exist
+        // and boost is handled via scalingMaxFreq.
+        if (this.boost.isAvailable()) {
+            if (setMaxFrequency === undefined || setMaxFrequency > this.cores[0].cpuinfoMaxFreq.readValue()) {
+                this.boost.writeValue(true);
+            }
+            else {
+                this.boost.writeValue(false);
             }
         }
     }
@@ -110,26 +145,45 @@ export class CpuController {
     /**
      * Sets the scaling_min_freq parameter for the current governor for all available logical cores
      *
-     * @param minFrequency Minimum scaling frequency value to set, defaults to min value for core
+     * @param setMinFrequency Minimum scaling frequency value to set, defaults to min value for core
      */
-    public setGovernorScalingMinFrequency(minFrequency?: number): void {
+    public setGovernorScalingMinFrequency(setMinFrequency?: number): void {
         for (const core of this.cores) {
             if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
                 || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
+            const scalingMaxFrequency = core.scalingMaxFreq.readValue();
+            let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+
             let newMinFrequency: number;
-            if (minFrequency === undefined) {
+
+            // Default to min available freq
+            if (setMinFrequency === undefined) {
                 newMinFrequency = coreMinFrequency;
+            } else if (setMinFrequency === -2) {
+                newMinFrequency = coreMaxFrequency;
             } else {
-                newMinFrequency = minFrequency;
+                newMinFrequency = setMinFrequency;
+                
+                // Enforce min/max limits
+                if (newMinFrequency < coreMinFrequency) {
+                    newMinFrequency = coreMinFrequency;
+                } else if (newMinFrequency > scalingMaxFrequency) {
+                    newMinFrequency = scalingMaxFrequency;
+                }
             }
 
-            const currentMaxFrequency = core.scalingMaxFreq.readValue();
-            if (newMinFrequency <= currentMaxFrequency && newMinFrequency >= coreMinFrequency) {
-                core.scalingMinFreq.writeValue(newMinFrequency);
+            // Additionally verify that it is one of the available frequencies
+            // ..if available frequencies are defined
+            if (availableFrequencies !== undefined) {
+                availableFrequencies = availableFrequencies.filter(value => value <= scalingMaxFrequency);
+                if (availableFrequencies.length === 0) { continue; }
+                newMinFrequency = findClosestValue(newMinFrequency, availableFrequencies);
             }
+
+            core.scalingMinFreq.writeValue(newMinFrequency);
         }
     }
 

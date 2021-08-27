@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -61,12 +61,16 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public activeProfile: ITccProfile;
   public isCustomProfile: boolean;
 
-  public fanProfileProgressMap: Map<string, number>;
-
   public animatedGauges = true;
-  public animatedGaugesDuration = 0.5;
+  public animatedGaugesDuration = 0.1;
 
   private subscriptions: Subscription = new Subscription();
+
+  private tweakVal = 0;
+
+  public odmProfileNames: string[] = [];
+  public odmProfileToName: Map<string, string> = new Map();
+  public odmProfileProgressMap: Map<string, number> = new Map();
 
   constructor(
     private sysfs: SysFsService,
@@ -115,24 +119,49 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       this.hasGPUTemp = this.validTemp(avgTemp);
       this.gaugeGPUTemp = Math.round(avgTemp);
       this.gaugeGPUSpeed = Math.round(avgSpeed);
+
+      // Workaround for gauge not updating (in some cases) when the value is the same
+      this.fanData.cpu.speed.data.value += this.tweakVal;
+      this.fanData.cpu.temp.data.value += this.tweakVal;
+      this.fanData.gpu1.speed.data.value += this.tweakVal;
+      this.fanData.gpu1.temp.data.value += this.tweakVal;
+      this.fanData.gpu2.speed.data.value += this.tweakVal;
+      this.fanData.gpu2.temp.data.value += this.tweakVal;
+      if (this.tweakVal === 0) {
+        this.tweakVal = 0.0001;
+      } else {
+        this.tweakVal = 0;
+      }
     }));
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
-      this.activeProfile = profile;
-      this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
+      if (profile) {
+        this.activeProfile = profile;
+        this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
+      }
     }));
-
-    const fanProfileNames = this.config.getFanProfiles().map(fanProfile => fanProfile.name);
-    this.fanProfileProgressMap = new Map();
-    const fanProfileProgressStep = 100.0 / fanProfileNames.length;
-    let progressValue = 0;
-    for (const fanProfileName of fanProfileNames) {
-      progressValue += fanProfileProgressStep;
-      this.fanProfileProgressMap.set(fanProfileName, progressValue);
-    }
 
     /*this.cpuModelName = this.node.getOs().cpus()[0].model;
     this.cpuModelName = this.cpuModelName.split('@')[0];
     this.cpuModelName = this.cpuModelName.split('CPU')[0];*/
+
+    this.subscriptions.add(this.tccdbus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+        this.odmProfileNames = nextAvailableODMProfiles;
+
+        // Update ODM profile name map
+        this.odmProfileToName.clear();
+        this.odmProfileProgressMap.clear();
+        let odmProfileProgressValue = 0;
+        if (this.odmProfileNames.length > 0) {
+            const odmProfileProgressStep = 100.0 / (this.odmProfileNames.length - 1);
+            for (const profileName of this.odmProfileNames) {
+                if (profileName.length > 0) {
+                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                    this.odmProfileProgressMap.set(profileName, odmProfileProgressValue);
+                    odmProfileProgressValue += odmProfileProgressStep;
+                }
+            }
+        }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -210,5 +239,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     if (profile !== undefined) {
       this.router.navigate(['profile-manager', profile.name]);
     }
+  }
+
+  public getCPUSettingsEnabled(): boolean {
+    return this.config.getSettings().cpuSettingsEnabled;
+  }
+
+  public getCPUSettingsDisabledTooltip(): string {
+    return this.config.cpuSettingsDisabledMessage;
+  }
+
+  public getFanControlEnabled(): boolean {
+    return this.config.getSettings().fanControlEnabled;
+  }
+
+  public getFanControlDisabledTooltip(): string {
+    return this.config.fanControlDisabledMessage;
   }
 }

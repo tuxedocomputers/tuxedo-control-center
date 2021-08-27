@@ -22,7 +22,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
         <span>
             <ng-container i18n="@@cProfMgrTitle">Profiles</ng-container>
-            <!-- <span [matTooltip]="buttonNew.tooltip()"><button mat-icon-button color="primary" (click)="buttonNew.click()"><mat-icon>add_box</mat-icon></button></span> -->
         </span>
         <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
             <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
@@ -33,26 +32,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-toolbar-row>
     
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
-        <!--span *ngIf="currentProfile" [matTooltip]="buttonCopy.tooltip()"><button mat-icon-button color="basic" (click)="buttonCopy.click()" *ngIf="buttonCopy.show()" [disabled]="buttonCopy.disable()"><mat-icon>file_copy</mat-icon></button></span-->
-        <!--span *ngIf="currentProfile" [matTooltip]="buttonDelete.tooltip()"><button mat-icon-button color="warn" (click)="buttonDelete.click()" *ngIf="buttonDelete.show()" [disabled]="buttonDelete.disable()"><mat-icon>delete</mat-icon></button></span-->
         <span style="flex: 1 1 auto"></span>
-        <!--span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes"><button mat-icon-button color="basic" (click)="profileDetailsEdit.discardFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>undo</mat-icon></button></span-->
-        <!--span *ngIf="currentProfile" i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes"><button mat-icon-button color="primary" (click)="profileDetailsEdit.submitFormInput()" [disabled]="!profileDetailsEdit.profileDirty"><mat-icon>save</mat-icon></button></span-->
-        <!--span i18n-matTooltip="@@cProfMgrButtonProfileOverviewTooltip" matTooltip="Profile overview">
-            <button *ngIf="currentProfile" mat-icon-button color="primary" (click)="selectProfile(undefined)">
-                <mat-icon>apps</mat-icon>
-            </button>
-        </span-->
     </mat-toolbar-row>
 
     <mat-toolbar-row *ngIf="inputActive" style="padding-top: 20px; padding-bottom: 20px;">
         <form (ngSubmit)="onInputSubmit()">
             <mat-form-field class="profile-name-input">
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
-                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="inputActive=false" placeholder="Profile name" minLength="1" maxLength="50" />
+                <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="cancelInput()" placeholder="Profile name" minLength="1" maxLength="50" />
             </mat-form-field>
             <button mat-stroked-button color="primary" i18n>Save</button>
-            <button mat-stroked-button color="basic" (click)="inputActive=false" i18n>Cancel</button>
+            <button mat-stroked-button color="basic" (click)="cancelInput()" i18n>Cancel</button>
         </form>
     </mat-toolbar-row>
     <!--/div-->
@@ -62,22 +52,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
 
 </mat-toolbar>
-<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}">
+<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}" #profileManagerContent>
     <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
         <app-profile-overview-tile
             *ngFor="let profile of getProfilesForList()"
             [profile]="profile"
             [hoverEffect]="false"
             [active]="isProfileActive(profile.name)"
-            [used]="isProfileUsed(profile.name)">
+            [used]="isProfileUsed(profile.name)"
+            (copyClick)="copyProfile($event)">
         </app-profile-overview-tile>
         <app-profile-overview-tile
             *ngIf="['all', 'custom'].includes(inputProfileFilter)"
             [addProfileTile]="true"
             [hoverEffect]="true"
-            (click)="buttonNew.click()"
-        ></app-profile-overview-tile>
+            (click)="buttonNew.click()">
+        </app-profile-overview-tile>
     </div>
-    <app-profile-details-edit #profileDetailsEdit [profile]="currentProfile"></app-profile-details-edit>
+    <app-profile-details-edit #profileDetailsEdit
+        [profile]="currentProfile"
+        (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
+    </app-profile-details-edit>
     <br />
 </div>

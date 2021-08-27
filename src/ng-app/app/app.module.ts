@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -47,6 +47,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material'
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -70,6 +71,13 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { GaugeModule } from 'angular-gauge';
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
+import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
+import { ToolsComponent } from "./tools/tool.component";
+import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
+import { FanGraphComponent } from './fan-graph/fan-graph.component';
+
+import { ChartsModule, ThemeService } from 'ng2-charts';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 registerLocaleData(localeNl, 'nl', localeNlExtra);
@@ -90,7 +98,12 @@ declare const require;
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,
     InfoComponent,
-    CpuDashboardComponent
+    CpuDashboardComponent,
+    GlobalSettingsComponent,
+    ShutdownTimerComponent,
+    ToolsComponent,
+    ChangeCryptPasswordComponent,
+    FanGraphComponent
   ],
   imports: [
     BrowserModule,
@@ -120,9 +133,11 @@ declare const require;
     MatStepperModule,
     MatButtonToggleModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MarkdownModule.forRoot(),
     OverlayModule,
-    GaugeModule.forRoot()
+    GaugeModule.forRoot(),
+    ChartsModule
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
@@ -137,7 +152,8 @@ declare const require;
       return translation;
     }},
     DecimalPipe,
-    I18n
+    I18n,
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })

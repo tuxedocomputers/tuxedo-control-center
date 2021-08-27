@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -82,9 +82,20 @@ export class SysFsService implements OnDestroy {
         availableCores: this.cpu.cores.length,
         minFreq: this.cpu.cores[0].cpuinfoMinFreq.readValueNT(),
         maxFreq: this.cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
+        scalingAvailableFrequencies: this.cpu.cores[0].scalingAvailableFrequencies.readValueNT(),
         scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
-        energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT()
+        energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
+        reducedAvailableFreq: this.cpu.cores[0].getReducedAvailableFreqNT(),
+        boost: this.cpu.boost.readValueNT()
       };
+      if (cpuInfo.scalingAvailableFrequencies !== undefined) {
+        cpuInfo.maxFreq = cpuInfo.scalingAvailableFrequencies[0];
+      }
+      if (cpuInfo.boost !== undefined) {
+        // FIXME: Use actual max boost frequency
+        cpuInfo.maxFreq += 1000000;
+        cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -155,8 +166,11 @@ export interface IGeneralCPUInfo {
   availableCores: number;
   minFreq: number;
   maxFreq: number;
+  scalingAvailableFrequencies: number[];
   scalingAvailableGovernors: string[];
   energyPerformanceAvailablePreferences: string[];
+  reducedAvailableFreq: number;
+  boost: boolean;
 }
 
 export interface ILogicalCoreInfo {

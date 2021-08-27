@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -67,21 +67,56 @@ export class FanData {
  */
 export class TccDBusData {
     public tuxedoWmiAvailable: boolean;
+    public tccdVersion: string;
     public fans: FanData[];
+    public webcamSwitchAvailable: boolean;
+    public webcamSwitchStatus: boolean;
+    public forceYUV420OutputSwitchAvailable: boolean;
+    public modeReapplyPending: boolean;
+    public tempProfileName: string;
+    public activeProfileJSON: string;
+    public profilesJSON: string;
+    public customProfilesJSON: string;
+    public defaultProfilesJSON: string;
+    public odmProfilesAvailable: string[];
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
-
     constructor(private data: TccDBusData) {
         super('com.tuxedocomputers.tccd');
     }
 
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
+    TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
     GetFanDataGPU1() { return this.data.fans[1].export(); }
     GetFanDataGPU2() { return this.data.fans[2].export(); }
+    WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
+    GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
+    GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
+    ConsumeModeReapplyPending() {
+        // Unlikely, but possible race condition.
+        // However no harmful impact, it will just cause the screen to flicker twice instead of once.
+        if (this.data.modeReapplyPending) {
+            this.data.modeReapplyPending = false;
+            return true;
+        }
+        return false;
+    }
+    GetActiveProfileJSON() { return this.data.activeProfileJSON; }
+    SetTempProfile(profileName: string) {
+        this.data.tempProfileName = profileName;
+        return true;
+    }
+    GetProfilesJSON() { return this.data.profilesJSON; }
+    GetCustomProfilesJSON() { return this.data.customProfilesJSON; }
+    GetDefaultProfilesJSON() { return this.data.defaultProfilesJSON; }
+    ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
+    ModeReapplyPendingChanged() {
+        return this.data.modeReapplyPending;
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -89,9 +124,22 @@ TccDBusInterface.configureMembers({
     },
     methods: {
         TuxedoWmiAvailable: { outSignature: 'b' },
+        TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
-        GetFanDataGPU2: { outSignature: 'a{sa{sv}}' }
+        GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
+        WebcamSWAvailable: { outSignature: 'b' },
+        GetWebcamSWStatus: { outSignature: 'b' },
+        GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
+        ConsumeModeReapplyPending: { outSignature: 'b' },
+        GetActiveProfileJSON: { outSignature: 's' },
+        SetTempProfile: { inSignature: 's',  outSignature: 'b' },
+        GetProfilesJSON: { outSignature: 's' },
+        GetCustomProfilesJSON: { outSignature: 's' },
+        GetDefaultProfilesJSON: { outSignature: 's' },
+        ODMProfilesAvailable: { outSignature: 'as' },
     },
-    signals: {}
+    signals: {
+        ModeReapplyPendingChanged: { signature: 'b' }
+    }
 });

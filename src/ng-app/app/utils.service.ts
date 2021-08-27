@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -64,69 +64,15 @@ export class UtilsService {
       }
     }
 
-  public fillDefaultValuesProfile(profile: ITccProfile): void {
-    const cpuInfo = this.sysfs.getGeneralCpuInfo();
-    const cpuCoreInfo = this.sysfs.getLogicalCoreInfo();
-
-    if (profile.cpu.onlineCores === undefined) {
-      profile.cpu.onlineCores = cpuInfo.availableCores;
-    }
-
-    if (profile.cpu.scalingMinFrequency === undefined) {
-      profile.cpu.scalingMinFrequency = cpuCoreInfo[0].cpuInfoMinFreq;
-    }
-
-    if (profile.cpu.scalingMaxFrequency === undefined) {
-      profile.cpu.scalingMaxFrequency = cpuCoreInfo[0].cpuInfoMaxFreq;
-    } else if (profile.cpu.scalingMaxFrequency < profile.cpu.scalingMinFrequency) {
-      profile.cpu.scalingMaxFrequency = profile.cpu.scalingMinFrequency;
-    }
-
-    if (profile.cpu.governor === undefined) {
-      profile.cpu.governor = defaultCustomProfile.cpu.governor;
-    }
-
-    if (profile.cpu.energyPerformancePreference === undefined) {
-      profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
-    }
-
-    if (profile.cpu.noTurbo === undefined) {
-      profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
-    }
-
-    if (profile.webcam === undefined) {
-      profile.webcam = {
-        useStatus: false,
-        status: true
-      };
-    }
-
-    if (profile.webcam.useStatus === undefined) {
-      profile.webcam.useStatus = false;
-    }
-
-    if (profile.webcam.status === undefined) {
-      profile.webcam.status = true;
-    }
-
-    if (profile.fan === undefined) {
-      profile.fan = {
-        useControl: true,
-        fanProfile: 'Balanced'
-      };
-    }
-  }
-
   public async execCmd(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      this.electron.ipcRenderer.once('exec-cmd-result', (event, result) => {
+      this.electron.ipcRenderer.invoke('exec-cmd-async', command).then((result) => {
         if (result.error === null) {
           resolve(result.data);
         } else {
           reject(result.error);
         }
       });
-      this.electron.ipcRenderer.send('exec-cmd-async', command);
     });
   }
 
