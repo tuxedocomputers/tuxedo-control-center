@@ -102,10 +102,9 @@ export class CpuController {
             if (setMaxFrequency === undefined) {
                 newMaxFrequency = coreMaxFrequency;
             } else if (setMaxFrequency === -1) {
-                if (this.boost === undefined) {
+                if (!this.boost.isAvailable()) {
                     newMaxFrequency = core.getReducedAvailableFreq();
-                }
-                else {
+                } else {
                     newMaxFrequency = coreMaxFrequency;
                 }
             } else {
@@ -233,20 +232,5 @@ export class CpuController {
                 core.energyPerformancePreference.writeValue(performancePreference);
             }
         }
-    }
-
-    /**
-     * Enables or disables CPU boost frequencies
-     * Used by AMD CPUs
-     * This switch is not available on Intel as there the CPU max frequency also applys to CPU Boost -> CPU boost on
-     * Intel is deactivated by setting max frequency = max non boost clock
-     *
-     * @param boost The choosen state for the boost setting
-     */
-    public setBoost(boost?: boolean) {
-        if (this.boost === undefined) {
-            return;
-        }
-        this.boost.writeValue(boost);
     }
 }

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -29,7 +29,7 @@ import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
-import { MatButton } from '@angular/material/button';
+import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -85,6 +85,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     @Input()
     get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
 
+    @Output() scrollTo = new EventEmitter<number>();
+
     public gridParams = {
         cols: 9,
         headerSpan: 4,
@@ -104,6 +106,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public selectableFrequencies;
 
+    public odmProfileNames: string[] = [];
+    public odmProfileToName: Map<string, string> = new Map();
+
+    public showFanGraphs = false;
+
     @ViewChild('inputName', { static: false }) inputName: MatInput;
 
     constructor(
@@ -113,6 +120,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private sysfs: SysFsService,
         private fb: FormBuilder,
         private dbus: DBusService,
+        private tccDBus: TccDBusClientService,
         public compat: CompatibilityService,
         private i18n: I18n
     ) { }
@@ -125,6 +133,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }));
 
         this.stateInputArray = this.state.getStateInputs();
+
+        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+            this.odmProfileNames = nextAvailableODMProfiles;
+
+            // Update ODM profile name map
+            this.odmProfileToName.clear();
+            for (const profileName of this.odmProfileNames) {
+                if (profileName.length > 0) {
+                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                }
+            }
+        }));
     }
 
     ngOnDestroy() {
@@ -180,6 +200,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const cpuGroup: FormGroup = this.fb.group(profile.cpu);
         const webcamGroup: FormGroup = this.fb.group(profile.webcam);
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
+        const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
 
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
@@ -189,7 +210,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             display: displayGroup,
             cpu: cpuGroup,
             webcam: webcamGroup,
-            fan: fanControlGroup
+            fan: fanControlGroup,
+            odmProfile: odmProfileGroup
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
@@ -258,6 +280,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public inputDisplayBrightnessOffsetFunc(slider, offset: number) {
+        return () => {
+            let newValue = slider.value + offset;
+            if (newValue < 0) {
+                newValue = 0;
+            } else if (newValue > 100) {
+                newValue = 100;
+            }
+            slider.setValue(newValue);
+            this.inputDisplayBrightnessChange(newValue);
+        }
+    }
+
     public formatFrequency(frequency: number): string {
         return this.utils.formatFrequency(frequency);
     }
@@ -279,5 +314,47 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
         const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
+    }
+
+    private buttonRepeatTimer: NodeJS.Timeout;
+    public buttonRepeatDown(action: () => void) {
+        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
+        const repeatDelayMS = 200;
+
+        action();
+        
+        this.buttonRepeatTimer = setInterval(() => {
+            action();
+        }, repeatDelayMS);
+    }
+
+    public buttonRepeatUp() {
+        clearInterval(this.buttonRepeatTimer);
+    }
+
+    public modifySliderInputFunc(slider, offset: number, min: number, max: number) {
+        return () => {
+            this.modifySliderInput(slider, offset, min, max);
+        }
+    }
+
+    public modifySliderInput(slider, offset: number, min: number, max: number) {
+            let newValue = slider.value += offset;
+            if (newValue < min) {
+                newValue = min;
+            } else if (newValue > max) {
+                newValue = max;
+            }
+            slider.setValue(newValue);
+    }
+
+    @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;
+    public toggleFanGraphs() {
+        if (!this.showFanGraphs) {
+            this.showFanGraphs = true;
+            this.scrollTo.emit(this.fancontrolHeaderE.nativeElement.offsetTop - 50);
+        } else {
+            this.showFanGraphs = false;
+        }
     }
 }

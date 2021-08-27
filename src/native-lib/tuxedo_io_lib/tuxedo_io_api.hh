@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -24,6 +24,7 @@
 #include <sys/ioctl.h>
 #include <string>
 #include <vector>
+#include <map>
 #include <cmath>
 #include "tuxedo_io_ioctl.h"
 
@@ -90,6 +91,9 @@ public:
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) = 0;
     virtual bool SetWebcam(const bool status) = 0;
     virtual bool GetWebcam(bool &status) = 0;
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) = 0;
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) = 0;
 
 protected:
     IO *io;
@@ -184,8 +188,43 @@ public:
         return ret;
     }
 
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
+        profiles.clear();
+        profiles.push_back(PERF_PROF_STR_QUIET);
+        profiles.push_back(PERF_PROF_STR_POWERSAVE);
+        profiles.push_back(PERF_PROF_STR_ENTERTAINMENT);
+        profiles.push_back(PERF_PROF_STR_PERFORMANCE);
+        return true;
+    }
+
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
+        bool result = false;
+        bool perfProfileExists = clevoPerformanceProfilesToArgument.find(performanceProfile) != clevoPerformanceProfilesToArgument.end();
+        if (perfProfileExists) {
+            int perfProfileArgument = clevoPerformanceProfilesToArgument.at(performanceProfile);
+            result = io->IoctlCall(W_CL_PERF_PROFILE, perfProfileArgument);
+        }
+        return result;
+    }
+
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
+        profileName = "performance";
+        return true;
+    }
+
 private:
     const int MAX_FAN_SPEED = 0xff;
+    const std::string PERF_PROF_STR_QUIET = "quiet";
+    const std::string PERF_PROF_STR_POWERSAVE = "power_saving";
+    const std::string PERF_PROF_STR_PERFORMANCE = "performance";
+    const std::string PERF_PROF_STR_ENTERTAINMENT = "entertainment";
+
+    const std::map<std::string, int> clevoPerformanceProfilesToArgument = {
+        { PERF_PROF_STR_QUIET,          0x00 },
+        { PERF_PROF_STR_POWERSAVE,      0x01 },
+        { PERF_PROF_STR_PERFORMANCE,    0x02 },
+        { PERF_PROF_STR_ENTERTAINMENT,  0x03 }
+    };
 
     bool GetFanInfo(int fanNr, int &fanInfo) {
         if (fanNr < 0 || fanNr >= 3) return false;
@@ -240,9 +279,7 @@ public:
     }
 
     virtual bool SetFansAuto() {
-        // Setting the mode will return control to the firmware
-        int mode = 0x00;
-        return io->IoctlCall(W_UW_MODE, mode);
+        return io->IoctlCall(W_UW_FANAUTO);
     }
 
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) {
@@ -319,6 +356,22 @@ public:
         return false;
     }
 
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
+        // Not implemented
+        profiles.clear();
+        return false;
+    }
+
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
+        // Not implemented
+        return false;
+    }
+
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
+        profileName = "";
+        return false;
+    }
+
 private:
     const int MAX_FAN_SPEED = 0xc8;
 };
@@ -355,6 +408,11 @@ public:
 
     bool GetModuleVersion(std::string &version) {
         return io.IoctlCall(R_MOD_VERSION, version, 20);
+    }
+
+    bool GetModuleAPIMinVersion(std::string &version) {
+        version = MOD_API_MIN_VERSION;
+        return true;
     }
 
     virtual bool Identify(bool &identified) {
@@ -429,6 +487,30 @@ public:
     virtual bool GetWebcam(bool &status) {
         if (activeInterface) {
             return activeInterface->GetWebcam(status);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
+        if (activeInterface) {
+            return activeInterface->GetAvailableODMPerformanceProfiles(profiles);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
+        if (activeInterface) {
+            return activeInterface->SetODMPerformanceProfile(performanceProfile);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
+        if (activeInterface) {
+            return activeInterface->GetDefaultODMPerformanceProfile(profileName);
         } else {
             return false;
         }

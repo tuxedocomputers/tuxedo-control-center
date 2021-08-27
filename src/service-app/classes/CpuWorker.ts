@@ -35,7 +35,9 @@ export class CpuWorker extends DaemonWorker {
     }
 
     public onStart() {
-        this.applyCpuProfile(this.tccd.getCurrentProfile());
+        if (this.tccd.settings.cpuSettingsEnabled) {
+            this.applyCpuProfile(this.tccd.getCurrentProfile());
+        }
     }
 
     public onWork() {
@@ -43,7 +45,7 @@ export class CpuWorker extends DaemonWorker {
         // apply profile again
 
         try {
-            if (!this.validateCpuFreq()) {
+            if (this.tccd.settings.cpuSettingsEnabled && !this.validateCpuFreq()) {
                 this.tccd.logLine('CpuWorker: Incorrect settings, reapplying profile');
                 this.applyCpuProfile(this.tccd.getCurrentProfile());
             }
@@ -211,8 +213,9 @@ export class CpuWorker extends DaemonWorker {
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
             if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+                const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 const coreMinFreq = core.cpuinfoMinFreq.readValue();
-                const coreMaxFreq = core.cpuinfoMaxFreq.readValue();
+                const coreMaxFreq = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
                     const minFreq = core.scalingMinFreq.readValue();
                     let minFreqProfile = profile.cpu.scalingMinFrequency;
@@ -232,10 +235,9 @@ export class CpuWorker extends DaemonWorker {
                     const maxFreq = core.scalingMaxFreq.readValue();
                     let maxFreqProfile = profile.cpu.scalingMaxFrequency;
                     if (maxFreqProfile === -1) {
-                        if (this.cpuCtrl.boost === undefined) {
+                        if (!this.cpuCtrl.boost.isAvailable()) {
                             maxFreqProfile = core.getReducedAvailableFreq();
-                        }
-                        else {
+                        } else {
                             maxFreqProfile = coreMaxFreq;
                         }
                     } else if (maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq || profile.cpu.useMaxPerfGov) {
@@ -288,18 +290,21 @@ export class CpuWorker extends DaemonWorker {
             const currentBoost = this.cpuCtrl.boost.readValue()
             const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
             const maxFreqProfile = profile.cpu.scalingMaxFrequency;
-            if ((profile.cpu.useMaxPerfGov || maxFreqProfile === undefined) && !currentBoost) {
-                cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of true');
+            if (profile.cpu.useMaxPerfGov) {
+                if (!currentBoost) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
+                }
             }
-            else if (maxFreqProfile === -1 && currentBoost) {
-                cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of false');
-            }
-            else if ((maxFreqProfile <= coreMaxFreq && currentBoost) || (maxFreqProfile > coreMaxFreq && !currentBoost)) {
-                cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: Unexpected value boost => ' + currentBoost + ' instead of '
-                + (maxFreqProfile > coreMaxFreq));
+            else {
+                if ((maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq) && !currentBoost) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
+                }
+                else if ((maxFreqProfile === -1 || maxFreqProfile <= coreMaxFreq) && currentBoost) {
+                    cpuFreqValidConfig = false;
+                    this.tccd.logLine('CpuWorker: Unexpected value boost => true instead of false');
+                }
             }
         }
 

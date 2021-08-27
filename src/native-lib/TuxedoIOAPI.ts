@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -73,6 +73,26 @@ export interface ITuxedoIOAPI {
      * @returns True if call succeeded, false otherwise
      */
     getWebcamStatus(status: ObjWrapper<boolean>): boolean;
+    /**
+     * Get names of output ports
+     * @returns Array of output port names
+     */
+     getOutputPorts(): Array<Array<string>>;
+    /**
+     *  Get list of available ODM performance profiles
+     *  @returns True if call succeeded, false otherwise
+     */
+    getAvailableODMPerformanceProfiles(profiles: ObjWrapper<string[]>): boolean;
+    /**
+     *  Set active performance profile (from valid list)
+     *  @returns True if call succeeded, false otherwise
+     */
+    setODMPerformanceProfile(performanceProfile: string): boolean;
+    /**
+     *  Get the default performance profile name
+     *  @returns True if call succeeded, false otherwise
+     */
+    getDefaultODMPerformanceProfile(profileName: ObjWrapper<string>): boolean;
 }
 
 

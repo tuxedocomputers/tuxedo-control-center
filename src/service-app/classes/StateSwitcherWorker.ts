@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -42,6 +42,9 @@ export class StateSwitcherWorker extends DaemonWorker {
             } else {
                 this.tccd.activeProfileName = newActiveProfileName;
             }
+
+            this.tccd.updateDBusActiveProfileData();
+
             // Note: No need to manually run other workers on fresh start
         }
     }
@@ -49,6 +52,7 @@ export class StateSwitcherWorker extends DaemonWorker {
     public onWork(): void {
         // Check state and switch profile if appropriate
         const newState = determineState();
+        const oldActiveProfileName = this.tccd.activeProfileName;
 
         if (newState !== this.currentState) {
             this.currentState = newState;
@@ -59,7 +63,23 @@ export class StateSwitcherWorker extends DaemonWorker {
             } else {
                 this.tccd.activeProfileName = newActiveProfileName;
             }
-            // Also run worker start procedure / application of profile
+        } else {
+            // If state didn't change, a manual temporary profile can still be set
+            if (this.tccd.dbusData.tempProfileName !== undefined) {
+                if (this.tccd.getAllProfiles().find((profile) => profile.name === this.tccd.dbusData.tempProfileName) !== undefined) {
+                    // If set and exists set this as active profile
+                    this.tccd.activeProfileName = this.tccd.dbusData.tempProfileName;
+                    this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileName + '" selected');
+                }
+                this.tccd.dbusData.tempProfileName = undefined;
+            }
+        }
+
+        this.tccd.updateDBusActiveProfileData();
+
+        // Run worker start procedure / application of profile
+        // if the profile changed
+        if (oldActiveProfileName !== this.tccd.activeProfileName) {
             this.tccd.startWorkers();
         }
     }

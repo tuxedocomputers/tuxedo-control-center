@@ -1,0 +1,40 @@
+header {
+    width: 100%;
+    padding-right: 20px;
+    text-align: left;
+    font-size: 1.15em;
+}
+
+content.value {
+    width: 100%;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.15em;
+}
+
+content.input {
+    mat-slider {
+        width: 200px;
+    }
+
+    mat-select {
+        width: 200px;
+    }
+}
+
+.margin-top {
+    margin-top: 0.8rem;
+}
+
+.margin-bottom {
+    margin-bottom: 0.8rem;
+}
+
+.margin-left {
+    margin-left: 2em;
+}
+
+.theme-settings-content {
+    display: flex;
+    justify-content: space-around;
+}

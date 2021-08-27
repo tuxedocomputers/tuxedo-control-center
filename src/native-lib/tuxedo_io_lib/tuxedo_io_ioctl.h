@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of tuxedo-io.
  *
@@ -27,6 +27,7 @@
 #define MAGIC_READ_UW	IOCTL_MAGIC + 3
 #define MAGIC_WRITE_UW	IOCTL_MAGIC + 4
 
+#define MOD_API_MIN_VERSION "0.2.2" // IMPORTANT: Needs to be updated when a new ioctl is added
 
 // General
 #define R_MOD_VERSION		_IOR(IOCTL_MAGIC, 0x00, char*)
@@ -60,6 +61,7 @@
 #define W_CL_WEBCAM_SW		_IOW(MAGIC_WRITE_CL, 0x12, int32_t*)
 #define W_CL_FLIGHTMODE_SW	_IOW(MAGIC_WRITE_CL, 0x13, int32_t*)
 #define W_CL_TOUCHPAD_SW	_IOW(MAGIC_WRITE_CL, 0x14, int32_t*)
+#define W_CL_PERF_PROFILE	_IOW(MAGIC_WRITE_CL, 0x15, int32_t*)
 
 #ifdef DEBUG
 #define W_TF_BC			_IOW(MAGIC_WRITE_CL, 0x91, uint32_t*)
@@ -83,5 +85,6 @@
 #define W_UW_FANSPEED2		_IOW(MAGIC_WRITE_UW, 0x11, int32_t*)
 #define W_UW_MODE		_IOW(MAGIC_WRITE_UW, 0x12, int32_t*)
 #define W_UW_MODE_ENABLE	_IOW(MAGIC_WRITE_UW, 0x13, int32_t*)
+#define W_UW_FANAUTO	_IO(MAGIC_WRITE_UW, 0x14) // undo all previous calls of W_UW_FANSPEED and W_UW_FANSPEED2
 
 #endif

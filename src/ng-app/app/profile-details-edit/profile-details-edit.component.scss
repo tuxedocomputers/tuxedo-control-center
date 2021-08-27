@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -81,6 +81,23 @@
             mat-select {
                 width: 200px;
             }
+        }
+    }
+
+    .fan-graph-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        //justify-content: center;
+
+        margin-top: 20px;
+        width: 100%;
+
+
+
+        app-fan-graph {
+            width: 100%;
+            margin-top: 20px;
         }
     }
 }
