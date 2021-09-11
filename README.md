@@ -27,14 +27,15 @@ tuxedo-control-center
 
 ## Development setup
 
-1. Install git, nodejs, gcc, g++, make \
+1. Install [tuxedo-keyboard](https://github.com/tuxedocomputers/tuxedo-keyboard)
+2. Install git, nodejs, gcc, g++, make \
    Ex (deb):
    ```
    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
    sudo apt install -y git gcc g++ make nodejs npm
    ```
-2. Clone & install libraries
+3. Clone & install libraries
     ```
     git clone https://github.com/tuxedocomputers/tuxedo-control-center
 
@@ -44,7 +45,7 @@ tuxedo-control-center
     ```
    **Note:** Do ***not*** continue with `npm audit fix`. Known to cause various issues.
 
-3. Install service file that points to development build path (or use installed service from packaged version)
+4. Install service file that points to development build path (or use installed service from packaged version)
    
    Manual instructions:
    1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
