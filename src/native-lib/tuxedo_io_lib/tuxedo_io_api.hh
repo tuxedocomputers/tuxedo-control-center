@@ -359,21 +359,61 @@ public:
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
         // Not implemented
         profiles.clear();
-        return false;
+        profiles.push_back(PERF_PROF_STR_BALANCED);
+        profiles.push_back(PERF_PROF_STR_ENTHUSIAST);
+        profiles.push_back(PERF_PROF_STR_OVERBOOST);
+        return true;
     }
 
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
-        // Not implemented
-        return false;
+        bool result = false;
+        bool perfProfileExists = uniwillProfileToTDP0.at("ph4trx").find(performanceProfile) != uniwillProfileToTDP0.at("ph4trx").end();
+        if (perfProfileExists) {
+            int tdp0_value = uniwillProfileToTDP0.at("ph4trx").at(performanceProfile);
+            int tdp1_value = uniwillProfileToTDP1.at("ph4trx").at(performanceProfile);
+            int tdp2_value = uniwillProfileToTDP2.at("ph4trx").at(performanceProfile);
+            io->IoctlCall(W_UW_TDP0, tdp0_value);
+            io->IoctlCall(W_UW_TDP1, tdp1_value);
+            io->IoctlCall(W_UW_TDP2, tdp2_value);
+            result = true;
+        }
+        return result;
     }
 
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
-        profileName = "";
-        return false;
+        profileName = PERF_PROF_STR_ENTHUSIAST;
+        return true;
     }
 
 private:
     const int MAX_FAN_SPEED = 0xc8;
+    const std::string PERF_PROF_STR_BALANCED = "power_save";
+    const std::string PERF_PROF_STR_ENTHUSIAST = "enthusiast";
+    const std::string PERF_PROF_STR_OVERBOOST = "overboost";
+
+    const std::map<std::string, std::map<std::string, int> > uniwillProfileToTDP0 = {
+        { "ph4trx", {
+            { PERF_PROF_STR_BALANCED,       0x0f },
+            { PERF_PROF_STR_ENTHUSIAST,     0x1e },
+            { PERF_PROF_STR_OVERBOOST,      0x32 }
+        }}
+    };
+
+    const std::map<std::string, std::map<std::string, int> > uniwillProfileToTDP1 = {
+        { "ph4trx", {
+            { PERF_PROF_STR_BALANCED,       0x0f },
+            { PERF_PROF_STR_ENTHUSIAST,     0x23 },
+            { PERF_PROF_STR_OVERBOOST,      0x3c }
+        }}
+    };
+
+    const std::map<std::string, std::map<std::string, int> > uniwillProfileToTDP2 = {
+        { "ph4trx", {
+            { PERF_PROF_STR_BALANCED,       0x00 },
+            { PERF_PROF_STR_ENTHUSIAST,     0x00 },
+            { PERF_PROF_STR_OVERBOOST,      0x00 }
+        }}
+    };
 };
 
 #define TUXEDO_IO_DEVICE_FILE "/dev/tuxedo_io"
