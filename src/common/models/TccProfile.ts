@@ -23,6 +23,7 @@ export interface ITccProfile {
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
+    odmPowerLimits: ITccODMPowerLimits;
 }
 
 export class TccProfile implements ITccProfile {
@@ -32,6 +33,7 @@ export class TccProfile implements ITccProfile {
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
+    odmPowerLimits: ITccODMPowerLimits;
     public constructor(init: ITccProfile) {
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
@@ -39,6 +41,7 @@ export class TccProfile implements ITccProfile {
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
         this.fan = JSON.parse(JSON.stringify(init.fan));
         this.odmProfile = JSON.parse(JSON.stringify(init.odmProfile));
+        this.odmPowerLimits = JSON.parse(JSON.stringify(init.odmPowerLimits));
     }
 }
 
@@ -73,6 +76,10 @@ interface ITccODMProfile {
     name: string
 }
 
+interface ITccODMPowerLimits {
+    tdpValues: number[]
+}
+
 export const defaultProfiles: ITccProfile[] = [
     {
         name: 'Default',
@@ -99,7 +106,8 @@ export const defaultProfiles: ITccProfile[] = [
             minimumFanspeed: 0,
             offsetFanspeed: 0
         },
-        odmProfile: { name: undefined }
+        odmProfile: { name: undefined },
+        odmPowerLimits: { tdpValues: [] }
     },
     {
         name: 'Cool and breezy',
@@ -126,7 +134,8 @@ export const defaultProfiles: ITccProfile[] = [
             minimumFanspeed: 0,
             offsetFanspeed: 0
         },
-        odmProfile: { name: undefined }
+        odmProfile: { name: undefined },
+        odmPowerLimits: { tdpValues: [] }
     },
     {
         name: 'Powersave extreme',
@@ -153,7 +162,8 @@ export const defaultProfiles: ITccProfile[] = [
             minimumFanspeed: 0,
             offsetFanspeed: 0
         },
-        odmProfile: { name: undefined }
+        odmProfile: { name: undefined },
+        odmPowerLimits: { tdpValues: [] }
     }
 ];
 
@@ -182,7 +192,8 @@ export const defaultCustomProfile: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined }
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [] }
 };
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
@@ -210,7 +221,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined }
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [] }
 };
 
 export const profileImageMap = new Map<string, string>();

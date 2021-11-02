@@ -39,6 +39,7 @@ import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
 import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
+import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
 
 const tccPackage = require('../../package.json');
@@ -111,6 +112,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
+        this.workers.push(new ODMPowerLimitWorker(this));
 
         this.startWorkers();
 
@@ -483,6 +485,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         if (profile.odmProfile.name === undefined) {
             profile.odmProfile.name = defaultODMProfileName.value;
+        }
+
+        if (profile.odmPowerLimits === undefined) {
+            profile.odmPowerLimits = { tdpValues: [] };
         }
 
         return profile;
