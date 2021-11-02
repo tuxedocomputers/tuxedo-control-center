@@ -94,6 +94,11 @@ public:
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) = 0;
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) = 0;
+    virtual bool GetNumberTDPs(int &nrTDPs) = 0;
+    virtual bool GetTDPMin(const int tdpInde, int &minValue) = 0;
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) = 0;
+    virtual bool SetTDP(const int tdpIndex, const int tdpValue) = 0;
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) = 0;
 
 protected:
     IO *io;
@@ -211,6 +216,12 @@ public:
         profileName = "performance";
         return true;
     }
+
+    virtual bool GetNumberTDPs(int &nrTDPs) { return false; }
+    virtual bool GetTDPMin(const int tdpIndex, int &minValue) { return false; }
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) { return false; }
+    virtual bool SetTDP(const int tdpIndex, int tdpValue) { return false; }
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) { return false; }
 
 private:
     const int MAX_FAN_SPEED = 0xff;
@@ -385,6 +396,54 @@ public:
         return true;
     }
 
+    virtual bool GetNumberTDPs(int &nrTDPs) {
+
+        // Check return status of getters to figure out how many
+        // TDPs are configurable
+        for (int i = 2; i >= 0; --i) {
+            int status = 0;
+            bool success = GetTDP(i, status);
+            if (success && status >= 0) {
+                nrTDPs = i + 1;
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    virtual bool GetTDPMin(const int tdpIndex, int &minValue) {
+        const unsigned long ioctl_tdp_min[] = { R_UW_TDP0_MIN, R_UW_TDP1_MIN, R_UW_TDP2_MIN };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_min[tdpIndex], minValue);
+    }
+
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) {
+        const unsigned long ioctl_tdp_max[] = { R_UW_TDP0_MAX, R_UW_TDP1_MAX, R_UW_TDP2_MAX };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_max[tdpIndex], maxValue);
+    }
+
+    virtual bool SetTDP(const int tdpIndex, int tdpValue) {
+        const unsigned long ioctl_tdp_set[] = { W_UW_TDP0, W_UW_TDP1, W_UW_TDP2 };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_set[tdpIndex], tdpValue);
+    }
+
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) {
+        const unsigned long ioctl_tdp_get[] = { R_UW_TDP0, R_UW_TDP1, R_UW_TDP2 };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_get[tdpIndex], tdpValue);
+    }
+
 private:
     const int MAX_FAN_SPEED = 0xc8;
     const std::string PERF_PROF_STR_BALANCED = "power_save";
@@ -551,6 +610,46 @@ public:
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
         if (activeInterface) {
             return activeInterface->GetDefaultODMPerformanceProfile(profileName);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetNumberTDPs(int &nrTDPs) {
+        if (activeInterface) {
+            return activeInterface->GetNumberTDPs(nrTDPs);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDPMin(const int tdpIndex, int &minValue) {
+        if (activeInterface) {
+            return activeInterface->GetTDPMin(tdpIndex, minValue);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) {
+        if (activeInterface) {
+            return activeInterface->GetTDPMax(tdpIndex, maxValue);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool SetTDP(const int tdpIndex, int tdpValue) {
+        if (activeInterface) {
+            return activeInterface->SetTDP(tdpIndex, tdpValue);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) {
+        if (activeInterface) {
+            return activeInterface->GetTDP(tdpIndex, tdpValue);
         } else {
             return false;
         }

@@ -84,6 +84,12 @@
 #define R_UW_TDP0		_IOR(MAGIC_READ_UW, 0x16, int32_t*)
 #define R_UW_TDP1		_IOR(MAGIC_READ_UW, 0x17, int32_t*)
 #define R_UW_TDP2		_IOR(MAGIC_READ_UW, 0x18, int32_t*)
+#define R_UW_TDP0_MIN		_IOR(MAGIC_READ_UW, 0x19, int32_t*)
+#define R_UW_TDP1_MIN		_IOR(MAGIC_READ_UW, 0x1a, int32_t*)
+#define R_UW_TDP2_MIN		_IOR(MAGIC_READ_UW, 0x1b, int32_t*)
+#define R_UW_TDP0_MAX		_IOR(MAGIC_READ_UW, 0x1c, int32_t*)
+#define R_UW_TDP1_MAX		_IOR(MAGIC_READ_UW, 0x1d, int32_t*)
+#define R_UW_TDP2_MAX		_IOR(MAGIC_READ_UW, 0x1e, int32_t*)
 
 // Write
 #define W_UW_FANSPEED		_IOW(MAGIC_WRITE_UW, 0x10, int32_t*)
