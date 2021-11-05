@@ -22,6 +22,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
+import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -49,6 +50,7 @@ export class TccDBusClientService implements OnDestroy {
   public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
 
   public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
+  public odmPowerLimits = new BehaviorSubject<TDPInfo[]>([]);
 
   public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
   public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
@@ -92,8 +94,10 @@ export class TccDBusClientService implements OnDestroy {
 
     this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
 
-    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable()
+    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable();
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
+    const nextODMPowerLimits = await this.tccDBusInterface.odmPowerLimits();
+    this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
 
     // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();

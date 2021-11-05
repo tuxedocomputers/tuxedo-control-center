@@ -18,6 +18,7 @@
  */
 import * as dbus from 'dbus-next';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
+import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 
 export class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
@@ -165,6 +166,14 @@ export class TccDBusController {
     async odmProfilesAvailable(): Promise<string[]> {
         try {
             return await this.interface.ODMProfilesAvailable();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async odmPowerLimits(): Promise<TDPInfo[]> {
+        try {
+            return JSON.parse(await this.interface.ODMPowerLimitsJSON());
         } catch (err) {
             return undefined;
         }

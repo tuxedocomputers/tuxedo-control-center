@@ -51,6 +51,12 @@ export class CompatibilityService {
         this.tccDbus.odmProfilesAvailable.value.length > 0;
   }
 
+  get hasODMPowerLimitControl(): boolean {
+      return this.tccDbus.tuxedoWmiAvailable.value &&
+        this.tccDbus.odmPowerLimits.value !== undefined &&
+        this.tccDbus.odmPowerLimits.value.length > 0;
+  }
+
   get tccDbusAvailable() {
     return this.tccDbus.available;
   }
