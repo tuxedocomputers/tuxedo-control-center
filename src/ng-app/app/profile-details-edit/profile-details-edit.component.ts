@@ -209,7 +209,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
         const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
 
-        const odmTDPValuesArray: FormArray = this.fb.array(profile.odmPowerLimits.tdpValues);
+        const odmTDPValuesArray: FormArray = this.fb.array(profile.odmPowerLimits.tdpValues.map(e => this.fb.control(e)));
         const odmPowerLimits: FormGroup = this.fb.group({
             tdpValues: odmTDPValuesArray
         });

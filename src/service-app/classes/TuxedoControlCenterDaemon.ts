@@ -37,7 +37,7 @@ import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
@@ -487,8 +487,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.odmProfile.name = defaultODMProfileName.value;
         }
 
-        if (profile.odmPowerLimits === undefined) {
+        let tdpInfo: TDPInfo[] = [];
+        TuxedoIOAPI.getTDPInfo(tdpInfo);
+        if (profile.odmPowerLimits === undefined
+            || profile.odmPowerLimits.tdpValues === undefined) {
             profile.odmPowerLimits = { tdpValues: [] };
+        }
+
+        const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
+        if (nrMissingValues > 0) {
+            profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
         }
 
         return profile;
