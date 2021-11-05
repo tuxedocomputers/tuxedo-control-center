@@ -24,12 +24,13 @@ import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -109,6 +110,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
 
+    public odmPowerLimitInfos: TDPInfo[] = [];
+
     public showFanGraphs = false;
 
     @ViewChild('inputName', { static: false }) inputName: MatInput;
@@ -144,6 +147,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
                 }
             }
+        }));
+
+        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
+            this.odmPowerLimitInfos = nextODMPowerLimits;
         }));
     }
 
@@ -202,6 +209,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
         const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
 
+        const odmTDPValuesArray: FormArray = this.fb.array(profile.odmPowerLimits.tdpValues);
+        const odmPowerLimits: FormGroup = this.fb.group({
+            tdpValues: odmTDPValuesArray
+        });
+
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
@@ -211,7 +223,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             cpu: cpuGroup,
             webcam: webcamGroup,
             fan: fanControlGroup,
-            odmProfile: odmProfileGroup
+            odmProfile: odmProfileGroup,
+            odmPowerLimits: odmPowerLimits
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);

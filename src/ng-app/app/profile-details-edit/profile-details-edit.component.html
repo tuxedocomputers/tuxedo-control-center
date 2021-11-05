@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -333,6 +333,49 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-select>
                             </content>
                         </mat-grid-tile>
+                    </div>
+
+                    <div formArrayName="odmPowerLimits">
+                        <div *ngFor="let tdpControl of odmPowerLimits.controls; index as i;">
+                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <header>TDP</header>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ profile.odmPowerLimits[i] }}%</content>
+                                <content class="value" [hidden]="!editProfile">{{ tdpControl.value }}%</content>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(tdpControl, -1, odmPowerLimitInfos[i].min, odmPowerLimitInfos[i].max)); tdpControl.markAsDirty();"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(tdpControl, +1, odmPowerLimitInfos[i].min, odmPowerLimitInfos[i].max))); tdpControl.markAsDirty();"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider
+                                        [formControlName]="i"
+                                        min="odmPowerLimitInfos[i].min"
+                                        max="odmPowerLimitInfos[i].max"
+                                        step="1"
+                                        color="primary">
+                                    </mat-slider>
+                                    <button mat-icon-button
+                                        color="primary"
+                                        (click)="tdpControl.reset(viewProfile.odmPowerLimits.tdpValues[i]);"
+                                        [hidden]="!tdpControl.dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </content>
+                            </mat-grid-tile>
+                        </div>
                     </div>
 
                 </mat-grid-list>
