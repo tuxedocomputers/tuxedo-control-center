@@ -476,8 +476,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         const defaultODMProfileName: ObjWrapper<string> = { value: '' };
+        const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
         TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
-        if (profile.odmProfile === undefined) {
+        TuxedoIOAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
+        if (profile.odmProfile === undefined || !availableODMProfiles.value.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
                 name: defaultODMProfileName.value
             };
