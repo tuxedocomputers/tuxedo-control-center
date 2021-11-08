@@ -91,6 +91,8 @@
 #define R_UW_TDP1_MAX		_IOR(MAGIC_READ_UW, 0x1d, int32_t*)
 #define R_UW_TDP2_MAX		_IOR(MAGIC_READ_UW, 0x1e, int32_t*)
 
+#define R_UW_PROFS_AVAILABLE	_IOR(MAGIC_READ_UW, 0x1f, int32_t*)
+
 // Write
 #define W_UW_FANSPEED		_IOW(MAGIC_WRITE_UW, 0x10, int32_t*)
 #define W_UW_FANSPEED2		_IOW(MAGIC_WRITE_UW, 0x11, int32_t*)
@@ -101,5 +103,7 @@
 #define W_UW_TDP0		_IOW(MAGIC_WRITE_UW, 0x15, int32_t*)
 #define W_UW_TDP1		_IOW(MAGIC_WRITE_UW, 0x16, int32_t*)
 #define W_UW_TDP2		_IOW(MAGIC_WRITE_UW, 0x17, int32_t*)
+
+#define W_UW_PERF_PROF		_IOW(MAGIC_WRITE_UW, 0x18, int32_t*)
 
 #endif
