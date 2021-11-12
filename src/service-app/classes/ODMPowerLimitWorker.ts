@@ -34,7 +34,7 @@ export class ODMPowerLimitWorker extends DaemonWorker {
         }
 
         let tdpInfo: TDPInfo[] = [];
-        if (ioAPI.getTDPInfo(tdpInfo)) {
+        if (ioAPI.getTDPInfo(tdpInfo) && tdpInfo.length > 0) {
             let newTDPValues: number[] = [];
             // If set in profile use these
             if (odmPowerLimitSettings.tdpValues && odmPowerLimitSettings.tdpValues.length > 0) {
