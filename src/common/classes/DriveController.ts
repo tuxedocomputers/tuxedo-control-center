@@ -67,7 +67,7 @@ export class DriveController {
             devPath = path.join("/dev/", name);
         }
 
-        let result = child_process.execSync(`lsblk --noheadings --output FSTYPE ${devPath}`);
+        let result = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
         const isCrpyt = result.toString().trim() == "crypto_LUKS";
 
         return {
