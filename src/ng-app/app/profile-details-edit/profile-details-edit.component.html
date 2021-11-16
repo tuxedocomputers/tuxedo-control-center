@@ -302,7 +302,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- System (aka ODM) control settings -->
-        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl">
+        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl && !compat.hasODMPowerLimitControl">
 
             <div class="title-row">
                 <hr />
