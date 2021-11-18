@@ -46,12 +46,15 @@ export class DriveController {
         return drives;
     }
 
+    /*
+    // Unused
     public static async getDrivesWorkaround(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         // Workaround for suse. Suse need a first call of blkid with sudo, to create the map for normal users
         child_process.execSync(`pkexec blkid -o value -s TYPE`);
 
         return this.getDrives(includeLoopDevices);
     }
+    */
 
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
         let name = path.basename(devicePath);
@@ -64,7 +67,7 @@ export class DriveController {
             devPath = path.join("/dev/", name);
         }
 
-        let result = child_process.execSync(`blkid -o value -s TYPE ${devPath}`);
+        let result = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
         const isCrpyt = result.toString().trim() == "crypto_LUKS";
 
         return {
