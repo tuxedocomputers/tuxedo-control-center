@@ -316,7 +316,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
-                    <div formGroupName="odmProfile">
+                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsODMProfileLabel">System profile</header>
                         </mat-grid-tile>
@@ -335,7 +335,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                     </div>
 
-                    <div formGroupName="odmPowerLimits">
+                    <div formGroupName="odmPowerLimits" [hidden]="!compat.hasODMPowerLimitControl">
                         <div formArrayName="tdpValues">
                             <div *ngFor="let tdpControl of profileFormGroup.get('odmPowerLimits').get('tdpValues').controls; index as i;">
                                 <mat-grid-tile [colspan]="gridParams.headerSpan">
