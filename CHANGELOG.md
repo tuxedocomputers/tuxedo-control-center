@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1] - 2021-11-26
+
+### Changed
+- Updated packages/dependencies
+
+### Fixed
+- Crypt: Fix for inconsistent behaviour of listing/detecting encrypted drives
+- Profile GUI input name related tweaks
+
 ## [1.1.0] - 2021-08-26
 ### Added
 - Profiles: *System profile* selection for TCC profiles for certain devices (more to come).
