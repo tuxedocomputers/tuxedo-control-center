@@ -259,7 +259,8 @@ function createTccWindow() {
         minHeight: windowHeight,
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            enableRemoteModule: true
         }
     });
 
