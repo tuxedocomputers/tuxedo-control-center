@@ -221,6 +221,8 @@ export class ConfigService implements OnDestroy {
     public async writeProfile(currentProfileName: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const profileIndex = this.customProfiles.findIndex(p => p.name === currentProfileName);
+            const existingDefaultProfileWithNewName = this.defaultProfiles.findIndex(p => p.name === profile.name);
+            const exisitingCustomProfileWithNewName = this.customProfiles.findIndex(p => p.name === profile.name);
 
             // Copy custom profiles and if provided profile is one of them, overwrite with
             // provided profile
@@ -232,6 +234,12 @@ export class ConfigService implements OnDestroy {
                     resolve(false);
                     return;
                 }
+            }
+
+            if (existingDefaultProfileWithNewName !== -1 ||
+                (exisitingCustomProfileWithNewName !== -1 && exisitingCustomProfileWithNewName !== profileIndex)) {
+                resolve(false);
+                return;
             }
 
             // Copy config and if states are provided, assign the chosen profile to these states
