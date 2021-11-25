@@ -249,4 +249,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.inputActive = false;
         this.profileToCopy = "";
     }
+
+    public profileNameExist(profileName: string) {
+        return this.getAllProfiles().find(p => p.name === profileName) !== undefined;
+    }
 }
