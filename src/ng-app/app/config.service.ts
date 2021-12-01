@@ -227,19 +227,16 @@ export class ConfigService implements OnDestroy {
             // Copy custom profiles and if provided profile is one of them, overwrite with
             // provided profile
             const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
-            if (profileIndex !== -1) {
-                customProfilesCopy[profileIndex] = profile;
-            } else {
-                if (this.defaultProfiles.find(p => p.name === currentProfileName) === undefined) {
-                    resolve(false);
-                    return;
-                }
-            }
+            const willOverwriteProfile =
+                // Is custom profile
+                profileIndex !== -1
+                // No default profile with same name
+                && existingDefaultProfileWithNewName === -1
+                // Ensure that a profile with the same name doesn't exist, unless it's the changed one
+                && (exisitingCustomProfileWithNewName === -1 || exisitingCustomProfileWithNewName === profileIndex);
 
-            if (existingDefaultProfileWithNewName !== -1 ||
-                (exisitingCustomProfileWithNewName !== -1 && exisitingCustomProfileWithNewName !== profileIndex)) {
-                resolve(false);
-                return;
+            if (willOverwriteProfile) {
+                customProfilesCopy[profileIndex] = profile;
             }
 
             // Copy config and if states are provided, assign the chosen profile to these states
