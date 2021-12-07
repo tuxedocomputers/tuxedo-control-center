@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.2] - 2021-12-07
+
+### Fixed
+- Unable to assign profile to state on profile overview
+
 ## [1.1.1] - 2021-11-26
 
 ### Changed
