@@ -339,7 +339,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div formArrayName="tdpValues">
                             <div *ngFor="let tdpControl of profileFormGroup.get('odmPowerLimits').get('tdpValues').controls; index as i;">
                                 <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                    <header>TDP{{ i }}</header>
+                                    <header>{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                                     <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>

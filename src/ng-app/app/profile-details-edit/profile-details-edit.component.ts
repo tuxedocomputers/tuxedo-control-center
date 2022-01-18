@@ -112,6 +112,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmPowerLimitInfos: TDPInfo[] = [];
 
+    private tdpLabels: Map<string, string>;
+
     public showFanGraphs = false;
 
     @ViewChild('inputName', { static: false }) inputName: MatInput;
@@ -152,6 +154,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             this.odmPowerLimitInfos = nextODMPowerLimits;
         }));
+
+        this.tdpLabels = new Map();
+        this.tdpLabels.set('pl1', this.i18n({ value: 'Sustained Power Limit (PL1)', id: 'tdpLabelsPL1' }));
+        this.tdpLabels.set('pl2', this.i18n({ value: 'Slow (max. 28 sec) Power Limit (PL2)', id: 'tdpLabelsPL2' }));
+        this.tdpLabels.set('pl4', this.i18n({ value: 'Fast (max. 8 sec) Power Limit (PL4)', id: 'tdpLabelsPL4' }));
     }
 
     ngOnDestroy() {
@@ -368,6 +375,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.scrollTo.emit(this.fancontrolHeaderE.nativeElement.offsetTop - 50);
         } else {
             this.showFanGraphs = false;
+        }
+    }
+
+    public odmTDPLabel(tdpDescriptor: string) {
+        const result = this.tdpLabels.get(tdpDescriptor);
+        if (result === undefined) {
+            return tdpDescriptor;
+        } else {
+            return result;
         }
     }
 }
