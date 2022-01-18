@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -224,6 +224,8 @@ Boolean GetTDPInfo(const CallbackInfo &info) {
     TuxedoIOAPI io;
     bool result;
     int nrTDPs = 0;
+    std::vector<std::string> tdpDescriptors;
+    io.GetTDPDescriptors(tdpDescriptors);
     result = io.GetNumberTDPs(nrTDPs);
     for (int i = 0; i < nrTDPs; ++i) {
         Object tdpInfo = Object::New(info.Env());
@@ -234,6 +236,7 @@ Boolean GetTDPInfo(const CallbackInfo &info) {
         tdpInfo.Set("min", minValue);
         tdpInfo.Set("max", maxValue);
         tdpInfo.Set("current", currentValue);
+        tdpInfo.Set("descriptor", tdpDescriptors.at(i));
         tdpArray[i] = tdpInfo;
     }
     return Boolean::New(info.Env(), result);

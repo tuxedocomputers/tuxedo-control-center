@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -95,6 +95,7 @@ public:
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) = 0;
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) = 0;
     virtual bool GetNumberTDPs(int &nrTDPs) = 0;
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) = 0;
     virtual bool GetTDPMin(const int tdpInde, int &minValue) = 0;
     virtual bool GetTDPMax(const int tdpIndex, int &maxValue) = 0;
     virtual bool SetTDP(const int tdpIndex, const int tdpValue) = 0;
@@ -218,6 +219,7 @@ public:
     }
 
     virtual bool GetNumberTDPs(int &nrTDPs) { return false; }
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) { return false; }
     virtual bool GetTDPMin(const int tdpIndex, int &minValue) { return false; }
     virtual bool GetTDPMax(const int tdpIndex, int &maxValue) { return false; }
     virtual bool SetTDP(const int tdpIndex, int tdpValue) { return false; }
@@ -421,6 +423,21 @@ public:
         return true;
     }
 
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) {
+        int nrTDPs = 0;
+        bool result = this->GetNumberTDPs(nrTDPs);
+        if (nrTDPs >= 1) {
+            tdpDescriptors.push_back("pl1");
+        }
+        if (nrTDPs >= 2) {
+            tdpDescriptors.push_back("pl2");
+        }
+        if (nrTDPs >= 3) {
+            tdpDescriptors.push_back("pl4");
+        }
+        return result;
+    }
+
     virtual bool GetTDPMin(const int tdpIndex, int &minValue) {
         const unsigned long ioctl_tdp_min[] = { R_UW_TDP0_MIN, R_UW_TDP1_MIN, R_UW_TDP2_MIN };
         if (tdpIndex < 0 || tdpIndex > 2) {
@@ -609,6 +626,14 @@ public:
     virtual bool GetNumberTDPs(int &nrTDPs) {
         if (activeInterface) {
             return activeInterface->GetNumberTDPs(nrTDPs);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) {
+        if (activeInterface) {
+            return activeInterface->GetTDPDescriptors(tdpDescriptors);
         } else {
             return false;
         }
