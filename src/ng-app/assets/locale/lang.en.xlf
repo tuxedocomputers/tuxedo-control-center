@@ -505,49 +505,49 @@
         <target state="translated">CPU settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">352</context>
+          <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
         <source>Number of logical cores</source>
         <target state="translated">Number of logical cores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">360</context>
+          <context context-type="linenumber">405</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
         <source>Maximum performance</source>
         <target state="translated">Maximum performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">379</context>
+          <context context-type="linenumber">424</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
         <source>yes</source>
         <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">383</context>
+          <context context-type="linenumber">428</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
         <source>no</source>
         <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">384</context>
+          <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
         <source>Minimum frequency</source>
         <target state="translated">Minimum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">442</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
         <source>Maximum frequency</source>
         <target state="translated">Maximum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">427</context>
+          <context context-type="linenumber">472</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
@@ -641,181 +641,61 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
+      </trans-unit><trans-unit id="ece6b23765edb029ab79a01fb5f5fa0dd651839a" datatype="html">
+        <source>Active profile:</source>
+        <target state="translated">Active profile:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
       </trans-unit><trans-unit id="0551549b43ce74879408c2bf92a8035bfa6ea54b" datatype="html">
         <source>Main processor monitor</source>
         <target state="translated">Main processor monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit><trans-unit id="f67ab12753f4365b36a78ac5b6d169538ec2af34" datatype="html">
         <source>CPU - Temp</source>
         <target state="translated">CPU - Temp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit><trans-unit id="7fe0cde0fbcfb34e7fc116339897490407049572" datatype="html">
         <source>CPU - Frequency</source>
         <target state="translated">CPU - Frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit><trans-unit id="bafe991112655207277a9f94bf263ef2903795b1" datatype="html">
         <source>CPU - Fan</source>
         <target state="translated">CPU - Fan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit><trans-unit id="2479d9cadf8ed5a60faad87f7e6ae16faff942c2" datatype="html">
         <source>Graphics card monitor</source>
         <target state="translated">Graphics card monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit><trans-unit id="a1f691cff975c3788fa37e26665dd774e31f6b51" datatype="html">
         <source>GPU - Temp</source>
         <target state="translated">GPU - Temp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit><trans-unit id="f765858f6ef9694c937069a90435bb627bc2e5b6" datatype="html">
         <source>GPU - Fan</source>
         <target state="translated">GPU - Fan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">142</context>
-        </context-group>
-      </trans-unit><trans-unit id="015e45e21b86e81108cda9cd0e74a9a0cdd986f0" datatype="html">
-        <source>Profile settings</source>
-        <target state="translated">Profile settings</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">153</context>
-        </context-group>
-      </trans-unit><trans-unit id="43a02cbb549d36c5086109559945a3db29542b1f" datatype="html">
-        <source>CPU</source>
-        <target state="translated">CPU</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">169</context>
-        </context-group>
-      </trans-unit><trans-unit id="9abcd7c82643d60c22733470463f74e4a54bc069" datatype="html">
-        <source>Min</source>
-        <target state="translated">Min</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">174</context>
-        </context-group>
-      </trans-unit><trans-unit id="c3ced4d162a0a55ee233a187ce7208ba5e922418" datatype="html">
-        <source>Max</source>
-        <target state="translated">Max</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">179</context>
-        </context-group>
-      </trans-unit><trans-unit id="eb4c7703af7db429c52a3c5a4f1ad6ecfc9ea3a5" datatype="html">
-        <source>Maximum performance (<x id="INTERPOLATION" equiv-text="{{ formatFrequency(cpuInfo.maxFreq) }}"/> GHz)</source>
-        <target state="translated">Maximum performance (<x id="INTERPOLATION" equiv-text="{{ formatFrequency(cpuInfo.maxFreq) }}"/> GHz)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">184</context>
-        </context-group>
-      </trans-unit><trans-unit id="c371b6323bb969f94c05f0ce9630745f64c95f3a" datatype="html">
-        <source>Maximum performance (Boost)</source>
-        <target state="translated">Maximum performance (Boost)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">185</context>
-        </context-group>
-      </trans-unit><trans-unit id="74f8b983dba0976dc511f7ccd9801d4ff8c48fd8" datatype="html">
-        <source>Active cores</source>
-        <target state="translated">Active cores</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">200</context>
-        </context-group>
-      </trans-unit><trans-unit id="024aa77d8116d95643de7dd89b423a737519adee" datatype="html">
-        <source>Fan profile</source>
-        <target state="translated">Fan profile</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">207</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardMinFanSpeedLabel" datatype="html">
-        <source>
-                                Min
-                            </source>
-        <target state="translated">
-                                Min
-                            </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardOffsetFanSpeedLabel" datatype="html">
-        <source>
-                                Offset
-                            </source>
-        <target state="translated">
-                                Offset
-                            </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">231</context>
-        </context-group>
-      </trans-unit><trans-unit id="f11dbe7a4cc27e8a49693597e745513942104db2" datatype="html">
-        <source>Fan control: off</source>
-        <target state="translated">Fan control: off</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">238</context>
-        </context-group>
-      </trans-unit><trans-unit id="57b0b92e55a491b36423f7325d0c6887d8298091" datatype="html">
-        <source>Brightness</source>
-        <target state="translated">Brightness</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">253</context>
-        </context-group>
-      </trans-unit><trans-unit id="2e843735a8019b9e71113785b9223ab500fcd429" datatype="html">
-        <source>Fixed brightness off</source>
-        <target state="translated">Fixed brightness off</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">254</context>
-        </context-group>
-      </trans-unit><trans-unit id="b88335949bb1616e9a70b3f3810001cf0a57085a" datatype="html">
-        <source>System profile</source>
-        <target state="translated">System profile</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">260</context>
-        </context-group>
-      </trans-unit><trans-unit id="263323eb8abde4b84da09b10be29b956b5f19933" datatype="html">
-        <source>Webcam</source>
-        <target state="translated">Webcam</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">272</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardWebcamOnLabel" datatype="html">
-        <source>Webcam: on</source>
-        <target state="translated">Webcam: on</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">279</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardWebcamOffLabel" datatype="html">
-        <source>Webcam: off</source>
-        <target state="translated">Webcam: off</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">280</context>
+          <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit><trans-unit id="globalSettingsHeaderLabel" datatype="html">
         <source>Settings</source>
@@ -1228,6 +1108,30 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">GPU Fan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tdpLabelsPL1" datatype="html">
+        <source>Sustained Power Limit (PL1)</source>
+        <target state="translated">Sustained Power Limit (PL1)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tdpLabelsPL2" datatype="html">
+        <source>Slow (max. 28 sec) Power Limit (PL2)</source>
+        <target state="translated">Slow (max. 28 sec) Power Limit (PL2)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tdpLabelsPL4" datatype="html">
+        <source>Fast (max. 8 sec) Power Limit (PL4)</source>
+        <target state="translated">Fast (max. 8 sec) Power Limit (PL4)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
