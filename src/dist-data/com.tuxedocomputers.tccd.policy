@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+    "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+    "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+
+    <vendor>TUXEDO Control Center</vendor>
+    <vendor_url>https://www.tuxedocomputers.com/</vendor_url>
+
+    <action id="com.tuxedocomputers.tccd">
+        <description>Run TUXEDO Control Center Daemon</description>
+        <description xml:lang="de">TUXEDO Control Center Daemon ausführen</description>
+        <message>Authentication is required to run/update the configuration of TUXEDO Control Center Daemon</message>
+        <message xml:lang="de">Authentifikation wird zum aktualisieren des TUXEDO Control Center Daemons benötigt</message>
+
+        <!--icon_name>preferences-system</icon_name-->
+
+        <defaults>
+            <allow_any>auth_admin_keep</allow_any>
+            <allow_inactive>auth_admin_keep</allow_inactive>
+            <allow_active>auth_admin_keep</allow_active>
+        </defaults>
+
+        <annotate key="org.freedesktop.policykit.exec.path">/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/service/tccd</annotate>
+        <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+    </action>
+
+</policyconfig>
+
