@@ -498,56 +498,63 @@
         <target state="translated">System profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">321</context>
+          <context context-type="linenumber">322</context>
+        </context-group>
+      </trans-unit><trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
+        <source> (LED status only)</source>
+        <target state="translated"> (LED status only)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsCpuHeaderLabel" datatype="html">
         <source>CPU settings</source>
         <target state="translated">CPU settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">402</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
         <source>Number of logical cores</source>
         <target state="translated">Number of logical cores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
         <source>Maximum performance</source>
         <target state="translated">Maximum performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">424</context>
+          <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
         <source>yes</source>
         <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">428</context>
+          <context context-type="linenumber">433</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
         <source>no</source>
         <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">429</context>
+          <context context-type="linenumber">434</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
         <source>Minimum frequency</source>
         <target state="translated">Minimum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">442</context>
+          <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
         <source>Maximum frequency</source>
         <target state="translated">Maximum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">472</context>
+          <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>

@@ -318,7 +318,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsODMProfileLabel">System profile</header>
+                            <header [ngClass]="{'inactive': false}">
+                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                <span
+                                    [hidden]="!(compat.hasODMProfileControl && compat.hasODMPowerLimitControl)"
+                                    i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo"> (LED status only)</span>
+                            </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>

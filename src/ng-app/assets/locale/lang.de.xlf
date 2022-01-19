@@ -499,56 +499,63 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Systemprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">321</context>
+          <context context-type="linenumber">322</context>
+        </context-group>
+      </trans-unit><trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
+        <source> (LED status only)</source>
+        <target state="translated"> (nur LED Status)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">325</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsCpuHeaderLabel" datatype="html" approved="yes">
         <source>CPU settings</source>
         <target phase-name="approval-1" state="signed-off">CPU-Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">402</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html" approved="yes">
         <source>Number of logical cores</source>
         <target phase-name="approval-1" state="signed-off">Anzahl der logischen Kerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
         <source>Maximum performance</source>
         <target phase-name="approval-1" state="signed-off">Maximale Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">424</context>
+          <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
         <source>yes</source>
         <target phase-name="approval-1" state="signed-off">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">428</context>
+          <context context-type="linenumber">433</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
         <source>no</source>
         <target phase-name="approval-1" state="signed-off">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">429</context>
+          <context context-type="linenumber">434</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html" approved="yes">
         <source>Minimum frequency</source>
         <target phase-name="approval-1" state="translated">Minimale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">442</context>
+          <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html" approved="yes">
         <source>Maximum frequency</source>
         <target phase-name="approval-1" state="translated">Maximale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">472</context>
+          <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
         <source>Info</source>
