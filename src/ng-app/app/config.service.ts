@@ -167,12 +167,16 @@ export class ConfigService implements OnDestroy {
         return success;
     }
 
-    public deleteCustomProfile(profileNameToDelete: string): boolean {
+    public async deleteCustomProfile(profileNameToDelete: string) {
         const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.name !== profileNameToDelete);
-        if (newProfileList.length === this.getCustomProfiles().length) { return false; }
-        const result = this.pkexecWriteCustomProfiles(newProfileList);
-        if (result) { this.updateConfigData(); }
-        return result;
+        if (newProfileList.length === this.getCustomProfiles().length) {
+            return false;
+        }
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+        }
+        return success;
     }
 
     public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {

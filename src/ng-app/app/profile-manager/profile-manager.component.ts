@@ -200,9 +200,11 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     }
 
     public deleteProfile(profileName): void {
-        if (this.config.deleteCustomProfile(profileName)) {
-            this.router.navigate(['profile-manager']);
-        }
+        this.config.deleteCustomProfile(profileName).then((success => {
+            if (success) {
+                this.router.navigate(['profile-manager']);
+            }
+        }));
     }
 
     public isCustomProfile(): boolean {
