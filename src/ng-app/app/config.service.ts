@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -210,7 +210,7 @@ export class ConfigService implements OnDestroy {
             } else {
                 tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
             }
-            this.utils.execCmd('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath).then(data => {
+            this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath).then(data => {
                 resolve(true);
             }).catch(error => {
                 resolve(false);
@@ -282,7 +282,7 @@ export class ConfigService implements OnDestroy {
             } else {
                 tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
             }
-            this.utils.execCmd(
+            this.utils.execFile(
                 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
             ).then(data => {
                 resolve(true);

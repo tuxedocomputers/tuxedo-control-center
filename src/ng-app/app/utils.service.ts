@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -67,6 +67,18 @@ export class UtilsService {
   public async execCmd(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('exec-cmd-async', command).then((result) => {
+        if (result.error === null) {
+          resolve(result.data);
+        } else {
+          reject(result.error);
+        }
+      });
+    });
+  }
+
+  public async execFile(command: string): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      this.electron.ipcRenderer.invoke('exec-file-async', command).then((result) => {
         if (result.error === null) {
           resolve(result.data);
         } else {

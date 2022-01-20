@@ -304,6 +304,21 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
     });
 });
 
+ipcMain.handle('exec-file-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        let strArg: string = arg;
+        let cmdList = strArg.split(' ');
+        let cmd = cmdList.shift();
+        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
+    });
+});
+
 ipcMain.on('spawn-external-async', (event, arg) => {
     child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
         console.log("\"" + arg + "\" could not be executed.")
