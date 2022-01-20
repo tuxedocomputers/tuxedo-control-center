@@ -420,55 +420,55 @@
         <source>System profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">322</context>
+          <context context-type="linenumber">324</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
-        <source> (LED status only)</source>
+        <source>LED status</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">327</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsCpuHeaderLabel" datatype="html">
         <source>CPU settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">402</context>
+          <context context-type="linenumber">405</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
         <source>Number of logical cores</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">410</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
         <source>Maximum performance</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">429</context>
+          <context context-type="linenumber">432</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
         <source>yes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">433</context>
+          <context context-type="linenumber">436</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
         <source>no</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">434</context>
+          <context context-type="linenumber">437</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
         <source>Minimum frequency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">447</context>
+          <context context-type="linenumber">450</context>
         </context-group>
       </trans-unit><trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
         <source>Maximum frequency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">477</context>
+          <context context-type="linenumber">480</context>
         </context-group>
       </trans-unit><trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
@@ -545,43 +545,43 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Main processor monitor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit><trans-unit id="f67ab12753f4365b36a78ac5b6d169538ec2af34" datatype="html">
         <source>CPU - Temp</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit><trans-unit id="7fe0cde0fbcfb34e7fc116339897490407049572" datatype="html">
         <source>CPU - Frequency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit><trans-unit id="bafe991112655207277a9f94bf263ef2903795b1" datatype="html">
         <source>CPU - Fan</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit><trans-unit id="2479d9cadf8ed5a60faad87f7e6ae16faff942c2" datatype="html">
         <source>Graphics card monitor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit><trans-unit id="a1f691cff975c3788fa37e26665dd774e31f6b51" datatype="html">
         <source>GPU - Temp</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit><trans-unit id="f765858f6ef9694c937069a90435bb627bc2e5b6" datatype="html">
         <source>GPU - Fan</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit><trans-unit id="globalSettingsHeaderLabel" datatype="html">
         <source>Settings</source>
@@ -929,6 +929,27 @@ Commercial register number - Part B of the commercial register - 27755
         <source>GPU Fan</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="odmLEDNone" datatype="html">
+        <source>all LEDs off</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="odmLEDOne" datatype="html">
+        <source>one LED on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="odmLEDTwo" datatype="html">
+        <source>two LEDs on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

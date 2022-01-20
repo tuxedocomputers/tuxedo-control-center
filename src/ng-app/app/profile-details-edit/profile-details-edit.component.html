@@ -319,14 +319,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
-                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
-                                <span
-                                    [hidden]="!(compat.hasODMProfileControl && compat.hasODMPowerLimitControl)"
-                                    i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo"> (LED status only)</span>
+                                <ng-container
+                                    *ngIf="!(compat.hasODMProfileControl && compat.hasODMPowerLimitControl)"
+                                    i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                <ng-container
+                                    *ngIf="(compat.hasODMProfileControl && compat.hasODMPowerLimitControl)"
+                                    i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">LED status</ng-container>
                             </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
                             <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">

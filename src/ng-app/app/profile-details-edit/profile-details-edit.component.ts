@@ -139,6 +139,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.stateInputArray = this.state.getStateInputs();
 
+        const odmProfileLEDNames: Map<string, string> = new Map();
+        odmProfileLEDNames.set('power_save', this.i18n({ value: 'all LEDs off', id: 'odmLEDNone' }));
+        odmProfileLEDNames.set('enthusiast', this.i18n({ value: 'one LED on', id: 'odmLEDOne' }));
+        odmProfileLEDNames.set('overboost', this.i18n({ value: 'two LEDs on', id: 'odmLEDTwo' }));
+
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
             this.odmProfileNames = nextAvailableODMProfiles;
 
@@ -146,7 +151,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.odmProfileToName.clear();
             for (const profileName of this.odmProfileNames) {
                 if (profileName.length > 0) {
-                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                    if (this.compat.hasODMProfileControl && this.compat.hasODMPowerLimitControl) {
+                        this.odmProfileToName.set(profileName, odmProfileLEDNames.get(profileName));
+                    } else {
+                        this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                    }
                 }
             }
         }));
