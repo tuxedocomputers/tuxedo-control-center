@@ -145,22 +145,26 @@ export class ConfigService implements OnDestroy {
         this.updateConfigData();
     }
 
-    public copyProfile(profileName: string, newProfileName: string): boolean {
+    public async copyProfile(profileName: string, newProfileName: string) {
         const profileToCopy: ITccProfile = this.getProfileByName(profileName);
 
-        if (profileToCopy === undefined) 
-        { return false; }
+        if (profileToCopy === undefined) {
+            return false;
+        }
 
         const existingProfile = this.getProfileByName(newProfileName);
-        if (existingProfile !== undefined) 
-        { return false; }
+        if (existingProfile !== undefined) {
+            return false;
+        }
 
         const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
         newProfile.name = newProfileName;
         const newProfileList = this.getCustomProfiles().concat(newProfile);
-        const result = this.pkexecWriteCustomProfiles(newProfileList);
-        if (result) { this.updateConfigData(); }
-        return result;
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+        }
+        return success;
     }
 
     public deleteCustomProfile(profileNameToDelete: string): boolean {

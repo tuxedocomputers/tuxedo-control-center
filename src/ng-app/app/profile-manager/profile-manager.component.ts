@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -167,11 +167,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     }
                     break;
                 case InputMode.Copy:
-                    // if (this.config.copyProfile(this.currentProfile.name, this.inputProfileName.value)) {
-                    if (this.config.copyProfile(this.profileToCopy, this.inputProfileName.value)) {
-                        this.inputActive = false;
-                        this.router.navigate(['profile-manager', this.inputProfileName.value]);
-                    }
+                    this.utils.pageDisabled = true;
+                    this.config.copyProfile(this.profileToCopy, this.inputProfileName.value).then((success) => {
+                        if (success) {
+                            this.inputActive = false;
+                            this.router.navigate(['profile-manager', this.inputProfileName.value]);
+                        }
+                        this.utils.pageDisabled = false;
+                    });
                     break;
                 case InputMode.Edit:
                     if (this.config.setCurrentEditingProfile(this.currentProfile.name)) {
