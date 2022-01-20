@@ -348,7 +348,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                                     <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>
-                                    <content class="value" [hidden]="!editProfile">{{ tdpControl.value }} W</content>
+                                    <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
                                     <button mat-icon-button color="primary"
                                         [hidden]="!editProfile"
                                         (mousedown)="buttonRepeatDown(modifySliderInputFunc(tdpControl, -1, odmPowerLimitInfos[i].min, odmPowerLimitInfos[i].max)); tdpControl.markAsDirty();"
@@ -367,6 +367,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-grid-tile [colspan]="gridParams.inputSpan">
                                     <content class="input" [hidden]="!editProfile">
                                         <mat-slider
+                                            #inputODMPowerLimit
                                             [formControlName]="i"
                                             [min]="odmPowerLimitInfos[i].min"
                                             [max]="odmPowerLimitInfos[i].max"
