@@ -364,6 +364,29 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
+
+            // Update LED choice (if available) on first TDP change
+            const updateLEDChoice =
+                movedSliderIndex === 0 &&
+                this.compat.hasODMPowerLimitControl &&
+                this.compat.hasODMProfileControl &&
+                // Also make sure three profiles are available
+                this.odmProfileNames.length === 3;
+
+            if (updateLEDChoice) {
+                const sliderMax = this.odmPowerLimitInfos[movedSliderIndex].max;
+                const sliderMin = this.odmPowerLimitInfos[movedSliderIndex].min;
+                const tdpPercentage = Math.round((newValue - sliderMin) / (sliderMax - sliderMin) * 100);
+                const odmProfileGroup: FormGroup = this.profileFormGroup.controls.odmProfile as FormGroup;
+                const profileNameControl: FormControl = odmProfileGroup.controls.name as FormControl;
+                if (tdpPercentage < 25) {
+                    profileNameControl.setValue(this.odmProfileNames[0]);
+                } else if ( tdpPercentage < 75) {
+                    profileNameControl.setValue(this.odmProfileNames[1]);
+                } else {
+                    profileNameControl.setValue(this.odmProfileNames[2]);
+                }
+            }
         }
 
     }
