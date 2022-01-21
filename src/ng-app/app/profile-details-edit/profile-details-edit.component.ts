@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -233,6 +233,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
+        for (let i = 1; i < odmTDPValuesArray.controls.length; ++i) {
+            odmTDPValuesArray.controls[i].setValidators([minControlValidator(odmTDPValuesArray.controls[i - 1])]);
+        }
+
+        for (let i = 0; i < odmTDPValuesArray.controls.length - 1; ++i) {
+            odmTDPValuesArray.controls[i].setValidators([maxControlValidator(odmTDPValuesArray.controls[i + 1])]);
+        }
+
         const fg = this.fb.group({
             name: profile.name,
             display: displayGroup,
@@ -301,6 +309,63 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (newValue !== undefined) {
             cpuGroup.controls.scalingMaxFrequency.setValue(newValue);
         }
+    }
+
+    public sliderODMPowerLimitMinValue(sliderIndex: number): number {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+
+        // Find largest allowed min value
+        let minValue = this.odmPowerLimitInfos[sliderIndex].min;
+
+        for (let i = 0; i < sliderIndex; ++i) {
+            if (minValue === undefined || tdpValues.controls[i].value > minValue) {
+                minValue = tdpValues.controls[i].value;
+            }
+        }
+
+        return minValue;
+    }
+
+    public sliderODMPowerLimitMaxValue(sliderIndex: number): number {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+
+        // Find smallest allowed max value
+        let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
+
+        for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
+            if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
+                maxValue = tdpValues.controls[i].value;
+            }
+        }
+
+        return maxValue;
+    }
+
+    public sliderODMPowerLimitChange(movedSliderIndex: number) {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        let newValue: number = tdpValues.controls[movedSliderIndex].value;
+
+
+        let minValue = this.sliderODMPowerLimitMinValue(movedSliderIndex);
+        let maxValue = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
+
+        // Ensure new value is above chosen min value
+        if (newValue < minValue) {
+            newValue = minValue;
+        }
+
+        // Ensure new value is below chosen max value
+        if (newValue > maxValue) {
+            newValue = maxValue;
+        }
+
+        if (newValue !== undefined) {
+            tdpValues.controls[movedSliderIndex].setValue(newValue);
+        }
+
     }
 
     public inputDisplayBrightnessChange(newValue: number) {
