@@ -353,14 +353,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
                                     <button mat-icon-button color="primary"
                                         [hidden]="!editProfile"
-                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(tdpControl, -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i))); tdpControl.markAsDirty();"
+                                        (mousedown)="
+                                            buttonRepeatDown(modifySliderInputFunc(tdpControl, -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
+                                            sliderODMPowerLimitChange(i);
+                                            tdpControl.markAsDirty();"
                                         (mouseup)="buttonRepeatUp()"
                                         (mouseleave)="buttonRepeatUp()">
                                         <mat-icon>remove</mat-icon>
                                     </button>
                                     <button mat-icon-button color="primary"
                                         [hidden]="!editProfile"
-                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(tdpControl, +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i))); tdpControl.markAsDirty();"
+                                        (mousedown)="
+                                            buttonRepeatDown(modifySliderInputFunc(tdpControl, +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
+                                            sliderODMPowerLimitChange(i);
+                                            tdpControl.markAsDirty();"
                                         (mouseup)="buttonRepeatUp()"
                                         (mouseleave)="buttonRepeatUp()">
                                         <mat-icon>add</mat-icon>
@@ -379,7 +385,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-slider>
                                         <button mat-icon-button
                                             color="primary"
-                                            (click)="tdpControl.reset(viewProfile.odmPowerLimits.tdpValues[i]);"
+                                            (click)="buttonODMPowerLimitUndo(i)"
                                             [hidden]="!tdpControl.dirty">
                                             <mat-icon>undo</mat-icon>
                                         </button>

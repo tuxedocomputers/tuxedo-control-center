@@ -482,4 +482,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             return result;
         }
     }
+
+    public buttonODMPowerLimitUndo(sliderIndex: number) {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        tdpValues.controls[sliderIndex].reset(this.viewProfile.odmPowerLimits.tdpValues[sliderIndex]);
+        const wantedValue = tdpValues.controls[sliderIndex].value;
+        this.sliderODMPowerLimitChange(sliderIndex);
+        const correctedValue = tdpValues.controls[sliderIndex].value;
+        if (correctedValue !== wantedValue) {
+            tdpValues.controls[sliderIndex].markAsDirty();
+        }
+    }
 }
