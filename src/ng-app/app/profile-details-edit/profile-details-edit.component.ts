@@ -151,7 +151,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.odmProfileToName.clear();
             for (const profileName of this.odmProfileNames) {
                 if (profileName.length > 0) {
-                    if (this.compat.hasODMProfileControl && this.compat.hasODMPowerLimitControl) {
+                    if (this.compat.uwLEDOnlyMode) {
                         this.odmProfileToName.set(profileName, odmProfileLEDNames.get(profileName));
                     } else {
                         this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
@@ -368,8 +368,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             // Update LED choice (if available) on first TDP change
             const updateLEDChoice =
                 movedSliderIndex === 0 &&
-                this.compat.hasODMPowerLimitControl &&
-                this.compat.hasODMProfileControl &&
+                this.compat.uwLEDOnlyMode
                 // Also make sure three profiles are available
                 this.odmProfileNames.length === 3;
 

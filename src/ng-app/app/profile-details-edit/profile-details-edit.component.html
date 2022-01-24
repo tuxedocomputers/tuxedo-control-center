@@ -320,10 +320,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
                                 <ng-container
-                                    *ngIf="!(compat.hasODMProfileControl && compat.hasODMPowerLimitControl)"
+                                    *ngIf="!compat.uwLEDOnlyMode"
                                     i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
                                 <ng-container
-                                    *ngIf="(compat.hasODMProfileControl && compat.hasODMPowerLimitControl)"
+                                    *ngIf="compat.uwLEDOnlyMode"
                                     i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">LED status</ng-container>
                             </header>
                         </mat-grid-tile>
