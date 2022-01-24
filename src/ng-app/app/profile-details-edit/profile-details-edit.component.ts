@@ -366,7 +366,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 
             // Update LED choice (if available) on first TDP change
-            const updateLEDChoice =
+            // Note: Deactivated update
+            const updateLEDChoice = false &&
                 movedSliderIndex === 0 &&
                 this.compat.uwLEDOnlyMode
                 // Also make sure three profiles are available
