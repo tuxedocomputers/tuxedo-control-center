@@ -430,8 +430,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <mat-slider
                                             #inputODMPowerLimit
                                             [formControlName]="i"
-                                            [min]="odmPowerLimitInfos.length > i ? odmPowerLimitInfos[i].min : 0"
-                                            [max]="odmPowerLimitInfos.length > i ? odmPowerLimitInfos[i].max : 0"
+                                            [min]="odmPowerLimitInfos[i].min"
+                                            [max]="odmPowerLimitInfos[i].max"
                                             step="1"
                                             (change)="sliderODMPowerLimitChange(i)"
                                             color="primary">

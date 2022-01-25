@@ -168,7 +168,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }));
 
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
-            this.odmPowerLimitInfos = nextODMPowerLimits;
+            if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
+                this.odmPowerLimitInfos = nextODMPowerLimits;
+            }
         }));
 
         this.tdpLabels = new Map();
