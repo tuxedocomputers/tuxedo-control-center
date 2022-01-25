@@ -106,6 +106,24 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </content>
                         </mat-grid-tile>
 
+                    <!-- ODM Profile for "led purposes" -->
+                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan">
+                            <header [ngClass]="{'inactive': false}">
+                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">LED status</ng-container>
+                            </header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                <mat-select formControlName="name" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                        {{ odmProfileToName.get(odmProfileName) }}
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
+                    </div>
+
                     </mat-grid-list>
                 </div>
             </div>
@@ -368,16 +386,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-content class="content">
                 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
-                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl">
+                    <!-- ODM Profile -->
+                    <!-- Note: "Copy" for "led purposes" also located in profile settings -->
+                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="!compat.uwLEDOnlyMode">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
-                                <ng-container
-                                    *ngIf="!compat.uwLEDOnlyMode"
-                                    i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
-                                <ng-container
-                                    *ngIf="compat.uwLEDOnlyMode"
-                                    i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">LED status</ng-container>
+                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
                             </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
