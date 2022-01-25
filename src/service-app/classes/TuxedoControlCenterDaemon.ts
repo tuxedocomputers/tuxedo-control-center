@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -395,6 +395,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+
+        if (profile.description === 'undefined') {
+            profile.description = '';
+        }
+
         const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
         if (profile.cpu.onlineCores === undefined) {
             profile.cpu.onlineCores = cpu.cores.length;

@@ -51,6 +51,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div>
                     <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="50px" class="profile-details-edit-grid">
 
+                        <!-- Profile name -->
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Profile name</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
@@ -68,6 +69,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </content>
                         </mat-grid-tile>
 
+                        <!-- Profile description -->
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Description</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input">
+                                <mat-form-field *ngIf="editProfile" class="input-description">
+                                    <input matInput
+                                        formControlName="description"
+                                        type="text"
+                                        minLength="1"
+                                        maxLength="200"
+                                        (focus)="$event.target.select()">
+                                </mat-form-field>
+                                <ng-container *ngIf="!editProfile">
+                                    {{ profileFormGroup.controls.description.value }}
+                                </ng-container>
+                            </content>
+                        </mat-grid-tile>
+
+                        <!-- Profile state selection -->
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Profile assignment</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">

@@ -97,9 +97,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public gridProfileSettings = {
         cols: 9,
-        headerSpan: 4,
+        headerSpan: 3,
         valueSpan: 0,
-        inputSpan: 5
+        inputSpan: 6
     };
 
     public selectStateControl: FormControl;
@@ -250,6 +250,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         const fg = this.fb.group({
             name: profile.name,
+            description: profile.description,
             display: displayGroup,
             cpu: cpuGroup,
             webcam: webcamGroup,

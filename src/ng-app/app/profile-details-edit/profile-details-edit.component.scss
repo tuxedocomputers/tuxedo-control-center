@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -67,6 +67,7 @@
         }
 
         content.input {
+            width: 100%;
 
             mat-slider {
                 width: 200px;
@@ -77,7 +78,11 @@
             }
 
             mat-form-field {
-                width: 350px;
+                width: 300px;
+
+                &.input-description {
+                    width: 450px;
+                }
             }
 
             mat-button-toggle-group {

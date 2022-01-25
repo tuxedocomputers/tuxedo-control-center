@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,6 +18,7 @@
  */
 export interface ITccProfile {
     name: string;
+    description: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
@@ -28,6 +29,7 @@ export interface ITccProfile {
 
 export class TccProfile implements ITccProfile {
     name: string;
+    description: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
@@ -83,6 +85,7 @@ interface ITccODMPowerLimits {
 export const defaultProfiles: ITccProfile[] = [
     {
         name: 'Default',
+        description: '',
         display: {
             brightness: 100,
             useBrightness: false
@@ -111,6 +114,7 @@ export const defaultProfiles: ITccProfile[] = [
     },
     {
         name: 'Cool and breezy',
+        description: '',
         display: {
             brightness: 50,
             useBrightness: false
@@ -139,6 +143,7 @@ export const defaultProfiles: ITccProfile[] = [
     },
     {
         name: 'Powersave extreme',
+        description: '',
         display: {
             brightness: 60,
             useBrightness: true
@@ -169,6 +174,7 @@ export const defaultProfiles: ITccProfile[] = [
 
 export const defaultCustomProfile: ITccProfile = {
     name: 'Default custom profile',
+    description: '',
     display: {
         brightness: 100,
         useBrightness: false
@@ -198,6 +204,7 @@ export const defaultCustomProfile: ITccProfile = {
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
     name: 'Custom XP1508 UHD',
+    description: '',
     display: {
         brightness: 100,
         useBrightness: false
