@@ -18,17 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card *ngIf="viewProfile" class="profile-details-edit" [formGroup]="profileFormGroup">
     <mat-card-title class="profile-title">
-        <span class="name" *ngIf="!editProfile">
-            {{ profileFormGroup.controls.name.value }}
-        </span>
-        <mat-form-field class="name" *ngIf="editProfile">
-            <input matInput #inputName="matInput"
-                formControlName="name"
-                type="text"
-                minLength="1"
-                maxLength="50"
-                (focus)="$event.target.select()">
-        </mat-form-field>
+        <div></div>
         <div *ngIf="editProfile" class="save-reset-buttons">
             <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
                 <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
@@ -45,19 +35,61 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </button>
             </span>
         </div>
-        <div *ngIf="editProfile">
-            <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
-                <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
-                    [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
-                    [value]="state.value"
-                    [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
-                    [matTooltipShowDelay]="100">
-                        {{ state.label }}
-                </mat-button-toggle>
-            </mat-button-toggle-group>
-        </div>
     </mat-card-title>
     <mat-card-content>
+        <!-- Profile settings -->
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsProfileSettingsLabel">Profile settings</ng-container>
+                </div>
+                <hr />
+            </div>
+            <div class="content">
+                <div>
+                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="50px" class="profile-details-edit-grid">
+
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Profile name</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input">
+                                <mat-form-field *ngIf="editProfile">
+                                    <input matInput #inputName="matInput"
+                                        formControlName="name"
+                                        type="text"
+                                        minLength="1"
+                                        maxLength="50"
+                                        (focus)="$event.target.select()">
+                                </mat-form-field>
+                                <ng-container *ngIf="!editProfile">
+                                    {{ profileFormGroup.controls.name.value }}
+                                </ng-container>
+                            </content>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Profile assignment</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input">
+                                <div *ngIf="editProfile">
+                                    <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
+                                        <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
+                                            [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                                            [value]="state.value"
+                                            [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
+                                            [matTooltipShowDelay]="100">
+                                                {{ state.label }}
+                                        </mat-button-toggle>
+                                    </mat-button-toggle-group>
+                                </div>
+                            </content>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+            </div>
+        </div>
+
         <!-- Display settings -->
         <div class="tcc-options-group">
             <div class="title-row">
@@ -344,7 +376,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     <div formGroupName="odmPowerLimits" [hidden]="!compat.hasODMPowerLimitControl">
                         <div formArrayName="tdpValues">
-                            <div *ngFor="let tdpControl of profileFormGroup.get('odmPowerLimits').get('tdpValues').controls; index as i;">
+                            <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
                                 <mat-grid-tile [colspan]="gridParams.headerSpan">
                                     <header>{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
                                 </mat-grid-tile>
@@ -354,9 +386,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <button mat-icon-button color="primary"
                                         [hidden]="!editProfile"
                                         (mousedown)="
-                                            buttonRepeatDown(modifySliderInputFunc(tdpControl, -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
+                                            buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
                                             sliderODMPowerLimitChange(i);
-                                            tdpControl.markAsDirty();"
+                                            getODMTDPControls[i].markAsDirty();"
                                         (mouseup)="buttonRepeatUp()"
                                         (mouseleave)="buttonRepeatUp()">
                                         <mat-icon>remove</mat-icon>
@@ -364,9 +396,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <button mat-icon-button color="primary"
                                         [hidden]="!editProfile"
                                         (mousedown)="
-                                            buttonRepeatDown(modifySliderInputFunc(tdpControl, +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
+                                            buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
                                             sliderODMPowerLimitChange(i);
-                                            tdpControl.markAsDirty();"
+                                            getODMTDPControls[i].markAsDirty();"
                                         (mouseup)="buttonRepeatUp()"
                                         (mouseleave)="buttonRepeatUp()">
                                         <mat-icon>add</mat-icon>
@@ -377,8 +409,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <mat-slider
                                             #inputODMPowerLimit
                                             [formControlName]="i"
-                                            [min]="odmPowerLimitInfos[i].min"
-                                            [max]="odmPowerLimitInfos[i].max"
+                                            [min]="odmPowerLimitInfos.length > i ? odmPowerLimitInfos[i].min : 0"
+                                            [max]="odmPowerLimitInfos.length > i ? odmPowerLimitInfos[i].max : 0"
                                             step="1"
                                             (change)="sliderODMPowerLimitChange(i)"
                                             color="primary">
@@ -386,7 +418,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <button mat-icon-button
                                             color="primary"
                                             (click)="buttonODMPowerLimitUndo(i)"
-                                            [hidden]="!tdpControl.dirty">
+                                            [hidden]="!getODMTDPControls[i].dirty">
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </content>

@@ -95,6 +95,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         inputSpan: 3
     };
 
+    public gridProfileSettings = {
+        cols: 9,
+        headerSpan: 4,
+        valueSpan: 0,
+        inputSpan: 5
+    };
+
     public selectStateControl: FormControl;
     public profileFormGroup: FormGroup;
     public profileFormProgress = false;
@@ -309,6 +316,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (newValue !== undefined) {
             cpuGroup.controls.scalingMaxFrequency.setValue(newValue);
         }
+    }
+
+    get getODMTDPControls() {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        return tdpValues.controls;
     }
 
     public sliderODMPowerLimitMinValue(sliderIndex: number): number {
