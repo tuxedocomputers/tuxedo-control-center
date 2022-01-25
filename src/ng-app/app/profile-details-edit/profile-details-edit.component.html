@@ -79,6 +79,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
                                             [matTooltipShowDelay]="100">
                                                 {{ state.label }}
+                                                <svg viewBox="0 0 512 512"><use attr.href="./assets/images/{{ state.icon }}"></use></svg>
                                         </mat-button-toggle>
                                     </mat-button-toggle-group>
                                 </div>

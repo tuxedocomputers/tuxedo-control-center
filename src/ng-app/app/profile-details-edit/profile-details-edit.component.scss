@@ -81,9 +81,16 @@
             }
 
             mat-button-toggle-group {
-                transform: scale(0.7);
+                transform: scale(0.8);
+
                 mat-button-toggle {
-                    font-size: 1.5em;
+                    font-size: 2em;
+                    svg {
+                        width: 40px;
+                        height: 40px;
+
+                        --icon-detail: var(--icon-main);
+                    }
                 }
             }
         }
