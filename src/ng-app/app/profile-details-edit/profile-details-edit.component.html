@@ -52,7 +52,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="50px" class="profile-details-edit-grid">
 
                         <!-- Profile name -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Profile name</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Name</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
                                 <mat-form-field *ngIf="editProfile">
@@ -88,7 +88,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
 
                         <!-- Profile state selection -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Profile assignment</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Activate profile automatically on</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
                                 <div *ngIf="editProfile">
