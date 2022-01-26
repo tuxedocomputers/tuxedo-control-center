@@ -19,7 +19,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <mat-card *ngIf="viewProfile" class="profile-details-edit" [formGroup]="profileFormGroup">
     <mat-card-title class="profile-title">
         <div></div>
-        <div *ngIf="editProfile" class="save-reset-buttons">
+        <div class="save-reset-buttons">
             <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
                 <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
                     <svg viewBox="0 0 512 512">
@@ -91,7 +91,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Activate profile automatically on</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
-                                <div *ngIf="editProfile">
+                                <div>
                                     <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
                                         <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
                                             [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
