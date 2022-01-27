@@ -462,134 +462,120 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </div>
                         </div>
                     </div>
+                    <span formGroupName="cpu">
+                        <!-- Number of logical cores -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cProfMgrDetailsNrCoresLabel">Number of logical cores</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
+                            <content class="value" [hidden]="!editProfile">{{ inputOnlineCores.value }}</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-slider #inputOnlineCores
+                                    formControlName="onlineCores"
+                                    min="1"
+                                    step="1"
+                                    [max]="cpuInfo.availableCores"
+                                    color="primary">
+                                </mat-slider>
+                            </content>
+                        </mat-grid-tile>
+
+                        <!-- Maximum performance -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile class="value" [colspan]="gridParams.valueSpan">
+                            <content class="value">
+                                <span [hidden]="!inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovYes">yes</span>
+                                <span [hidden]="inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovNo">no</span>
+                            </content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputUseMaxPerfGov
+                                    formControlName="useMaxPerfGov"
+                                    color="primary">
+                                </mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
+
+                        <!-- Minimum frequency -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
+                            <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
+                            <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
+                                <mat-slider #inputScalingMinFrequency
+                                    formControlName="scalingMinFrequency"
+                                    [min]="cpuInfo.minFreq"
+                                    [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                    step="100000"
+                                    (change)="sliderMinFreqChange()"
+                                    color="primary">
+                                </mat-slider>
+                            </content>
+                            <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
+                                <mat-slider #inputScalingMinFrequencyDummy
+                                    [min]="cpuInfo.minFreq"
+                                    [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                    [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                    step="100000"
+                                    color="primary">
+                                </mat-slider>
+                            </content>
+                        </mat-grid-tile>
+
+                        <!-- Maximum frequency -->
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (cpuInfo.boost === undefined || (cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
+                                {{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
+                            <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (cpuInfo.boost === undefined || (cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
+                                {{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
+                            <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost === undefined)" [ngClass]="{'inactive': true}">
+                                {{ formatFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
+                            <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
+                                Boost</content>
+                            <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">
+                                Boost</content>
+                            <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost !== undefined)" [ngClass]="{'inactive': true}">
+                                Boost</content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
+                                <mat-slider #inputScalingMaxFrequency
+                                    formControlName="scalingMaxFrequency"
+                                    [min]="cpuInfo.minFreq"
+                                    [max]="cpuInfo.maxFreq"
+                                    step="100000"
+                                    (change)="sliderMaxFreqChange()"
+                                    color="primary">
+                                </mat-slider>
+                            </content>
+                            <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
+                                <mat-slider #inputScalingMaxFrequencyDummy
+                                    [min]="cpuInfo.minFreq"
+                                    [max]="cpuInfo.maxFreq"
+                                    [value]="cpuInfo.maxFreq"
+                                    step="100000"
+                                    color="primary">
+                                </mat-slider>
+                            </content>
+                        </mat-grid-tile>
+                    </span>
 
                 </mat-grid-list>
             
-            </mat-card-content>
-        </div>
-
-        <!-- CPU settings -->
-        <div class="tcc-options-group"
-            [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
-            [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage: ''">
-
-            <div class="title-row">
-                <hr />
-                <div class="title">
-                    <svg viewBox="0 0 320 512" class="tcc-icons"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                    <ng-container i18n="@@cProfMgrDetailsCpuHeaderLabel">CPU settings</ng-container>
-                </div>
-                <hr />
-            </div>
-            <mat-card-content class="content">
-                <mat-grid-list formGroupName="cpu" [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
-                    <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsNrCoresLabel">Number of logical cores</header>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
-                        <content class="value" [hidden]="!editProfile">{{ inputOnlineCores.value }}</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-slider #inputOnlineCores
-                                formControlName="onlineCores"
-                                min="1"
-                                step="1"
-                                [max]="cpuInfo.availableCores"
-                                color="primary">
-                            </mat-slider>
-                        </content>
-                    </mat-grid-tile>
-
-                    <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
-                    </mat-grid-tile>
-                    <mat-grid-tile class="value" [colspan]="gridParams.valueSpan">
-                        <content class="value">
-                            <span [hidden]="!inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovYes">yes</span>
-                            <span [hidden]="inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovNo">no</span>
-                        </content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="!editProfile">
-                            <mat-checkbox #inputUseMaxPerfGov
-                                formControlName="useMaxPerfGov"
-                                color="primary">
-                            </mat-checkbox>
-                        </content>
-                    </mat-grid-tile>
-
-                    <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
-                        <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
-                        <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
-                            <mat-slider #inputScalingMinFrequency
-                                formControlName="scalingMinFrequency"
-                                [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
-                                step="100000"
-                                (change)="sliderMinFreqChange()"
-                                color="primary">
-                            </mat-slider>
-                        </content>
-                        <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
-                            <mat-slider #inputScalingMinFrequencyDummy
-                                [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
-                                [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
-                                step="100000"
-                                color="primary">
-                            </mat-slider>
-                        </content>
-                    </mat-grid-tile>
-
-                    <mat-grid-tile [colspan]="gridParams.headerSpan">
-                        <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.valueSpan">
-                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (cpuInfo.boost === undefined || (cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
-                            {{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
-                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (cpuInfo.boost === undefined || (cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
-                            {{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
-                        <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost === undefined)" [ngClass]="{'inactive': true}">
-                            {{ formatFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
-                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && cpuInfo.boost !== undefined && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
-                            Boost</content>
-                        <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && cpuInfo.boost !== undefined && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">
-                            Boost</content>
-                        <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && cpuInfo.boost !== undefined)" [ngClass]="{'inactive': true}">
-                            Boost</content>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="gridParams.inputSpan">
-                        <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
-                            <mat-slider #inputScalingMaxFrequency
-                                formControlName="scalingMaxFrequency"
-                                [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.maxFreq"
-                                step="100000"
-                                (change)="sliderMaxFreqChange()"
-                                color="primary">
-                            </mat-slider>
-                        </content>
-                        <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
-                            <mat-slider #inputScalingMaxFrequencyDummy
-                                [min]="cpuInfo.minFreq"
-                                [max]="cpuInfo.maxFreq"
-                                [value]="cpuInfo.maxFreq"
-                                step="100000"
-                                color="primary">
-                            </mat-slider>
-                        </content>
-                    </mat-grid-tile>
-                </mat-grid-list>
             </mat-card-content>
         </div>
 
