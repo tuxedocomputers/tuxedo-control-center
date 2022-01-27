@@ -47,7 +47,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material'
+import { MatProgressSpinnerModule } from '@angular/material';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -130,6 +131,7 @@ declare const require;
     MatButtonToggleModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatTabsModule,
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),
