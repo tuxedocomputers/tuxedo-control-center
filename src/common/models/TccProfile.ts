@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,20 +18,24 @@
  */
 export interface ITccProfile {
     name: string;
+    description: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
+    odmPowerLimits: ITccODMPowerLimits;
 }
 
 export class TccProfile implements ITccProfile {
     name: string;
+    description: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
+    odmPowerLimits: ITccODMPowerLimits;
     public constructor(init: ITccProfile) {
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
@@ -39,6 +43,7 @@ export class TccProfile implements ITccProfile {
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
         this.fan = JSON.parse(JSON.stringify(init.fan));
         this.odmProfile = JSON.parse(JSON.stringify(init.odmProfile));
+        this.odmPowerLimits = JSON.parse(JSON.stringify(init.odmPowerLimits));
     }
 }
 
@@ -73,9 +78,14 @@ interface ITccODMProfile {
     name: string
 }
 
+interface ITccODMPowerLimits {
+    tdpValues: number[]
+}
+
 export const defaultProfiles: ITccProfile[] = [
     {
         name: 'Default',
+        description: '',
         display: {
             brightness: 100,
             useBrightness: false
@@ -99,10 +109,12 @@ export const defaultProfiles: ITccProfile[] = [
             minimumFanspeed: 0,
             offsetFanspeed: 0
         },
-        odmProfile: { name: undefined }
+        odmProfile: { name: undefined },
+        odmPowerLimits: { tdpValues: [] }
     },
     {
         name: 'Cool and breezy',
+        description: '',
         display: {
             brightness: 50,
             useBrightness: false
@@ -126,10 +138,12 @@ export const defaultProfiles: ITccProfile[] = [
             minimumFanspeed: 0,
             offsetFanspeed: 0
         },
-        odmProfile: { name: undefined }
+        odmProfile: { name: undefined },
+        odmPowerLimits: { tdpValues: [] }
     },
     {
         name: 'Powersave extreme',
+        description: '',
         display: {
             brightness: 60,
             useBrightness: true
@@ -153,12 +167,14 @@ export const defaultProfiles: ITccProfile[] = [
             minimumFanspeed: 0,
             offsetFanspeed: 0
         },
-        odmProfile: { name: undefined }
+        odmProfile: { name: undefined },
+        odmPowerLimits: { tdpValues: [] }
     }
 ];
 
 export const defaultCustomProfile: ITccProfile = {
     name: 'Default custom profile',
+    description: '',
     display: {
         brightness: 100,
         useBrightness: false
@@ -182,11 +198,13 @@ export const defaultCustomProfile: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined }
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [] }
 };
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
     name: 'Custom XP1508 UHD',
+    description: '',
     display: {
         brightness: 100,
         useBrightness: false
@@ -210,7 +228,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined }
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [] }
 };
 
 export const profileImageMap = new Map<string, string>();

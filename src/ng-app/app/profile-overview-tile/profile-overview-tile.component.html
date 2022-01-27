@@ -115,7 +115,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </span>
                 </div>
-                <div class="status-component" *ngIf="compat.hasODMProfileControl">
+                <div class="status-component" *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
                     </div>

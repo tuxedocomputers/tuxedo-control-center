@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -18,18 +18,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card *ngIf="viewProfile" class="profile-details-edit" [formGroup]="profileFormGroup">
     <mat-card-title class="profile-title">
-        <span class="name" *ngIf="!editProfile">
-            {{ profileFormGroup.controls.name.value }}
-        </span>
-        <mat-form-field class="name" *ngIf="editProfile">
-            <input matInput #inputName="matInput"
-                formControlName="name"
-                type="text"
-                minLength="1"
-                maxLength="50"
-                (focus)="$event.target.select()">
-        </mat-form-field>
-        <div *ngIf="editProfile" class="save-reset-buttons">
+        <div></div>
+        <div class="save-reset-buttons">
             <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
                 <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
                     <svg viewBox="0 0 512 512">
@@ -45,19 +35,101 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </button>
             </span>
         </div>
-        <div *ngIf="editProfile">
-            <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
-                <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
-                    [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
-                    [value]="state.value"
-                    [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
-                    [matTooltipShowDelay]="100">
-                        {{ state.label }}
-                </mat-button-toggle>
-            </mat-button-toggle-group>
-        </div>
     </mat-card-title>
     <mat-card-content>
+        <!-- Profile settings -->
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                    <ng-container i18n="@@cProfMgrDetailsProfileSettingsLabel">Profile settings</ng-container>
+                </div>
+                <hr />
+            </div>
+            <div class="content">
+                <div>
+                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="70px" class="profile-details-edit-grid">
+
+                        <!-- Profile name -->
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Name</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input">
+                                <mat-form-field *ngIf="editProfile">
+                                    <input matInput #inputName="matInput"
+                                        formControlName="name"
+                                        type="text"
+                                        minLength="1"
+                                        maxLength="50"
+                                        (focus)="$event.target.select()">
+                                </mat-form-field>
+                                <ng-container *ngIf="!editProfile">
+                                    {{ profileFormGroup.controls.name.value }}
+                                </ng-container>
+                            </content>
+                        </mat-grid-tile>
+
+                        <!-- Profile description -->
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Description</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input">
+                                <mat-form-field *ngIf="editProfile" class="input-description">
+                                    <input matInput
+                                        formControlName="description"
+                                        type="text"
+                                        minLength="1"
+                                        maxLength="200"
+                                        (focus)="$event.target.select()">
+                                </mat-form-field>
+                                <ng-container *ngIf="!editProfile">
+                                    {{ profileFormGroup.controls.description.value }}
+                                </ng-container>
+                            </content>
+                        </mat-grid-tile>
+
+                        <!-- Profile state selection -->
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Activate profile automatically on</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input">
+                                <div>
+                                    <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
+                                        <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
+                                            [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                                            [value]="state.value"
+                                            [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
+                                            [matTooltipShowDelay]="100">
+                                                {{ state.label }}
+                                                <svg viewBox="0 0 512 512"><use attr.href="./assets/images/{{ state.icon }}"></use></svg>
+                                        </mat-button-toggle>
+                                    </mat-button-toggle-group>
+                                </div>
+                            </content>
+                        </mat-grid-tile>
+
+                    <!-- ODM Profile for "led purposes" -->
+                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan">
+                            <header [ngClass]="{'inactive': false}">
+                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">LED status</ng-container>
+                            </header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <content class="input" *ngIf="editProfile" [ngClass]="{'inactive': false}">
+                                <mat-select formControlName="name" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                        {{ odmProfileToName.get(odmProfileName) }}
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                            <content class="input" *ngIf="!editProfile">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
+                        </mat-grid-tile>
+                    </div>
+
+                    </mat-grid-list>
+                </div>
+            </div>
+        </div>
+
         <!-- Display settings -->
         <div class="tcc-options-group">
             <div class="title-row">
@@ -302,7 +374,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- System (aka ODM) control settings -->
-        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl">
+        <div class="tcc-options-group" [hidden]="!compat.hasODMProfileControl && !compat.hasODMPowerLimitControl">
 
             <div class="title-row">
                 <hr />
@@ -315,13 +387,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-content class="content">
                 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
-                    <div formGroupName="odmProfile">
+                    <!-- ODM Profile -->
+                    <!-- Note: "Copy" for "led purposes" also located in profile settings -->
+                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="!compat.uwLEDOnlyMode">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsODMProfileLabel">System profile</header>
+                            <header [ngClass]="{'inactive': false}">
+                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                            </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.odmProfile.name }}</content>
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
                             <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
@@ -333,6 +408,59 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-select>
                             </content>
                         </mat-grid-tile>
+                    </div>
+
+                    <div formGroupName="odmPowerLimits" [hidden]="!compat.hasODMPowerLimitControl">
+                        <div formArrayName="tdpValues">
+                            <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
+                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                    <header>{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                    <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>
+                                    <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
+                                    <button mat-icon-button color="primary"
+                                        [hidden]="!editProfile"
+                                        (mousedown)="
+                                            buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
+                                            sliderODMPowerLimitChange(i);
+                                            getODMTDPControls[i].markAsDirty();"
+                                        (mouseup)="buttonRepeatUp()"
+                                        (mouseleave)="buttonRepeatUp()">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="primary"
+                                        [hidden]="!editProfile"
+                                        (mousedown)="
+                                            buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
+                                            sliderODMPowerLimitChange(i);
+                                            getODMTDPControls[i].markAsDirty();"
+                                        (mouseup)="buttonRepeatUp()"
+                                        (mouseleave)="buttonRepeatUp()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <content class="input" [hidden]="!editProfile">
+                                        <mat-slider
+                                            #inputODMPowerLimit
+                                            [formControlName]="i"
+                                            [min]="odmPowerLimitInfos[i].min"
+                                            [max]="odmPowerLimitInfos[i].max"
+                                            step="1"
+                                            (change)="sliderODMPowerLimitChange(i)"
+                                            color="primary">
+                                        </mat-slider>
+                                        <button mat-icon-button
+                                            color="primary"
+                                            (click)="buttonODMPowerLimitUndo(i)"
+                                            [hidden]="!getODMTDPControls[i].dirty">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </content>
+                                </mat-grid-tile>
+                            </div>
+                        </div>
                     </div>
 
                 </mat-grid-list>

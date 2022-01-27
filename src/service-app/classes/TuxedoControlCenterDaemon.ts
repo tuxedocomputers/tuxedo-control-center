@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -37,8 +37,9 @@ import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
+import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
 
 const tccPackage = require('../../package.json');
@@ -111,6 +112,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
+        this.workers.push(new ODMPowerLimitWorker(this));
 
         this.startWorkers();
 
@@ -393,6 +395,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+
+        if (profile.description === 'undefined') {
+            profile.description = '';
+        }
+
         const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
         if (profile.cpu.onlineCores === undefined) {
             profile.cpu.onlineCores = cpu.cores.length;
@@ -474,8 +481,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         const defaultODMProfileName: ObjWrapper<string> = { value: '' };
+        const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
         TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
-        if (profile.odmProfile === undefined) {
+        TuxedoIOAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
+        if (profile.odmProfile === undefined || !availableODMProfiles.value.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
                 name: defaultODMProfileName.value
             };
@@ -483,6 +492,18 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         if (profile.odmProfile.name === undefined) {
             profile.odmProfile.name = defaultODMProfileName.value;
+        }
+
+        let tdpInfo: TDPInfo[] = [];
+        TuxedoIOAPI.getTDPInfo(tdpInfo);
+        if (profile.odmPowerLimits === undefined
+            || profile.odmPowerLimits.tdpValues === undefined) {
+            profile.odmPowerLimits = { tdpValues: [] };
+        }
+
+        const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
+        if (nrMissingValues > 0) {
+            profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
         }
 
         return profile;

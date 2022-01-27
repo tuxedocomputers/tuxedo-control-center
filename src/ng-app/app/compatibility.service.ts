@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -49,6 +49,17 @@ export class CompatibilityService {
       return this.tccDbus.tuxedoWmiAvailable.value &&
         this.tccDbus.odmProfilesAvailable.value !== undefined &&
         this.tccDbus.odmProfilesAvailable.value.length > 0;
+  }
+
+  get hasODMPowerLimitControl(): boolean {
+      return this.tccDbus.tuxedoWmiAvailable.value &&
+        this.tccDbus.odmPowerLimits.value !== undefined &&
+        this.tccDbus.odmPowerLimits.value.length > 0;
+  }
+
+  get uwLEDOnlyMode(): boolean {
+      return this.hasODMPowerLimitControl &&
+        this.hasODMProfileControl;
   }
 
   get tccDbusAvailable() {
