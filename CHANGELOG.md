@@ -1,5 +1,24 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Support for system profile selection for a number of devices like
+    - BA1501
+    - Pulse 14/15
+    - Polaris gen 1
+    - XMG Fusion
+- Support for multiple TDP selection for a number of devices like
+    - Infinitybook Pro 15 gen 6
+    - Polaris gen 2/3
+    - Stellaris gen 2/3
+- TCC-profile description
+- Profile edit layout adjustments
+
+### Changed
+- Password prompt improvements.
+    - If asked to change settings to `tccd` there will not be another prompt for awhile.
+    - More descriptive password prompt text
+
 ## [1.1.2] - 2021-12-07
 
 ### Fixed
