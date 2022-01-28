@@ -386,10 +386,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <mat-card-content class="content">
                 
-                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                    *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <!-- ODM Profile -->
                     <!-- Note: "Copy" for "led purposes" also located in profile settings -->
-                    <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="!compat.uwLEDOnlyMode">
+                    <div formGroupName="odmProfile">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
                                 <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
