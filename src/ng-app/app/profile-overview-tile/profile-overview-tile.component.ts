@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -50,6 +50,8 @@ export class ProfileOverviewTileComponent implements OnInit {
      * If set to true it overrules the profile input. Defaults to false.
      */
     @Input() addProfileTile = false;
+
+    @Input() showDetails = false;
 
     @Output() copyClick = new EventEmitter<string>();
 
@@ -125,6 +127,10 @@ export class ProfileOverviewTileComponent implements OnInit {
             }
             this.showOverlay = status;
         }
+    }
+
+    public activateProfile(): void {
+        this.tccDBus.setTempProfile(this.profile.name);
     }
 
     public selectProfile(): void {

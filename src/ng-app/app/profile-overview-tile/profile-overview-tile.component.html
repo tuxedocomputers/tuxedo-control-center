@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -26,53 +26,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     (mouseenter)="activateOverlay(true)"
     (mouseleave)="activateOverlay(false)">
 
-    <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
-        <div class="overlay-content">
-            <div class="icon-bar">
-                <button mat-icon-button disableRipple (click)="copyProfile(profile)">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
-                </button>
-                <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile && !used">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
-                </button>
-                <button mat-icon-button disableRipple (click)="selectProfile()">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-                </button>
-            </div>
-            <div class="state-selector">
-                <mat-button-toggle-group color="primary"
-                    [formControl]="selectStateControl"
-                    multiple
-                    matTooltipPosition="left">
-                    <mat-button-toggle
-                        *ngFor="let state of stateInputArray"
-                        disableRipple
-                        [disabled]="getSettings().stateMap[state.value] === profile.name"
-                        [value]="state.value">
-                        <svg viewBox="0 0 512 512">
-                            <use attr.href="./assets/images/{{ state.icon }}"></use>
-                        </svg>
-                        <span class="label">{{ state.label }}</span>
-                    </mat-button-toggle>
-                </mat-button-toggle-group>
-                <div class="state-buttons">
-                    <button
-                        (click)="saveStateSelection()"
-                        mat-icon-button
-                        disableRipple
-                        *ngIf="selectStateControl.dirty">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_save.svg#Icon"></use></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
-            <div *ngIf="active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
-            <div *ngIf="!active && used" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
-
             <div class="state-icon" *ngFor="let state of getStateInputs()">
                 <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">
                     <use attr.href="./assets/images/{{ state.icon }}"></use>
@@ -93,9 +48,31 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>
         </header>
 
-        <mat-divider></mat-divider>
+        <content *ngIf="!addProfileTile">
+            <div class="description">
+                {{ profile.description }}
+            </div>
+            <div class="buttons">
+                <button mat-button class="activate-button" [ngClass]="{'active': active}" (click)="activateProfile()">
+                    Activate profile
+                </button>
+                <button mat-icon-button (click)="selectProfile()">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </div>
+        </content>
 
-        <span *ngIf="!addProfileTile">
+        <!--button mat-icon-button disableRipple (click)="copyProfile(profile)">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
+        </button>
+        <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile && !used">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+        </button>
+        <button mat-icon-button disableRipple (click)="selectProfile()">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+        </button-->
+
+        <span *ngIf="!addProfileTile && showDetails">
             <div class="status-flexbox">
                 <div class="status-component" [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled}">
                     <div class="status-icon-container">
