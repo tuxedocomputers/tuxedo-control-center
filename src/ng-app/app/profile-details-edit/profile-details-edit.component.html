@@ -412,14 +412,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                 </mat-grid-list>
-                <mat-tab-group dynamicHeight>
+                <mat-tab-group dynamicHeight #cpuSettingsTabGroup (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
                     <mat-tab label="Power limit control" *ngIf="compat.hasODMPowerLimitControl">
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <div formGroupName="odmPowerLimits">
                                 <div formArrayName="tdpValues">
                                     <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
                                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                            <header>{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
+                                            <header (click)="findActiveTab()">{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                                             <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>

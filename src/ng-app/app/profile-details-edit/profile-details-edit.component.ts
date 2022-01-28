@@ -31,6 +31,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -81,6 +82,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         this.editProfile = (this.config.getCustomProfileByName(profile.name) !== undefined);
+
+        this.setActiveTab();
     }
 
     @Input()
@@ -124,6 +127,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public showFanGraphs = false;
 
     @ViewChild('inputName', { static: false }) inputName: MatInput;
+
+    public selectedCPUTabIndex: number = 0;
 
     constructor(
         private utils: UtilsService,
@@ -170,6 +175,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
+                this.setActiveTab();
             }
         }));
 
@@ -216,6 +222,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
+        this.setActiveTab();
         this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
         // Also restore brightness to active profile if applicable
         if (!this.dbus.displayBrightnessNotSupported) {
@@ -510,5 +517,48 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (correctedValue !== wantedValue) {
             tdpValues.controls[sliderIndex].markAsDirty();
         }
+    }
+
+    private setFormGroupValue(groupName, value): boolean {
+        let valueChanged = false;
+        if (JSON.stringify(value) !== JSON.stringify(this.viewProfile[groupName])) {
+            valueChanged = true;
+        }
+        this.profileFormGroup.get(groupName).setValue(value);
+        if (valueChanged) {
+            this.profileFormGroup.get(groupName).markAsDirty();
+        }
+        return valueChanged;
+    }
+
+    @ViewChild('cpuSettingsTabGroup', { static: false }) cpuTabGroup: MatTabGroup;
+    public setActiveTab(index?: number) {
+        if (this.compat.hasODMPowerLimitControl) {
+            const defaultProfile = this.config.getDefaultProfiles()[0];
+            const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+            const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
+
+            // Choose either manual index or manually selectd
+            if (index !== undefined) {
+                this.selectedCPUTabIndex = index;
+            } else if (powerNotDefault) {
+                this.selectedCPUTabIndex = 0;
+            } else if (cpufreqNotDefault) {
+                this.selectedCPUTabIndex = 1;
+            } else {
+                this.selectedCPUTabIndex = 0;
+            }
+
+            // Reset not chosen tab to default
+            if (this.selectedCPUTabIndex === 0) {
+                this.setFormGroupValue('cpu', defaultProfile.cpu);
+            } else if (this.selectedCPUTabIndex === 1) {
+                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+            }
+        }
+    }
+
+    public tabChange(event: MatTabChangeEvent) {
+        this.setActiveTab(event.index);
     }
 }
