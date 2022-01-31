@@ -68,7 +68,7 @@
             flex-flow: row nowrap;
             justify-content: space-around;
 
-            .activate-button {
+            .action-button {
                 border-radius: 20px;
 
                 .dot {
@@ -148,16 +148,6 @@
 
             &.inactive {
                 opacity: 0.3;
-            }
-        }
-    }
-
-    mat-card-content {
-        height: auto;
-        
-        .add-profile-content {
-            mat-icon {
-                transform: scale(2);
             }
         }
     }

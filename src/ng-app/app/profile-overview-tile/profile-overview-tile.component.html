@@ -51,7 +51,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 {{ profile.description }}
             </div>
             <div class="buttons">
-                <button mat-stroked-button color="primary" class="activate-button" [disabled]="active" [ngClass]="{'active': active}" (click)="activateProfile()">
+                <button mat-stroked-button color="primary" class="action-button" [disabled]="active" [ngClass]="{'active': active}" (click)="activateProfile()">
                     <div *ngIf="active" class="dot"></div>
                     <ng-container *ngIf="!active" i18n="@@ProfOverviewTileActivate">Activate profile</ng-container>
                     <ng-container *ngIf="active" i18n="@@ProfOverviewTileActivate">Profile active</ng-container>
@@ -137,9 +137,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </content>
 
-        <content *ngIf="addProfileTile" class="add-profile-content">
-            <div style="position:relative; top:10px; text-align: center;">
-                <button mat-icon-button color="primary" style="cursor: default;"><mat-icon>add_box</mat-icon></button>
+        <content *ngIf="addProfileTile" class="add-profile">
+            <div class="description" i18n="@@ProfOverviewTileNewProfileDescription">
+                Create a new profile and configure it as you want
+            </div>
+            <div class="buttons">
+                <button mat-stroked-button color="primary" class="action-button">
+                    <ng-container i18n="@@ProfOverviewTileCreateProfile">Create profile</ng-container>
+                </button>
             </div>
         </content>
     </mat-card-content>
