@@ -55,8 +55,6 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     @Output() copyClick = new EventEmitter<string>();
 
-    public showOverlay = false;
-
     public selectStateControl: FormControl;
     public stateInputArray: IStateInfo[];
 
@@ -118,15 +116,6 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public formatFrequency(frequency: number): string {
         return this.utils.formatFrequency(frequency);
-    }
-
-    public activateOverlay(status: boolean): void {
-        if (!this.addProfileTile) {
-            if (status === true) {
-                this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
-            }
-            this.showOverlay = status;
-        }
     }
 
     public activateProfile(): void {

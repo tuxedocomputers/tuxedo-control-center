@@ -22,9 +22,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         'selected': isSelected,
         'tile-active': active
     }"
-    *ngIf="visible"
-    (mouseenter)="activateOverlay(true)"
-    (mouseleave)="activateOverlay(false)">
+    *ngIf="visible">
 
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
@@ -48,7 +46,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>
         </header>
 
-        <content *ngIf="!addProfileTile">
+        <content *ngIf="!addProfileTile && !showDetails">
             <div class="description">
                 {{ profile.description }}
             </div>
@@ -80,17 +78,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-menu>
         </content>
 
-        <!--button mat-icon-button disableRipple (click)="copyProfile(profile)">
-            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
-        </button>
-        <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile && !used">
-            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
-        </button>
-        <button mat-icon-button disableRipple (click)="selectProfile()">
-            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-        </button-->
-
-        <span *ngIf="!addProfileTile && showDetails">
+        <content *ngIf="!addProfileTile && showDetails">
             <div class="status-flexbox">
                 <div class="status-component" [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled}">
                     <div class="status-icon-container">
@@ -144,12 +132,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </span>
                 </div>
             </div>
-        </span>
+        </content>
 
-        <span *ngIf="addProfileTile" class="add-profile-content">
+        <content *ngIf="addProfileTile" class="add-profile-content">
             <div style="position:relative; top:10px; text-align: center;">
                 <button mat-icon-button color="primary" style="cursor: default;"><mat-icon>add_box</mat-icon></button>
             </div>
-        </span>
+        </content>
     </mat-card-content>
 </mat-card>
