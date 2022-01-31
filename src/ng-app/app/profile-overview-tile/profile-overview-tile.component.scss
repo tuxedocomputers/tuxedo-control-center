@@ -27,7 +27,7 @@
     padding: 10px;
     padding-bottom: 15px;
 
-    border-radius: 5px;
+    border-radius: 15px;
 
     hr {
         opacity: 0.2;
@@ -71,6 +71,7 @@
             justify-content: space-around;
 
             .activate-button {
+                border-radius: 20px;
                 &.active {
                     background-color: rgba(#75df47, 0.5);
                 }
