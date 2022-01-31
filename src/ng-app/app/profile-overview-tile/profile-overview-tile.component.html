@@ -51,8 +51,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 {{ profile.description }}
             </div>
             <div class="buttons">
-                <button mat-stroked-button color="primary" class="activate-button" [ngClass]="{'active': active}" (click)="activateProfile()">
-                    <ng-container i18n="@@ProfOverviewTileActivate">Activate profile</ng-container>
+                <button mat-stroked-button color="primary" class="activate-button" [disabled]="active" [ngClass]="{'active': active}" (click)="activateProfile()">
+                    <div *ngIf="active" class="dot"></div>
+                    <ng-container *ngIf="!active" i18n="@@ProfOverviewTileActivate">Activate profile</ng-container>
+                    <ng-container *ngIf="active" i18n="@@ProfOverviewTileActivate">Profile active</ng-container>
                 </button>
                 <button mat-icon-button [matMenuTriggerFor]="menuAdjust">
                     <mat-icon>more_vert</mat-icon>

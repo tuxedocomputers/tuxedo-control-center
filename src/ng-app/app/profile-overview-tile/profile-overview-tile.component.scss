@@ -64,8 +64,21 @@
 
             .activate-button {
                 border-radius: 20px;
+
+                .dot {
+                    display:inline-block;
+                    border-radius: 50%;
+                    width:10px;
+                    height: 10px;
+                    background-color: gray;
+
+                    margin-right: 10px;
+                }
+
                 &.active {
-                    background-color: rgba(#75df47, 0.5);
+                    .dot {
+                        background-color:#75df47;
+                    }
                 }
             }
         }
