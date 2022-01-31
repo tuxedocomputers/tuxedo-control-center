@@ -60,25 +60,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-icon>more_vert</mat-icon>
                 </button>
             </div>
-            <mat-menu #menuAdjust="matMenu" class="adjust-menu" yPosition="above">
-                <button mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-                    <span i18n="@@ProfOverviewTileMenuEdit">Edit</span>
-                </button>
-                <button mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
-                    <mat-icon>visibility</mat-icon>
-                    <span i18n="@@ProfOverviewTileMenuView">View</span>
-                </button>
-                <button mat-menu-item (click)="copyProfile(profile)">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
-                    <span i18n="@@ProfOverviewTileMenuCopy">Copy</span>
-                </button>
-                <button mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
-                    <span i18n="@@ProfOverviewTileMenuDelete">Delete</span>
-                </button>
-            </mat-menu>
         </content>
+
+        <mat-menu #menuAdjust="matMenu" class="adjust-menu" yPosition="above">
+            <button mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
+                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+                <span i18n="@@ProfOverviewTileMenuEdit">Edit</span>
+            </button>
+            <button mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
+                <mat-icon>visibility</mat-icon>
+                <span i18n="@@ProfOverviewTileMenuView">View</span>
+            </button>
+            <button mat-menu-item (click)="copyProfile(profile)">
+                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
+                <span i18n="@@ProfOverviewTileMenuCopy">Copy</span>
+            </button>
+            <button mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
+                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+                <span i18n="@@ProfOverviewTileMenuDelete">Delete</span>
+            </button>
+        </mat-menu>
 
         <content *ngIf="!addProfileTile && showDetails">
             <div class="status-flexbox">
