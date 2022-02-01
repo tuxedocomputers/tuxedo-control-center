@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -27,7 +27,7 @@
     padding: 10px;
     padding-bottom: 15px;
 
-    border-radius: 5px;
+    border-radius: 15px;
 
     hr {
         opacity: 0.2;
@@ -42,28 +42,64 @@
 
         .profile-name {
             font-size: 20px;
+            font-weight: bold;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
             margin:auto;
         }
+    }
 
-        /*.state-icons {
+    content {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+
+        .description {
+            height: 110px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .buttons {
+            margin-top: 10px;
             display: flex;
-            .status-icon {
-                font-size: 17px;
-                width: 17px;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+
+            .action-button {
+                border-radius: 20px;
+
+                .dot {
+                    display:inline-block;
+                    border-radius: 50%;
+                    width:10px;
+                    height: 10px;
+                    background-color: gray;
+
+                    margin-right: 10px;
+                }
+
+                &.active {
+                    .dot {
+                        background-color:#75df47;
+                    }
+                }
             }
-        }*/
+        }
     }
 
     .profile-icon {
-        width: 80px;
+        width: 65px;
         margin: auto;
         margin-bottom: 5px;
     }
 
     .state-status-icons {
+        position: absolute;
+        top: 5px;
+        right: 5px;
         display: flex;
         flex-flow: row;
         justify-content: flex-end;
@@ -80,9 +116,6 @@
             }
         }
 
-        .dot {
-            margin: 8px;
-        }
     }
 
     .status-flexbox {
@@ -118,107 +151,13 @@
             }
         }
     }
+}
 
-    .overlay {
-        display: none;
-        position: absolute;
-        z-index: 20;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-
-        border-radius: inherit;
-
-        opacity: 0.95;
-
-        &.show {
-            display: initial;
-        }
-
-        .overlay-content {
-            display: flex;
-            flex-flow: column;
-            justify-content: flex-start;
-
-            width: 100%;
-            height: 100%;
-
-            .icon-bar {
-                display: flex;
-                flex-flow: row;
-                justify-content: flex-end;
-                align-items: center;
-
-                padding: 10px;
-
-                svg {
-                    width: 48px;
-                    height: 48px;
-                    --icon-detail: var(--icon-main);
-                }
-
-                button {
-                    margin-left: 5px;
-                }
-            }
-
-            .state-selector {
-                margin-top: 20px;
-
-                mat-button-toggle-group {
-                    flex-flow: column;
-                    width: 100%;
-
-                    border-style: none;
-
-                    mat-button-toggle {
-
-                        svg {
-                            width: 48px;
-                            height: 48px;
-
-                            --icon-detail: var(--icon-main);
-                        }
-                    }
-
-                    ::ng-deep .mat-button-toggle-label-content {
-                        display: flex;
-                        flex-flow: column;
-                        justify-content: flex-start;
-                        align-items: center;
-                    }
-                }
-
-                .state-buttons {
-                    display: flex;
-                    flex-flow: row;
-                    justify-content: flex-end;
-                    align-items: center;
-                    
-                    padding: 10px;
-    
-                    svg {
-                        width: 48px;
-                        height: 48px;
-                        --icon-detail: var(--icon-main);
-                    }
-    
-                    button {
-                       margin:30px auto auto auto;
-                    }
-                }
-            }
-        }
-    }
-
-    mat-card-content {
-        height: auto;
-        
-        .add-profile-content {
-            mat-icon {
-                transform: scale(2);
-            }
-        }
+::ng-deep .adjust-menu {
+    svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 16px;
+        vertical-align: middle;
     }
 }

@@ -136,5 +136,11 @@ export class TccDBusClientService implements OnDestroy {
     if (this.timeout !== undefined) {
       clearInterval(this.timeout);
     }
+    this.tccDBusInterface.disconnect();
+  }
+
+  public async setTempProfile(profileName: string) {
+    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileName(profileName);
+    return result;
   }
 }

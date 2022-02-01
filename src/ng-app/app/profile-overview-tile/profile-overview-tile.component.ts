@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -51,9 +51,9 @@ export class ProfileOverviewTileComponent implements OnInit {
      */
     @Input() addProfileTile = false;
 
-    @Output() copyClick = new EventEmitter<string>();
+    @Input() showDetails = false;
 
-    public showOverlay = false;
+    @Output() copyClick = new EventEmitter<string>();
 
     public selectStateControl: FormControl;
     public stateInputArray: IStateInfo[];
@@ -118,13 +118,8 @@ export class ProfileOverviewTileComponent implements OnInit {
         return this.utils.formatFrequency(frequency);
     }
 
-    public activateOverlay(status: boolean): void {
-        if (!this.addProfileTile) {
-            if (status === true) {
-                this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
-            }
-            this.showOverlay = status;
-        }
+    public activateProfile(): void {
+        this.tccDBus.setTempProfile(this.profile.name);
     }
 
     public selectProfile(): void {

@@ -63,6 +63,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     public inputProfileFilter = 'all';
 
+    viewDetails: boolean = false;
+
     @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
 
     public buttonCopy: ProfileManagerButton;
