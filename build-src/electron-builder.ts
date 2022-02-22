@@ -61,7 +61,7 @@ async function buildDeb(): Promise<void> {
             description: 'TUXEDO Control Center Application'
         },
         deb: {
-            depends: ['tuxedo-keyboard (>= 3.0.6)', 'libappindicator3-1'],
+            depends: ['tuxedo-keyboard (>= 3.0.6)', 'libayatana-appindicator3-1'],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
