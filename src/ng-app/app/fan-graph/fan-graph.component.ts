@@ -138,7 +138,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         },
     };
 
-    @ViewChild('chartTextE', { static: false }) chartTextE: ElementRef;
+    @ViewChild('chartTextE') chartTextE: ElementRef;
     public get chartTextColor(): string { return this.elementColor(this.chartTextE); };
 
     initDone = false;

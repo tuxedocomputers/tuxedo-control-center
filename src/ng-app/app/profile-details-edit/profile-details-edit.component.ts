@@ -111,7 +111,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public showFanGraphs = false;
 
-    @ViewChild('inputName', { static: false }) inputName: MatInput;
+    @ViewChild('inputName') inputName: MatInput;
 
     constructor(
         private utils: UtilsService,
@@ -348,7 +348,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             slider.setValue(newValue);
     }
 
-    @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;
+    @ViewChild('fancontrolHeader') fancontrolHeaderE;
     public toggleFanGraphs() {
         if (!this.showFanGraphs) {
             this.showFanGraphs = true;
