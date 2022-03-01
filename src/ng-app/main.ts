@@ -43,7 +43,7 @@ if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId
 declare const require;
 let translation;
 try {
-  translation = require('raw-loader!./assets/locale/lang.' + langId + '.xlf');
+  translation = require('raw-loader!./assets/locale/lang.' + langId + '.xlf').default;
 } catch (err) {
   translation = '';
 }

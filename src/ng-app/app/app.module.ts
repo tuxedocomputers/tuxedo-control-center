@@ -141,7 +141,7 @@ declare const require;
     { provide: TRANSLATIONS, useFactory: () => {
       let translation;
       try {
-        translation = require('raw-loader!./../assets/locale/lang.' + langId + '.xlf');
+        translation = require('raw-loader!./../assets/locale/lang.' + langId + '.xlf').default;
       } catch (err) {
         translation = '';
       }
