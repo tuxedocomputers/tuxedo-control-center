@@ -29,7 +29,7 @@
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
     "copy-changelog": "cp CHANGELOG.md ./src/ng-app/assets/",
     "pack": "npm run build && ts-node ./build-src/electron-builder.ts",
-    "pack-prod": "npm run build-prod && ts-node ./build-src/electron-builder.ts",
+    "pack-prod": "npm run build-prod && TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/electron-builder.ts",
     "clean": "rm -rf ./dist; rm -rf ./build",
     "tests": "npm run test-common",
     "test-common": "ts-node node_modules/jasmine/bin/jasmine --config=./src/common/jasmine.json",
