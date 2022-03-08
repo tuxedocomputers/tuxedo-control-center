@@ -201,6 +201,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
+        // Reset non chosen CPU tab to defaults on save
+        const defaultProfile = this.config.getDefaultProfiles()[0];
+        if (this.selectedCPUTabIndex === 0) {
+            this.setFormGroupValue('cpu', defaultProfile.cpu);
+        } else if (this.selectedCPUTabIndex === 1) {
+            this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+        }
+
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
@@ -550,10 +558,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
 
             // Reset not chosen tab to default
-            if (this.selectedCPUTabIndex === 0) {
-                this.setFormGroupValue('cpu', defaultProfile.cpu);
-            } else if (this.selectedCPUTabIndex === 1) {
-                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+            const resetNonChosenTabWhenNotSelected = false;
+            if (resetNonChosenTabWhenNotSelected) {
+                if (this.selectedCPUTabIndex === 0) {
+                    this.setFormGroupValue('cpu', defaultProfile.cpu);
+                } else if (this.selectedCPUTabIndex === 1) {
+                    this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+                }
             }
         }
     }
