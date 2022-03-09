@@ -100,9 +100,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public gridProfileSettings = {
         cols: 9,
-        headerSpan: 3,
+        headerSpan: 4,
         valueSpan: 0,
-        inputSpan: 6
+        inputSpan: 5
     };
 
     public selectStateControl: FormControl;
