@@ -28,6 +28,7 @@ import { CompatibilityService } from '../compatibility.service';
 import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 
 @Component({
     selector: 'app-profile-overview-tile',
@@ -67,6 +68,9 @@ export class ProfileOverviewTileComponent implements OnInit {
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
 
+    public odmPowerLimitInfos: TDPInfo[];
+    public selectedCPUTabIndex: number;
+
     constructor(
         private utils: UtilsService,
         private state: StateService,
@@ -104,6 +108,19 @@ export class ProfileOverviewTileComponent implements OnInit {
                 }
             }
         }));
+
+        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
+            if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
+                this.odmPowerLimitInfos = nextODMPowerLimits;
+                if (this.profile) {
+                    this.selectedCPUTabIndex = this.selectCPUCtlShown();
+                }
+            }
+        }));
+
+        if (this.profile) {
+            this.selectedCPUTabIndex = this.selectCPUCtlShown();
+        }
     }
 
     public getStateInputs(): IStateInfo[] {
@@ -156,5 +173,29 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public copyProfile() {
         this.copyClick.emit(this.profile.name);
+    }
+
+    public selectCPUCtlShown(): number {
+        const defaultProfile = this.config.getDefaultProfiles()[0];
+        const powerNotDefault = JSON.stringify(this.profile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+        const cpufreqNotDefault = JSON.stringify(this.profile.cpu) !== JSON.stringify(defaultProfile.cpu);
+        const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
+
+        const INDEX_ODMCPUTDP = 0;
+        const INDEX_CPUFREQ = 1;
+
+        let selectedCPUTabIndex;
+
+        if (cpuFreqOnly) {
+            selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else if (powerNotDefault) {
+            selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        } else if (cpufreqNotDefault) {
+            selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else {
+            selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        }
+
+        return selectedCPUTabIndex;
     }
 }
