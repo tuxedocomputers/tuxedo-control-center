@@ -52,7 +52,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="40px" class="profile-details-edit-grid">
 
                         <!-- Profile name -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Name</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsNameLabel">Name</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
                                 <mat-form-field *ngIf="editProfile">
@@ -70,7 +70,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
 
                         <!-- Profile description -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Description</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
                                 <mat-form-field *ngIf="editProfile" class="input-description">
@@ -88,7 +88,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
 
                         <!-- Profile state selection -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n>Activate profile automatically on</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
                                 <div>
@@ -414,7 +414,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-grid-list>
                 <mat-tab-group #cpuSettingsTabGroup animationDuration="0" (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
                     <mat-tab *ngIf="compat.hasODMPowerLimitControl" [disabled]="!editProfile">
-                        <ng-template mat-tab-label><mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile">Power limit control</mat-radio-button></ng-template>
+                        <ng-template mat-tab-label>
+                            <mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile" i18n="@@cProfMgrDetailsODMTDPLabel">Power limit control</mat-radio-button>
+                        </ng-template>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <div formGroupName="odmPowerLimits">
                                 <div formArrayName="tdpValues">
@@ -471,7 +473,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-list>
                     </mat-tab>
                     <mat-tab formGroupName="cpu" [disabled]="!editProfile">
-                        <ng-template mat-tab-label><mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 1" [disabled]="!editProfile">CPU frequency control</mat-radio-button></ng-template>
+                        <ng-template mat-tab-label>
+                            <mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 1" [disabled]="!editProfile" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</mat-radio-button>
+                        </ng-template>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <!-- Number of logical cores -->
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
