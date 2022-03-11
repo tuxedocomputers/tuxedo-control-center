@@ -413,8 +413,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 </mat-grid-list>
                 <mat-tab-group #cpuSettingsTabGroup animationDuration="0" (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
-                    <mat-tab *ngIf="compat.hasODMPowerLimitControl">
-                        <ng-template mat-tab-label><mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 0">Power limit control</mat-radio-button></ng-template>
+                    <mat-tab *ngIf="compat.hasODMPowerLimitControl" [disabled]="!editProfile">
+                        <ng-template mat-tab-label><mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile">Power limit control</mat-radio-button></ng-template>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <div formGroupName="odmPowerLimits">
                                 <div formArrayName="tdpValues">
@@ -470,8 +470,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </div>
                         </mat-grid-list>
                     </mat-tab>
-                    <mat-tab formGroupName="cpu">
-                        <ng-template mat-tab-label><mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 1">CPU frequency control</mat-radio-button></ng-template>
+                    <mat-tab formGroupName="cpu" [disabled]="!editProfile">
+                        <ng-template mat-tab-label><mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 1" [disabled]="!editProfile">CPU frequency control</mat-radio-button></ng-template>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <!-- Number of logical cores -->
                             <mat-grid-tile [colspan]="gridParams.headerSpan">

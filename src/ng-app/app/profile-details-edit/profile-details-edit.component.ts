@@ -541,30 +541,34 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild('cpuSettingsTabGroup', { static: false }) cpuTabGroup: MatTabGroup;
     public setActiveTab(index?: number) {
-        if (this.compat.hasODMPowerLimitControl) {
-            const defaultProfile = this.config.getDefaultProfiles()[0];
-            const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
-            const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
+        const defaultProfile = this.config.getDefaultProfiles()[0];
+        const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+        const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
+        const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
 
-            // Choose either manual index or manually selectd
-            if (index !== undefined) {
-                this.selectedCPUTabIndex = index;
-            } else if (powerNotDefault) {
-                this.selectedCPUTabIndex = 0;
-            } else if (cpufreqNotDefault) {
-                this.selectedCPUTabIndex = 1;
-            } else {
-                this.selectedCPUTabIndex = 0;
-            }
+        const INDEX_ODMCPUTDP = 0;
+        const INDEX_CPUFREQ = 1;
 
-            // Reset not chosen tab to default
-            const resetNonChosenTabWhenNotSelected = false;
-            if (resetNonChosenTabWhenNotSelected) {
-                if (this.selectedCPUTabIndex === 0) {
-                    this.setFormGroupValue('cpu', defaultProfile.cpu);
-                } else if (this.selectedCPUTabIndex === 1) {
-                    this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
-                }
+        // Choose either index automatically or manually selectd
+        if (index !== undefined) {
+            this.selectedCPUTabIndex = index;
+        } else if (cpuFreqOnly) {
+            this.selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else if (powerNotDefault) {
+            this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        } else if (cpufreqNotDefault) {
+            this.selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else {
+            this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        }
+
+        // Reset not chosen tab to default
+        const resetNonChosenTabWhenNotSelected = false;
+        if (resetNonChosenTabWhenNotSelected) {
+            if (this.selectedCPUTabIndex === INDEX_ODMCPUTDP) {
+                this.setFormGroupValue('cpu', defaultProfile.cpu);
+            } else if (this.selectedCPUTabIndex === INDEX_CPUFREQ) {
+                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
             }
         }
     }
