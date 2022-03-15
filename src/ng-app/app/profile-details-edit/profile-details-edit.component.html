@@ -110,18 +110,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
-                                <div>
-                                    <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
-                                        <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
-                                            [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
-                                            [value]="state.value"
-                                            [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
-                                            [matTooltipShowDelay]="100">
-                                                {{ state.label }}
-                                                <svg viewBox="0 0 512 512"><use attr.href="./assets/images/{{ state.icon }}"></use></svg>
-                                        </mat-button-toggle>
-                                    </mat-button-toggle-group>
-                                </div>
+                                <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
+                                    <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
+                                        [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                                        [value]="state.value"
+                                        [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
+                                        [matTooltipShowDelay]="100">
+                                            {{ state.label }}
+                                            <svg viewBox="0 0 512 512"><use attr.href="./assets/images/{{ state.icon }}"></use></svg>
+                                    </mat-button-toggle>
+                                </mat-button-toggle-group>
                             </content>
                         </mat-grid-tile>
 

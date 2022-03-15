@@ -88,6 +88,7 @@
 
             mat-button-toggle-group {
                 transform: scale(0.8);
+                transform-origin: left;
 
                 mat-button-toggle {
                     font-size: 1.6em;
