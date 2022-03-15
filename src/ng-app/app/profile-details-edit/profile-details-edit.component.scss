@@ -79,10 +79,13 @@
             }
 
             mat-form-field {
-                width: 300px;
+                width: 360px;
 
                 &.input-description {
-                    width: 450px;
+
+                    textarea {
+                        resize: none;
+                    }
                 }
             }
 

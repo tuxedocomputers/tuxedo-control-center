@@ -68,25 +68,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </ng-container>
                             </content>
                         </mat-grid-tile>
-
+                    </mat-grid-list>
+                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="80px" class="profile-details-edit-grid">
                         <!-- Profile description -->
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
                                 <mat-form-field *ngIf="editProfile" class="input-description">
-                                    <input matInput
+                                    <textarea matInput
                                         formControlName="description"
                                         type="text"
                                         minLength="1"
                                         maxLength="200"
+                                        rows="3"
                                         (focus)="$event.target.select()">
+                                    </textarea>
                                 </mat-form-field>
                                 <ng-container *ngIf="!editProfile">
                                     {{ profileFormGroup.controls.description.value }}
                                 </ng-container>
                             </content>
                         </mat-grid-tile>
-
+                    </mat-grid-list>
+                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="40px" class="profile-details-edit-grid">
                         <!-- ODM Profile for "led purposes" -->
                         <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
                             <mat-grid-tile [colspan]="gridProfileSettings.headerSpan">
