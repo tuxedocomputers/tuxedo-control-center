@@ -101,7 +101,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </span>
                     <span class="status-info" *ngIf="selectedCPUTabIndex === 0">
-                        <span *ngIf="odmPowerLimitInfos.length > 0">{{ odmPowerLimitInfos[0].descriptor.toUpperCase() }}: {{ profile.odmPowerLimits.tdpValues[0] }} W</span>
+                        <ng-container *ngIf="odmPowerLimitInfos.length > 0">{{ profile.odmPowerLimits.tdpValues[0] }} W</ng-container>
+                        <ng-container *ngIf="odmPowerLimitInfos.length > 1">, {{ profile.odmPowerLimits.tdpValues[1] }} W</ng-container>
                     </span>
                 </div>
                 <div class="status-component" *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
