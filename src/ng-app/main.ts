@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { enableProdMode, TRANSLATIONS, TRANSLATIONS_FORMAT, LOCALE_ID } from '@angular/core';
+import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
@@ -26,36 +26,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-// Default language to browser language
-let langId = navigator.language;
-// If not a known language change to english
-// TODO: General (not hardcoded) language list
-if (!['en', 'de'].includes(langId)) {
-  langId = 'en';
-}
-// If language is already saved choose this language
-if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId') !== null) {
-  langId = localStorage.getItem('langId');
-} else {
-  localStorage.setItem('langId', langId);
-}
-
-declare const require;
-let translation;
-try {
-  translation = require('raw-loader!./assets/locale/lang.' + langId + '.xlf').default;
-} catch (err) {
-  translation = '';
-}
-
 platformBrowserDynamic().bootstrapModule(AppModule, {
-  providers: [
-    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
-    { provide: LOCALE_ID, useFactory: () => {
-      return langId;
-    }, deps: [] },
-    { provide: TRANSLATIONS, useFactory: (localeId) => {
-      return translation;
-    }, deps: [ LOCALE_ID ] }
-  ]
+  providers: []
 }).catch(err => console.error(err));

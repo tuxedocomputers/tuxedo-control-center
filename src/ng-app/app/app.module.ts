@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID, TRANSLATIONS_FORMAT, TRANSLATIONS } from '@angular/core';
+import { NgModule, TRANSLATIONS_FORMAT, TRANSLATIONS } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -78,12 +78,6 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
-// TODO: Set localeId according to settings
-let langId = 'en';
-if (localStorage.getItem('langId') !== undefined && localStorage.getItem('langId') !== null) {
-  langId = localStorage.getItem('langId');
-}
-
 declare const require;
 
 @NgModule({
@@ -137,14 +131,9 @@ declare const require;
   ],
   providers: [
     { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
-    { provide: LOCALE_ID, useValue: langId },
     { provide: TRANSLATIONS, useFactory: () => {
       let translation;
-      try {
-        translation = require('raw-loader!./../assets/locale/lang.' + langId + '.xlf').default;
-      } catch (err) {
-        translation = '';
-      }
+      translation = '';
       return translation;
     }},
     DecimalPipe,

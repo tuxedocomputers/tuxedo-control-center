@@ -24,13 +24,14 @@ import * as os from 'os';
 import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
+import { UserConfig } from './UserConfig';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
 
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
-const tccConfigDir = '.tcc';
+const tccConfigDir = path.join(os.homedir(), '.tcc');
 let startTCCAccelerator;
 
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
@@ -65,9 +66,18 @@ if (isFirstStart()) {
     installAutostartTray();
 }
 
+const userConfig = new UserConfig(tccConfigDir);
+
 if (!userConfigDirExists()) {
     createUserConfigDir();
 }
+
+userConfig.readConfig().catch(() => {
+    const systemLanguageId = app.getLocale().substring(0, 2);
+    console.log('sys lang id: ' + systemLanguageId);
+
+    userConfig.writeConfig();
+});
 
 app.on('second-instance', (event, cmdLine, workingDir) => {
     // If triggered by a second instance, find/show/start GUI
@@ -269,11 +279,13 @@ function createTccWindow() {
     // Workaround to menu bar appearing after full screen state
     tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
 
-    const lang = 'en';
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', lang, 'index.html');
-    tccWindow.loadFile(indexPath);
     tccWindow.on('closed', () => {
         tccWindow = null;
+    });
+
+    userConfig.readConfig().then(() => {
+        const indexPath = path.join(__dirname, '..', '..', 'ng-app', userConfig.data.langId, 'index.html');
+        tccWindow.loadFile(indexPath);
     });
 }
 
@@ -310,6 +322,26 @@ ipcMain.on('spawn-external-async', (event, arg) => {
         console.log("\"" + arg + "\" could not be executed.")
         dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
     });
+});
+
+async function changeLanguage(newLangId: string) {
+    await userConfig.readConfig();
+    if (newLangId !== userConfig.data.langId) {
+        userConfig.data.langId = newLangId;
+        await userConfig.writeConfig();
+        if (tccWindow) {
+            const indexPath = path.join(__dirname, '..', '..', 'ng-app', userConfig.data.langId, 'index.html');
+            tccWindow.loadFile(indexPath);
+        }
+    }
+}
+
+/**
+ * Change user language IPC interface
+ */
+ipcMain.on('trigger-language-change', (event, arg) => {
+    const langId = arg;
+    changeLanguage(langId);
 });
 
 function installAutostartTray(): boolean {
@@ -353,7 +385,7 @@ function isFirstStart(): boolean {
 
 function userConfigDirExists(): boolean {
     try {
-        return fs.existsSync(path.join(os.homedir(), '.tcc'));
+        return fs.existsSync(tccConfigDir);
     } catch (err) {
         return false;
     }
@@ -361,7 +393,7 @@ function userConfigDirExists(): boolean {
 
 function createUserConfigDir(): boolean {
     try {
-        fs.mkdirSync(path.join(os.homedir(), '.tcc'));
+        fs.mkdirSync(tccConfigDir);
         return true;
     } catch (err) {
         return false;

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, HostBinding } from '@angular/core';
+import { Injectable, HostBinding, Inject, LOCALE_ID } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { ElectronService } from 'ngx-electron';
@@ -46,12 +46,15 @@ export class UtilsService {
 
   public themeClass: BehaviorSubject<string>;
 
+  private localeId: string;
+
   constructor(
     private sysfs: SysFsService,
     private electron: ElectronService,
     private decimalPipe: DecimalPipe,
-    public overlayContainer: OverlayContainer) {
-
+    public overlayContainer: OverlayContainer,
+    @Inject(LOCALE_ID) localeId) {
+      this.localeId = localeId;
       this.languageMap = {};
       for (const lang of this.getLanguagesMenuArray()) {
         this.languageMap[lang.id] = lang;
@@ -153,17 +156,11 @@ export class UtilsService {
   }
 
   public changeLanguage(languageId: string) {
-    localStorage.setItem('langId', languageId);
-    location.reload();
+    this.electron.ipcRenderer.send('trigger-language-change', languageId);
   }
 
   public getCurrentLanguageId(): string {
-    let langId = 'en';
-    const storedLangId = localStorage.getItem('langId');
-    if (storedLangId !== undefined && storedLangId !== null) {
-      langId = storedLangId;
-    }
-    return langId;
+    return this.localeId;
   }
 
   public getLanguageData(langId: string) {
