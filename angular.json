@@ -5,6 +5,12 @@
   "projects": {
     "tuxedo-control-center": {
       "projectType": "application",
+      "i18n": {
+          "locales": {
+              "en": { "translation": "src/ng-app/assets/locale/lang.en.xlf", "baseHref": "" },
+              "de": { "translation": "src/ng-app/assets/locale/lang.de.xlf", "baseHref": "" }
+          }
+      },
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
@@ -23,6 +29,7 @@
             "polyfills": "src/ng-app/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "localize": true,
             "assets": [
               "src/ng-app/favicon.ico",
               "src/ng-app/assets"

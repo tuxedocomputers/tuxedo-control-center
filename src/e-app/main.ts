@@ -269,7 +269,8 @@ function createTccWindow() {
     // Workaround to menu bar appearing after full screen state
     tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
 
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
+    const lang = 'en';
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', lang, 'index.html');
     tccWindow.loadFile(indexPath);
     tccWindow.on('closed', () => {
         tccWindow = null;
