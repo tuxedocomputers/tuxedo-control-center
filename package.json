@@ -40,7 +40,7 @@
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
     "start-electron-watch": "electron ./dist/tuxedo-control-center --watch",
-    "gen-lang": "ng xi18n --out-file src/ng-app/assets/locale/lang.xlf && ngx-extractor -i \"src/ng-app/**/*.ts\" -f xlf -o src/ng-app/assets/locale/lang.xlf",
+    "gen-lang": "ng xi18n --out-file src/ng-app/assets/locale/lang.xlf",
     "ng-update": "ng update"
   },
   "private": true,
@@ -68,7 +68,6 @@
     "@angular/compiler-cli": "~9.1.13",
     "@angular/language-service": "~9.1.13",
     "@angular/material": "^9.2.4",
-    "@ngx-translate/i18n-polyfill": "^1.0.0",
     "@types/jasmine": "^3.3.13",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",

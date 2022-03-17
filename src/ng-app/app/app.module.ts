@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, TRANSLATIONS_FORMAT, TRANSLATIONS } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -62,8 +62,6 @@ import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
-
-import { I18n } from '@ngx-translate/i18n-polyfill';
 
 import { OverlayModule } from '@angular/cdk/overlay';
 
@@ -130,14 +128,7 @@ declare const require;
     ChartsModule
   ],
   providers: [
-    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' },
-    { provide: TRANSLATIONS, useFactory: () => {
-      let translation;
-      translation = '';
-      return translation;
-    }},
     DecimalPipe,
-    I18n,
     ThemeService
   ],
   bootstrap: [AppComponent]

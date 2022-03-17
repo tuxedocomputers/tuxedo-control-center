@@ -32,7 +32,6 @@ import { StateService, IStateInfo } from './state.service';
 import { UtilsService } from './utils.service';
 import { CompatibilityService } from './compatibility.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { I18n } from '@ngx-translate/i18n-polyfill';
 
 @Component({
     selector: 'app-root',
@@ -53,8 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private config: ConfigService,
         private state: StateService,
         private utils: UtilsService,
-        private compat: CompatibilityService,
-        private i18n: I18n) { }
+        private compat: CompatibilityService) { }
 
     @HostBinding('class') componentThemeCssClass;
 
@@ -76,8 +74,8 @@ export class AppComponent implements OnInit, OnDestroy {
             this.electron.remote.dialog.showMessageBox(
               this.electron.remote.getCurrentWindow(),
               {
-                title: this.i18n({ value: 'Service unavailable' }),
-                message: this.i18n({ value: 'Communication with tccd service is unavailable, please restart service and try again.' }),
+                title: $localize `Service unavailable`,
+                message: $localize `Communication with tccd service is unavailable, please restart service and try again.`,
                 type: 'error',
                 buttons: ['ok']
               }

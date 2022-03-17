@@ -18,7 +18,6 @@
  */
 import { Injectable } from '@angular/core';
 import { TccDBusClientService } from './tcc-dbus-client.service';
-import { I18n } from '@ngx-translate/i18n-polyfill';
 
 @Injectable({
   providedIn: 'root'
@@ -26,15 +25,14 @@ import { I18n } from '@ngx-translate/i18n-polyfill';
 export class CompatibilityService {
 
   constructor(
-    private tccDbus: TccDBusClientService,
-    private i18n: I18n) { }
+    private tccDbus: TccDBusClientService) { }
 
   get hasFancontrol(): boolean {
     return this.tccDbus.tuxedoWmiAvailable.value;
   }
 
   get fanControlCompatibilityMessage(): string {
-    return this.i18n({ value: 'This feature is not supported on your model.' });
+    return $localize `This feature is not supported on your model.`;
   }
 
   get hasWebcamControl(): boolean {
@@ -42,7 +40,7 @@ export class CompatibilityService {
   }
 
   get webcamControlCompatibilityMessage(): string {
-    return this.i18n({ value: 'This feature is not supported on your model.' });
+    return $localize `This feature is not supported on your model.`;
   }
 
   get hasODMProfileControl(): boolean {

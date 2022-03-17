@@ -27,7 +27,6 @@ import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
-import { I18n } from '@ngx-translate/i18n-polyfill';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -60,8 +59,7 @@ export class ConfigService implements OnDestroy {
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
-        private dbus: TccDBusClientService,
-        private i18n: I18n) {
+        private dbus: TccDBusClientService) {
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
 
@@ -104,11 +102,11 @@ export class ConfigService implements OnDestroy {
     }
 
     get cpuSettingsDisabledMessage(): string {
-        return this.i18n({ value: 'CPU settings deactivated in Tools→Global\u00A0Settings' });
+        return $localize `CPU settings deactivated in Tools→Global\u00A0Settings`;
     }
 
     get fanControlDisabledMessage(): string {
-        return this.i18n({ value: 'Fan control deactivated in Tools→Global\u00A0Settings' });
+        return $localize `Fan control deactivated in Tools→Global\u00A0Settings`;
     }
 
     public getCustomProfiles(): ITccProfile[] {
