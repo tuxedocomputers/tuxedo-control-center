@@ -24,14 +24,40 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     }"
     *ngIf="visible">
 
+    <mat-menu #menuAdjust="matMenu" class="adjust-menu" yPosition="below">
+        <button mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+            <span i18n="@@ProfOverviewTileMenuEdit">Edit</span>
+        </button>
+        <button mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
+            <mat-icon>visibility</mat-icon>
+            <span i18n="@@ProfOverviewTileMenuView">View</span>
+        </button>
+        <button mat-menu-item (click)="copyProfile(profile)">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
+            <span i18n="@@ProfOverviewTileMenuCopy">Copy</span>
+        </button>
+        <button mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+            <span i18n="@@ProfOverviewTileMenuDelete">Delete</span>
+        </button>
+    </mat-menu>
+
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
-            <div class="state-icon" *ngFor="let state of getStateInputs()">
-                <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">
-                    <use attr.href="./assets/images/{{ state.icon }}"></use>
-                </svg>
+            <mat-slide-toggle [disabled]="true" [checked]="active" (click)="activateProfile()"></mat-slide-toggle>
+            <div class="group-right">
+                <div class="state-icon" *ngFor="let state of getStateInputs()">
+                    <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">
+                        <use attr.href="./assets/images/{{ state.icon }}"></use>
+                    </svg>
+                </div>
+                <button mat-icon-button [matMenuTriggerFor]="menuAdjust">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
             </div>
         </div>
+
         <div class="state-status-icons" *ngIf="addProfileTile"></div>
 
         <div class="profile-icon">
@@ -50,36 +76,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="description">
                 {{ profile.description }}
             </div>
-            <div class="buttons">
-                <button mat-stroked-button color="primary" class="action-button" [disabled]="active" [ngClass]="{'active': active}" (click)="activateProfile()">
-                    <div *ngIf="active" class="dot"></div>
-                    <ng-container *ngIf="!active" i18n="@@ProfOverviewTileActivate">Activate profile</ng-container>
-                    <ng-container *ngIf="active" i18n="@@ProfOverviewTileActivate">Profile active</ng-container>
-                </button>
-                <button mat-icon-button [matMenuTriggerFor]="menuAdjust">
-                    <mat-icon>more_vert</mat-icon>
-                </button>
-            </div>
         </content>
-
-        <mat-menu #menuAdjust="matMenu" class="adjust-menu" yPosition="above">
-            <button mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
-                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-                <span i18n="@@ProfOverviewTileMenuEdit">Edit</span>
-            </button>
-            <button mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
-                <mat-icon>visibility</mat-icon>
-                <span i18n="@@ProfOverviewTileMenuView">View</span>
-            </button>
-            <button mat-menu-item (click)="copyProfile(profile)">
-                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
-                <span i18n="@@ProfOverviewTileMenuCopy">Copy</span>
-            </button>
-            <button mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
-                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
-                <span i18n="@@ProfOverviewTileMenuDelete">Delete</span>
-            </button>
-        </mat-menu>
 
         <content *ngIf="!addProfileTile && showDetails">
             <div class="status-flexbox">
@@ -144,11 +141,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <content *ngIf="addProfileTile" class="add-profile">
             <div class="description" i18n="@@ProfOverviewTileNewProfileDescription">
                 Create a new profile and configure it as you want
-            </div>
-            <div class="buttons">
-                <button mat-stroked-button color="primary" class="action-button">
-                    <ng-container i18n="@@ProfOverviewTileCreateProfile">Create profile</ng-container>
-                </button>
             </div>
         </content>
     </mat-card-content>
