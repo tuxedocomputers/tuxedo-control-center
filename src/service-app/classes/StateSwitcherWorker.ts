@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -75,11 +75,10 @@ export class StateSwitcherWorker extends DaemonWorker {
             }
         }
 
-        this.tccd.updateDBusActiveProfileData();
-
         // Run worker start procedure / application of profile
         // if the profile changed
         if (oldActiveProfileName !== this.tccd.activeProfileName) {
+            this.tccd.updateDBusActiveProfileData();
             this.tccd.startWorkers();
         }
     }
