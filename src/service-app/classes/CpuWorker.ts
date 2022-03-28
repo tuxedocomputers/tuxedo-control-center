@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -30,7 +30,7 @@ export class CpuWorker extends DaemonWorker {
     private readonly preferredPerformanceAcpiFreqGovernors = [ 'performance' ];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd);
+        super(10000, tccd);
         this.cpuCtrl = new CpuController(this.basePath);
     }
 
