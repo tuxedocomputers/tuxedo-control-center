@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2021-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -28,7 +28,7 @@ export class ODMPowerLimitWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        let odmPowerLimitSettings = this.tccd.getCurrentProfile().odmPowerLimits;
+        let odmPowerLimitSettings = this.activeProfile.odmPowerLimits;
         if (odmPowerLimitSettings === undefined) {
             odmPowerLimitSettings = { tdpValues: [] }
         }
