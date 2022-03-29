@@ -123,7 +123,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         for (const worker of this.workers) {
             worker.timer = setInterval(() => {
                 try {
-                    worker.onWork();
+                    worker.work();
                 } catch (err) {
                     this.logLine('Failed executing onWork() => ' + err);
                 }
@@ -133,9 +133,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     public startWorkers(): void {
+        const activeProfile = this.getCurrentProfile();
         for (const worker of this.workers) {
             try {
-                worker.onStart();
+                worker.updateProfile(activeProfile);
+                worker.start();
             } catch (err) {
                 this.logLine('Failed executing onStart() => ' + err);
             }
@@ -162,7 +164,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.forEach((worker) => {
             // On exit events for each worker before exiting and saving settings
             try {
-                worker.onExit();
+                worker.exit();
             } catch (err) {
                 this.logLine('Failed executing onExit() => ' + err);
             }
