@@ -41,6 +41,10 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
     } else {
         moduleInfo.Set("activeInterface", "inactive");
     }
+    
+    std::string deviceIdStr;
+    io.DeviceModelIdStr(deviceIdStr);
+    moduleInfo.Set("model", deviceIdStr);
 
     return Boolean::New(info.Env(), result);
 }

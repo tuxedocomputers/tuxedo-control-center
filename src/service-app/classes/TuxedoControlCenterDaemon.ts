@@ -41,6 +41,8 @@ import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/T
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
+import { DMIController } from '../../common/classes/DMIController';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 const tccPackage = require('../../package.json');
 
@@ -97,8 +99,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         this.dbusData.tccdVersion = tccPackage.version;
 
+        const dev = this.identifyDevice();
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles().map(this.fillDeviceSpecificDefaults)
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
         const customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
         this.dbusData.profilesJSON = JSON.stringify(defaultProfilesFilled.concat(customProfilesFilled));
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
@@ -352,27 +355,68 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
+    identifyDevice(): TUXEDODevice {
+        const modInfo = new ModuleInfo();
+
+        const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
+        dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
+        dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
+        dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
+        dmiSKUDeviceMap.set('POLARIS1XI03', TUXEDODevice.POLARIS1XI03);
+        dmiSKUDeviceMap.set('STELLARIS1XA03', TUXEDODevice.STELLARIS1XA03);
+        dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
+
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const productSKU = dmi.productSKU.readValueNT();
+        const boardName = dmi.boardName.readValueNT();
+        const skuMatch = dmiSKUDeviceMap.get(productSKU);
+
+        if (skuMatch !== undefined) {
+            return skuMatch;
+        }
+
+        const uwidDeviceMap = new Map<number, TUXEDODevice>();
+        uwidDeviceMap.set(0x13, TUXEDODevice.IBP14G6_TUX);
+        uwidDeviceMap.set(0x12, TUXEDODevice.IBP14G6_TRX);
+        uwidDeviceMap.set(0x14, TUXEDODevice.IBP14G6_TQF);
+
+        TuxedoIOAPI.getModuleInfo(modInfo);
+        const uwidMatch = uwidDeviceMap.get(parseInt(modInfo.model));
+        if (uwidMatch !== undefined) {
+            return uwidMatch;
+        }
+
+        console.log(`model: '${modInfo.model}' board name: '${boardName}' product sku: '${productSKU}`)
+
+        return undefined;
+    }
+
     getDefaultProfile(): ITccProfile {
-        return this.config.getDefaultProfiles()[0];
+        const dev = this.identifyDevice();
+        return this.config.getDefaultProfiles(dev)[0];
     }
 
     getAllProfiles(): ITccProfile[] {
-        return this.config.getDefaultProfiles().concat(this.customProfiles);
+        const dev = this.identifyDevice();
+        return this.config.getDefaultProfiles(dev).concat(this.customProfiles);
     }
 
     getCurrentProfile(): ITccProfile {
         return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
     }
 
-    getCurrentFanProfile(): ITccFanProfile {
+    getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
+        if (chosenProfile === undefined) {
+            chosenProfile = this.getCurrentProfile();
+        }
         // If no fanprofile is set in tcc profile, use fallback
-        if (this.getCurrentProfile().fan === undefined || this.getCurrentProfile().fan.fanProfile === undefined) {
+        if (chosenProfile.fan === undefined || chosenProfile.fan.fanProfile === undefined) {
             return this.getFallbackFanProfile();
         }
 
         // Attempt to find fan profile from tcc profile
         let chosenFanProfile = this.config.getDefaultFanProfiles()
-            .find(fanProfile => fanProfile.name === this.getCurrentProfile().fan.fanProfile);
+            .find(fanProfile => fanProfile.name === chosenProfile.fan.fanProfile);
 
         if (chosenFanProfile === undefined) {
             chosenFanProfile = this.getFallbackFanProfile();
