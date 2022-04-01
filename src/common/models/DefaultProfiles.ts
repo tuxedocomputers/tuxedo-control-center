@@ -19,6 +19,156 @@
 
 import { ITccProfile } from "./TccProfile";
 
+const maxEnergySave: ITccProfile = {
+    name: '__profile_max_energy_save__',
+    description: '',
+    display: {
+        brightness: 40,
+        useBrightness: true
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Silent',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [5, 10, 15] }
+};
+
+const silent: ITccProfile = {
+    name: '__profile_silent__',
+    description: '',
+    display: {
+        brightness: 50,
+        useBrightness: true
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Silent',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [10, 15, 25] }
+};
+
+const office: ITccProfile = {
+    name: '__office__',
+    description: '',
+    display: {
+        brightness: 60,
+        useBrightness: true
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Quiet',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [25, 35, 35] }
+};
+
+const highPerformance: ITccProfile = {
+    name: '__high_performance__',
+    description: '',
+    display: {
+        brightness: 60,
+        useBrightness: true
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [60, 60, 70] }
+};
+
+const maximumPerformance: ITccProfile = {
+    name: '__maximum_performance__',
+    description: '',
+    display: {
+        brightness: 60,
+        useBrightness: true
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [120, 120, 120] }
+};
+
 export enum TUXEDODevice {
     IBP14G6_TUX,
     IBP14G6_TRX,
@@ -36,185 +186,10 @@ export enum TUXEDODevice {
  */
 export const deviceProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 
-deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [
-    {
-        name: 'Default',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-    {
-        name: 'Something tux',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-]);
+deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
+deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);
+deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [ maxEnergySave, silent, office ]);
 
-deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [
-    {
-        name: 'Default',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-    {
-        name: 'Something trx',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-]);
-
-deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [
-    {
-        name: 'Default',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-    {
-        name: 'Something polaris intel gen 3',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
