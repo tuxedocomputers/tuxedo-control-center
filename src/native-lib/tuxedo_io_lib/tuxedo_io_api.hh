@@ -291,7 +291,7 @@ public:
         modelIdStr = "";
         bool success = io->IoctlCall(R_UW_MODEL_ID, modelId);
         if (success) {
-            modelIdStr += std::to_string(modelId);
+            modelIdStr = std::to_string(modelId);
         }
         return success;
     }
