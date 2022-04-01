@@ -19,8 +19,16 @@
 
 import { ITccProfile } from "./TccProfile";
 
+export enum DefaultProfileNames {
+    MaxEnergySave = '__profile_max_energy_save__',
+    Quiet = '__profile_silent__',
+    Office = '__office__',
+    HighPerformance = '__high_performance__',
+    MaximumPerformance = '__maximum_performance__'
+}
+
 const maxEnergySave: ITccProfile = {
-    name: '__profile_max_energy_save__',
+    name: DefaultProfileNames.MaxEnergySave,
     description: '',
     display: {
         brightness: 40,
@@ -50,7 +58,7 @@ const maxEnergySave: ITccProfile = {
 };
 
 const silent: ITccProfile = {
-    name: '__profile_silent__',
+    name: DefaultProfileNames.Quiet,
     description: '',
     display: {
         brightness: 50,
@@ -80,7 +88,7 @@ const silent: ITccProfile = {
 };
 
 const office: ITccProfile = {
-    name: '__office__',
+    name: DefaultProfileNames.Office,
     description: '',
     display: {
         brightness: 60,
@@ -110,7 +118,7 @@ const office: ITccProfile = {
 };
 
 const highPerformance: ITccProfile = {
-    name: '__high_performance__',
+    name: DefaultProfileNames.HighPerformance,
     description: '',
     display: {
         brightness: 60,
@@ -140,7 +148,7 @@ const highPerformance: ITccProfile = {
 };
 
 const maximumPerformance: ITccProfile = {
-    name: '__maximum_performance__',
+    name: DefaultProfileNames.MaximumPerformance,
     description: '',
     display: {
         brightness: 60,
