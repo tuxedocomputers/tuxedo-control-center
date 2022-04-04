@@ -270,7 +270,8 @@ function createTccWindow() {
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule: true
+            contextIsolation: false,
+            enableRemoteModule: true,
         }
     });
 
