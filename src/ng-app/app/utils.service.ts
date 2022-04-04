@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, HostBinding } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
-import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
 import { ElectronService } from 'ngx-electron';
 import { DecimalPipe } from '@angular/common';
 import * as https from 'https';
@@ -26,7 +25,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { AppComponent } from './app.component';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

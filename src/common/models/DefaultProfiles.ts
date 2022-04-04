@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ITccProfile } from "./TccProfile";
+import { ITccProfile } from './TccProfile';
 
 export enum DefaultProfileNames {
     MaxEnergySave = '__profile_max_energy_save__',

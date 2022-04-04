@@ -19,7 +19,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
-import { ITccProfile, defaultProfiles, defaultCustomProfile, defaultCustomProfileXP1508UHD } from '../models/TccProfile';
+import { ITccProfile } from '../models/TccProfile';
+import { defaultProfiles, defaultCustomProfile } from '../models/profiles/LegacyProfiles';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
 import { deviceProfiles, TUXEDODevice } from '../models/DefaultProfiles';
