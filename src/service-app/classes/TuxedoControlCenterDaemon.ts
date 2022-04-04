@@ -61,8 +61,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public dbusData = new TccDBusData(3);
 
-    // Initialize to default profile, will be changed by state switcher as soon as it is started
-    public activeProfileName = 'Default';
+    public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
 
@@ -107,6 +106,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
 
+        // Initialize active profile (fallback), will update when state is determined
+        this.activeProfile = this.getDefaultProfile();
+
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
@@ -136,10 +138,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     public startWorkers(): void {
-        const activeProfile = this.getCurrentProfile();
         for (const worker of this.workers) {
             try {
-                worker.updateProfile(activeProfile);
+                worker.updateProfile(this.getCurrentProfile());
                 worker.start();
             } catch (err) {
                 this.logLine('Failed executing onStart() => ' + err);
@@ -403,7 +404,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     getCurrentProfile(): ITccProfile {
-        return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
+        return this.activeProfile;
+    }
+
+    setCurrentProfileByName(profileName: string) {
+        this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
+        if (this.activeProfile === undefined) {
+            this.activeProfile = this.getDefaultProfile();
+        }
     }
 
     getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {

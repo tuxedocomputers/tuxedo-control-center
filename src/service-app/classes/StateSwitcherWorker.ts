@@ -36,11 +36,10 @@ export class StateSwitcherWorker extends DaemonWorker {
         if (newState !== this.currentState) {
             this.currentState = newState;
             const newActiveProfileName = this.tccd.settings.stateMap[newState.toString()];
-            if (newActiveProfileName === undefined) {
-                this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
-                this.tccd.activeProfileName = 'Default';
+            if (newActiveProfileName !== undefined) {
+                this.tccd.setCurrentProfileByName(newActiveProfileName);
             } else {
-                this.tccd.activeProfileName = newActiveProfileName;
+                this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
             }
 
             this.tccd.updateDBusActiveProfileData();
@@ -52,23 +51,22 @@ export class StateSwitcherWorker extends DaemonWorker {
     public onWork(): void {
         // Check state and switch profile if appropriate
         const newState = determineState();
-        const oldActiveProfileName = this.tccd.activeProfileName;
+        const oldActiveProfileName = this.tccd.activeProfile.name;
 
         if (newState !== this.currentState) {
             this.currentState = newState;
             const newActiveProfileName = this.tccd.settings.stateMap[newState.toString()];
             if (newActiveProfileName === undefined) {
                 this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
-                this.tccd.activeProfileName = 'Default';
             } else {
-                this.tccd.activeProfileName = newActiveProfileName;
+                this.tccd.setCurrentProfileByName(newActiveProfileName);
             }
         } else {
             // If state didn't change, a manual temporary profile can still be set
             if (this.tccd.dbusData.tempProfileName !== undefined) {
                 if (this.tccd.getAllProfiles().find((profile) => profile.name === this.tccd.dbusData.tempProfileName) !== undefined) {
                     // If set and exists set this as active profile
-                    this.tccd.activeProfileName = this.tccd.dbusData.tempProfileName;
+                    this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName);
                     this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileName + '" selected');
                 }
                 this.tccd.dbusData.tempProfileName = undefined;
@@ -77,7 +75,7 @@ export class StateSwitcherWorker extends DaemonWorker {
 
         // Run worker start procedure / application of profile
         // if the profile changed
-        if (oldActiveProfileName !== this.tccd.activeProfileName) {
+        if (oldActiveProfileName !== this.tccd.activeProfile.name) {
             this.tccd.updateDBusActiveProfileData();
             this.tccd.startWorkers();
         }
