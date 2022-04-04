@@ -2,6 +2,7 @@ import { ITccProfile } from "../TccProfile";
 
 export const defaultProfiles: ITccProfile[] = [
     {
+        id: 'Default',
         name: 'Default',
         description: '',
         display: {
@@ -31,6 +32,7 @@ export const defaultProfiles: ITccProfile[] = [
         odmPowerLimits: { tdpValues: [] }
     },
     {
+        id: 'Cool and breezy',
         name: 'Cool and breezy',
         description: '',
         display: {
@@ -60,6 +62,7 @@ export const defaultProfiles: ITccProfile[] = [
         odmPowerLimits: { tdpValues: [] }
     },
     {
+        id: 'Powersave extreme',
         name: 'Powersave extreme',
         description: '',
         display: {
@@ -91,6 +94,7 @@ export const defaultProfiles: ITccProfile[] = [
 ];
 
 export const defaultCustomProfile: ITccProfile = {
+    id: 'Default custom profile',
     name: 'Default custom profile',
     description: '',
     display: {
@@ -122,6 +126,7 @@ export const defaultCustomProfile: ITccProfile = {
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
     name: 'Custom XP1508 UHD',
+    id: 'Custom XP1508 UHD',
     description: '',
     display: {
         brightness: 100,

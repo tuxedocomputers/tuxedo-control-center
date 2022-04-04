@@ -20,6 +20,7 @@
 import { defaultProfiles } from "./profiles/LegacyProfiles";
 
 export interface ITccProfile {
+    id: string;
     name: string;
     description: string;
     display: ITccProfileDisplay;
@@ -31,6 +32,7 @@ export interface ITccProfile {
 }
 
 export class TccProfile implements ITccProfile {
+    id: string;
     name: string;
     description: string;
     display: ITccProfileDisplay;
@@ -40,6 +42,7 @@ export class TccProfile implements ITccProfile {
     odmProfile: ITccODMProfile;
     odmPowerLimits: ITccODMPowerLimits;
     public constructor(init: ITccProfile) {
+        this.id = init.id;
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
@@ -86,6 +89,7 @@ interface ITccODMPowerLimits {
 }
 
 export const profileImageMap = new Map<string, string>();
+// TODO: map IDs instead of names
 profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');
 profileImageMap.set(defaultProfiles[1].name, 'icon_profile_breezy.svg');
 profileImageMap.set(defaultProfiles[2].name, 'icon_profile_energysaver.svg');

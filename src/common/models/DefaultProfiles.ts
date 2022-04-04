@@ -28,6 +28,7 @@ export enum DefaultProfileNames {
 }
 
 const maxEnergySave: ITccProfile = {
+    id: DefaultProfileNames.MaxEnergySave,
     name: DefaultProfileNames.MaxEnergySave,
     description: '',
     display: {
@@ -58,6 +59,7 @@ const maxEnergySave: ITccProfile = {
 };
 
 const silent: ITccProfile = {
+    id: DefaultProfileNames.Quiet,
     name: DefaultProfileNames.Quiet,
     description: '',
     display: {
@@ -88,6 +90,7 @@ const silent: ITccProfile = {
 };
 
 const office: ITccProfile = {
+    id: DefaultProfileNames.Office,
     name: DefaultProfileNames.Office,
     description: '',
     display: {
@@ -118,6 +121,7 @@ const office: ITccProfile = {
 };
 
 const highPerformance: ITccProfile = {
+    id: DefaultProfileNames.HighPerformance,
     name: DefaultProfileNames.HighPerformance,
     description: '',
     display: {
@@ -148,6 +152,7 @@ const highPerformance: ITccProfile = {
 };
 
 const maximumPerformance: ITccProfile = {
+    id: DefaultProfileNames.MaximumPerformance,
     name: DefaultProfileNames.MaximumPerformance,
     description: '',
     display: {
