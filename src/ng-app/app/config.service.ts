@@ -27,7 +27,7 @@ import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { DefaultProfileNames } from '../../common/models/DefaultProfiles';
+import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
@@ -84,27 +84,27 @@ export class ConfigService implements OnDestroy {
             TccPaths.FANTABLES_FILE
         );
 
-        this.defaultProfileInfos.set(DefaultProfileNames.MaxEnergySave, {
+        this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
             name: this.i18n({ value: 'Powersave extreme', id: 'profileNamePowersaveExtreme'}),
             description: this.i18n({ value: 'Lowest possible power consumption and silent fans at the cost of extremely low performance.', id: 'profileDescPowersaveExtreme'})
         });
 
-        this.defaultProfileInfos.set(DefaultProfileNames.Quiet, {
+        this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
             name: this.i18n({ value: 'Quiet', id: 'profileNameQuiet'}),
             description: this.i18n({ value: 'Low performance for light office tasks for very quiet fans and low power consumption.', id: 'profileDescQuiet'})
         });
 
-        this.defaultProfileInfos.set(DefaultProfileNames.Office, {
+        this.defaultProfileInfos.set(DefaultProfileIDs.Office, {
             name: this.i18n({ value: 'Office and Multimedia', id: 'profileNameOffice'}),
             description: this.i18n({ value: 'Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.', id: 'profileDescOffice'})
         });
 
-        this.defaultProfileInfos.set(DefaultProfileNames.HighPerformance, {
+        this.defaultProfileInfos.set(DefaultProfileIDs.HighPerformance, {
             name: this.i18n({ value: 'High Performance', id: 'profileNameHighPerformance'}),
             description: this.i18n({ value: 'High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.', id: 'profileDescHighPerformance'})
         });
 
-        this.defaultProfileInfos.set(DefaultProfileNames.MaximumPerformance, {
+        this.defaultProfileInfos.set(DefaultProfileIDs.MaximumPerformance, {
             name: this.i18n({ value: 'Max Performance', id: 'profileNameMaximumPerformance'}),
             description: this.i18n({ value: 'Maximum performance at the cost of very loud fan noise levels and very high temperatures.', id: 'profileDescMaximumPerformance'})
         });

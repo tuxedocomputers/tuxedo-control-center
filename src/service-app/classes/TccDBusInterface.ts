@@ -74,6 +74,7 @@ export class TccDBusData {
     public forceYUV420OutputSwitchAvailable: boolean;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
+    public tempProfileId: string;
     public activeProfileJSON: string;
     public profilesJSON: string;
     public customProfilesJSON: string;
@@ -109,6 +110,10 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetActiveProfileJSON() { return this.data.activeProfileJSON; }
     SetTempProfile(profileName: string) {
         this.data.tempProfileName = profileName;
+        return true;
+    }
+    SetTempProfileById(id: string) {
+        this.data.tempProfileId = id;
         return true;
     }
     GetProfilesJSON() { return this.data.profilesJSON; }

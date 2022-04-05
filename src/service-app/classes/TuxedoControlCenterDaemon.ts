@@ -415,6 +415,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
+    setCurrentProfileById(id: string) {
+        this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
+        if (this.activeProfile === undefined) {
+            this.activeProfile = this.getDefaultProfile();
+        }
+    }
+
     getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
         if (chosenProfile === undefined) {
             chosenProfile = this.getCurrentProfile();
