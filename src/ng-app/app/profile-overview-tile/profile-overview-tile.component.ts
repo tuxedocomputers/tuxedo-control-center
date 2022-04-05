@@ -136,7 +136,7 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
 
     public activateProfile(): void {
-        this.tccDBus.setTempProfile(this.profile.name);
+        this.tccDBus.setTempProfileById(this.profile.id);
     }
 
     public selectProfile(): void {
