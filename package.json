@@ -54,7 +54,7 @@
     "@angular/platform-browser-dynamic": "~9.1.13",
     "@angular/router": "~9.1.13",
     "chart.js": "^2.9.3",
-    "dbus-next": "^0.8.2",
+    "dbus-next": "^0.9.2",
     "ng2-charts": "^2.4.3",
     "rxjs": "~6.6.7",
     "tslib": "^1.14.1",
