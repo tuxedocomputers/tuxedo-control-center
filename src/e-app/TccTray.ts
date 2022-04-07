@@ -51,7 +51,7 @@ export class TccTray {
                 label: profile.name,
                 click: () => this.events.profileClick(profile.id),
                 type: 'radio',
-                checked: profile.name === this.state.activeProfile.name
+                checked: profile.id === this.state.activeProfile.id
             };
         });
 

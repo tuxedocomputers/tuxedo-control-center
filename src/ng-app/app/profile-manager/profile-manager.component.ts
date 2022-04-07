@@ -72,7 +72,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public buttonNew: ProfileManagerButton;
     public buttonDelete: ProfileManagerButton;
 
-    private profileToCopy: string = "";
+    private profileIdToCopy: string = "";
 
     constructor(
         private route: ActivatedRoute,
@@ -88,13 +88,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
         this.route.params.subscribe(params => {
             this.inputActive = false;
-            if (params.profileName) {
-                this.currentProfile = this.config.getProfileByName(params.profileName);
+            if (params.profileId) {
+                this.currentProfile = this.config.getProfileById(params.profileId);
                 if (this.currentProfile === undefined) {
                     this.config.setCurrentEditingProfile(undefined);
                     this.router.navigate(['profile-manager']);
-                } else if (this.config.getCustomProfileByName(this.currentProfile.name) !== undefined) {
-                    this.config.setCurrentEditingProfile(this.currentProfile.name);
+                } else if (this.config.getCustomProfileById(this.currentProfile.id) !== undefined) {
+                    this.config.setCurrentEditingProfile(this.currentProfile.id);
                 } else {
                     this.config.setCurrentEditingProfile(undefined);
                 }
@@ -111,12 +111,12 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
-    public isProfileActive(profileName: string): boolean {
-        return this.state.getActiveProfile().name === profileName;
+    public isProfileActive(profileId: string): boolean {
+        return this.state.getActiveProfile().id === profileId;
     }
 
-    public isProfileUsed(profileName: string): boolean {
-        return this.state.getProfileStates(profileName).length > 0;
+    public isProfileUsed(profileId: string): boolean {
+        return this.state.getProfileStates(profileId).length > 0;
     }
 
     public getSettings(): ITccSettings {
@@ -136,26 +136,26 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             return this.config.getCustomProfiles();
         } else if (this.inputProfileFilter === 'used') {
             return this.config.getAllProfiles().filter(profile => {
-                return Object.values(this.config.getSettings().stateMap).includes(profile.name);
+                return Object.values(this.config.getSettings().stateMap).includes(profile.id);
             });
         } else {
             return [];
         }
     }
 
-    public selectProfile(profileName?: string): void {
+    public selectProfile(profileId?: string): void {
         setImmediate(() => {
-            if (profileName === undefined) {
+            if (profileId === undefined) {
                 this.router.navigate(['profile-manager']);
             } else {
-                this.router.navigate(['profile-manager', profileName]);
+                this.router.navigate(['profile-manager', profileId]);
             }
         });
     }
 
-    public setActiveProfile(profileName: string, stateId: string): void {
+    public setActiveProfile(profileId: string, stateId: string): void {
         setImmediate(() => {
-            this.config.setActiveProfile(profileName, stateId);
+            this.config.setActiveProfile(profileId, stateId);
         });
     }
 
@@ -163,6 +163,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         if (this.inputProfileName.valid) {
             switch (this.currentInputMode) {
                 case InputMode.New:
+                    // TODO: New profile by ID + fix not waiting for copyProfile + new profile id redirect
                     if (this.config.copyProfile('Default', this.inputProfileName.value)) {
                         this.inputActive = false;
                         this.router.navigate(['profile-manager', this.inputProfileName.value]);
@@ -170,16 +171,18 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     break;
                 case InputMode.Copy:
                     this.utils.pageDisabled = true;
-                    this.config.copyProfile(this.profileToCopy, this.inputProfileName.value).then((success) => {
+                    this.config.copyProfile(this.profileIdToCopy, this.inputProfileName.value).then((success) => {
                         if (success) {
                             this.inputActive = false;
+                            // TODO: Fix redirect to new ID
                             this.router.navigate(['profile-manager', this.inputProfileName.value]);
                         }
                         this.utils.pageDisabled = false;
                     });
                     break;
                 case InputMode.Edit:
-                    if (this.config.setCurrentEditingProfile(this.currentProfile.name)) {
+                    // TODO: Check if used. Probably old edit name. If needed adjust for ID. If not delete.
+                    if (this.config.setCurrentEditingProfile(this.currentProfile.id)) {
                         this.config.getCurrentEditingProfile().name = this.inputProfileName.value;
                         if (this.config.writeCurrentEditingProfile()) {
                             this.inputActive = false;
@@ -201,8 +204,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public deleteProfile(profileName): void {
-        this.config.deleteCustomProfile(profileName).then((success => {
+    public deleteProfile(profileId): void {
+        this.config.deleteCustomProfile(profileId).then((success => {
             if (success) {
                 this.router.navigate(['profile-manager']);
             }
@@ -210,11 +213,11 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     }
 
     public isCustomProfile(): boolean {
-        return this.config.getCustomProfiles().find(profile => profile.name === this.currentProfile.name) !== undefined;
+        return this.config.getCustomProfiles().find(profile => profile.id === this.currentProfile.id) !== undefined;
     }
 
     public isUsedProfile(): boolean {
-        return Object.values(this.config.getSettings().stateMap).includes(this.currentProfile.name);
+        return Object.values(this.config.getSettings().stateMap).includes(this.currentProfile.id);
     }
 
     public formatFrequency(frequency: number): string {
@@ -242,8 +245,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         );
     }
 
-    public copyProfile(profileName: string) {
-        this.profileToCopy = profileName;
+    public copyProfile(profileId: string) {
+        this.profileIdToCopy = profileId;
 
         this.currentInputMode = InputMode.Copy;
         this.inputProfileName.setValue('');
@@ -254,7 +257,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     public cancelInput() {
         this.inputActive = false;
-        this.profileToCopy = "";
+        this.profileIdToCopy = "";
     }
 
     public profileNameExist(profileName: string) {

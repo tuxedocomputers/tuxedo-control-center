@@ -86,15 +86,15 @@ export class ProfileOverviewTileComponent implements OnInit {
 
         if (!this.addProfileTile) {
             if (this.selectStateControl === undefined) {
-                this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.name));
+                this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.id));
             } else {
-                this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
+                this.selectStateControl.reset(this.state.getProfileStates(this.profile.id));
             }
         }
 
         this.stateInputArray = this.state.getStateInputs();
         if (this.profile) {
-            this.isCustomProfile = this.config.getCustomProfileByName(this.profile.name) !== undefined;
+            this.isCustomProfile = this.config.getCustomProfileById(this.profile.id) !== undefined;
         }
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
@@ -141,13 +141,13 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public selectProfile(): void {
         setImmediate(() => {
-            this.router.navigate(['profile-manager', this.profile.name]);
+            this.router.navigate(['profile-manager', this.profile.id]);
         });
     }
 
     public deleteProfile(): void {
         this.utils.pageDisabled = true;
-        this.config.deleteCustomProfile(this.profile.name).then(success => {
+        this.config.deleteCustomProfile(this.profile.id).then(success => {
             this.utils.pageDisabled = false;
         });
     }
@@ -155,7 +155,7 @@ export class ProfileOverviewTileComponent implements OnInit {
     public saveStateSelection(): void {
         this.utils.pageDisabled = true;
         const profileStateAssignments: string[] = this.selectStateControl.value;
-        this.config.writeProfile(this.profile.name, this.profile, profileStateAssignments).then(success => {
+        this.config.writeProfile(this.profile.id, this.profile, profileStateAssignments).then(success => {
             if (success) {
                 this.selectStateControl.markAsPristine();
             }
@@ -164,15 +164,15 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
 
     public getProfileIcon(profile: ITccProfile): string {
-        if (profileImageMap.get(profile.name) !== undefined) {
-            return profileImageMap.get(profile.name);
+        if (profileImageMap.get(profile.id) !== undefined) {
+            return profileImageMap.get(profile.id);
         } else {
             return profileImageMap.get('custom');
         }
     }
 
     public copyProfile() {
-        this.copyClick.emit(this.profile.name);
+        this.copyClick.emit(this.profile.id);
     }
 
     public selectCPUCtlShown(): number {

@@ -30,7 +30,7 @@ import { GlobalSettingsComponent } from './global-settings/global-settings.compo
 const routes: Routes = [
     { path: '', redirectTo: 'cpu-dashboard', pathMatch: 'full' },
     { path: 'profile-manager', component: ProfileManagerComponent },
-    { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
+    { path: 'profile-manager/:profileId', component: ProfileManagerComponent },
     { path: 'support', component: SupportComponent },
     { path: 'info', component: InfoComponent },
     { path: 'cpu-dashboard', component: CpuDashboardComponent },

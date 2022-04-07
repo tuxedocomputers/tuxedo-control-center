@@ -88,6 +88,10 @@ interface ITccODMPowerLimits {
     tdpValues: number[]
 }
 
+export function generateProfileId(): string {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
 export const profileImageMap = new Map<string, string>();
 // TODO: map IDs instead of names
 profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');

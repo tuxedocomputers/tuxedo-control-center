@@ -64,8 +64,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             *ngFor="let profile of getProfilesForList()"
             [profile]="profile"
             [hoverEffect]="false"
-            [active]="isProfileActive(profile.name)"
-            [used]="isProfileUsed(profile.name)"
+            [active]="isProfileActive(profile.id)"
+            [used]="isProfileUsed(profile.id)"
             (copyClick)="copyProfile($event)"
             [showDetails]="viewDetails">
         </app-profile-overview-tile>
