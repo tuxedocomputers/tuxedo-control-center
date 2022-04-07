@@ -27,12 +27,12 @@ tuxedo-control-center
 
 ## Development setup
 
-1. Install git, nodejs, gcc, g++, make \
+1. Install git, gcc, g++, make, nodejs, npm and libudev-dev \
    Ex (deb):
    ```
    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
-   sudo apt install -y git gcc g++ make nodejs npm
+   sudo apt install -y git gcc g++ make nodejs libudev-dev
    ```
 2. Clone & install libraries
     ```
