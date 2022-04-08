@@ -25,7 +25,7 @@ import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { defaultCustomProfile } from '../../common/models/profiles/LegacyProfiles';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
@@ -458,6 +458,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+
+        if (profile.id === undefined) {
+            profile.id = generateProfileId();
+            console.log('id for ' + inputProfile.name + ' generated: ' + profile.id);
+        }
 
         if (profile.description === 'undefined') {
             profile.description = '';
