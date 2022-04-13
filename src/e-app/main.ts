@@ -32,6 +32,11 @@ const appPath = __dirname.replace('app.asar/', '');
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
 const tccConfigDir = path.join(os.homedir(), '.tcc');
+const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
+const availableLanguages = [
+    'en',
+    'de'
+];
 let startTCCAccelerator;
 
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
@@ -66,18 +71,11 @@ if (isFirstStart()) {
     installAutostartTray();
 }
 
-const userConfig = new UserConfig(tccConfigDir);
+const userConfig = new UserConfig(tccStandardConfigFile);
 
 if (!userConfigDirExists()) {
     createUserConfigDir();
 }
-
-userConfig.readConfig().catch(() => {
-    const systemLanguageId = app.getLocale().substring(0, 2);
-    console.log('sys lang id: ' + systemLanguageId);
-
-    userConfig.writeConfig();
-});
 
 app.on('second-instance', (event, cmdLine, workingDir) => {
     // If triggered by a second instance, find/show/start GUI
@@ -85,6 +83,20 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( async () => {
+    try {
+        const systemLanguageId = app.getLocale().substring(0, 2);
+        if (await userConfig.get('langId') === undefined) {
+            if (availableLanguages.includes(systemLanguageId)) {
+                userConfig.set('langId', systemLanguageId);
+            } else {
+                userConfig.set('langId', availableLanguages[0]);
+            }
+        }
+    } catch (err) {
+        console.log('Error determining user language => ' + err);
+        quitCurrentTccSession();
+    }
+
     if (startTCCAccelerator !== 'none') {
         const success = globalShortcut.register(startTCCAccelerator, () => {
             activateTccGui();
@@ -209,7 +221,9 @@ function activateTccGui() {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
     } else {
-        createTccWindow();
+        userConfig.get('langId').then(langId => {
+            createTccWindow(langId);
+        });
     }
 }
 
@@ -249,7 +263,7 @@ async function getActiveProfile(): Promise<TccProfile> {
     return result;
 }
 
-function createTccWindow() {
+function createTccWindow(langId: string) {
     let windowWidth = 1040;
     let windowHeight = 750;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
@@ -284,10 +298,8 @@ function createTccWindow() {
         tccWindow = null;
     });
 
-    userConfig.readConfig().then(() => {
-        const indexPath = path.join(__dirname, '..', '..', 'ng-app', userConfig.data.langId, 'index.html');
-        tccWindow.loadFile(indexPath);
-    });
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
+    tccWindow.loadFile(indexPath);
 }
 
 function quitCurrentTccSession() {
@@ -326,12 +338,10 @@ ipcMain.on('spawn-external-async', (event, arg) => {
 });
 
 async function changeLanguage(newLangId: string) {
-    await userConfig.readConfig();
-    if (newLangId !== userConfig.data.langId) {
-        userConfig.data.langId = newLangId;
-        await userConfig.writeConfig();
+    if (newLangId !== await userConfig.get('langId')) {
+        await userConfig.set('langId', newLangId);
         if (tccWindow) {
-            const indexPath = path.join(__dirname, '..', '..', 'ng-app', userConfig.data.langId, 'index.html');
+            const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
             tccWindow.loadFile(indexPath);
         }
     }

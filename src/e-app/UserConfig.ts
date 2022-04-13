@@ -1,22 +1,42 @@
-import * as path from 'path';
 import * as fs from 'fs';
 
-export interface IUserConfig {
-    langId: string;
-};
-
 export class UserConfig {
-    public data: IUserConfig;
+    private data: object;
 
-    constructor(private configPath: string) {
-        if (configPath === undefined) { throw Error('No config path defined'); }
+    constructor(private configFile: string) {
+        if (configFile === undefined) { throw Error('No config path defined'); }
 
         this.validateValues();
     }
 
-    async writeConfig(): Promise<void> {
+    public async set(property: string, value: string) {
+        try {
+            await this.readConfig();
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                console.log('Config file (' + this.configFile + ') does not exist. Will be created.');
+            } else {
+                throw err;
+            }
+        }
+        this.data[property] = value;
+        await this.writeConfig();
+    }
+
+    public async get(property: string): Promise<string> {
+        try {
+            await this.readConfig();
+        } catch (err) {
+            if (err.code !== 'ENOENT') {
+                throw err;
+            }
+        }
+        return this.data[property];
+    }
+
+    private async writeConfig(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            fs.writeFile(path.join(this.configPath, 'user.conf'), JSON.stringify(this.data), (err) => {
+            fs.writeFile(this.configFile, JSON.stringify(this.data), (err) => {
                 if (err) {
                     reject(err)
                 } else {
@@ -26,9 +46,9 @@ export class UserConfig {
         });
     }
 
-    async readConfig(): Promise<void> {
+    private async readConfig(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            fs.readFile(path.join(this.configPath, 'user.conf'), (err, data) => {
+            fs.readFile(this.configFile, (err, data) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -43,10 +63,6 @@ export class UserConfig {
     private validateValues(): void {
         if (this.data === undefined) {
             this.data = JSON.parse('{}');
-        }
-
-        if (this.data.langId === undefined) {
-            this.data.langId = 'en';
         }
     }
 }
