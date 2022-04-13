@@ -213,7 +213,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     if (this.compat.hasFancontrol) {
       return Math.round(value).toString();
     } else {
-      return $localize `N/A`;
+      return $localize `:@@noFanTempValue:N/A`;
     }
   }
 
@@ -221,15 +221,15 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     if (this.compat.hasFancontrol) {
       return Math.round(value).toString();
     } else {
-      return $localize `N/A`;
+      return $localize `:@@noFanSpeedValue:N/A`;
     }
   }
 
   public gaugeOnOffFormat: (value: number) => string = (value) => {
     if (value === 0) {
-      return $localize `off`;
+      return $localize `:@@gaugeTextOff:off`;
     } else {
-      return $localize `on`;
+      return $localize `:@@gaugeTextOn:on`;
     }
   }
 

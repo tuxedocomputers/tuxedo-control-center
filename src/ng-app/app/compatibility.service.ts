@@ -32,7 +32,7 @@ export class CompatibilityService {
   }
 
   get fanControlCompatibilityMessage(): string {
-    return $localize `This feature is not supported on your model.`;
+    return $localize `:@@compatibilityMessageNoFanControl:This feature is not supported on your model.`;
   }
 
   get hasWebcamControl(): boolean {
@@ -40,7 +40,7 @@ export class CompatibilityService {
   }
 
   get webcamControlCompatibilityMessage(): string {
-    return $localize `This feature is not supported on your model.`;
+    return $localize `:@@compatibilityMessageNoWebcamSwitch:This feature is not supported on your model.`;
   }
 
   get hasODMProfileControl(): boolean {

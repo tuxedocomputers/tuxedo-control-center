@@ -102,11 +102,11 @@ export class ConfigService implements OnDestroy {
     }
 
     get cpuSettingsDisabledMessage(): string {
-        return $localize `CPU settings deactivated in Tools→Global\u00A0Settings`;
+        return $localize `:@@messageCPUSettingsOff:CPU settings deactivated in Tools→Global\u00A0Settings`;
     }
 
     get fanControlDisabledMessage(): string {
-        return $localize `Fan control deactivated in Tools→Global\u00A0Settings`;
+        return $localize `:@@messageFanControlOff:Fan control deactivated in Tools→Global\u00A0Settings`;
     }
 
     public getCustomProfiles(): ITccProfile[] {

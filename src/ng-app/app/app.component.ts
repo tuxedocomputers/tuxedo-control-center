@@ -74,8 +74,8 @@ export class AppComponent implements OnInit, OnDestroy {
             this.electron.remote.dialog.showMessageBox(
               this.electron.remote.getCurrentWindow(),
               {
-                title: $localize `Service unavailable`,
-                message: $localize `Communication with tccd service is unavailable, please restart service and try again.`,
+                title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
+                message: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
                 type: 'error',
                 buttons: ['ok']
               }
