@@ -116,7 +116,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <content class="input">
                                 <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
                                     <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
-                                        [disabled]="getSettings().stateMap[state.value] === viewProfile.name"
+                                        [disabled]="getSettings().stateMap[state.value] === viewProfile.id"
                                         [value]="state.value"
                                         [matTooltip]="stateButtonTooltip(state.tooltip, state.value)"
                                         [matTooltipShowDelay]="100">

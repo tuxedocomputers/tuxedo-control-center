@@ -143,4 +143,9 @@ export class TccDBusClientService implements OnDestroy {
     const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileName(profileName);
     return result;
   }
+
+  public async setTempProfileById(profileId: string) {
+    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
+    return result;
+  }
 }

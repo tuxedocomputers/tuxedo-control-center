@@ -20,15 +20,21 @@ import { Injectable, OnDestroy } from '@angular/core';
 
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
+import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { I18n } from '@ngx-translate/i18n-polyfill';
 import { TccDBusClientService } from './tcc-dbus-client.service';
+
+interface IProfileTextMappings {
+    name: string;
+    description: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -53,6 +59,8 @@ export class ConfigService implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+    private defaultProfileInfos = new Map<string, IProfileTextMappings>();
+
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;
     // public writeSettings = ConfigHandler.prototype.writeSettings;
@@ -75,6 +83,32 @@ export class ConfigService implements OnDestroy {
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
+
+        this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
+            name: this.i18n({ value: 'Powersave extreme', id: 'profileNamePowersaveExtreme'}),
+            description: this.i18n({ value: 'Lowest possible power consumption and silent fans at the cost of extremely low performance.', id: 'profileDescPowersaveExtreme'})
+        });
+
+        this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
+            name: this.i18n({ value: 'Quiet', id: 'profileNameQuiet'}),
+            description: this.i18n({ value: 'Low performance for light office tasks for very quiet fans and low power consumption.', id: 'profileDescQuiet'})
+        });
+
+        this.defaultProfileInfos.set(DefaultProfileIDs.Office, {
+            name: this.i18n({ value: 'Office and Multimedia', id: 'profileNameOffice'}),
+            description: this.i18n({ value: 'Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.', id: 'profileDescOffice'})
+        });
+
+        this.defaultProfileInfos.set(DefaultProfileIDs.HighPerformance, {
+            name: this.i18n({ value: 'High Performance', id: 'profileNameHighPerformance'}),
+            description: this.i18n({ value: 'High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.', id: 'profileDescHighPerformance'})
+        });
+
+        this.defaultProfileInfos.set(DefaultProfileIDs.MaximumPerformance, {
+            name: this.i18n({ value: 'Max Performance', id: 'profileNameMaximumPerformance'}),
+            description: this.i18n({ value: 'Maximum performance at the cost of very loud fan noise levels and very high temperatures.', id: 'profileDescMaximumPerformance'})
+        });
+
         this.defaultProfiles = this.dbus.defaultProfiles.value;
         this.updateConfigData();
         this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
@@ -123,11 +157,11 @@ export class ConfigService implements OnDestroy {
         return this.defaultProfiles.concat(this.getCustomProfiles());
     }
 
-    public setActiveProfile(profileName: string, stateId: string): void {
-        // Copy existing current settings and set name of new profile
+    public setActiveProfile(profileId: string, stateId: string): void {
+        // Copy existing current settings and set id of new profile
         const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
 
-        newSettings.stateMap[stateId] = profileName;
+        newSettings.stateMap[stateId] = profileId;
         const tmpSettingsPath = '/tmp/tmptccsettings';
         this.config.writeSettings(newSettings, tmpSettingsPath);
         let tccdExec: string;
@@ -145,20 +179,16 @@ export class ConfigService implements OnDestroy {
         this.updateConfigData();
     }
 
-    public async copyProfile(profileName: string, newProfileName: string) {
-        const profileToCopy: ITccProfile = this.getProfileByName(profileName);
+    public async copyProfile(sourceProfileId: string, newProfileName: string) {
+        const profileToCopy: ITccProfile = this.getProfileById(sourceProfileId);
 
         if (profileToCopy === undefined) {
             return false;
         }
 
-        const existingProfile = this.getProfileByName(newProfileName);
-        if (existingProfile !== undefined) {
-            return false;
-        }
-
         const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
         newProfile.name = newProfileName;
+        newProfile.id = generateProfileId();
         const newProfileList = this.getCustomProfiles().concat(newProfile);
         const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
@@ -167,8 +197,8 @@ export class ConfigService implements OnDestroy {
         return success;
     }
 
-    public async deleteCustomProfile(profileNameToDelete: string) {
-        const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.name !== profileNameToDelete);
+    public async deleteCustomProfile(profileIdToDelete: string) {
+        const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
         if (newProfileList.length === this.getCustomProfiles().length) {
             return false;
         }
@@ -226,22 +256,17 @@ export class ConfigService implements OnDestroy {
         });
     }
 
-    public async writeProfile(currentProfileName: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
+    public async writeProfile(currentProfileId: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
-            const profileIndex = this.customProfiles.findIndex(p => p.name === currentProfileName);
-            const existingDefaultProfileWithNewName = this.defaultProfiles.findIndex(p => p.name === profile.name);
-            const exisitingCustomProfileWithNewName = this.customProfiles.findIndex(p => p.name === profile.name);
+            const profileIndex = this.customProfiles.findIndex(p => p.id === currentProfileId);
+            profile.id = currentProfileId;
 
             // Copy custom profiles and if provided profile is one of them, overwrite with
             // provided profile
             const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
             const willOverwriteProfile =
                 // Is custom profile
-                profileIndex !== -1
-                // No default profile with same name
-                && existingDefaultProfileWithNewName === -1
-                // Ensure that a profile with the same name doesn't exist, unless it's the changed one
-                && (exisitingCustomProfileWithNewName === -1 || exisitingCustomProfileWithNewName === profileIndex);
+                profileIndex !== -1;
 
             if (willOverwriteProfile) {
                 customProfilesCopy[profileIndex] = profile;
@@ -251,7 +276,7 @@ export class ConfigService implements OnDestroy {
             const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
             if (states !== undefined) {
                 for (const stateId of states) {
-                    newSettings.stateMap[stateId] = profile.name;
+                    newSettings.stateMap[stateId] = profile.id;
                 }
             }
 
@@ -318,8 +343,26 @@ export class ConfigService implements OnDestroy {
         }
     }
 
+    public getProfileById(searchedProfileId: string): ITccProfile {
+        const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.id === searchedProfileId);
+        if (foundProfile !== undefined) {
+            return this.config.copyConfig<ITccProfile>(foundProfile);
+        } else {
+            return undefined;
+        }
+    }
+
     public getCustomProfileByName(searchedProfileName: string): ITccProfile {
         const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
+        if (foundProfile !== undefined) {
+            return this.config.copyConfig<ITccProfile>(foundProfile);
+        } else {
+            return undefined;
+        }
+    }
+
+    public getCustomProfileById(searchedProfileId: string): ITccProfile {
+        const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
         if (foundProfile !== undefined) {
             return this.config.copyConfig<ITccProfile>(foundProfile);
         } else {
@@ -344,17 +387,17 @@ export class ConfigService implements OnDestroy {
      * Set the current profile to edit. Effectively makes a new copy of the chosen profile
      * for edit and compare with current profile values. Overwrites any current changes.
      *
-     * @param customProfileName Profile name used to look up the profile
-     * @returns false if the name doesn't exist among the custom profiles, true if successfully set
+     * @param customProfileId Profile ID used to look up the profile
+     * @returns false if the ID doesn't exist among the custom profiles, true if successfully set
      */
-    public setCurrentEditingProfile(customProfileName: string): boolean {
-        if (customProfileName === undefined) {
+    public setCurrentEditingProfile(customProfileId: string): boolean {
+        if (customProfileId === undefined) {
             this.currentProfileEditIndex = -1;
             this.currentProfileEdit = undefined;
             this.editingProfileSubject.next(undefined);
             this.editingProfile.next(undefined);
         }
-        const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.name === customProfileName);
+        const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.id === customProfileId);
         if (index === -1) {
             return false;
         } else {
@@ -368,5 +411,23 @@ export class ConfigService implements OnDestroy {
 
     public getFanProfiles(): ITccFanProfile[] {
         return this.config.getDefaultFanProfiles();
+    }
+
+    public getDefaultProfileName(descriptor: string): string {
+        const info = this.defaultProfileInfos.get(descriptor);
+        if (info !== undefined) {
+            return info.name;
+        } else {
+            return undefined;
+        }
+    }
+
+    public getDefaultProfileDescription(descriptor: string): string {
+        const info = this.defaultProfileInfos.get(descriptor);
+        if (info !== undefined) {
+            return info.description;
+        } else {
+            return undefined;
+        }
     }
 }

@@ -136,7 +136,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.state.activeProfile.subscribe(profile => {
       if (profile) {
         this.activeProfile = profile;
-        this.isCustomProfile = this.config.getCustomProfileByName(this.activeProfile.name) !== undefined;
+        this.isCustomProfile = this.config.getCustomProfileById(this.activeProfile.id) !== undefined;
       }
     }));
 
@@ -237,7 +237,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public goToProfileEdit(profile: ITccProfile): void {
     if (profile !== undefined) {
-      this.router.navigate(['profile-manager', profile.name]);
+      this.router.navigate(['profile-manager', profile.id]);
     }
   }
 

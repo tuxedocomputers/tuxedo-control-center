@@ -76,12 +76,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         if (this.selectStateControl === undefined) {
-            this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.name));
+            this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.id));
         } else {
-            this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
+            this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         }
 
-        this.editProfile = (this.config.getCustomProfileByName(profile.name) !== undefined);
+        this.editProfile = (this.config.getCustomProfileById(profile.id) !== undefined);
 
         this.setActiveTab();
     }
@@ -213,7 +213,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
             const newProfileStateAssignments = this.selectStateControl.value;
-            this.config.writeProfile(this.viewProfile.name, formProfileData, newProfileStateAssignments).then(success => {
+            this.config.writeProfile(this.viewProfile.id, formProfileData, newProfileStateAssignments).then(success => {
                 if (success) {
                     this.profileFormGroup.markAsPristine();
                     this.selectStateControl.markAsPristine();
@@ -231,7 +231,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
         this.setActiveTab();
-        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
+        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         // Also restore brightness to active profile if applicable
         if (!this.dbus.displayBrightnessNotSupported) {
             const activeProfile = this.state.getActiveProfile();
@@ -461,7 +461,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
         const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
-        return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
+        return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.id ? strAlreadySet : '');
     }
 
     private buttonRepeatTimer: NodeJS.Timeout;

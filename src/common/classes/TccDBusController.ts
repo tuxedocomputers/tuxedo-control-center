@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -134,6 +134,14 @@ export class TccDBusController {
     async setTempProfileName(profileName: string): Promise<boolean> {
         try {
             return await this.interface.SetTempProfile(profileName);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async setTempProfileById(profileId: string): Promise<boolean> {
+        try {
+            return await this.interface.SetTempProfileById(profileId);
         } catch (err) {
             return false;
         }

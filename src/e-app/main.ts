@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -109,7 +109,7 @@ app.whenReady().then( async () => {
     tray.events.selectBuiltInClick = () => {
         if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
     };
-    tray.events.profileClick = (profileName: string) => { setTempProfile(profileName); };
+    tray.events.profileClick = (profileId: string) => { setTempProfileById(profileId); };
     tray.create();
 
     tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
@@ -222,6 +222,14 @@ async function setTempProfile(profileName: string) {
     const dbus = new TccDBusController();
     await dbus.init();
     const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
+    dbus.disconnect();
+    return result;
+}
+
+async function setTempProfileById(profileId: string) {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileById(profileId);
     dbus.disconnect();
     return result;
 }

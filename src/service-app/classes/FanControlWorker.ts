@@ -30,6 +30,7 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
+    private previousProfileName;
 
     private modeSameSpeed = false;
 
@@ -50,7 +51,7 @@ export class FanControlWorker extends DaemonWorker {
         }
 
         // Update fan logic
-        const currentFanProfile = this.tccd.getCurrentFanProfile();
+        const currentFanProfile = this.tccd.getCurrentFanProfile(this.activeProfile);
         for (const fanNumber of this.fans.keys()) {
             if (this.fans.get(fanNumber).getFanProfile() === undefined ||
                 this.fans.get(fanNumber).getFanProfile().name !== currentFanProfile.name) {
@@ -112,7 +113,6 @@ export class FanControlWorker extends DaemonWorker {
         // For each fan read and process sensor values
         for (const fanNumber of this.fans.keys()) {
             const fanIndex: number = fanNumber - 1;
-
 
             const fanLogic = this.fans.get(fanNumber);
 

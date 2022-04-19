@@ -61,7 +61,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public buttonLanguageLabel: string;
 
     public ngOnInit(): void {
-
         this.updateLanguageName();
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));

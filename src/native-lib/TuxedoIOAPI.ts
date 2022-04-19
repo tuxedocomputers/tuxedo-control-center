@@ -110,6 +110,7 @@ export interface ITuxedoIOAPI {
 export class ModuleInfo {
     version = '';
     activeInterface = '';
+    model = '';
 }
 
 export class TDPInfo {

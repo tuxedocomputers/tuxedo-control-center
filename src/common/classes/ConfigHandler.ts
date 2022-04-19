@@ -19,9 +19,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
-import { ITccProfile, defaultProfiles, defaultCustomProfile, defaultCustomProfileXP1508UHD } from '../models/TccProfile';
+import { ITccProfile } from '../models/TccProfile';
+import { defaultProfiles, defaultCustomProfile } from '../models/profiles/LegacyProfiles';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
+import { deviceProfiles, TUXEDODevice } from '../models/DefaultProfiles';
 
 export class ConfigHandler {
     public settingsFileMod: number;
@@ -108,8 +110,12 @@ export class ConfigHandler {
         return JSON.parse(JSON.stringify(config));
     }
 
-    public getDefaultProfiles(): ITccProfile[] {
-        return this.copyConfig<ITccProfile[]>(defaultProfiles);
+    public getDefaultProfiles(device?: TUXEDODevice): ITccProfile[] {
+        let deviceDefaultProfiles = deviceProfiles.get(device);
+        if (deviceDefaultProfiles === undefined) {
+            deviceDefaultProfiles = defaultProfiles;
+        }
+        return this.copyConfig<ITccProfile[]>(deviceDefaultProfiles);
     }
 
     public getDefaultCustomProfile(): ITccProfile {

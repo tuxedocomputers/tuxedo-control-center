@@ -16,7 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+import { defaultProfiles } from "./profiles/LegacyProfiles";
+
 export interface ITccProfile {
+    id: string;
     name: string;
     description: string;
     display: ITccProfileDisplay;
@@ -28,6 +32,7 @@ export interface ITccProfile {
 }
 
 export class TccProfile implements ITccProfile {
+    id: string;
     name: string;
     description: string;
     display: ITccProfileDisplay;
@@ -37,6 +42,7 @@ export class TccProfile implements ITccProfile {
     odmProfile: ITccODMProfile;
     odmPowerLimits: ITccODMPowerLimits;
     public constructor(init: ITccProfile) {
+        this.id = init.id;
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
@@ -82,157 +88,12 @@ interface ITccODMPowerLimits {
     tdpValues: number[]
 }
 
-export const defaultProfiles: ITccProfile[] = [
-    {
-        name: 'Default',
-        description: '',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-    {
-        name: 'Cool and breezy',
-        description: '',
-        display: {
-            brightness: 50,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: -1,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Quiet',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    },
-    {
-        name: 'Powersave extreme',
-        description: '',
-        display: {
-            brightness: 60,
-            useBrightness: true
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: 0,
-            scalingMaxFrequency: 0,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Silent',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
-    }
-];
-
-export const defaultCustomProfile: ITccProfile = {
-    name: 'Default custom profile',
-    description: '',
-    display: {
-        brightness: 100,
-        useBrightness: false
-    },
-    cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: undefined,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-    },
-    webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Balanced',
-        minimumFanspeed: 0,
-        offsetFanspeed: 0
-    },
-    odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [] }
-};
-
-export const defaultCustomProfileXP1508UHD: ITccProfile = {
-    name: 'Custom XP1508 UHD',
-    description: '',
-    display: {
-        brightness: 100,
-        useBrightness: false
-    },
-    cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: 1200000,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-    },
-    webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Balanced',
-        minimumFanspeed: 0,
-        offsetFanspeed: 0
-    },
-    odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [] }
-};
+export function generateProfileId(): string {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
 export const profileImageMap = new Map<string, string>();
+// TODO: map IDs instead of names
 profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');
 profileImageMap.set(defaultProfiles[1].name, 'icon_profile_breezy.svg');
 profileImageMap.set(defaultProfiles[2].name, 'icon_profile_energysaver.svg');

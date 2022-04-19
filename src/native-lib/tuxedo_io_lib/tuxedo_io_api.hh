@@ -83,6 +83,7 @@ public:
 
     virtual bool Identify(bool &identified) = 0;
     virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) = 0;
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) = 0;
     virtual bool SetEnableModeSet(bool enabled) = 0;
     virtual bool GetNumberFans(int &nrFans) = 0;
     virtual bool SetFansAuto() = 0;
@@ -118,6 +119,10 @@ public:
 
     virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
         return io->IoctlCall(R_CL_HW_IF_STR, interfaceIdStr, 50);
+    }
+
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) {
+        return false;
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
@@ -279,6 +284,16 @@ public:
     virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
         interfaceIdStr = "uniwill";
         return true;
+    }
+
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) {
+        int32_t modelId;
+        modelIdStr = "";
+        bool success = io->IoctlCall(R_UW_MODEL_ID, modelId);
+        if (success) {
+            modelIdStr = std::to_string(modelId);
+        }
+        return success;
     }
 
     virtual bool SetEnableModeSet(bool enabled) {
@@ -533,6 +548,14 @@ public:
     virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) {
         if (activeInterface) {
             return activeInterface->DeviceInterfaceIdStr(interfaceIdStr);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) {
+        if (activeInterface) {
+            return activeInterface->DeviceModelIdStr(modelIdStr);
         } else {
             return false;
         }
