@@ -24,13 +24,19 @@ import * as os from 'os';
 import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
+import { UserConfig } from './UserConfig';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
 
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
-const tccConfigDir = '.tcc';
+const tccConfigDir = path.join(os.homedir(), '.tcc');
+const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
+const availableLanguages = [
+    'en',
+    'de'
+];
 let startTCCAccelerator;
 
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
@@ -65,6 +71,8 @@ if (isFirstStart()) {
     installAutostartTray();
 }
 
+const userConfig = new UserConfig(tccStandardConfigFile);
+
 if (!userConfigDirExists()) {
     createUserConfigDir();
 }
@@ -75,6 +83,20 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.whenReady().then( async () => {
+    try {
+        const systemLanguageId = app.getLocale().substring(0, 2);
+        if (await userConfig.get('langId') === undefined) {
+            if (availableLanguages.includes(systemLanguageId)) {
+                userConfig.set('langId', systemLanguageId);
+            } else {
+                userConfig.set('langId', availableLanguages[0]);
+            }
+        }
+    } catch (err) {
+        console.log('Error determining user language => ' + err);
+        quitCurrentTccSession();
+    }
+
     if (startTCCAccelerator !== 'none') {
         const success = globalShortcut.register(startTCCAccelerator, () => {
             activateTccGui();
@@ -199,7 +221,9 @@ function activateTccGui() {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
     } else {
-        createTccWindow();
+        userConfig.get('langId').then(langId => {
+            createTccWindow(langId);
+        });
     }
 }
 
@@ -239,7 +263,7 @@ async function getActiveProfile(): Promise<TccProfile> {
     return result;
 }
 
-function createTccWindow() {
+function createTccWindow(langId: string) {
     let windowWidth = 1040;
     let windowHeight = 750;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
@@ -260,7 +284,8 @@ function createTccWindow() {
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule: true
+            contextIsolation: false,
+            enableRemoteModule: true,
         }
     });
 
@@ -269,11 +294,12 @@ function createTccWindow() {
     // Workaround to menu bar appearing after full screen state
     tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
 
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
-    tccWindow.loadFile(indexPath);
     tccWindow.on('closed', () => {
         tccWindow = null;
     });
+
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
+    tccWindow.loadFile(indexPath);
 }
 
 function quitCurrentTccSession() {
@@ -309,6 +335,24 @@ ipcMain.on('spawn-external-async', (event, arg) => {
         console.log("\"" + arg + "\" could not be executed.")
         dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
     });
+});
+
+async function changeLanguage(newLangId: string) {
+    if (newLangId !== await userConfig.get('langId')) {
+        await userConfig.set('langId', newLangId);
+        if (tccWindow) {
+            const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
+            tccWindow.loadFile(indexPath);
+        }
+    }
+}
+
+/**
+ * Change user language IPC interface
+ */
+ipcMain.on('trigger-language-change', (event, arg) => {
+    const langId = arg;
+    changeLanguage(langId);
 });
 
 function installAutostartTray(): boolean {
@@ -352,7 +396,7 @@ function isFirstStart(): boolean {
 
 function userConfigDirExists(): boolean {
     try {
-        return fs.existsSync(path.join(os.homedir(), '.tcc'));
+        return fs.existsSync(tccConfigDir);
     } catch (err) {
         return false;
     }
@@ -360,7 +404,7 @@ function userConfigDirExists(): boolean {
 
 function createUserConfigDir(): boolean {
     try {
-        fs.mkdirSync(path.join(os.homedir(), '.tcc'));
+        fs.mkdirSync(tccConfigDir);
         return true;
     } catch (err) {
         return false;
