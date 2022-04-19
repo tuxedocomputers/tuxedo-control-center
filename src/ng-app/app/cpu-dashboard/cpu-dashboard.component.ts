@@ -26,7 +26,6 @@ import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 
-import { I18n } from '@ngx-translate/i18n-polyfill';
 import { NodeService } from '../node.service';
 import { CompatibilityService } from '../compatibility.service';
 
@@ -80,8 +79,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private config: ConfigService,
     private node: NodeService,
-    public compat: CompatibilityService,
-    private i18n: I18n
+    public compat: CompatibilityService
   ) { }
 
   private validTemp(tempValue: number) {
@@ -215,7 +213,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     if (this.compat.hasFancontrol) {
       return Math.round(value).toString();
     } else {
-      return this.i18n({ value: 'N/A'});
+      return $localize `:@@noFanTempValue:N/A`;
     }
   }
 
@@ -223,15 +221,15 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     if (this.compat.hasFancontrol) {
       return Math.round(value).toString();
     } else {
-      return this.i18n({ value: 'N/A'});
+      return $localize `:@@noFanSpeedValue:N/A`;
     }
   }
 
   public gaugeOnOffFormat: (value: number) => string = (value) => {
     if (value === 0) {
-      return this.i18n({ value: 'off'});
+      return $localize `:@@gaugeTextOff:off`;
     } else {
-      return this.i18n({ value: 'on'});
+      return $localize `:@@gaugeTextOn:on`;
     }
   }
 

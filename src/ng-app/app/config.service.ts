@@ -20,7 +20,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
+import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
@@ -28,7 +28,6 @@ import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
-import { I18n } from '@ngx-translate/i18n-polyfill';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 interface IProfileTextMappings {
@@ -68,8 +67,7 @@ export class ConfigService implements OnDestroy {
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
-        private dbus: TccDBusClientService,
-        private i18n: I18n) {
+        private dbus: TccDBusClientService) {
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
 
@@ -85,28 +83,28 @@ export class ConfigService implements OnDestroy {
         );
 
         this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
-            name: this.i18n({ value: 'Powersave extreme', id: 'profileNamePowersaveExtreme'}),
-            description: this.i18n({ value: 'Lowest possible power consumption and silent fans at the cost of extremely low performance.', id: 'profileDescPowersaveExtreme'})
+            name: $localize `:@@profileNamePowersaveExtreme:Powersave extreme`,
+            description: $localize `:@@profileDescPowersaveExtreme:Lowest possible power consumption and silent fans at the cost of extremely low performance.`
         });
 
         this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
-            name: this.i18n({ value: 'Quiet', id: 'profileNameQuiet'}),
-            description: this.i18n({ value: 'Low performance for light office tasks for very quiet fans and low power consumption.', id: 'profileDescQuiet'})
+            name: $localize `:@@profileNameQuiet:Quiet`,
+            description: $localize `:@@profileDescQuiet:Low performance for light office tasks for very quiet fans and low power consumption.`
         });
 
         this.defaultProfileInfos.set(DefaultProfileIDs.Office, {
-            name: this.i18n({ value: 'Office and Multimedia', id: 'profileNameOffice'}),
-            description: this.i18n({ value: 'Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.', id: 'profileDescOffice'})
+            name: $localize `:@@profileNameOffice:Office and Multimedia`,
+            description: $localize `:@@profileDescOffice:Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.`
         });
 
         this.defaultProfileInfos.set(DefaultProfileIDs.HighPerformance, {
-            name: this.i18n({ value: 'High Performance', id: 'profileNameHighPerformance'}),
-            description: this.i18n({ value: 'High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.', id: 'profileDescHighPerformance'})
+            name: $localize `:@@profileNameHighPerformance:High Performance`,
+            description: $localize `:@@profileDescHighPerformance:High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.`
         });
 
         this.defaultProfileInfos.set(DefaultProfileIDs.MaximumPerformance, {
-            name: this.i18n({ value: 'Max Performance', id: 'profileNameMaximumPerformance'}),
-            description: this.i18n({ value: 'Maximum performance at the cost of very loud fan noise levels and very high temperatures.', id: 'profileDescMaximumPerformance'})
+            name: $localize `:@@profileNameMaximumPerformance:Max Performance`,
+            description: $localize `:@@profileDescMaximumPerformance:Maximum performance at the cost of very loud fan noise levels and very high temperatures.`
         });
 
         this.defaultProfiles = this.dbus.defaultProfiles.value;
@@ -138,11 +136,11 @@ export class ConfigService implements OnDestroy {
     }
 
     get cpuSettingsDisabledMessage(): string {
-        return this.i18n({ value: 'CPU settings deactivated in Tools→Global\u00A0Settings' });
+        return $localize `:@@messageCPUSettingsOff:CPU settings deactivated in Tools→Global\u00A0Settings`;
     }
 
     get fanControlDisabledMessage(): string {
-        return this.i18n({ value: 'Fan control deactivated in Tools→Global\u00A0Settings' });
+        return $localize `:@@messageFanControlOff:Fan control deactivated in Tools→Global\u00A0Settings`;
     }
 
     public getCustomProfiles(): ITccProfile[] {

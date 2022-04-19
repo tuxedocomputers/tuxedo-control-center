@@ -27,7 +27,6 @@ import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
-import { I18n } from '@ngx-translate/i18n-polyfill';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
@@ -126,7 +125,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public showFanGraphs = false;
 
-    @ViewChild('inputName', { static: false }) inputName: MatInput;
+    @ViewChild('inputName') inputName: MatInput;
 
     public selectedCPUTabIndex: number = 0;
 
@@ -138,8 +137,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private dbus: DBusService,
         private tccDBus: TccDBusClientService,
-        public compat: CompatibilityService,
-        private i18n: I18n
+        public compat: CompatibilityService
     ) { }
 
     ngOnInit() {
@@ -460,7 +458,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
-        const strAlreadySet = this.i18n({ value: ' (already set)', id: 'cProfMgrDetailsStateSelectButtonAlreadySet' });
+        const strAlreadySet = $localize `:@@cProfMgrDetailsStateSelectButtonAlreadySet: (already set)`;
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.id ? strAlreadySet : '');
     }
 
@@ -496,7 +494,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             slider.setValue(newValue);
     }
 
-    @ViewChild('fancontrolHeader', { static: false }) fancontrolHeaderE;
+    @ViewChild('fancontrolHeader') fancontrolHeaderE;
     public toggleFanGraphs() {
         if (!this.showFanGraphs) {
             this.showFanGraphs = true;

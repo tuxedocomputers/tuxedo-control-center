@@ -25,6 +25,15 @@
   - Switchable between "description view" and detailed view for
     profile comparison
 
+## [1.1.3] - 2022-04-01
+
+### Changed
+- Dependencies on `libappindicator3-1` switched to `libayatana-appindicator3-1` (DEB + RPM)
+- Alternative dependency on `libappindicator` for fedora (RPM)
+
+### Fixed
+- AMD boost max frequency workaround patched
+
 ## [1.1.2] - 2021-12-07
 
 ### Fixed
