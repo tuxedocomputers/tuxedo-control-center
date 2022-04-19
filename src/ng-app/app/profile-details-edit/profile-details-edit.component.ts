@@ -30,7 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -150,9 +150,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.stateInputArray = this.state.getStateInputs();
 
         const odmProfileLEDNames: Map<string, string> = new Map();
-        odmProfileLEDNames.set('power_save', this.i18n({ value: 'all LEDs off', id: 'odmLEDNone' }));
-        odmProfileLEDNames.set('enthusiast', this.i18n({ value: 'one LED on', id: 'odmLEDOne' }));
-        odmProfileLEDNames.set('overboost', this.i18n({ value: 'two LEDs on', id: 'odmLEDTwo' }));
+        odmProfileLEDNames.set('power_save', $localize `:@@odmLEDNone:all LEDs off`);
+        odmProfileLEDNames.set('enthusiast', $localize `:@@odmLEDOne:one LED on`);
+        odmProfileLEDNames.set('overboost', $localize `:@@odmLEDTwo:two LEDs on`);
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
             this.odmProfileNames = nextAvailableODMProfiles;
@@ -178,9 +178,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }));
 
         this.tdpLabels = new Map();
-        this.tdpLabels.set('pl1', this.i18n({ value: 'Sustained Power Limit (PL1)', id: 'tdpLabelsPL1' }));
-        this.tdpLabels.set('pl2', this.i18n({ value: 'Slow (max. 28 sec) Power Limit (PL2)', id: 'tdpLabelsPL2' }));
-        this.tdpLabels.set('pl4', this.i18n({ value: 'Fast (max. 8 sec) Power Limit (PL4)', id: 'tdpLabelsPL4' }));
+        this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
+        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Slow (max. 28 sec) Power Limit (PL2)`);
+        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Fast (max. 8 sec) Power Limit (PL4)`);
     }
 
     ngOnDestroy() {
