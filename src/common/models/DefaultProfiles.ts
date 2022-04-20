@@ -27,6 +27,11 @@ export enum DefaultProfileIDs {
     MaximumPerformance = '__maximum_performance__'
 }
 
+export interface IProfileTextMappings {
+    name: string;
+    description: string;
+}
+
 const maxEnergySave: ITccProfile = {
     id: DefaultProfileIDs.MaxEnergySave,
     name: DefaultProfileIDs.MaxEnergySave,

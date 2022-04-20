@@ -27,13 +27,8 @@ import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
+import { DefaultProfileIDs, IProfileTextMappings } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
-
-interface IProfileTextMappings {
-    name: string;
-    description: string;
-}
 
 @Injectable({
     providedIn: 'root'
