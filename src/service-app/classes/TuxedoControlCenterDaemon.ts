@@ -467,7 +467,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         if (profile.id === undefined) {
             profile.id = generateProfileId();
-            console.log('id for ' + inputProfile.name + ' generated: ' + profile.id);
+            console.log(`(fillDeviceSpecificDefaults) Generated id (${profile.id}) for ${profile.name}`);
         }
 
         if (profile.description === 'undefined') {

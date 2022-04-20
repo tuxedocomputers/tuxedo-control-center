@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,7 +19,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { ITccSettings, defaultSettings } from '../models/TccSettings';
-import { ITccProfile } from '../models/TccProfile';
+import { generateProfileId, ITccProfile } from '../models/TccProfile';
 import { defaultProfiles, defaultCustomProfile } from '../models/profiles/LegacyProfiles';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
@@ -60,7 +60,13 @@ export class ConfigHandler {
     }
 
     readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
-        return this.readConfig<ITccProfile[]>(filePath);
+        return this.readConfig<ITccProfile[]>(filePath).map(profile => {
+            if (profile.id === undefined) {
+                profile.id = generateProfileId();
+                console.log(`(readProfiles) Generated id (${profile.id}) for ${profile.name}`);
+            }
+            return profile;
+        });
     }
 
     writeProfiles(profiles: ITccProfile[], filePath: string = this.pathProfiles) {
