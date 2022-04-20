@@ -26,6 +26,8 @@ import * as path from 'path';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
+import { ITccProfile } from '../../common/models/TccProfile';
+import { DefaultProfileIDs, IProfileTextMappings } from '../../common/models/DefaultProfiles';
 
 @Injectable({
   providedIn: 'root'
@@ -197,5 +199,59 @@ export class UtilsService {
 
   public setThemeDark() {
     this.setThemeClass('dark-theme');
+  }
+
+  private defaultProfileInfos = new Map<string, IProfileTextMappings>();
+
+  public fillDefaultProfileTexts(profile: ITccProfile) {
+
+    this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
+        name: $localize `:@@profileNameQuiet:Quiet`,
+        description: $localize `:@@profileDescQuiet:Low performance for light office tasks for very quiet fans and low power consumption.`
+    });
+
+    this.defaultProfileInfos.set(DefaultProfileIDs.Office, {
+        name: $localize `:@@profileNameOffice:Office and Multimedia`,
+        description: $localize `:@@profileDescOffice:Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.`
+    });
+
+    this.defaultProfileInfos.set(DefaultProfileIDs.HighPerformance, {
+        name: $localize `:@@profileNameHighPerformance:High Performance`,
+        description: $localize `:@@profileDescHighPerformance:High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.`
+    });
+
+    this.defaultProfileInfos.set(DefaultProfileIDs.MaximumPerformance, {
+        name: $localize `:@@profileNameMaximumPerformance:Max Performance`,
+        description: $localize `:@@profileDescMaximumPerformance:Maximum performance at the cost of very loud fan noise levels and very high temperatures.`
+    });
+
+    this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
+        name: $localize `:@@profileNamePowersaveExtreme:Powersave extreme`,
+        description: $localize `:@@profileDescPowersaveExtreme:Lowest possible power consumption and silent fans at the cost of extremely low performance.`
+    });
+
+    const defaultProfileInfo = this.defaultProfileInfos.get(profile.id);
+    if (defaultProfileInfo !== undefined) {
+        profile.name = defaultProfileInfo.name;
+        profile.description = defaultProfileInfo.description;
+    }
+  }
+
+  public getDefaultProfileName(profileId: string): string {
+    const info = this.defaultProfileInfos.get(profileId);
+    if (info !== undefined) {
+        return info.name;
+    } else {
+        return undefined;
+    }
+  }
+
+  public getDefaultProfileDescription(profileId: string): string {
+    const info = this.defaultProfileInfos.get(profileId);
+    if (info !== undefined) {
+        return info.description;
+    } else {
+        return undefined;
+    }
   }
 }

@@ -142,4 +142,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public getActiveProfile(): ITccProfile {
         return this.state.getActiveProfile();
     }
+
+    public getStateProfileName(state: IStateInfo) {
+        return this.utils.getDefaultProfileName(this.getSettings().stateMap[state.value]);
+    }
 }

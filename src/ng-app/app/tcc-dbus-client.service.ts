@@ -23,6 +23,7 @@ import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { ConfigService } from './config.service';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -107,6 +108,7 @@ export class TccDBusClientService implements OnDestroy {
             const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
             // this.utils.fillDefaultValuesProfile(activeProfile);
             if (this.previousActiveProfileJSON !== activeProfileJSON) {
+                this.utils.fillDefaultProfileTexts(activeProfile);
                 this.activeProfile.next(activeProfile);
                 this.previousActiveProfileJSON = activeProfileJSON;
             }

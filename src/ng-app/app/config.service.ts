@@ -27,7 +27,7 @@ import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { DefaultProfileIDs, IProfileTextMappings } from '../../common/models/DefaultProfiles';
+import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -53,8 +53,6 @@ export class ConfigService implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    private defaultProfileInfos = new Map<string, IProfileTextMappings>();
-
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;
     // public writeSettings = ConfigHandler.prototype.writeSettings;
@@ -77,31 +75,6 @@ export class ConfigService implements OnDestroy {
             TccPaths.FANTABLES_FILE
         );
 
-        this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
-            name: $localize `:@@profileNamePowersaveExtreme:Powersave extreme`,
-            description: $localize `:@@profileDescPowersaveExtreme:Lowest possible power consumption and silent fans at the cost of extremely low performance.`
-        });
-
-        this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
-            name: $localize `:@@profileNameQuiet:Quiet`,
-            description: $localize `:@@profileDescQuiet:Low performance for light office tasks for very quiet fans and low power consumption.`
-        });
-
-        this.defaultProfileInfos.set(DefaultProfileIDs.Office, {
-            name: $localize `:@@profileNameOffice:Office and Multimedia`,
-            description: $localize `:@@profileDescOffice:Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.`
-        });
-
-        this.defaultProfileInfos.set(DefaultProfileIDs.HighPerformance, {
-            name: $localize `:@@profileNameHighPerformance:High Performance`,
-            description: $localize `:@@profileDescHighPerformance:High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.`
-        });
-
-        this.defaultProfileInfos.set(DefaultProfileIDs.MaximumPerformance, {
-            name: $localize `:@@profileNameMaximumPerformance:Max Performance`,
-            description: $localize `:@@profileDescMaximumPerformance:Maximum performance at the cost of very loud fan noise levels and very high temperatures.`
-        });
-
         this.defaultProfiles = this.dbus.defaultProfiles.value;
         this.updateConfigData();
         this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
@@ -109,6 +82,9 @@ export class ConfigService implements OnDestroy {
         }));
         this.subscriptions.add(this.dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
             this.defaultProfiles = nextDefaultProfiles;
+            for (const profile of this.defaultProfiles) {
+                this.utils.fillDefaultProfileTexts(profile);
+            }
         }));
     }
 
@@ -404,23 +380,5 @@ export class ConfigService implements OnDestroy {
 
     public getFanProfiles(): ITccFanProfile[] {
         return this.config.getDefaultFanProfiles();
-    }
-
-    public getDefaultProfileName(descriptor: string): string {
-        const info = this.defaultProfileInfos.get(descriptor);
-        if (info !== undefined) {
-            return info.name;
-        } else {
-            return undefined;
-        }
-    }
-
-    public getDefaultProfileDescription(descriptor: string): string {
-        const info = this.defaultProfileInfos.get(descriptor);
-        if (info !== undefined) {
-            return info.description;
-        } else {
-            return undefined;
-        }
     }
 }
