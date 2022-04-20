@@ -408,17 +408,23 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return this.activeProfile;
     }
 
-    setCurrentProfileByName(profileName: string) {
+    setCurrentProfileByName(profileName: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
+            return true;
+        } else {
+            return false;
         }
     }
 
-    setCurrentProfileById(id: string) {
+    setCurrentProfileById(id: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
+            return true;
+        } else {
+            return false;
         }
     }
 

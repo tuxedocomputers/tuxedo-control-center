@@ -64,17 +64,13 @@ export class StateSwitcherWorker extends DaemonWorker {
         } else {
             // If state didn't change, a manual temporary profile can still be set
             if (this.tccd.dbusData.tempProfileName !== undefined) {
-                if (this.tccd.getAllProfiles().find((profile) => profile.name === this.tccd.dbusData.tempProfileName) !== undefined) {
-                    // If set and exists set this as active profile
-                    this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName);
+                if (this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName)) {
                     this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileName + '" selected');
                 }
                 this.tccd.dbusData.tempProfileName = undefined;
             }
             if (this.tccd.dbusData.tempProfileId !== undefined) {
-                if (this.tccd.getAllProfiles().find((profile) => profile.id === this.tccd.dbusData.tempProfileId) !== undefined) {
-                    // If set and exists set this as active profile
-                    this.tccd.setCurrentProfileById(this.tccd.dbusData.tempProfileId);
+                if (this.tccd.setCurrentProfileById(this.tccd.dbusData.tempProfileId)) {
                     this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileId + '" selected');
                 }
                 this.tccd.dbusData.tempProfileId = undefined;
