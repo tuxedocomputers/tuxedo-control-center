@@ -25,6 +25,7 @@ import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
+import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -37,6 +38,7 @@ const availableLanguages = [
     'en',
     'de'
 ];
+const translation = new NgTranslations();
 let startTCCAccelerator;
 
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
@@ -87,11 +89,12 @@ app.whenReady().then( async () => {
         const systemLanguageId = app.getLocale().substring(0, 2);
         if (await userConfig.get('langId') === undefined) {
             if (availableLanguages.includes(systemLanguageId)) {
-                userConfig.set('langId', systemLanguageId);
+                await userConfig.set('langId', systemLanguageId);
             } else {
-                userConfig.set('langId', availableLanguages[0]);
+                await userConfig.set('langId', availableLanguages[0]);
             }
         }
+        await loadTranslation(await userConfig.get('langId'));
     } catch (err) {
         console.log('Error determining user language => ' + err);
         quitCurrentTccSession();
@@ -360,12 +363,29 @@ ipcMain.on('spawn-external-async', (event, arg) => {
     });
 });
 
+async function loadTranslation(langId) {
+    try {
+        await translation.loadLanguage(langId);
+    } catch (err) {
+        console.log('Failed loading translation => ' + err);
+        const fallbackLangId = 'en';
+        console.log('fallback to \'' + fallbackLangId + '\'');
+        try {
+            await translation.loadLanguage(fallbackLangId);
+        } catch (err) {
+            console.log('Failed loading fallback translation => ' + err);
+        }
+    }
+}
+
 async function changeLanguage(newLangId: string) {
     if (newLangId !== await userConfig.get('langId')) {
         await userConfig.set('langId', newLangId);
+        await loadTranslation(newLangId);
+        await updateTrayProfiles();
         if (tccWindow) {
             const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
-            tccWindow.loadFile(indexPath);
+            await tccWindow.loadFile(indexPath);
         }
     }
 }
@@ -487,6 +507,16 @@ async function updateTrayProfiles() {
     try {
         const updatedActiveProfile = await getActiveProfile();
         const updatedProfiles = await getProfiles();
+
+        // Replace default profile names/descriptions with translations
+        for (const profile of updatedProfiles) {
+            const profileTranslationId = profileIdToI18nId.get(profile.id);
+            if (profileTranslationId !== undefined) {
+                profile.name = translation.idToString(profileTranslationId.name);
+                profile.description = translation.idToString(profileTranslationId.description);
+            }
+        }
+
         if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
             JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
         ) {

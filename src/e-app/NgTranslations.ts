@@ -77,7 +77,7 @@ export class NgTranslations {
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
         return new Promise<Map<string, string>>((resolve, reject) => {
-            let xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'assets', 'locale', fileName);
+            let xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
             fs.readFile(xlfPath, (err, xmlBuffer) => {
                 if (err) {
                     reject(err);
@@ -111,7 +111,7 @@ export class NgTranslations {
     }
 }
 
-export const profileIdToI18nId = new Map<DefaultProfileIDs, IProfileTextMappings>()
+export const profileIdToI18nId = new Map<string, IProfileTextMappings>()
     .set(DefaultProfileIDs.MaxEnergySave, { name: 'profileNamePowersaveExtreme', description: 'profileDescPowersaveExtreme' })
     .set(DefaultProfileIDs.Quiet, { name: 'profileNameQuiet', description: 'profileDescQuiet' })
     .set(DefaultProfileIDs.Office, { name: 'profileNameOffice', description: 'profileDescOffice' })
