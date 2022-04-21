@@ -22,7 +22,6 @@ import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
-import { I18n } from '@ngx-translate/i18n-polyfill';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 
@@ -51,7 +50,7 @@ export class StateService implements OnDestroy {
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
 
-  constructor(private config: ConfigService, private tccdbus: TccDBusClientService, private i18n: I18n) {
+  constructor(private config: ConfigService, private tccdbus: TccDBusClientService) {
     this.activeProfile = tccdbus.activeProfile;
 
     this.stateSubject = new Subject<ProfileStates>();
@@ -69,14 +68,14 @@ export class StateService implements OnDestroy {
 
     this.stateInputMap
       .set(ProfileStates.AC.toString(), {
-        label: this.i18n({ value: 'Mains', id: 'stateLabelMains' }),
-        tooltip: this.i18n({ value: 'Mains power adaptor', id: 'stateTooltipMains' }),
+        label: $localize `:@@stateLabelMains:Mains`,
+        tooltip: $localize `:@@stateTooltipMains:Mains power adaptor`,
         icon: 'icon_pluggedin.svg#Icon',
         value: ProfileStates.AC.toString()
       })
       .set(ProfileStates.BAT.toString(), {
-        label: this.i18n({ value: 'Battery ', id: 'stateLabelBattery' }),
-        tooltip: this.i18n({ value: 'Battery powered', id: 'stateTooltipBattery' }),
+        label: $localize `:@@stateLabelBattery:Battery `,
+        tooltip: $localize `:@@stateTooltipBattery:Battery powered`,
         icon: 'icon_batterymode.svg#Icon',
         value: ProfileStates.BAT.toString()
       });

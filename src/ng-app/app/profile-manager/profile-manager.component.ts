@@ -28,8 +28,6 @@ import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
 
-import { I18n } from '@ngx-translate/i18n-polyfill';
-
 enum InputMode {
     New, Copy, Edit
 }
@@ -63,7 +61,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     public inputProfileFilter = 'all';
 
-    @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
+    @ViewChild('inputFocus') inputFocus: MatInput;
 
     public buttonCopy: ProfileManagerButton;
     public buttonEdit: ProfileManagerButton;
@@ -78,8 +76,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private state: StateService,
         private utils: UtilsService,
         private router: Router,
-        private electron: ElectronService,
-        private i18n: I18n) { }
+        private electron: ElectronService) { }
 
     ngOnInit() {
         this.defineButtons();
@@ -187,8 +184,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             const choice = this.electron.remote.dialog.showMessageBox(
                 this.electron.remote.getCurrentWindow(),
                 {
-                    title: this.i18n({ value: 'Invalid input', id: 'cProfMgrInvalidNameTitle' }),
-                    message: this.i18n({ value: 'A name for the profile is required', id: 'cProfMgrInvalidNameMessage' }),
+                    title: $localize `:@@cProfMgrInvalidNameTitle:Invalid input`,
+                    message: $localize `:@@cProfMgrInvalidNameMessage:A name for the profile is required`,
                     type: 'info',
                     buttons: ['ok']
                 }
@@ -224,14 +221,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             () => {
                 this.currentInputMode = InputMode.New;
                 this.inputProfileName.setValue('');
-                this.inputProfileNameLabel = this.i18n({ value: 'New profile', id: 'cProfMgrNewProfileLabel' });
+                this.inputProfileNameLabel = $localize `:@@cProfMgrNewProfileLabel:New profile`;
                 this.inputActive = true;
                 setImmediate(() => { this.inputFocus.focus(); });
             },
             // Label
             () => '',
             // Tooltip
-            () => this.i18n({ value: 'Create a new profile with default settings', id: 'cProfMgrNewButtonTooltip' }),
+            () => $localize `:@@cProfMgrNewButtonTooltip:Create a new profile with default settings`,
         );
     }
 
@@ -240,7 +237,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
         this.currentInputMode = InputMode.Copy;
         this.inputProfileName.setValue('');
-        this.inputProfileNameLabel = this.i18n({ value: 'Copy this profile', id: 'cProfMgrCopyProfileLabel' });
+        this.inputProfileNameLabel = $localize `:@@cProfMgrCopyProfileLabel:Copy this profile`;
         this.inputActive = true;
         setImmediate(() => { this.inputFocus.focus(); });
     }
