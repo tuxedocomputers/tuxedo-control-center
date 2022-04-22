@@ -16,11 +16,11 @@
       "https": [ "./src/ng-app/native/https.js" ]
     }
   },
-  "include": [
-    "src/**/*.ts"
+  "files": [
+    "src/ng-app/main.ts",
+    "src/ng-app/polyfills.ts"
   ],
-  "exclude": [
-    "src/test.ts",
-    "src/**/*.spec.ts"
+  "include": [
+    "src/**/*.d.ts"
   ]
 }

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.4] - 2022-04-21
+### Changed
+- First steps of basic dependency/framework updates
+  - Electron 13
+  - Node 14
+  - Angular 10
+
+### Fixed
+- Ubuntu 22.04 KDE with nvidia based systems sometimes refused to start TCC gui
+
 ## [1.1.3] - 2022-04-01
 
 ### Changed

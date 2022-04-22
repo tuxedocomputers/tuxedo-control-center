@@ -20,7 +20,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
 import { DriveController } from "../../../common/classes/DriveController";
-import { I18n } from '@ngx-translate/i18n-polyfill';
 
 @Component({
     selector: 'app-change-crypt-password',
@@ -42,7 +41,6 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }, { validators: [this.confirmValidation] })
 
     constructor(
-        private i18n: I18n,
         private utils: UtilsService
     ) { }
 
@@ -50,17 +48,17 @@ export class ChangeCryptPasswordComponent implements OnInit {
         this.crypt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
 
         this.buttonType = "password";
-        this.show_password_button_text = this.i18n({ value: 'Show Passwords', id: 'cryptButtonShowPassword' });
+        this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;
     }
 
     showPassword() {
         if (this.buttonType == "password") {
             this.buttonType = "text";
-            this.show_password_button_text = this.i18n({ value: 'Hide Passwords', id: 'cryptButtonHidePassword' });
+            this.show_password_button_text = $localize `:@@cryptButtonHidePassword:Hide Passwords`;
         }
         else {
             this.buttonType = "password";
-            this.show_password_button_text = this.i18n({ value: 'Show Passwords', id: 'cryptButtonShowPassword' });
+            this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;
         }
     }
 
@@ -97,11 +95,11 @@ export class ChangeCryptPasswordComponent implements OnInit {
         oneliner = oneliner.slice(0, -4); // remove the tailing " && "
 
         return this.utils.execCmd(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
-            this.successtext_cryptsetup = this.i18n({ value: 'Crypt password changed successfully', id: 'cryptfinishprocess' });
+            this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
         }).catch(() => {
             this.successtext_cryptsetup = '';
-            this.errortext_cryptsetup = this.i18n({ value: 'Error: Could not change crypt password (wrong old crypt password?)', id: 'errornewpassword' });
+            this.errortext_cryptsetup = $localize `:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
         });
     }
 
