@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -73,6 +73,7 @@ import { ChangeCryptPasswordComponent } from './change-crypt-password/change-cry
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
 import { ChartsModule, ThemeService } from 'ng2-charts';
+import { MainGuiComponent } from './main-gui/main-gui.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -91,7 +92,8 @@ declare const require;
     ShutdownTimerComponent,
     ToolsComponent,
     ChangeCryptPasswordComponent,
-    FanGraphComponent
+    FanGraphComponent,
+    MainGuiComponent
   ],
   imports: [
     BrowserModule,
