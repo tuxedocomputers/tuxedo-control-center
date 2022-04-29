@@ -10,7 +10,7 @@ export class ClientAPI {
     public disconnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.disconnect.name]); }
     public isConnected() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.isConnected.name]) as Promise<boolean>; }
     public readFwVersion() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.readFwVersion.name]) as Promise<string>; }
-    public writeRGB(red: number, green: number, blue: number, state: RGBState | number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writeRGB.name, red, green, blue, state]); }
+    public updateLED(red: number, green: number, blue: number, state: RGBState | number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.updateLED.name, red, green, blue, state]); }
     public writeRGBOff() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writeRGBOff.name]); }
     public writeFanMode(dutyCyclePercent: number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writeFanMode.name, dutyCyclePercent]); }
     public writeFanOff() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writeFanOff.name]); }

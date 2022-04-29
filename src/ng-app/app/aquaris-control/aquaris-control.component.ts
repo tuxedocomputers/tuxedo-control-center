@@ -57,18 +57,11 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
         const ledMode = parseInt(this.ctrlLedMode.value);
 
-        if (this.isConnected && !this.ioInProgress) {
-            this.ioInProgress = true;
+        if (this.isConnected) {
             try {
-                await this.aquaris.writeRGB(red, green, blue, ledMode);
-                const updatedLedMode = parseInt(this.ctrlLedMode.value);
-                if (this.ledState.red !== red || this.ledState.green !== green || this.ledState.blue !== blue || ledMode !== updatedLedMode) {
-                    await this.aquaris.writeRGB(this.ledState.red, this.ledState.green, this.ledState.blue, updatedLedMode);
-                }
+                await this.aquaris.updateLED(red, green, blue, ledMode);
             } catch (err) {
                 console.log('failed writing led state => ' + err);
-            } finally {
-                this.ioInProgress = false;
             }
         }
     }

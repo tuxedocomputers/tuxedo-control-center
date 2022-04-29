@@ -26,7 +26,7 @@ import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, ClientAPI, registerAPI } from './AquarisAPI';
-import { LCT21001 } from './LCT21001';
+import { LCT21001, PumpVoltage, RGBState } from './LCT21001';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -524,10 +524,71 @@ async function updateTrayProfiles() {
     }
 }
 
+interface AquarisState {
+    red: number,
+    green: number,
+    blue: number,
+    ledMode: RGBState | number,
+    fanDutyCycle: number,
+    pumpDutyCycle: number,
+    pumpVoltage: PumpVoltage | number
+}
+
+async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState) {
+    if (!aquarisIoProgress) {
+        aquarisIoProgress = true;
+        let updatedSomething;
+        do {
+            let updateLed = false;
+            let updateFan = false;
+            let updatePump = false;
+
+            if (current.red !== next.red || current.green !== next.green || current.blue !== next.blue || current.ledMode !== next.ledMode) {
+                updateLed = true;
+                console.log(`writeRGB(${next.red}, ${next.green}, ${next.blue}, ${next.ledMode})`);
+                current.red = next.red;
+                current.green = next.green;
+                current.blue = next.blue;
+                current.ledMode = next.ledMode;
+                await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
+            }
+            if (current.fanDutyCycle !== next.fanDutyCycle) {
+                updateFan = true;
+                current.fanDutyCycle = next.fanDutyCycle;
+                await dev.writeFanMode(next.fanDutyCycle);
+            }
+            if (current.pumpDutyCycle !== next.pumpDutyCycle || current.pumpVoltage !== next.pumpVoltage) {
+                updatePump = true;
+                current.pumpDutyCycle = next.pumpDutyCycle;
+                current.pumpVoltage = next.pumpVoltage;
+                await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
+            }
+            updatedSomething = updateLed || updateFan || updatePump;
+            if (!updateLed) {}
+        } while (updatedSomething);
+        aquarisIoProgress = false;
+    }
+}
+
+let aquarisStateExpected: AquarisState;
+let aquarisStateCurrent: AquarisState;
+
+let aquarisIoProgress = false;
+
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     .set(ClientAPI.prototype.connect.name, async (deviceUUID) => {
         await aquaris.connect();
+        aquarisStateCurrent = {
+            red: 0,
+            green: 0,
+            blue: 0,
+            ledMode: RGBState.Static,
+            fanDutyCycle: 0,
+            pumpDutyCycle: 60,
+            pumpVoltage: PumpVoltage.V8
+        };
+        aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
     })
 
     .set(ClientAPI.prototype.disconnect.name, async () => {
@@ -542,8 +603,13 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         return await aquaris.readFwVersion();
     })
 
-    .set(ClientAPI.prototype.writeRGB.name, async (red, green, blue, state) => {
-        await aquaris.writeRGB(red, green, blue, state);
+    .set(ClientAPI.prototype.updateLED.name, async (red, green, blue, state) => {
+        console.log(`updateLED(${red}, ${green}, ${blue}, ${state})`);
+        aquarisStateExpected.red = red;
+        aquarisStateExpected.green = green;
+        aquarisStateExpected.blue = blue;
+        aquarisStateExpected.ledMode = state;
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writeRGBOff.name, async () => {
@@ -551,7 +617,8 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.writeFanMode.name, async (dutyCyclePercent) => {
-        await aquaris.writeFanMode(dutyCyclePercent);
+        aquarisStateExpected.fanDutyCycle = dutyCyclePercent;
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writeFanOff.name, async () => {
@@ -559,7 +626,9 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.writePumpMode.name, async (dutyCyclePercent, voltage) => {
-        await aquaris.writePumpMode(dutyCyclePercent, voltage);
+        aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
+        aquarisStateExpected.pumpVoltage = voltage;
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writePumpOff.name, async () => {
