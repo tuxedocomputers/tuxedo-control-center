@@ -25,6 +25,8 @@ import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
+import { aquarisAPIHandle, ClientAPI, registerAPI } from './AquarisAPI';
+import { LCT21001 } from './LCT21001';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -45,6 +47,7 @@ if (startTCCAccelerator === '') {
 }
 
 let tccWindow: Electron.BrowserWindow;
+let aquarisWindow: Electron.BrowserWindow;
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
@@ -110,6 +113,7 @@ app.whenReady().then( async () => {
     tray.state.isPrimeSupported = primeSupported();
     await updateTrayProfiles();
     tray.events.startTCCClick = () => activateTccGui();
+    tray.events.startAquarisControl = () => activateAquariusGui();
     tray.events.exitClick = () => quitCurrentTccSession();
     tray.events.autostartTrayToggle = () => {
         if (tray.state.isAutostartTrayInstalled) {
@@ -194,7 +198,7 @@ app.whenReady().then( async () => {
     setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
 });
 
-app.on('will-quit', (event) => {
+app.on('will-quit', async (event) => {
     // Prevent default quit action
     event.preventDefault();
 
@@ -206,6 +210,7 @@ app.on('will-quit', (event) => {
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
+        if (aquaris !== undefined) { await aquaris.disconnect(); }
         app.exit(0);
     }
 });
@@ -223,6 +228,49 @@ function activateTccGui() {
     } else {
         userConfig.get('langId').then(langId => {
             createTccWindow(langId);
+        });
+    }
+}
+
+function createAquarisControl(langId: string) {
+    let windowWidth = 700;
+    let windowHeight = 400;
+
+    aquarisWindow = new BrowserWindow({
+        title: 'Aquaris control',
+        width: windowWidth,
+        height: windowHeight,
+        frame: true,
+        resizable: true,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
+        icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+
+    // Hide menu bar
+    aquarisWindow.setMenuBarVisibility(false);
+    // Workaround to menu bar appearing after full screen state
+    aquarisWindow.on('leave-full-screen', () => { aquarisWindow.setMenuBarVisibility(false); });
+
+    aquarisWindow.on('closed', () => {
+        aquarisWindow = null;
+    });
+
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
+    aquarisWindow.loadFile(indexPath, { hash: '/aquaris-control'});
+}
+
+function activateAquariusGui() {
+    if (aquarisWindow) {
+        if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
+        aquarisWindow.focus();
+    } else {
+        userConfig.get('langId').then(langId => {
+            createAquarisControl(langId);
         });
     }
 }
@@ -475,3 +523,47 @@ async function updateTrayProfiles() {
         console.log('updateTrayProfiles() exception => ' + err);
     }
 }
+
+const aquaris = new LCT21001();
+const aquarisHandlers = new Map<string, (...args: any[]) => any>()
+    .set(ClientAPI.prototype.connect.name, async (deviceUUID) => {
+        await aquaris.connect();
+    })
+
+    .set(ClientAPI.prototype.disconnect.name, async () => {
+        await aquaris.disconnect();
+    })
+
+    .set(ClientAPI.prototype.isConnected.name, async () => {
+        return await aquaris.isConnected();
+    })
+
+    .set(ClientAPI.prototype.readFwVersion.name, async () => {
+        return await aquaris.readFwVersion();
+    })
+
+    .set(ClientAPI.prototype.writeRGB.name, async (red, green, blue, state) => {
+        await aquaris.writeRGB(red, green, blue, state);
+    })
+
+    .set(ClientAPI.prototype.writeRGBOff.name, async () => {
+        await aquaris.writeRGBOff();
+    })
+
+    .set(ClientAPI.prototype.writeFanMode.name, async (dutyCyclePercent) => {
+        await aquaris.writeFanMode(dutyCyclePercent);
+    })
+
+    .set(ClientAPI.prototype.writeFanOff.name, async () => {
+        await aquaris.writeFanOff();
+    })
+
+    .set(ClientAPI.prototype.writePumpMode.name, async (dutyCyclePercent, voltage) => {
+        await aquaris.writePumpMode(dutyCyclePercent, voltage);
+    })
+
+    .set(ClientAPI.prototype.writePumpOff.name, async () => {
+        await aquaris.writePumpOff()
+    });
+
+registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);

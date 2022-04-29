@@ -1,0 +1,27 @@
+button {
+    margin: 5px;
+}
+
+.categories {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+
+    .category {
+        display: flex;
+        flex-flow: column nowrap;
+
+        width: 100%;
+
+        .label {
+            display: inline-flex;
+            width: 80px;
+        }
+
+        mat-button-toggle-group {
+            font-size: 0.7em;
+            height: 24px;
+            align-items: center;
+        }
+    }
+}

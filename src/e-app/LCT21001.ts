@@ -23,14 +23,14 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-enum RGBState {
+export enum RGBState {
     Static = 0x00,
     Breathe = 0x01,
     Colorful = 0x02,
     BreatheColor = 0x03
 }
 
-enum PumpVoltage {
+export enum PumpVoltage {
     V11 = 0x00,
     V12 = 0x01,
     V7 = 0x02,
@@ -106,13 +106,13 @@ export class LCT21001 {
         // or turn off configured parameters
         try { await this.writeReset(); } catch(err) {}
 
+        if (this.device !== undefined && await this.device.isConnected()) {
+            await this.device.disconnect().catch();
+        }
+
         // Clean-up other initialized stuff
         if (this.adapter !== undefined) {
             await this.adapter.stopDiscovery().catch();
-        }
-
-        if (this.device !== undefined && await this.device.isConnected()) {
-            await this.device.disconnect().catch();
         }
 
         if (this.destroy !== undefined) {
@@ -244,7 +244,7 @@ export class LCT21001 {
         }
         if (pumpVoltage < 0 || pumpVoltage > 0x03) throw Error('writePumpMode(): param out of range');
 
-        const data = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x01, pumpVoltage, pumpDutyCyclePercent, 0x00, 0x00, 0xef]);
+        const data = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x01, pumpDutyCyclePercent, pumpVoltage, 0x00, 0x00, 0xef]);
         await this.writeBuffer(data);
     }
 

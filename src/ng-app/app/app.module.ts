@@ -74,6 +74,7 @@ import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { MainGuiComponent } from './main-gui/main-gui.component';
+import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -93,7 +94,8 @@ declare const require;
     ToolsComponent,
     ChangeCryptPasswordComponent,
     FanGraphComponent,
-    MainGuiComponent
+    MainGuiComponent,
+    AquarisControlComponent
   ],
   imports: [
     BrowserModule,
