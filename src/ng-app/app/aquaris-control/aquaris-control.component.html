@@ -12,6 +12,47 @@
     Connected: {{ isConnected ? 'yes' : 'no' }} {{ fwVersion }}
 
     <div class="categories" *ngIf="isConnected">
+
+        <!-- Fan control -->
+        <div class="category">
+            <span>Fan (<button mat-button (click)="buttonFanStop()">Stop</button>)</span>
+            <div>
+                <span class="label">{{ fanSpeed.value }} %</span>
+                <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
+                    min="0"
+                    max="100"
+                    step="1"
+                    color="primary"
+                    (change)="sliderFanInput(fanSpeed.value)">
+                </mat-slider>
+            </div>
+        </div>
+
+        <!-- Pump control -->
+        <div class="category">
+            <span>Pump (<button mat-button (click)="buttonPumpStop()">Stop</button>)</span>
+            <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle"
+                min="0"
+                max="100"
+                step="1"
+                color="primary"
+                (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
+            </mat-slider>
+            <div>
+                <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
+                    <mat-button-toggle [value]="2">7V</mat-button-toggle>
+                    <mat-button-toggle [value]="3">8V</mat-button-toggle>
+                    <mat-button-toggle [value]="0">11V</mat-button-toggle>
+                    <mat-button-toggle [value]="1">12V</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="categories" *ngIf="isConnected">
+
+        <!-- LED Control-->
         <div class="category">
             <span>LED (<button mat-button (click)="buttonLedStop()">Stop</button>)</span>
             <div>
@@ -53,37 +94,7 @@
                 </mat-button-toggle-group>
             </div>
         </div>
-        <div class="category">
-            <span>Fan (<button mat-button (click)="buttonFanStop()">Stop</button>)</span>
-            <div>
-                <span class="label">{{ fanSpeed.value }} %</span>
-                <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
-                    min="0"
-                    max="100"
-                    step="1"
-                    color="primary"
-                    (change)="sliderFanInput(fanSpeed.value)">
-                </mat-slider>
-            </div>
-        </div>
-        <div class="category">
-            <span>Pump (<button mat-button (click)="buttonPumpStop()">Stop</button>)</span>
-            <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle"
-                min="0"
-                max="100"
-                step="1"
-                color="primary"
-                (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
-            </mat-slider>
-            <div>
-                <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
-                    <mat-button-toggle [value]="2">7V</mat-button-toggle>
-                    <mat-button-toggle [value]="3">8V</mat-button-toggle>
-                    <mat-button-toggle [value]="0">11V</mat-button-toggle>
-                    <mat-button-toggle [value]="1">12V</mat-button-toggle>
-                </mat-button-toggle-group>
-            </div>
-        </div>
+
     </div>
 
 </mat-card>
