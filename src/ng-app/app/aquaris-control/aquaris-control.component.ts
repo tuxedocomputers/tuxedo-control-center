@@ -41,19 +41,9 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         this.isConnected = await this.aquaris.isConnected();
     }
 
-    private ledState: LEDState = {
-        red: 0,
-        green: 0,
-        blue: 0
-    };
-
     public ctrlLedMode = new FormControl(0);
 
-    public async ledInput(red: number, green: number, blue: number, state = 0) {
-
-        this.ledState.red = red;
-        this.ledState.green = green;
-        this.ledState.blue = blue;
+    public async ledInput(red: number, green: number, blue: number) {
 
         const ledMode = parseInt(this.ctrlLedMode.value);
 
@@ -66,22 +56,12 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         }
     }
 
-    private fanState = 0;
-
     public async sliderFanInput(fanSpeed: number) {
-        this.fanState = fanSpeed;
-
-        if (this.isConnected && !this.ioInProgress) {
-            this.ioInProgress = true;
+        if (this.isConnected) {
             try {
                 await this.aquaris.writeFanMode(fanSpeed);
-                if (this.fanState !== fanSpeed) {
-                    await this.aquaris.writeFanMode(this.fanState);
-                }
             } catch (err) {
                 console.log('failed writing fan state => ' + err);
-            } finally {
-                this.ioInProgress = false;
             }
         }
     }
@@ -92,18 +72,11 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public async pumpInput() {
         const dutyCycle = parseInt(this.ctrlPumpDutyCycle.value);
         const voltage = parseInt(this.ctrlPumpVoltage.value);
-        if (this.isConnected && !this.ioInProgress) {
-            this.ioInProgress = true;
+        if (this.isConnected) {
             try {
                 await this.aquaris.writePumpMode(dutyCycle, voltage);
-                console.log(`(${dutyCycle}, ${voltage})`);
-                if (parseInt(this.ctrlPumpDutyCycle.value) !== dutyCycle || parseInt(this.ctrlPumpVoltage.value) !== voltage) {
-                    await this.aquaris.writePumpMode(parseInt(this.ctrlPumpDutyCycle.value), parseInt(this.ctrlPumpVoltage.value));
-                }
             } catch (err) {
                 console.log('failed writing pump state => ' + err);
-            } finally {
-                this.ioInProgress = false;
             }
         }
     }
