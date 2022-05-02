@@ -15,9 +15,22 @@
 
         <!-- Fan control -->
         <div class="category">
-            <span>Fan (<button mat-button (click)="buttonFanStop()">Stop</button>)</span>
-            <div>
-                <span class="label">{{ fanSpeed.value }} %</span>
+            <div class="tcc-gauge small fan-speed">
+                <mwl-gauge
+                    [max]="100"
+                    [min]="0"
+                    [value]="fanSpeed.value"
+                    [dialStartAngle]="150"
+                    [dialEndAngle]="30"
+                    [animated]="true"
+                    [animationDuration]="0.3">
+                </mwl-gauge>
+                <div class="unit-text">%</div>
+                <div class="legend">
+                    <div class="text small">Fan speed</div>
+                </div>
+            </div>
+            <span>
                 <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
                     min="0"
                     max="100"
@@ -25,7 +38,7 @@
                     color="primary"
                     (change)="sliderFanInput(fanSpeed.value)">
                 </mat-slider>
-            </div>
+            </span>
         </div>
 
         <!-- Pump control -->

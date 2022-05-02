@@ -10,6 +10,7 @@ button {
     .category {
         display: flex;
         flex-flow: column nowrap;
+        align-items: center;
 
         width: 100%;
 
@@ -23,5 +24,33 @@ button {
             height: 24px;
             align-items: center;
         }
+    }
+}
+
+.tcc-gauge.small {
+    transform: scale(0.7);
+    transform-origin: bottom;
+
+    .legend {
+        bottom: 20px;
+    }
+}
+
+.tcc-gauge.small.fan-speed {
+    ::ng-deep .value-text {
+        font-size: 1.8em;
+    }
+
+    .unit-text {
+        width: auto;
+        top: 50%;
+        left: 50%;
+        transform: translateX(40px) translateY(-12px);
+
+        font-size: 1.5em;
+    }
+
+    mat-slider {
+        bottom: 0px;
     }
 }
