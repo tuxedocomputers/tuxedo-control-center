@@ -531,7 +531,10 @@ interface AquarisState {
     ledMode: RGBState | number,
     fanDutyCycle: number,
     pumpDutyCycle: number,
-    pumpVoltage: PumpVoltage | number
+    pumpVoltage: PumpVoltage | number,
+    ledOn: boolean,
+    fanOn: boolean,
+    pumpOn: boolean
 }
 
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState) {
@@ -543,25 +546,39 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
             let updateFan = false;
             let updatePump = false;
 
-            if (current.red !== next.red || current.green !== next.green || current.blue !== next.blue || current.ledMode !== next.ledMode) {
+            if (current.red !== next.red || current.green !== next.green || current.blue !== next.blue || current.ledMode !== next.ledMode || current.ledOn !== next.ledOn) {
                 updateLed = true;
-                console.log(`writeRGB(${next.red}, ${next.green}, ${next.blue}, ${next.ledMode})`);
                 current.red = next.red;
                 current.green = next.green;
                 current.blue = next.blue;
                 current.ledMode = next.ledMode;
-                await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
+                current.ledOn = next.ledOn;
+                if (next.ledOn) {
+                    await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
+                } else {
+                    await dev.writeRGBOff();
+                }
             }
-            if (current.fanDutyCycle !== next.fanDutyCycle) {
+            if (current.fanDutyCycle !== next.fanDutyCycle || current.fanOn !== next.fanOn) {
                 updateFan = true;
                 current.fanDutyCycle = next.fanDutyCycle;
-                await dev.writeFanMode(next.fanDutyCycle);
+                current.fanOn = next.fanOn;
+                if (next.fanOn) {
+                    await dev.writeFanMode(next.fanDutyCycle);
+                } else {
+                    await dev.writeFanOff();
+                }
             }
-            if (current.pumpDutyCycle !== next.pumpDutyCycle || current.pumpVoltage !== next.pumpVoltage) {
+            if (current.pumpDutyCycle !== next.pumpDutyCycle || current.pumpVoltage !== next.pumpVoltage || current.pumpOn !== next.pumpOn) {
                 updatePump = true;
                 current.pumpDutyCycle = next.pumpDutyCycle;
                 current.pumpVoltage = next.pumpVoltage;
-                await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
+                current.pumpOn = next.pumpOn;
+                if (next.pumpOn) {
+                    await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
+                } else {
+                    await dev.writePumpOff();
+                }
             }
             updatedSomething = updateLed || updateFan || updatePump;
             if (!updateLed) {}
@@ -586,7 +603,10 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             ledMode: RGBState.Static,
             fanDutyCycle: 0,
             pumpDutyCycle: 60,
-            pumpVoltage: PumpVoltage.V8
+            pumpVoltage: PumpVoltage.V8,
+            ledOn: false,
+            fanOn: false,
+            pumpOn: false
         };
         aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
     })
@@ -609,30 +629,36 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisStateExpected.green = green;
         aquarisStateExpected.blue = blue;
         aquarisStateExpected.ledMode = state;
+        aquarisStateExpected.ledOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writeRGBOff.name, async () => {
-        await aquaris.writeRGBOff();
+        aquarisStateExpected.ledOn = false;
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writeFanMode.name, async (dutyCyclePercent) => {
         aquarisStateExpected.fanDutyCycle = dutyCyclePercent;
+        aquarisStateExpected.fanOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writeFanOff.name, async () => {
-        await aquaris.writeFanOff();
+        aquarisStateExpected.fanOn = false;
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writePumpMode.name, async (dutyCyclePercent, voltage) => {
         aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
         aquarisStateExpected.pumpVoltage = voltage;
+        aquarisStateExpected.pumpOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
     .set(ClientAPI.prototype.writePumpOff.name, async () => {
-        await aquaris.writePumpOff()
+        aquarisStateExpected.pumpOn = false;
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     });
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
