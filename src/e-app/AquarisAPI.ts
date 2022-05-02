@@ -1,5 +1,18 @@
 import { PumpVoltage, RGBState } from "./LCT21001";
 
+export interface AquarisState {
+    red: number,
+    green: number,
+    blue: number,
+    ledMode: RGBState | number,
+    fanDutyCycle: number,
+    pumpDutyCycle: number,
+    pumpVoltage: PumpVoltage | number,
+    ledOn: boolean,
+    fanOn: boolean,
+    pumpOn: boolean
+}
+
 export const aquarisAPIHandle = 'aquarisAPIHandle';
 
 export class ClientAPI {
@@ -9,6 +22,7 @@ export class ClientAPI {
     public connect(deviceUUID: string) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.connect.name, deviceUUID]); }
     public disconnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.disconnect.name]); }
     public isConnected() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.isConnected.name]) as Promise<boolean>; }
+    public getState() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.getState.name]) as Promise<AquarisState>; }
     public readFwVersion() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.readFwVersion.name]) as Promise<string>; }
     public updateLED(red: number, green: number, blue: number, state: RGBState | number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.updateLED.name, red, green, blue, state]); }
     public writeRGBOff() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writeRGBOff.name]); }

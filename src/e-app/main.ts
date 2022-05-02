@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,7 +25,7 @@ import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
-import { aquarisAPIHandle, ClientAPI, registerAPI } from './AquarisAPI';
+import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { LCT21001, PumpVoltage, RGBState } from './LCT21001';
 
 // Tweak to get correct dirname for resource files outside app.asar
@@ -524,19 +524,6 @@ async function updateTrayProfiles() {
     }
 }
 
-interface AquarisState {
-    red: number,
-    green: number,
-    blue: number,
-    ledMode: RGBState | number,
-    fanDutyCycle: number,
-    pumpDutyCycle: number,
-    pumpVoltage: PumpVoltage | number,
-    ledOn: boolean,
-    fanOn: boolean,
-    pumpOn: boolean
-}
-
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState) {
     if (!aquarisIoProgress) {
         aquarisIoProgress = true;
@@ -619,12 +606,15 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         return await aquaris.isConnected();
     })
 
+    .set(ClientAPI.prototype.getState.name, async () => {
+        return aquarisStateExpected;
+    })
+
     .set(ClientAPI.prototype.readFwVersion.name, async () => {
         return await aquaris.readFwVersion();
     })
 
     .set(ClientAPI.prototype.updateLED.name, async (red, green, blue, state) => {
-        console.log(`updateLED(${red}, ${green}, ${blue}, ${state})`);
         aquarisStateExpected.red = red;
         aquarisStateExpected.green = green;
         aquarisStateExpected.blue = blue;
