@@ -611,7 +611,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.readFwVersion.name, async () => {
-        return await aquaris.readFwVersion();
+        return (await aquaris.readFwVersion()).toString();
     })
 
     .set(ClientAPI.prototype.updateLED.name, async (red, green, blue, state) => {

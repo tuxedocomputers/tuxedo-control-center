@@ -30,6 +30,8 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public ctrlFanDutyCycle = new FormControl();
     public ctrlPumpDutyCycle = new FormControl();
     public ctrlPumpVoltage = new FormControl();
+
+    public fwVersion: string = '';
     
     constructor(private electron: ElectronService) {
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
@@ -47,6 +49,8 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
                 this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
                 this.ctrlPumpVoltage.setValue(state.pumpVoltage);
             }
+            
+            this.aquaris.readFwVersion().then(fwString => { this.fwVersion = fwString });
         });
     }
 

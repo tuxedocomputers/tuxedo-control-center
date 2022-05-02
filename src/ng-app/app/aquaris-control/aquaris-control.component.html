@@ -9,7 +9,7 @@
     <button mat-raised-button color="basic" (click)="buttonDisconnect()" [disabled]="!isConnected || isDisconnecting">
         <strong>Disconnect</strong>
     </button>
-    Connected: {{ isConnected ? 'yes' : 'no' }}
+    Connected: {{ isConnected ? 'yes' : 'no' }} {{ fwVersion }}
 
     <div class="categories" *ngIf="isConnected">
         <div class="category">
