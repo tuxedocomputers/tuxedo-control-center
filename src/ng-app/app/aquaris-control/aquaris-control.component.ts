@@ -22,6 +22,14 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     private timeout: NodeJS.Timeout;
 
     public ioInProgress = false;
+
+    public ctrlLedRed = new FormControl();
+    public ctrlLedGreen = new FormControl;
+    public ctrlLedBlue = new FormControl();
+    public ctrlLedMode = new FormControl();
+    public ctrlFanDutyCycle = new FormControl();
+    public ctrlPumpDutyCycle = new FormControl();
+    public ctrlPumpVoltage = new FormControl();
     
     constructor(private electron: ElectronService) {
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
@@ -29,6 +37,17 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.timeout = setInterval(async () => { await this.periodicUpdate(); }, 1000);
+        this.aquaris.getState().then(state => {
+            if (state !== undefined) {
+                this.ctrlLedRed.setValue(state.red);
+                this.ctrlLedGreen.setValue(state.green);
+                this.ctrlLedBlue.setValue(state.blue);
+                this.ctrlLedMode.setValue(state.ledMode);
+                this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
+                this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
+                this.ctrlPumpVoltage.setValue(state.pumpVoltage);
+            }
+        });
     }
 
     ngOnDestroy() {
@@ -40,8 +59,6 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     private async periodicUpdate() {
         this.isConnected = await this.aquaris.isConnected();
     }
-
-    public ctrlLedMode = new FormControl(0);
 
     public async ledInput(red: number, green: number, blue: number) {
 
@@ -65,9 +82,6 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
             }
         }
     }
-
-    public ctrlPumpDutyCycle = new FormControl(60);
-    public ctrlPumpVoltage = new FormControl(3);
 
     public async pumpInput() {
         const dutyCycle = parseInt(this.ctrlPumpDutyCycle.value);

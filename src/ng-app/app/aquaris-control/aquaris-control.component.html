@@ -16,7 +16,7 @@
             <span>LED (<button mat-button (click)="buttonLedStop()">Stop</button>)</span>
             <div>
                 <span class="label">Red {{ colorRed.value }}</span>
-                <mat-slider #colorRed form
+                <mat-slider #colorRed [formControl]="ctrlLedRed"
                     min="0"
                     max="255"
                     step="1"
@@ -26,7 +26,7 @@
             </div>
             <div>
                 <span class="label">Green {{ colorGreen.value }}</span>
-                <mat-slider #colorGreen
+                <mat-slider #colorGreen [formControl]="ctrlLedGreen"
                     min="0"
                     max="255"
                     step="1"
@@ -36,7 +36,7 @@
             </div>
             <div>
                 <span class="label">Blue {{ colorBlue.value }}</span>
-                <mat-slider #colorBlue
+                <mat-slider #colorBlue [formControl]="ctrlLedBlue"
                     min="0"
                     max="255"
                     step="1"
@@ -57,7 +57,7 @@
             <span>Fan (<button mat-button (click)="buttonFanStop()">Stop</button>)</span>
             <div>
                 <span class="label">{{ fanSpeed.value }} %</span>
-                <mat-slider #fanSpeed
+                <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
                     min="0"
                     max="100"
                     step="1"
