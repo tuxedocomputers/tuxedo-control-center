@@ -431,7 +431,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="ProfOverviewTileMenuCopy" datatype="html">
         <source>Copy</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">38</context>
@@ -439,7 +439,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="ProfOverviewTileMenuDelete" datatype="html">
         <source>Delete</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Löschen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">42</context>
@@ -447,7 +447,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="ProfOverviewTileMenuEdit" datatype="html">
         <source>Edit</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Bearbeiten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">30</context>
@@ -455,7 +455,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="ProfOverviewTileMenuView" datatype="html">
         <source>View</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Detailansicht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">34</context>
@@ -503,7 +503,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="ProfOverviewTileNewProfileDescription" datatype="html">
         <source> Create a new profile and configure it as you want </source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Erstellen Sie ein neues Profil und konfigurieren Sie es nach Belieben</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">143,144</context>
@@ -583,7 +583,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsProfileSettingsLabel" datatype="html">
         <source>Profile settings</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Profileinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">46</context>
@@ -591,7 +591,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNameLabel" datatype="html">
         <source>Name</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Profilname</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">55</context>
@@ -599,7 +599,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsDescriptionLabel" datatype="html">
         <source>Description</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Kurzbeschreibung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">74</context>
@@ -607,7 +607,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsStateAssignmentLabel" datatype="html">
         <source>Activate profile automatically on</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Profil automatisch aktivieren im Betrieb mit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">114</context>
@@ -799,7 +799,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
         <source>Power limit control</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">Energieaufnahme begrenzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">420</context>
@@ -807,7 +807,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
         <source>CPU frequency control</source>
-        <target state="needs-translation"/>
+       <target state="needs-translation">Taktfrequenz begrenzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">479</context>
@@ -938,7 +938,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="0551549b43ce74879408c2bf92a8035bfa6ea54b" datatype="html">
         <source>Main processor monitor</source>
-        <target state="needs-translation"/>
+        <target state="needs-translation">CPU-Überwachung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">41</context>
