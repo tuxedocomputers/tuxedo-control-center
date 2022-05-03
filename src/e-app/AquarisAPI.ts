@@ -39,6 +39,9 @@ export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mains
         if (mainsideFunction === undefined) {
             throw Error(apiHandle + ': Undefined API function');
         } else {
+            if (args[0] !== 'isConnected') {
+                console.log(`${apiHandle}: ${args[0]}(${args.slice(1)})`);
+            }
             return mainsideFunction.call(this, ...args.slice(1));
         }
     });

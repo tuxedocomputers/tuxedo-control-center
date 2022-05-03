@@ -524,7 +524,7 @@ async function updateTrayProfiles() {
     }
 }
 
-async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState) {
+async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false) {
     if (!aquarisIoProgress) {
         aquarisIoProgress = true;
         let updatedSomething;
@@ -533,42 +533,54 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
             let updateFan = false;
             let updatePump = false;
 
-            if (current.red !== next.red || current.green !== next.green || current.blue !== next.blue || current.ledMode !== next.ledMode || current.ledOn !== next.ledOn) {
-                updateLed = true;
+            updateLed = overrideCheck ||
+                        current.red !== next.red || current.green !== next.green || current.blue !== next.blue ||
+                        current.ledMode !== next.ledMode || current.ledOn !== next.ledOn;
+            if (updateLed) {
                 current.red = next.red;
                 current.green = next.green;
                 current.blue = next.blue;
                 current.ledMode = next.ledMode;
                 current.ledOn = next.ledOn;
                 if (next.ledOn) {
+                    console.log(`writeRGB(${next.red}, ${next.green}, ${next.blue}, ${next.ledMode})`);
                     await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
                 } else {
+                    console.log(`writeRGBOff()`);
                     await dev.writeRGBOff();
                 }
             }
-            if (current.fanDutyCycle !== next.fanDutyCycle || current.fanOn !== next.fanOn) {
-                updateFan = true;
+
+            updateFan = overrideCheck ||
+                        current.fanDutyCycle !== next.fanDutyCycle || current.fanOn !== next.fanOn;
+            if (updateFan) {
                 current.fanDutyCycle = next.fanDutyCycle;
                 current.fanOn = next.fanOn;
                 if (next.fanOn) {
+                    console.log(`writeFanMode(${next.fanDutyCycle})`);
                     await dev.writeFanMode(next.fanDutyCycle);
                 } else {
+                    console.log(`writeFanOff()`);
                     await dev.writeFanOff();
                 }
             }
-            if (current.pumpDutyCycle !== next.pumpDutyCycle || current.pumpVoltage !== next.pumpVoltage || current.pumpOn !== next.pumpOn) {
-                updatePump = true;
+
+            updatePump = overrideCheck ||
+                         current.pumpDutyCycle !== next.pumpDutyCycle || current.pumpVoltage !== next.pumpVoltage || current.pumpOn !== next.pumpOn;
+            if (updatePump) {
                 current.pumpDutyCycle = next.pumpDutyCycle;
                 current.pumpVoltage = next.pumpVoltage;
                 current.pumpOn = next.pumpOn;
                 if (next.pumpOn) {
+                    console.log(`writePumpMode(${next.pumpDutyCycle}, ${next.pumpVoltage})`);
                     await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
                 } else {
+                    console.log(`writePumpOff()`);
                     await dev.writePumpOff();
                 }
             }
+            overrideCheck = false;
             updatedSomething = updateLed || updateFan || updatePump;
-            if (!updateLed) {}
         } while (updatedSomething);
         aquarisIoProgress = false;
     }
@@ -596,6 +608,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             pumpOn: false
         };
         aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
+        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
     })
 
     .set(ClientAPI.prototype.disconnect.name, async () => {

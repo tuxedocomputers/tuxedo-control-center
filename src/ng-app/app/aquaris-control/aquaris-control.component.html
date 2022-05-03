@@ -11,7 +11,7 @@
     </button>
     Connected: {{ isConnected ? 'yes' : 'no' }} {{ fwVersion }}
 
-    <div class="categories" *ngIf="isConnected">
+    <div class="categories" *ngIf="isConnected && stateInitialized">
 
         <!-- Fan control -->
         <div class="category">
@@ -63,7 +63,7 @@
 
     </div>
 
-    <div class="categories" *ngIf="isConnected">
+    <div class="categories" *ngIf="isConnected && stateInitialized">
 
         <!-- LED Control-->
         <div class="category">

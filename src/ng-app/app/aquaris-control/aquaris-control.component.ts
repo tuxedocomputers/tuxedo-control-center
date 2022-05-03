@@ -21,7 +21,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     private timeout: NodeJS.Timeout;
 
-    public ioInProgress = false;
+    public stateInitialized = false;
 
     public ctrlLedRed = new FormControl();
     public ctrlLedGreen = new FormControl;
@@ -43,18 +43,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.timeout = setInterval(async () => { await this.periodicUpdate(); }, 1000);
-        this.aquaris.getState().then(state => {
-            if (state !== undefined) {
-                this.ctrlLedRed.setValue(state.red);
-                this.ctrlLedGreen.setValue(state.green);
-                this.ctrlLedBlue.setValue(state.blue);
-                this.ctrlLedMode.setValue(state.ledMode);
-                this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
-                this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
-                this.ctrlPumpToggle.setValue(state.pumpOn);
-                this.ctrlPumpVoltage.setValue(state.pumpVoltage);
-            }
-            
+        this.updateState().then(() => {
             this.aquaris.readFwVersion().then(fwString => { this.fwVersion = fwString });
         });
     }
@@ -62,6 +51,21 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.timeout !== undefined) {
             clearInterval(this.timeout);
+        }
+    }
+
+    private async updateState() {
+        const state = await this.aquaris.getState();
+        if (state !== undefined) {
+            this.ctrlLedRed.setValue(state.red);
+            this.ctrlLedGreen.setValue(state.green);
+            this.ctrlLedBlue.setValue(state.blue);
+            this.ctrlLedMode.setValue(state.ledMode);
+            this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
+            this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
+            this.ctrlPumpToggle.setValue(state.pumpOn);
+            this.ctrlPumpVoltage.setValue(state.pumpVoltage);
+            this.stateInitialized = true;
         }
     }
 
@@ -118,6 +122,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         try {
             await this.aquaris.connect('smth');
             this.isConnected = await this.aquaris.isConnected();
+            await this.updateState();
         } catch (err) {
             console.log('connect failed => ' + err);
             await this.aquaris.disconnect();
