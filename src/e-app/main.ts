@@ -603,9 +603,9 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             fanDutyCycle: 0,
             pumpDutyCycle: 60,
             pumpVoltage: PumpVoltage.V8,
-            ledOn: false,
-            fanOn: false,
-            pumpOn: false
+            ledOn: true,
+            fanOn: true,
+            pumpOn: true
         };
         aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);

@@ -94,11 +94,10 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     public inputColor() {
-        console.log(this.chosenColorHex);
         const red = this.hexToRed(this.chosenColorHex);
         const green = this.hexToGreen(this.chosenColorHex);
         const blue = this.hexToBlue(this.chosenColorHex);
-        console.log(`(${red}, ${green}, ${blue})`);
+
         this.ctrlLedRed.setValue(red);
         this.ctrlLedGreen.setValue(green);
         this.ctrlLedBlue.setValue(blue);
@@ -147,6 +146,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         const pumpToggle = this.ctrlPumpToggle.value;
         const dutyCycle = parseInt(this.ctrlPumpDutyCycle.value);
         const voltage = parseInt(this.ctrlPumpVoltage.value);
+
         if (this.isConnected) {
             try {
                 if (pumpToggle) {
