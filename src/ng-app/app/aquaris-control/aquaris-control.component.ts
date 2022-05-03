@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { PumpVoltage, RGBState } from '../../../e-app/LCT21001';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
 
 interface LEDState {
     red: number,
@@ -28,10 +28,14 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public ctrlLedBlue = new FormControl();
     public ctrlLedMode = new FormControl();
     public ctrlFanDutyCycle = new FormControl();
+
+    public ctrlPumpToggle = new FormControl();
     public ctrlPumpDutyCycle = new FormControl();
     public ctrlPumpVoltage = new FormControl();
 
     public fwVersion: string = '';
+
+    public showPumpControls = false;
     
     constructor(private electron: ElectronService) {
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
@@ -47,6 +51,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
                 this.ctrlLedMode.setValue(state.ledMode);
                 this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
                 this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
+                this.ctrlPumpToggle.setValue(state.pumpOn);
                 this.ctrlPumpVoltage.setValue(state.pumpVoltage);
             }
             
@@ -88,11 +93,17 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     public async pumpInput() {
+        console.log(this.ctrlPumpToggle.value);
+        const pumpToggle = this.ctrlPumpToggle.value;
         const dutyCycle = parseInt(this.ctrlPumpDutyCycle.value);
         const voltage = parseInt(this.ctrlPumpVoltage.value);
         if (this.isConnected) {
             try {
-                await this.aquaris.writePumpMode(dutyCycle, voltage);
+                if (pumpToggle) {
+                    await this.aquaris.writePumpMode(dutyCycle, voltage);
+                } else {
+                    await this.aquaris.writePumpOff();
+                }
             } catch (err) {
                 console.log('failed writing pump state => ' + err);
             }

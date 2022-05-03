@@ -43,16 +43,16 @@
 
         <!-- Pump control -->
         <div class="category">
-            <span>Pump (<button mat-button (click)="buttonPumpStop()">Stop</button>)</span>
-            <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle"
+            <mat-slide-toggle [formControl]="ctrlPumpToggle" (change)="pumpInput()">Pump status</mat-slide-toggle>
+            <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle" *ngIf="showPumpControls"
                 min="0"
                 max="100"
                 step="1"
                 color="primary"
                 (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
             </mat-slider>
-            <div>
-                <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
+            <div *ngIf="showPumpControls">
+                <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput()">
                     <mat-button-toggle [value]="2">7V</mat-button-toggle>
                     <mat-button-toggle [value]="3">8V</mat-button-toggle>
                     <mat-button-toggle [value]="0">11V</mat-button-toggle>
