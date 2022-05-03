@@ -2,6 +2,7 @@
     <mat-card-title class="theme-page-title">
         <ng-container>Aquaris control</ng-container>
     </mat-card-title>
+    <hr />
 
     <button mat-raised-button color="basic" (click)="buttonConnect()" [disabled]="isConnected || isConnecting">
         <strong>Connect <i class="fas fa-cog" [ngClass]="{'fa-spin': isConnecting }"></i></strong>

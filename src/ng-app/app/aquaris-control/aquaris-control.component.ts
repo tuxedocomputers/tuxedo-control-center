@@ -23,10 +23,13 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     public stateInitialized = false;
 
+    public ctrlLedToggle = new FormControl();
     public ctrlLedRed = new FormControl();
     public ctrlLedGreen = new FormControl;
     public ctrlLedBlue = new FormControl();
     public ctrlLedMode = new FormControl();
+
+    public ctrlFanToggle = new FormControl();
     public ctrlFanDutyCycle = new FormControl();
 
     public ctrlPumpToggle = new FormControl();
@@ -57,14 +60,19 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     private async updateState() {
         const state = await this.aquaris.getState();
         if (state !== undefined) {
+            this.ctrlLedToggle.setValue(state.ledOn);
             this.ctrlLedRed.setValue(state.red);
             this.ctrlLedGreen.setValue(state.green);
             this.ctrlLedBlue.setValue(state.blue);
             this.ctrlLedMode.setValue(state.ledMode);
+            
+            this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
-            this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
+
             this.ctrlPumpToggle.setValue(state.pumpOn);
+            this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
             this.ctrlPumpVoltage.setValue(state.pumpVoltage);
+
             this.stateInitialized = true;
         }
     }
@@ -74,12 +82,16 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     public async ledInput(red: number, green: number, blue: number) {
-
+        const ledToggle = this.ctrlLedToggle.value;
         const ledMode = parseInt(this.ctrlLedMode.value);
 
         if (this.isConnected) {
             try {
-                await this.aquaris.updateLED(red, green, blue, ledMode);
+                if (ledToggle) {
+                    await this.aquaris.updateLED(red, green, blue, ledMode);
+                } else {
+                    await this.aquaris.writeRGBOff();
+                }
             } catch (err) {
                 console.log('failed writing led state => ' + err);
             }
@@ -87,9 +99,15 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     public async sliderFanInput(fanSpeed: number) {
+        const fanToggle = this.ctrlFanToggle.value;
+
         if (this.isConnected) {
             try {
-                await this.aquaris.writeFanMode(fanSpeed);
+                if (fanToggle) {
+                    await this.aquaris.writeFanMode(fanSpeed);
+                } else {
+                    await this.aquaris.writeFanOff();
+                }
             } catch (err) {
                 console.log('failed writing fan state => ' + err);
             }
@@ -97,7 +115,6 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     public async pumpInput() {
-        console.log(this.ctrlPumpToggle.value);
         const pumpToggle = this.ctrlPumpToggle.value;
         const dutyCycle = parseInt(this.ctrlPumpDutyCycle.value);
         const voltage = parseInt(this.ctrlPumpVoltage.value);
