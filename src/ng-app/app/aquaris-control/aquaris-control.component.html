@@ -37,14 +37,14 @@
                     max="100"
                     step="1"
                     color="primary"
-                    (change)="sliderFanInput(fanSpeed.value)">
+                    (input)="sliderFanInput(fanSpeed.value)">
                 </mat-slider>
             </span>
         </div>
 
         <!-- Pump control -->
         <div class="category">
-            <mat-slide-toggle [formControl]="ctrlPumpToggle" (change)="pumpInput()">Pump status</mat-slide-toggle>
+            <mat-slide-toggle [formControl]="ctrlPumpToggle" (change)="pumpInput()" color="warn">Pump status</mat-slide-toggle>
             <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle" *ngIf="showPumpControls"
                 min="0"
                 max="100"
