@@ -74,6 +74,7 @@ import { ChangeCryptPasswordComponent } from './change-crypt-password/change-cry
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
 import { ChartsModule, ThemeService } from 'ng2-charts';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 
@@ -131,7 +132,8 @@ declare const require;
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    ColorPickerModule
   ],
   providers: [
     DecimalPipe,

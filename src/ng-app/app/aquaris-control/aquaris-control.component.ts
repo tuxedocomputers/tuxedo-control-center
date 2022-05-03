@@ -1,14 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { PumpVoltage, RGBState } from '../../../e-app/LCT21001';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
-import { AbstractControl, FormControl } from '@angular/forms';
-
-interface LEDState {
-    red: number,
-    green: number,
-    blue: number
-}
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-aquaris-control',
@@ -28,6 +21,8 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public ctrlLedGreen = new FormControl;
     public ctrlLedBlue = new FormControl();
     public ctrlLedMode = new FormControl();
+
+    public chosenColorHex;
 
     public ctrlFanToggle = new FormControl();
     public ctrlFanDutyCycle = new FormControl();
@@ -57,6 +52,22 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         }
     }
 
+    public rgbToHex(red: number, green: number, blue: number) {
+        return '#' + red.toString(16).padStart(2, '0') + green.toString(16).padStart(2, '0') + blue.toString(16).padStart(2, '0');
+    }
+
+    public hexToRed(hex: string) {
+        return parseInt(hex.slice(1, 3), 16);
+    }
+
+    public hexToGreen(hex: string) {
+        return parseInt(hex.slice(3, 5), 16);
+    }
+
+    public hexToBlue(hex: string) {
+        return parseInt(hex.slice(5, 7), 16);
+    }
+
     private async updateState() {
         const state = await this.aquaris.getState();
         if (state !== undefined) {
@@ -65,6 +76,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
             this.ctrlLedGreen.setValue(state.green);
             this.ctrlLedBlue.setValue(state.blue);
             this.ctrlLedMode.setValue(state.ledMode);
+            this.chosenColorHex = this.rgbToHex(state.red, state.green, state.blue);
             
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
@@ -81,7 +93,24 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         this.isConnected = await this.aquaris.isConnected();
     }
 
-    public async ledInput(red: number, green: number, blue: number) {
+    public inputColor() {
+        console.log(this.chosenColorHex);
+        const red = this.hexToRed(this.chosenColorHex);
+        const green = this.hexToGreen(this.chosenColorHex);
+        const blue = this.hexToBlue(this.chosenColorHex);
+        console.log(`(${red}, ${green}, ${blue})`);
+        this.ctrlLedRed.setValue(red);
+        this.ctrlLedGreen.setValue(green);
+        this.ctrlLedBlue.setValue(blue);
+        this.ledUpdate(red, green, blue);
+    }
+
+    public inputSlider(red: number, green: number, blue: number) {
+        this.chosenColorHex = this.rgbToHex(red, green, blue);
+        this.ledUpdate(red, green, blue);
+    }
+
+    public async ledUpdate(red: number, green: number, blue: number) {
         const ledToggle = this.ctrlLedToggle.value;
         const ledMode = parseInt(this.ctrlLedMode.value);
 

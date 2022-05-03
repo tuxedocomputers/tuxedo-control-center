@@ -68,7 +68,6 @@
 
         <!-- LED Control-->
         <div class="category">
-            <span>LED (<button mat-button (click)="buttonLedStop()">Stop</button>)</span>
             <div>
                 <span class="label">Red {{ colorRed.value }}</span>
                 <mat-slider #colorRed [formControl]="ctrlLedRed"
@@ -76,7 +75,7 @@
                     max="255"
                     step="1"
                     color="primary"
-                    (input)="ledInput(colorRed.value, colorGreen.value, colorBlue.value)">
+                    (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
                 </mat-slider>
             </div>
             <div>
@@ -86,7 +85,7 @@
                     max="255"
                     step="1"
                     color="primary"
-                    (input)="ledInput(colorRed.value, colorGreen.value, colorBlue.value)">
+                    (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
                 </mat-slider>
             </div>
             <div>
@@ -96,17 +95,26 @@
                     max="255"
                     step="1"
                     color="primary"
-                    (input)="ledInput(colorRed.value, colorGreen.value, colorBlue.value)">
+                    (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
                 </mat-slider>
             </div>
             <div>
-                <mat-button-toggle-group #ledMode [formControl]="ctrlLedMode" (change)="ledInput(colorRed.value, colorGreen.value, colorBlue.value)">
+                <mat-button-toggle-group #ledMode [formControl]="ctrlLedMode" (change)="ledUpdate(colorRed.value, colorGreen.value, colorBlue.value)">
                     <mat-button-toggle [value]="0">Static</mat-button-toggle>
                     <mat-button-toggle [value]="1">Breathe</mat-button-toggle>
                     <mat-button-toggle [value]="2">"Colorful"</mat-button-toggle>
                     <mat-button-toggle [value]="3">Breathingcolors :)</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
+        </div>
+
+        <div class="category">
+            <span class="color-visualizer"
+                [style.background]="chosenColorHex"
+                [(colorPicker)]="chosenColorHex"
+                [cpDisableInput]="true"
+                cpAlphaChannel="disabled"
+                (colorPickerChange)="inputColor()"></span>
         </div>
 
     </div>
