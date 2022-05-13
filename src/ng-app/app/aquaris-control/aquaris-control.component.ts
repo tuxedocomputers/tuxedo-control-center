@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
+import { DeviceInfo as AquarisDeviceInfo } from '../../../e-app/LCT21001';
 
 @Component({
     selector: 'app-aquaris-control',
@@ -12,7 +13,10 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     private aquaris: ClientAPI;
 
-    private timeout: NodeJS.Timeout;
+    private connectedTimeout: NodeJS.Timeout;
+    private discoverTimeout: NodeJS.Timeout;
+
+    public deviceList: AquarisDeviceInfo[] = [];
 
     public stateInitialized = false;
 
@@ -40,16 +44,38 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.timeout = setInterval(async () => { await this.periodicUpdate(); }, 1000);
         this.updateState().then(() => {
-            this.aquaris.readFwVersion().then(fwString => { this.fwVersion = fwString });
+            if (this.isConnected) {
+                this.aquaris.readFwVersion().then(fwString => { this.fwVersion = fwString });
+            } else {
+                this.aquaris.startDiscover();
+            }
+
+            this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 1000);
         });
     }
 
     ngOnDestroy() {
-        if (this.timeout !== undefined) {
-            clearInterval(this.timeout);
+        if (this.connectedTimeout !== undefined) {
+            clearInterval(this.connectedTimeout);
         }
+    }
+
+    public startDiscover() {
+        if (this.discoverTimeout === undefined) {
+            this.discoverTimeout = setInterval(async () => { console.time(); await this.discoverUpdate(); console.timeEnd(); }, 2000);
+        }
+    }
+
+    public stopDiscover() {
+        if (this.discoverTimeout !== undefined) {
+            clearInterval(this.discoverTimeout);
+            this.discoverTimeout = undefined;
+        }
+    }
+
+    private async discoverUpdate() {
+        this.deviceList = await this.aquaris.getDevices();
     }
 
     public rgbToHex(red: number, green: number, blue: number) {
@@ -91,6 +117,12 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     private async periodicUpdate() {
         this.isConnected = await this.aquaris.isConnected();
+
+        if (this.isConnected) {
+            this.stopDiscover();
+        } else {
+            this.startDiscover();
+        }
     }
 
     public inputColor() {
@@ -163,10 +195,11 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public isConnecting = false;
     public isConnected = false;
 
-    public async buttonConnect() {
+    public async buttonConnect(deviceUUID: string) {
+        this.stopDiscover();
         this.isConnecting = true;
         try {
-            await this.aquaris.connect('smth');
+            await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
         } catch (err) {

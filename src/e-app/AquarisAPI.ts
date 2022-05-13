@@ -1,4 +1,4 @@
-import { PumpVoltage, RGBState } from "./LCT21001";
+import { DeviceInfo, PumpVoltage, RGBState } from "./LCT21001";
 
 export interface AquarisState {
     red: number,
@@ -22,6 +22,9 @@ export class ClientAPI {
     public connect(deviceUUID: string) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.connect.name, deviceUUID]); }
     public disconnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.disconnect.name]); }
     public isConnected() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.isConnected.name]) as Promise<boolean>; }
+    public startDiscover() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.startDiscover.name]); }
+    public stopDiscover() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.stopDiscover.name]); }
+    public getDevices() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.getDevices.name]) as Promise<DeviceInfo[]>; }
     public getState() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.getState.name]) as Promise<AquarisState>; }
     public readFwVersion() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.readFwVersion.name]) as Promise<string>; }
     public updateLED(red: number, green: number, blue: number, state: RGBState | number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.updateLED.name, red, green, blue, state]); }

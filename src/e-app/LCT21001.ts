@@ -37,6 +37,12 @@ export enum PumpVoltage {
     V8 = 0x03
 }
 
+export class DeviceInfo {
+    uuid: string;
+    name: string;
+    rssi: number;
+}
+
 /**
  * Encapsulates communication with the Bluetooth LE device.
  * 
@@ -45,7 +51,6 @@ export enum PumpVoltage {
  *   - Connect/read wait timeout
  */
 export class LCT21001 {
-    private deviceUUID = 'DC:8A:36:C9:11:FA';
 
     private static readonly NORDIC_UART_SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
     private static readonly NORDIC_UART_CHAR_TX = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
@@ -70,18 +75,8 @@ export class LCT21001 {
     /**
      * Initialize bluetooth communication and attempt to connect to device
      */
-    async connect() {
-        const { bluetooth, destroy } = createBluetooth();
-        this.destroy = destroy;
-
-        this.adapter = await bluetooth.defaultAdapter();
-
-        if (! await this.adapter.isDiscovering()) {
-            await this.adapter.startDiscovery();
-        }
-
-        await sleep(2000);
-        this.device = await this.adapter.getDevice(this.deviceUUID);
+    async connect(deviceUUID: string) {
+        this.device = await this.adapter.getDevice(deviceUUID);
 
         let rssi;
         try { rssi = await this.device.getRSSI(); } catch (err) {}
@@ -109,7 +104,26 @@ export class LCT21001 {
         if (this.device !== undefined && await this.device.isConnected()) {
             await this.device.disconnect().catch();
         }
+    }
 
+    async startDiscover() {
+        try {
+            const { bluetooth, destroy } = createBluetooth();
+            this.destroy = destroy;
+
+            this.adapter = await bluetooth.defaultAdapter();
+
+            if (! await this.adapter.isDiscovering()) {
+                await this.adapter.startDiscovery();
+            }
+
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async stopDiscover() {
         // Clean-up other initialized stuff
         if (this.adapter !== undefined) {
             await this.adapter.stopDiscovery().catch();
@@ -118,6 +132,48 @@ export class LCT21001 {
         if (this.destroy !== undefined) {
             this.destroy();
         }
+    }
+
+    async isDiscovering() {
+        try {
+            return await this.adapter?.isDiscovering();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getDeviceList() {
+        const deviceIds = await this.adapter.devices();
+        const deviceInfo = [];
+        for (let deviceId of deviceIds) {
+            const blDevice = await this.adapter.getDevice(deviceId);
+            const info = new DeviceInfo();
+
+            try {
+                info.rssi = parseInt(await blDevice.getRSSI());
+            } catch (err) {
+                break;
+            }
+
+            try {
+                info.uuid = deviceId;
+            } catch (err) {
+                info.uuid = '';
+            }
+            try {
+                info.name = await blDevice.getName();
+            } catch (err) {
+                info.name = '';
+            }
+
+            blDevice.disconnect();
+            
+            if (info.name.toLowerCase().indexOf('lct21001') !== -1) {
+                deviceInfo.push(info);
+            }
+        };
+
+        return deviceInfo;
     }
 
     async isConnected() {

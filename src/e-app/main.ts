@@ -210,7 +210,10 @@ app.on('will-quit', async (event) => {
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
-        if (aquaris !== undefined) { await aquaris.disconnect(); }
+        if (aquaris !== undefined) {
+            await aquaris.disconnect();
+            await aquaris.stopDiscover();
+        }
         app.exit(0);
     }
 });
@@ -594,7 +597,7 @@ let aquarisIoProgress = false;
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     .set(ClientAPI.prototype.connect.name, async (deviceUUID) => {
-        await aquaris.connect();
+        await aquaris.connect(deviceUUID);
         aquarisStateCurrent = {
             red: 0,
             green: 0,
@@ -617,6 +620,21 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
 
     .set(ClientAPI.prototype.isConnected.name, async () => {
         return await aquaris.isConnected();
+    })
+
+    .set(ClientAPI.prototype.startDiscover.name, async () => {
+        if (! await aquaris.isDiscovering()) {
+            await aquaris.stopDiscover();
+            await aquaris.startDiscover();
+        }
+    })
+
+    .set(ClientAPI.prototype.stopDiscover.name, async () => {
+        await aquaris.stopDiscover();
+    })
+
+    .set(ClientAPI.prototype.getDevices.name, async () => {
+        return await aquaris.getDeviceList();
     })
 
     .set(ClientAPI.prototype.getState.name, async () => {
