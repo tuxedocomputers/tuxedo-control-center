@@ -131,6 +131,6 @@
         <span *ngIf="deviceList.length === 0">No devices found</span>
     </div>
 
-    <mat-spinner *ngIf="isConnecting"></mat-spinner>
+    <mat-spinner *ngIf="isConnecting && !isConnected"></mat-spinner>
 
 </mat-card>
