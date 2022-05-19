@@ -207,10 +207,15 @@ app.on('will-quit', async (event) => {
         tccWindow.close();
         tccWindow = null;
     }
+    if (aquarisWindow) {
+        aquarisWindow.close();
+        aquarisWindow = null;
+    }
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
         if (aquaris !== undefined) {
+            console.log('disconnect');
             await aquaris.disconnect();
             await aquaris.stopDiscover();
         }
@@ -623,10 +628,10 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.startDiscover.name, async () => {
-        if (! await aquaris.isDiscovering()) {
+        if (await aquaris.isDiscovering()) {
             await aquaris.stopDiscover();
-            await aquaris.startDiscover();
         }
+        await aquaris.startDiscover();
     })
 
     .set(ClientAPI.prototype.stopDiscover.name, async () => {

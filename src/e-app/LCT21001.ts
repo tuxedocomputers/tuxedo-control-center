@@ -145,29 +145,35 @@ export class LCT21001 {
     async getDeviceList() {
         const deviceIds = await this.adapter.devices();
         const deviceInfo = [];
+        let blDevice;
         for (let deviceId of deviceIds) {
-            const blDevice = await this.adapter.getDevice(deviceId);
+            try {
+                blDevice = await this.adapter.getDevice(deviceId);
+            } catch (err) {
+                await blDevice.disconnect();
+                blDevice.helper._propsProxy.removeAllListeners('PropertiesChanged');
+                continue;
+            }
             const info = new DeviceInfo();
+            info.uuid = deviceId;
 
             try {
                 info.rssi = parseInt(await blDevice.getRSSI());
             } catch (err) {
-                break;
+                await blDevice.disconnect();
+                blDevice.helper._propsProxy.removeAllListeners('PropertiesChanged');
+                continue;
             }
 
-            try {
-                info.uuid = deviceId;
-            } catch (err) {
-                info.uuid = '';
-            }
             try {
                 info.name = await blDevice.getName();
             } catch (err) {
                 info.name = '';
             }
 
-            blDevice.disconnect();
-            
+            await blDevice.disconnect();
+            blDevice.helper._propsProxy.removeAllListeners('PropertiesChanged');
+
             if (info.name.toLowerCase().indexOf('lct21001') !== -1) {
                 deviceInfo.push(info);
             }
