@@ -2,6 +2,11 @@ button {
     margin: 5px;
 }
 
+.theme-page-title {
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
 .aquaris-content {
 
     display: flex;
@@ -78,4 +83,8 @@ button {
     padding: 10px;
     min-height: 200px;
     width: 600px;
+}
+
+.aquaris-logo {
+    height: 150px;
 }
