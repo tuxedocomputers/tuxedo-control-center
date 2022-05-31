@@ -51,7 +51,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
                 this.aquaris.startDiscover();
             }
 
-            this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 1000);
+            this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 3000);
         });
     }
 
@@ -118,10 +118,8 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     private async periodicUpdate() {
         this.isConnected = await this.aquaris.isConnected();
 
-        if (this.isConnected) {
-            this.stopDiscover();
-        } else {
-            this.startDiscover();
+        if (!this.isConnected && !this.isConnecting) {
+            await this.discoverUpdate();
         }
     }
 
