@@ -153,7 +153,6 @@ export class LCT21001 {
                 blDevice = await this.adapter.getDevice(deviceId);
             } catch (err) {
                 await blDevice.disconnect();
-                blDevice.helper._propsProxy.removeAllListeners('PropertiesChanged');
                 continue;
             }
             const info = new DeviceInfo();
@@ -163,7 +162,6 @@ export class LCT21001 {
                 info.rssi = parseInt(await blDevice.getRSSI());
             } catch (err) {
                 await blDevice.disconnect();
-                blDevice.helper._propsProxy.removeAllListeners('PropertiesChanged');
                 continue;
             }
 
@@ -174,7 +172,6 @@ export class LCT21001 {
             }
 
             await blDevice.disconnect();
-            blDevice.helper._propsProxy.removeAllListeners('PropertiesChanged');
 
             if (info.name.toLowerCase().indexOf('lct21001') !== -1) {
                 deviceInfo.push(info);
