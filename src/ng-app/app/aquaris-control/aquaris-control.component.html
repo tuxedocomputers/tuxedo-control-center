@@ -12,125 +12,128 @@
     </button>
     Connected: {{ isConnected ? 'yes' : 'no' }} {{ fwVersion }}
 
-    <div class="categories" *ngIf="isConnected && stateInitialized">
+    <div class="aquaris-content">
+        <div class="categories" *ngIf="isConnected && stateInitialized">
 
-        <!-- Fan control -->
-        <div class="category">
-            <div class="tcc-gauge small fan-speed">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="fanSpeed.value"
-                    [dialStartAngle]="150"
-                    [dialEndAngle]="30"
-                    [animated]="true"
-                    [animationDuration]="0.3">
-                </mwl-gauge>
-                <div class="unit-text">%</div>
-                <div class="legend">
-                    <div class="text small">Fan speed</div>
+            <!-- Fan control -->
+            <div class="category">
+                <div class="tcc-gauge small fan-speed">
+                    <mwl-gauge
+                        [max]="100"
+                        [min]="0"
+                        [value]="fanSpeed.value"
+                        [dialStartAngle]="150"
+                        [dialEndAngle]="30"
+                        [animated]="true"
+                        [animationDuration]="0.3">
+                    </mwl-gauge>
+                    <div class="unit-text">%</div>
+                    <div class="legend">
+                        <div class="text small">Fan speed</div>
+                    </div>
                 </div>
+                <span>
+                    <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
+                        min="0"
+                        max="100"
+                        step="1"
+                        color="primary"
+                        (input)="sliderFanInput(fanSpeed.value)">
+                    </mat-slider>
+                </span>
             </div>
-            <span>
-                <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
+
+            <!-- Pump control -->
+            <div class="category">
+                <mat-slide-toggle [formControl]="ctrlPumpToggle" (change)="pumpInput()" color="warn">Pump status</mat-slide-toggle>
+                <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle" *ngIf="showPumpControls"
                     min="0"
                     max="100"
                     step="1"
                     color="primary"
-                    (input)="sliderFanInput(fanSpeed.value)">
+                    (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
                 </mat-slider>
-            </span>
-        </div>
-
-        <!-- Pump control -->
-        <div class="category">
-            <mat-slide-toggle [formControl]="ctrlPumpToggle" (change)="pumpInput()" color="warn">Pump status</mat-slide-toggle>
-            <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle" *ngIf="showPumpControls"
-                min="0"
-                max="100"
-                step="1"
-                color="primary"
-                (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
-            </mat-slider>
-            <div *ngIf="showPumpControls">
-                <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput()">
-                    <mat-button-toggle [value]="2">7V</mat-button-toggle>
-                    <mat-button-toggle [value]="3">8V</mat-button-toggle>
-                    <mat-button-toggle [value]="0">11V</mat-button-toggle>
-                    <mat-button-toggle [value]="1">12V</mat-button-toggle>
-                </mat-button-toggle-group>
+                <div *ngIf="showPumpControls">
+                    <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput()">
+                        <mat-button-toggle [value]="2">7V</mat-button-toggle>
+                        <mat-button-toggle [value]="3">8V</mat-button-toggle>
+                        <mat-button-toggle [value]="0">11V</mat-button-toggle>
+                        <mat-button-toggle [value]="1">12V</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
             </div>
+
         </div>
 
+        <div class="categories" *ngIf="isConnected && stateInitialized">
+
+            <!-- LED Control-->
+            <div class="category">
+                <div>
+                    <span class="label">Red {{ colorRed.value }}</span>
+                    <mat-slider #colorRed [formControl]="ctrlLedRed"
+                        min="0"
+                        max="255"
+                        step="1"
+                        color="primary"
+                        (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
+                    </mat-slider>
+                </div>
+                <div>
+                    <span class="label">Green {{ colorGreen.value }}</span>
+                    <mat-slider #colorGreen [formControl]="ctrlLedGreen"
+                        min="0"
+                        max="255"
+                        step="1"
+                        color="primary"
+                        (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
+                    </mat-slider>
+                </div>
+                <div>
+                    <span class="label">Blue {{ colorBlue.value }}</span>
+                    <mat-slider #colorBlue [formControl]="ctrlLedBlue"
+                        min="0"
+                        max="255"
+                        step="1"
+                        color="primary"
+                        (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
+                    </mat-slider>
+                </div>
+                <div>
+                    <mat-button-toggle-group #ledMode [formControl]="ctrlLedMode" (change)="ledUpdate(colorRed.value, colorGreen.value, colorBlue.value)">
+                        <mat-button-toggle [value]="0">Static</mat-button-toggle>
+                        <mat-button-toggle [value]="1">Breathe</mat-button-toggle>
+                        <mat-button-toggle [value]="2">"Colorful"</mat-button-toggle>
+                        <mat-button-toggle [value]="3">Breathingcolors :)</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <div class="category">
+                <span class="color-visualizer"
+                    [style.background]="chosenColorHex"
+                    [(colorPicker)]="chosenColorHex"
+                    [cpDisableInput]="true"
+                    cpAlphaChannel="disabled"
+                    (colorPickerChange)="inputColor()"></span>
+            </div>
+
+        </div>
+
+        <div class="device-list-wrapper" *ngIf="!isConnected && !isConnecting">
+            Please choose your TUXEDO Aquaris and click on the connect button
+            <mat-selection-list [multiple]="false" *ngIf="deviceList.length > 0">
+                <mat-list-option *ngFor="let device of deviceList" (click)="buttonConnect(device.uuid)">
+                    <mat-icon mat-list-icon *ngIf="device.rssi >= -70">signal_cellular_alt</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi < -70 && device.rssi > -100">signal_cellular_alt_2_bar</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi <= -100">signal_cellular_alt_1_bar</mat-icon>
+                    <mat-line>TUXEDO Aquaris ({{ device.uuid }}) {{ device.rssi }}dBm</mat-line>
+                </mat-list-option>
+            </mat-selection-list>
+            <span *ngIf="deviceList.length === 0">No devices found</span>
+        </div>
+
+        <mat-spinner *ngIf="isConnecting && !isConnected"></mat-spinner>
     </div>
-
-    <div class="categories" *ngIf="isConnected && stateInitialized">
-
-        <!-- LED Control-->
-        <div class="category">
-            <div>
-                <span class="label">Red {{ colorRed.value }}</span>
-                <mat-slider #colorRed [formControl]="ctrlLedRed"
-                    min="0"
-                    max="255"
-                    step="1"
-                    color="primary"
-                    (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
-                </mat-slider>
-            </div>
-            <div>
-                <span class="label">Green {{ colorGreen.value }}</span>
-                <mat-slider #colorGreen [formControl]="ctrlLedGreen"
-                    min="0"
-                    max="255"
-                    step="1"
-                    color="primary"
-                    (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
-                </mat-slider>
-            </div>
-            <div>
-                <span class="label">Blue {{ colorBlue.value }}</span>
-                <mat-slider #colorBlue [formControl]="ctrlLedBlue"
-                    min="0"
-                    max="255"
-                    step="1"
-                    color="primary"
-                    (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
-                </mat-slider>
-            </div>
-            <div>
-                <mat-button-toggle-group #ledMode [formControl]="ctrlLedMode" (change)="ledUpdate(colorRed.value, colorGreen.value, colorBlue.value)">
-                    <mat-button-toggle [value]="0">Static</mat-button-toggle>
-                    <mat-button-toggle [value]="1">Breathe</mat-button-toggle>
-                    <mat-button-toggle [value]="2">"Colorful"</mat-button-toggle>
-                    <mat-button-toggle [value]="3">Breathingcolors :)</mat-button-toggle>
-                </mat-button-toggle-group>
-            </div>
-        </div>
-
-        <div class="category">
-            <span class="color-visualizer"
-                [style.background]="chosenColorHex"
-                [(colorPicker)]="chosenColorHex"
-                [cpDisableInput]="true"
-                cpAlphaChannel="disabled"
-                (colorPickerChange)="inputColor()"></span>
-        </div>
-
-    </div>
-
-    <div class="device-list" *ngIf="!isConnected && !isConnecting">
-        <mat-selection-list [multiple]="false" *ngIf="deviceList.length > 0">
-            <mat-list-option *ngFor="let device of deviceList" (click)="buttonConnect(device.uuid)">
-                <mat-icon mat-list-icon *ngIf="device.rssi >= -70">signal_cellular_alt</mat-icon>
-                <mat-icon mat-list-icon *ngIf="device.rssi < -70 && device.rssi > -100">signal_cellular_alt_2_bar</mat-icon>
-                <mat-icon mat-list-icon *ngIf="device.rssi <= -100">signal_cellular_alt_1_bar</mat-icon>
-                <mat-line>TUXEDO Aquaris ({{ device.uuid }}) {{ device.rssi }}dBm</mat-line>
-            </mat-list-option>
-        </mat-selection-list>
-        <span *ngIf="deviceList.length === 0">No devices found</span>
-    </div>
-
-    <mat-spinner *ngIf="isConnecting && !isConnected"></mat-spinner>
 
 </mat-card>

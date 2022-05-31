@@ -2,28 +2,36 @@ button {
     margin: 5px;
 }
 
-.categories {
+.aquaris-content {
+
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-evenly;
+    flex-flow: column nowrap;
+    align-items: center;
 
-    .category {
+    .categories {
         display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-around;
-        align-items: center;
-
+        flex-flow: row nowrap;
+        justify-content: space-evenly;
         width: 100%;
 
-        .label {
-            display: inline-flex;
-            width: 80px;
-        }
-
-        mat-button-toggle-group {
-            font-size: 0.7em;
-            height: 24px;
+        .category {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-around;
             align-items: center;
+
+            width: 100%;
+
+            .label {
+                display: inline-flex;
+                width: 80px;
+            }
+
+            mat-button-toggle-group {
+                font-size: 0.7em;
+                height: 24px;
+                align-items: center;
+            }
         }
     }
 }
@@ -61,4 +69,13 @@ button {
     height: 150px;
 
     border: 3px solid;
+}
+
+.device-list-wrapper {
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,.2);
+    margin: 24px 0;
+    padding: 10px;
+    min-height: 200px;
+    width: 600px;
 }
