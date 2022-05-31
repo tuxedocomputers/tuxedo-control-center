@@ -59,7 +59,7 @@
     "ng2-charts": "^2.4.3",
     "ngx-color-picker": "^10.1.0",
     "ngx-markdown": "^10.1.1",
-    "node-ble": "^1.7.0",
+    "node-ble": "git+https://github.com/tuxedoxt/node-ble.git#match-and-event-leak-fixes",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
