@@ -23,6 +23,8 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const noop = () => {};
+
 export enum RGBState {
     Static = 0x00,
     Breathe = 0x01,
@@ -125,8 +127,8 @@ export class LCT21001 {
 
     async stopDiscover() {
         // Clean-up other initialized stuff
-        if (this.adapter !== undefined) {
-            await this.adapter.stopDiscovery().catch();
+        if (this.adapter !== undefined && await this.adapter.isDiscovering()) {
+            await this.adapter.stopDiscovery().catch(noop);
         }
 
         if (this.destroy !== undefined) {
