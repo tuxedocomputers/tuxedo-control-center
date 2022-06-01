@@ -178,6 +178,11 @@ export class LCT21001 {
             }
         };
 
+        if (deviceIds.length > 100) {
+            await this.stopDiscover();
+            await this.startDiscover();
+        }
+
         return deviceInfo;
     }
 
