@@ -14,7 +14,6 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     private aquaris: ClientAPI;
 
     private connectedTimeout: NodeJS.Timeout;
-    private discoverTimeout: NodeJS.Timeout;
 
     public deviceList: AquarisDeviceInfo[] = [];
 
@@ -44,33 +43,23 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.updateState().then(() => {
-            if (this.isConnected) {
-                this.aquaris.readFwVersion().then(fwString => { this.fwVersion = fwString });
-            } else {
-                this.aquaris.startDiscover();
-            }
+        this.initCommunication();
+    }
 
-            this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 3000);
-        });
+    async initCommunication() {
+        this.isConnected = await this.aquaris.isConnected();
+        if (!this.isConnected) {
+            await this.aquaris.startDiscover();
+        }
+        await this.updateState();
+        await this.periodicUpdate();
+
+        this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 3000);
     }
 
     ngOnDestroy() {
         if (this.connectedTimeout !== undefined) {
             clearInterval(this.connectedTimeout);
-        }
-    }
-
-    public startDiscover() {
-        if (this.discoverTimeout === undefined) {
-            this.discoverTimeout = setInterval(async () => { console.time(); await this.discoverUpdate(); console.timeEnd(); }, 2000);
-        }
-    }
-
-    public stopDiscover() {
-        if (this.discoverTimeout !== undefined) {
-            clearInterval(this.discoverTimeout);
-            this.discoverTimeout = undefined;
         }
     }
 
@@ -194,7 +183,6 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public isConnected = false;
 
     public async buttonConnect(deviceUUID: string) {
-        this.stopDiscover();
         this.isConnecting = true;
         try {
             await this.aquaris.connect(deviceUUID);

@@ -104,7 +104,9 @@ export class LCT21001 {
         try { await this.writeReset(); } catch(err) {}
 
         if (this.device !== undefined && await this.device.isConnected()) {
-            await this.device.disconnect().catch();
+            try {
+                await this.device.disconnect();
+            } catch (err) {}
         }
     }
 
@@ -187,10 +189,18 @@ export class LCT21001 {
     }
 
     async isConnected() {
+        let result;
+
         try {
-            return await this.device?.isConnected();
+            result = await this.device?.isConnected();
         } catch (err) {
+            result = false;
+        }
+
+        if (result === undefined) {
             return false;
+        } else {
+            return result;
         }
     }
 
