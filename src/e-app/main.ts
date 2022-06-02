@@ -624,7 +624,11 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.isConnected.name, async () => {
-        return await aquaris.isConnected();
+        if (aquarisIoProgress) {
+            return true;
+        } else {
+            return await aquaris.isConnected();
+        }
     })
 
     .set(ClientAPI.prototype.startDiscover.name, async () => {

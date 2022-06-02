@@ -19,6 +19,10 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     public stateInitialized = false;
 
+    public ctrlConnectionToggle = new FormControl();
+    public ctrlDeviceList = new FormControl();
+    public selectedDeviceUUID: string;
+
     public ctrlLedToggle = new FormControl();
     public ctrlLedRed = new FormControl();
     public ctrlLedGreen = new FormControl;
@@ -63,8 +67,15 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
         }
     }
 
+    public isUpdatingDevices = false;
+
     private async discoverUpdate() {
+        this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
+        if (this.selectedDeviceUUID !== undefined) {
+            this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
+        }
+        this.isUpdatingDevices = false;
     }
 
     public rgbToHex(red: number, green: number, blue: number) {
@@ -107,7 +118,7 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     private async periodicUpdate() {
         this.isConnected = await this.aquaris.isConnected();
 
-        if (!this.isConnected && !this.isConnecting) {
+        if (!this.isConnected && !this.isConnecting && !this.isDisconnecting) {
             await this.discoverUpdate();
         }
     }
@@ -182,8 +193,32 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public isConnecting = false;
     public isConnected = false;
 
+    public async connectionToggle() {
+        if (this.isConnecting || this.isDisconnecting) {
+            return;
+        }
+
+        const deviceUUID = this.selectedDeviceUUID;
+
+        if (!this.isConnected) {
+            await this.buttonConnect(deviceUUID);
+        } else {
+            await this.buttonDisconnect();
+        }
+
+        this.ctrlConnectionToggle.setValue(this.isConnected);
+    }
+
     public async buttonConnect(deviceUUID: string) {
+        if (deviceUUID === undefined) {
+            return;
+        }
+
         this.isConnecting = true;
+
+        const sleep = (ms: number) => { return new Promise(resolve => setTimeout(resolve, ms)); }
+        while (this.isUpdatingDevices) { await sleep(10); }
+
         try {
             await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
@@ -221,5 +256,9 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     
     public async buttonPumpStop() {
         await this.aquaris.writePumpOff();
+    }
+
+    public selectDevice(deviceUUID) {
+        this.selectedDeviceUUID = deviceUUID;
     }
 }
