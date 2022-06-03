@@ -127,7 +127,7 @@
 
         </div>
 
-        <div class="device-list-wrapper" *ngIf="!isConnected && !isConnecting && !isDisconnecting">
+        <div class="device-list-wrapper" *ngIf="!isConnected && !isConnecting && !isDisconnecting && deviceList.length > 0">
             Please choose your TUXEDO Aquaris and click on the connect button
             <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList.length === 0">
                 <mat-list-option *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
