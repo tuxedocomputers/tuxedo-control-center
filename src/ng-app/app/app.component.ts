@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component } from '@angular/core';
+import { Component, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 
 @Component({
@@ -24,9 +25,21 @@ import { UtilsService } from './utils.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+
+    @HostBinding('class') componentThemeCssClass;
+
+    private subscriptions: Subscription = new Subscription();
 
     constructor(private utils: UtilsService) {}
+
+    ngOnInit(): void {
+        this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
 
     public pageDisabled(): boolean {
         return this.utils.pageDisabled;

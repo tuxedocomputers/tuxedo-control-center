@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
@@ -47,8 +47,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         private utils: UtilsService,
         private compat: CompatibilityService) { }
 
-    @HostBinding('class') componentThemeCssClass;
-
     public buttonLanguageLabel: string;
 
     public ngOnInit(): void {
@@ -57,7 +55,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
         this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
-        this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Wait for the first true/false availability announcement, undefined is ignored
         const availabilitySubscription = this.compat.tccDbusAvailable.subscribe(available => {
