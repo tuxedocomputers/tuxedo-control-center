@@ -5,6 +5,30 @@ button {
 .theme-page-title {
     flex-flow: column nowrap;
     align-items: center;
+
+    opacity: 1.0;
+
+    header {
+        margin-bottom: 25px;
+
+        .emph {
+            color: var(--icon-detail);
+        }
+    }
+
+    .connect-slider {
+        transform: scale(1.7);
+        transform-origin: center;
+    }
+
+    .connection-status{
+        font-size: 0.8em;
+        margin: 20px;
+
+        .value {
+            font-weight: normal;
+        }
+    }
 }
 
 .aquaris-content {
