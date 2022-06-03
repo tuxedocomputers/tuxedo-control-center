@@ -39,7 +39,8 @@ const routes: Routes = [
             { path: 'info', component: InfoComponent },
             { path: 'cpu-dashboard', component: CpuDashboardComponent },
             { path: 'tools', component: ToolsComponent },
-            { path: 'global-settings', component: GlobalSettingsComponent }
+            { path: 'global-settings', component: GlobalSettingsComponent },
+            { path: 'aquaris-control', component: AquarisControlComponent }
         ]
     },
     { path: 'aquaris-control', component: AquarisControlComponent }
