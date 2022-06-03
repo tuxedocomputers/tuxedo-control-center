@@ -261,4 +261,16 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public selectDevice(deviceUUID) {
         this.selectedDeviceUUID = deviceUUID;
     }
+
+    public connectedStatusString(): string {
+        if (this.isConnecting) {
+            return 'Connecting..';
+        } else if (this.isDisconnecting) {
+            return 'Disconnecting..';
+        } else if (this.isConnected) {
+            return 'Connected';
+        } else {
+            return 'Looking for devices..';
+        }
+    }
 }
