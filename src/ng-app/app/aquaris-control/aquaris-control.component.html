@@ -80,6 +80,7 @@
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_theme.svg#Icon"></use></svg>
                     LED Control
                 </header>
+                <mat-slide-toggle class="led-slide-toggle" [formControl]="ctrlLedToggle" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)" color="warn"></mat-slide-toggle>
                 <div *ngIf="showLedSliders">
                     <span class="label">Red {{ colorRed.value }}</span>
                     <mat-slider #colorRed [formControl]="ctrlLedRed"
