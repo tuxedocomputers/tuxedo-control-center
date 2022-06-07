@@ -40,7 +40,7 @@ button {
     .categories {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-evenly;
+        justify-content: flex-start;
         width: 100%;
 
         .category {
@@ -51,12 +51,18 @@ button {
 
             width: 100%;
 
+            header {
+                display: flex;
+                flex-flow: column nowrap;
+            }
+
             .label {
                 display: inline-flex;
                 width: 80px;
             }
 
             mat-button-toggle-group {
+                margin: 25px 0px;
                 font-size: 0.7em;
                 height: 24px;
                 align-items: center;
@@ -67,7 +73,7 @@ button {
 
 .tcc-gauge.small {
     transform: scale(0.7);
-    transform-origin: bottom;
+    transform-origin: center;
 
     .legend {
         bottom: 20px;
@@ -94,10 +100,14 @@ button {
 }
 
 .color-visualizer {
+    width: 0px;
+    height: 0px;
+/*
     width: 50px;
     height: 150px;
 
     border: 3px solid;
+*/
 }
 
 .device-list-wrapper {
