@@ -310,6 +310,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
+            this.ctrlFanDutyCycle.setValue(this.fanPresets.get('slow').value);
+            await this.sliderFanInput(this.fanPresets.get('slow').value);
+            await this.sliderFanChange(this.fanPresets.get('slow').value);
         } catch (err) {
             console.log('connect failed => ' + err);
             await this.aquaris.disconnect();
