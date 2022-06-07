@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
-import { DeviceInfo as AquarisDeviceInfo } from '../../../e-app/LCT21001';
+import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 
 @Component({
     selector: 'app-aquaris-control',
     templateUrl: './aquaris-control.component.html',
     styleUrls: ['./aquaris-control.component.scss']
 })
-export class AquarisControlComponent implements OnInit, OnDestroy {
+export class AquarisControlComponent implements OnInit, AfterContentInit, OnDestroy {
 
     private aquaris: ClientAPI;
 
@@ -27,7 +27,9 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public ctrlLedRed = new FormControl();
     public ctrlLedGreen = new FormControl;
     public ctrlLedBlue = new FormControl();
-    public ctrlLedMode = new FormControl();
+
+    public selectedLedTab = 0;
+    public ctrlLedBreathe = new FormControl();
 
     public chosenColorHex;
 
@@ -41,12 +43,19 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
     public fwVersion: string = '';
 
     public showPumpControls = false;
+
+    public readonly TAB_COLORPICKER = 0;
+    public readonly TAB_ANIMATION = 1;
     
     constructor(private electron: ElectronService) {
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
     }
 
     ngOnInit() {
+        
+    }
+
+    ngAfterContentInit(): void {
         this.initCommunication();
     }
 
@@ -101,7 +110,6 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
             this.ctrlLedRed.setValue(state.red);
             this.ctrlLedGreen.setValue(state.green);
             this.ctrlLedBlue.setValue(state.blue);
-            this.ctrlLedMode.setValue(state.ledMode);
             this.chosenColorHex = this.rgbToHex(state.red, state.green, state.blue);
             
             this.ctrlFanToggle.setValue(state.fanOn);
@@ -110,6 +118,25 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
             this.ctrlPumpToggle.setValue(state.pumpOn);
             this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
             this.ctrlPumpVoltage.setValue(state.pumpVoltage);
+
+            switch (state.ledMode) {
+                case RGBState.Static:
+                    this.selectedLedTab = this.TAB_COLORPICKER;
+                    this.ctrlLedBreathe.setValue(false);
+                    break;
+                case RGBState.Breathe:
+                    this.selectedLedTab = this.TAB_COLORPICKER;
+                    this.ctrlLedBreathe.setValue(true);
+                    break;
+                case RGBState.Colorful:
+                    this.selectedLedTab = this.TAB_ANIMATION;
+                    this.ctrlLedBreathe.setValue(false);
+                    break;
+                case RGBState.BreatheColor:
+                    this.selectedLedTab = this.TAB_ANIMATION;
+                    this.ctrlLedBreathe.setValue(true);
+                    break;
+            }
 
             this.stateInitialized = true;
         }
@@ -141,7 +168,21 @@ export class AquarisControlComponent implements OnInit, OnDestroy {
 
     public async ledUpdate(red: number, green: number, blue: number) {
         const ledToggle = this.ctrlLedToggle.value;
-        const ledMode = parseInt(this.ctrlLedMode.value);
+        let ledMode;
+        const isBreathing = this.ctrlLedBreathe.value as boolean;
+        if (this.selectedLedTab === 0) {
+            if (isBreathing) {
+                ledMode = RGBState.Breathe;
+            } else {
+                ledMode = RGBState.Static;
+            }
+        } else {
+            if (isBreathing) {
+                ledMode = RGBState.BreatheColor;
+            } else {
+                ledMode = RGBState.Colorful;
+            }
+        }
 
         if (this.isConnected) {
             try {

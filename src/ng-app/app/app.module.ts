@@ -49,6 +49,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -129,6 +130,7 @@ declare const require;
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
+    MatTabsModule,
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),

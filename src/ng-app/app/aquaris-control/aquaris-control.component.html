@@ -110,22 +110,22 @@
                         (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
                     </mat-slider>
                 </div>
-                <div>
-                    <mat-button-toggle-group #ledMode [formControl]="ctrlLedMode" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
-                        <mat-button-toggle [value]="0">Static</mat-button-toggle>
-                        <mat-button-toggle [value]="1">Breathe</mat-button-toggle>
-                        <mat-button-toggle [value]="2">"Colorful"</mat-button-toggle>
-                        <mat-button-toggle [value]="3">Breathingcolors :)</mat-button-toggle>
-                    </mat-button-toggle-group>
-                </div>
-                <span class="color-visualizer"
-                    [style.background]="chosenColorHex"
-                    [(colorPicker)]="chosenColorHex"
-                    [cpDisableInput]="true"
-                    [cpToggle]="true"
-                    cpDialogDisplay="inline"
-                    cpAlphaChannel="disabled"
-                    (colorPickerChange)="inputColor()"></span>
+                <mat-tab-group mat-stretch-tabs [dynamicHeight]="false" [(selectedIndex)]="selectedLedTab" (selectedIndexChange)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
+                    <mat-tab label="Choose color">
+                        <span class="color-visualizer"
+                        [style.background]="chosenColorHex"
+                        [(colorPicker)]="chosenColorHex"
+                        [cpDisableInput]="true"
+                        [cpToggle]="true"
+                        cpDialogDisplay="inline"
+                        cpAlphaChannel="disabled"
+                        (colorPickerChange)="inputColor()"></span>
+                    </mat-tab>
+                    <mat-tab label="Animation">
+                        <span class="description">Cycle color animation with optional breathe effect</span>
+                    </mat-tab>
+                </mat-tab-group>
+                <mat-checkbox color="primary" [formControl]="ctrlLedBreathe" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">Breathe</mat-checkbox>
             </div>
 
         </div>

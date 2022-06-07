@@ -67,6 +67,37 @@ button {
                 height: 24px;
                 align-items: center;
             }
+
+            mat-tab-group {
+                width: 100%;
+
+                ::ng-deep .mat-tab-body-content {
+                    height: 230px;
+                    width: 100%;
+
+                    .description {
+                        display: block;
+                        margin: 40px auto;
+                        width: 90%;
+                        font-size: 1.2em;
+                        text-align: center;
+                    }
+
+                    .color-picker.open {
+                        margin: 0 auto;
+                        margin-top: 15px;
+                        border-style: none;
+
+                        .saturation-lightness {
+                            border-radius: 4px;
+                        }
+
+                        .hue {
+                            border-radius: 8px;
+                        }
+                    }
+                }
+            }
         }
     }
 }
