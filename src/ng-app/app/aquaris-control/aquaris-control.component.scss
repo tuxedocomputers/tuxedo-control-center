@@ -46,7 +46,7 @@ button {
         .category {
             display: flex;
             flex-flow: column nowrap;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
 
             width: 100%;
@@ -54,6 +54,7 @@ button {
             header {
                 display: flex;
                 flex-flow: column nowrap;
+                margin-bottom: 20px;
             }
 
             .label {
