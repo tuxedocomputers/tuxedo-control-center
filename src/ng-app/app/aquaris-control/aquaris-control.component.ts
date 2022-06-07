@@ -360,4 +360,37 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             return 'Looking for devices..';
         }
     }
+
+    private buttonRepeatTimer: NodeJS.Timeout;
+    public buttonRepeatDown(action: () => void) {
+        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
+        const repeatDelayMS = 200;
+
+        action();
+        
+        this.buttonRepeatTimer = setInterval(() => {
+            action();
+        }, repeatDelayMS);
+    }
+
+    public buttonRepeatUp() {
+        clearInterval(this.buttonRepeatTimer);
+    }
+
+    public modifyFanSliderInputFunc(slider, offset: number, min: number, max: number) {
+        return () => {
+            this.modifySliderInput(slider, offset, min, max);
+            this.sliderFanInput(slider.value);
+        }
+    }
+
+    public modifySliderInput(slider, offset: number, min: number, max: number) {
+            let newValue = slider.value += offset;
+            if (newValue < min) {
+                newValue = min;
+            } else if (newValue > max) {
+                newValue = max;
+            }
+            slider.setValue(newValue);
+    }
 }

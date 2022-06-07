@@ -52,6 +52,12 @@
                     </div>
                 </div>
                 <span>
+                    <button mat-icon-button color="primary"
+                        (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max));"
+                        (mouseup)="buttonRepeatUp()"
+                        (mouseleave)="buttonRepeatUp()">
+                        <mat-icon>remove</mat-icon>
+                    </button>
                     <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
                         min="0"
                         max="100"
@@ -60,6 +66,12 @@
                         (input)="sliderFanInput(fanSpeed.value)"
                         (change)="sliderFanChange(fanSpeed.value)">
                     </mat-slider>
+                    <button mat-icon-button color="primary"
+                        (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, +1, fanSpeed.min, fanSpeed.max));"
+                        (mouseup)="buttonRepeatUp()"
+                        (mouseleave)="buttonRepeatUp()">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </span>
             </div>
 
