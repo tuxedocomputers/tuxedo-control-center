@@ -4,6 +4,11 @@ import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 
+interface FanPreset {
+    name: string;
+    value: number;
+}
+
 @Component({
     selector: 'app-aquaris-control',
     templateUrl: './aquaris-control.component.html',
@@ -36,6 +41,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public ctrlFanToggle = new FormControl();
     public ctrlFanDutyCycle = new FormControl();
 
+    public fanPresets: Map<string, FanPreset> = new Map();
+    public ctrlFanPreset = new FormControl();
+
     public ctrlPumpToggle = new FormControl();
     public ctrlPumpDutyCycle = new FormControl();
     public ctrlPumpVoltage = new FormControl();
@@ -48,6 +56,19 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public readonly TAB_ANIMATION = 1;
     
     constructor(private electron: ElectronService) {
+        this.fanPresets.set('slow', {
+            name: 'Slow',
+            value: 45
+        }).set('medium', {
+            name: 'Medium',
+            value: 55
+        }).set('fast', {
+            name: 'Fast',
+            value: 65
+        }).set('custom', {
+            name: 'Custom',
+            value: undefined
+        });
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
     }
 
@@ -114,6 +135,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
+            await this.sliderFanChange(state.fanDutyCycle);
 
             this.ctrlPumpToggle.setValue(state.pumpOn);
             this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
@@ -210,6 +232,30 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             } catch (err) {
                 console.log('failed writing fan state => ' + err);
             }
+        }
+    }
+
+    public async sliderFanChange(fanSpeed: number) {
+        let foundPresetKey;
+        for (let [presetKey, fanPreset] of this.fanPresets) {
+            if (fanPreset.value === fanSpeed) {
+                foundPresetKey = presetKey;
+                break;
+            }
+        }
+
+        if (foundPresetKey === undefined) {
+            this.ctrlFanPreset.setValue('custom');
+        } else {
+            this.ctrlFanPreset.setValue(foundPresetKey);
+        }
+    }
+
+    public async selectFanPreset() {
+        const fanPreset = this.fanPresets.get(this.ctrlFanPreset.value);
+        if (fanPreset.value !== undefined) {
+            this.ctrlFanDutyCycle.setValue(fanPreset.value);
+            await this.sliderFanInput(fanPreset.value);
         }
     }
 

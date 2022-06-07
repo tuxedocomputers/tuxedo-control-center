@@ -28,6 +28,11 @@
                     <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     Fan speed
                 </header>
+                <mat-select class="select-dropdown" [formControl]="ctrlFanPreset" (selectionChange)="selectFanPreset()" [disableOptionCentering]="true">
+                    <mat-option *ngFor="let fanPreset of fanPresets | keyvalue" [value]="fanPreset.key" color="primary">
+                        {{ fanPreset.value.name }}
+                    </mat-option>
+                </mat-select>
                 <div class="tcc-gauge small fan-speed">
                     <mwl-gauge
                         [max]="100"
@@ -49,7 +54,8 @@
                         max="100"
                         step="1"
                         color="primary"
-                        (input)="sliderFanInput(fanSpeed.value)">
+                        (input)="sliderFanInput(fanSpeed.value)"
+                        (change)="sliderFanChange(fanSpeed.value)">
                     </mat-slider>
                 </span>
             </div>
