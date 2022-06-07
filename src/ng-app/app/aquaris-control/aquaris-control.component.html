@@ -26,26 +26,29 @@
             <div class="category">
                 <header>
                     <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
-                    Fan speed
+                    Fan control
                 </header>
                 <mat-select class="select-dropdown" [formControl]="ctrlFanPreset" (selectionChange)="selectFanPreset()" [disableOptionCentering]="true">
                     <mat-option *ngFor="let fanPreset of fanPresets | keyvalue" [value]="fanPreset.key" color="primary">
                         {{ fanPreset.value.name }}
                     </mat-option>
                 </mat-select>
-                <div class="tcc-gauge small fan-speed">
+                <div class="tcc-gauge">
                     <mwl-gauge
                         [max]="100"
                         [min]="0"
                         [value]="fanSpeed.value"
-                        [dialStartAngle]="150"
-                        [dialEndAngle]="30"
+                        [showValue]="false"
+                        [dialStartAngle]="130"
+                        [dialEndAngle]="50"
                         [animated]="true"
                         [animationDuration]="0.3">
                     </mwl-gauge>
+                    <div class="custom-value-text">{{ fanSpeed.value }}</div>
                     <div class="unit-text">%</div>
+                    <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <div class="legend">
-                        <div class="text small">Fan speed</div>
+                        <div class="text">Fan speed</div>
                     </div>
                 </div>
                 <span>

@@ -103,34 +103,6 @@ button {
     }
 }
 
-.tcc-gauge.small {
-    transform: scale(0.7);
-    transform-origin: center;
-
-    .legend {
-        bottom: 20px;
-    }
-}
-
-.tcc-gauge.small.fan-speed {
-    ::ng-deep .value-text {
-        font-size: 1.8em;
-    }
-
-    .unit-text {
-        width: auto;
-        top: 50%;
-        left: 50%;
-        transform: translateX(40px) translateY(-12px);
-
-        font-size: 1.5em;
-    }
-
-    mat-slider {
-        bottom: 0px;
-    }
-}
-
 .color-visualizer {
     width: 0px;
     height: 0px;
