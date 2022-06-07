@@ -215,11 +215,14 @@ app.on('will-quit', async (event) => {
         // Actually quit
         globalShortcut.unregisterAll();
         if (aquaris !== undefined) {
-            console.log('disconnect');
             await aquaris.disconnect();
             await aquaris.stopDiscover();
         }
+        if (tccDBus !== undefined) {
+            tccDBus.disconnect();
+        }
         app.exit(0);
+        return;
     }
 });
 
