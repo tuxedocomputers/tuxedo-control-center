@@ -8,7 +8,7 @@
             [disabled]="isConnecting || isDisconnecting"
             (change)="connectionToggle()"
             color="warn"></mat-slide-toggle>
-        <span class="connection-status">Status: <span class="value">{{ connectedStatusString() }}</span></span>
+        <span class="connection-status"><span class="value">{{ connectedStatusString() }}</span></span>
     </mat-card-title>
 
     <!--button mat-raised-button color="basic" (click)="buttonConnect()" [disabled]="isConnected || isConnecting">

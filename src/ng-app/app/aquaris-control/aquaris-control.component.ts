@@ -358,13 +358,13 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public connectedStatusString(): string {
         if (this.isConnecting) {
-            return 'Connecting..';
+            return 'Connecting...';
         } else if (this.isDisconnecting) {
-            return 'Disconnecting..';
+            return 'Disconnecting...';
         } else if (this.isConnected) {
             return 'Connected';
         } else {
-            return 'Looking for devices..';
+            return 'Looking for devices...';
         }
     }
 
