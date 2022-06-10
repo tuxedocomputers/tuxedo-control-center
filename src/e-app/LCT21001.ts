@@ -19,8 +19,8 @@
 import { createBluetooth } from 'node-ble';
 import * as NodeBle from 'node-ble';
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function sleep(ms: number, arg = 'timeout') {
+    return new Promise(resolve => setTimeout(resolve, ms, arg));
 }
 
 const noop = () => {};
@@ -86,7 +86,14 @@ export class LCT21001 {
             throw Error('connect(): device appears offline/unavailable');
         }
 
-        await this.device.connect();
+        const connectionTimeout = sleep(5000, 'timeout');
+        const connect = this.device.connect();
+
+        const result = await Promise.race([connect, connectionTimeout]);
+        if (result === 'timeout') {
+            this.device.disconnect();
+            return;
+        }
 
         const gattServer = await this.device.gatt();
 
