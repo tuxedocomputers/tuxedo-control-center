@@ -3,6 +3,8 @@ import { ElectronService } from 'ngx-electron';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
 
 interface FanPreset {
     name: string;
@@ -21,6 +23,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private connectedTimeout: NodeJS.Timeout;
 
     public deviceList: AquarisDeviceInfo[] = [];
+    public deviceNameMap = new Map<string, string>();
 
     public stateInitialized = false;
 
@@ -55,7 +58,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public readonly TAB_COLORPICKER = 0;
     public readonly TAB_ANIMATION = 1;
     
-    constructor(private electron: ElectronService) {
+    constructor(private electron: ElectronService, public dialog: MatDialog) {
         this.fanPresets.set('slow', {
             name: 'Slow',
             value: 45
@@ -102,6 +105,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async discoverUpdate() {
         this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
+        this.deviceNameMap = await this.getUserDeviceNames();
         if (this.selectedDeviceUUID !== undefined) {
             this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
         }
@@ -395,5 +399,44 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 newValue = max;
             }
             slider.setValue(newValue);
+    }
+
+    public async getUserDeviceNames() {
+        let deviceNamesSerialized = localStorage.getItem('aquarisUserDeviceNames');
+        let deviceNames: Map<string, string>;
+        if (deviceNamesSerialized === null) {
+            deviceNames = new Map<string, string>();
+        } else {
+            deviceNames = new Map(JSON.parse(deviceNamesSerialized));
+        }
+        
+        return deviceNames;
+    }
+
+    public async setUserDeviceNames(deviceNames: Map<string, string>) {
+        localStorage.setItem('aquarisUserDeviceNames', JSON.stringify(Array.from(deviceNames.entries())));
+    }
+
+    public async inputTextDialog() {
+        if (!this.isConnected || this.isConnecting || this.isDisconnecting) { return; }
+
+        const deviceNamesCheck = await this.getUserDeviceNames();
+        const hasName = deviceNamesCheck.get(this.selectedDeviceUUID) !== undefined;
+        if (hasName) {
+            deviceNamesCheck.delete(this.selectedDeviceUUID);
+            await this.setUserDeviceNames(deviceNamesCheck);
+        } else {
+            const dialogRef = this.dialog.open(DialogInputTextComponent, {
+                minWidth: 350,
+                data: { title: 'Device name', description: 'A descriptive name for the device' }
+            });
+            return dialogRef.afterClosed().toPromise().then(async chosenName => {
+                if (chosenName !== undefined) {
+                    const deviceNames = await this.getUserDeviceNames();
+                    deviceNames.set(this.selectedDeviceUUID, chosenName);
+                    await this.setUserDeviceNames(deviceNames);
+                }
+            });
+        }
     }
 }

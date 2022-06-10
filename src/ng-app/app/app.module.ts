@@ -50,6 +50,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -78,6 +79,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -98,7 +100,8 @@ declare const require;
     ChangeCryptPasswordComponent,
     FanGraphComponent,
     MainGuiComponent,
-    AquarisControlComponent
+    AquarisControlComponent,
+    DialogInputTextComponent
   ],
   imports: [
     BrowserModule,
@@ -131,6 +134,7 @@ declare const require;
     MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatTabsModule,
+    MatDialogModule,
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),

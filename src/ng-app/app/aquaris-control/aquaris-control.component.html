@@ -1,7 +1,7 @@
 <mat-card class="tcc-card aquaris-control">
     <mat-card-title class="theme-page-title">
         <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
-        <header>TUXEDO <span class="emph">AQUARIS</span></header>
+        <header>TUXEDO <span class="emph" (click)="inputTextDialog()">AQUARIS</span></header>
         <mat-slide-toggle class="connect-slider"
             [formControl]="ctrlConnectionToggle"
             [checked]="isConnected"
@@ -159,7 +159,7 @@
                     <mat-icon mat-list-icon *ngIf="device.rssi >= -70">signal_cellular_alt</mat-icon>
                     <mat-icon mat-list-icon *ngIf="device.rssi < -70 && device.rssi > -100">signal_cellular_alt_2_bar</mat-icon>
                     <mat-icon mat-list-icon *ngIf="device.rssi <= -100">signal_cellular_alt_1_bar</mat-icon>
-                    <mat-line>TUXEDO Aquaris ({{ device.uuid }}) {{ device.rssi }}dBm</mat-line>
+                    <mat-line>{{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }} ({{ device.uuid }}) {{ device.rssi }}dBm</mat-line>
                 </mat-list-option>
             </mat-selection-list>
             <span *ngIf="deviceList.length === 0">No devices found</span>

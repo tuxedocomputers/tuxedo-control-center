@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="mat-typography">
+    <h3 *ngIf="data.heading">{{ data.heading }}</h3>
+    <mat-form-field class="input-text">
+        <input matInput #inputText="matInput"
+            cdkFocusInitial
+            type="text"
+            minLength="1"
+            maxLength="30"
+            (keyup.enter)="closeDialog(inputText.value)"
+            (focus)="$event.target.select()">
+    </mat-form-field>
+    <p>{{ data.description }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button (click)="closeDialog(inputText.value)">Ok</button>
+</mat-dialog-actions>
