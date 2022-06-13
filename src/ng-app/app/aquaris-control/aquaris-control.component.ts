@@ -140,6 +140,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
             await this.sliderFanChange(state.fanDutyCycle);
+            this.setPresetFromFanspeed(state.fanDutyCycle);
 
             this.ctrlPumpToggle.setValue(state.pumpOn);
             this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
@@ -239,7 +240,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    public async sliderFanChange(fanSpeed: number) {
+    private async setPresetFromFanspeed(fanSpeed: number) {
         let foundPresetKey;
         for (let [presetKey, fanPreset] of this.fanPresets) {
             if (fanPreset.value === fanSpeed) {
@@ -253,6 +254,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         } else {
             this.ctrlFanPreset.setValue(foundPresetKey);
         }
+    }
+
+    public async sliderFanChange(fanSpeed: number) {
+
     }
 
     public async selectFanPreset() {

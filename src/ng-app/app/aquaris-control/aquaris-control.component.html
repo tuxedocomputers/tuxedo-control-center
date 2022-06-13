@@ -54,12 +54,14 @@
                 <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value <= 40) ? 'visible' : 'hidden'">Low fan speeds (1-40%) are known to cause unwanted noises</div>
                 <span>
                     <button mat-icon-button color="primary"
+                        [disabled]="ctrlFanPreset.value !== 'custom'"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max));"
                         (mouseup)="buttonRepeatUp()"
                         (mouseleave)="buttonRepeatUp()">
                         <mat-icon>remove</mat-icon>
                     </button>
                     <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
+                        [disabled]="ctrlFanPreset.value !== 'custom'"
                         min="0"
                         max="100"
                         step="1"
@@ -68,6 +70,7 @@
                         (change)="sliderFanChange(fanSpeed.value)">
                     </mat-slider>
                     <button mat-icon-button color="primary"
+                        [disabled]="ctrlFanPreset.value !== 'custom'"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, +1, fanSpeed.min, fanSpeed.max));"
                         (mouseup)="buttonRepeatUp()"
                         (mouseleave)="buttonRepeatUp()">
