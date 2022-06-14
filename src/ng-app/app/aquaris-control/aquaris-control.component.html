@@ -51,7 +51,7 @@
                         <div class="text">Fan speed</div>
                     </div>
                 </div>
-                <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value <= 40) ? 'visible' : 'hidden'">Low fan speeds (1-40%) are known to cause unwanted noises</div>
+                <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value <= 50) ? 'visible' : 'hidden'">Low fan speeds (1-50%) are known to cause unwanted noises</div>
                 <span>
                     <button mat-icon-button color="primary"
                         [disabled]="ctrlFanPreset.value !== 'custom'"
