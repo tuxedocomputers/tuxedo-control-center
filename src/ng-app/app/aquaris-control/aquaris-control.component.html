@@ -28,11 +28,14 @@
                     <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     Fan control
                 </header>
-                <mat-select class="select-dropdown" [formControl]="ctrlFanPreset" (selectionChange)="selectFanPreset()" [disableOptionCentering]="true">
-                    <mat-option *ngFor="let fanPreset of fanPresets | keyvalue" [value]="fanPreset.key" color="primary">
-                        {{ fanPreset.value.name }}
-                    </mat-option>
-                </mat-select>
+                <mat-form-field>
+                    <mat-label>Fan presets</mat-label>
+                    <mat-select class="select-dropdown" [formControl]="ctrlFanPreset" (selectionChange)="selectFanPreset()" [disableOptionCentering]="true">
+                        <mat-option *ngFor="let fanPreset of fanPresets | keyvalue" [value]="fanPreset.key" color="primary">
+                            {{ fanPreset.value.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <div class="tcc-gauge">
                     <mwl-gauge
                         [max]="100"
@@ -54,14 +57,12 @@
                 <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value <= 50) ? 'visible' : 'hidden'">Low fan speeds (1-50%) are known to cause unwanted noises</div>
                 <span>
                     <button mat-icon-button color="primary"
-                        [disabled]="ctrlFanPreset.value !== 'custom'"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max));"
                         (mouseup)="buttonRepeatUp()"
                         (mouseleave)="buttonRepeatUp()">
                         <mat-icon>remove</mat-icon>
                     </button>
                     <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
-                        [disabled]="ctrlFanPreset.value !== 'custom'"
                         min="0"
                         max="100"
                         step="1"
@@ -70,7 +71,6 @@
                         (change)="sliderFanChange(fanSpeed.value)">
                     </mat-slider>
                     <button mat-icon-button color="primary"
-                        [disabled]="ctrlFanPreset.value !== 'custom'"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, +1, fanSpeed.min, fanSpeed.max));"
                         (mouseup)="buttonRepeatUp()"
                         (mouseleave)="buttonRepeatUp()">

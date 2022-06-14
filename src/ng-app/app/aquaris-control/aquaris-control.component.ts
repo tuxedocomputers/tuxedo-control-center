@@ -68,9 +68,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }).set('fast', {
             name: 'Fast',
             value: 65
-        }).set('custom', {
-            name: 'Custom',
-            value: undefined
         });
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
     }
@@ -140,7 +137,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
             await this.sliderFanChange(state.fanDutyCycle);
-            this.setPresetFromFanspeed(state.fanDutyCycle);
 
             this.ctrlPumpToggle.setValue(state.pumpOn);
             this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
@@ -249,9 +245,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             }
         }
 
-        if (foundPresetKey === undefined) {
-            this.ctrlFanPreset.setValue('custom');
-        } else {
+        if (foundPresetKey !== undefined) {
             this.ctrlFanPreset.setValue(foundPresetKey);
         }
     }
@@ -266,6 +260,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlFanDutyCycle.setValue(fanPreset.value);
             await this.sliderFanInput(fanPreset.value);
         }
+        this.ctrlFanPreset.setValue(undefined);
     }
 
     public async pumpInput() {
