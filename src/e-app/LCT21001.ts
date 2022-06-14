@@ -91,7 +91,7 @@ export class LCT21001 {
 
         const result = await Promise.race([connect, connectionTimeout]);
         if (result === 'timeout') {
-            this.device.disconnect();
+            await this.device.disconnect();
             return;
         }
 
@@ -106,14 +106,12 @@ export class LCT21001 {
      * Disconnect from device and clean-up bluetooth initializations
      */
     async disconnect() {
-        // Data written on disconnect by original control, seems to reset
-        // or turn off configured parameters
-        try { await this.writeReset(); } catch(err) {}
-
         if (this.device !== undefined && await this.device.isConnected()) {
-            try {
-                await this.device.disconnect();
-            } catch (err) {}
+            // Data written on disconnect by original control, seems to reset
+            // or turn off configured parameters
+            try { await this.writeReset(); } catch(err) {}
+            try { await this.device.disconnect(); } catch (err) {}
+            this.device = undefined;
         }
     }
 
@@ -186,11 +184,6 @@ export class LCT21001 {
                 deviceInfo.push(info);
             }
         };
-
-        if (deviceIds.length > 100) {
-            await this.stopDiscover();
-            await this.startDiscover();
-        }
 
         return deviceInfo;
     }

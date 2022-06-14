@@ -26,7 +26,7 @@ import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
-import { LCT21001, PumpVoltage, RGBState } from './LCT21001';
+import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -214,13 +214,11 @@ app.on('will-quit', async (event) => {
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
-        if (aquaris !== undefined) {
-            await aquaris.disconnect();
-            await aquaris.stopDiscover();
-        }
+        await aquarisCleanUp();
         if (tccDBus !== undefined) {
             tccDBus.disconnect();
         }
+        await new Promise(resolve => setTimeout(resolve, 1000));
         app.exit(0);
         return;
     }
@@ -596,7 +594,7 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
             } while (updatedSomething);
             aquarisIoProgress = false;
         } catch (err) {
-            console.log('updateDeviceState error => ' + err)
+            console.log('updateDeviceState error => ' + err);
         } finally {
             aquarisIoProgress = false;
         }
@@ -607,25 +605,95 @@ let aquarisStateExpected: AquarisState;
 let aquarisStateCurrent: AquarisState;
 
 let aquarisIoProgress = false;
+let aquarisSearchProgress = false;
+let aquarisConnectProgress = false;
 
+let searchingTimeout: NodeJS.Timeout;
+let searchingDelayMs = 1000;
+let discoverTries = 0;
+const discoverMaxTries = 5;
+let interestTries = 0;
+const interestMaxTries = 8;
+let isSearching = false;
+
+async function doSearch() {
+    aquarisSearchProgress = true;
+    try {
+        isSearching = true;
+        // Start discover if not started or restart if reached discover max tries
+        if (!await aquaris.isDiscovering()  || discoverTries >= discoverMaxTries) {
+            discoverTries = 0;
+            await aquaris.stopDiscover();
+            await aquaris.startDiscover();
+        } else {
+            discoverTries += 1;
+        }
+
+        // Look for devices
+        devicesList = await aquaris.getDeviceList();
+
+        // Trigger another search if not timed out
+        if (interestTries < interestMaxTries) {
+            interestTries += 1;
+            searchingTimeout = setTimeout(doSearch, searchingDelayMs);
+        } else {
+            await stopSearch();
+        }
+    } finally {
+        aquarisSearchProgress = false;
+    }
+}
+
+async function startSearch() {
+    if (!isSearching) {
+        await doSearch();
+    }
+    interestTries = 0;
+}
+
+async function stopSearch() {
+    while (aquarisSearchProgress) await new Promise(resolve => setTimeout(resolve, 100));
+    devicesList = [];
+    isSearching = false;
+    clearTimeout(searchingTimeout);
+    searchingTimeout = undefined;
+    interestTries = 0;
+    discoverTries = discoverMaxTries;
+}
+
+async function aquarisCleanUp() {
+    if (aquaris !== undefined) {
+        await aquaris.disconnect();
+        await stopSearch();
+        await aquaris.stopDiscover();
+    }
+}
+
+let devicesList: DeviceInfo[] = [];
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     .set(ClientAPI.prototype.connect.name, async (deviceUUID) => {
-        await aquaris.connect(deviceUUID);
-        aquarisStateCurrent = {
-            red: 0,
-            green: 0,
-            blue: 0,
-            ledMode: RGBState.Static,
-            fanDutyCycle: 0,
-            pumpDutyCycle: 60,
-            pumpVoltage: PumpVoltage.V8,
-            ledOn: true,
-            fanOn: true,
-            pumpOn: true
-        };
-        aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
-        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
+        aquarisConnectProgress = true;
+        try {
+            await stopSearch();
+            await aquaris.connect(deviceUUID);
+            aquarisStateCurrent = {
+                red: 0,
+                green: 0,
+                blue: 0,
+                ledMode: RGBState.Static,
+                fanDutyCycle: 0,
+                pumpDutyCycle: 60,
+                pumpVoltage: PumpVoltage.V8,
+                ledOn: true,
+                fanOn: true,
+                pumpOn: true
+            };
+            aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
+            await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
+        } finally {
+            aquarisConnectProgress = false;
+        }
     })
 
     .set(ClientAPI.prototype.disconnect.name, async () => {
@@ -641,18 +709,16 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.startDiscover.name, async () => {
-        if (await aquaris.isDiscovering()) {
-            await aquaris.stopDiscover();
-        }
-        await aquaris.startDiscover();
+
     })
 
     .set(ClientAPI.prototype.stopDiscover.name, async () => {
-        await aquaris.stopDiscover();
+
     })
 
     .set(ClientAPI.prototype.getDevices.name, async () => {
-        return await aquaris.getDeviceList();
+        await startSearch();
+        return devicesList;
     })
 
     .set(ClientAPI.prototype.getState.name, async () => {

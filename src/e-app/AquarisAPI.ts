@@ -45,7 +45,11 @@ export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mains
             if (args[0] !== 'isConnected') {
                 console.log(`${apiHandle}: ${args[0]}(${args.slice(1)})`);
             }
-            return mainsideFunction.call(this, ...args.slice(1));
+            try {
+                return mainsideFunction.call(this, ...args.slice(1));
+            } catch (err) {
+                console.log(`Error in [${apiHandle}: ${args[0]}(${args.slice(1)})] => ${err}`);
+            }
         }
     });
 }
