@@ -61,13 +61,13 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     constructor(private electron: ElectronService, public dialog: MatDialog) {
         this.fanPresets.set('slow', {
             name: 'Slow',
-            value: 45
+            value: 50
         }).set('medium', {
             name: 'Medium',
-            value: 55
+            value: 65
         }).set('fast', {
             name: 'Fast',
-            value: 65
+            value: 80
         });
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
     }
