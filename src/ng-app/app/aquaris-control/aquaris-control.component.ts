@@ -138,7 +138,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
-            await this.sliderFanChange(state.fanDutyCycle);
 
             this.ctrlPumpToggle.setValue(state.pumpOn);
             this.ctrlPumpDutyCycle.setValue(state.pumpDutyCycle);
@@ -319,9 +318,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
-            this.ctrlFanDutyCycle.setValue(this.fanPresets.get('slow').value);
-            await this.sliderFanInput(this.fanPresets.get('slow').value);
-            await this.sliderFanChange(this.fanPresets.get('slow').value);
         } catch (err) {
             console.log('connect failed => ' + err);
             await this.aquaris.disconnect();
@@ -336,6 +332,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public async buttonDisconnect() {
         this.isDisconnecting = true;
         try {
+            await this.aquaris.saveState();
             await this.aquaris.disconnect();
             this.isConnected = await this.aquaris.isConnected();
         } catch (err) {

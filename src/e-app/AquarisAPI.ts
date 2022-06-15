@@ -34,6 +34,7 @@ export class ClientAPI {
     public writeFanOff() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writeFanOff.name]); }
     public writePumpMode(dutyCyclePercent: number, voltage: PumpVoltage | number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writePumpMode.name, dutyCyclePercent, voltage]); }
     public writePumpOff() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writePumpOff.name]); }
+    public saveState() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.saveState.name]); }
 }
 
 export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {

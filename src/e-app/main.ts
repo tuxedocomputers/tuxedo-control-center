@@ -691,7 +691,12 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
                 fanOn: true,
                 pumpOn: true
             };
-            aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
+            const aquarisSavedSerialized = await userConfig.get('aquarisSaveState');
+            if (aquarisSavedSerialized !== undefined) {
+                aquarisStateExpected = JSON.parse(aquarisSavedSerialized) as AquarisState;
+            } else {
+                aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
+            }
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
         } finally {
             aquarisConnectProgress = false;
@@ -766,6 +771,10 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     .set(ClientAPI.prototype.writePumpOff.name, async () => {
         aquarisStateExpected.pumpOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
+    })
+    
+    .set(ClientAPI.prototype.saveState.name, async () => {
+        await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
