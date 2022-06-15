@@ -160,7 +160,10 @@
                     <mat-icon mat-list-icon *ngIf="device.rssi < -70 && device.rssi > -100">signal_cellular_alt_2_bar</mat-icon>
                     <mat-icon mat-list-icon *ngIf="device.rssi <= -100">signal_cellular_alt_1_bar</mat-icon>
                     <mat-line style="display: inline; vertical-align: middle;">
-                        {{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }} ({{ device.uuid }}) {{ device.rssi }}dBm
+                        {{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }}
+                    </mat-line>
+                    <mat-line>
+                        {{ device.uuid }} ({{ device.rssi }}dBm)
                     </mat-line>
                     <button mat-raised-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)">Connect</button>
                 </mat-list-option>
