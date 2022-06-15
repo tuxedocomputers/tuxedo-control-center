@@ -637,6 +637,7 @@ async function doSearch() {
             interestTries += 1;
             searchingTimeout = setTimeout(doSearch, searchingDelayMs);
         } else {
+            aquarisSearchProgress = false;
             await stopSearch();
         }
     } finally {
