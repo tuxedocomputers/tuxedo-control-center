@@ -680,7 +680,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             await aquaris.connect(deviceUUID);
             aquarisStateCurrent = {
                 deviceUUID: deviceUUID,
-                red: 0,
+                red: 255,
                 green: 0,
                 blue: 0,
                 ledMode: RGBState.Static,
