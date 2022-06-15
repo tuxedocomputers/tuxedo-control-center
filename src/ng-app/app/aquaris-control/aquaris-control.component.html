@@ -2,7 +2,16 @@
     <mat-card-title class="theme-page-title">
         <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
         <header>TUXEDO <span class="emph" (click)="inputTextDialog()">AQUARIS</span></header>
-        <span class="connection-status"><span class="value">{{ connectedStatusString() }}</span></span>
+        <span class="connection-status">
+            <span
+                class="connection-status-dot"
+                [ngClass]="{
+                    'searching': !isConnected || isConnecting || isDisconnecting,
+                    'connected': isConnected && !isConnecting && !isDisconnecting
+                }"
+            ></span>
+            <span class="value">{{ connectedStatusString() }}</span>
+        </span>
         <button mat-raised-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting">Disconnect</button>
     </mat-card-title>
 
