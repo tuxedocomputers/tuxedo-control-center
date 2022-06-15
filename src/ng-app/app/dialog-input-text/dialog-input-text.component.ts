@@ -4,7 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export interface InputDialogData {
     title: string,
     heading: string,
-    description: string
+    description: string,
+    prefill: string
 }
 
 @Component({
@@ -19,11 +20,6 @@ export class DialogInputTextComponent {
         @Inject(MAT_DIALOG_DATA) public data: InputDialogData) {}
 
     closeDialog(result?: string) {
-        if (result !== undefined) {
-            if (result.trim().length === 0) {
-                return;
-            }
-        }
         this.dialogRef.close(result);
     }
 }

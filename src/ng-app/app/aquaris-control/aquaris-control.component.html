@@ -1,7 +1,7 @@
 <mat-card class="tcc-card aquaris-control">
     <mat-card-title class="theme-page-title">
         <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
-        <header>TUXEDO <span class="emph" (click)="inputTextDialog()">AQUARIS</span></header>
+        <header>TUXEDO <span class="emph">AQUARIS</span></header>
         <span class="connection-status">
             <span
                 class="connection-status-dot"
@@ -10,7 +10,12 @@
                     'connected': isConnected && !isConnecting && !isDisconnecting
                 }"
             ></span>
-            <span class="value">{{ connectedStatusString() }}</span>
+            <span class="value">{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span>
+            <button mat-icon-button
+                *ngIf="isConnected && !isConnecting && !isDisconnecting"
+                (click)="inputTextDialog()">
+                <mat-icon>edit</mat-icon>
+            </button>
         </span>
         <button mat-raised-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting">Disconnect</button>
     </mat-card-title>

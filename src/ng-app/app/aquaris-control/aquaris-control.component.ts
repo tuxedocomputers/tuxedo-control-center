@@ -80,6 +80,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     async initCommunication() {
+        this.deviceNameMap = await this.getUserDeviceNames();
         this.isConnected = await this.aquaris.isConnected();
         if (!this.isConnected) {
             await this.aquaris.startDiscover();
@@ -101,7 +102,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async discoverUpdate() {
         this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
-        this.deviceNameMap = await this.getUserDeviceNames();
         if (this.selectedDeviceUUID !== undefined) {
             this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
         }
@@ -127,6 +127,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async updateState() {
         const state = await this.aquaris.getState();
         if (state !== undefined) {
+            this.selectedDeviceUUID = state.deviceUUID;
+
             this.ctrlLedToggle.setValue(state.ledOn);
             this.ctrlLedRed.setValue(state.red);
             this.ctrlLedGreen.setValue(state.green);
@@ -359,10 +361,22 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         } else if (this.isDisconnecting) {
             return 'Disconnecting...';
         } else if (this.isConnected) {
-            return 'Connected';
+            return 'Connected to';
         } else {
             return 'Looking for devices...';
         }
+    }
+
+    public connectedDisplayName() {
+        const chosenName = this.deviceNameMap.get(this.selectedDeviceUUID);
+        let displayName;
+        if (chosenName === undefined) {
+            displayName = this.selectedDeviceUUID;
+        } else {
+            displayName = chosenName;
+        }
+
+        return displayName;
     }
 
     private buttonRepeatTimer: NodeJS.Timeout;
@@ -418,22 +432,27 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         if (!this.isConnected || this.isConnecting || this.isDisconnecting) { return; }
 
         const deviceNamesCheck = await this.getUserDeviceNames();
-        const hasName = deviceNamesCheck.get(this.selectedDeviceUUID) !== undefined;
-        if (hasName) {
-            deviceNamesCheck.delete(this.selectedDeviceUUID);
-            await this.setUserDeviceNames(deviceNamesCheck);
-        } else {
-            const dialogRef = this.dialog.open(DialogInputTextComponent, {
-                minWidth: 350,
-                data: { title: 'Device name', description: 'A descriptive name for the device' }
-            });
-            return dialogRef.afterClosed().toPromise().then(async chosenName => {
-                if (chosenName !== undefined) {
-                    const deviceNames = await this.getUserDeviceNames();
+        const chosenName = deviceNamesCheck.get(this.selectedDeviceUUID);
+        const hasName = chosenName !== undefined;
+        const dialogRef = this.dialog.open(DialogInputTextComponent, {
+            minWidth: 350,
+            data: {
+                title: 'Device name',
+                description: 'A descriptive name for the device',
+                prefill: hasName ? chosenName : ''
+            }
+        });
+        return dialogRef.afterClosed().toPromise().then(async chosenName => {
+            if (chosenName !== undefined) {
+                const deviceNames = await this.getUserDeviceNames();
+                if (chosenName.trim() === '') {
+                    deviceNames.delete(this.selectedDeviceUUID);
+                } else {                    
                     deviceNames.set(this.selectedDeviceUUID, chosenName);
-                    await this.setUserDeviceNames(deviceNames);
                 }
-            });
-        }
+                await this.setUserDeviceNames(deviceNames);
+                this.deviceNameMap = deviceNames;
+            }
+        });
     }
 }

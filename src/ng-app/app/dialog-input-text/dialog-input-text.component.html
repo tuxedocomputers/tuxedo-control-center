@@ -7,6 +7,7 @@
             type="text"
             minLength="1"
             maxLength="30"
+            [value]="data.prefill"
             (keyup.enter)="closeDialog(inputText.value)"
             (focus)="$event.target.select()">
     </mat-form-field>
