@@ -137,7 +137,7 @@
                         (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
                     </mat-slider>
                 </div>
-                <mat-tab-group mat-stretch-tabs [dynamicHeight]="false" [(selectedIndex)]="selectedLedTab" (selectedIndexChange)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
+                <mat-tab-group mat-stretch-tabs [dynamicHeight]="false" [(selectedIndex)]="selectedLedTab">
                     <mat-tab label="Pick color">
                         <span class="color-visualizer"
                         [style.background]="chosenColorHex"
@@ -148,11 +148,14 @@
                         cpAlphaChannel="disabled"
                         (colorPickerChange)="inputColor()"></span>
                     </mat-tab>
-                    <mat-tab label="Color cycle">
-                        <span class="description">Cycle color animation with optional breathe effect</span>
+                    <mat-tab label="Mode">
+                        <mat-button-toggle-group #ledStaticOrRainbow [formControl]="ctrlLedStaticOrRainbow" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
+                            <mat-button-toggle value="static">Chosen color</mat-button-toggle>
+                            <mat-button-toggle value="rainbow">Rainbow</mat-button-toggle>
+                        </mat-button-toggle-group>
+                        <mat-checkbox color="primary" [formControl]="ctrlLedBreathe" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">Breathe</mat-checkbox>
                     </mat-tab>
                 </mat-tab-group>
-                <mat-checkbox color="primary" [formControl]="ctrlLedBreathe" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">Breathe</mat-checkbox>
             </div>
 
         </div>

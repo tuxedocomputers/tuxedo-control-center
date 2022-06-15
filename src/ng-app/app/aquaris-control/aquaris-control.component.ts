@@ -37,6 +37,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public selectedLedTab = 0;
     public ctrlLedBreathe = new FormControl();
+    public ctrlLedStaticOrRainbow = new FormControl();
 
     public chosenColorHex;
 
@@ -146,18 +147,22 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             switch (state.ledMode) {
                 case RGBState.Static:
                     this.selectedLedTab = this.TAB_COLORPICKER;
+                    this.ctrlLedStaticOrRainbow.setValue('static');
                     this.ctrlLedBreathe.setValue(false);
                     break;
                 case RGBState.Breathe:
                     this.selectedLedTab = this.TAB_COLORPICKER;
+                    this.ctrlLedStaticOrRainbow.setValue('static');
                     this.ctrlLedBreathe.setValue(true);
                     break;
                 case RGBState.Colorful:
                     this.selectedLedTab = this.TAB_ANIMATION;
+                    this.ctrlLedStaticOrRainbow.setValue('rainbow');
                     this.ctrlLedBreathe.setValue(false);
                     break;
                 case RGBState.BreatheColor:
                     this.selectedLedTab = this.TAB_ANIMATION;
+                    this.ctrlLedStaticOrRainbow.setValue('rainbow');
                     this.ctrlLedBreathe.setValue(true);
                     break;
             }
@@ -194,7 +199,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const ledToggle = this.ctrlLedToggle.value;
         let ledMode;
         const isBreathing = this.ctrlLedBreathe.value as boolean;
-        if (this.selectedLedTab === 0) {
+        const staticOrRainbow = this.ctrlLedStaticOrRainbow.value as string;
+        if (staticOrRainbow === 'static') {
             if (isBreathing) {
                 ledMode = RGBState.Breathe;
             } else {

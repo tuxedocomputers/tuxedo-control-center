@@ -97,8 +97,17 @@ button {
                 width: 100%;
 
                 ::ng-deep .mat-tab-body-content {
+                    display: flex;
+                    flex-flow: column nowrap;
+                    align-items: center;
+
                     height: 230px;
                     width: 100%;
+
+                    mat-button-toggle-group {
+                        transform: scale(1.4);
+                        transform-origin: center;
+                    }
 
                     .description {
                         display: block;
