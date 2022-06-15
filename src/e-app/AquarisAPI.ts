@@ -1,6 +1,7 @@
 import { DeviceInfo, PumpVoltage, RGBState } from "./LCT21001";
 
 export interface AquarisState {
+    deviceUUID: string,
     red: number,
     green: number,
     blue: number,

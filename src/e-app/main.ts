@@ -679,6 +679,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             await stopSearch();
             await aquaris.connect(deviceUUID);
             aquarisStateCurrent = {
+                deviceUUID: deviceUUID,
                 red: 0,
                 green: 0,
                 blue: 0,
