@@ -2,22 +2,9 @@
     <mat-card-title class="theme-page-title">
         <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
         <header>TUXEDO <span class="emph" (click)="inputTextDialog()">AQUARIS</span></header>
-        <mat-slide-toggle class="connect-slider"
-            [formControl]="ctrlConnectionToggle"
-            [checked]="isConnected"
-            [disabled]="isConnecting || isDisconnecting"
-            (change)="connectionToggle()"
-            color="warn"></mat-slide-toggle>
         <span class="connection-status"><span class="value">{{ connectedStatusString() }}</span></span>
+        <button mat-raised-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting">Disconnect</button>
     </mat-card-title>
-
-    <!--button mat-raised-button color="basic" (click)="buttonConnect()" [disabled]="isConnected || isConnecting">
-        <strong>Connect <i class="fas fa-cog" [ngClass]="{'fa-spin': isConnecting }"></i></strong>
-    </button-->
-    <!--button mat-raised-button color="basic" (click)="buttonDisconnect()" [disabled]="!isConnected || isDisconnecting">
-        <strong>Disconnect</strong>
-    </button-->
-    <!-- {{ fwVersion }} -->
 
     <div class="aquaris-content">
         <div class="categories" *ngIf="isConnected && stateInitialized && !isDisconnecting">
@@ -159,11 +146,14 @@
         <div class="device-list-wrapper" *ngIf="!isConnected && !isConnecting && !isDisconnecting && deviceList.length > 0">
             Please choose your TUXEDO Aquaris and click on the connect button
             <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList.length === 0">
-                <mat-list-option *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
+                <mat-list-option #currentOption *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
                     <mat-icon mat-list-icon *ngIf="device.rssi >= -70">signal_cellular_alt</mat-icon>
                     <mat-icon mat-list-icon *ngIf="device.rssi < -70 && device.rssi > -100">signal_cellular_alt_2_bar</mat-icon>
                     <mat-icon mat-list-icon *ngIf="device.rssi <= -100">signal_cellular_alt_1_bar</mat-icon>
-                    <mat-line>{{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }} ({{ device.uuid }}) {{ device.rssi }}dBm</mat-line>
+                    <mat-line style="display: inline; vertical-align: middle;">
+                        {{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }} ({{ device.uuid }}) {{ device.rssi }}dBm
+                    </mat-line>
+                    <button mat-raised-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)">Connect</button>
                 </mat-list-option>
             </mat-selection-list>
             <span *ngIf="deviceList.length === 0">No devices found</span>

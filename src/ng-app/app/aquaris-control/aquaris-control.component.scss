@@ -9,8 +9,6 @@ button {
     opacity: 1.0;
 
     header {
-        margin-bottom: 25px;
-
         .emph {
             color: var(--icon-detail);
         }
@@ -137,4 +135,12 @@ button {
 
 .low-fan-values-notice {
     font-size: 0.8em;
+}
+
+.list-connect-button {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+
+    width: 60px;
 }

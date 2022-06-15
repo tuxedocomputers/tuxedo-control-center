@@ -27,7 +27,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public stateInitialized = false;
 
-    public ctrlConnectionToggle = new FormControl();
     public ctrlDeviceList = new FormControl();
     public selectedDeviceUUID: string;
 
@@ -296,8 +295,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         } else {
             await this.buttonDisconnect();
         }
-
-        this.ctrlConnectionToggle.setValue(this.isConnected);
     }
 
     public async buttonConnect(deviceUUID: string) {
