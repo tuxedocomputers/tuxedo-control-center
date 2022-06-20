@@ -625,6 +625,8 @@ async function doSearch() {
             discoverTries = 0;
             await aquaris.stopDiscover();
             await aquaris.startDiscover();
+            // Wait a moment after reconnect for initial discovery to have a chance
+            await new Promise(resolve => setTimeout(resolve, 500));
         } else {
             discoverTries += 1;
         }
