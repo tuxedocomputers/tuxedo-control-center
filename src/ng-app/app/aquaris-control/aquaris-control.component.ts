@@ -5,6 +5,8 @@ import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
 
 interface FanPreset {
     name: string;
@@ -45,7 +47,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public ctrlFanDutyCycle = new FormControl();
 
     public fanPresets: Map<string, FanPreset> = new Map();
-    public ctrlFanPreset = new FormControl();
 
     public ctrlPumpToggle = new FormControl();
     public ctrlPumpDutyCycle = new FormControl();
@@ -242,31 +243,17 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    private async setPresetFromFanspeed(fanSpeed: number) {
-        let foundPresetKey;
-        for (let [presetKey, fanPreset] of this.fanPresets) {
-            if (fanPreset.value === fanSpeed) {
-                foundPresetKey = presetKey;
-                break;
-            }
-        }
-
-        if (foundPresetKey !== undefined) {
-            this.ctrlFanPreset.setValue(foundPresetKey);
-        }
-    }
-
     public async sliderFanChange(fanSpeed: number) {
 
     }
 
-    public async selectFanPreset() {
-        const fanPreset = this.fanPresets.get(this.ctrlFanPreset.value);
+    public async selectFanPreset(fanPresetId: string) {
+        const fanPreset = this.fanPresets.get(fanPresetId);
+
         if (fanPreset.value !== undefined) {
             this.ctrlFanDutyCycle.setValue(fanPreset.value);
             await this.sliderFanInput(fanPreset.value);
         }
-        this.ctrlFanPreset.setValue(undefined);
     }
 
     public async pumpInput() {

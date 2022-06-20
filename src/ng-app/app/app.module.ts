@@ -51,6 +51,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu'
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -139,7 +140,8 @@ declare const require;
     OverlayModule,
     GaugeModule.forRoot(),
     ChartsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    MatMenuModule
   ],
   providers: [
     DecimalPipe,

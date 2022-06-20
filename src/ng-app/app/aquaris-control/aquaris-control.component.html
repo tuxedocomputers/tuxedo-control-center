@@ -29,14 +29,12 @@
                     <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     Fan control
                 </header>
-                <mat-form-field>
-                    <mat-label>Fan presets</mat-label>
-                    <mat-select class="select-dropdown" [formControl]="ctrlFanPreset" (selectionChange)="selectFanPreset()" [disableOptionCentering]="true">
-                        <mat-option *ngFor="let fanPreset of fanPresets | keyvalue" [value]="fanPreset.key" color="primary">
-                            {{ fanPreset.value.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <button mat-raised-button [matMenuTriggerFor]="fanPresetMenu">Fan presets</button>
+                <mat-menu #fanPresetMenu>
+                    <button mat-menu-item *ngFor="let fanPreset of fanPresets | keyvalue" (click)="selectFanPreset(fanPreset.key)">
+                        {{ fanPreset.value.name }}
+                    </button>
+                </mat-menu>
                 <div class="tcc-gauge">
                     <mwl-gauge
                         [max]="100"
