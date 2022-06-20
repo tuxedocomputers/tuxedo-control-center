@@ -23,6 +23,7 @@ export class ClientAPI {
     public connect(deviceUUID: string) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.connect.name, deviceUUID]); }
     public disconnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.disconnect.name]); }
     public isConnected() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.isConnected.name]) as Promise<boolean>; }
+    public hasBluetooth() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.hasBluetooth.name]) as Promise<boolean>; }
     public startDiscover() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.startDiscover.name]); }
     public stopDiscover() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.stopDiscover.name]); }
     public getDevices() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.getDevices.name]) as Promise<DeviceInfo[]>; }

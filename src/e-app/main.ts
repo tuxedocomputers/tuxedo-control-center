@@ -608,6 +608,8 @@ let aquarisIoProgress = false;
 let aquarisSearchProgress = false;
 let aquarisConnectProgress = false;
 
+let aquarisHasBluetooth = false;
+
 let searchingTimeout: NodeJS.Timeout;
 let searchingDelayMs = 1000;
 let discoverTries = 0;
@@ -624,7 +626,12 @@ async function doSearch() {
         if (!await aquaris.isDiscovering()  || discoverTries >= discoverMaxTries) {
             discoverTries = 0;
             await aquaris.stopDiscover();
-            await aquaris.startDiscover();
+            aquarisHasBluetooth = await aquaris.startDiscover();
+            if (!aquarisHasBluetooth) {
+                aquarisSearchProgress = false;
+                await stopSearch();
+                return;
+            }
             // Wait a moment after reconnect for initial discovery to have a chance
             await new Promise(resolve => setTimeout(resolve, 500));
         } else {
@@ -715,6 +722,10 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         } else {
             return await aquaris.isConnected();
         }
+    })
+
+    .set(ClientAPI.prototype.hasBluetooth.name, async () => {
+        return aquarisHasBluetooth;
     })
 
     .set(ClientAPI.prototype.startDiscover.name, async () => {
