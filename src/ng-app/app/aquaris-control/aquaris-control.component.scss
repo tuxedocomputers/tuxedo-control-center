@@ -48,6 +48,10 @@
                 background-color: rgba(100, 209, 113, 1.00);;
             }
         }
+
+        mat-icon {
+            margin: 10px;
+        }
     }
 }
 
@@ -154,6 +158,12 @@
     padding: 10px;
     min-height: 200px;
     width: 600px;
+}
+
+.troubleshoot-list {
+    width: 600px;
+
+    font-size: 1.2em;
 }
 
 .aquaris-logo {

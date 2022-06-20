@@ -5,11 +5,13 @@
         <span class="connection-status">
             <span
                 class="connection-status-dot"
+                *ngIf="hasBluetooth"
                 [ngClass]="{
                     'searching': !isConnected || isConnecting || isDisconnecting,
                     'connected': isConnected && !isConnecting && !isDisconnecting
                 }"
             ></span>
+            <mat-icon *ngIf="!hasBluetooth">bluetooth_disabled</mat-icon>
             <span class="value">{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span>
             <button mat-icon-button
                 *ngIf="isConnected && !isConnecting && !isDisconnecting"
@@ -158,7 +160,7 @@
 
         </div>
 
-        <div class="device-list-wrapper" *ngIf="!isConnected && !isConnecting && !isDisconnecting && deviceList.length > 0">
+        <div class="device-list-wrapper" *ngIf="hasBluetooth && !isConnected && !isConnecting && !isDisconnecting && deviceList.length > 0">
             Please choose your TUXEDO Aquaris and click on the connect button
             <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList.length === 0">
                 <mat-list-option #currentOption *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
@@ -175,6 +177,14 @@
                 </mat-list-option>
             </mat-selection-list>
             <span *ngIf="deviceList.length === 0">No devices found</span>
+        </div>
+
+        <div class="troubleshoot-list" *ngIf="!hasBluetooth || deviceList.length === 0">
+            <p><b>No devices found. Verify that...</b></p>
+            <p>1. Bluetooth is turned on.</p>
+            <p>2. The power cable is connected.</p>
+            <p>3. A blue light is blinking on top of the device. If not, press the power button which is also located on top of the device.</p>
+            <p>4. A bluetooth adapter is available on the device.</p>
         </div>
 
         <mat-spinner *ngIf="(isConnecting && !isConnected) || isDisconnecting"></mat-spinner>

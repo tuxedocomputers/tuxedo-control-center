@@ -5,8 +5,6 @@ import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
-import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
 
 interface FanPreset {
     name: string;
@@ -58,6 +56,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public readonly TAB_COLORPICKER = 0;
     public readonly TAB_ANIMATION = 1;
+
+    public hasBluetooth = false;
     
     constructor(private electron: ElectronService, public dialog: MatDialog) {
         this.fanPresets.set('slow', {
@@ -104,6 +104,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async discoverUpdate() {
         this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
+        this.hasBluetooth = await this.aquaris.hasBluetooth();
         if (this.selectedDeviceUUID !== undefined) {
             this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
         }
@@ -346,7 +347,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public connectedStatusString(): string {
-        if (this.isConnecting) {
+        if (!this.hasBluetooth) {
+            return 'No Bluetooth available'
+        } else if (this.isConnecting) {
             return 'Connecting...';
         } else if (this.isDisconnecting) {
             return 'Disconnecting...';
