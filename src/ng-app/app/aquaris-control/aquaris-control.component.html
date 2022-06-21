@@ -179,7 +179,7 @@
             <span *ngIf="deviceList.length === 0">No devices found</span>
         </div>
 
-        <div class="troubleshoot-list" *ngIf="!hasBluetooth || deviceList.length === 0">
+        <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (!hasBluetooth || deviceList.length === 0)">
             <p><b>No devices found. Verify that...</b></p>
             <ol>
                 <li>Bluetooth is turned on.</li>

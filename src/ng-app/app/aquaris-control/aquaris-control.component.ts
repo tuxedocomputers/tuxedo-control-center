@@ -57,7 +57,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public readonly TAB_COLORPICKER = 0;
     public readonly TAB_ANIMATION = 1;
 
-    public hasBluetooth = false;
+    public hasBluetooth = true;
     
     constructor(private electron: ElectronService, public dialog: MatDialog) {
         this.fanPresets.set('slow', {
@@ -104,7 +104,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async discoverUpdate() {
         this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
-        this.hasBluetooth = await this.aquaris.hasBluetooth();
         if (this.selectedDeviceUUID !== undefined) {
             this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
         }
@@ -174,6 +173,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     private async periodicUpdate() {
         this.isConnected = await this.aquaris.isConnected();
+        this.hasBluetooth = await this.aquaris.hasBluetooth();
 
         if (!this.isConnected && !this.isConnecting && !this.isDisconnecting) {
             await this.discoverUpdate();
