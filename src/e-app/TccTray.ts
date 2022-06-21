@@ -63,7 +63,7 @@ export class TccTray {
     
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
-            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl() },
+            // { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl() },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
