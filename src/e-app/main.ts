@@ -693,7 +693,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
                 green: 0,
                 blue: 0,
                 ledMode: RGBState.Static,
-                fanDutyCycle: 0,
+                fanDutyCycle: 50,
                 pumpDutyCycle: 60,
                 pumpVoltage: PumpVoltage.V8,
                 ledOn: true,
