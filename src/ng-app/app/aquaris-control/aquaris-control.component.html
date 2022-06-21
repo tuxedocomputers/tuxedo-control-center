@@ -181,10 +181,12 @@
 
         <div class="troubleshoot-list" *ngIf="!hasBluetooth || deviceList.length === 0">
             <p><b>No devices found. Verify that...</b></p>
-            <p>1. Bluetooth is turned on.</p>
-            <p>2. The power cable is connected.</p>
-            <p>3. A blue light is blinking on top of the device. If not, press the power button which is also located on top of the device.</p>
-            <p>4. A bluetooth adapter is available on the device.</p>
+            <ol>
+                <li>Bluetooth is turned on.</li>
+                <li>The power cable is connected.</li>
+                <li>A blue light is blinking on top of the device. If not, press the power button which is also located on top of the device.</li>
+                <li>A bluetooth adapter is available on the device.</li>
+            </ol>
         </div>
 
         <mat-spinner *ngIf="(isConnecting && !isConnected) || isDisconnecting"></mat-spinner>
