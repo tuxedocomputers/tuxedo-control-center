@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
+import { DMIController } from 'src/common/classes/DMIController';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -24,8 +25,18 @@ import { TccDBusClientService } from './tcc-dbus-client.service';
 })
 export class CompatibilityService {
 
-  constructor(
-    private tccDbus: TccDBusClientService) { }
+  private hasAquarisValue: boolean;
+
+  constructor(private tccDbus: TccDBusClientService) {
+    // TODO: Manual read until general device id get merged
+    const dmi = new DMIController('/sys/class/dmi/id');
+    const name = dmi.productSKU.readValueNT();
+    if (name !== undefined && name === 'STELLARIS1XI04') {
+        this.hasAquarisValue = true;
+    } else {
+        this.hasAquarisValue = false;
+    }
+  }
 
   get hasFancontrol(): boolean {
     return this.tccDbus.tuxedoWmiAvailable.value;
@@ -51,5 +62,9 @@ export class CompatibilityService {
 
   get tccDbusAvailable() {
     return this.tccDbus.available;
+  }
+
+  get hasAquaris() {
+    return this.hasAquarisValue;
   }
 }

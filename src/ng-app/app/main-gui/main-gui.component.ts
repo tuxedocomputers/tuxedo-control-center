@@ -45,7 +45,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         private config: ConfigService,
         private state: StateService,
         private utils: UtilsService,
-        private compat: CompatibilityService) { }
+        public compat: CompatibilityService) { }
 
     public buttonLanguageLabel: string;
 
