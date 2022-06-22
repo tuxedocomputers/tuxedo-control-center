@@ -393,7 +393,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public connectedStatusString(): string {
         if (!this.hasBluetooth) {
-            return 'No Bluetooth available'
+            return 'Bluetooth not available'
         } else if (this.isConnecting) {
             return 'Connecting...';
         } else if (this.isDisconnecting) {

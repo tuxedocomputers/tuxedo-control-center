@@ -179,13 +179,20 @@
             <span *ngIf="deviceList.length === 0">No devices found</span>
         </div>
 
-        <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (!hasBluetooth || deviceList.length === 0)">
-            <p><b>No devices found. Verify that...</b></p>
+        <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && !hasBluetooth">
+            <p><b>Verify that...</b></p>
             <ol>
                 <li>Bluetooth is turned on.</li>
-                <li>The power cable is connected.</li>
-                <li>A blue light is blinking on top of the device. If not, press the power button which is also located on top of the device.</li>
-                <li>A bluetooth adapter is available on the device.</li>
+                <li>A bluetooth adapter is available in the computer.</li>
+            </ol>
+        </div>
+
+        <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (hasBluetooth && deviceList.length === 0)">
+            <p><b>No devices found.</b></p>
+            <p><b>Verify that...</b></p>
+            <ol>
+                <li>The power cable is connected to your <i>TUXEDO Aquaris</i>.</li>
+                <li>A light is blinking on top of your <i>TUXEDO Aquaris</i>. If not, press the power button which is also located on top of the device.</li>
             </ol>
         </div>
 
