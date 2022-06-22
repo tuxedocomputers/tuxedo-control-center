@@ -706,6 +706,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             } else {
                 aquarisStateExpected = Object.assign({}, aquarisStateCurrent);
             }
+            aquarisStateExpected.deviceUUID = deviceUUID;
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
         } finally {
             aquarisConnectProgress = false;
@@ -714,13 +715,18 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
 
     .set(ClientAPI.prototype.disconnect.name, async () => {
         await aquaris.disconnect();
+        aquarisStateExpected.deviceUUID = undefined;
     })
 
     .set(ClientAPI.prototype.isConnected.name, async () => {
         if (aquarisIoProgress) {
             return true;
         } else {
-            return await aquaris.isConnected();
+            const isConnected = await aquaris.isConnected();
+            if (!isConnected && aquarisStateExpected !== undefined) {
+                aquarisStateExpected.deviceUUID = undefined;
+            }
+            return isConnected;
         }
     })
 

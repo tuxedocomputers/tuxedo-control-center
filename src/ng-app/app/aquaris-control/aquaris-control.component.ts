@@ -104,10 +104,46 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async discoverUpdate() {
         this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
+
+        if (this.selectedDeviceUUID === undefined) {
+            this.selectedDeviceUUID = this.findDefaultSelectedDevice();
+        }
+
         if (this.selectedDeviceUUID !== undefined) {
             this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
         }
         this.isUpdatingDevices = false;
+    }
+
+    private findDefaultSelectedDevice() {
+        let defaultDeviceUUID;
+
+        // First default list selection: first device with an assigned name
+        let uuidWithAssignedName;
+        for (let device of this.deviceList) {
+            if (this.deviceNameMap.get(device.uuid) !== undefined) {
+                uuidWithAssignedName = device.uuid;
+                break;
+            }
+        }
+        if (uuidWithAssignedName !== undefined) {
+            defaultDeviceUUID = uuidWithAssignedName;
+        }
+
+        // Second default list selection: last connected device
+        if (defaultDeviceUUID === undefined) {
+            let lastConnectedUUID = localStorage.getItem('aquarisLastConnected');
+            if (lastConnectedUUID !== null) {
+                for (let device of this.deviceList) {
+                    if (device.uuid === lastConnectedUUID) {
+                        defaultDeviceUUID = lastConnectedUUID;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return defaultDeviceUUID;
     }
 
     public rgbToHex(red: number, green: number, blue: number) {
@@ -129,7 +165,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     private async updateState() {
         const state = await this.aquaris.getState();
         if (state !== undefined) {
-            this.selectedDeviceUUID = state.deviceUUID;
+            if (this.isConnected) {
+                this.selectedDeviceUUID = state.deviceUUID;
+            }
 
             this.ctrlLedToggle.setValue(state.ledOn);
             this.ctrlLedRed.setValue(state.red);
@@ -306,6 +344,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
+            localStorage.setItem('aquarisLastConnected', deviceUUID);
         } catch (err) {
             console.log('connect failed => ' + err);
             await this.aquaris.disconnect();
@@ -323,6 +362,12 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             await this.aquaris.saveState();
             await this.aquaris.disconnect();
             this.isConnected = await this.aquaris.isConnected();
+            this.selectedDeviceUUID = this.findDefaultSelectedDevice();
+            if (this.selectedDeviceUUID === undefined) {
+                this.ctrlDeviceList.reset();
+            } else {
+                this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
+            }
         } catch (err) {
             console.log('disconnect failed => ' + err);
         } finally {
