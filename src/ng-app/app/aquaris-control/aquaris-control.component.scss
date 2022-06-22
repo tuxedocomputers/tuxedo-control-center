@@ -45,7 +45,8 @@
             }
         
             &.connected {
-                background-color: rgba(100, 209, 113, 1.00);;
+                transform: scale(0.7);
+                background-color: rgba(100, 209, 113, 1.00);
             }
         }
 
