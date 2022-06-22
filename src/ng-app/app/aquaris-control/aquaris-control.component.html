@@ -150,7 +150,7 @@
                     </mat-tab>
                     <mat-tab label="Mode">
                         <mat-button-toggle-group #ledStaticOrRainbow [formControl]="ctrlLedStaticOrRainbow" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
-                            <mat-button-toggle value="static">Chosen color</mat-button-toggle>
+                            <mat-button-toggle value="static">Single color</mat-button-toggle>
                             <mat-button-toggle value="rainbow">Rainbow</mat-button-toggle>
                         </mat-button-toggle-group>
                         <mat-checkbox color="primary" [formControl]="ctrlLedBreathe" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">Breathe</mat-checkbox>
