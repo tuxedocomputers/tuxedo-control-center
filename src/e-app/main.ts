@@ -608,7 +608,7 @@ let aquarisIoProgress = false;
 let aquarisSearchProgress = false;
 let aquarisConnectProgress = false;
 
-let aquarisHasBluetooth = false;
+let aquarisHasBluetooth = true;
 
 let searchingTimeout: NodeJS.Timeout;
 let searchingDelayMs = 1000;
