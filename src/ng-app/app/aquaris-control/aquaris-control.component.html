@@ -180,19 +180,22 @@
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && !hasBluetooth">
-            <p><b>Verify that...</b></p>
+            <p><b>TUXEDO Control Center could not find a Bluetooth connection.</b></p>
+            <p>Please verify that:</p>
             <ol>
-                <li>Bluetooth is turned on.</li>
-                <li>A bluetooth adapter is available in the computer.</li>
+                <li>Your Bluetooth adapter is turned on in your system settings.</li>
+                <li>Your Bluetooth adapter is not disabled in the UEFI.</li>
+                <li>A Bluetooth adapter is installed in your TUXEDO notebook.</li>
             </ol>
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (hasBluetooth && deviceList.length === 0)">
-            <p><b>No devices found.</b></p>
-            <p><b>Verify that...</b></p>
+            <p><b>TUXEDO Control Center could not find your TUXEDO Aquaris</b></p>
+            <p>Please verify that:</p>
             <ol>
-                <li>The power cable is connected to your <i>TUXEDO Aquaris</i>.</li>
-                <li>A light is blinking on top of your <i>TUXEDO Aquaris</i>. If not, press the power button which is also located on top of the device.</li>
+                <li>Your Aquaris is switched on and the blue LED on the power button is blinking.</li>
+                <li>Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</li>
+                <li>Your Aquaris' power cable is plugged into your TUXEDO notebook.</li>
             </ol>
         </div>
 
