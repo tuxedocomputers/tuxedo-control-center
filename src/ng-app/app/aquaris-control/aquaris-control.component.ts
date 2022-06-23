@@ -5,6 +5,8 @@ import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
+import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
+import { UtilsService } from '../utils.service';
 
 interface FanPreset {
     name: string;
@@ -59,7 +61,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public hasBluetooth = true;
     
-    constructor(private electron: ElectronService, public dialog: MatDialog) {
+    constructor(
+        private electron: ElectronService,
+        public dialog: MatDialog,
+        private utils: UtilsService) {
         this.fanPresets.set('slow', {
             name: 'Slow',
             value: 50
@@ -357,6 +362,22 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public isDisconnecting = false;
 
     public async buttonDisconnect() {
+        const disconnectNoticeDisable = localStorage.getItem('disconnectNoticeDisable');
+        if (disconnectNoticeDisable === null || disconnectNoticeDisable === 'false') {
+            const askToClose = await this.utils.confirmDialog({
+                title: 'Do you want to disconnect your Aquaris?',
+                description: 'Please ensure to follow our instructions (Link) carefully in case you want to unplug your Aquaris from your TUXEDO.',
+                buttonAbortLabel: 'Stay connected',
+                buttonConfirmLabel: 'Disconnect',
+                checkboxNoBotherLabel: 'Don\'t ask again',
+                showCheckboxNoBother: true
+            });
+            if (askToClose.noBother) {
+                localStorage.setItem('disconnectNoticeDisable', 'true');
+            }
+            if (!askToClose.confirm) return;
+        }
+
         this.isDisconnecting = true;
         try {
             await this.aquaris.saveState();

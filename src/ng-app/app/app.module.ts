@@ -81,6 +81,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -102,7 +103,8 @@ declare const require;
     FanGraphComponent,
     MainGuiComponent,
     AquarisControlComponent,
-    DialogInputTextComponent
+    DialogInputTextComponent,
+    DialogConfirmComponent
   ],
   imports: [
     BrowserModule,
