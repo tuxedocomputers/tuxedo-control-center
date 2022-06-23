@@ -45,6 +45,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public ctrlFanToggle = new FormControl();
     public ctrlFanDutyCycle = new FormControl();
+    public ctrlFanDutyCycleTextInput = new FormControl();
 
     public fanPresets: Map<string, FanPreset> = new Map();
 
@@ -295,8 +296,20 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const fanPreset = this.fanPresets.get(fanPresetId);
 
         if (fanPreset.value !== undefined) {
-            this.ctrlFanDutyCycle.setValue(fanPreset.value);
-            await this.sliderFanInput(fanPreset.value);
+            await this.setCustomFanSpeed(fanPreset.value)
+        }
+    }
+
+    public async setCustomFanSpeed(speed: number) {
+        this.ctrlFanDutyCycle.setValue(speed);
+        await this.sliderFanInput(speed);
+    }
+
+    public async fanSpeedTextInput() {
+        const textSpeed = parseInt(this.ctrlFanDutyCycleTextInput.value);
+        if (!isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
+            await this.setCustomFanSpeed(textSpeed);
+            this.ctrlFanDutyCycleTextInput.reset();
         }
     }
 

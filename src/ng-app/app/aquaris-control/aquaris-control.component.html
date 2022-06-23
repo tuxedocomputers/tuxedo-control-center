@@ -48,7 +48,13 @@
                         [animated]="true"
                         [animationDuration]="0.3">
                     </mwl-gauge>
-                    <div class="custom-value-text">{{ fanSpeed.value }}</div>
+                    <input matInput
+                        class="custom-value-text fan-gauge-input"
+                        [formControl]="ctrlFanDutyCycleTextInput"
+                        [placeholder]="fanSpeed.value + ''"
+                        (keydown.enter)="fanSpeedTextInput()"
+                        maxlength="3">
+                    <!--div class="custom-value-text">{{ fanSpeed.value }}</div-->
                     <div class="unit-text">%</div>
                     <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <div class="legend">
