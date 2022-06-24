@@ -34,9 +34,9 @@
             background-color: gray;
         
             @keyframes pulse-frames {
-                0%   { opacity: 0.3; transform: scale(0.7); }
-                50%  { opacity: 0.7; transform: scale(1.0); }
-                100% { opacity: 0.3; transform: scale(0.7);}
+                0%   { opacity: 0.3; transform: scale(0.42); }
+                50%  { opacity: 0.7; transform: scale(0.83); }
+                100% { opacity: 0.3; transform: scale(0.42);}
             }
         
             &.searching {
@@ -45,7 +45,7 @@
             }
         
             &.connected {
-                transform: scale(0.7);
+                transform: scale(0.42);
                 background-color: rgba(100, 209, 113, 1.00);
             }
         }
