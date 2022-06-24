@@ -139,10 +139,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -198,8 +198,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">87</context>
@@ -246,11 +246,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt; "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i> "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -266,10 +266,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -605,14 +605,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cc363dec382fbe3f178f63e99e788a4bf6fb8053" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;&#xA;                "/> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;&#xA;                "/> With 3 premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>&#10;                "/> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>&#10;                "/> With 3 premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
                 safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 With 3 premade as well as any number of individually configurable profiles, you have
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">31,36</context>
@@ -965,8 +965,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="243c85168792d2dacd3e7a9868767d947b7df7ac" datatype="html">
-        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
-        <target state="needs-adaptation">On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> reset to default. Default settings need to be restored by hand or a system reboot.</target>
+        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong> "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
+        <target state="needs-adaptation">On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> reset to default. Default settings need to be restored by hand or a system reboot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1182,12 +1182,12 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
-        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="needs-adaptation">
-          <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to
-            reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
-            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+          <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
+          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to
+            reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending
+            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
@@ -1358,7 +1358,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="menuAquaris" datatype="html">
         <source>Aquaris</source>
-        <target state="needs-translation"/>
+        <target state="translated">Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
           <context context-type="linenumber">74</context>
@@ -1366,7 +1366,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqFanPresetSlowLabel" datatype="html">
         <source>Slow</source>
-        <target state="needs-translation"/>
+        <target state="translated">Slow</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -1374,7 +1374,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqFanPresetMediumLabel" datatype="html">
         <source>Medium</source>
-        <target state="needs-translation"/>
+        <target state="translated">Medium</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -1382,7 +1382,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqFanPresetFastLabel" datatype="html">
         <source>Fast</source>
-        <target state="needs-translation"/>
+        <target state="translated">Fast</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -1390,7 +1390,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogDisconnectTitle" datatype="html">
         <source>Do you want to disconnect your Aquaris?</source>
-        <target state="needs-translation"/>
+        <target state="translated">Do you want to disconnect your Aquaris?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">381</context>
@@ -1398,7 +1398,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogDisconnectDescription" datatype="html">
         <source>Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">382</context>
@@ -1406,7 +1406,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
         <source>Stay connected</source>
-        <target state="needs-translation"/>
+        <target state="translated">Stay connected</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">383</context>
@@ -1414,7 +1414,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
         <source>Disconnect</source>
-        <target state="needs-translation"/>
+        <target state="translated">Disconnect</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">384</context>
@@ -1422,7 +1422,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
         <source>Don't ask again</source>
-        <target state="needs-translation"/>
+        <target state="translated">Don't ask again</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">385</context>
@@ -1430,7 +1430,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="8300092213868729072" datatype="html">
         <source>Bluetooth not available</source>
-        <target state="needs-translation"/>
+        <target state="translated">Bluetooth not available</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">430</context>
@@ -1439,7 +1439,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="3852289441366561594" datatype="html">
         <source>Connecting...</source>
-        <target state="needs-translation"/>
+        <target state="translated">Connecting...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">432</context>
@@ -1448,7 +1448,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="2844912541574448086" datatype="html">
         <source>Disconnecting...</source>
-        <target state="needs-translation"/>
+        <target state="translated">Disconnecting...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">434</context>
@@ -1457,7 +1457,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="628702835471697117" datatype="html">
         <source>Connected to</source>
-        <target state="needs-translation"/>
+        <target state="translated">Connected to</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">436</context>
@@ -1466,7 +1466,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="245175603611658921" datatype="html">
         <source>Looking for devices...</source>
-        <target state="needs-translation"/>
+        <target state="translated">Looking for devices...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">438</context>
@@ -1475,7 +1475,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogSelectNameTitle" datatype="html">
         <source>Device name</source>
-        <target state="needs-translation"/>
+        <target state="translated">Device name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">512</context>
@@ -1483,7 +1483,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqDialogSelectNameDescription" datatype="html">
         <source>A descriptive name for the device</source>
-        <target state="needs-translation"/>
+        <target state="translated">A descriptive name for the device</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">513</context>
@@ -1491,7 +1491,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqButtonDisconnectLabel" datatype="html">
         <source>Disconnect</source>
-        <target state="needs-translation"/>
+        <target state="translated">Disconnect</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1499,7 +1499,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqLabelFanControl" datatype="html">
         <source>Fan control</source>
-        <target state="needs-translation"/>
+        <target state="translated">Fan control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">32</context>
@@ -1507,7 +1507,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqButtonFanPresetsLabel" datatype="html">
         <source>Fan presets</source>
-        <target state="needs-translation"/>
+        <target state="translated">Fan presets</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1515,7 +1515,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqFanGaugeLegendText" datatype="html">
         <source>Fan speed</source>
-        <target state="needs-translation"/>
+        <target state="translated">Fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">61</context>
@@ -1523,7 +1523,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqLowFanSpeedNotice" datatype="html">
         <source>Low fan speeds (&lt; 50%) are known to cause unwanted noises</source>
-        <target state="needs-translation"/>
+        <target state="translated">Low fan speeds (&lt; 50%) are known to cause unwanted noises</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">64</context>
@@ -1531,7 +1531,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqLabelLEDControl" datatype="html">
         <source>LED Control</source>
-        <target state="needs-translation"/>
+        <target state="translated">LED Control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">113</context>
@@ -1539,7 +1539,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqTabLEDColorPickerLabel" datatype="html">
         <source>Pick color</source>
-        <target state="needs-translation"/>
+        <target state="translated">Pick color</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">147</context>
@@ -1547,7 +1547,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqTabLEDModeLabel" datatype="html">
         <source>Mode</source>
-        <target state="needs-translation"/>
+        <target state="translated">Mode</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">157</context>
@@ -1555,7 +1555,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqButtonToggleLEDStaticLabel" datatype="html">
         <source>Single color</source>
-        <target state="needs-translation"/>
+        <target state="translated">Single color</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">159</context>
@@ -1563,7 +1563,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqButtonToggleLEDRainbowLabel" datatype="html">
         <source>Rainbow</source>
-        <target state="needs-translation"/>
+        <target state="translated">Rainbow</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">160</context>
@@ -1571,7 +1571,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqCheckboxLEDBreatheLabel" datatype="html">
         <source>Breathe</source>
-        <target state="needs-translation"/>
+        <target state="translated">Breathe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">162</context>
@@ -1579,7 +1579,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqChooseAquarisText" datatype="html">
         <source>Please choose your TUXEDO Aquaris and click on the connect button</source>
-        <target state="needs-translation"/>
+        <target state="translated">Please choose your TUXEDO Aquaris and click on the connect button</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">170</context>
@@ -1587,7 +1587,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqButtonConnectLabel" datatype="html">
         <source>Connect</source>
-        <target state="needs-translation"/>
+        <target state="translated">Connect</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">182</context>
@@ -1595,7 +1595,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoBluetoothHeadlineText" datatype="html">
         <source>TUXEDO Control Center could not find a Bluetooth connection.</source>
-        <target state="needs-translation"/>
+        <target state="translated">TUXEDO Control Center could not find a Bluetooth connection.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">188</context>
@@ -1603,7 +1603,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoBluetoothVerifyText" datatype="html">
         <source>Please verify that:</source>
-        <target state="needs-translation"/>
+        <target state="translated">Please verify that:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">189</context>
@@ -1611,7 +1611,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintTurnedOn" datatype="html">
         <source>Your Bluetooth adapter is turned on in your system settings.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Your Bluetooth adapter is turned on in your system settings.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">191</context>
@@ -1619,7 +1619,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintNotDisabled" datatype="html">
         <source>Your Bluetooth adapter is not disabled in the UEFI.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Your Bluetooth adapter is not disabled in the UEFI.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">192</context>
@@ -1627,7 +1627,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintIsInstalled" datatype="html">
         <source>A Bluetooth adapter is installed in your TUXEDO notebook.</source>
-        <target state="needs-translation"/>
+        <target state="translated">A Bluetooth adapter is installed in your TUXEDO notebook.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">193</context>
@@ -1635,7 +1635,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoDevicesHeadlineText" datatype="html">
         <source>TUXEDO Control Center could not find your TUXEDO Aquaris</source>
-        <target state="needs-translation"/>
+        <target state="translated">TUXEDO Control Center could not find your TUXEDO Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">198</context>
@@ -1643,7 +1643,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoDevicesVerifyText" datatype="html">
         <source>Please verify that:</source>
-        <target state="needs-translation"/>
+        <target state="translated">Please verify that:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">199</context>
@@ -1651,7 +1651,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoDevicesHintSwitchedOn" datatype="html">
         <source>Your Aquaris is switched on and the blue LED on the power button is blinking.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Your Aquaris is switched on and the blue LED on the power button is blinking.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">201</context>
@@ -1659,7 +1659,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
         <source>Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">202</context>
@@ -1667,7 +1667,7 @@ Commercial register number - Part B of the commercial register - 27755
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
         <source>Your Aquaris' power cable is plugged into your TUXEDO notebook.</source>
-        <target state="needs-translation"/>
+        <target state="translated">Your Aquaris' power cable is plugged into your TUXEDO notebook.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">203</context>
