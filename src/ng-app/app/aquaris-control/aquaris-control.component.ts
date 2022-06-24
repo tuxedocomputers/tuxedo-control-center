@@ -67,13 +67,13 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         public dialog: MatDialog,
         private utils: UtilsService) {
         this.fanPresets.set('slow', {
-            name: 'Slow',
+            name: $localize `:@@aqFanPresetSlowLabel:Slow`,
             value: 50
         }).set('medium', {
-            name: 'Medium',
+            name: $localize `:@@aqFanPresetMediumLabel:Medium`,
             value: 65
         }).set('fast', {
-            name: 'Fast',
+            name: $localize `:@@aqFanPresetFastLabel:Fast`,
             value: 80
         });
         this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
@@ -378,11 +378,11 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const disconnectNoticeDisable = localStorage.getItem('disconnectNoticeDisable');
         if (disconnectNoticeDisable === null || disconnectNoticeDisable === 'false') {
             const askToClose = await this.utils.confirmDialog({
-                title: 'Do you want to disconnect your Aquaris?',
-                description: 'Please ensure to follow our instructions (Link) carefully in case you want to unplug your Aquaris from your TUXEDO.',
-                buttonAbortLabel: 'Stay connected',
-                buttonConfirmLabel: 'Disconnect',
-                checkboxNoBotherLabel: 'Don\'t ask again',
+                title: $localize `:@@aqDialogDisconnectTitle:Do you want to disconnect your Aquaris?`,
+                description: $localize `:@@aqDialogDisconnectDescription:Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.`,
+                buttonAbortLabel: $localize `:@@aqDialogButtonAbortLabel:Stay connected`,
+                buttonConfirmLabel: $localize `:@@aqDialogButtonConfirmLabel:Disconnect`,
+                checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
                 showCheckboxNoBother: true
             });
             if (askToClose.noBother) {
@@ -427,15 +427,15 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public connectedStatusString(): string {
         if (!this.hasBluetooth) {
-            return 'Bluetooth not available'
+            return $localize `:aqConnectionStatusNoBluetooth:Bluetooth not available`;
         } else if (this.isConnecting) {
-            return 'Connecting...';
+            return $localize `:aqConnectionStatusConnecting:Connecting...`;
         } else if (this.isDisconnecting) {
-            return 'Disconnecting...';
+            return $localize `:aqConnectionStatusDisconnecting:Disconnecting...`;
         } else if (this.isConnected) {
-            return 'Connected to';
+            return $localize `:aqConnectionStatusConnectedTo:Connected to`;
         } else {
-            return 'Looking for devices...';
+            return $localize `:aqConnectionStatusLookingForDevices:Looking for devices...`;
         }
     }
 
@@ -509,8 +509,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const dialogRef = this.dialog.open(DialogInputTextComponent, {
             minWidth: 350,
             data: {
-                title: 'Device name',
-                description: 'A descriptive name for the device',
+                title: $localize `:@@aqDialogSelectNameTitle:Device name`,
+                description: $localize `:@@aqDialogSelectNameDescription:A descriptive name for the device`,
                 prefill: hasName ? chosenName : ''
             }
         });
