@@ -552,12 +552,14 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     current.blue = next.blue;
                     current.ledMode = next.ledMode;
                     current.ledOn = next.ledOn;
-                    if (next.ledOn) {
-                        console.log(`writeRGB(${next.red}, ${next.green}, ${next.blue}, ${next.ledMode})`);
-                        await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
-                    } else {
-                        console.log(`writeRGBOff()`);
-                        await dev.writeRGBOff();
+                    if (next.deviceUUID !== 'demo') {
+                        if (next.ledOn) {
+                            console.log(`writeRGB(${next.red}, ${next.green}, ${next.blue}, ${next.ledMode})`);
+                            await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
+                        } else {
+                            console.log(`writeRGBOff()`);
+                            await dev.writeRGBOff();
+                        }
                     }
                 }
 
@@ -566,12 +568,14 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                 if (updateFan) {
                     current.fanDutyCycle = next.fanDutyCycle;
                     current.fanOn = next.fanOn;
-                    if (next.fanOn) {
-                        console.log(`writeFanMode(${next.fanDutyCycle})`);
-                        await dev.writeFanMode(next.fanDutyCycle);
-                    } else {
-                        console.log(`writeFanOff()`);
-                        await dev.writeFanOff();
+                    if (next.deviceUUID !== 'demo') {
+                        if (next.fanOn) {
+                            console.log(`writeFanMode(${next.fanDutyCycle})`);
+                            await dev.writeFanMode(next.fanDutyCycle);
+                        } else {
+                            console.log(`writeFanOff()`);
+                            await dev.writeFanOff();
+                        }
                     }
                 }
 
@@ -581,12 +585,14 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     current.pumpDutyCycle = next.pumpDutyCycle;
                     current.pumpVoltage = next.pumpVoltage;
                     current.pumpOn = next.pumpOn;
-                    if (next.pumpOn) {
-                        console.log(`writePumpMode(${next.pumpDutyCycle}, ${next.pumpVoltage})`);
-                        await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
-                    } else {
-                        console.log(`writePumpOff()`);
-                        await dev.writePumpOff();
+                    if (next.deviceUUID !== 'demo') {
+                        if (next.pumpOn) {
+                            console.log(`writePumpMode(${next.pumpDutyCycle}, ${next.pumpVoltage})`);
+                            await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
+                        } else {
+                            console.log(`writePumpOff()`);
+                            await dev.writePumpOff();
+                        }
                     }
                 }
                 overrideCheck = false;
@@ -679,6 +685,10 @@ async function aquarisCleanUp() {
     }
 }
 
+async function aquarisConnectedDemo() {
+    return aquarisStateCurrent !== undefined && aquarisStateCurrent.deviceUUID === 'demo';
+}
+
 let devicesList: DeviceInfo[] = [];
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
@@ -686,7 +696,13 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisConnectProgress = true;
         try {
             await stopSearch();
-            await aquaris.connect(deviceUUID);
+
+            if (deviceUUID === 'demo') {
+                await new Promise(resolve => setTimeout(resolve, 600));
+            } else {
+                await aquaris.connect(deviceUUID);
+            }
+
             aquarisStateCurrent = {
                 deviceUUID: deviceUUID,
                 red: 255,
@@ -708,17 +724,26 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             }
             aquarisStateExpected.deviceUUID = deviceUUID;
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
+        } catch (err) {
+            console.log('err => ' + err);
         } finally {
             aquarisConnectProgress = false;
         }
     })
 
     .set(ClientAPI.prototype.disconnect.name, async () => {
-        await aquaris.disconnect();
+        if (await aquarisConnectedDemo()) {
+            await new Promise(resolve => setTimeout(resolve, 600));
+        } else {
+            await aquaris.disconnect();
+        }
         aquarisStateExpected.deviceUUID = undefined;
+        aquarisStateCurrent.deviceUUID = undefined;
     })
 
     .set(ClientAPI.prototype.isConnected.name, async () => {
+        if (await aquarisConnectedDemo()) return true;
+
         if (aquarisIoProgress) {
             return true;
         } else {
@@ -731,7 +756,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
 
     .set(ClientAPI.prototype.hasBluetooth.name, async () => {
-        return aquarisHasBluetooth;
+        return aquarisHasBluetooth || await aquarisConnectedDemo();
     })
 
     .set(ClientAPI.prototype.startDiscover.name, async () => {
@@ -793,6 +818,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     })
     
     .set(ClientAPI.prototype.saveState.name, async () => {
+        if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });
 
