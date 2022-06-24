@@ -35,8 +35,4 @@ export class ToolsComponent implements OnInit {
     ngOnInit() {
         
     }
-
-    gotoAquaris() {
-        this.router.navigate(['aquaris-control'], { relativeTo: this.route.parent });
-    }
 }
