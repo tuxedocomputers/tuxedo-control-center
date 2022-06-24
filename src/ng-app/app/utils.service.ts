@@ -195,7 +195,7 @@ export class UtilsService {
   public async confirmDialog(config: ConfirmDialogData): Promise<ConfirmDialogResult> {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
       minWidth: 350,
-      maxWidth: 450,
+      maxWidth: 550,
       data: config
     });
     let result: ConfirmDialogResult =  await dialogRef.afterClosed().toPromise();
