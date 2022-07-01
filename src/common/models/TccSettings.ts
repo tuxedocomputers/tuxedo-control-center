@@ -21,12 +21,20 @@ export enum ProfileStates {
     BAT = 'power_bat'
 }
 
+export enum KeyboardBacklightColorModes {
+    static,
+    breathing
+}
+
 export interface ITccSettings {
     stateMap: any;
     shutdownTime: string | null;
     cpuSettingsEnabled: boolean;
     fanControlEnabled: boolean;
     ycbcr420Workaround: Array<Object>;
+    keyboardBacklightBrightness: number;
+    keyboardBacklightColorMode: KeyboardBacklightColorModes;
+    keyboardBacklightColor: Array<number>;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -37,7 +45,10 @@ export const defaultSettings: ITccSettings = {
     shutdownTime: null,
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
-    ycbcr420Workaround: []
+    ycbcr420Workaround: [],
+    keyboardBacklightBrightness: 0,
+    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
+    keyboardBacklightColor: []
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -48,5 +59,8 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     shutdownTime: null,
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
-    ycbcr420Workaround: []
+    ycbcr420Workaround: [],
+    keyboardBacklightBrightness: 0,
+    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
+    keyboardBacklightColor: []
 };

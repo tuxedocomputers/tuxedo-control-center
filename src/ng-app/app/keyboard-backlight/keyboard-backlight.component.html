@@ -1,0 +1,34 @@
+<!--
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<mat-card class="tcc-card card-keyboard-backlight">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n>Keyboard Backlight</ng-container>
+    </mat-card-title>
+    <hr />
+    
+    <div class="content-container centered">
+        <p i18n>Setup the Keyboard Backlight</p>
+    </div>
+
+    <div class=controls>
+        <button mat-stroked-button (click)="onButtonClickOn()">On</button>
+        <button mat-stroked-button (click)="onButtonClickOff()">Off</button>
+    </div>
+</mat-card>

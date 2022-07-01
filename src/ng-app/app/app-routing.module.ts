@@ -25,6 +25,7 @@ import { InfoComponent } from './info/info.component';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 import { ShutdownTimerComponent } from "./shutdown-timer/shutdown-timer.component";
 import { ToolsComponent } from "./tools/tool.component";
+import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
     { path: 'info', component: InfoComponent },
     { path: 'cpu-dashboard', component: CpuDashboardComponent },
     { path: 'tools', component: ToolsComponent },
+    { path: 'keyboard-backlight', component: KeyboardBacklightComponent },
     { path: 'global-settings', component: GlobalSettingsComponent }
 ];
 

@@ -40,6 +40,7 @@ import { TccDBusData } from './TccDBusInterface';
 import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { CpuController } from '../../common/classes/CpuController';
+import { KeyboardBacklightWorker } from './KeyboardBacklightWorker';
 
 const tccPackage = require('../../package.json');
 
@@ -111,6 +112,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
+        this.workers.push(new KeyboardBacklightWorker(this));
 
         this.startWorkers();
 
