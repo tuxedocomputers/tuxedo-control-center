@@ -26,6 +26,12 @@ export enum KeyboardBacklightColorModes {
     breathing
 }
 
+export interface KeyboardBacklightCapabilitiesInterface {
+    modes: Array<KeyboardBacklightColorModes>;
+    zones: number;
+    maxBrightness: number;
+}
+
 export interface ITccSettings {
     stateMap: any;
     shutdownTime: string | null;

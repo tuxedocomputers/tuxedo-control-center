@@ -21,10 +21,17 @@ import * as fs from 'fs';
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface } from '../../common/models/TccSettings';
 
 export class KeyboardBacklightWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(100000, tccd);
+        let keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {
+            modes: [KeyboardBacklightColorModes.static],
+            zones: 3,
+            maxBrightness: 100
+        }
+        this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(keyboardBacklightCapabilities);
     }
 
     public onStart(): void {
