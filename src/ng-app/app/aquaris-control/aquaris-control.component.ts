@@ -269,6 +269,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             } catch (err) {
                 console.log('failed writing led state => ' + err);
             }
+            await this.triggerSave();
         }
     }
 
@@ -285,6 +286,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             } catch (err) {
                 console.log('failed writing fan state => ' + err);
             }
+            await this.triggerSave();
         }
 
         if (this.ctrlFanDutyCycleTextInput.dirty) {
@@ -332,6 +334,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             } catch (err) {
                 console.log('failed writing pump state => ' + err);
             }
+            await this.triggerSave();
         }
     }
 
@@ -530,5 +533,17 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 this.deviceNameMap = deviceNames;
             }
         });
+    }
+
+    private saveOnTheWay = false;
+
+    public async triggerSave() {
+        if (!this.saveOnTheWay && this.isConnected && !this.isConnecting && !this.isDisconnecting) {
+            this.saveOnTheWay = true;
+            const waitForSaveMs = 1000;
+            await new Promise(resolve => setTimeout(resolve, waitForSaveMs));
+            await this.aquaris.saveState();
+            this.saveOnTheWay = false;
+        }
     }
 }
