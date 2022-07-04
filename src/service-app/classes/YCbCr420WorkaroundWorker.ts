@@ -21,7 +21,7 @@ import * as fs from 'fs';
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { fileOK } from 'src/common/classes/Utils';
+import { fileOK } from '../../common/classes/Utils';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
