@@ -30,6 +30,9 @@ export interface KeyboardBacklightCapabilitiesInterface {
     modes: Array<KeyboardBacklightColorModes>;
     zones: number;
     maxBrightness: number;
+    maxRed: number;
+    maxGreen: number;
+    maxBlue: number;
 }
 
 export interface ITccSettings {
