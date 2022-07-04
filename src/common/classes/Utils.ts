@@ -52,3 +52,12 @@ export function findClosestValue(value: number, array: number[]): number {
     }
     return closest;
 }
+
+export function fileOK(path: string): boolean {
+    try {
+        fs.accessSync(path, fs.constants.F_OK |  fs.constants.R_OK | fs.constants.W_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
