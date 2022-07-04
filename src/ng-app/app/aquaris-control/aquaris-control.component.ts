@@ -286,6 +286,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 console.log('failed writing fan state => ' + err);
             }
         }
+
+        if (this.ctrlFanDutyCycleTextInput.dirty) {
+            this.ctrlFanDutyCycleTextInput.reset();
+        }
     }
 
     public async sliderFanChange(fanSpeed: number) {
