@@ -27,6 +27,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <p i18n>Setup the Keyboard Backlight</p>
     </div>
 
+    <span class="color-visualizer"
+    [style.background]="chosenColorHex"
+    [(colorPicker)]="chosenColorHex"
+    [cpDisableInput]="true"
+    [cpToggle]="true"
+    cpDialogDisplay="inline"
+    cpAlphaChannel="disabled"></span>
+
     <div class=controls>
         <button mat-stroked-button (click)="onButtonClickOn()">On</button>
         <button mat-stroked-button (click)="onButtonClickOff()">Off</button>

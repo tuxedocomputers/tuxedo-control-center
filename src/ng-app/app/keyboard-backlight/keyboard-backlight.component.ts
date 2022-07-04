@@ -34,6 +34,8 @@ export class KeyboardBacklightComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
+    public chosenColorHex: string = "#000000";
+
     constructor(
         private config: ConfigService,
         private utils: UtilsService,
