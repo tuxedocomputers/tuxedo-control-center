@@ -22,7 +22,7 @@ import * as fs from 'fs';
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface } from '../../common/models/TccSettings';
-import { fileOK } from 'src/common/classes/Utils';
+import { fileOK } from '../../common/classes/Utils';
 
 export class KeyboardBacklightWorker extends DaemonWorker {
     private clevoBrightnessPath = "/sys/devices/platform/tuxedo_keyboard/brightness";
@@ -60,7 +60,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     }
 
     private rgbaIntToRGBString (input: number): string {
-        return input.toString(16).substring(0,6);
+        return input.toString(16).padStart(8, '0').substring(0,6);
     }
 
     public onStart(): void {
