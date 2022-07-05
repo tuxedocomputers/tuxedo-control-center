@@ -41,44 +41,49 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(100000, tccd);
+
         if (fileOK(this.clevoBrightnessPath)) {
             this.keyboardBacklightCapabilities.maxBrightness = 100;
         }
+
+        if (fileOK(this.clevoColorLeftPath)) {
+            this.keyboardBacklightCapabilities.zones++;
+        }
         if (fileOK(this.clevoColorCenterPath)) {
             this.keyboardBacklightCapabilities.zones++;
-            if (fileOK(this.clevoColorLeftPath)) {
-                this.keyboardBacklightCapabilities.zones++;
-                if (fileOK(this.clevoColorRightPath)) {
-                    this.keyboardBacklightCapabilities.zones++;
-                    if (fileOK(this.clevoColorExtraPath)) {
-                        this.keyboardBacklightCapabilities.zones++;
-                    }
-                }
-            }
         }
+        if (fileOK(this.clevoColorRightPath)) {
+            this.keyboardBacklightCapabilities.zones++;
+        }
+        if (fileOK(this.clevoColorExtraPath)) {
+            this.keyboardBacklightCapabilities.zones++;
+        }
+
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
-    private rgbaIntToRGBString (input: number): string {
-        return input.toString(16).padStart(8, '0').substring(0,6);
+    // Converts Int Value: 0xRRGGBBAA to string value "0xRRGGBB"
+    private rgbaIntToRGBHexString (input: number): string {
+        return "0x" + input.toString(16).padStart(8, '0').substring(0,6);
     }
 
     public onStart(): void {
         if (fileOK(this.clevoBrightnessPath)) {
             fs.appendFileSync(this.clevoBrightnessPath, this.tccd.settings.keyboardBacklightBrightness.toString());
         }
+
         if (this.tccd.settings.keyboardBacklightColor.length == this.keyboardBacklightCapabilities.zones) {
+            if (fileOK(this.clevoColorLeftPath)) {
+                fs.appendFileSync(this.clevoColorLeftPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[0]));
+            }
             if (fileOK(this.clevoColorCenterPath)) {
-                fs.appendFileSync(this.clevoColorCenterPath, this.rgbaIntToRGBString(this.tccd.settings.keyboardBacklightColor[0]));
-                if (fileOK(this.clevoColorLeftPath)) {
-                    fs.appendFileSync(this.clevoColorLeftPath, this.rgbaIntToRGBString(this.tccd.settings.keyboardBacklightColor[1]));
-                    if (fileOK(this.clevoColorRightPath)) {
-                        fs.appendFileSync(this.clevoColorRightPath, this.rgbaIntToRGBString(this.tccd.settings.keyboardBacklightColor[2]));
-                        if (fileOK(this.clevoColorExtraPath)) {
-                            fs.appendFileSync(this.clevoColorExtraPath, this.rgbaIntToRGBString(this.tccd.settings.keyboardBacklightColor[3]));
-                        }
-                    }
-                }
+                fs.appendFileSync(this.clevoColorCenterPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[1]));
+            }
+            if (fileOK(this.clevoColorRightPath)) {
+                fs.appendFileSync(this.clevoColorRightPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[2]));
+            }
+            if (fileOK(this.clevoColorExtraPath)) {
+                fs.appendFileSync(this.clevoColorExtraPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[3]));
             }
         }
     }

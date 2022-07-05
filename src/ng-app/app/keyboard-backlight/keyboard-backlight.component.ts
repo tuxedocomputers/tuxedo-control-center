@@ -19,10 +19,9 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config.service';
-import { UtilsService } from '../utils.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { KeyboardBacklightColorModes } from '../../../common/models/TccSettings';
+import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightColorModes } from '../../../common/models/TccSettings';
 
 @Component({
     selector: 'app-keyboard-backlight',
@@ -32,31 +31,77 @@ import { KeyboardBacklightColorModes } from '../../../common/models/TccSettings'
 export class KeyboardBacklightComponent implements OnInit {
     Object = Object;
 
+    public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
+    public chosenBrightness: number;
+    public chosenColorHex: Array<string>;
+
     private subscriptions: Subscription = new Subscription();
 
-    public chosenColorHex: string = "#000000";
+    public gridParams = {
+        cols: 9,
+        headerSpan: 4,
+        valueSpan: 2,
+        inputSpan: 3
+    };
+
+    public gridParamsSymmetrical = {
+        cols: 9,
+        firstSpan: 3,
+        secondSpan: 3,
+        thirdSpan: 3
+    };
 
     constructor(
         private config: ConfigService,
-        private utils: UtilsService,
         private tccdbus: TccDBusClientService
     ) { }
 
-    ngOnInit() {
 
+    // Converts Int Value: 0xRRGGBBAA to string value "#RRGGBB"
+    private rgbaIntToRGBSharpString (input: number): string {
+        return "#" + input.toString(16).padStart(8, '0').substring(0, 6);
     }
 
-    onButtonClickOn(){
-        this.config.getSettings().keyboardBacklightBrightness = 100;
-        this.config.getSettings().keyboardBacklightColorMode = KeyboardBacklightColorModes.static;
-        this.config.getSettings().keyboardBacklightColor = [0xffffff00, 0xffffff00, 0xffffff00];
-        this.config.saveSettings()
+    // Converts string Value: "#RRGGBB" to int value 0xRRGGBB00
+    private rgbSharpStringToRGBAInt (input: string): number {
+        return parseInt(input.substring(1, 7).padEnd(8, '0'), 16);
     }
 
-    onButtonClickOff(){
-        this.config.getSettings().keyboardBacklightBrightness = 0;
+    private clamp (input: number, min: number, max:number): number {
+        return Math.min(Math.max(input, min), max);
+    }
+
+    public ngOnInit() {
+        this.subscriptions.add(this.tccdbus.keyboardBacklightCapabilities.subscribe(
+            keyboardBacklightCapabilities => {
+                if (keyboardBacklightCapabilities != undefined) {
+                    this.keyboardBacklightCapabilities = keyboardBacklightCapabilities;
+                    this.chosenBrightness = this.clamp(this.chosenBrightness, 0, this.keyboardBacklightCapabilities.maxBrightness);
+                    if (this.chosenColorHex.length != this.keyboardBacklightCapabilities.zones) {
+                        this.chosenColorHex = this.chosenColorHex.slice(0, this.keyboardBacklightCapabilities.zones);
+                        for (let i = 0; i < this.keyboardBacklightCapabilities.zones; i++) {
+                            if (this.chosenColorHex[i] == undefined) {
+                                this.chosenColorHex[i] = "#ffffff"
+                            }
+                        }
+                    }
+                }
+            }
+        ));
+        this.chosenColorHex = [];
+        for (let i = 0; i < this.config.getSettings().keyboardBacklightColor.length; i++) {
+            this.chosenColorHex[i] = this.rgbaIntToRGBSharpString(this.config.getSettings().keyboardBacklightColor[i]);
+        }
+        this.chosenBrightness = this.config.getSettings().keyboardBacklightBrightness;
+    }
+
+    public onButtonClickApply() {
         this.config.getSettings().keyboardBacklightColorMode = KeyboardBacklightColorModes.static;
-        this.config.getSettings().keyboardBacklightColor = [0xffffff00, 0xffffff00, 0xffffff00];
+        this.config.getSettings().keyboardBacklightBrightness = this.chosenBrightness;
+        this.config.getSettings().keyboardBacklightColor = [];
+        for (let [i, color] of this.chosenColorHex.entries()) {
+            this.config.getSettings().keyboardBacklightColor[i] = this.rgbSharpStringToRGBAInt(color);
+        }
         this.config.saveSettings()
     }
 }

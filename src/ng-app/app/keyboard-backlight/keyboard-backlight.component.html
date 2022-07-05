@@ -19,24 +19,69 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-card class="tcc-card card-keyboard-backlight">
     <mat-card-title class="theme-page-title">
-        <ng-container i18n>Keyboard Backlight</ng-container>
+        <ng-container i18n="@@cKeyboardBacklightLabel">Keyboard Backlight</ng-container>
     </mat-card-title>
     <hr />
     
     <div class="content-container centered">
-        <p i18n>Setup the Keyboard Backlight</p>
+        <p i18n="@@cKeyboardBacklightDescription">Setup the Keyboard Backlight</p>
     </div>
 
-    <span class="color-visualizer"
-    [style.background]="chosenColorHex"
-    [(colorPicker)]="chosenColorHex"
-    [cpDisableInput]="true"
-    [cpToggle]="true"
-    cpDialogDisplay="inline"
-    cpAlphaChannel="disabled"></span>
+    <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities != undefined">
+        <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="keyboard-backlight-grid" *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
+            <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cKeyboardBacklightBrightnessLabel">Brightness</header></mat-grid-tile>
+            <mat-grid-tile [colspan]="gridParams.valueSpan"><content class="value">{{ brightnessSlider.value }}</content></mat-grid-tile>
+            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                <mat-slider #brightnessSlider
+                    [(value)]="chosenBrightness"
+                    min="0"
+                    max="keyboardBacklightCapabilities.maxBrightness"
+                    step="1"
+                    color="primary">
+                </mat-slider>
+            </mat-grid-tile>
+        </mat-grid-list>
 
-    <div class=controls>
-        <button mat-stroked-button (click)="onButtonClickOn()">On</button>
-        <button mat-stroked-button (click)="onButtonClickOff()">Off</button>
+        <div *ngIf="keyboardBacklightCapabilities.zones >= 1 && keyboardBacklightCapabilities.zones <= 2">
+            <span class="color-visualizer"
+            [style.background]="chosenColorHex[0]"
+            [(colorPicker)]="chosenColorHex[0]"
+            [cpToggle]="true"
+            cpDialogDisplay="inline"
+            cpAlphaChannel="disabled"></span>
+        </div>
+
+        <div *ngIf="keyboardBacklightCapabilities.zones >= 3 && keyboardBacklightCapabilities.zones <= 4">
+            <mat-grid-list [cols]="gridParamsSymmetrical.cols" rowHeight="20em" class="keyboard-color-grid">
+                <mat-grid-tile [colspan]="gridParamsSymmetrical.firstSpan">
+                    <span class="color-visualizer"
+                    [style.background]="chosenColorHex[0]"
+                    [(colorPicker)]="chosenColorHex[0]"
+                    [cpToggle]="true"
+                    cpDialogDisplay="inline"
+                    cpAlphaChannel="disabled"></span>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParamsSymmetrical.secondSpan">
+                    <span class="color-visualizer"
+                    [style.background]="chosenColorHex[1]"
+                    [(colorPicker)]="chosenColorHex[1]"
+                    [cpToggle]="true"
+                    cpDialogDisplay="inline"
+                    cpAlphaChannel="disabled"></span>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParamsSymmetrical.thirdSpan">
+                    <span class="color-visualizer"
+                    [style.background]="chosenColorHex[2]"
+                    [(colorPicker)]="chosenColorHex[2]"
+                    [cpToggle]="true"
+                    cpDialogDisplay="inline"
+                    cpAlphaChannel="disabled"></span>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+
+        <div class=controls>
+            <button mat-stroked-button (click)="onButtonClickApply()" i18n="@@cKeyboardBacklightApply">Apply</button>
+        </div>
     </div>
 </mat-card>
