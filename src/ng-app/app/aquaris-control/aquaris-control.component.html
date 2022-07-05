@@ -202,6 +202,10 @@
                 <li i18n="@@aqNoDevicesHintIsConnected">Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</li>
                 <li i18n="@@aqNoDevicesHintIsPluggedIn">Your Aquaris' power cable is plugged into your TUXEDO notebook.</li>
             </ol>
+            <p>
+                <ng-container i18n="@@aqNoDevicesSuggestDemoMode">Do not have a TUXEDO Aquaris yet?</ng-container>
+                <button mat-stroked-button class="try-demo-mode-button" (click)="buttonConnect('demo')" i18n="@@aqNoDevicesDemoButtonLabel">Try demo mode</button>
+            </p>
         </div>
 
         <mat-spinner *ngIf="(isConnecting && !isConnected) || isDisconnecting"></mat-spinner>

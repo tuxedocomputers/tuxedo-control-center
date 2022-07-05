@@ -1392,7 +1392,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Möchten Sie die Verbindung zu Ihrer Aquaris trennen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">381</context>
+          <context context-type="linenumber">388</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogDisconnectDescription" datatype="html">
@@ -1400,7 +1400,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Zum sicheren Trennen der Aquaris von Ihrem Notebook, befolgen Sie bitte genau unsere Instruktionen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">382</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
@@ -1408,7 +1408,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbunden bleiben</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">383</context>
+          <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
@@ -1416,7 +1416,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbindung trennen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">384</context>
+          <context context-type="linenumber">391</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
@@ -1424,7 +1424,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Nicht erneut fragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8300092213868729072" datatype="html">
@@ -1432,7 +1432,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Es konnte keine Bluetooth-Verbindung gefunden werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">430</context>
+          <context context-type="linenumber">437</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusNoBluetooth</note>
       </trans-unit>
@@ -1441,7 +1441,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbinden...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">432</context>
+          <context context-type="linenumber">439</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnecting</note>
       </trans-unit>
@@ -1450,7 +1450,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbindung trennen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">434</context>
+          <context context-type="linenumber">441</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusDisconnecting</note>
       </trans-unit>
@@ -1459,7 +1459,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbunden mit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">436</context>
+          <context context-type="linenumber">443</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnectedTo</note>
       </trans-unit>
@@ -1468,7 +1468,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Suche nach Geräten...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">438</context>
+          <context context-type="linenumber">445</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusLookingForDevices</note>
       </trans-unit>
@@ -1477,7 +1477,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Gerätename</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">512</context>
+          <context context-type="linenumber">519</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogSelectNameDescription" datatype="html">
@@ -1485,7 +1485,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ein beschreibender Name für das Gerät</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">513</context>
+          <context context-type="linenumber">520</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonDisconnectLabel" datatype="html">
@@ -1521,8 +1521,9 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqLowFanSpeedNotice" datatype="html">
-        <source>Low fan speeds (&lt; 50%) are known to cause disruptive noises.</source>
-        <target state="translated">Niedrige Lüfterdrehzahlen (&lt; 50%) können leise Störgeräusche erzeugen.</target>
+        <source>Low fan speeds (&lt; 50%) are known to cause unwanted noises</source>
+        <target state="needs-adaptation">Niedrige Lüfterdrehzahlen (&lt; 50%) können leise Störgeräusche erzeugen.</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">64</context>
@@ -1633,8 +1634,9 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHeadlineText" datatype="html">
-        <source>TUXEDO Control Center could not find your TUXEDO Aquaris.</source>
-        <target state="translated">TUXEDO Control Center konnte Ihre TUXEDO Aquaris nicht finden.</target>
+        <source>TUXEDO Control Center could not find your TUXEDO Aquaris</source>
+        <target state="needs-adaptation">TUXEDO Control Center konnte Ihre TUXEDO Aquaris nicht finden.</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">198</context>
@@ -1670,6 +1672,22 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesSuggestDemoMode" datatype="html">
+        <source>Do not have a TUXEDO Aquaris yet?</source>
+        <target state="translated">Sie besitzen noch keine TUXEDO Aquaris?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">206</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesDemoButtonLabel" datatype="html">
+        <source>Try demo mode</source>
+        <target state="translated">Demo-Modus starten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
