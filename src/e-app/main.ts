@@ -554,10 +554,8 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     current.ledOn = next.ledOn;
                     if (next.deviceUUID !== 'demo') {
                         if (next.ledOn) {
-                            console.log(`writeRGB(${next.red}, ${next.green}, ${next.blue}, ${next.ledMode})`);
                             await dev.writeRGB(next.red, next.green, next.blue, next.ledMode);
                         } else {
-                            console.log(`writeRGBOff()`);
                             await dev.writeRGBOff();
                         }
                     }
@@ -570,10 +568,8 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     current.fanOn = next.fanOn;
                     if (next.deviceUUID !== 'demo') {
                         if (next.fanOn) {
-                            console.log(`writeFanMode(${next.fanDutyCycle})`);
                             await dev.writeFanMode(next.fanDutyCycle);
                         } else {
-                            console.log(`writeFanOff()`);
                             await dev.writeFanOff();
                         }
                     }
@@ -587,10 +583,8 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     current.pumpOn = next.pumpOn;
                     if (next.deviceUUID !== 'demo') {
                         if (next.pumpOn) {
-                            console.log(`writePumpMode(${next.pumpDutyCycle}, ${next.pumpVoltage})`);
                             await dev.writePumpMode(next.pumpDutyCycle, next.pumpVoltage);
                         } else {
-                            console.log(`writePumpOff()`);
                             await dev.writePumpOff();
                         }
                     }

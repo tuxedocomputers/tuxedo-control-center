@@ -1,5 +1,7 @@
 import { DeviceInfo, PumpVoltage, RGBState } from "./LCT21001";
 
+const debugAquarisAPICalls = false;
+
 export interface AquarisState {
     deviceUUID: string,
     red: number,
@@ -45,7 +47,7 @@ export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mains
         if (mainsideFunction === undefined) {
             throw Error(apiHandle + ': Undefined API function');
         } else {
-            if (args[0] !== 'isConnected') {
+            if (debugAquarisAPICalls && args[0] !== 'isConnected') {
                 console.log(`${apiHandle}: ${args[0]}(${args.slice(1)})`);
             }
             try {
