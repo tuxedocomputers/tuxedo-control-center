@@ -405,6 +405,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             const askToClose = await this.utils.confirmDialog({
                 title: $localize `:@@aqDialogDisconnectTitle:Do you want to disconnect your Aquaris?`,
                 description: $localize `:@@aqDialogDisconnectDescription:Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.`,
+                linkLabel: $localize `:@@aqDialogDisconnectLinkLabel:Instructions`,
+                linkHref: $localize `:@@aqDialogDisconnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`,
                 buttonAbortLabel: $localize `:@@aqDialogButtonAbortLabel:Stay connected`,
                 buttonConfirmLabel: $localize `:@@aqDialogButtonConfirmLabel:Disconnect`,
                 checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,

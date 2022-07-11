@@ -1227,7 +1227,7 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">410</context>
+          <context context-type="linenumber">412</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogDisconnectTitle" datatype="html">
@@ -1244,25 +1244,39 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aqDialogDisconnectLinkLabel" datatype="html">
+        <source>Instructions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">408</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectLinkHref" datatype="html">
+        <source>https://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">409</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
         <source>Stay connected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">408</context>
+          <context context-type="linenumber">410</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
         <source>Disconnect</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">411</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8300092213868729072" datatype="html">
         <source>Bluetooth not available</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">455</context>
+          <context context-type="linenumber">457</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusNoBluetooth</note>
       </trans-unit>
@@ -1270,7 +1284,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Connecting...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">457</context>
+          <context context-type="linenumber">459</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnecting</note>
       </trans-unit>
@@ -1278,7 +1292,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Disconnecting...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">459</context>
+          <context context-type="linenumber">461</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusDisconnecting</note>
       </trans-unit>
@@ -1286,7 +1300,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Connected to</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">461</context>
+          <context context-type="linenumber">463</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnectedTo</note>
       </trans-unit>
@@ -1294,7 +1308,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Looking for devices...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">463</context>
+          <context context-type="linenumber">465</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusLookingForDevices</note>
       </trans-unit>
@@ -1302,14 +1316,14 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Device name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">537</context>
+          <context context-type="linenumber">539</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogSelectNameDescription" datatype="html">
         <source>A descriptive name for the device</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">538</context>
+          <context context-type="linenumber">540</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonDisconnectLabel" datatype="html">
@@ -1487,20 +1501,6 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU settings deactivated in Tools→Global Settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="messageFanControlOff" datatype="html">
-        <source>Fan control deactivated in Tools→Global Settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">109</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
         <source>Mains</source>
         <context-group purpose="location">
@@ -1527,6 +1527,20 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageCPUSettingsOff" datatype="html">
+        <source>CPU settings deactivated in Tools→Global Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageFanControlOff" datatype="html">
+        <source>Fan control deactivated in Tools→Global Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
