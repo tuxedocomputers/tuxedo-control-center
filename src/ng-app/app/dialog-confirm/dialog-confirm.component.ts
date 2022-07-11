@@ -1,11 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ElectronService } from 'ngx-electron';
 
 export interface ConfirmDialogData {
     title: string,
     heading?: string,
     description: string,
+    linkLabel?: string,
+    linkHref?: string,
     buttonAbortLabel: string,
     buttonConfirmLabel: string,
     showCheckboxNoBother?: boolean,
@@ -27,6 +30,7 @@ export class DialogConfirmComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
+        private electron: ElectronService,
         public dialogRef: MatDialogRef<DialogConfirmComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {
             
@@ -55,4 +59,9 @@ export class DialogConfirmComponent {
         }
         this.dialogRef.close(dialogResult);
     }
+
+    public async openExternalUrl(url: string) {
+        console.log(url);
+        await this.electron.shell.openExternal(url);
+      }
 }

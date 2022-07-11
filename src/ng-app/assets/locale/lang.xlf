@@ -1177,46 +1177,92 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="aqDialogDisconnectTitle" datatype="html">
-        <source>Do you want to disconnect your Aquaris?</source>
+      <trans-unit id="aqDialogConnectTitle" datatype="html">
+        <source>Are you ready to start your Aquaris?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">388</context>
+          <context context-type="linenumber">366</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="aqDialogDisconnectDescription" datatype="html">
-        <source>Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.</source>
+      <trans-unit id="aqDialogConnectDescription" datatype="html">
+        <source>Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">389</context>
+          <context context-type="linenumber">367</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
-        <source>Stay connected</source>
+      <trans-unit id="aqDialogConnectLinkLabel" datatype="html">
+        <source>Instructions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">390</context>
+          <context context-type="linenumber">368</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
-        <source>Disconnect</source>
+      <trans-unit id="aqDialogConnectLinkHref" datatype="html">
+        <source>https://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">391</context>
+          <context context-type="linenumber">369</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonAbortConnectLabel" datatype="html">
+        <source>Do not connect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">370</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonConfirmConnectLabel" datatype="html">
+        <source>Connect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
         <source>Don&apos;t ask again</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">392</context>
+          <context context-type="linenumber">372</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">410</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectTitle" datatype="html">
+        <source>Do you want to disconnect your Aquaris?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">406</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectDescription" datatype="html">
+        <source>Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">407</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
+        <source>Stay connected</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">408</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
+        <source>Disconnect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8300092213868729072" datatype="html">
         <source>Bluetooth not available</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">437</context>
+          <context context-type="linenumber">455</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusNoBluetooth</note>
       </trans-unit>
@@ -1224,7 +1270,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Connecting...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">439</context>
+          <context context-type="linenumber">457</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnecting</note>
       </trans-unit>
@@ -1232,7 +1278,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Disconnecting...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">441</context>
+          <context context-type="linenumber">459</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusDisconnecting</note>
       </trans-unit>
@@ -1240,7 +1286,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Connected to</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">443</context>
+          <context context-type="linenumber">461</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnectedTo</note>
       </trans-unit>
@@ -1248,7 +1294,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Looking for devices...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">445</context>
+          <context context-type="linenumber">463</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusLookingForDevices</note>
       </trans-unit>
@@ -1256,14 +1302,14 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Device name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">519</context>
+          <context context-type="linenumber">537</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogSelectNameDescription" datatype="html">
         <source>A descriptive name for the device</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">520</context>
+          <context context-type="linenumber">538</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonDisconnectLabel" datatype="html">

@@ -2,6 +2,7 @@
 <mat-dialog-content class="mat-typography">
     <h3 *ngIf="data.heading">{{ data.heading }}</h3>
     <p>{{ data.description }}</p>
+    <p *ngIf="data.linkHref"><a (click)="openExternalUrl(data.linkHref)" class="link-style">{{ data.linkHref }}</a></p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{ data.checkboxNoBotherLabel }}</mat-checkbox>
