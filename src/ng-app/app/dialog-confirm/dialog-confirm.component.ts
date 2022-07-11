@@ -61,7 +61,6 @@ export class DialogConfirmComponent {
     }
 
     public async openExternalUrl(url: string) {
-        console.log(url);
         await this.electron.shell.openExternal(url);
-      }
+    }
 }
