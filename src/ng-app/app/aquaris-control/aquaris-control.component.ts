@@ -355,6 +355,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
+    public aquarisInfoUrlHref = $localize `:@@aqDialogConnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`;
+
     public async buttonConnect(deviceUUID: string) {
         if (deviceUUID === undefined) {
             return;
@@ -366,7 +368,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 title: $localize `:@@aqDialogConnectTitle:Are you ready to start your Aquaris?`,
                 description: $localize `:@@aqDialogConnectDescription:Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!`,
                 linkLabel: $localize `:@@aqDialogConnectLinkLabel:Instructions`,
-                linkHref: $localize `:@@aqDialogConnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`,
+                linkHref: this.aquarisInfoUrlHref,
                 buttonAbortLabel: $localize `:@@aqDialogButtonAbortConnectLabel:Do not connect`,
                 buttonConfirmLabel: $localize `:@@aqDialogButtonConfirmConnectLabel:Connect`,
                 checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
@@ -565,5 +567,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             await this.aquaris.saveState();
             this.saveOnTheWay = false;
         }
+    }
+
+    public async openExternalUrl(url: string) {
+        await this.electron.shell.openExternal(url);
     }
 }

@@ -1,5 +1,12 @@
 <mat-card class="tcc-card aquaris-control">
     <mat-card-title class="theme-page-title">
+        <a class="icon-link-info"
+            matTooltip="Open info page..."
+            i18n-matTooltip="@@aqTitleOpenInfoTooltip"
+            matTooltipPosition="left"
+            (click)="openExternalUrl(aquarisInfoUrlHref)">
+            <svg viewBox="0 0 512 512" class="aquaris-logo" class="tcc-icons"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+        </a>
         <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
         <header>TUXEDO <span class="emph">AQUARIS</span></header>
         <span class="connection-status">
