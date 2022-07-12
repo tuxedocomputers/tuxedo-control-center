@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,6 +19,7 @@
 
 import { Menu, Tray } from "electron";
 import { TccProfile } from "../common/models/TccProfile";
+import { DMIController } from '../common/classes/DMIController';
 
 export class TccTray {
 
@@ -61,9 +62,19 @@ export class TccTray {
             { type: 'separator' }
         );
     
+        // TODO: Manual read until general device id get merged
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const deviceName = dmi.productSKU.readValueNT();
+        let hasAquaris;
+        if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
+            hasAquaris = true;
+        } else {
+            hasAquaris = false;
+        }
+
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
-            // { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl() },
+            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: hasAquaris },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,

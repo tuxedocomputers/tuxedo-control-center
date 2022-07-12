@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
-import { DMIController } from 'src/common/classes/DMIController';
+import { DMIController } from '../../common/classes/DMIController';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({

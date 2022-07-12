@@ -113,7 +113,7 @@ app.whenReady().then( async () => {
     tray.state.isPrimeSupported = primeSupported();
     await updateTrayProfiles();
     tray.events.startTCCClick = () => activateTccGui();
-    tray.events.startAquarisControl = () => activateAquariusGui();
+    tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
     tray.events.exitClick = () => quitCurrentTccSession();
     tray.events.autostartTrayToggle = () => {
         if (tray.state.isAutostartTrayInstalled) {
@@ -230,13 +230,17 @@ app.on('window-all-closed', () => {
     }
 });
 
-function activateTccGui() {
+function activateTccGui(module?: string) {
     if (tccWindow) {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
+        const baseURL = tccWindow.webContents.getURL().split("#")[0];
+        if (module !== undefined) {
+            tccWindow.loadURL(baseURL + '#' + module);
+        }
     } else {
         userConfig.get('langId').then(langId => {
-            createTccWindow(langId);
+            createTccWindow(langId, module);
         });
     }
 }
@@ -270,10 +274,10 @@ function createAquarisControl(langId: string) {
     });
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
-    aquarisWindow.loadFile(indexPath, { hash: '/aquaris-control'});
+    aquarisWindow.loadFile(indexPath, { hash: '/main-gui/aquaris-control' });
 }
 
-function activateAquariusGui() {
+function activateAquarisGui() {
     if (aquarisWindow) {
         if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
         aquarisWindow.focus();
@@ -320,7 +324,7 @@ async function getActiveProfile(): Promise<TccProfile> {
     return result;
 }
 
-function createTccWindow(langId: string) {
+function createTccWindow(langId: string, module?: string) {
     let windowWidth = 1040;
     let windowHeight = 750;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
@@ -356,7 +360,11 @@ function createTccWindow(langId: string) {
     });
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
-    tccWindow.loadFile(indexPath);
+    if (module !== undefined) {
+        tccWindow.loadFile(indexPath, { hash: '/' + module });
+    } else {
+        tccWindow.loadFile(indexPath);
+    }
 }
 
 function quitCurrentTccSession() {
