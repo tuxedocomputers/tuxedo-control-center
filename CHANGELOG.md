@@ -1,5 +1,18 @@
 # Changelog
 
+## [] - UNRELEASED
+
+### Added
+- TUXEDO Aquaris control
+  - Fan speed presets
+  - Fan speed manual set (slider + input)
+  - LED RGB color picker
+  - LED static/rainbow mode picker
+  - LED breath checkbox
+  - Assign custom name to find device easier
+  - Save/restore last used configuration
+  - Links and notices to online instructions on how to use the device
+
 ## [1.1.4] - 2022-04-21
 ### Changed
 - First steps of basic dependency/framework updates
