@@ -177,14 +177,14 @@
             <ng-container i18n="@@aqChooseAquarisText">Please choose your TUXEDO Aquaris and click on the connect button</ng-container>
             <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList.length === 0">
                 <mat-list-option #currentOption *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
-                    <mat-icon mat-list-icon *ngIf="device.rssi >= -70">signal_cellular_alt</mat-icon>
-                    <mat-icon mat-list-icon *ngIf="device.rssi < -70 && device.rssi > -100">signal_cellular_alt_2_bar</mat-icon>
-                    <mat-icon mat-list-icon *ngIf="device.rssi <= -100">signal_cellular_alt_1_bar</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi >= -65">signal_cellular_alt</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi < -65 && device.rssi > -80">signal_cellular_alt_2_bar</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi <= -80">signal_cellular_alt_1_bar</mat-icon>
                     <mat-line style="display: inline; vertical-align: middle;">
                         {{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }}
                     </mat-line>
                     <mat-line>
-                        {{ device.uuid }} ({{ device.rssi }}dBm)
+                        {{ device.uuid }}
                     </mat-line>
                     <button mat-raised-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)" i18n="@@aqButtonConnectLabel">Connect</button>
                 </mat-list-option>
