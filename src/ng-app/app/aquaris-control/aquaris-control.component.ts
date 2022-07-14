@@ -23,7 +23,6 @@ import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
-import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
 import { UtilsService } from '../utils.service';
 
 interface FanPreset {
