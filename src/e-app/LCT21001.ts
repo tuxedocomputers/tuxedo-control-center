@@ -47,10 +47,6 @@ export class DeviceInfo {
 
 /**
  * Encapsulates communication with the Bluetooth LE device.
- * 
- * TODO:
- *   - Multiple device detection
- *   - Connect/read wait timeout
  */
 export class LCT21001 {
 
