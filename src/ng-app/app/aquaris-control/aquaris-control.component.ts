@@ -382,7 +382,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
         if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
             const askToClose = await this.utils.confirmDialog({
-                title: $localize `:@@aqDialogConnectTitle:Are you ready to start your Aquaris?`,
+                title: $localize `:@@aqDialogConnectTitle:Are you ready to connect to your Aquaris?`,
                 description: $localize `:@@aqDialogConnectDescription:Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!`,
                 linkLabel: $localize `:@@aqDialogConnectLinkLabel:Instructions`,
                 linkHref: this.aquarisInfoUrlHref,

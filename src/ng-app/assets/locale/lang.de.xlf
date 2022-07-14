@@ -139,10 +139,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bei komplexeren Problemstellungen kann es nötig sein Diagnosedaten Ihres PCs auszuwerten.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Unser Diagnoseprogramm sammelt KEINERLEI persönliche Daten und KEINE Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Bei komplexeren Problemstellungen kann es nötig sein Diagnosedaten Ihres PCs auszuwerten.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Unser Diagnoseprogramm sammelt KEINERLEI persönliche Daten und KEINE Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -198,9 +198,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
-Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
+Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">87</context>
@@ -247,11 +247,11 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
       </trans-unit>
       <trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt; "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i> "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Lässt sich Ihr Problem mittels der Systemdiagnose nicht lösen, bieten wir Ihnen gerne eine kostenlose Live-Unterstützung per Fernwartungssoftware <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> an.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Auf diese Weise kann sich ein Supportmitarbeiter online auf Ihren TUXEDO Computer verbinden und mit Ihnen zusammen das Problem lösen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Der Support erhält ausschließlich temporär und in Ihrem Beisein Zugriff auf Ihr System. Es werden keinerlei persönliche Daten erfasst!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Lässt sich Ihr Problem mittels der Systemdiagnose nicht lösen, bieten wir Ihnen gerne eine kostenlose Live-Unterstützung per Fernwartungssoftware <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> an.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Auf diese Weise kann sich ein Supportmitarbeiter online auf Ihren TUXEDO Computer verbinden und mit Ihnen zusammen das Problem lösen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Der Support erhält ausschließlich temporär und in Ihrem Beisein Zugriff auf Ihr System. Es werden keinerlei persönliche Daten erfasst!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -267,10 +267,10 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
       </trans-unit>
       <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer "fully automated installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur 3 Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Mit unserer "fully automated installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur 3 Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -606,14 +606,14 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
       </trans-unit>
       <trans-unit id="cc363dec382fbe3f178f63e99e788a4bf6fb8053" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;&#xA;                "/> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;&#xA;                "/> With 3 premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>&#10;                "/> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>&#10;                "/> With 3 premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target phase-name="approval-1" state="needs-adaptation">
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
                 Mit 3 vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>    
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>    
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
@@ -965,8 +965,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="243c85168792d2dacd3e7a9868767d947b7df7ac" datatype="html">
-        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
-        <target phase-name="approval-1" state="needs-adaptation">Beim Deaktivieren werden die CPU-Einstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
+        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong> "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
+        <target phase-name="approval-1" state="needs-adaptation">Beim Deaktivieren werden die CPU-Einstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1183,10 +1183,10 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
-        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target phase-name="approval-1" state="needs-adaptation">
-        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Wie es aussieht verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
-        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur wärend der installation ihres Systems aktiviert werden. Wenn sie die Festplattenverschlüsselung verwenden wollen, müssen sie ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn sie ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>Wie es aussieht verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Die Festplattenverschlüsselung kann nur wärend der installation ihres Systems aktiviert werden. Wenn sie die Festplattenverschlüsselung verwenden wollen, müssen sie ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Wenn sie ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
@@ -1368,7 +1368,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">https://www.tuxedocomputers.com/de/TUXEDO-Aquaris.tuxedo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">358</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqFanPresetSlowLabel" datatype="html">
@@ -1376,7 +1376,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Langsam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqFanPresetMediumLabel" datatype="html">
@@ -1384,7 +1384,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Mittel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqFanPresetFastLabel" datatype="html">
@@ -1392,15 +1392,16 @@ Handelsregisternummer HRB 27755
         <target state="translated">Schnell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectTitle" datatype="html">
-        <source>Are you ready to start your Aquaris?</source>
-        <target state="translated">Bereit zu starten?</target>
+        <source>Are you ready to connect to your Aquaris?</source>
+        <target state="translated">Bereit zu verbinden?</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">368</context>
+          <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectDescription" datatype="html">
@@ -1408,7 +1409,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Bitte stellen Sie sicher, dass beide Wasserkühlungsschläuche Ihrer Aquaris an Ihr TUXEDO Notebook angeschlossen sind, bevor Sie auf "Verbinden" klicken!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">386</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkLabel" datatype="html">
@@ -1416,7 +1417,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Anleitung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">370</context>
+          <context context-type="linenumber">387</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonAbortConnectLabel" datatype="html">
@@ -1424,7 +1425,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Nicht verbinden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">372</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonConfirmConnectLabel" datatype="html">
@@ -1432,7 +1433,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbinden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">373</context>
+          <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
@@ -1440,11 +1441,11 @@ Handelsregisternummer HRB 27755
         <target state="translated">Nicht erneut fragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">374</context>
+          <context context-type="linenumber">391</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">414</context>
+          <context context-type="linenumber">431</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogDisconnectTitle" datatype="html">
@@ -1452,7 +1453,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Möchten Sie die Verbindung zu Ihrer Aquaris trennen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">408</context>
+          <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogDisconnectDescription" datatype="html">
@@ -1460,7 +1461,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Zum sicheren Trennen der Aquaris von Ihrem Notebook, befolgen Sie bitte genau unsere Instruktionen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">426</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogDisconnectLinkLabel" datatype="html">
@@ -1468,7 +1469,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Anleitung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">410</context>
+          <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogDisconnectLinkHref" datatype="html">
@@ -1476,7 +1477,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">https://www.tuxedocomputers.com/de/TUXEDO-Aquaris.tuxedo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">411</context>
+          <context context-type="linenumber">428</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
@@ -1484,7 +1485,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbunden bleiben</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">412</context>
+          <context context-type="linenumber">429</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
@@ -1492,7 +1493,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbindung trennen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">413</context>
+          <context context-type="linenumber">430</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8300092213868729072" datatype="html">
@@ -1500,7 +1501,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Es konnte keine Bluetooth-Verbindung gefunden werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">459</context>
+          <context context-type="linenumber">476</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusNoBluetooth</note>
       </trans-unit>
@@ -1509,7 +1510,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbinden...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">461</context>
+          <context context-type="linenumber">478</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnecting</note>
       </trans-unit>
@@ -1518,7 +1519,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbindung trennen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">463</context>
+          <context context-type="linenumber">480</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusDisconnecting</note>
       </trans-unit>
@@ -1527,7 +1528,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbunden mit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">465</context>
+          <context context-type="linenumber">482</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusConnectedTo</note>
       </trans-unit>
@@ -1536,7 +1537,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Suche nach Geräten...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">467</context>
+          <context context-type="linenumber">484</context>
         </context-group>
         <note priority="1" from="description">aqConnectionStatusLookingForDevices</note>
       </trans-unit>
@@ -1545,7 +1546,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Gerätename</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">541</context>
+          <context context-type="linenumber">558</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogSelectNameDescription" datatype="html">
@@ -1553,7 +1554,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ein beschreibender Name für das Gerät</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
-          <context context-type="linenumber">542</context>
+          <context context-type="linenumber">559</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqTitleOpenInfoTooltip" datatype="html">
@@ -1561,7 +1562,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Info-Seite aufrufen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonDisconnectLabel" datatype="html">
@@ -1569,7 +1570,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbindung trennen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqLabelFanControl" datatype="html">
@@ -1577,7 +1578,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Lüfterdrehzahl festlegen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonFanPresetsLabel" datatype="html">
@@ -1585,7 +1586,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Lüfterprofile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqFanGaugeLegendText" datatype="html">
@@ -1593,15 +1594,16 @@ Handelsregisternummer HRB 27755
         <target state="translated">Lüfterdrehzahl</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqLowFanSpeedNotice" datatype="html">
-        <source>Low fan speeds (&lt; 50%) are known to cause unwanted noises</source>
+        <source>Low fan speeds (&lt; 50%) may cause interference noise</source>
         <target state="needs-adaptation">Niedrige Lüfterdrehzahlen (&lt; 50%) können leise Störgeräusche erzeugen.</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqLabelLEDControl" datatype="html">
@@ -1609,7 +1611,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">LED-Steuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqTabLEDColorPickerLabel" datatype="html">
@@ -1617,7 +1619,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Farbe wählen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqTabLEDModeLabel" datatype="html">
@@ -1625,7 +1627,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Anzeigemodus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonToggleLEDStaticLabel" datatype="html">
@@ -1633,7 +1635,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Einzelfarbe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonToggleLEDRainbowLabel" datatype="html">
@@ -1641,7 +1643,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Regenbogen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqCheckboxLEDBreatheLabel" datatype="html">
@@ -1649,7 +1651,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Atmen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqChooseAquarisText" datatype="html">
@@ -1657,7 +1659,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Bitte wählen Sie Ihre TUXEDO Aquaris und klicken Sie auf "Verbinden"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonConnectLabel" datatype="html">
@@ -1665,7 +1667,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verbinden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHeadlineText" datatype="html">
@@ -1673,7 +1675,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">TUXEDO Control Center konnte leider keine Bluetooth-Verbindung aufbauen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothVerifyText" datatype="html">
@@ -1681,7 +1683,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Bitte stellen Sie sicher, dass:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintTurnedOn" datatype="html">
@@ -1689,7 +1691,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ihr Bluetooth-Adapter in Ihren Systemeinstellungen eingeschaltet ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintNotDisabled" datatype="html">
@@ -1697,7 +1699,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ihr Bluetooth-Adapter nicht im UEFI deaktiviert ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">199</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintIsInstalled" datatype="html">
@@ -1705,7 +1707,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ein Bluetooth-Adapter in Ihrem TUXEDO-Notebook verbaut ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHeadlineText" datatype="html">
@@ -1713,7 +1715,7 @@ Handelsregisternummer HRB 27755
         <target state="needs-adaptation">TUXEDO Control Center konnte Ihre TUXEDO Aquaris nicht finden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesVerifyText" datatype="html">
@@ -1721,7 +1723,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Bitte stellen Sie sicher, dass:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintSwitchedOn" datatype="html">
@@ -1729,7 +1731,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ihre Aquaris eingeschaltet ist und die blaue LED auf dem Einschaltknopf blinkt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
@@ -1737,7 +1739,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ihre Aquaris mit dem Notebook-Netzteil am Stromnetz verbunden ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
@@ -1745,7 +1747,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Das Verlängerungs-Stromkabel Ihrer Aquaris mit Ihrem Notebook verbunden ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesSuggestDemoMode" datatype="html">
@@ -1753,7 +1755,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sie besitzen noch keine TUXEDO Aquaris?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesDemoButtonLabel" datatype="html">
@@ -1761,7 +1763,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Demo-Modus starten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
@@ -1817,7 +1819,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
@@ -1825,7 +1827,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
     </body>

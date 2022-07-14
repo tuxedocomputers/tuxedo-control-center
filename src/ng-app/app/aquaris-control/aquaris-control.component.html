@@ -86,7 +86,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div class="text" i18n="@@aqFanGaugeLegendText">Fan speed</div>
                     </div>
                 </div>
-                <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value < 50) ? 'visible' : 'hidden'" i18n="@@aqLowFanSpeedNotice">Low fan speeds (&lt; 50%) are known to cause unwanted noises</div>
+                <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value < 50) ? 'visible' : 'hidden'" i18n="@@aqLowFanSpeedNotice">Low fan speeds (&lt; 50%) may cause interference noise</div>
                 <span>
                     <button mat-icon-button color="primary"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max));"
