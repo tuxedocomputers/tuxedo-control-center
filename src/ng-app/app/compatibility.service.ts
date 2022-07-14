@@ -30,12 +30,19 @@ export class CompatibilityService {
   constructor(private tccDbus: TccDBusClientService) {
     // TODO: Manual read until general device id get merged
     const dmi = new DMIController('/sys/class/dmi/id');
-    const name = dmi.productSKU.readValueNT();
-    if (name !== undefined && name === 'STELLARIS1XI04') {
-        this.hasAquarisValue = true;
+    const deviceName = dmi.productSKU.readValueNT();
+    const boardVendor = dmi.boardVendor.readValueNT();
+    let showAquarisMenu;
+    if (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) {
+      if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
+        showAquarisMenu = true;
+      } else {
+        showAquarisMenu = false;
+      }
     } else {
-        this.hasAquarisValue = false;
+      showAquarisMenu = true;
     }
+    this.hasAquarisValue = showAquarisMenu;
   }
 
   get hasFancontrol(): boolean {

@@ -65,16 +65,21 @@ export class TccTray {
         // TODO: Manual read until general device id get merged
         const dmi = new DMIController('/sys/class/dmi/id');
         const deviceName = dmi.productSKU.readValueNT();
-        let hasAquaris;
-        if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
-            hasAquaris = true;
+        const boardVendor = dmi.boardVendor.readValueNT();
+        let showAquarisMenu;
+        if (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) {
+            if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
+                showAquarisMenu = true;
+            } else {
+                showAquarisMenu = false;
+            }
         } else {
-            hasAquaris = false;
+            showAquarisMenu = true;
         }
 
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
-            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: hasAquaris },
+            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: showAquarisMenu },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
