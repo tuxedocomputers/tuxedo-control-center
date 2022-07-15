@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [1.1.5] - 2022-07-15
 
 ### Added
 - TUXEDO Aquaris control
