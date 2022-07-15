@@ -32,8 +32,14 @@ export class CompatibilityService {
     const dmi = new DMIController('/sys/class/dmi/id');
     const deviceName = dmi.productSKU.readValueNT();
     const boardVendor = dmi.boardVendor.readValueNT();
+    const chassisVendor = dmi.chassisVendor.readValueNT();
+    const sysVendor = dmi.sysVendor.readValueNT();
     let showAquarisMenu;
-    if (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) {
+    const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
+                     (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
+                     (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+
+    if (isTuxedo) {
       if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
         showAquarisMenu = true;
       } else {
