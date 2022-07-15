@@ -1,0 +1,239 @@
+<!--
+Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<mat-card class="tcc-card aquaris-control">
+    <mat-card-title class="theme-page-title">
+        <a class="icon-link-info"
+            matTooltip="Open info page..."
+            i18n-matTooltip="@@aqTitleOpenInfoTooltip"
+            matTooltipPosition="left"
+            (click)="openExternalUrl(aquarisInfoUrlHref)">
+            <svg viewBox="0 0 512 512" class="aquaris-logo" class="tcc-icons"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+        </a>
+        <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
+        <header>TUXEDO <span class="emph">AQUARIS</span></header>
+        <span class="connection-status">
+            <span
+                class="connection-status-dot"
+                *ngIf="hasBluetooth"
+                [ngClass]="{
+                    'searching': !isConnected || isConnecting || isDisconnecting,
+                    'connected': isConnected && !isConnecting && !isDisconnecting
+                }"
+            ></span>
+            <mat-icon *ngIf="!hasBluetooth">bluetooth_disabled</mat-icon>
+            <span class="value">{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span>
+            <button mat-icon-button
+                *ngIf="isConnected && !isConnecting && !isDisconnecting"
+                (click)="inputTextDialog()">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </span>
+        <button mat-raised-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting" i18n="@@aqButtonDisconnectLabel">Disconnect</button>
+    </mat-card-title>
+
+    <div class="aquaris-content">
+        <div class="categories" *ngIf="isConnected && stateInitialized && !isDisconnecting">
+
+            <!-- Fan control -->
+            <div class="category">
+                <header>
+                    <svg viewBox="0 0 302 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <ng-container i18n="@@aqLabelFanControl">Fan control</ng-container>
+                </header>
+                <button mat-raised-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
+                <mat-menu #fanPresetMenu>
+                    <button mat-menu-item *ngFor="let fanPreset of fanPresets | keyvalue" (click)="selectFanPreset(fanPreset.key)">
+                        {{ fanPreset.value.name }}
+                    </button>
+                </mat-menu>
+                <div class="tcc-gauge">
+                    <mwl-gauge
+                        [max]="100"
+                        [min]="0"
+                        [value]="fanSpeed.value"
+                        [showValue]="false"
+                        [dialStartAngle]="130"
+                        [dialEndAngle]="50"
+                        [animated]="true"
+                        [animationDuration]="0.3">
+                    </mwl-gauge>
+                    <input matInput
+                        class="custom-value-text fan-gauge-input"
+                        [formControl]="ctrlFanDutyCycleTextInput"
+                        [placeholder]="fanSpeed.value + ''"
+                        (keydown.enter)="fanSpeedTextInput()"
+                        maxlength="3">
+                    <!--div class="custom-value-text">{{ fanSpeed.value }}</div-->
+                    <div class="unit-text">%</div>
+                    <svg viewBox="0 0 302 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <div class="legend">
+                        <div class="text" i18n="@@aqFanGaugeLegendText">Fan speed</div>
+                    </div>
+                </div>
+                <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value < 50) ? 'visible' : 'hidden'" i18n="@@aqLowFanSpeedNotice">Low fan speeds (&lt; 50%) may cause interference noise</div>
+                <span>
+                    <button mat-icon-button color="primary"
+                        (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max));"
+                        (mouseup)="buttonRepeatUp()"
+                        (mouseleave)="buttonRepeatUp()">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <mat-slider #fanSpeed [formControl]="ctrlFanDutyCycle"
+                        min="0"
+                        max="100"
+                        step="1"
+                        color="primary"
+                        (input)="sliderFanInput(fanSpeed.value)"
+                        (change)="sliderFanChange(fanSpeed.value)">
+                    </mat-slider>
+                    <button mat-icon-button color="primary"
+                        (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, +1, fanSpeed.min, fanSpeed.max));"
+                        (mouseup)="buttonRepeatUp()"
+                        (mouseleave)="buttonRepeatUp()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </span>
+            </div>
+
+            <!-- Pump control -->
+            <div class="category" *ngIf="showPumpControls">
+                <mat-slide-toggle [formControl]="ctrlPumpToggle" (change)="pumpInput()" color="warn">Pump status</mat-slide-toggle>
+                <mat-slider #pumpDutyCycle [formControl]="ctrlPumpDutyCycle"
+                    min="0"
+                    max="100"
+                    step="1"
+                    color="primary"
+                    (change)="pumpInput(pumpDutyCycle.value, pumpVoltage.value)">
+                </mat-slider>
+                <div>
+                    <mat-button-toggle-group #pumpVoltage [formControl]="ctrlPumpVoltage" (change)="pumpInput()">
+                        <mat-button-toggle [value]="2">7V</mat-button-toggle>
+                        <mat-button-toggle [value]="3">8V</mat-button-toggle>
+                        <mat-button-toggle [value]="0">11V</mat-button-toggle>
+                        <mat-button-toggle [value]="1">12V</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <!-- LED Control-->
+            <div class="category">
+                <header>
+                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_theme.svg#Icon"></use></svg>
+                    <ng-container i18n="@@aqLabelLEDControl">LED Control</ng-container>
+                </header>
+                <mat-slide-toggle class="led-slide-toggle green-slide-toggle" [formControl]="ctrlLedToggle" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)"></mat-slide-toggle>
+                <div *ngIf="showLedSliders">
+                    <span class="label">Red {{ colorRed.value }}</span>
+                    <mat-slider #colorRed [formControl]="ctrlLedRed"
+                        min="0"
+                        max="255"
+                        step="1"
+                        color="primary"
+                        (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
+                    </mat-slider>
+                </div>
+                <div *ngIf="showLedSliders">
+                    <span class="label">Green {{ colorGreen.value }}</span>
+                    <mat-slider #colorGreen [formControl]="ctrlLedGreen"
+                        min="0"
+                        max="255"
+                        step="1"
+                        color="primary"
+                        (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
+                    </mat-slider>
+                </div>
+                <div *ngIf="showLedSliders">
+                    <span class="label">Blue {{ colorBlue.value }}</span>
+                    <mat-slider #colorBlue [formControl]="ctrlLedBlue"
+                        min="0"
+                        max="255"
+                        step="1"
+                        color="primary"
+                        (input)="inputSlider(colorRed.value, colorGreen.value, colorBlue.value)">
+                    </mat-slider>
+                </div>
+                <mat-tab-group mat-stretch-tabs [dynamicHeight]="false" [(selectedIndex)]="selectedLedTab">
+                    <mat-tab label="Pick color" i18n-label="@@aqTabLEDColorPickerLabel">
+                        <span class="color-visualizer"
+                        [style.background]="chosenColorHex"
+                        [(colorPicker)]="chosenColorHex"
+                        [cpDisableInput]="true"
+                        [cpToggle]="true"
+                        cpDialogDisplay="inline"
+                        cpAlphaChannel="disabled"
+                        (colorPickerChange)="inputColor()"></span>
+                    </mat-tab>
+                    <mat-tab label="Mode" i18n-label="@@aqTabLEDModeLabel">
+                        <mat-button-toggle-group #ledStaticOrRainbow [formControl]="ctrlLedStaticOrRainbow" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
+                            <mat-button-toggle value="static" i18n="@@aqButtonToggleLEDStaticLabel">Single color</mat-button-toggle>
+                            <mat-button-toggle value="rainbow" i18n="@@aqButtonToggleLEDRainbowLabel">Rainbow</mat-button-toggle>
+                        </mat-button-toggle-group>
+                        <mat-checkbox color="primary" [formControl]="ctrlLedBreathe" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)" i18n="@@aqCheckboxLEDBreatheLabel">Breathe</mat-checkbox>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+
+        </div>
+
+        <div class="device-list-wrapper" *ngIf="hasBluetooth && !isConnected && !isConnecting && !isDisconnecting && deviceList.length > 0">
+            <ng-container i18n="@@aqChooseAquarisText">Please choose your TUXEDO Aquaris and click on the connect button</ng-container>
+            <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList.length === 0">
+                <mat-list-option #currentOption *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
+                    <mat-icon mat-list-icon *ngIf="device.rssi >= -65">signal_cellular_alt</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi < -65 && device.rssi > -80">signal_cellular_alt_2_bar</mat-icon>
+                    <mat-icon mat-list-icon *ngIf="device.rssi <= -80">signal_cellular_alt_1_bar</mat-icon>
+                    <mat-line style="display: inline; vertical-align: middle;">
+                        {{ deviceNameMap.get(device.uuid) !== undefined ? deviceNameMap.get(device.uuid) : 'TUXEDO Aquaris' }}
+                    </mat-line>
+                    <mat-line>
+                        {{ device.uuid }}
+                    </mat-line>
+                    <button mat-raised-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)" i18n="@@aqButtonConnectLabel">Connect</button>
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+
+        <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && !hasBluetooth">
+            <p><b i18n="@@aqNoBluetoothHeadlineText">TUXEDO Control Center could not find a Bluetooth connection.</b></p>
+            <p i18n="@@aqNoBluetoothVerifyText">Please verify that:</p>
+            <ol>
+                <li i18n="@@aqNoBluetoothHintTurnedOn">Your Bluetooth adapter is turned on in your system settings.</li>
+                <li i18n="@@aqNoBluetoothHintNotDisabled">Your Bluetooth adapter is not disabled in the UEFI.</li>
+                <li i18n="@@aqNoBluetoothHintIsInstalled">A Bluetooth adapter is installed in your TUXEDO notebook.</li>
+            </ol>
+        </div>
+
+        <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (hasBluetooth && deviceList.length === 0)">
+            <p><b i18n="@@aqNoDevicesHeadlineText">TUXEDO Control Center could not find your TUXEDO Aquaris</b></p>
+            <p i18n="@@aqNoDevicesVerifyText">Please verify that:</p>
+            <ol>
+                <li i18n="@@aqNoDevicesHintSwitchedOn">Your Aquaris is switched on and the blue LED on the power button is blinking.</li>
+                <li i18n="@@aqNoDevicesHintIsConnected">Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</li>
+                <li i18n="@@aqNoDevicesHintIsPluggedIn">Your Aquaris' power cable is plugged into your TUXEDO notebook.</li>
+            </ol>
+            <p>
+                <ng-container i18n="@@aqNoDevicesSuggestDemoMode">Do not have a TUXEDO Aquaris yet?</ng-container>
+                <button mat-stroked-button class="try-demo-mode-button" (click)="buttonConnect('demo')" i18n="@@aqNoDevicesDemoButtonLabel">Try demo mode</button>
+            </p>
+        </div>
+
+        <mat-spinner *ngIf="(isConnecting && !isConnected) || isDisconnecting"></mat-spinner>
+    </div>
+
+</mat-card>

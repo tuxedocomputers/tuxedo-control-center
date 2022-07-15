@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -87,7 +87,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 this.currentProfile = this.config.getProfileByName(params.profileName);
                 if (this.currentProfile === undefined) {
                     this.config.setCurrentEditingProfile(undefined);
-                    this.router.navigate(['profile-manager']);
+                    this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
                 } else if (this.config.getCustomProfileByName(this.currentProfile.name) !== undefined) {
                     this.config.setCurrentEditingProfile(this.currentProfile.name);
                 } else {
@@ -95,7 +95,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 }
             } else {
                 this.config.setCurrentEditingProfile(undefined);
-                this.router.navigate(['profile-manager']);
+                this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
             }
         });
 
@@ -141,9 +141,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public selectProfile(profileName?: string): void {
         setImmediate(() => {
             if (profileName === undefined) {
-                this.router.navigate(['profile-manager']);
+                this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
             } else {
-                this.router.navigate(['profile-manager', profileName]);
+                this.router.navigate(['profile-manager', profileName], { relativeTo: this.route.parent });
             }
         });
     }
@@ -160,14 +160,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 case InputMode.New:
                     if (this.config.copyProfile('Default', this.inputProfileName.value)) {
                         this.inputActive = false;
-                        this.router.navigate(['profile-manager', this.inputProfileName.value]);
+                        this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
                     }
                     break;
                 case InputMode.Copy:
                     // if (this.config.copyProfile(this.currentProfile.name, this.inputProfileName.value)) {
                     if (this.config.copyProfile(this.profileToCopy, this.inputProfileName.value)) {
                         this.inputActive = false;
-                        this.router.navigate(['profile-manager', this.inputProfileName.value]);
+                        this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
                     }
                     break;
                 case InputMode.Edit:
@@ -175,7 +175,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                         this.config.getCurrentEditingProfile().name = this.inputProfileName.value;
                         if (this.config.writeCurrentEditingProfile()) {
                             this.inputActive = false;
-                            this.router.navigate(['profile-manager', this.inputProfileName.value]);
+                            this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
                         }
                         break;
                     }
@@ -195,7 +195,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     public deleteProfile(profileName): void {
         if (this.config.deleteCustomProfile(profileName)) {
-            this.router.navigate(['profile-manager']);
+            this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
         }
     }
 

@@ -28,6 +28,8 @@ import * as path from 'path';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { AppComponent } from './app.component';
 import { BehaviorSubject } from 'rxjs';
+import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +55,7 @@ export class UtilsService {
     private electron: ElectronService,
     private decimalPipe: DecimalPipe,
     public overlayContainer: OverlayContainer,
+    public dialog: MatDialog,
     @Inject(LOCALE_ID) localeId) {
       this.localeId = localeId;
       this.languageMap = {};
@@ -187,5 +190,21 @@ export class UtilsService {
 
   public setThemeDark() {
     this.setThemeClass('dark-theme');
+  }
+
+  public async confirmDialog(config: ConfirmDialogData): Promise<ConfirmDialogResult> {
+    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+      minWidth: 350,
+      maxWidth: 550,
+      data: config
+    });
+    let result: ConfirmDialogResult =  await dialogRef.afterClosed().toPromise();
+    if (result === undefined) {
+      result = {
+        confirm: false,
+        noBother: false
+      };
+    }
+    return result;
   }
 }

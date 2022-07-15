@@ -2,76 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
-        <source>Service unavailable</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.ts</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="msgboxMessageServiceUnavailable" datatype="html">
-        <source>Communication with tccd service is unavailable, please restart service and try again.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.ts</context>
-          <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="menuDashboard" datatype="html">
-        <source>Dashboard</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="menuProfiles" datatype="html">
-        <source>Profiles</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">59</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="menuTools" datatype="html">
-        <source>Tools</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="menuUsedProfilesLabel" datatype="html">
-        <source>Used profiles</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="menuSupport" datatype="html">
-        <source>Support</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">111</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
-        <source>Settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">123</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
-        <source>Info</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">132</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
-        <source>TUXEDO Control Center</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/app.component.html</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="cProfMgrInvalidNameTitle" datatype="html">
         <source>Invalid input</source>
         <context-group purpose="location">
@@ -645,28 +575,28 @@ Commercial register number - Part B of the commercial register - 27755
         <source>N/A</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanSpeedValue" datatype="html">
         <source>N/A</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gaugeTextOff" datatype="html">
         <source>off</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gaugeTextOn" datatype="html">
         <source>on</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
       <trans-unit id="36a9f3e32b06903ce9038e66286fe4c0e45f0559" datatype="html">
@@ -1037,7 +967,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Change Crypt Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
@@ -1149,6 +1079,435 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
+        <source>Service unavailable</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="msgboxMessageServiceUnavailable" datatype="html">
+        <source>Communication with tccd service is unavailable, please restart service and try again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuDashboard" datatype="html">
+        <source>Dashboard</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuProfiles" datatype="html">
+        <source>Profiles</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuTools" datatype="html">
+        <source>Tools</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuUsedProfilesLabel" datatype="html">
+        <source>Used profiles</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuSupport" datatype="html">
+        <source>Support</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
+        <source>Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
+        <source>Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
+        <source>TUXEDO Control Center</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuAquaris" datatype="html">
+        <source>Aquaris</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogConnectLinkHref" datatype="html">
+        <source>https://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">375</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqFanPresetSlowLabel" datatype="html">
+        <source>Slow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqFanPresetMediumLabel" datatype="html">
+        <source>Medium</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqFanPresetFastLabel" datatype="html">
+        <source>Fast</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogConnectTitle" datatype="html">
+        <source>Are you ready to connect to your Aquaris?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">385</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogConnectDescription" datatype="html">
+        <source>Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">386</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogConnectLinkLabel" datatype="html">
+        <source>Instructions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">387</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonAbortConnectLabel" datatype="html">
+        <source>Do not connect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">389</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonConfirmConnectLabel" datatype="html">
+        <source>Connect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">390</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
+        <source>Don&apos;t ask again</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">391</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">431</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectTitle" datatype="html">
+        <source>Do you want to disconnect your Aquaris?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">425</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectDescription" datatype="html">
+        <source>Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">426</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectLinkLabel" datatype="html">
+        <source>Instructions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">427</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogDisconnectLinkHref" datatype="html">
+        <source>https://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">428</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonAbortLabel" datatype="html">
+        <source>Stay connected</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">429</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogButtonConfirmLabel" datatype="html">
+        <source>Disconnect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">430</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8300092213868729072" datatype="html">
+        <source>Bluetooth not available</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">476</context>
+        </context-group>
+        <note priority="1" from="description">aqConnectionStatusNoBluetooth</note>
+      </trans-unit>
+      <trans-unit id="3852289441366561594" datatype="html">
+        <source>Connecting...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">478</context>
+        </context-group>
+        <note priority="1" from="description">aqConnectionStatusConnecting</note>
+      </trans-unit>
+      <trans-unit id="2844912541574448086" datatype="html">
+        <source>Disconnecting...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">480</context>
+        </context-group>
+        <note priority="1" from="description">aqConnectionStatusDisconnecting</note>
+      </trans-unit>
+      <trans-unit id="628702835471697117" datatype="html">
+        <source>Connected to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">482</context>
+        </context-group>
+        <note priority="1" from="description">aqConnectionStatusConnectedTo</note>
+      </trans-unit>
+      <trans-unit id="245175603611658921" datatype="html">
+        <source>Looking for devices...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">484</context>
+        </context-group>
+        <note priority="1" from="description">aqConnectionStatusLookingForDevices</note>
+      </trans-unit>
+      <trans-unit id="aqDialogSelectNameTitle" datatype="html">
+        <source>Device name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">558</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqDialogSelectNameDescription" datatype="html">
+        <source>A descriptive name for the device</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
+          <context context-type="linenumber">559</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqTitleOpenInfoTooltip" datatype="html">
+        <source>Open info page...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqButtonDisconnectLabel" datatype="html">
+        <source>Disconnect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqLabelFanControl" datatype="html">
+        <source>Fan control</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqButtonFanPresetsLabel" datatype="html">
+        <source>Fan presets</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqFanGaugeLegendText" datatype="html">
+        <source>Fan speed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqLowFanSpeedNotice" datatype="html">
+        <source>Low fan speeds (&lt; 50%) may cause interference noise</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqLabelLEDControl" datatype="html">
+        <source>LED Control</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqTabLEDColorPickerLabel" datatype="html">
+        <source>Pick color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">172</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqTabLEDModeLabel" datatype="html">
+        <source>Mode</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">182</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqButtonToggleLEDStaticLabel" datatype="html">
+        <source>Single color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">184</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqButtonToggleLEDRainbowLabel" datatype="html">
+        <source>Rainbow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">185</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqCheckboxLEDBreatheLabel" datatype="html">
+        <source>Breathe</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">187</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqChooseAquarisText" datatype="html">
+        <source>Please choose your TUXEDO Aquaris and click on the connect button</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqButtonConnectLabel" datatype="html">
+        <source>Connect</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">207</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoBluetoothHeadlineText" datatype="html">
+        <source>TUXEDO Control Center could not find a Bluetooth connection.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">213</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoBluetoothVerifyText" datatype="html">
+        <source>Please verify that:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoBluetoothHintTurnedOn" datatype="html">
+        <source>Your Bluetooth adapter is turned on in your system settings.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">216</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoBluetoothHintNotDisabled" datatype="html">
+        <source>Your Bluetooth adapter is not disabled in the UEFI.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoBluetoothHintIsInstalled" datatype="html">
+        <source>A Bluetooth adapter is installed in your TUXEDO notebook.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesHeadlineText" datatype="html">
+        <source>TUXEDO Control Center could not find your TUXEDO Aquaris</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">223</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesVerifyText" datatype="html">
+        <source>Please verify that:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesHintSwitchedOn" datatype="html">
+        <source>Your Aquaris is switched on and the blue LED on the power button is blinking.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">226</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
+        <source>Your Aquaris is connected to your TUXEDO notebook&apos;s power supply, which is connected to a power outlet.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
+        <source>Your Aquaris&apos; power cable is plugged into your TUXEDO notebook.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">228</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesSuggestDemoMode" datatype="html">
+        <source>Do not have a TUXEDO Aquaris yet?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aqNoDevicesDemoButtonLabel" datatype="html">
+        <source>Try demo mode</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
         <source>CPU settings deactivated in Tools→Global Settings</source>
         <context-group purpose="location">
@@ -1195,14 +1554,14 @@ Commercial register number - Part B of the commercial register - 27755
         <source>This feature is not supported on your model.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
         <source>This feature is not supported on your model.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
     </body>

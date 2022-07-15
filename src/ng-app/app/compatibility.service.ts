@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
+import { DMIController } from '../../common/classes/DMIController';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -24,8 +25,31 @@ import { TccDBusClientService } from './tcc-dbus-client.service';
 })
 export class CompatibilityService {
 
-  constructor(
-    private tccDbus: TccDBusClientService) { }
+  private hasAquarisValue: boolean;
+
+  constructor(private tccDbus: TccDBusClientService) {
+    // TODO: Manual read until general device id get merged
+    const dmi = new DMIController('/sys/class/dmi/id');
+    const deviceName = dmi.productSKU.readValueNT();
+    const boardVendor = dmi.boardVendor.readValueNT();
+    const chassisVendor = dmi.chassisVendor.readValueNT();
+    const sysVendor = dmi.sysVendor.readValueNT();
+    let showAquarisMenu;
+    const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
+                     (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
+                     (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+
+    if (isTuxedo) {
+      if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
+        showAquarisMenu = true;
+      } else {
+        showAquarisMenu = false;
+      }
+    } else {
+      showAquarisMenu = true;
+    }
+    this.hasAquarisValue = showAquarisMenu;
+  }
 
   get hasFancontrol(): boolean {
     return this.tccDbus.tuxedoWmiAvailable.value;
@@ -51,5 +75,9 @@ export class CompatibilityService {
 
   get tccDbusAvailable() {
     return this.tccDbus.available;
+  }
+
+  get hasAquaris() {
+    return this.hasAquarisValue;
   }
 }
