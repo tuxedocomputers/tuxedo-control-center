@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -23,7 +23,7 @@ import { UtilsService } from '../utils.service';
 import { TccDBusClientService, IDBusFanData } from '../tcc-dbus-client.service';
 import { ITccProfile } from 'src/common/models/TccProfile';
 import { StateService } from '../state.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 
 import { NodeService } from '../node.service';
@@ -77,6 +77,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private tccdbus: TccDBusClientService,
     private state: StateService,
     private router: Router,
+    private route: ActivatedRoute,
     private config: ConfigService,
     private node: NodeService,
     public compat: CompatibilityService
@@ -235,7 +236,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public goToProfileEdit(profile: ITccProfile): void {
     if (profile !== undefined) {
-      this.router.navigate(['profile-manager', profile.name]);
+      this.router.navigate(['profile-manager', profile.name], { relativeTo: this.route.parent });
     }
   }
 

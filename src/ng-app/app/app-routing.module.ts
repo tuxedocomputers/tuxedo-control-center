@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -23,19 +23,27 @@ import { ProfileManagerComponent } from './profile-manager/profile-manager.compo
 import { SupportComponent } from './support/support.component';
 import { InfoComponent } from './info/info.component';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
-import { ShutdownTimerComponent } from "./shutdown-timer/shutdown-timer.component";
 import { ToolsComponent } from "./tools/tool.component";
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
+import { MainGuiComponent } from './main-gui/main-gui.component';
+import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'cpu-dashboard', pathMatch: 'full' },
-    { path: 'profile-manager', component: ProfileManagerComponent },
-    { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
-    { path: 'support', component: SupportComponent },
-    { path: 'info', component: InfoComponent },
-    { path: 'cpu-dashboard', component: CpuDashboardComponent },
-    { path: 'tools', component: ToolsComponent },
-    { path: 'global-settings', component: GlobalSettingsComponent }
+    { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
+    {
+        path: 'main-gui', component: MainGuiComponent,
+        children: [
+            { path: 'profile-manager', component: ProfileManagerComponent },
+            { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
+            { path: 'support', component: SupportComponent },
+            { path: 'info', component: InfoComponent },
+            { path: 'cpu-dashboard', component: CpuDashboardComponent },
+            { path: 'tools', component: ToolsComponent },
+            { path: 'global-settings', component: GlobalSettingsComponent },
+            { path: 'aquaris-control', component: AquarisControlComponent }
+        ]
+    },
+    { path: 'aquaris-control', component: AquarisControlComponent }
 ];
 
 @NgModule({
