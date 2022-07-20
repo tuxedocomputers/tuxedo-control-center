@@ -11,7 +11,7 @@
         <description>Run TUXEDO Control Center Daemon</description>
         <description xml:lang="de">TUXEDO Control Center Daemon ausführen</description>
         <message>Authentication is required to run/update the configuration of TUXEDO Control Center Daemon</message>
-        <message xml:lang="de">Authentifikation wird zum aktualisieren des TUXEDO Control Center Daemons benötigt</message>
+        <message xml:lang="de">Zum Ausführen des TUXEDO Control Center Daemons ist eine Authentifizierung erforderlich</message>
 
         <!--icon_name>preferences-system</icon_name-->
 
