@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -24,11 +24,13 @@ import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -73,12 +75,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         if (this.selectStateControl === undefined) {
-            this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.name));
+            this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.id));
         } else {
-            this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
+            this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         }
 
-        this.editProfile = (this.config.getCustomProfileByName(profile.name) !== undefined);
+        this.editProfile = (this.config.getCustomProfileById(profile.id) !== undefined);
+
+        this.setActiveTab();
     }
 
     @Input()
@@ -91,6 +95,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         headerSpan: 4,
         valueSpan: 2,
         inputSpan: 3
+    };
+
+    public gridProfileSettings = {
+        cols: 9,
+        headerSpan: 4,
+        valueSpan: 0,
+        inputSpan: 5
     };
 
     public selectStateControl: FormControl;
@@ -108,9 +119,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
 
+    public odmPowerLimitInfos: TDPInfo[] = [];
+
+    private tdpLabels: Map<string, string>;
+
     public showFanGraphs = false;
 
     @ViewChild('inputName') inputName: MatInput;
+
+    public selectedCPUTabIndex: number = 0;
 
     constructor(
         private utils: UtilsService,
@@ -132,6 +149,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.stateInputArray = this.state.getStateInputs();
 
+        const odmProfileLEDNames: Map<string, string> = new Map();
+        odmProfileLEDNames.set('power_save', $localize `:@@odmLEDNone:all LEDs off`);
+        odmProfileLEDNames.set('enthusiast', $localize `:@@odmLEDOne:one LED on`);
+        odmProfileLEDNames.set('overboost', $localize `:@@odmLEDTwo:two LEDs on`);
+
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
             this.odmProfileNames = nextAvailableODMProfiles;
 
@@ -139,10 +161,26 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.odmProfileToName.clear();
             for (const profileName of this.odmProfileNames) {
                 if (profileName.length > 0) {
-                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                    if (this.compat.uwLEDOnlyMode) {
+                        this.odmProfileToName.set(profileName, odmProfileLEDNames.get(profileName));
+                    } else {
+                        this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
+                    }
                 }
             }
         }));
+
+        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
+            if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
+                this.odmPowerLimitInfos = nextODMPowerLimits;
+                this.setActiveTab();
+            }
+        }));
+
+        this.tdpLabels = new Map();
+        this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
+        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Slow (max. 28 sec) Power Limit (PL2)`);
+        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Fast (max. 8 sec) Power Limit (PL4)`);
     }
 
     ngOnDestroy() {
@@ -161,11 +199,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
+        // Reset non chosen CPU tab to defaults on save
+        const defaultProfile = this.config.getDefaultProfiles()[0];
+        if (this.selectedCPUTabIndex === 0) {
+            this.setFormGroupValue('cpu', defaultProfile.cpu);
+        } else if (this.selectedCPUTabIndex === 1) {
+            this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+        }
+
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
             const newProfileStateAssignments = this.selectStateControl.value;
-            this.config.writeProfile(this.viewProfile.name, formProfileData, newProfileStateAssignments).then(success => {
+            this.config.writeProfile(this.viewProfile.id, formProfileData, newProfileStateAssignments).then(success => {
                 if (success) {
                     this.profileFormGroup.markAsPristine();
                     this.selectStateControl.markAsPristine();
@@ -182,7 +228,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
-        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.name));
+        this.setActiveTab();
+        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         // Also restore brightness to active profile if applicable
         if (!this.dbus.displayBrightnessNotSupported) {
             const activeProfile = this.state.getActiveProfile();
@@ -200,16 +247,31 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
         const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
 
+        const odmTDPValuesArray: FormArray = this.fb.array(profile.odmPowerLimits.tdpValues.map(e => this.fb.control(e)));
+        const odmPowerLimits: FormGroup = this.fb.group({
+            tdpValues: odmTDPValuesArray
+        });
+
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
+        for (let i = 1; i < odmTDPValuesArray.controls.length; ++i) {
+            odmTDPValuesArray.controls[i].setValidators([minControlValidator(odmTDPValuesArray.controls[i - 1])]);
+        }
+
+        for (let i = 0; i < odmTDPValuesArray.controls.length - 1; ++i) {
+            odmTDPValuesArray.controls[i].setValidators([maxControlValidator(odmTDPValuesArray.controls[i + 1])]);
+        }
+
         const fg = this.fb.group({
             name: profile.name,
+            description: profile.description,
             display: displayGroup,
             cpu: cpuGroup,
             webcam: webcamGroup,
             fan: fanControlGroup,
-            odmProfile: odmProfileGroup
+            odmProfile: odmProfileGroup,
+            odmPowerLimits: odmPowerLimits
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
@@ -272,6 +334,92 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    get getODMTDPControls() {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        return tdpValues.controls;
+    }
+
+    public sliderODMPowerLimitMinValue(sliderIndex: number): number {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+
+        // Find largest allowed min value
+        let minValue = this.odmPowerLimitInfos[sliderIndex].min;
+
+        for (let i = 0; i < sliderIndex; ++i) {
+            if (minValue === undefined || tdpValues.controls[i].value > minValue) {
+                minValue = tdpValues.controls[i].value;
+            }
+        }
+
+        return minValue;
+    }
+
+    public sliderODMPowerLimitMaxValue(sliderIndex: number): number {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+
+        // Find smallest allowed max value
+        let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
+
+        for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
+            if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
+                maxValue = tdpValues.controls[i].value;
+            }
+        }
+
+        return maxValue;
+    }
+
+    public sliderODMPowerLimitChange(movedSliderIndex: number) {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        let newValue: number = tdpValues.controls[movedSliderIndex].value;
+
+
+        let minValue = this.sliderODMPowerLimitMinValue(movedSliderIndex);
+        let maxValue = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
+
+        // Ensure new value is above chosen min value
+        if (newValue < minValue) {
+            newValue = minValue;
+        }
+
+        // Ensure new value is below chosen max value
+        if (newValue > maxValue) {
+            newValue = maxValue;
+        }
+
+        if (newValue !== undefined) {
+            tdpValues.controls[movedSliderIndex].setValue(newValue);
+
+            // Update LED choice (if available) on first TDP change
+            // Note: Deactivated update
+            const updateLEDChoice = false &&
+                movedSliderIndex === 0 &&
+                this.compat.uwLEDOnlyMode
+                // Also make sure three profiles are available
+                this.odmProfileNames.length === 3;
+
+            if (updateLEDChoice) {
+                const sliderMax = this.odmPowerLimitInfos[movedSliderIndex].max;
+                const sliderMin = this.odmPowerLimitInfos[movedSliderIndex].min;
+                const tdpPercentage = Math.round((newValue - sliderMin) / (sliderMax - sliderMin) * 100);
+                const odmProfileGroup: FormGroup = this.profileFormGroup.controls.odmProfile as FormGroup;
+                const profileNameControl: FormControl = odmProfileGroup.controls.name as FormControl;
+                if (tdpPercentage < 25) {
+                    profileNameControl.setValue(this.odmProfileNames[0]);
+                } else if ( tdpPercentage < 75) {
+                    profileNameControl.setValue(this.odmProfileNames[1]);
+                } else {
+                    profileNameControl.setValue(this.odmProfileNames[2]);
+                }
+            }
+        }
+
+    }
+
     public inputDisplayBrightnessChange(newValue: number) {
         if (!this.dbus.displayBrightnessNotSupported) {
             this.dbus.setDisplayBrightness(newValue);
@@ -311,7 +459,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
         const strAlreadySet = $localize `:@@cProfMgrDetailsStateSelectButtonAlreadySet: (already set)`;
-        return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.name ? strAlreadySet : '');
+        return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.id ? strAlreadySet : '');
     }
 
     private buttonRepeatTimer: NodeJS.Timeout;
@@ -354,5 +502,76 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         } else {
             this.showFanGraphs = false;
         }
+    }
+
+    public odmTDPLabel(tdpDescriptor: string) {
+        const result = this.tdpLabels.get(tdpDescriptor);
+        if (result === undefined) {
+            return tdpDescriptor;
+        } else {
+            return result;
+        }
+    }
+
+    public buttonODMPowerLimitUndo(sliderIndex: number) {
+        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
+        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        tdpValues.controls[sliderIndex].reset(this.viewProfile.odmPowerLimits.tdpValues[sliderIndex]);
+        const wantedValue = tdpValues.controls[sliderIndex].value;
+        this.sliderODMPowerLimitChange(sliderIndex);
+        const correctedValue = tdpValues.controls[sliderIndex].value;
+        if (correctedValue !== wantedValue) {
+            tdpValues.controls[sliderIndex].markAsDirty();
+        }
+    }
+
+    private setFormGroupValue(groupName, value): boolean {
+        let valueChanged = false;
+        if (JSON.stringify(value) !== JSON.stringify(this.viewProfile[groupName])) {
+            valueChanged = true;
+        }
+        this.profileFormGroup.get(groupName).setValue(value);
+        if (valueChanged) {
+            this.profileFormGroup.get(groupName).markAsDirty();
+        }
+        return valueChanged;
+    }
+
+    @ViewChild('cpuSettingsTabGroup', { static: false }) cpuTabGroup: MatTabGroup;
+    public setActiveTab(index?: number) {
+        const defaultProfile = this.config.getDefaultProfiles()[0];
+        const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+        const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
+        const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
+
+        const INDEX_ODMCPUTDP = 0;
+        const INDEX_CPUFREQ = 1;
+
+        // Choose either index automatically or manually selectd
+        if (index !== undefined) {
+            this.selectedCPUTabIndex = index;
+        } else if (cpuFreqOnly) {
+            this.selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else if (powerNotDefault) {
+            this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        } else if (cpufreqNotDefault) {
+            this.selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else {
+            this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        }
+
+        // Reset not chosen tab to default
+        const resetNonChosenTabWhenNotSelected = false;
+        if (resetNonChosenTabWhenNotSelected) {
+            if (this.selectedCPUTabIndex === INDEX_ODMCPUTDP) {
+                this.setFormGroupValue('cpu', defaultProfile.cpu);
+            } else if (this.selectedCPUTabIndex === INDEX_CPUFREQ) {
+                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+            }
+        }
+    }
+
+    public tabChange(event: MatTabChangeEvent) {
+        this.setActiveTab(event.index);
     }
 }

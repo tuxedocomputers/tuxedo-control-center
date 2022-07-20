@@ -97,10 +97,10 @@ export class StateService implements OnDestroy {
   /**
    * Get the array of state names that the profile is activated for
    */
-  public getProfileStates(profileName: string): string[] {
-    // Filter on value (profile name) and map on key (state)
+  public getProfileStates(profileId: string): string[] {
+    // Filter on value (profile id) and map on key (state)
     return Object.entries(this.currentSettings.stateMap)
-            .filter(entry => entry[1] === profileName)
+            .filter(entry => entry[1] === profileId)
             .map(entry => entry[0]);
   }
 

@@ -30,6 +30,7 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
+    private previousProfileName;
 
     private modeSameSpeed = false;
 
@@ -47,6 +48,17 @@ export class FanControlWorker extends DaemonWorker {
             if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
             if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
             if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+        }
+
+        // Update fan logic
+        const currentFanProfile = this.tccd.getCurrentFanProfile(this.activeProfile);
+        for (const fanNumber of this.fans.keys()) {
+            if (this.fans.get(fanNumber).getFanProfile() === undefined ||
+                this.fans.get(fanNumber).getFanProfile().name !== currentFanProfile.name) {
+                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
+            }
+            this.fans.get(fanNumber).minimumFanspeed = this.activeProfile.fan.minimumFanspeed;
+            this.fans.get(fanNumber).offsetFanspeed = this.activeProfile.fan.offsetFanspeed;
         }
     }
 
@@ -101,10 +113,6 @@ export class FanControlWorker extends DaemonWorker {
         // For each fan read and process sensor values
         for (const fanNumber of this.fans.keys()) {
             const fanIndex: number = fanNumber - 1;
-            // Update fan profile
-            this.fans.get(fanNumber).setFanProfile(this.tccd.getCurrentFanProfile());
-            this.fans.get(fanNumber).minimumFanspeed = this.tccd.getCurrentProfile().fan.minimumFanspeed;
-            this.fans.get(fanNumber).offsetFanspeed = this.tccd.getCurrentProfile().fan.offsetFanspeed;
 
             const fanLogic = this.fans.get(fanNumber);
 

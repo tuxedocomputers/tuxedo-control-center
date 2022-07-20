@@ -74,11 +74,13 @@ export class TccDBusData {
     public forceYUV420OutputSwitchAvailable: boolean;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
+    public tempProfileId: string;
     public activeProfileJSON: string;
     public profilesJSON: string;
     public customProfilesJSON: string;
     public defaultProfilesJSON: string;
     public odmProfilesAvailable: string[];
+    public odmPowerLimitsJSON: string;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -110,10 +112,15 @@ export class TccDBusInterface extends dbus.interface.Interface {
         this.data.tempProfileName = profileName;
         return true;
     }
+    SetTempProfileById(id: string) {
+        this.data.tempProfileId = id;
+        return true;
+    }
     GetProfilesJSON() { return this.data.profilesJSON; }
     GetCustomProfilesJSON() { return this.data.customProfilesJSON; }
     GetDefaultProfilesJSON() { return this.data.defaultProfilesJSON; }
     ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
+    ODMPowerLimitsJSON() { return this.data.odmPowerLimitsJSON; }
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
     }
@@ -134,10 +141,12 @@ TccDBusInterface.configureMembers({
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },
+        SetTempProfileById: { inSignature: 's',  outSignature: 'b' },
         GetProfilesJSON: { outSignature: 's' },
         GetCustomProfilesJSON: { outSignature: 's' },
         GetDefaultProfilesJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
+        ODMPowerLimitsJSON: { outSignature: 's' },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

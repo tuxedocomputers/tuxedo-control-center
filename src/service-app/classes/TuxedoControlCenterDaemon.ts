@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,7 +25,8 @@ import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile, defaultCustomProfile } from '../../common/models/TccProfile';
+import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
+import { defaultCustomProfile } from '../../common/models/profiles/LegacyProfiles';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
@@ -37,9 +38,12 @@ import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
+import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
+import { DMIController } from '../../common/classes/DMIController';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 const tccPackage = require('../../package.json');
 
@@ -58,8 +62,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public dbusData = new TccDBusData(3);
 
-    // Initialize to default profile, will be changed by state switcher as soon as it is started
-    public activeProfileName = 'Default';
+    public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
 
@@ -96,12 +99,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         this.dbusData.tccdVersion = tccPackage.version;
 
+        const dev = this.identifyDevice();
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles().map(this.fillDeviceSpecificDefaults)
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
         const customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
         this.dbusData.profilesJSON = JSON.stringify(defaultProfilesFilled.concat(customProfilesFilled));
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
+
+        // Initialize active profile (fallback), will update when state is determined
+        this.activeProfile = this.getDefaultProfile();
 
         this.workers.push(new StateSwitcherWorker(this));
         this.workers.push(new DisplayBacklightWorker(this));
@@ -111,6 +118,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
+        this.workers.push(new ODMPowerLimitWorker(this));
 
         this.startWorkers();
 
@@ -121,7 +129,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         for (const worker of this.workers) {
             worker.timer = setInterval(() => {
                 try {
-                    worker.onWork();
+                    worker.work();
                 } catch (err) {
                     this.logLine('Failed executing onWork() => ' + err);
                 }
@@ -133,7 +141,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public startWorkers(): void {
         for (const worker of this.workers) {
             try {
-                worker.onStart();
+                worker.updateProfile(this.getCurrentProfile());
+                worker.start();
             } catch (err) {
                 this.logLine('Failed executing onStart() => ' + err);
             }
@@ -160,7 +169,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.forEach((worker) => {
             // On exit events for each worker before exiting and saving settings
             try {
-                worker.onExit();
+                worker.exit();
             } catch (err) {
                 this.logLine('Failed executing onExit() => ' + err);
             }
@@ -348,27 +357,89 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
+    identifyDevice(): TUXEDODevice {
+
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const productSKU = dmi.productSKU.readValueNT();
+        const boardName = dmi.boardName.readValueNT();
+        const modInfo = new ModuleInfo();
+        TuxedoIOAPI.getModuleInfo(modInfo);
+
+        console.log(`model: '${modInfo.model}' board name: '${boardName}' product sku: '${productSKU}`);
+
+        const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
+        dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
+        dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
+        dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
+        dmiSKUDeviceMap.set('POLARIS1XI03', TUXEDODevice.POLARIS1XI03);
+        dmiSKUDeviceMap.set('STELLARIS1XA03', TUXEDODevice.STELLARIS1XA03);
+        dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
+
+        const skuMatch = dmiSKUDeviceMap.get(productSKU);
+
+        if (skuMatch !== undefined) {
+            return skuMatch;
+        }
+
+        const uwidDeviceMap = new Map<number, TUXEDODevice>();
+        uwidDeviceMap.set(0x13, TUXEDODevice.IBP14G6_TUX);
+        uwidDeviceMap.set(0x12, TUXEDODevice.IBP14G6_TRX);
+        uwidDeviceMap.set(0x14, TUXEDODevice.IBP14G6_TQF);
+
+        const uwidMatch = uwidDeviceMap.get(parseInt(modInfo.model));
+        if (uwidMatch !== undefined) {
+            return uwidMatch;
+        }
+
+        return undefined;
+    }
+
     getDefaultProfile(): ITccProfile {
-        return this.config.getDefaultProfiles()[0];
+        const dev = this.identifyDevice();
+        return this.config.getDefaultProfiles(dev)[0];
     }
 
     getAllProfiles(): ITccProfile[] {
-        return this.config.getDefaultProfiles().concat(this.customProfiles);
+        const dev = this.identifyDevice();
+        return this.config.getDefaultProfiles(dev).concat(this.customProfiles);
     }
 
     getCurrentProfile(): ITccProfile {
-        return this.getAllProfiles().find((profile) => profile.name === this.activeProfileName);
+        return this.activeProfile;
     }
 
-    getCurrentFanProfile(): ITccFanProfile {
+    setCurrentProfileByName(profileName: string): boolean {
+        this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
+        if (this.activeProfile === undefined) {
+            this.activeProfile = this.getDefaultProfile();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    setCurrentProfileById(id: string): boolean {
+        this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
+        if (this.activeProfile === undefined) {
+            this.activeProfile = this.getDefaultProfile();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
+        if (chosenProfile === undefined) {
+            chosenProfile = this.getCurrentProfile();
+        }
         // If no fanprofile is set in tcc profile, use fallback
-        if (this.getCurrentProfile().fan === undefined || this.getCurrentProfile().fan.fanProfile === undefined) {
+        if (chosenProfile.fan === undefined || chosenProfile.fan.fanProfile === undefined) {
             return this.getFallbackFanProfile();
         }
 
         // Attempt to find fan profile from tcc profile
         let chosenFanProfile = this.config.getDefaultFanProfiles()
-            .find(fanProfile => fanProfile.name === this.getCurrentProfile().fan.fanProfile);
+            .find(fanProfile => fanProfile.name === chosenProfile.fan.fanProfile);
 
         if (chosenFanProfile === undefined) {
             chosenFanProfile = this.getFallbackFanProfile();
@@ -393,6 +464,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+
+        if (profile.id === undefined) {
+            profile.id = generateProfileId();
+            console.log(`(fillDeviceSpecificDefaults) Generated id (${profile.id}) for ${profile.name}`);
+        }
+
+        if (profile.description === 'undefined') {
+            profile.description = '';
+        }
+
         const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
         if (profile.cpu.onlineCores === undefined) {
             profile.cpu.onlineCores = cpu.cores.length;
@@ -474,8 +555,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         const defaultODMProfileName: ObjWrapper<string> = { value: '' };
+        const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
         TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
-        if (profile.odmProfile === undefined) {
+        TuxedoIOAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
+        if (profile.odmProfile === undefined || !availableODMProfiles.value.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
                 name: defaultODMProfileName.value
             };
@@ -483,6 +566,18 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         if (profile.odmProfile.name === undefined) {
             profile.odmProfile.name = defaultODMProfileName.value;
+        }
+
+        let tdpInfo: TDPInfo[] = [];
+        TuxedoIOAPI.getTDPInfo(tdpInfo);
+        if (profile.odmPowerLimits === undefined
+            || profile.odmPowerLimits.tdpValues === undefined) {
+            profile.odmPowerLimits = { tdpValues: [] };
+        }
+
+        const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
+        if (nrMissingValues > 0) {
+            profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
         }
 
         return profile;

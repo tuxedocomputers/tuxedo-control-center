@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,29 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+import { defaultProfiles } from "./profiles/LegacyProfiles";
+
 export interface ITccProfile {
+    id: string;
     name: string;
+    description: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
+    odmPowerLimits: ITccODMPowerLimits;
 }
 
 export class TccProfile implements ITccProfile {
+    id: string;
     name: string;
+    description: string;
     display: ITccProfileDisplay;
     cpu: ITccProfileCpu;
     webcam: ITccProfileWebCam;
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
+    odmPowerLimits: ITccODMPowerLimits;
     public constructor(init: ITccProfile) {
+        this.id = init.id;
         this.name = init.name;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
         this.fan = JSON.parse(JSON.stringify(init.fan));
         this.odmProfile = JSON.parse(JSON.stringify(init.odmProfile));
+        this.odmPowerLimits = JSON.parse(JSON.stringify(init.odmPowerLimits));
     }
 }
 
@@ -73,147 +84,16 @@ interface ITccODMProfile {
     name: string
 }
 
-export const defaultProfiles: ITccProfile[] = [
-    {
-        name: 'Default',
-        display: {
-            brightness: 100,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Balanced',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined }
-    },
-    {
-        name: 'Cool and breezy',
-        display: {
-            brightness: 50,
-            useBrightness: false
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: undefined,
-            scalingMaxFrequency: -1,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Quiet',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined }
-    },
-    {
-        name: 'Powersave extreme',
-        display: {
-            brightness: 60,
-            useBrightness: true
-        },
-        cpu: {
-            onlineCores: undefined,
-            useMaxPerfGov: false,
-            scalingMinFrequency: 0,
-            scalingMaxFrequency: 0,
-            governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-            energyPerformancePreference: 'balance_performance',
-            noTurbo: false
-        },
-        webcam: {
-            status: true,
-            useStatus: true
-        },
-        fan: {
-            useControl: true,
-            fanProfile: 'Silent',
-            minimumFanspeed: 0,
-            offsetFanspeed: 0
-        },
-        odmProfile: { name: undefined }
-    }
-];
+interface ITccODMPowerLimits {
+    tdpValues: number[]
+}
 
-export const defaultCustomProfile: ITccProfile = {
-    name: 'Default custom profile',
-    display: {
-        brightness: 100,
-        useBrightness: false
-    },
-    cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: undefined,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-    },
-    webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Balanced',
-        minimumFanspeed: 0,
-        offsetFanspeed: 0
-    },
-    odmProfile: { name: undefined }
-};
-
-export const defaultCustomProfileXP1508UHD: ITccProfile = {
-    name: 'Custom XP1508 UHD',
-    display: {
-        brightness: 100,
-        useBrightness: false
-    },
-    cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: 1200000,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-    },
-    webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Balanced',
-        minimumFanspeed: 0,
-        offsetFanspeed: 0
-    },
-    odmProfile: { name: undefined }
-};
+export function generateProfileId(): string {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
 export const profileImageMap = new Map<string, string>();
+// TODO: map IDs instead of names
 profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');
 profileImageMap.set(defaultProfiles[1].name, 'icon_profile_breezy.svg');
 profileImageMap.set(defaultProfiles[2].name, 'icon_profile_energysaver.svg');

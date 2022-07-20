@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -44,7 +44,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
     public onStart(): void {
 
         // Figure out which brightness percentage to set
-        const currentProfile = this.tccd.getCurrentProfile();
+        const currentProfile = this.activeProfile;
         let brightnessPercent;
         if (!currentProfile.display.useBrightness || currentProfile.display.brightness === undefined) {
             if (this.tccd.autosave.displayBrightness === undefined) {

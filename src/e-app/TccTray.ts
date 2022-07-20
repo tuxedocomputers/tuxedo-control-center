@@ -50,9 +50,9 @@ export class TccTray {
             // Creation of each profile selection submenu item
             return {
                 label: profile.name,
-                click: () => this.events.profileClick(profile.name),
+                click: () => this.events.profileClick(profile.id),
                 type: 'radio',
-                checked: profile.name === this.state.activeProfile.name
+                checked: profile.id === this.state.activeProfile.id
             };
         });
 
@@ -146,6 +146,6 @@ export class TrayEvents {
     autostartTrayToggle: () => void;
     selectNvidiaClick: () => void;
     selectBuiltInClick: () => void;
-    profileClick: (profileName: string) => void;
+    profileClick: (profileId: string) => void;
     powersaveBlockerClick: () => void;
 }
