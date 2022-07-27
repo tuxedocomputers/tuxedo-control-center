@@ -374,6 +374,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('POLARIS1XI03', TUXEDODevice.POLARIS1XI03);
         dmiSKUDeviceMap.set('STELLARIS1XA03', TUXEDODevice.STELLARIS1XA03);
         dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
+        dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
 
         const skuMatch = dmiSKUDeviceMap.get(productSKU);
 
