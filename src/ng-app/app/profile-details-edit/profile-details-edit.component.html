@@ -396,6 +396,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
                                 <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                <mat-icon
+                                    class="info-icon"
+                                    i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
+                                    matTooltip="System profiles commonly adjust power limits of the CPU (and sometimes GPU when available)."
+                                    matTooltipShowDelay="700">
+                                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                </mat-icon>
                             </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">

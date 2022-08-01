@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -32,6 +32,11 @@
     &.row {
         margin-right:10px;
     }
+}
+
+.info-icon {
+    cursor: help;
+    --icon-detail: var(--icon-main);
 }
 
 .tcc-card {
