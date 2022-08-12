@@ -239,11 +239,6 @@ export class UtilsService {
         description: $localize `:@@profileDescHighPerformance:High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.`
     });
 
-    this.defaultProfileInfos.set(DefaultProfileIDs.MaximumPerformance, {
-        name: $localize `:@@profileNameMaximumPerformance:Max Performance`,
-        description: $localize `:@@profileDescMaximumPerformance:Maximum performance at the cost of very loud fan noise levels and very high temperatures.`
-    });
-
     this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
         name: $localize `:@@profileNamePowersaveExtreme:Powersave extreme`,
         description: $localize `:@@profileDescPowersaveExtreme:Lowest possible power consumption and silent fans at the cost of extremely low performance.`

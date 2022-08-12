@@ -24,7 +24,6 @@ export enum DefaultProfileIDs {
     Quiet = '__profile_silent__',
     Office = '__office__',
     HighPerformance = '__high_performance__',
-    MaximumPerformance = '__maximum_performance__'
 }
 
 export interface IProfileTextMappings {
@@ -156,37 +155,6 @@ const highPerformance: ITccProfile = {
     odmPowerLimits: { tdpValues: [60, 60, 70] }
 };
 
-const maximumPerformance: ITccProfile = {
-    id: DefaultProfileIDs.MaximumPerformance,
-    name: DefaultProfileIDs.MaximumPerformance,
-    description: '',
-    display: {
-        brightness: 60,
-        useBrightness: true
-    },
-    cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: undefined,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-    },
-    webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Balanced',
-        minimumFanspeed: 0,
-        offsetFanspeed: 0
-    },
-    odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [120, 120, 120] }
-};
-
 export enum TUXEDODevice {
     IBP14G6_TUX,
     IBP14G6_TRX,
@@ -209,7 +177,7 @@ deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [ maxEnergySave, silent, office ]);
 
-deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
-deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
-deviceProfiles.set(TUXEDODevice.STELLARIS1XI04, [ maxEnergySave, silent, office, highPerformance, maximumPerformance ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI04, [ maxEnergySave, silent, office, highPerformance ]);

@@ -115,5 +115,4 @@ export const profileIdToI18nId = new Map<string, IProfileTextMappings>()
     .set(DefaultProfileIDs.MaxEnergySave, { name: 'profileNamePowersaveExtreme', description: 'profileDescPowersaveExtreme' })
     .set(DefaultProfileIDs.Quiet, { name: 'profileNameQuiet', description: 'profileDescQuiet' })
     .set(DefaultProfileIDs.Office, { name: 'profileNameOffice', description: 'profileDescOffice' })
-    .set(DefaultProfileIDs.HighPerformance, { name: 'profileNameHighPerformance', description: 'profileDescHighPerformance' })
-    .set(DefaultProfileIDs.MaximumPerformance, { name: 'profileNameMaximumPerformance', description: 'profileDescMaximumPerformance' });
+    .set(DefaultProfileIDs.HighPerformance, { name: 'profileNameHighPerformance', description: 'profileDescHighPerformance' });
