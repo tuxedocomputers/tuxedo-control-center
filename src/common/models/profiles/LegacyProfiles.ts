@@ -94,7 +94,7 @@ export const defaultProfiles: ITccProfile[] = [
 ];
 
 export const defaultCustomProfile: ITccProfile = {
-    id: 'Default custom profile',
+    id: '__default_custom_profile__',
     name: 'Default custom profile',
     description: '',
     display: {
