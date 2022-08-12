@@ -96,7 +96,7 @@ export const defaultProfiles: ITccProfile[] = [
 export const defaultCustomProfile: ITccProfile = {
     id: '__default_custom_profile__',
     name: 'Default custom profile',
-    description: '',
+    description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
         useBrightness: false
