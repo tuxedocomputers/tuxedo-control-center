@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { DefaultProfileIDs } from "./DefaultProfiles";
 import { defaultProfiles } from "./profiles/LegacyProfiles";
 
 export interface ITccProfile {
@@ -98,3 +99,8 @@ profileImageMap.set(defaultProfiles[0].name, 'icon_profile_default.svg');
 profileImageMap.set(defaultProfiles[1].name, 'icon_profile_breezy.svg');
 profileImageMap.set(defaultProfiles[2].name, 'icon_profile_energysaver.svg');
 profileImageMap.set('custom', 'icon_profile_custom.svg');
+
+profileImageMap.set(DefaultProfileIDs.MaxEnergySave, 'icon_profile_energysaver.svg');
+profileImageMap.set(DefaultProfileIDs.Quiet, 'icon_profile_breezy.svg');
+profileImageMap.set(DefaultProfileIDs.Office, 'icon_profile_default.svg');
+profileImageMap.set(DefaultProfileIDs.HighPerformance, 'icon_profile_default.svg');
