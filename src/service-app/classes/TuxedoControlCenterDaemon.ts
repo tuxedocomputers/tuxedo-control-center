@@ -68,6 +68,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     protected started = false;
 
+    private stateWorker: DaemonWorker;
+
     constructor() {
         super(TccPaths.PID_FILE);
         this.config = new ConfigHandler(
@@ -110,7 +112,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // Initialize active profile (fallback), will update when state is determined
         this.activeProfile = this.getDefaultProfile();
 
-        this.workers.push(new StateSwitcherWorker(this));
+        this.stateWorker = new StateSwitcherWorker(this);
+        this.workers.push(this.stateWorker);
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
@@ -146,6 +149,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } catch (err) {
                 this.logLine('Failed executing onStart() => ' + err);
             }
+        }
+    }
+
+    public triggerStateCheck() {
+        if (this.stateWorker !== undefined) {
+            this.stateWorker.work();
         }
     }
 

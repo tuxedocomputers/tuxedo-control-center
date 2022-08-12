@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -85,9 +85,20 @@ export class TccDBusData {
     // export() { return this.fans.map(fan => fan.export()); }
 }
 
+export class TccDBusOptions {
+    public triggerStateCheck?: () => Promise<void>;
+}
+
 export class TccDBusInterface extends dbus.interface.Interface {
-    constructor(private data: TccDBusData) {
+    private interfaceOptions: TccDBusOptions;
+
+    constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
         super('com.tuxedocomputers.tccd');
+
+        this.interfaceOptions = options;
+        if (this.interfaceOptions.triggerStateCheck === undefined) {
+            this.interfaceOptions.triggerStateCheck = async () => {};
+        }
     }
 
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -114,6 +125,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
     SetTempProfileById(id: string) {
         this.data.tempProfileId = id;
+        this.interfaceOptions.triggerStateCheck();
         return true;
     }
     GetProfilesJSON() { return this.data.profilesJSON; }
