@@ -77,7 +77,6 @@ export class ConfigService implements OnDestroy {
         );
 
         this.defaultProfiles = this.dbus.defaultProfiles.value;
-        this.defaultValuesProfile = this.dbus.defaultValueProfile.value;
         this.updateConfigData();
         this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
             this.customProfiles = nextCustomProfiles;
@@ -87,6 +86,11 @@ export class ConfigService implements OnDestroy {
             for (const profile of this.defaultProfiles) {
                 this.utils.fillDefaultProfileTexts(profile);
             }
+        }));
+
+        this.defaultValuesProfile = this.dbus.defaultValuesProfile.value;
+        this.subscriptions.add(this.dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
+            this.defaultValuesProfile = nextDefaultValuesProfile;
         }));
     }
 
