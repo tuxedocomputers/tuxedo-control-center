@@ -200,7 +200,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.utils.pageDisabled = true;
 
         // Reset non chosen CPU tab to defaults on save
-        const defaultProfile = this.config.getDefaultProfiles()[0];
+        const defaultProfile = this.config.getDefaultValuesProfile();
         if (this.selectedCPUTabIndex === 0) {
             this.setFormGroupValue('cpu', defaultProfile.cpu);
         } else if (this.selectedCPUTabIndex === 1) {

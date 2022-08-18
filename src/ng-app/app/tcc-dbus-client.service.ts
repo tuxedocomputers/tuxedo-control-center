@@ -55,8 +55,10 @@ export class TccDBusClientService implements OnDestroy {
 
   public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
   public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
+  public defaultValueProfile = new BehaviorSubject<ITccProfile>(undefined);
   private previousCustomProfilesJSON = '';
   private previousDefaultProfilesJSON = '';
+  private previousDefaultValueProfileJSON = '';
 
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
@@ -116,8 +118,9 @@ export class TccDBusClientService implements OnDestroy {
     }
 
     const defaultProfilesJSON: string = await this.tccDBusInterface.getDefaultProfilesJSON();
+    const defaultValueProfileJSON: string = await this.tccDBusInterface.getDefaultValuesProfileJSON();
     const customProfilesJSON: string = await this.tccDBusInterface.getCustomProfilesJSON();
-    if (defaultProfilesJSON !== undefined && customProfilesJSON !== undefined) {
+    if (defaultProfilesJSON !== undefined && defaultValueProfileJSON !== undefined && customProfilesJSON !== undefined) {
         try {
             if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
                 this.defaultProfiles.next(JSON.parse(defaultProfilesJSON));
@@ -126,6 +129,10 @@ export class TccDBusClientService implements OnDestroy {
             if (this.previousCustomProfilesJSON !== customProfilesJSON) {
                 this.customProfiles.next(JSON.parse(customProfilesJSON));
                 this.previousCustomProfilesJSON = customProfilesJSON;
+            }
+            if (this.previousDefaultValueProfileJSON !== defaultValueProfileJSON) {
+                this.defaultValueProfile.next(JSON.parse(defaultValueProfileJSON));
+                this.previousDefaultValueProfileJSON = defaultValueProfileJSON;
             }
         } catch (err) {
             console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);

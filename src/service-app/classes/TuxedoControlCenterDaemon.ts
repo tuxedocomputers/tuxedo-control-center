@@ -108,6 +108,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.profilesJSON = JSON.stringify(defaultProfilesFilled.concat(customProfilesFilled));
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
+        this.dbusData.defaultValuesProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(defaultCustomProfile));
 
         // Initialize active profile (fallback), will update when state is determined
         this.activeProfile = this.getDefaultProfile();

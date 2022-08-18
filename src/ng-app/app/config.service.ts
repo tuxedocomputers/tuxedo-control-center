@@ -38,6 +38,7 @@ export class ConfigService implements OnDestroy {
     private config: ConfigHandler;
 
     private defaultProfiles: ITccProfile[];
+    private defaultValuesProfile: ITccProfile;
     private customProfiles: ITccProfile[];
     private settings: ITccSettings;
 
@@ -76,6 +77,7 @@ export class ConfigService implements OnDestroy {
         );
 
         this.defaultProfiles = this.dbus.defaultProfiles.value;
+        this.defaultValuesProfile = this.dbus.defaultValueProfile.value;
         this.updateConfigData();
         this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
             this.customProfiles = nextCustomProfiles;
@@ -120,6 +122,10 @@ export class ConfigService implements OnDestroy {
 
     public getDefaultProfiles(): ITccProfile[] {
         return this.defaultProfiles;
+    }
+
+    public getDefaultValuesProfile(): ITccProfile {
+        return this.defaultValuesProfile;
     }
 
     public getAllProfiles(): ITccProfile[] {
