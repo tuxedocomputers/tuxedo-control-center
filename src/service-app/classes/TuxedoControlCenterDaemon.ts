@@ -24,7 +24,7 @@ import { SIGINT, SIGTERM } from 'constants';
 import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { ITccSettings } from '../../common/models/TccSettings';
+import { defaultSettings, ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { defaultCustomProfile } from '../../common/models/profiles/LegacyProfiles';
 import { DaemonWorker } from './DaemonWorker';
@@ -105,13 +105,22 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
         const customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
-        this.dbusData.profilesJSON = JSON.stringify(defaultProfilesFilled.concat(customProfilesFilled));
+        const allProfilesFilled = defaultProfilesFilled.concat(customProfilesFilled);
+        this.dbusData.profilesJSON = JSON.stringify(allProfilesFilled);
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
         this.dbusData.defaultValuesProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(defaultCustomProfile));
 
         // Initialize active profile (fallback), will update when state is determined
         this.activeProfile = this.getDefaultProfile();
+
+        // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
+        for (const state of Object.keys(ProfileStates)) {
+            if (!this.settings.stateMap.hasOwnProperty(ProfileStates[state]) ||
+                 allProfilesFilled.find(p => p.id === this.settings.stateMap[ProfileStates[state]]) === undefined) {
+                    this.settings.stateMap[ProfileStates[state]] = defaultSettings.stateMap[ProfileStates[state]];
+            }
+        }
 
         this.stateWorker = new StateSwitcherWorker(this);
         this.workers.push(this.stateWorker);
