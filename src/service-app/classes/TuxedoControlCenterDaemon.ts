@@ -99,28 +99,47 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles();
         this.setupSignalHandling();
 
-        this.dbusData.tccdVersion = tccPackage.version;
-
         const dev = this.identifyDevice();
+
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
-        const customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
-        const allProfilesFilled = defaultProfilesFilled.concat(customProfilesFilled);
-        this.dbusData.profilesJSON = JSON.stringify(allProfilesFilled);
-        this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
-        this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
-        this.dbusData.defaultValuesProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(defaultCustomProfile));
+        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+
+        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
 
         // Initialize active profile (fallback), will update when state is determined
         this.activeProfile = this.getDefaultProfile();
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
-        for (const state of Object.keys(ProfileStates)) {
-            if (!this.settings.stateMap.hasOwnProperty(ProfileStates[state]) ||
-                 allProfilesFilled.find(p => p.id === this.settings.stateMap[ProfileStates[state]]) === undefined) {
-                    this.settings.stateMap[ProfileStates[state]] = defaultSettings.stateMap[ProfileStates[state]];
+        let settingsChanged = false;
+        for (const stateId of Object.keys(ProfileStates)) {
+            const stateDescriptor = ProfileStates[stateId];
+            if (!this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
+                 customProfilesFilled.find(p => p.id === this.settings.stateMap[stateDescriptor]) === undefined) {
+                    console.log('Missing state assignment for \'' + stateId + '\' default to + \'' + defaultValuesProfileFilled.id + '\'');
+                    this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
+                    settingsChanged = true;
             }
         }
+        if (settingsChanged) {
+            // Add default values profile if not existing
+            if (customProfilesFilled.find(p => p.id === defaultValuesProfileFilled.id) === undefined) {
+                customProfilesFilled = [ defaultValuesProfileFilled ].concat(customProfilesFilled);
+                this.customProfiles = customProfilesFilled;
+                this.config.writeProfiles(this.customProfiles);
+            }
+
+            // Write updated settings
+            this.config.writeSettings(this.settings);
+        }
+
+        const allProfilesFilled = defaultProfilesFilled.concat(customProfilesFilled);
+        this.dbusData.profilesJSON = JSON.stringify(allProfilesFilled);
+        this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
+        this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
+        this.dbusData.defaultValuesProfileJSON = JSON.stringify(defaultValuesProfileFilled);
+
+        this.dbusData.tccdVersion = tccPackage.version;
 
         this.stateWorker = new StateSwitcherWorker(this);
         this.workers.push(this.stateWorker);
