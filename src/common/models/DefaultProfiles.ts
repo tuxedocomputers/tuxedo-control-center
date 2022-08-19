@@ -159,13 +159,14 @@ export enum TUXEDODevice {
     IBP14G6_TUX,
     IBP14G6_TRX,
     IBP14G6_TQF,
+    PULSE1502,
     POLARIS1XA02,
     POLARIS1XI02,
     POLARIS1XA03,
     POLARIS1XI03,
     STELLARIS1XA03,
     STELLARIS1XI03,
-    STELLARIS1XI04
+    STELLARIS1XI04,
 };
 
 /*
@@ -176,6 +177,8 @@ export const deviceProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [ maxEnergySave, silent, office ]);
+
+deviceProfiles.set(TUXEDODevice.PULSE1502, [ maxEnergySave, silent, office ]);
 
 deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
