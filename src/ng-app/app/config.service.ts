@@ -226,22 +226,21 @@ export class ConfigService implements OnDestroy {
         }
     }
 
-    private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            const tmpProfilesPath = '/tmp/tmptccprofiles';
-            this.config.writeProfiles(customProfiles, tmpProfilesPath);
-            let tccdExec: string;
-            if (environment.production) {
-                tccdExec = TccPaths.TCCD_EXEC_FILE;
-            } else {
-                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
-            }
-            this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath).then(data => {
-                resolve(true);
-            }).catch(error => {
-                resolve(false);
-            });
-        });
+    private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]) {
+        const tmpProfilesPath = '/tmp/tmptccprofiles';
+        this.config.writeProfiles(customProfiles, tmpProfilesPath);
+        let tccdExec: string;
+        if (environment.production) {
+            tccdExec = TccPaths.TCCD_EXEC_FILE;
+        } else {
+            tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+        }
+        try {
+            await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+            return true;
+        } catch (err) {
+            return false;
+        }
     }
 
     public async writeProfile(currentProfileId: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
