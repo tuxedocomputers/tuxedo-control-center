@@ -158,11 +158,18 @@ export class ConfigService implements OnDestroy {
         this.updateConfigData();
     }
 
+    /**
+     * Copy profile with specified ID
+     *
+     * @param sourceProfileId Profile ID to copy
+     * @param newProfileName Name for the copied profile
+     * @returns The new profile ID or undefined on error
+     */
     public async copyProfile(sourceProfileId: string, newProfileName: string) {
         const profileToCopy: ITccProfile = this.getProfileById(sourceProfileId);
 
         if (profileToCopy === undefined) {
-            return false;
+            return undefined;
         }
 
         const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
@@ -172,8 +179,10 @@ export class ConfigService implements OnDestroy {
         const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
             this.updateConfigData();
+            return newProfile.id;
+        } else {
+            return undefined;
         }
-        return success;
     }
 
     public async deleteCustomProfile(profileIdToDelete: string) {

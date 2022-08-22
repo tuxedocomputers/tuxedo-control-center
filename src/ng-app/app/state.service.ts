@@ -19,7 +19,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
@@ -45,7 +45,7 @@ export class StateService implements OnDestroy {
   private stateSubject: Subject<ProfileStates>;
   public stateObserver: Observable<ProfileStates>;
 
-  public activeProfile;
+  public activeProfile: BehaviorSubject<ITccProfile>;
 
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];

@@ -156,26 +156,26 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onInputSubmit(): void {
+    public async onInputSubmit() {
+        let newProfileId;
+
         if (this.inputProfileName.valid) {
             switch (this.currentInputMode) {
                 case InputMode.New:
-                    // TODO: New profile by ID + fix not waiting for copyProfile + new profile id redirect
-                    if (this.config.copyProfile('Default', this.inputProfileName.value)) {
+                    newProfileId = await this.config.copyProfile(this.config.getDefaultValuesProfile().id, this.inputProfileName.value);
+                    if (newProfileId !== undefined) {
                         this.inputActive = false;
-                        this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
+                        this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
                     }
                     break;
                 case InputMode.Copy:
                     this.utils.pageDisabled = true;
-                    this.config.copyProfile(this.profileIdToCopy, this.inputProfileName.value).then((success) => {
-                        if (success) {
-                            this.inputActive = false;
-                            // TODO: Fix redirect to new ID
-                            this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
-                        }
-                        this.utils.pageDisabled = false;
-                    });
+                    newProfileId = await this.config.copyProfile(this.profileIdToCopy, this.inputProfileName.value);
+                    if (newProfileId !== undefined) {
+                        this.inputActive = false;
+                        this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
+                    }
+                    this.utils.pageDisabled = false;
                     break;
                 case InputMode.Edit:
                     // TODO: Check if used. Probably old edit name. If needed adjust for ID. If not delete.
@@ -185,8 +185,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                             this.inputActive = false;
                             this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
                         }
-                        break;
                     }
+                    break;
             }
         } else {
             const choice = this.electron.remote.dialog.showMessageBox(
