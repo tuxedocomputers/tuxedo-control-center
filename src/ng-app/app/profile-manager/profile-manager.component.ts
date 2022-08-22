@@ -83,10 +83,18 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.defineButtons();
 
-        this.route.params.subscribe(params => {
+        this.route.params.subscribe(async params => {
             this.inputActive = false;
             if (params.profileId) {
                 this.currentProfile = this.config.getProfileById(params.profileId);
+
+                // If not yet available, attempt to wait shortly to see if it appears
+                let nrTries = 0;
+                while (this.currentProfile === undefined && nrTries < 10) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    this.currentProfile = this.config.getProfileById(params.profileId);
+                }
+
                 if (this.currentProfile === undefined) {
                     this.config.setCurrentEditingProfile(undefined);
                     this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
@@ -162,18 +170,20 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         if (this.inputProfileName.valid) {
             switch (this.currentInputMode) {
                 case InputMode.New:
+                    this.utils.pageDisabled = true;
                     newProfileId = await this.config.copyProfile(this.config.getDefaultValuesProfile().id, this.inputProfileName.value);
                     if (newProfileId !== undefined) {
                         this.inputActive = false;
-                        this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
+                        await this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
                     }
+                    this.utils.pageDisabled = false;
                     break;
                 case InputMode.Copy:
                     this.utils.pageDisabled = true;
                     newProfileId = await this.config.copyProfile(this.profileIdToCopy, this.inputProfileName.value);
                     if (newProfileId !== undefined) {
                         this.inputActive = false;
-                        this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
+                        await this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
                     }
                     this.utils.pageDisabled = false;
                     break;
