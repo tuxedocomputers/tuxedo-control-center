@@ -140,6 +140,10 @@ export class TccDBusClientService implements OnDestroy {
     }
   }
 
+  public async triggerUpdate() {
+    await this.periodicUpdate();
+  }
+
   ngOnDestroy() {
     // Cleanup
     if (this.timeout !== undefined) {

@@ -179,6 +179,7 @@ export class ConfigService implements OnDestroy {
         const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
             this.updateConfigData();
+            await this.dbus.triggerUpdate();
             return newProfile.id;
         } else {
             return undefined;
@@ -193,6 +194,7 @@ export class ConfigService implements OnDestroy {
         const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
             this.updateConfigData();
+            await this.dbus.triggerUpdate();
         }
         return success;
     }
