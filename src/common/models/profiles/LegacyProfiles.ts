@@ -1,8 +1,9 @@
+import { LegacyDefaultProfileIDs } from "../DefaultProfiles";
 import { ITccProfile } from "../TccProfile";
 
 export const defaultProfiles: ITccProfile[] = [
     {
-        id: 'Default',
+        id: LegacyDefaultProfileIDs.Default,
         name: 'Default',
         description: '',
         display: {
@@ -32,7 +33,7 @@ export const defaultProfiles: ITccProfile[] = [
         odmPowerLimits: { tdpValues: [] }
     },
     {
-        id: 'Cool and breezy',
+        id: LegacyDefaultProfileIDs.CoolAndBreezy,
         name: 'Cool and breezy',
         description: '',
         display: {
@@ -62,7 +63,7 @@ export const defaultProfiles: ITccProfile[] = [
         odmPowerLimits: { tdpValues: [] }
     },
     {
-        id: 'Powersave extreme',
+        id: LegacyDefaultProfileIDs.PowersaveExtreme,
         name: 'Powersave extreme',
         description: '',
         display: {

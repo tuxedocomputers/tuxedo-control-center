@@ -19,6 +19,12 @@
 
 import { ITccProfile } from './TccProfile';
 
+export enum LegacyDefaultProfileIDs {
+    Default = '__legacy_default__',
+    CoolAndBreezy = '__legacy_cool_and_breezy__',
+    PowersaveExtreme = '__legacy_powersave_extreme__',
+}
+
 export enum DefaultProfileIDs {
     MaxEnergySave = '__profile_max_energy_save__',
     Quiet = '__profile_silent__',
