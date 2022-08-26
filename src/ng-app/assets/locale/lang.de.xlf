@@ -7,7 +7,7 @@
         <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrInvalidNameMessage" datatype="html" approved="yes">
@@ -15,7 +15,7 @@
         <target phase-name="approval-1" state="signed-off">Ein Name für das Profil ist nötig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">206</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewProfileLabel" datatype="html" approved="yes">
@@ -23,7 +23,7 @@
         <target phase-name="approval-1" state="signed-off">Neues Profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewButtonTooltip" datatype="html" approved="yes">
@@ -31,7 +31,7 @@
         <target phase-name="approval-1" state="signed-off">Ein neues Profil mit Standardeinstellungen erstellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrCopyProfileLabel" datatype="html" approved="yes">
@@ -39,7 +39,7 @@
         <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrTitle" datatype="html" approved="yes">
@@ -1840,12 +1840,60 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="profileNameLegacyDefault" datatype="html">
+        <source>Default</source>
+        <target state="translated">Default</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profileDescLegacyDefault" datatype="html">
+        <source>Full performance at the expense of more noise and high temperatures.</source>
+        <target state="translated">Volle Leistung zulasten von hoher Lautstärke und hohen Temperaturen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
+          <context context-type="linenumber">250</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
+        <source>Cool and breezy</source>
+        <target state="translated">Cool and breezy</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
+          <context context-type="linenumber">254</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
+        <source>Reduced power in favor of low temperatures and quiet fan noise.</source>
+        <target state="translated">Reduzierte Leistung zugunsten von geringen Gehäusetemperaturen und leisem bis mittlerem Lüftergeräusch.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
+        <source>Powersave extreme</source>
+        <target state="translated">Powersave extreme</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
+          <context context-type="linenumber">259</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
+        <source>Heavily reduced performance in favor of lowest possible power consumption and silent cooling.</source>
+        <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
+          <context context-type="linenumber">260</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
         <source>CPU settings deactivated in Tools→Global Settings</source>
         <target state="translated">CPU-Einstellungen deaktiviert in Tools→Globale Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFanControlOff" datatype="html">
@@ -1853,7 +1901,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Lüftersteuerung deaktiviert in Tools→Globale Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html" approved="yes">
