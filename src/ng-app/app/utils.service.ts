@@ -29,7 +29,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
-import { DefaultProfileIDs, IProfileTextMappings } from '../../common/models/DefaultProfiles';
+import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 
 @Injectable({
   providedIn: 'root'
@@ -242,6 +242,22 @@ export class UtilsService {
     this.defaultProfileInfos.set(DefaultProfileIDs.MaxEnergySave, {
         name: $localize `:@@profileNamePowersaveExtreme:Powersave extreme`,
         description: $localize `:@@profileDescPowersaveExtreme:Lowest possible power consumption and silent fans at the cost of extremely low performance.`
+    });
+
+    // Old profiles
+    this.defaultProfileInfos.set(LegacyDefaultProfileIDs.Default, {
+        name: $localize `:@@profileNameLegacyDefault:Default`,
+        description: $localize `:@@profileDescLegacyDefault:Full performance at the expense of more noise and high temperatures.`
+    });
+
+    this.defaultProfileInfos.set(LegacyDefaultProfileIDs.CoolAndBreezy, {
+        name: $localize `:@@profileNameLegacyCoolAndBreezy:Cool and breezy`,
+        description: $localize `:@@profileDescLegacyCoolAndBreezy:Reduced power in favor of low temperatures and quiet fan noise.`
+    });
+
+    this.defaultProfileInfos.set(LegacyDefaultProfileIDs.PowersaveExtreme, {
+        name: $localize `:@@profileNameLegacyPowersaveExtreme:Powersave extreme`,
+        description: $localize `:@@profileDescLegacyPowersaveExtreme:Heavily reduced performance in favor of lowest possible power consumption and silent cooling.`
     });
 
     const defaultProfileInfo = this.defaultProfileInfos.get(profile.id);

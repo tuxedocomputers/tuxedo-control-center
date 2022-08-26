@@ -19,7 +19,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as xliff from 'xliff';
-import { DefaultProfileIDs, IProfileTextMappings } from '../common/models/DefaultProfiles';
+import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../common/models/DefaultProfiles';
 
 /**
  * Loading of angular generated translation files. Workaround
@@ -115,4 +115,8 @@ export const profileIdToI18nId = new Map<string, IProfileTextMappings>()
     .set(DefaultProfileIDs.MaxEnergySave, { name: 'profileNamePowersaveExtreme', description: 'profileDescPowersaveExtreme' })
     .set(DefaultProfileIDs.Quiet, { name: 'profileNameQuiet', description: 'profileDescQuiet' })
     .set(DefaultProfileIDs.Office, { name: 'profileNameOffice', description: 'profileDescOffice' })
-    .set(DefaultProfileIDs.HighPerformance, { name: 'profileNameHighPerformance', description: 'profileDescHighPerformance' });
+    .set(DefaultProfileIDs.HighPerformance, { name: 'profileNameHighPerformance', description: 'profileDescHighPerformance' })
+    .set(LegacyDefaultProfileIDs.Default, { name: 'profileNameLegacyDefault', description: 'profileDescLegacyDefault' })
+    .set(LegacyDefaultProfileIDs.CoolAndBreezy, { name: 'profileNameLegacyCoolAndBreezy', description: 'profileDescLegacyCoolAndBreezy' })
+    .set(LegacyDefaultProfileIDs.PowersaveExtreme, { name: 'profileNameLegacyPowersaveExtreme', description: 'profileDescLegacyPowersaveExtreme' });
+;
