@@ -78,16 +78,16 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
 
         if (fileOK(this.clevoLedsWhiteOnly + "/brightness")) {
-            fs.appendFileSync(this.clevoLedsWhiteOnly + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+            fs.appendFileSync(this.clevoLedsWhiteOnly + "/brightness", brightness.toString());
         }
         if (fileOK(this.clevoLedsRGBZone0 + "/brightness")) {
-            fs.appendFileSync(this.clevoLedsRGBZone0 + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+            fs.appendFileSync(this.clevoLedsRGBZone0 + "/brightness", brightness.toString());
         }
         if (fileOK(this.clevoLedsRGBZone1 + "/brightness")) {
-            fs.appendFileSync(this.clevoLedsRGBZone1 + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+            fs.appendFileSync(this.clevoLedsRGBZone1 + "/brightness", brightness.toString());
         }
         if (fileOK(this.clevoLedsRGBZone2 + "/brightness")) {
-            fs.appendFileSync(this.clevoLedsRGBZone2 + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+            fs.appendFileSync(this.clevoLedsRGBZone2 + "/brightness", brightness.toString());
         }
 
         if (this.tccd.settings.keyboardBacklightColor.length == this.keyboardBacklightCapabilities.zones) {
