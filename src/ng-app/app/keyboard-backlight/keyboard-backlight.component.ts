@@ -35,7 +35,7 @@ export class KeyboardBacklightComponent implements OnInit {
     public chosenBrightness: number;
     public chosenColorHex: Array<string>;
 
-    private subscriptions: Subscription = new Subscription();
+    private keyboardBacklightCapabilitiesSubscription: Subscription;
 
     public gridParams = {
         cols: 9,
@@ -72,12 +72,18 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.subscriptions.add(this.tccdbus.keyboardBacklightCapabilities.subscribe(
+        this.keyboardBacklightCapabilitiesSubscription = this.tccdbus.keyboardBacklightCapabilities.subscribe(
             keyboardBacklightCapabilities => {
-                if (keyboardBacklightCapabilities != undefined) {
+                if (keyboardBacklightCapabilities !== undefined) {
+                    this.keyboardBacklightCapabilitiesSubscription.unsubscribe();
                     this.keyboardBacklightCapabilities = keyboardBacklightCapabilities;
-                    this.chosenBrightness = this.clamp(this.chosenBrightness, 0, this.keyboardBacklightCapabilities.maxBrightness);
-                    if (this.chosenColorHex.length != this.keyboardBacklightCapabilities.zones) {
+                    if (this.chosenBrightness === undefined) {
+                        this.chosenBrightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
+                    }
+                    else {
+                        this.chosenBrightness = this.clamp(this.chosenBrightness, 0, this.keyboardBacklightCapabilities.maxBrightness);
+                    }
+                    if (this.chosenColorHex.length !== this.keyboardBacklightCapabilities.zones) {
                         this.chosenColorHex = this.chosenColorHex.slice(0, this.keyboardBacklightCapabilities.zones);
                         for (let i = 0; i < this.keyboardBacklightCapabilities.zones; i++) {
                             if (this.chosenColorHex[i] == undefined) {
@@ -87,7 +93,7 @@ export class KeyboardBacklightComponent implements OnInit {
                     }
                 }
             }
-        ));
+        );
         this.chosenColorHex = [];
         for (let i = 0; i < this.config.getSettings().keyboardBacklightColor.length; i++) {
             this.chosenColorHex[i] = this.rgbaIntToRGBSharpString(this.config.getSettings().keyboardBacklightColor[i]);
@@ -102,6 +108,6 @@ export class KeyboardBacklightComponent implements OnInit {
         for (let [i, color] of this.chosenColorHex.entries()) {
             this.config.getSettings().keyboardBacklightColor[i] = this.rgbSharpStringToRGBAInt(color);
         }
-        this.config.saveSettings()
+        this.config.saveSettings();
     }
 }

@@ -55,7 +55,7 @@ export const defaultSettings: ITccSettings = {
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
     ycbcr420Workaround: [],
-    keyboardBacklightBrightness: 0,
+    keyboardBacklightBrightness: undefined, // undefined is interpreted as "default brightness" aka 50% by tccd
     keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
     keyboardBacklightColor: []
 };

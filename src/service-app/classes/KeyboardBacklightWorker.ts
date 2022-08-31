@@ -25,11 +25,10 @@ import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface } f
 import { fileOK } from '../../common/classes/Utils';
 
 export class KeyboardBacklightWorker extends DaemonWorker {
-    private clevoBrightnessPath = "/sys/devices/platform/tuxedo_keyboard/brightness";
-    private clevoColorLeftPath = "/sys/devices/platform/tuxedo_keyboard/color_left";
-    private clevoColorCenterPath = "/sys/devices/platform/tuxedo_keyboard/color_center";
-    private clevoColorRightPath = "/sys/devices/platform/tuxedo_keyboard/color_right";
-    private clevoColorExtraPath = "/sys/devices/platform/tuxedo_keyboard/color_extra";
+    private clevoLedsWhiteOnly = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
+    private clevoLedsRGBZone0 = "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight";
+    private clevoLedsRGBZone1 = "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_1";
+    private clevoLedsRGBZone2 = "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2";
     private keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {
         modes: [KeyboardBacklightColorModes.static],
         zones: 0,
@@ -42,48 +41,64 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(100000, tccd);
 
-        if (fileOK(this.clevoBrightnessPath)) {
-            this.keyboardBacklightCapabilities.maxBrightness = 100;
+        if (fileOK(this.clevoLedsWhiteOnly + "/max_brightness")) {
+            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.clevoLedsWhiteOnly + "/max_brightness"));
+            this.keyboardBacklightCapabilities.zones = 1;
+            this.keyboardBacklightCapabilities.maxRed = 0;
+            this.keyboardBacklightCapabilities.maxGreen = 0;
+            this.keyboardBacklightCapabilities.maxBlue = 0;
         }
-
-        if (fileOK(this.clevoColorLeftPath)) {
-            this.keyboardBacklightCapabilities.zones++;
+        else {
+            if (fileOK(this.clevoLedsRGBZone0 + "/max_brightness")) {
+                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.clevoLedsRGBZone0 + "/max_brightness"));
+                this.keyboardBacklightCapabilities.zones++;
+                if (fileOK(this.clevoLedsRGBZone1 + "/max_brightness")) {
+                    this.keyboardBacklightCapabilities.zones++;
+                }
+                if (fileOK(this.clevoLedsRGBZone2 + "/max_brightness")) {
+                    this.keyboardBacklightCapabilities.zones++;
+                }
+            }
         }
-        if (fileOK(this.clevoColorCenterPath)) {
-            this.keyboardBacklightCapabilities.zones++;
-        }
-        if (fileOK(this.clevoColorRightPath)) {
-            this.keyboardBacklightCapabilities.zones++;
-        }
-        if (fileOK(this.clevoColorExtraPath)) {
-            this.keyboardBacklightCapabilities.zones++;
-        }
-
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
-    // Converts Int Value: 0xRRGGBBAA to string value "0xRRGGBB"
-    private rgbaIntToRGBHexString (input: number): string {
-        return "0x" + input.toString(16).padStart(8, '0').substring(0,6);
+    // Converts Int Value: 0xRRGGBBAA to string value "RRR GGG BBB" (in decimal)
+    private rgbaIntToRGBDecString (input: number): string {
+        let red = (input >> 24) & 0xff;
+        let green = (input >> 16) & 0xff;
+        let blue = (input >> 8) & 0xff;
+        return red.toString(10) + " " + green.toString(10) + " " + blue.toString(10);
     }
 
     public onStart(): void {
-        if (fileOK(this.clevoBrightnessPath)) {
-            fs.appendFileSync(this.clevoBrightnessPath, this.tccd.settings.keyboardBacklightBrightness.toString());
+        let brightness: Number = this.tccd.settings.keyboardBacklightBrightness;
+        if (brightness === undefined) {
+            brightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
+        }
+
+        if (fileOK(this.clevoLedsWhiteOnly + "/brightness")) {
+            fs.appendFileSync(this.clevoLedsWhiteOnly + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+        }
+        if (fileOK(this.clevoLedsRGBZone0 + "/brightness")) {
+            fs.appendFileSync(this.clevoLedsRGBZone0 + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+        }
+        if (fileOK(this.clevoLedsRGBZone1 + "/brightness")) {
+            fs.appendFileSync(this.clevoLedsRGBZone1 + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
+        }
+        if (fileOK(this.clevoLedsRGBZone2 + "/brightness")) {
+            fs.appendFileSync(this.clevoLedsRGBZone2 + "/brightness", this.tccd.settings.keyboardBacklightBrightness.toString());
         }
 
         if (this.tccd.settings.keyboardBacklightColor.length == this.keyboardBacklightCapabilities.zones) {
-            if (fileOK(this.clevoColorLeftPath)) {
-                fs.appendFileSync(this.clevoColorLeftPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[0]));
+            if (fileOK(this.clevoLedsRGBZone0 + "/multi_intensity")) {
+                fs.appendFileSync(this.clevoLedsRGBZone0 + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[0]));
             }
-            if (fileOK(this.clevoColorCenterPath)) {
-                fs.appendFileSync(this.clevoColorCenterPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[1]));
+            if (fileOK(this.clevoLedsRGBZone1 + "/multi_intensity")) {
+                fs.appendFileSync(this.clevoLedsRGBZone1 + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[1]));
             }
-            if (fileOK(this.clevoColorRightPath)) {
-                fs.appendFileSync(this.clevoColorRightPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[2]));
-            }
-            if (fileOK(this.clevoColorExtraPath)) {
-                fs.appendFileSync(this.clevoColorExtraPath, this.rgbaIntToRGBHexString(this.tccd.settings.keyboardBacklightColor[3]));
+            if (fileOK(this.clevoLedsRGBZone2 + "/multi_intensity")) {
+                fs.appendFileSync(this.clevoLedsRGBZone2 + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[2]));
             }
         }
     }

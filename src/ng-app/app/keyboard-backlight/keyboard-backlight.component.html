@@ -35,49 +35,51 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-slider #brightnessSlider
                     [(value)]="chosenBrightness"
                     min="0"
-                    max="keyboardBacklightCapabilities.maxBrightness"
+                    [max]="keyboardBacklightCapabilities.maxBrightness"
                     step="1"
                     color="primary">
                 </mat-slider>
             </mat-grid-tile>
         </mat-grid-list>
 
-        <div *ngIf="keyboardBacklightCapabilities.zones >= 1 && keyboardBacklightCapabilities.zones <= 2">
-            <span class="color-visualizer"
-            [style.background]="chosenColorHex[0]"
-            [(colorPicker)]="chosenColorHex[0]"
-            [cpToggle]="true"
-            cpDialogDisplay="inline"
-            cpAlphaChannel="disabled"></span>
-        </div>
+        <div *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
+            <div *ngIf="keyboardBacklightCapabilities.zones >= 1 && keyboardBacklightCapabilities.zones <= 2">
+                <span class="color-visualizer"
+                [style.background]="chosenColorHex[0]"
+                [(colorPicker)]="chosenColorHex[0]"
+                [cpToggle]="true"
+                cpDialogDisplay="inline"
+                cpAlphaChannel="disabled"></span>
+            </div>
 
-        <div *ngIf="keyboardBacklightCapabilities.zones >= 3 && keyboardBacklightCapabilities.zones <= 4">
-            <mat-grid-list [cols]="gridParamsSymmetrical.cols" rowHeight="20em" class="keyboard-color-grid">
-                <mat-grid-tile [colspan]="gridParamsSymmetrical.firstSpan">
-                    <span class="color-visualizer"
-                    [style.background]="chosenColorHex[0]"
-                    [(colorPicker)]="chosenColorHex[0]"
-                    [cpToggle]="true"
-                    cpDialogDisplay="inline"
-                    cpAlphaChannel="disabled"></span>
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="gridParamsSymmetrical.secondSpan">
-                    <span class="color-visualizer"
-                    [style.background]="chosenColorHex[1]"
-                    [(colorPicker)]="chosenColorHex[1]"
-                    [cpToggle]="true"
-                    cpDialogDisplay="inline"
-                    cpAlphaChannel="disabled"></span>
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="gridParamsSymmetrical.thirdSpan">
-                    <span class="color-visualizer"
-                    [style.background]="chosenColorHex[2]"
-                    [(colorPicker)]="chosenColorHex[2]"
-                    [cpToggle]="true"
-                    cpDialogDisplay="inline"
-                    cpAlphaChannel="disabled"></span>
-                </mat-grid-tile>
-            </mat-grid-list>
+            <div *ngIf="keyboardBacklightCapabilities.zones >= 3 && keyboardBacklightCapabilities.zones <= 4">
+                <mat-grid-list [cols]="gridParamsSymmetrical.cols" rowHeight="20em" class="keyboard-color-grid">
+                    <mat-grid-tile [colspan]="gridParamsSymmetrical.firstSpan">
+                        <span class="color-visualizer"
+                        [style.background]="chosenColorHex[0]"
+                        [(colorPicker)]="chosenColorHex[0]"
+                        [cpToggle]="true"
+                        cpDialogDisplay="inline"
+                        cpAlphaChannel="disabled"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParamsSymmetrical.secondSpan">
+                        <span class="color-visualizer"
+                        [style.background]="chosenColorHex[1]"
+                        [(colorPicker)]="chosenColorHex[1]"
+                        [cpToggle]="true"
+                        cpDialogDisplay="inline"
+                        cpAlphaChannel="disabled"></span>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="gridParamsSymmetrical.thirdSpan">
+                        <span class="color-visualizer"
+                        [style.background]="chosenColorHex[2]"
+                        [(colorPicker)]="chosenColorHex[2]"
+                        [cpToggle]="true"
+                        cpDialogDisplay="inline"
+                        cpAlphaChannel="disabled"></span>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
         </div>
 
         <div class=controls>
