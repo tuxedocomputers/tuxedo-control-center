@@ -80,6 +80,7 @@ export class TccDBusData {
     public defaultProfilesJSON: string;
     public odmProfilesAvailable: string[];
     public keyboardBacklightCapabilitiesJSON: string;
+    public keyboardBacklightStatesJSON: string;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -116,6 +117,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDefaultProfilesJSON() { return this.data.defaultProfilesJSON; }
     ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
     GetKeyboardBacklightCapabilitiesJSON() { return this.data.keyboardBacklightCapabilitiesJSON; }
+    GetKeyboardBacklightStatesJSON() { return this.data.keyboardBacklightStatesJSON; }
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
     }
@@ -140,7 +142,8 @@ TccDBusInterface.configureMembers({
         GetCustomProfilesJSON: { outSignature: 's' },
         GetDefaultProfilesJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
-        GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' }
+        GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' },
+        GetKeyboardBacklightStatesJSON: { outSignature: 's' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

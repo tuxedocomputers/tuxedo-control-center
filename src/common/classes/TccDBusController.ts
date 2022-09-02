@@ -178,6 +178,14 @@ export class TccDBusController {
         }
     }
 
+    async getKeyboardBacklightStatesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetKeyboardBacklightStatesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
     }

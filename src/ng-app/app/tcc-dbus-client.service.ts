@@ -22,7 +22,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
-import { KeyboardBacklightCapabilitiesInterface } from '../../common/models/TccSettings';
+import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -60,6 +60,7 @@ export class TccDBusClientService implements OnDestroy {
   private previousActiveProfileJSON = '';
 
   public keyboardBacklightCapabilities = new Subject<KeyboardBacklightCapabilitiesInterface>();
+  public keyboardBacklightStates = new Subject<Array<KeyboardBacklightStateInterface>>();
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -134,6 +135,13 @@ export class TccDBusClientService implements OnDestroy {
         try {
             this.keyboardBacklightCapabilities.next(JSON.parse(keyboardBacklightCapabilitiesJSON));
         } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight capabilities'); }
+    }
+
+    const keyboardBacklightStatesJSON: string = await this.tccDBusInterface.getKeyboardBacklightStatesJSON();
+    if (keyboardBacklightStatesJSON !== undefined) {
+        try {
+            this.keyboardBacklightStates.next(JSON.parse(keyboardBacklightStatesJSON));
+        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight states'); }
     }
   }
 

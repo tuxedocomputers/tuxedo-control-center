@@ -35,6 +35,14 @@ export interface KeyboardBacklightCapabilitiesInterface {
     maxBlue: number;
 }
 
+export interface KeyboardBacklightStateInterface {
+    mode: KeyboardBacklightColorModes;
+    brightness: number;
+    red: number;
+    green: number;
+    blue: number;
+}
+
 export interface ITccSettings {
     stateMap: any;
     shutdownTime: string | null;
