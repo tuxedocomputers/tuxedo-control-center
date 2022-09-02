@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as dbus from 'dbus-next';
+import { Subject } from 'rxjs';
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
@@ -81,6 +82,7 @@ export class TccDBusData {
     public odmProfilesAvailable: string[];
     public keyboardBacklightCapabilitiesJSON: string;
     public keyboardBacklightStatesJSON: string;
+    public keyboardBacklightStatesNewJSON: Subject<string> = new Subject<string>();
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -118,6 +120,10 @@ export class TccDBusInterface extends dbus.interface.Interface {
     ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
     GetKeyboardBacklightCapabilitiesJSON() { return this.data.keyboardBacklightCapabilitiesJSON; }
     GetKeyboardBacklightStatesJSON() { return this.data.keyboardBacklightStatesJSON; }
+    SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string) {
+        this.data.keyboardBacklightStatesNewJSON.next(keyboardBacklightStatesJSON);
+        return true;
+    }
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
     }
@@ -143,7 +149,8 @@ TccDBusInterface.configureMembers({
         GetDefaultProfilesJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
         GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' },
-        GetKeyboardBacklightStatesJSON: { outSignature: 's' }
+        GetKeyboardBacklightStatesJSON: { outSignature: 's' },
+        SetKeyboardBacklightStatesJSON: { inSignature: 's',  outSignature: 'b' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

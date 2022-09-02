@@ -32,7 +32,31 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     private keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {} as KeyboardBacklightCapabilitiesInterface;
     private keyboardBacklightStates: Array<KeyboardBacklightStateInterface> = [];
 
-    private updateKeyboardBacklightCapabilities(): void {
+    constructor(tccd: TuxedoControlCenterDaemon) {
+        super(1500, tccd);
+    }
+
+    // Converts Int Value: 0xRRGGBBAA to string value "RRR GGG BBB" (in decimal)
+    private rgbaIntToRGBDecString (input: number): string {
+        let red = (input >> 24) & 0xff;
+        let green = (input >> 16) & 0xff;
+        let blue = (input >> 8) & 0xff;
+        return red.toString(10) + " " + green.toString(10) + " " + blue.toString(10);
+    }
+
+    private updateSettingFromValue (keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): void {
+        this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
+        this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
+        this.tccd.settings.keyboardBacklightColor = [];
+        for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
+            this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24) +
+                                                            (keyboardBacklightStatesNew[i].green << 16) +
+                                                            (keyboardBacklightStatesNew[i].blue << 8);
+        }
+        this.tccd.config.writeSettings(this.tccd.settings);
+    }
+
+    private updateKeyboardBacklightCapabilitiesFromSysFS(): void {
         this.keyboardBacklightCapabilities = {} as KeyboardBacklightCapabilitiesInterface;
 
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
@@ -59,7 +83,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
-    private updateKeyboardBacklightStates(): void {
+    private updateKeyboardBacklightStatesFromSysFS(): void {
         this.keyboardBacklightStates = [];
 
         if (fileOK(this.clevoLedsWhiteOnly + "/brightness")) {
@@ -88,22 +112,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.tccd.dbusData.keyboardBacklightStatesJSON = JSON.stringify(this.keyboardBacklightStates);
     }
 
-    constructor(tccd: TuxedoControlCenterDaemon) {
-        super(1500, tccd);
-
-        this.updateKeyboardBacklightCapabilities();
-        this.updateKeyboardBacklightStates();
-    }
-
-    // Converts Int Value: 0xRRGGBBAA to string value "RRR GGG BBB" (in decimal)
-    private rgbaIntToRGBDecString (input: number): string {
-        let red = (input >> 24) & 0xff;
-        let green = (input >> 16) & 0xff;
-        let blue = (input >> 8) & 0xff;
-        return red.toString(10) + " " + green.toString(10) + " " + blue.toString(10);
-    }
-
-    private writeStatesFromSetting(): void {
+    private writeSysFSFromSetting(): void {
         let brightness: Number = this.tccd.settings.keyboardBacklightBrightness;
         if (brightness === undefined) {
             brightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
@@ -138,24 +147,25 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        this.writeStatesFromSetting();
-    }
+        this.updateKeyboardBacklightCapabilitiesFromSysFS();
 
-    private updateSettingsFromKeyboardBacklightStates(): void {
-        this.tccd.settings.keyboardBacklightColorMode = this.keyboardBacklightStates[0].mode;
-        this.tccd.settings.keyboardBacklightBrightness = this.keyboardBacklightStates[0].brightness;
-        this.tccd.settings.keyboardBacklightColor = [];
-        for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-            this.tccd.settings.keyboardBacklightColor[i] = (this.keyboardBacklightStates[i].red << 24) +
-                                                           (this.keyboardBacklightStates[i].green << 16) +
-                                                           (this.keyboardBacklightStates[i].blue << 8);
-        }
+        this.writeSysFSFromSetting();
+        setTimeout(this.onWork.bind(this), 500); // Delay read back a little as the driver waits for the EC to finish applying.
+
+        this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(
+            (keyboardBacklightStatesNewJSON) => {
+                let keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = JSON.parse(keyboardBacklightStatesNewJSON);
+                this.updateSettingFromValue(keyboardBacklightStatesNew);
+
+                this.writeSysFSFromSetting();
+                setTimeout(this.onWork.bind(this), 500); // Delay read back a little as the driver waits for the EC to finish applying.
+            }
+        )
     }
 
     public onWork(): void {
-        this.updateKeyboardBacklightStates();
-        this.updateSettingsFromKeyboardBacklightStates();
-        this.tccd.config.writeSettings(this.tccd.settings);
+        this.updateKeyboardBacklightStatesFromSysFS();
+        this.updateSettingFromValue(this.keyboardBacklightStates);
     }
 
     public onExit(): void {
