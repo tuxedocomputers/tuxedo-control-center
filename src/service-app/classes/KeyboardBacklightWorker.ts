@@ -44,14 +44,14 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         return red.toString(10) + " " + green.toString(10) + " " + blue.toString(10);
     }
 
-    private updateSettingFromValue (keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): void {
+    private updateSettingFromValue(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): void {
         this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
         this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
         this.tccd.settings.keyboardBacklightColor = [];
         for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-            this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24) +
-                                                            (keyboardBacklightStatesNew[i].green << 16) +
-                                                            (keyboardBacklightStatesNew[i].blue << 8);
+            this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
+                                                            (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
+                                                            (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
         }
         this.tccd.config.writeSettings(this.tccd.settings);
     }
@@ -71,7 +71,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
                 this.keyboardBacklightCapabilities.maxBlue = 0xff;
-                this.keyboardBacklightCapabilities.zones++;
+                this.keyboardBacklightCapabilities.zones = 1;
                 if (fileOK(this.clevoLedsRGBZones[1] + "/max_brightness")) {
                     this.keyboardBacklightCapabilities.zones++;
                 }
@@ -153,14 +153,14 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         setTimeout(this.onWork.bind(this), 500); // Delay read back a little as the driver waits for the EC to finish applying.
 
         this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(
-            (keyboardBacklightStatesNewJSON) => {
-                let keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = JSON.parse(keyboardBacklightStatesNewJSON);
-                this.updateSettingFromValue(keyboardBacklightStatesNew);
-
-                this.writeSysFSFromSetting();
-                setTimeout(this.onWork.bind(this), 500); // Delay read back a little as the driver waits for the EC to finish applying.
+            keyboardBacklightStatesNewJSON => {
+                if (keyboardBacklightStatesNewJSON !== undefined ) {
+                    this.updateSettingFromValue(JSON.parse(keyboardBacklightStatesNewJSON));
+                    this.writeSysFSFromSetting();
+                    setTimeout(this.onWork.bind(this), 500);
+                }
             }
-        )
+        );
     }
 
     public onWork(): void {

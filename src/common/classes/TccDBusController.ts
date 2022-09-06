@@ -186,9 +186,9 @@ export class TccDBusController {
         }
     }
 
-    async setKeyboardBacklightStatesJSON(): Promise<string> {
+    async setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): Promise<boolean> {
         try {
-            return await this.interface.SetKeyboardBacklightStatesJSON();
+            return await this.interface.SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON);
         } catch (err) {
             return undefined;
         }

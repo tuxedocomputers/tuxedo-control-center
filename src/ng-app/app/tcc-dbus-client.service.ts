@@ -59,8 +59,8 @@ export class TccDBusClientService implements OnDestroy {
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
 
-  public keyboardBacklightCapabilities = new Subject<KeyboardBacklightCapabilitiesInterface>();
-  public keyboardBacklightStates = new Subject<Array<KeyboardBacklightStateInterface>>();
+  public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
+  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -143,6 +143,10 @@ export class TccDBusClientService implements OnDestroy {
             this.keyboardBacklightStates.next(JSON.parse(keyboardBacklightStatesJSON));
         } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight states'); }
     }
+  }
+
+  public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
+    this.tccDBusInterface.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
   }
 
   ngOnDestroy() {

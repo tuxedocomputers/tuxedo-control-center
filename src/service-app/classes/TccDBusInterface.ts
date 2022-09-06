@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as dbus from 'dbus-next';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
@@ -82,7 +82,7 @@ export class TccDBusData {
     public odmProfilesAvailable: string[];
     public keyboardBacklightCapabilitiesJSON: string;
     public keyboardBacklightStatesJSON: string;
-    public keyboardBacklightStatesNewJSON: Subject<string> = new Subject<string>();
+    public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
