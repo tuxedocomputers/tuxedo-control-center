@@ -22,7 +22,7 @@ import * as fs from 'fs';
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
-import { fileOK } from '../../common/classes/Utils';
+import { fileOK, fileOKAsync } from '../../common/classes/Utils';
 
 export class KeyboardBacklightWorker extends DaemonWorker {
     private clevoLedsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
@@ -31,6 +31,11 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                                                 "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2"];
     private keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {} as KeyboardBacklightCapabilitiesInterface;
     private keyboardBacklightStates: Array<KeyboardBacklightStateInterface> = [];
+    private keyboardBacklightStatesPendingNewJSON: string = undefined;
+    private keyboardBacklightStatesWritingNew: boolean = false;
+    private keyboardBacklightStatesUpdating: boolean = false;
+    private keyboardBacklightStatesUpdatingReset: NodeJS.Timeout;
+
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1500, tccd);
@@ -44,19 +49,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         return red.toString(10) + " " + green.toString(10) + " " + blue.toString(10);
     }
 
-    private updateSettingFromValue(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): void {
-        this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
-        this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
-        this.tccd.settings.keyboardBacklightColor = [];
-        for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-            this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
-                                                            (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
-                                                            (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
-        }
-        this.tccd.config.writeSettings(this.tccd.settings);
-    }
-
-    private updateKeyboardBacklightCapabilitiesFromSysFS(): void {
+    private getKeyboardBacklightCapabilities(): void {
         this.keyboardBacklightCapabilities = {} as KeyboardBacklightCapabilitiesInterface;
 
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
@@ -83,89 +76,131 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
-    private updateKeyboardBacklightStatesFromSysFS(): void {
-        this.keyboardBacklightStates = [];
-
-        if (fileOK(this.clevoLedsWhiteOnly + "/brightness")) {
-            this.keyboardBacklightStates.push({} as KeyboardBacklightStateInterface);
-            this.keyboardBacklightStates[0].mode = KeyboardBacklightColorModes.static;
-            this.keyboardBacklightStates[0].brightness = Number(fs.readFileSync(this.clevoLedsWhiteOnly + "/brightness"));
+    private async updateSettingsFromValue(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): Promise<void> {
+        this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
+        this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
+        this.tccd.settings.keyboardBacklightColor = [];
+        for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
+            this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
+                                                            (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
+                                                            (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
         }
-        else {
-            for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-                if (fileOK(this.clevoLedsRGBZones[i] + "/brightness")) {
-                    this.keyboardBacklightStates.push({} as KeyboardBacklightStateInterface);
+        await this.tccd.config.writeSettingsAsync(this.tccd.settings);
+    }
 
-                    this.keyboardBacklightStates[i].mode = KeyboardBacklightColorModes.static;
-
-                    this.keyboardBacklightStates[i].brightness = Number(fs.readFileSync(this.clevoLedsRGBZones[i] + "/brightness"));
-
-                    if (fileOK(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
-                        let colors = fs.readFileSync(this.clevoLedsRGBZones[i] + "/multi_intensity").toString().split(' ').map(Number);
-                        this.keyboardBacklightStates[i].red = colors[0];
-                        this.keyboardBacklightStates[i].green = colors[1];
-                        this.keyboardBacklightStates[i].blue = colors[2];
-                    }
-                }
-            }
-        }
+    private async updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): Promise<void> {
+        this.keyboardBacklightStates = keyboardBacklightStatesNew;
         this.tccd.dbusData.keyboardBacklightStatesJSON = JSON.stringify(this.keyboardBacklightStates);
     }
 
-    private writeSysFSFromSetting(): void {
+    private async updateSysFsFromSettings(): Promise<void> {
         let brightness: Number = this.tccd.settings.keyboardBacklightBrightness;
         if (brightness === undefined) {
             brightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
         }
 
-        if (fileOK(this.clevoLedsWhiteOnly + "/brightness")) {
-            fs.appendFileSync(this.clevoLedsWhiteOnly + "/brightness", brightness.toString());
+        if (await fileOKAsync(this.clevoLedsWhiteOnly + "/brightness")) {
+            await fs.promises.appendFile(this.clevoLedsWhiteOnly + "/brightness", brightness.toString());
         }
 
         for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-            if (fileOK(this.clevoLedsRGBZones[i] + "/brightness")) {
-                fs.appendFileSync(this.clevoLedsRGBZones[i] + "/brightness", brightness.toString());
+            if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/brightness")) {
+                await fs.promises.appendFile(this.clevoLedsRGBZones[i] + "/brightness", brightness.toString());
             }
         }
 
         if (this.tccd.settings.keyboardBacklightColor !== undefined) {
             if (this.tccd.settings.keyboardBacklightColor.length == this.keyboardBacklightCapabilities.zones) {
                 for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-                    if (fileOK(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
-                        fs.appendFileSync(this.clevoLedsRGBZones[i] + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[i]));
+                    if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
+                        await fs.promises.appendFile(this.clevoLedsRGBZones[i] + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[i]));
                     }
                 }
             }
         }
         else {
             for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-                if (fileOK(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
-                    fs.appendFileSync(this.clevoLedsRGBZones[i] + "/multi_intensity", "255 255 255");
+                if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
+                    await fs.promises.appendFile(this.clevoLedsRGBZones[i] + "/multi_intensity", "255 255 255");
                 }
             }
         }
     }
 
-    public onStart(): void {
-        this.updateKeyboardBacklightCapabilitiesFromSysFS();
+    private async updateKeyboardBacklightStatesFromSysFS(): Promise<void> {
+        let keyboardBacklightStatesNew = [];
 
-        this.writeSysFSFromSetting();
-        setTimeout(this.onWork.bind(this), 500); // Delay read back a little as the driver waits for the EC to finish applying.
+        if (await fileOKAsync(this.clevoLedsWhiteOnly + "/brightness")) {
+            keyboardBacklightStatesNew.push({} as KeyboardBacklightStateInterface);
+            keyboardBacklightStatesNew[0].mode = KeyboardBacklightColorModes.static;
+            keyboardBacklightStatesNew[0].brightness = Number(await fs.promises.readFile(this.clevoLedsWhiteOnly + "/brightness"));
+        }
+        else {
+            for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
+                if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/brightness")) {
+                    keyboardBacklightStatesNew.push({} as KeyboardBacklightStateInterface);
 
-        this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(
-            keyboardBacklightStatesNewJSON => {
-                if (keyboardBacklightStatesNewJSON !== undefined ) {
-                    this.updateSettingFromValue(JSON.parse(keyboardBacklightStatesNewJSON));
-                    this.writeSysFSFromSetting();
-                    setTimeout(this.onWork.bind(this), 500);
+                    keyboardBacklightStatesNew[i].mode = KeyboardBacklightColorModes.static;
+
+                    keyboardBacklightStatesNew[i].brightness = Number(await fs.promises.readFile(this.clevoLedsRGBZones[i] + "/brightness"));
+
+                    if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
+                        let colors = (await fs.promises.readFile(this.clevoLedsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                        keyboardBacklightStatesNew[i].red = colors[0];
+                        keyboardBacklightStatesNew[i].green = colors[1];
+                        keyboardBacklightStatesNew[i].blue = colors[2];
+                    }
                 }
             }
-        );
+        }
+        this.updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew);
+    }
+
+    private async updateSettingsFromKeyboardBacklightStates(): Promise<void> {
+        await this.updateSettingsFromValue(this.keyboardBacklightStates);
+    }
+
+    private async keyboardBacklightStatesNewJSONSubscriptionHandler(keyboardBacklightStatesNewJSON: string): Promise<void> {
+        if (keyboardBacklightStatesNewJSON !== undefined ) {
+            this.keyboardBacklightStatesPendingNewJSON = keyboardBacklightStatesNewJSON;
+
+            this.keyboardBacklightStatesUpdating = true;
+            clearTimeout(this.keyboardBacklightStatesUpdatingReset);
+
+            if (this.keyboardBacklightStatesWritingNew === false) {
+                this.keyboardBacklightStatesWritingNew = true;
+                while(this.keyboardBacklightStatesPendingNewJSON !== undefined) {
+                    let keyboardBacklightStatesNew = JSON.parse(this.keyboardBacklightStatesPendingNewJSON);
+                    this.keyboardBacklightStatesPendingNewJSON = undefined;
+                    await this.updateSettingsFromValue(keyboardBacklightStatesNew);
+                    await this.updateSysFsFromSettings();
+                }
+                this.keyboardBacklightStatesWritingNew = false;
+
+                this.keyboardBacklightStatesUpdatingReset = setTimeout(() => {
+                    this.keyboardBacklightStatesUpdating = false;
+                    this.onWork();
+                }, 500); // There is a small delay between writing SysFS and getting the correct value back.
+            }
+        }
+    }
+
+    public onStart(): void {
+        this.getKeyboardBacklightCapabilities();
+
+        this.updateSysFsFromSettings().then(() => {
+            setTimeout(this.onWork, 500); // There is a small delay between writing SysFS and getting the correct value back.
+        });
+
+        this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(this.keyboardBacklightStatesNewJSONSubscriptionHandler.bind(this));
     }
 
     public onWork(): void {
-        this.updateKeyboardBacklightStatesFromSysFS();
-        this.updateSettingFromValue(this.keyboardBacklightStates);
+        if (this.keyboardBacklightStatesUpdating === false) {
+            this.updateKeyboardBacklightStatesFromSysFS().then(() => {
+                this.updateSettingsFromKeyboardBacklightStates();
+            });
+        }
     }
 
     public onExit(): void {

@@ -42,7 +42,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [max]="keyboardBacklightCapabilities.maxBrightness"
                     step="1"
                     color="primary"
-                    (input)="onBrightnessSliderInput($event)">
+                    (input)="onBrightnessSliderInput($event)"
+                    (onTouched)="onBrightnessSliderTouched($event)"
+                    (change)="onBrightnessSliderChange($event)">
                 </mat-slider>
             </mat-grid-tile>
         </mat-grid-list>
@@ -56,7 +58,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 cpDialogDisplay="inline"
                 cpAlphaChannel="disabled"
                 (cpSliderChange)="onColorPickerInput($event, 0)"
-                (cpInputChange)="onColorPickerInput($event, 0)"></span>
+                (cpInputChange)="onColorPickerInput($event, 0)"
+                (cpSliderDragStart)="onColorPickerDragStart($event, 0)"
+                (cpSliderDragEnd)="onColorPickerDragEnd($event, 0)"></span>
             </div>
 
             <div *ngIf="keyboardBacklightCapabilities.zones >= 3 && keyboardBacklightCapabilities.zones <= 4">
@@ -69,7 +73,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         cpDialogDisplay="inline"
                         cpAlphaChannel="disabled"
                         (cpSliderChange)="onColorPickerInput($event, 0)"
-                        (cpInputChange)="onColorPickerInput($event, 0)"></span>
+                        (cpInputChange)="onColorPickerInput($event, 0)"
+                        (cpSliderDragStart)="onColorPickerDragStart($event, 0)"
+                        (cpSliderDragEnd)="onColorPickerDragEnd($event, 0)"></span>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParamsSymmetrical.secondSpan">
                         <span class="color-visualizer"
@@ -79,7 +85,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         cpDialogDisplay="inline"
                         cpAlphaChannel="disabled"
                         (cpSliderChange)="onColorPickerInput($event, 1)"
-                        (cpInputChange)="onColorPickerInput($event, 1)"></span>
+                        (cpInputChange)="onColorPickerInput($event, 1)"
+                        (cpSliderDragStart)="onColorPickerDragStart($event, 1)"
+                        (cpSliderDragEnd)="onColorPickerDragEnd($event, 1)"></span>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="gridParamsSymmetrical.thirdSpan">
                         <span class="color-visualizer"
@@ -89,7 +97,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         cpDialogDisplay="inline"
                         cpAlphaChannel="disabled"
                         (cpSliderChange)="onColorPickerInput($event, 2)"
-                        (cpInputChange)="onColorPickerInput($event, 2)"></span>
+                        (cpInputChange)="onColorPickerInput($event, 2)"
+                        (cpSliderDragStart)="onColorPickerDragStart($event, 2)"
+                        (cpSliderDragEnd)="onColorPickerDragEnd($event, 2)"></span>
                     </mat-grid-tile>
                 </mat-grid-list>
             </div>

@@ -35,13 +35,18 @@ export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightStates: Array<KeyboardBacklightStateInterface>;
     public chosenBrightness: number;
     public chosenColorHex: Array<string>;
+    public brightnessSliderInUsage: boolean = false;
+    public brightnessSliderInUsageReset: NodeJS.Timeout = undefined;
+    public colorPickerInUsage: Array<boolean> = [false, false, false];
+    public colorPickerInUsageReset: Array<NodeJS.Timeout> = [undefined, undefined, undefined];
+    public foo: string;
 
-    private keyboardBacklightCapabilitiesSubscription: Subscription;
+    private keyboardBacklightCapabilitiesSubscription: Subscription = new Subscription();
 
     public gridParams = {
         cols: 9,
-        headerSpan: 4,
-        valueSpan: 2,
+        headerSpan: 3,
+        valueSpan: 3,
         inputSpan: 3
     };
 
@@ -79,7 +84,7 @@ export class KeyboardBacklightComponent implements OnInit {
         }
         this.chosenBrightness = this.config.getSettings().keyboardBacklightBrightness;
 
-        this.keyboardBacklightCapabilitiesSubscription = this.tccdbus.keyboardBacklightCapabilities.subscribe(
+        this.keyboardBacklightCapabilitiesSubscription.add(this.tccdbus.keyboardBacklightCapabilities.subscribe(
             keyboardBacklightCapabilities => {
                 if (keyboardBacklightCapabilities !== undefined) {
                     this.keyboardBacklightCapabilitiesSubscription.unsubscribe();
@@ -100,11 +105,12 @@ export class KeyboardBacklightComponent implements OnInit {
                     }
                 }
             }
-        );
+        ));
 
         this.tccdbus.keyboardBacklightStates.subscribe(
             keyboardBacklightStates => {
-                if (keyboardBacklightStates !== undefined) {
+                if (keyboardBacklightStates !== undefined && (!this.brightnessSliderInUsage &&
+                    !this.colorPickerInUsage[0] && !this.colorPickerInUsage[1] && !this.colorPickerInUsage[2])) {
                     this.chosenBrightness = keyboardBacklightStates[0].brightness;
                     this.chosenColorHex = []
                     for (let i = 0; i < keyboardBacklightStates.length; ++i) {
@@ -116,7 +122,6 @@ export class KeyboardBacklightComponent implements OnInit {
                 }
             }
         );
-
     }
 
     private fillKeyboardBacklightStatesFromValues(brightness: number, colorHex: Array<string>): Array<KeyboardBacklightStateInterface> {
@@ -146,17 +151,52 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onBrightnessSliderInput(event: any) {
-        console.log("A");
+        this.brightnessSliderInUsage = true;
+        clearTimeout(this.brightnessSliderInUsageReset);
+        this.brightnessSliderInUsageReset = setTimeout(() => {
+            this.brightnessSliderInUsage = false;
+        }, 2000);
         let colorHex = (this.chosenColorHex === undefined) || (this.chosenColorHex.length == 0) ? undefined : this.chosenColorHex;
         this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(event.value, colorHex));
     }
 
+    public onBrightnessSliderChange(event: any) {
+        clearTimeout(this.brightnessSliderInUsageReset);
+        this.brightnessSliderInUsageReset = setTimeout(() => {
+            this.brightnessSliderInUsage = false;
+        }, 2000);
+    }
+
     public onColorPickerInput(event: any, i: number) {
-        console.log("B");
         if (event.valid === undefined || event.valid === true) {
+            this.colorPickerInUsage[i] = true;
+            clearTimeout(this.colorPickerInUsageReset[i]);
+            this.colorPickerInUsageReset[i] = setTimeout(() => {
+                this.colorPickerInUsage[i] = false;
+            }, 2000);
+
             let colorHex = this.chosenColorHex;
             colorHex[i] = event.color;
             this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(this.chosenBrightness, colorHex));
+        }
+    }
+
+    public onColorPickerDragStart(event: any, i: number) {
+        if (event.valid === undefined || event.valid === true) {
+            this.colorPickerInUsage[i] = true;
+            clearTimeout(this.colorPickerInUsageReset[i]);
+            this.colorPickerInUsageReset[i] = setTimeout(() => {
+                this.colorPickerInUsage[i] = false;
+            }, 2000);
+        }
+    }
+
+    public onColorPickerDragEnd(event: any, i: number) {
+        if (event.valid === undefined || event.valid === true) {
+            clearTimeout(this.colorPickerInUsageReset[i]);
+            this.colorPickerInUsageReset[i] = setTimeout(() => {
+                this.colorPickerInUsage[i] = false;
+            }, 2000);
         }
     }
 }
