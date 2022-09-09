@@ -429,6 +429,20 @@ ipcMain.on('spawn-external-async', (event, arg) => {
 });
 
 async function loadTranslation(langId) {
+
+    // Watch mode Workaround: Waiting for translation when starting in watch mode
+    let canLoadTranslation = false;
+    while (watchOption && !canLoadTranslation) {
+        try {
+            await translation.loadLanguage(langId);
+            canLoadTranslation = true;
+        } catch (err) {
+            console.log('Watch mode: Waiting for translation');
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+    }
+    // End watch mode workaround
+
     try {
         await translation.loadLanguage(langId);
     } catch (err) {
