@@ -428,7 +428,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                 </mat-grid-list>
-                <mat-tab-group mat-stretch-tabs #cpuSettingsTabGroup animationDuration="0" (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
+                <mat-tab-group class="active-always-focused" mat-stretch-tabs #cpuSettingsTabGroup animationDuration="0" (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
                     <mat-tab *ngIf="compat.hasODMPowerLimitControl" [disabled]="!editProfile">
                         <ng-template mat-tab-label>
                             <mat-radio-button color="primary" [ngClass]="{'hide-radio-circle': !showCPUTabsCircles}" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile" i18n="@@cProfMgrDetailsODMTDPLabel">CPU power limit control</mat-radio-button>

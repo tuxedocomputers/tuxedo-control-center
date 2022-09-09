@@ -137,3 +137,9 @@ mat-radio-button.hide-radio-circle {
         display: none;
     }
 }
+
+mat-tab-group.active-always-focused {
+    .mat-tab-label-active {
+        opacity: 1.0;
+    }
+}
