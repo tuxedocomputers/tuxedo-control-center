@@ -127,6 +127,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public showCPUTabsCircles;
 
+    public infoTooltipShowDelay = 700;
+
     @ViewChild('inputName') inputName: MatInput;
 
     public selectedCPUTabIndex: number = 0;

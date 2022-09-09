@@ -95,7 +95,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
                             <mat-grid-tile [colspan]="gridProfileSettings.headerSpan">
                                 <header [ngClass]="{'inactive': false}">
-                                    <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">LED status</ng-container>
+                                    <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">Profile indicator</ng-container>
+                                    <mat-icon
+                                        class="info-icon"
+                                        i18n-matTooltip="@@cProfMgrDetailsODMProfileLEDInfoTooltip"
+                                        matTooltip="With the profile indicator you can recognize the active profile with a glance on the TCC button (next to the power button)."
+                                        [matTooltipShowDelay]="infoTooltipShowDelay">
+                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                    </mat-icon>
                                 </header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
@@ -400,7 +407,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     class="info-icon"
                                     i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
                                     matTooltip="The system profiles limit the maximal energy consumption of the processors."
-                                    matTooltipShowDelay="700">
+                                    [matTooltipShowDelay]="infoTooltipShowDelay">
                                     <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
                                 </mat-icon>
                             </header>

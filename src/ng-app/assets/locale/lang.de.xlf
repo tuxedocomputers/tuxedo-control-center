@@ -434,7 +434,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">alle LEDs aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDOne" datatype="html">
@@ -442,7 +442,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">1 LED an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDTwo" datatype="html">
@@ -450,7 +450,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">beide LEDs an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL1" datatype="html">
@@ -458,7 +458,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Dauerhafte Maximalleistung (PL1)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL2" datatype="html">
@@ -466,7 +466,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Kurzzeitige (max. 28 Sek.) Maximalleistung (PL2)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL4" datatype="html">
@@ -474,7 +474,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Kurzzeitige (max. 8 Sek) Maximalleistung (PL4)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsStateSelectButtonAlreadySet" datatype="html" approved="yes">
@@ -482,7 +482,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off"> (bereits festgelegt)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">461</context>
+          <context context-type="linenumber">463</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html" approved="yes">
@@ -530,7 +530,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="needs-translation">Profil automatisch aktivieren im Betrieb mit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsDisplayHeaderLabel" datatype="html" approved="yes">
@@ -538,7 +538,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4eaf6bbe34f6c5893d9198aa087353dadeb751cf" datatype="html">
@@ -546,7 +546,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Bei Aktivierung des Profils festlegen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseBrightnessYes" datatype="html" approved="yes">
@@ -554,7 +554,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseBrightnessNo" datatype="html" approved="yes">
@@ -562,7 +562,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsBrightnessLabel" datatype="html" approved="yes">
@@ -570,7 +570,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Hintergrundbeleuchtung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html" approved="yes">
@@ -578,7 +578,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Lüftersteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">220</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html" approved="yes">
@@ -586,7 +586,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Lüfterprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
@@ -594,7 +594,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Minimale Lüftergeschwindigkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
@@ -602,7 +602,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Offset-Lüftergeschwindigkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">285</context>
+          <context context-type="linenumber">292</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsToggleFanChartsLabel" datatype="html">
@@ -610,7 +610,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Lüftertabellendiagramm umschalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">328</context>
+          <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html" approved="yes">
@@ -618,7 +618,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">349</context>
+          <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
@@ -626,7 +626,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Status der Webcam (an/aus)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">357</context>
+          <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html" approved="yes">
@@ -634,7 +634,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">361</context>
+          <context context-type="linenumber">368</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html" approved="yes">
@@ -642,7 +642,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">362</context>
+          <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
@@ -650,7 +650,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Systemleistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html" approved="yes">
@@ -658,7 +658,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Anzahl der logischen Kerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">491</context>
+          <context context-type="linenumber">498</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
@@ -666,7 +666,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Maximale Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">511</context>
+          <context context-type="linenumber">518</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
@@ -674,7 +674,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">515</context>
+          <context context-type="linenumber">522</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
@@ -682,7 +682,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">516</context>
+          <context context-type="linenumber">523</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html" approved="yes">
@@ -690,7 +690,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="translated">Minimale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">530</context>
+          <context context-type="linenumber">537</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html" approved="yes">
@@ -698,15 +698,23 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="translated">Maximale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">561</context>
+          <context context-type="linenumber">568</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
-        <source>LED status</source>
-        <target state="translated">LED-Status</target>
+        <source>Profile indicator</source>
+        <target state="translated">Profil-Indikator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsODMProfileLEDInfoTooltip" datatype="html">
+        <source>With the profile indicator you can recognize the active profile with a glance on the TCC button (next to the power button).</source>
+        <target state="translated">Mit dem Profil-Indikator erkennen Sie das aktive Profil mit einem Blick auf der TCC-Taste (neben dem Einschaltknopf).</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabel" datatype="html">
@@ -714,7 +722,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Systemprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">398</context>
+          <context context-type="linenumber">405</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemProfileiInfoTooltip" datatype="html">
@@ -722,16 +730,15 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">Die Systemprofile begrenzen die maximale Energieaufnahme des Prozessors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">402</context>
+          <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
         <source>CPU power limit control</source>
         <target state="translated">CPU-Energieaufnahme begrenzen</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">427</context>
+          <context context-type="linenumber">434</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
@@ -739,7 +746,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target state="translated">CPU-Taktfrequenz begrenzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">486</context>
+          <context context-type="linenumber">493</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
