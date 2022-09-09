@@ -726,8 +726,9 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
-        <source>Power limit control</source>
-        <target state="needs-translation">Energieaufnahme begrenzen</target>
+        <source>CPU power limit control</source>
+        <target state="translated">CPU-Energieaufnahme begrenzen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">427</context>
@@ -735,7 +736,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
         <source>CPU frequency control</source>
-        <target state="needs-translation">Taktfrequenz begrenzen</target>
+        <target state="translated">CPU-Taktfrequenz begrenzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">486</context>

@@ -649,7 +649,6 @@
       <trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
         <source>System performance</source>
         <target state="translated">System performance</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">385</context>
@@ -728,8 +727,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
-        <source>Power limit control</source>
-        <target state="translated">Power limit control</target>
+        <source>CPU power limit control</source>
+        <target state="translated">CPU power limit control</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">427</context>
