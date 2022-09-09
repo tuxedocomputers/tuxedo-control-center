@@ -424,7 +424,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-tab-group mat-stretch-tabs #cpuSettingsTabGroup animationDuration="0" (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
                     <mat-tab *ngIf="compat.hasODMPowerLimitControl" [disabled]="!editProfile">
                         <ng-template mat-tab-label>
-                            <mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile" i18n="@@cProfMgrDetailsODMTDPLabel">CPU power limit control</mat-radio-button>
+                            <mat-radio-button color="primary" [ngClass]="{'hide-radio-circle': !showCPUTabsCircles}" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile" i18n="@@cProfMgrDetailsODMTDPLabel">CPU power limit control</mat-radio-button>
                         </ng-template>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <div formGroupName="odmPowerLimits">
@@ -483,7 +483,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-tab>
                     <mat-tab formGroupName="cpu" [disabled]="!editProfile">
                         <ng-template mat-tab-label>
-                            <mat-radio-button color="primary" [checked]="selectedCPUTabIndex === 1" [disabled]="!editProfile" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</mat-radio-button>
+                            <mat-radio-button color="primary" [ngClass]="{'hide-radio-circle': !showCPUTabsCircles}" [checked]="selectedCPUTabIndex === 1" [disabled]="!editProfile" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</mat-radio-button>
                         </ng-template>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                             <!-- Number of logical cores -->

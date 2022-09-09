@@ -131,3 +131,9 @@
         background-color: rgba(100, 209, 113, 1.00);
     }
 }
+
+mat-radio-button.hide-radio-circle {
+    .mat-radio-container {
+        display: none;
+    }
+}

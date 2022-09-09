@@ -125,6 +125,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public showFanGraphs = false;
 
+    public showCPUTabsCircles;
+
     @ViewChild('inputName') inputName: MatInput;
 
     public selectedCPUTabIndex: number = 0;
@@ -543,6 +545,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
         const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
         const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
+
+        this.showCPUTabsCircles = !cpuFreqOnly;
 
         const INDEX_ODMCPUTDP = 0;
         const INDEX_CPUFREQ = 1;
