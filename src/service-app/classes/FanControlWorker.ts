@@ -18,6 +18,7 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { DMIController } from '../../common/classes/DMIController';
 
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
@@ -55,13 +56,8 @@ export class FanControlWorker extends DaemonWorker {
 
         const useFanControl = this.getFanControlStatus();
 
-        if (this.tccd.settings.fanControlEnabled) {
+        if (useFanControl) {
             ioAPI.setEnableModeSet(true); //FIXME Dummy function, tuxedo-io always sets the manual bit
-
-            if (!useFanControl) { //FIXME Dummy variable, useFanControl always true
-                // Stop TCC fan control for all fans
-                ioAPI.setFansAuto();
-            }
         }
     }
 
@@ -175,6 +171,11 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private getFanControlStatus(): boolean {
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const boardName = dmi.boardName.readValueNT();
+        if (boardName === "GMxRGxx") {
+            return false;
+        }
         return this.tccd.settings.fanControlEnabled;
     }
 }

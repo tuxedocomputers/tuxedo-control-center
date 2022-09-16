@@ -51,7 +51,17 @@ export class CompatibilityService {
     this.hasAquarisValue = showAquarisMenu;
   }
 
-  get hasFancontrol(): boolean {
+  get hasFanInfo(): boolean {
+    return this.tccDbus.tuxedoWmiAvailable.value;
+  }
+
+  // hasFanControl==true implies hasFanInfo==true, but not the other way around
+  get hasFanControl(): boolean {
+    const dmi = new DMIController('/sys/class/dmi/id');
+    const boardName = dmi.boardName.readValueNT();
+    if (boardName === "GMxRGxx") {
+      return false;
+    }
     return this.tccDbus.tuxedoWmiAvailable.value;
   }
 

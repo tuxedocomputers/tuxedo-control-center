@@ -136,8 +136,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <!-- Fan control settings -->
         <div #fancontrolHeader
             class="tcc-options-group"
-            [ngClass]="{'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled }"
-            [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
+            [ngClass]="{'not-available': !compat.hasFanControl || !this.config.getSettings().fanControlEnabled }"
+            [matTooltip]="!compat.hasFanControl ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
             <div class="title-row">
                 <hr />

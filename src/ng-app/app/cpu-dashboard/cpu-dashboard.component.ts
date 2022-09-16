@@ -211,7 +211,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   }
 
   public gaugeFanTempFormat: (value: number) => string = (value) => {
-    if (this.compat.hasFancontrol) {
+    if (this.compat.hasFanInfo) {
       return Math.round(value).toString();
     } else {
       return $localize `:@@noFanTempValue:N/A`;
@@ -219,7 +219,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   }
 
   public gaugeFanSpeedFormat: (value: number) => string = (value) => {
-    if (this.compat.hasFancontrol) {
+    if (this.compat.hasFanInfo) {
       return Math.round(value).toString();
     } else {
       return $localize `:@@noFanSpeedValue:N/A`;
