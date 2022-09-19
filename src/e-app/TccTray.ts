@@ -74,7 +74,9 @@ export class TccTray {
                          (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
 
         if (isTuxedo) {
-            if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
+            if (deviceName !== undefined &&
+                (deviceName === 'STELLARIS1XI04' ||
+                 deviceName === 'STEPOL1XA04')) {
                 showAquarisMenu = true;
             } else {
                 showAquarisMenu = false;
