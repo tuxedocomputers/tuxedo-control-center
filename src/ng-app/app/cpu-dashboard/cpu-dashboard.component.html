@@ -38,7 +38,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="content-container system-monitor-gauges">
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -75,7 +75,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>CPU - Frequency</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -98,7 +98,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <!-- GPU -->
         <div class="content-container profile-overview" *ngIf="hasGPUTemp">
             <div class="column">
-                <div class="title" [ngClass]="{'not-available': !compat.hasFancontrol }">
+                <div class="title" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                     <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
                     <span class="text" i18n>Graphics card monitor</span>
                 </div>
@@ -106,7 +106,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="content-container system-monitor-gauges bottom" *ngIf="hasGPUTemp">
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -124,7 +124,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>GPU - Temp</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFancontrol }" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage: ''">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"
@@ -201,7 +201,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                 </div>
-                <div class="item" [ngClass]="{'not-available': !compat.hasFancontrol || !getFanControlEnabled()}" [matTooltip]="!compat.hasFancontrol ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
+                <div class="item" [ngClass]="{'not-available': !compat.hasFanControl || !getFanControlEnabled()}" [matTooltip]="!compat.hasFanControl ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
                     <div class="title">
                         <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                         <span class="text" i18n>Fan profile</span>

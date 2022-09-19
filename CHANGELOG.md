@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.7] - 2022-09-19
+### Added
+- Basic support for Stellaris AMD Gen 4
+
+## [1.1.6] - 2022-08-01
+
+### Changed
+- Packaging dependency tweaks (RPM) for wider compatibility
+
 ## [1.1.5] - 2022-07-15
 
 ### Added

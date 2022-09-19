@@ -40,7 +40,9 @@ export class CompatibilityService {
                      (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
 
     if (isTuxedo) {
-      if (deviceName !== undefined && deviceName === 'STELLARIS1XI04') {
+      if (deviceName !== undefined &&
+           (deviceName === 'STELLARIS1XI04' ||
+            deviceName === 'STEPOL1XA04')) {
         showAquarisMenu = true;
       } else {
         showAquarisMenu = false;
@@ -51,7 +53,17 @@ export class CompatibilityService {
     this.hasAquarisValue = showAquarisMenu;
   }
 
-  get hasFancontrol(): boolean {
+  get hasFanInfo(): boolean {
+    return this.tccDbus.tuxedoWmiAvailable.value;
+  }
+
+  // hasFanControl==true implies hasFanInfo==true, but not the other way around
+  get hasFanControl(): boolean {
+    const dmi = new DMIController('/sys/class/dmi/id');
+    const boardName = dmi.boardName.readValueNT();
+    if (boardName === "GMxRGxx") {
+      return false;
+    }
     return this.tccDbus.tuxedoWmiAvailable.value;
   }
 
