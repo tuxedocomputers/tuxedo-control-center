@@ -123,7 +123,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         {{ odmProfileToName.get(profile.odmProfile.name) }}
                     </span>
                 </div>
-                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFancontrol || !this.config.getSettings().fanControlEnabled}">
+                <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFanControl || !this.config.getSettings().fanControlEnabled}">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 302 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
