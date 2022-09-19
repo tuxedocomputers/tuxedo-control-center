@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.7] - 2022-09-19
+### Added
+- Basic support for Stellaris AMD Gen 4
+
 ## [1.1.6] - 2022-08-01
 
 ### Changed
