@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component type="desktop">
+  <!--Created with jdAppdataEdit 5.0-->
+  <id>de.tuxedocomputers.tcc</id>
+  <name>Tuexedo Control Center</name>
+  <summary>A tool to help you control performance, energy, fan and comfort settings on TUXEDO laptops.</summary>
+  <developer_name>Tuxedo Computers</developer_name>
+  <launchable type="desktop-id">tuxedo-control-center.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <description>
+    <p>The dashboard provides an overview of system performance, temperature, fan speed and currently active profile settings. The profile overview is clearly laid out so that users have an immediate overview of the profiles and can create new ones or delete unused profiles immediately. It can also be differentiated whether the respective profile is to apply to battery or mains operation.</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://www.tuxedocomputers.com/store_files/1/images/product_images/extra/tcc_dashboard.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image type="source">https://www.tuxedocomputers.com/store_files/1/images/product_images/extra/tcc_dashboard_dark.jpg</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://www.tuxedocomputers.com/de/TUXEDO-Control-Center.tuxedo</url>
+  <url type="bugtracker">https://github.com/tuxedocomputers/tuxedo-control-center/issues</url>
+  <content_rating type="oars-1.1"/>
+</component>

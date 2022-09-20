@@ -25,5 +25,6 @@ rm -rf /usr/bin/tuxedo-control-center || true
 # Remove policy kit and desktop files
 rm /usr/share/polkit-1/actions/de.tuxedocomputers.tcc.policy || true
 rm /usr/share/applications/tuxedo-control-center.desktop || true
+rm /usr/share/metainfo/de.tuxedocomputers.tcc.metainfo.xml || true
 rm /etc/skel/.config/autostart/tuxedo-control-center-tray.desktop || true
 rm /usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf || true
