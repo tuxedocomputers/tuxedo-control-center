@@ -25,10 +25,10 @@ import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface, Ke
 import { fileOK, fileOKAsync } from '../../common/classes/Utils';
 
 export class KeyboardBacklightWorker extends DaemonWorker {
-    private clevoLedsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
-    private clevoLedsRGBZones: Array<string> = ["/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight",
-                                                "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_1",
-                                                "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2"];
+    private ledsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
+    private ledsRGBZones: Array<string> = ["/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight",
+                                           "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_1",
+                                           "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2"];
     private keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {} as KeyboardBacklightCapabilitiesInterface;
     private keyboardBacklightStates: Array<KeyboardBacklightStateInterface> = [];
     private keyboardBacklightStatesPendingNewJSON: string = undefined;
@@ -54,25 +54,26 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
 
-        if (fileOK(this.clevoLedsWhiteOnly + "/max_brightness")) {
-            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.clevoLedsWhiteOnly + "/max_brightness"));
+        if (fileOK(this.ledsWhiteOnly + "/max_brightness")) {
+            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsWhiteOnly + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
         else {
-            if (fileOK(this.clevoLedsRGBZones[0] + "/max_brightness")) {
-                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.clevoLedsRGBZones[0] + "/max_brightness"));
+            if (fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
                 this.keyboardBacklightCapabilities.maxBlue = 0xff;
                 this.keyboardBacklightCapabilities.zones = 1;
-                if (fileOK(this.clevoLedsRGBZones[1] + "/max_brightness")) {
+                if (fileOK(this.ledsRGBZones[1] + "/max_brightness")) {
                     this.keyboardBacklightCapabilities.zones++;
                 }
-                if (fileOK(this.clevoLedsRGBZones[2] + "/max_brightness")) {
+                if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
                     this.keyboardBacklightCapabilities.zones++;
                 }
             }
         }
+
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
@@ -80,7 +81,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
         this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
         this.tccd.settings.keyboardBacklightColor = [];
-        for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
+        for (let i: number = 0; i < keyboardBacklightStatesNew.length ; ++i) {
             this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
                                                             (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
                                                             (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
@@ -99,53 +100,53 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             brightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
         }
 
-        if (await fileOKAsync(this.clevoLedsWhiteOnly + "/brightness")) {
-            await fs.promises.appendFile(this.clevoLedsWhiteOnly + "/brightness", brightness.toString());
+        if (await fileOKAsync(this.ledsWhiteOnly + "/brightness")) {
+            await fs.promises.appendFile(this.ledsWhiteOnly + "/brightness", brightness.toString());
         }
 
-        for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-            if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/brightness")) {
-                await fs.promises.appendFile(this.clevoLedsRGBZones[i] + "/brightness", brightness.toString());
+        for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+            if (await fileOKAsync(this.ledsRGBZones[i] + "/brightness")) {
+                await fs.promises.appendFile(this.ledsRGBZones[i] + "/brightness", brightness.toString());
             }
         }
 
         if (this.tccd.settings.keyboardBacklightColor !== undefined) {
             if (this.tccd.settings.keyboardBacklightColor.length == this.keyboardBacklightCapabilities.zones) {
-                for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-                    if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
-                        await fs.promises.appendFile(this.clevoLedsRGBZones[i] + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[i]));
+                for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                        await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[i]));
                     }
                 }
             }
         }
         else {
-            for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-                if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
-                    await fs.promises.appendFile(this.clevoLedsRGBZones[i] + "/multi_intensity", "255 255 255");
+            for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+                if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                    await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity", "255 255 255");
                 }
             }
         }
     }
 
     private async updateKeyboardBacklightStatesFromSysFS(): Promise<void> {
-        let keyboardBacklightStatesNew = [];
+        let keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = [];
 
-        if (await fileOKAsync(this.clevoLedsWhiteOnly + "/brightness")) {
+        if (await fileOKAsync(this.ledsWhiteOnly + "/brightness")) {
             keyboardBacklightStatesNew.push({} as KeyboardBacklightStateInterface);
             keyboardBacklightStatesNew[0].mode = KeyboardBacklightColorModes.static;
-            keyboardBacklightStatesNew[0].brightness = Number(await fs.promises.readFile(this.clevoLedsWhiteOnly + "/brightness"));
+            keyboardBacklightStatesNew[0].brightness = Number(await fs.promises.readFile(this.ledsWhiteOnly + "/brightness"));
         }
         else {
-            for (let i: number = 0; i < this.clevoLedsRGBZones.length ; ++i) {
-                if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/brightness")) {
+            for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+                if (await fileOKAsync(this.ledsRGBZones[i] + "/brightness")) {
                     keyboardBacklightStatesNew.push({} as KeyboardBacklightStateInterface);
 
                     keyboardBacklightStatesNew[i].mode = KeyboardBacklightColorModes.static;
 
-                    keyboardBacklightStatesNew[i].brightness = Number(await fs.promises.readFile(this.clevoLedsRGBZones[i] + "/brightness"));
+                    keyboardBacklightStatesNew[i].brightness = Number(await fs.promises.readFile(this.ledsRGBZones[i] + "/brightness"));
 
-                    if (await fileOKAsync(this.clevoLedsRGBZones[i] + "/multi_intensity")) {
-                        let colors = (await fs.promises.readFile(this.clevoLedsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                        let colors = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
                         keyboardBacklightStatesNew[i].red = colors[0];
                         keyboardBacklightStatesNew[i].green = colors[1];
                         keyboardBacklightStatesNew[i].blue = colors[2];
@@ -153,6 +154,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                 }
             }
         }
+
         this.updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew);
     }
 
