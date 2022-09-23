@@ -115,7 +115,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         for (const stateId of Object.keys(ProfileStates)) {
             const stateDescriptor = ProfileStates[stateId];
             if (!this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
-                 customProfilesFilled.find(p => p.id === this.settings.stateMap[stateDescriptor]) === undefined) {
+                 defaultProfilesFilled.concat(customProfilesFilled).find(p => p.id === this.settings.stateMap[stateDescriptor]) === undefined) {
                     console.log('Missing state assignment for \'' + stateId + '\' default to + \'' + defaultValuesProfileFilled.id + '\'');
                     this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
                     settingsChanged = true;
