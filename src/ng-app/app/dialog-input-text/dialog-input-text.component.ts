@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,23 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CompatibilityService } from '../compatibility.service';
+export interface InputDialogData {
+    title: string,
+    heading: string,
+    description: string,
+    prefill: string
+}
 
 @Component({
-    selector: 'app-tools',
-    templateUrl: './tools.component.html',
-    styleUrls: ['./tools.component.scss']
+    selector: 'app-dialog-input-text',
+    templateUrl: './dialog-input-text.component.html',
+    styleUrls: ['./dialog-input-text.component.scss']
 })
-export class ToolsComponent implements OnInit {
-    constructor(
-        public compat: CompatibilityService,
-        private router: Router,
-        private route: ActivatedRoute) {}
+export class DialogInputTextComponent {
 
-    ngOnInit() {
-        
+    constructor(
+        public dialogRef: MatDialogRef<DialogInputTextComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: InputDialogData) {}
+
+    closeDialog(result?: string) {
+        this.dialogRef.close(result);
     }
 }

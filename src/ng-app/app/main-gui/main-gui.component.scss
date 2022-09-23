@@ -1,0 +1,171 @@
+/*!
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+.tcc-mat-toolbar {
+    min-height: 40px;
+}
+
+.title-row {
+    height:40px;
+    -webkit-app-region: drag;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: nowrap;
+    align-items: center;
+
+    background-color: #252525;
+    
+    #title-left {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        #title-logo {
+            height:26px;
+        }
+
+        #title-text {
+            font-size: 16px;
+            margin-left:16px;
+            color:#F5F5F5;
+        }
+
+        /*#title-lang {
+            display: flex;
+            flex-flow: column nowrap;
+            -webkit-app-region: no-drag;
+            img {
+                cursor: pointer;
+                max-height: 20px;
+                width: 20px;
+            }
+        }*/
+    }
+
+    /*#main-title {
+        .logo {
+            width: 80px;
+        }
+
+        .text {
+            padding-left: 10px;
+        }
+    }*/
+
+    #title-right {
+        -webkit-app-region: no-drag;
+        svg {
+            width:14px;
+            margin-left:16px;
+            cursor: pointer;
+        }
+    }
+
+    /*i {
+        -webkit-app-region: no-drag;
+    }*/
+}
+
+.main-sidenav-container {
+    height: 100% !important;
+
+    .selected {
+        font-weight: bold;
+    }
+
+    mat-icon {
+        transform-origin: center left;
+        transform: scale(2);
+    }
+}
+
+.main-sidenav-nav {
+    --sidenav-width: 240px;
+    width: var(--sidenav-width);
+    // height: 100%;
+    margin-top:10px;
+
+    .sidenav-top {
+        mat-list-item {
+            content {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+
+                .profile-name {
+                    max-width: 80%;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+
+    .sidenav-bottom {
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+        overflow: hidden;
+
+        display: flex;
+
+        mat-nav-list {
+            flex: 50%;
+
+            padding-top: 0px;
+
+            mat-list-item {
+                width: var(--sidenav-width) / 2;
+                height: 60px;
+                content {
+                    width: 100%;
+                    height: 75%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    mat-icon {
+                        transform-origin: center center;
+                        transform: scale(2);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.main-sidenav-content {
+    padding: 10px;
+    margin: 0;
+    //bottom: 20px;
+    overflow-y: auto;
+}
+
+.language-select {
+    mat-select-trigger {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        mat-icon {
+            margin-right: 16px;
+        }
+    }
+}

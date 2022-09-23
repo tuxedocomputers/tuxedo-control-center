@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -48,6 +48,10 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu'
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -75,6 +79,10 @@ import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { MainGuiComponent } from './main-gui/main-gui.component';
+import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -94,7 +102,11 @@ declare const require;
     ToolsComponent,
     KeyboardBacklightComponent,
     ChangeCryptPasswordComponent,
-    FanGraphComponent
+    FanGraphComponent,
+    MainGuiComponent,
+    AquarisControlComponent,
+    DialogInputTextComponent,
+    DialogConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -125,11 +137,15 @@ declare const require;
     MatButtonToggleModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatSlideToggleModule,
+    MatTabsModule,
+    MatDialogModule,
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),
     ChartsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    MatMenuModule
   ],
   providers: [
     DecimalPipe,

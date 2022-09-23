@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.1.7] - 2022-09-19
+### Added
+- Basic support for Stellaris AMD Gen 4
+
+## [1.1.6] - 2022-08-01
+
+### Changed
+- Packaging dependency tweaks (RPM) for wider compatibility
+
+## [1.1.5] - 2022-07-15
+
+### Added
+- TUXEDO Aquaris control
+  - Fan speed presets
+  - Fan speed manual set (slider + input)
+  - LED RGB color picker
+  - LED static/rainbow mode picker
+  - LED breath checkbox
+  - Assign custom name to find device easier
+  - Save/restore last used configuration
+  - Links and notices to online instructions on how to use the device
+
 ## [1.1.4] - 2022-04-21
 ### Changed
 - First steps of basic dependency/framework updates

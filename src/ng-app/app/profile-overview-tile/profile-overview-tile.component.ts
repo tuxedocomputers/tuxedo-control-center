@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -22,7 +22,7 @@ import { UtilsService } from '../utils.service';
 import { StateService, IStateInfo } from '../state.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
 import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
@@ -72,6 +72,7 @@ export class ProfileOverviewTileComponent implements OnInit {
         private state: StateService,
         private config: ConfigService,
         private router: Router,
+        private route: ActivatedRoute,
         public compat: CompatibilityService,
         private sysfs: SysFsService,
         private tccDBus: TccDBusClientService
@@ -129,7 +130,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public selectProfile(): void {
         setImmediate(() => {
-            this.router.navigate(['profile-manager', this.profile.name]);
+            this.router.navigate(['profile-manager', this.profile.name], { relativeTo: this.route.parent });
         });
     }
 
