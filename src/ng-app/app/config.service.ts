@@ -161,12 +161,18 @@ export class ConfigService implements OnDestroy {
     /**
      * Copy profile with specified ID
      *
-     * @param sourceProfileId Profile ID to copy
+     * @param sourceProfileId Profile ID to copy, if undefined use default values profile
      * @param newProfileName Name for the copied profile
      * @returns The new profile ID or undefined on error
      */
     public async copyProfile(sourceProfileId: string, newProfileName: string) {
-        const profileToCopy: ITccProfile = this.getProfileById(sourceProfileId);
+        let profileToCopy: ITccProfile;
+
+        if (sourceProfileId === undefined) {
+            profileToCopy = this.dbus.defaultValuesProfile.value;
+        } else {
+            profileToCopy = this.getProfileById(sourceProfileId);
+        }
 
         if (profileToCopy === undefined) {
             return undefined;

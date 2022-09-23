@@ -171,7 +171,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             switch (this.currentInputMode) {
                 case InputMode.New:
                     this.utils.pageDisabled = true;
-                    newProfileId = await this.config.copyProfile(this.config.getDefaultValuesProfile().id, this.inputProfileName.value);
+                    newProfileId = await this.config.copyProfile(undefined, this.inputProfileName.value);
                     if (newProfileId !== undefined) {
                         this.inputActive = false;
                         await this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
