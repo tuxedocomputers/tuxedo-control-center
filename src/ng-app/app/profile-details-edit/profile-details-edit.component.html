@@ -55,7 +55,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsNameLabel">Name</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
-                                <mat-form-field *ngIf="editProfile">
+                                <mat-form-field *ngIf="editProfile" appearance="fill">
                                     <input matInput #inputName="matInput"
                                         formControlName="name"
                                         type="text"
@@ -74,7 +74,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
                             <content class="input">
-                                <mat-form-field *ngIf="editProfile" class="input-description">
+                                <mat-form-field *ngIf="editProfile" class="input-description" appearance="fill">
                                     <textarea matInput
                                         formControlName="description"
                                         type="text"
