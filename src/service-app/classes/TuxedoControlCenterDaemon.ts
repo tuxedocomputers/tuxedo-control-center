@@ -411,6 +411,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
         dmiSKUDeviceMap.set('POLARIS1XI03', TUXEDODevice.POLARIS1XI03);
         dmiSKUDeviceMap.set('STELLARIS1XA03', TUXEDODevice.STELLARIS1XA03);
+        dmiSKUDeviceMap.set('STEPOL1XA04', TUXEDODevice.STEPOL1XA04);
         dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
@@ -425,6 +426,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         uwidDeviceMap.set(0x13, TUXEDODevice.IBP14G6_TUX);
         uwidDeviceMap.set(0x12, TUXEDODevice.IBP14G6_TRX);
         uwidDeviceMap.set(0x14, TUXEDODevice.IBP14G6_TQF);
+        uwidDeviceMap.set(0x17, TUXEDODevice.IBP14G7_AQF_ARX);
 
         const uwidMatch = uwidDeviceMap.get(parseInt(modInfo.model));
         if (uwidMatch !== undefined) {
