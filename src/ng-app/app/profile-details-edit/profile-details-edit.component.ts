@@ -185,6 +185,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Slow (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Fast (max. 8 sec) Power Limit (PL4)`);
+
+        this.showCPUTabsCircles = this.compat.hasODMPowerLimitControl;
     }
 
     ngOnDestroy() {
@@ -546,9 +548,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const defaultProfile = this.config.getDefaultProfiles()[0];
         const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
         const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
-        const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
-
-        this.showCPUTabsCircles = !cpuFreqOnly;
 
         const INDEX_ODMCPUTDP = 0;
         const INDEX_CPUFREQ = 1;
@@ -556,14 +555,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         // Choose either index automatically or manually selectd
         if (index !== undefined) {
             this.selectedCPUTabIndex = index;
-        } else if (cpuFreqOnly) {
-            this.selectedCPUTabIndex = INDEX_CPUFREQ;
         } else if (powerNotDefault) {
             this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
         } else if (cpufreqNotDefault) {
             this.selectedCPUTabIndex = INDEX_CPUFREQ;
         } else {
-            this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
+            this.selectedCPUTabIndex = 0;
         }
 
         // Reset not chosen tab to default
