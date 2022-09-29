@@ -171,11 +171,12 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private getFanControlStatus(): boolean {
-        const dmi = new DMIController('/sys/class/dmi/id');
+        /*const dmi = new DMIController('/sys/class/dmi/id');
         const boardName = dmi.boardName.readValueNT();
+        // when adding or removing devices here don't forget to also alter hasFanControl() from compatibility.service.ts from tcc
         if (boardName === "GMxRGxx") {
             return false;
-        }
+        }*/
         return this.tccd.settings.fanControlEnabled;
     }
 }
