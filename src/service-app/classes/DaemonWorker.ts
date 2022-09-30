@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -29,8 +29,24 @@ export abstract class DaemonWorker {
 
     public timer: NodeJS.Timer;
 
-    public abstract onStart(): void;
-    public abstract onWork(): void;
-    public abstract onExit(): void;
+    protected previousProfile: ITccProfile;
+    protected activeProfile: ITccProfile;
+
+    protected abstract onStart(): void;
+    protected abstract onWork(): void;
+    protected abstract onExit(): void;
+
+    public start(): void { this.triggerWork(this.onStart); }
+    public work(): void { this.triggerWork(this.onWork); }
+    public exit(): void { this.triggerWork(this.onExit); }
+
+    public updateProfile(activeProfile: ITccProfile): void {
+        this.activeProfile = activeProfile;
+    }
+
+    private triggerWork(eventFunction: () => void): void {
+        eventFunction.call(this);
+        this.previousProfile = this.activeProfile;
+    }
 
 }

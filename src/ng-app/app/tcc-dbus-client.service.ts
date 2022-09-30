@@ -22,6 +22,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
+import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { ConfigService } from './config.service';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -49,11 +51,14 @@ export class TccDBusClientService implements OnDestroy {
   public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
 
   public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
+  public odmPowerLimits = new BehaviorSubject<TDPInfo[]>([]);
 
   public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
   public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
+  public defaultValuesProfile = new BehaviorSubject<ITccProfile>(undefined);
   private previousCustomProfilesJSON = '';
   private previousDefaultProfilesJSON = '';
+  private previousDefaultValuesProfileJSON = '';
 
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
@@ -92,8 +97,10 @@ export class TccDBusClientService implements OnDestroy {
 
     this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
 
-    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable()
+    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable();
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
+    const nextODMPowerLimits = await this.tccDBusInterface.odmPowerLimits();
+    this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
 
     // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
@@ -103,6 +110,7 @@ export class TccDBusClientService implements OnDestroy {
             const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
             // this.utils.fillDefaultValuesProfile(activeProfile);
             if (this.previousActiveProfileJSON !== activeProfileJSON) {
+                this.utils.fillDefaultProfileTexts(activeProfile);
                 this.activeProfile.next(activeProfile);
                 this.previousActiveProfileJSON = activeProfileJSON;
             }
@@ -110,8 +118,9 @@ export class TccDBusClientService implements OnDestroy {
     }
 
     const defaultProfilesJSON: string = await this.tccDBusInterface.getDefaultProfilesJSON();
+    const defaultValuesProfileJSON: string = await this.tccDBusInterface.getDefaultValuesProfileJSON();
     const customProfilesJSON: string = await this.tccDBusInterface.getCustomProfilesJSON();
-    if (defaultProfilesJSON !== undefined && customProfilesJSON !== undefined) {
+    if (defaultProfilesJSON !== undefined && defaultValuesProfileJSON !== undefined && customProfilesJSON !== undefined) {
         try {
             if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
                 this.defaultProfiles.next(JSON.parse(defaultProfilesJSON));
@@ -121,10 +130,18 @@ export class TccDBusClientService implements OnDestroy {
                 this.customProfiles.next(JSON.parse(customProfilesJSON));
                 this.previousCustomProfilesJSON = customProfilesJSON;
             }
+            if (this.previousDefaultValuesProfileJSON !== defaultValuesProfileJSON) {
+                this.defaultValuesProfile.next(JSON.parse(defaultValuesProfileJSON));
+                this.previousDefaultValuesProfileJSON = defaultValuesProfileJSON;
+            }
         } catch (err) {
             console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
         }
     }
+  }
+
+  public async triggerUpdate() {
+    await this.periodicUpdate();
   }
 
   ngOnDestroy() {
@@ -132,5 +149,16 @@ export class TccDBusClientService implements OnDestroy {
     if (this.timeout !== undefined) {
       clearInterval(this.timeout);
     }
+    this.tccDBusInterface.disconnect();
+  }
+
+  public async setTempProfile(profileName: string) {
+    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileName(profileName);
+    return result;
+  }
+
+  public async setTempProfileById(profileId: string) {
+    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
+    return result;
   }
 }
