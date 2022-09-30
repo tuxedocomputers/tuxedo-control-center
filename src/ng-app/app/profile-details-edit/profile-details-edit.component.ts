@@ -545,7 +545,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild('cpuSettingsTabGroup', { static: false }) cpuTabGroup: MatTabGroup;
     public setActiveTab(index?: number) {
-        const defaultProfile = this.config.getDefaultProfiles()[0];
+        const defaultProfile = this.config.getDefaultValuesProfile();
         const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
         const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
 
@@ -562,6 +562,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         } else {
             this.selectedCPUTabIndex = 0;
         }
+        console.log(`selected tab: ${this.selectedCPUTabIndex}`);
 
         // Reset not chosen tab to default
         const resetNonChosenTabWhenNotSelected = false;
