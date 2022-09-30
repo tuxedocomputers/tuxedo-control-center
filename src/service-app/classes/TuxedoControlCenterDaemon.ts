@@ -403,8 +403,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const modInfo = new ModuleInfo();
         TuxedoIOAPI.getModuleInfo(modInfo);
 
-        console.log(`model: '${modInfo.model}' board name: '${boardName}' product sku: '${productSKU}`);
-
         const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
         dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
         dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
