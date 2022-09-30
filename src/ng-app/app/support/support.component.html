@@ -79,6 +79,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                         </mat-form-field> &nbsp;
                         <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
+                        <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty"
+                        class="alert alert-danger">
+                            <ng-container i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</ng-container>
+                        </div>
                     </form>
 
                 </mat-step>
