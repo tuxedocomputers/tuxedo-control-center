@@ -34,6 +34,9 @@ export class FanControlWorker extends DaemonWorker {
 
     private modeSameSpeed = false;
 
+    private fansOffAvailable: boolean = true;
+    private fansMinSpeedHWLimit: number = 0;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
     }
@@ -48,6 +51,14 @@ export class FanControlWorker extends DaemonWorker {
             if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
             if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
             if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+        }
+
+        this.fansOffAvailable = ioAPI.getFansOffAvailable();
+        this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
+
+        for (const fanNumber of this.fans.keys()) {
+            this.fans.get(fanNumber).fansMinSpeedHWLimit = this.fansMinSpeedHWLimit;
+            this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
         }
     }
 
