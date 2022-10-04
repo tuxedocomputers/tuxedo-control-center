@@ -110,6 +110,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public showFanGraphs = false;
 
+    public fansMinSpeed = 0;
+    public fansOffAvailable = true;
+
     @ViewChild('inputName') inputName: MatInput;
 
     constructor(
@@ -143,6 +146,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             }
         }));
+
+        this.subscriptions.add(this.tccDBus.fansMinSpeed.subscribe(
+            fansMinSpeed => { this.fansMinSpeed = fansMinSpeed; }
+        ));
+
+        this.subscriptions.add(this.tccDBus.fansOffAvailable.subscribe(
+            fansOffAvailable => { this.fansOffAvailable = fansOffAvailable; }
+        ));
     }
 
     ngOnDestroy() {

@@ -58,6 +58,9 @@ export class TccDBusClientService implements OnDestroy {
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
 
+  public fansMinSpeed = new BehaviorSubject<number>(0);
+  public fansOffAvailable = new BehaviorSubject<boolean>(true);
+
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -125,6 +128,9 @@ export class TccDBusClientService implements OnDestroy {
             console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
         }
     }
+
+    this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
+    this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
   }
 
   ngOnDestroy() {
