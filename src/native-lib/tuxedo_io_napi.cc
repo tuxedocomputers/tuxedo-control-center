@@ -91,9 +91,9 @@ Number GetFansMinSpeed(const CallbackInfo &info) {
 
 Boolean GetFansOffAvailable(const CallbackInfo &info) {
     TuxedoIOAPI io;
-    bool offAvailable = 0;
+    bool offAvailable = true;
     io.GetFansOffAvailable(offAvailable);
-    return Number::New(info.Env(), offAvailable);
+    return Boolean::New(info.Env(), offAvailable);
 }
 
 Number GetNumberFans(const CallbackInfo &info) {

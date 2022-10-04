@@ -89,6 +89,8 @@ public:
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) = 0;
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) = 0;
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) = 0;
+    virtual bool GetFansMinSpeed(int &minSpeed) = 0;
+    virtual bool GetFansOffAvailable(bool &offAvailable) = 0;
     virtual bool SetWebcam(const bool status) = 0;
     virtual bool GetWebcam(bool &status) = 0;
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
@@ -284,12 +286,12 @@ public:
     }
 
     virtual bool GetFansMinSpeed(int &minSpeed) {
-        return io->IoctlCall(R_UW_FANS_OFF_POSSIBLE, minSpeed);
+        return io->IoctlCall(R_UW_FANS_MIN_SPEED, minSpeed);
     }
 
     virtual bool GetFansOffAvailable(bool &offAvailable) {
         int result;
-        int ret = io->IoctlCall(R_UW_FANS_OFF_POSSIBLE, result);
+        int ret = io->IoctlCall(R_UW_FANS_OFF_AVAILABLE, result);
         offAvailable = result == 1;
         return ret;
     }
