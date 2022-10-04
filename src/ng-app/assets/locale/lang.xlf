@@ -135,8 +135,8 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="41d9fbf1328af76c6a3d4c2282e9472b40388324" datatype="html">
-        <source>Please enter the ticket number you received with your support request. If you do not have a ticket number, please contact us via our </source>
+      <trans-unit id="cSupportPleaseEnterTicketnumber" datatype="html">
+        <source>Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">75</context>
