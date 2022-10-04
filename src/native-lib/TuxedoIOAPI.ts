@@ -48,7 +48,7 @@ export interface ITuxedoIOAPI {
      * Get the information if the firmware allows the fan to be turned off
      * completely
      */
-    getFansOffAvailable(): number;
+    getFansOffAvailable(): boolean;
 
     /**
      * Get number of controllable fan interfaces,
