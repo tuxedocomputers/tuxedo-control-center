@@ -56,6 +56,9 @@ export class FanControlWorker extends DaemonWorker {
         this.fansOffAvailable = ioAPI.getFansOffAvailable();
         this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
 
+        this.tccd.dbusData.fansOffAvailable = this.fansOffAvailable;
+        this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
+
         for (const fanNumber of this.fans.keys()) {
             this.fans.get(fanNumber).fansMinSpeedHWLimit = this.fansMinSpeedHWLimit;
             this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
