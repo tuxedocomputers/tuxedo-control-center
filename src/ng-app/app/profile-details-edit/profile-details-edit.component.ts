@@ -562,7 +562,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         } else {
             this.selectedCPUTabIndex = 0;
         }
-        console.log(`selected tab: ${this.selectedCPUTabIndex}`);
 
         // Reset not chosen tab to default
         const resetNonChosenTabWhenNotSelected = false;
