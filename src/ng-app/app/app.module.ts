@@ -82,6 +82,7 @@ import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -104,7 +105,8 @@ declare const require;
     MainGuiComponent,
     AquarisControlComponent,
     DialogInputTextComponent,
-    DialogConfirmComponent
+    DialogConfirmComponent,
+    TomteGuiComponent
   ],
   imports: [
     BrowserModule,
