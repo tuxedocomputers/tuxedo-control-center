@@ -58,8 +58,8 @@ export class TccDBusClientService implements OnDestroy {
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
 
-  public fansMinSpeed = new BehaviorSubject<number>(0);
-  public fansOffAvailable = new BehaviorSubject<boolean>(true);
+  public fansMinSpeed = new BehaviorSubject<number>(undefined);
+  public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();

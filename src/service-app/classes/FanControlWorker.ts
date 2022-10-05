@@ -41,23 +41,24 @@ export class FanControlWorker extends DaemonWorker {
         super(1000, tccd);
     }
 
+    private initHardwareCapabilities() {
+        this.fansOffAvailable = ioAPI.getFansOffAvailable();
+        this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
+
+        this.tccd.dbusData.fansOffAvailable = this.fansOffAvailable;
+        this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
+    }
+
     private initFanControl(): void {
         const nrFans = ioAPI.getNumberFans();
 
         if (this.fans === undefined || this.fans.size !== nrFans) {
-
             // Map logic to fan number
             this.fans = new Map();
             if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
             if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
             if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
         }
-
-        this.fansOffAvailable = ioAPI.getFansOffAvailable();
-        this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
-
-        this.tccd.dbusData.fansOffAvailable = this.fansOffAvailable;
-        this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
 
         for (const fanNumber of this.fans.keys()) {
             this.fans.get(fanNumber).fansMinSpeedHWLimit = this.fansMinSpeedHWLimit;
@@ -66,6 +67,7 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onStart(): void {
+        this.initHardwareCapabilities();
         this.initFanControl();
 
         const useFanControl = this.getFanControlStatus();
