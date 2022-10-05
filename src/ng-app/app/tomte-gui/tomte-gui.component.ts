@@ -21,6 +21,7 @@ import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
+
 @Component({
   selector: 'app-tomte-gui',
   templateUrl: './tomte-gui.component.html',
@@ -33,15 +34,15 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ]
 })
 export class TomteGuiComponent implements OnInit {
-  tomteguitest = '';
+  tomteguitest = [];
 
   constructor(
     private electron: ElectronService,
-    private utils: UtilsService,
-    private renderer: Renderer2
+    private utils: UtilsService
+    //private renderer: Renderer2
   ) { }
 
-  @ViewChild('tomteList', { static: false }) tomteList: ElementRef;
+  //@ViewChild('tomteList', { static: false }) tomteList: ElementRef;
 
   ngOnInit() {
   }
@@ -61,21 +62,55 @@ export class TomteGuiComponent implements OnInit {
     private async tomtelist() {
 
     let command = "tomte list"
+    let results = await this.utils.execCmd(command);
+    // return this.utils.execCmd(command).then((data) => {
+    //         this.parseTomteList(data);
+    //     }).catch(function(err) {
+    //         console.log("tomte list failed!", err);
+    //     })
 
-    return this.utils.execCmd(command).then((data) => {
-            this.parseTomteList(data);
-        }).catch(function(err) {
-            console.log("tomte list failed!", err);
-        })
+    this.parseTomteList(results);
     }
 
     private parseTomteList(data){
         data = "" + data;
         data = data.split("\n");
+        let tomtelistarray = [];
         for (var i = 0; i < data.length; i++)
         {
-            this.renderer.appendChild(this.tomteList,'' + data[i]);
+            if (i < 2)
+            {
+                continue;
+            }
+            // fill array with proper values
+            let data2 = "" + data[i];
+            let array2 = (data2).split(/ +/);
+            //console.log("data[i]: ", data[i]);
+            //console.log("array2: ", array2);
+            tomtelistarray.push(array2);
         }
+        //console.log("tomtelistarray: ", tomtelistarray);
+        this.tomteguitest = tomtelistarray;
+    }
+
+    private tomteBlockButton(name)
+    {
+        // TODO just a mockup to see if I can make the html side of it working, later I have to add it actually doing something lololol
+        for (var i = 0; i < this.tomteguitest.length; i++)
+        {
+            if (this.tomteguitest[i] == name)
+            {
+                if (this.tomteguitest[i][3] == "no")
+                {
+                    this.tomteguitest[i][3] = "yes";
+                }
+                else
+                {
+                    this.tomteguitest[i][3] = "no";
+                }
+            }
+        }
+
     }
  
 }

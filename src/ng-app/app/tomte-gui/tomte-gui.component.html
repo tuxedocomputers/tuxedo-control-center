@@ -20,7 +20,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <h1>TUXEDO Tomte</h1>
 <br />
 
-<ng-container id="tomteList"> </ng-container> 
+<ng-container > 
+    <table class="tomte-list-output-table">
+    <tr *ngFor="let test of tomteguitest; first as isFirst">
+        <ng-container *ngIf="isFirst">
+            <thead>
+                <th>{{test[0]}}</th><th>{{test[1]}}</th><th>{{test[2]}}</th><th>{{test[3]}}</th><th>{{test[4]}}</th>
+            </thead>
+        </ng-container>
+        <ng-container *ngIf="!isFirst">
+            <td>{{test[0]}}</td>
+            <td>{{test[1]}}</td>
+            <td>{{test[2]}}</td>
+            <td>                             
+                <button mat-raised-button color="primary" (click)="tomteBlockButton(test[0])">
+                    <ng-container>{{test[3]}}</ng-container>
+                </button>
+            </td>
+            <td>{{test[4]}}</td>
+        </ng-container>
+    </tr>
+    </table>
+
+</ng-container> 
 
 
 <br />

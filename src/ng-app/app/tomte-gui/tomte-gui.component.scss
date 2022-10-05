@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.card-tomte {
-    .tomte-info-text {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+.tomte-list-output-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid purple;
+    th,
+    td {
+        padding: 20px;
+    }  
 }
