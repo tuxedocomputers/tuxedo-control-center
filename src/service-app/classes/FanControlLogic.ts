@@ -89,6 +89,7 @@ export class FanControlLogic {
         } else {
             this._fansMinSpeedHWLimit = speed;
         }
+        this._minimumFanspeed = this._minimumFanspeed < this._fansMinSpeedHWLimit ? this._fansMinSpeedHWLimit : this._minimumFanspeed;
     }
 
     /**
@@ -204,7 +205,7 @@ export class FanControlLogic {
 
         // Adjust for minimum speed parameter
         if (newSpeed < this.minimumFanspeed) {
-            if (this.fansOffAvailable && newSpeed < (this.minimumFanspeed / 2)) {
+            if (this.fansOffAvailable && (newSpeed < (this._fansMinSpeedHWLimit / 2))) {
                 newSpeed = 0;
             }
             else {
