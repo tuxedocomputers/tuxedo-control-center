@@ -150,7 +150,6 @@ export class FanControlWorker extends DaemonWorker {
 
         // Write fan speeds
         if (useFanControl) {
-            
             const highestSpeed = fanSpeedsSet.reduce((prev, cur) => cur > prev ? cur : prev, 0);
             for (const fanNumber of this.fans.keys()) {
                 const fanIndex = fanNumber - 1;
