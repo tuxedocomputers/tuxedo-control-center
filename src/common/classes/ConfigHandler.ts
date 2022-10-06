@@ -60,13 +60,20 @@ export class ConfigHandler {
     }
 
     readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
-        return this.readConfig<ITccProfile[]>(filePath).map(profile => {
+        let idUpdated = false;
+        const profiles = this.readConfig<ITccProfile[]>(filePath).map(profile => {
             if (profile.id === undefined) {
                 profile.id = generateProfileId();
                 console.log(`(readProfiles) Generated id (${profile.id}) for ${profile.name}`);
+                idUpdated = true;
             }
             return profile;
         });
+        if (idUpdated) {
+            this.writeProfiles(profiles);
+            console.log(`Saved updated profiles`);
+        }
+        return profiles;
     }
 
     writeProfiles(profiles: ITccProfile[], filePath: string = this.pathProfiles) {
