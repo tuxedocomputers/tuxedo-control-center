@@ -187,6 +187,22 @@ export class TccDBusController {
         }
     }
 
+    async getFansMinSpeed(): Promise<number> {
+        try {
+            return await this.interface.GetFansMinSpeed();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getFansOffAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.GetFansOffAvailable();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async odmPowerLimits(): Promise<TDPInfo[]> {
         try {
             return JSON.parse(await this.interface.ODMPowerLimitsJSON());

@@ -27,7 +27,7 @@
 #define MAGIC_READ_UW	IOCTL_MAGIC + 3
 #define MAGIC_WRITE_UW	IOCTL_MAGIC + 4
 
-#define MOD_API_MIN_VERSION "0.2.2" // IMPORTANT: Needs to be updated when a new ioctl is added
+#define MOD_API_MIN_VERSION "0.2.6" // IMPORTANT: Needs to be updated when a new ioctl is added
 
 // General
 #define R_MOD_VERSION		_IOR(IOCTL_MAGIC, 0x00, char*)
@@ -81,18 +81,20 @@
 
 #define R_UW_MODE		_IOR(MAGIC_READ_UW, 0x14, int32_t*)
 #define R_UW_MODE_ENABLE	_IOR(MAGIC_READ_UW, 0x15, int32_t*)
+#define R_UW_FANS_OFF_AVAILABLE	_IOR(MAGIC_READ_UW, 0x16, int32_t*)
+#define R_UW_FANS_MIN_SPEED	_IOR(MAGIC_READ_UW, 0x17, int32_t*)
 
-#define R_UW_TDP0		_IOR(MAGIC_READ_UW, 0x16, int32_t*)
-#define R_UW_TDP1		_IOR(MAGIC_READ_UW, 0x17, int32_t*)
-#define R_UW_TDP2		_IOR(MAGIC_READ_UW, 0x18, int32_t*)
-#define R_UW_TDP0_MIN		_IOR(MAGIC_READ_UW, 0x19, int32_t*)
-#define R_UW_TDP1_MIN		_IOR(MAGIC_READ_UW, 0x1a, int32_t*)
-#define R_UW_TDP2_MIN		_IOR(MAGIC_READ_UW, 0x1b, int32_t*)
-#define R_UW_TDP0_MAX		_IOR(MAGIC_READ_UW, 0x1c, int32_t*)
-#define R_UW_TDP1_MAX		_IOR(MAGIC_READ_UW, 0x1d, int32_t*)
-#define R_UW_TDP2_MAX		_IOR(MAGIC_READ_UW, 0x1e, int32_t*)
+#define R_UW_TDP0		_IOR(MAGIC_READ_UW, 0x18, int32_t*)
+#define R_UW_TDP1		_IOR(MAGIC_READ_UW, 0x19, int32_t*)
+#define R_UW_TDP2		_IOR(MAGIC_READ_UW, 0x1a, int32_t*)
+#define R_UW_TDP0_MIN		_IOR(MAGIC_READ_UW, 0x1b, int32_t*)
+#define R_UW_TDP1_MIN		_IOR(MAGIC_READ_UW, 0x1c, int32_t*)
+#define R_UW_TDP2_MIN		_IOR(MAGIC_READ_UW, 0x1d, int32_t*)
+#define R_UW_TDP0_MAX		_IOR(MAGIC_READ_UW, 0x1e, int32_t*)
+#define R_UW_TDP1_MAX		_IOR(MAGIC_READ_UW, 0x1f, int32_t*)
+#define R_UW_TDP2_MAX		_IOR(MAGIC_READ_UW, 0x20, int32_t*)
 
-#define R_UW_PROFS_AVAILABLE	_IOR(MAGIC_READ_UW, 0x1f, int32_t*)
+#define R_UW_PROFS_AVAILABLE	_IOR(MAGIC_READ_UW, 0x21, int32_t*)
 
 // Write
 #define W_UW_FANSPEED		_IOW(MAGIC_WRITE_UW, 0x10, int32_t*)

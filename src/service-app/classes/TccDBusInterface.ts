@@ -82,6 +82,8 @@ export class TccDBusData {
     public defaultValuesProfileJSON: string;
     public odmProfilesAvailable: string[];
     public odmPowerLimitsJSON: string;
+    public fansMinSpeed: number;
+    public fansOffAvailable: boolean;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -138,6 +140,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
     }
+    GetFansMinSpeed() { return this.data.fansMinSpeed; }
+    GetFansOffAvailable() { return this.data.fansOffAvailable; }
 }
 
 TccDBusInterface.configureMembers({
@@ -162,6 +166,8 @@ TccDBusInterface.configureMembers({
         GetDefaultValuesProfileJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
         ODMPowerLimitsJSON: { outSignature: 's' },
+        GetFansMinSpeed: { outSignature: 'i' },
+        GetFansOffAvailable: { outSignature: 'b' },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

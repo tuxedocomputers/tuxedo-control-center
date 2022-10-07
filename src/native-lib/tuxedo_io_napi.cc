@@ -86,6 +86,20 @@ Boolean SetEnableModeSet(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Number GetFansMinSpeed(const CallbackInfo &info) {
+    TuxedoIOAPI io;
+    int minSpeed = 0;
+    io.GetFansMinSpeed(minSpeed);
+    return Number::New(info.Env(), minSpeed);
+}
+
+Boolean GetFansOffAvailable(const CallbackInfo &info) {
+    TuxedoIOAPI io;
+    bool offAvailable = true;
+    io.GetFansOffAvailable(offAvailable);
+    return Boolean::New(info.Env(), offAvailable);
+}
+
 Number GetNumberFans(const CallbackInfo &info) {
     TuxedoIOAPI io;
     int nrFans = 0;
@@ -274,6 +288,8 @@ Object Init(Env env, Object exports) {
     exports.Set(String::New(env, "getOutputPorts"), Function::New(env, GetOutputPorts));
 
     // Fan control
+    exports.Set(String::New(env, "getFansMinSpeed"), Function::New(env, GetFansMinSpeed));
+    exports.Set(String::New(env, "getFansOffAvailable"), Function::New(env, GetFansOffAvailable));
     exports.Set(String::New(env, "getNumberFans"), Function::New(env, GetNumberFans));
     exports.Set(String::New(env, "setFansAuto"), Function::New(env, SetFansAuto));
     exports.Set(String::New(env, "setFanSpeedPercent"), Function::New(env, SetFanSpeedPercent));

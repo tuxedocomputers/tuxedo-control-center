@@ -39,6 +39,18 @@ export interface ITuxedoIOAPI {
     setEnableModeSet(enabled: boolean): boolean;
 
     /**
+     * Get the minimum speed the fan must be running for not making noises
+     * because it is stuttering
+     */
+    getFansMinSpeed(): number;
+
+    /**
+     * Get the information if the firmware allows the fan to be turned off
+     * completely
+     */
+    getFansOffAvailable(): boolean;
+
+    /**
      * Get number of controllable fan interfaces,
      * not necessarily the number of actual fans
      */

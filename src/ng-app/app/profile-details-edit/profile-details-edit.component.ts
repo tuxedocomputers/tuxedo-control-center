@@ -109,6 +109,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public profileFormProgress = false;
 
     private subscriptions: Subscription = new Subscription();
+    private fansMinSpeedSubscription: Subscription = new Subscription();
+    private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
 
@@ -128,6 +130,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public showCPUTabsCircles;
 
     public infoTooltipShowDelay = 700;
+
+    public fansMinSpeed = 0;
+    public fansOffAvailable = true;
 
     @ViewChild('inputName') inputName: MatInput;
 
@@ -174,6 +179,26 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }));
 
+        this.fansMinSpeedSubscription.add(this.tccDBus.fansMinSpeed.subscribe(
+            fansMinSpeed => {
+                if (fansMinSpeed !== undefined) {
+                    this.fansMinSpeedSubscription.unsubscribe();
+                    this.fansMinSpeed = fansMinSpeed;
+                    this.clampCurrentMinimumFanSpeedToHWCapabilities()
+                }
+            }
+        ));
+
+        this.fansOffAvailableSubscription.add(this.tccDBus.fansOffAvailable.subscribe(
+            fansOffAvailable => {
+                if (fansOffAvailable != undefined) {
+                    this.fansOffAvailableSubscription.unsubscribe();
+                    this.fansOffAvailable = fansOffAvailable;
+                    this.clampCurrentMinimumFanSpeedToHWCapabilities()
+                }
+            }
+        ));
+
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
@@ -191,6 +216,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
+    }
+
+    private clampCurrentMinimumFanSpeedToHWCapabilities() {
+        if (!this.fansOffAvailable) {
+            let minimumFanspeedValue = this.profileFormGroup.get('fan.minimumFanspeed').value
+            this.profileFormGroup.patchValue({fan: {minimumFanspeed: minimumFanspeedValue < this.fansMinSpeed ? this.fansMinSpeed : minimumFanspeedValue}});
+        }
     }
 
     public getStateInputs(): IStateInfo[] {

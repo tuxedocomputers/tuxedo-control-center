@@ -35,15 +35,25 @@ export class FanControlWorker extends DaemonWorker {
 
     private modeSameSpeed = false;
 
+    private fansOffAvailable: boolean = true;
+    private fansMinSpeedHWLimit: number = 0;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
+    }
+
+    private initHardwareCapabilities() {
+        this.fansOffAvailable = ioAPI.getFansOffAvailable();
+        this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
+
+        this.tccd.dbusData.fansOffAvailable = this.fansOffAvailable;
+        this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
     }
 
     private initFanControl(): void {
         const nrFans = ioAPI.getNumberFans();
 
         if (this.fans === undefined || this.fans.size !== nrFans) {
-
             // Map logic to fan number
             this.fans = new Map();
             if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
@@ -61,9 +71,15 @@ export class FanControlWorker extends DaemonWorker {
             this.fans.get(fanNumber).minimumFanspeed = this.activeProfile.fan.minimumFanspeed;
             this.fans.get(fanNumber).offsetFanspeed = this.activeProfile.fan.offsetFanspeed;
         }
+
+        for (const fanNumber of this.fans.keys()) {
+            this.fans.get(fanNumber).fansMinSpeedHWLimit = this.fansMinSpeedHWLimit;
+            this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
+        }
     }
 
     public onStart(): void {
+        this.initHardwareCapabilities();
         this.initFanControl();
 
         const useFanControl = this.getFanControlStatus();
@@ -142,7 +158,6 @@ export class FanControlWorker extends DaemonWorker {
 
         // Write fan speeds
         if (useFanControl) {
-            
             const highestSpeed = fanSpeedsSet.reduce((prev, cur) => cur > prev ? cur : prev, 0);
             for (const fanNumber of this.fans.keys()) {
                 const fanIndex = fanNumber - 1;
@@ -179,11 +194,12 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private getFanControlStatus(): boolean {
-        const dmi = new DMIController('/sys/class/dmi/id');
+        /*const dmi = new DMIController('/sys/class/dmi/id');
         const boardName = dmi.boardName.readValueNT();
+        // when adding or removing devices here don't forget to also alter hasFanControl() from compatibility.service.ts from tcc
         if (boardName === "GMxRGxx") {
             return false;
-        }
+        }*/
         return this.tccd.settings.fanControlEnabled;
     }
 }

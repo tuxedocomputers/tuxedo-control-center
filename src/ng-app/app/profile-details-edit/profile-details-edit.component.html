@@ -253,7 +253,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header i18n="@@cProfMgrDetailsMinFanSpeedLabel">Minimum fan speed</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.minimumFanspeed }} %</content>
+                            <content class="value" [hidden]="editProfile">{{ !fansOffAvailable && viewProfile.fan.minimumFanspeed < fansMinSpeed ? fansMinSpeed : viewProfile.fan.minimumFanspeed }} %</content>
                             <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }} %</content>
                             <button mat-icon-button color="primary"
                                 [hidden]="!editProfile"
@@ -274,7 +274,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <content class="input" [hidden]="!editProfile">
                                 <mat-slider #inputMinimumFanspeed
                                     formControlName="minimumFanspeed"
-                                    [min]="0"
+                                    [min]="fansOffAvailable ? 0 : fansMinSpeed"
                                     [max]="100"
                                     step="1"
                                     color="primary">
