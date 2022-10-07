@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2021-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -31,7 +31,7 @@ export class ODMProfileWorker extends DaemonWorker {
         const availableProfiles: ObjWrapper<string[]> = { value: [] };
         const odmProfilesAvailable = ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
         if (odmProfilesAvailable) {
-            const odmProfileSettings = this.tccd.getCurrentProfile().odmProfile;
+            const odmProfileSettings = this.activeProfile.odmProfile;
             let chosenODMProfileName;
             if (odmProfileSettings !== undefined) {
                 chosenODMProfileName = odmProfileSettings.name;

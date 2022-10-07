@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -22,63 +22,42 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         'selected': isSelected,
         'tile-active': active
     }"
-    *ngIf="visible"
-    (mouseenter)="activateOverlay(true)"
-    (mouseleave)="activateOverlay(false)">
+    *ngIf="visible">
 
-    <div class="overlay" [ngClass]="{'show': showOverlay}" *ngIf="!addProfileTile">
-        <div class="overlay-content">
-            <div class="icon-bar">
-                <button mat-icon-button disableRipple (click)="copyProfile(profile)">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
-                </button>
-                <button mat-icon-button disableRipple (click)="deleteProfile()" *ngIf="isCustomProfile && !used">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
-                </button>
-                <button mat-icon-button disableRipple (click)="selectProfile()">
-                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-                </button>
-            </div>
-            <div class="state-selector">
-                <mat-button-toggle-group color="primary"
-                    [formControl]="selectStateControl"
-                    multiple
-                    matTooltipPosition="left">
-                    <mat-button-toggle
-                        *ngFor="let state of stateInputArray"
-                        disableRipple
-                        [disabled]="getSettings().stateMap[state.value] === profile.name"
-                        [value]="state.value">
-                        <svg viewBox="0 0 512 512">
-                            <use attr.href="./assets/images/{{ state.icon }}"></use>
-                        </svg>
-                        <span class="label">{{ state.label }}</span>
-                    </mat-button-toggle>
-                </mat-button-toggle-group>
-                <div class="state-buttons">
-                    <button
-                        (click)="saveStateSelection()"
-                        mat-icon-button
-                        disableRipple
-                        *ngIf="selectStateControl.dirty">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_save.svg#Icon"></use></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <mat-menu #menuAdjust="matMenu" class="adjust-menu" yPosition="below">
+        <button mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
+            <span i18n="@@ProfOverviewTileMenuEdit">Edit</span>
+        </button>
+        <button mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
+            <mat-icon>visibility</mat-icon>
+            <span i18n="@@ProfOverviewTileMenuView">View</span>
+        </button>
+        <button mat-menu-item (click)="copyProfile(profile)">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_copy.svg#Icon"></use></svg>
+            <span i18n="@@ProfOverviewTileMenuCopy">Copy</span>
+        </button>
+        <button mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
+            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+            <span i18n="@@ProfOverviewTileMenuDelete">Delete</span>
+        </button>
+    </mat-menu>
 
     <mat-card-content>
         <div class="state-status-icons" *ngIf="!addProfileTile">
-            <div *ngIf="active" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color:#75df47;"></div>
-            <div *ngIf="!active && used" class="dot" style="display:inline-block; border-radius: 50%; width:10px; height: 10px; background-color: grey;"></div>
-
-            <div class="state-icon" *ngFor="let state of getStateInputs()">
-                <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.name">
-                    <use attr.href="./assets/images/{{ state.icon }}"></use>
-                </svg>
+            <mat-slide-toggle class="green-slide-toggle" [disabled]="false" [checked]="active" (click)="activateProfile(); false;"></mat-slide-toggle>
+            <div class="group-right">
+                <div class="state-icon" *ngFor="let state of getStateInputs()">
+                    <svg viewBox="0 0 512 512" *ngIf="getSettings().stateMap[state.value] === profile.id">
+                        <use attr.href="./assets/images/{{ state.icon }}"></use>
+                    </svg>
+                </div>
+                <button mat-icon-button [matMenuTriggerFor]="menuAdjust">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
             </div>
         </div>
+
         <div class="state-status-icons" *ngIf="addProfileTile"></div>
 
         <div class="profile-icon">
@@ -93,9 +72,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <span class="profile-name" i18n="@@ProfMgrOverviewNewProfile">New profile</span>
         </header>
 
-        <mat-divider></mat-divider>
+        <content *ngIf="!addProfileTile && !showDetails">
+            <div class="description">
+                {{ profile.description }}
+            </div>
+        </content>
 
-        <span *ngIf="!addProfileTile">
+        <content *ngIf="!addProfileTile && showDetails">
             <div class="status-flexbox">
                 <div class="status-component" [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled}">
                     <div class="status-icon-container">
@@ -109,13 +92,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="status-icon-container">
                         <svg viewBox="0 0 336 512"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                     </div>
-                    <span class="status-info">
+                    <span class="status-info" *ngIf="selectedCPUTabIndex === 1">
                         <span *ngIf="!profile.cpu.useMaxPerfGov && (cpuInfo.boost === undefined || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatFrequency(profile.cpu.scalingMaxFrequency) }} GHz</span>
                         <span *ngIf="!profile.cpu.useMaxPerfGov && !(cpuInfo.boost === undefined || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">{{ formatFrequency(profile.cpu.scalingMinFrequency) }} - Boost</span>
                         <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </span>
+                    <span class="status-info" *ngIf="selectedCPUTabIndex === 0">
+                        <ng-container *ngIf="odmPowerLimitInfos.length > 0">{{ profile.odmPowerLimits.tdpValues[0] }} W</ng-container>
+                        <ng-container *ngIf="odmPowerLimitInfos.length > 1">, {{ profile.odmPowerLimits.tdpValues[1] }} W</ng-container>
+                    </span>
                 </div>
-                <div class="status-component" *ngIf="compat.hasODMProfileControl">
+                <div class="status-component" *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <div class="status-icon-container">
                         <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
                     </div>
@@ -149,12 +136,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </span>
                 </div>
             </div>
-        </span>
+        </content>
 
-        <span *ngIf="addProfileTile" class="add-profile-content">
-            <div style="position:relative; top:10px; text-align: center;">
-                <button mat-icon-button color="primary" style="cursor: default;"><mat-icon>add_box</mat-icon></button>
+        <content *ngIf="addProfileTile" class="add-profile">
+            <div class="description" i18n="@@ProfOverviewTileNewProfileDescription">
+                Create a new profile and configure it as you want
             </div>
-        </span>
+        </content>
     </mat-card-content>
 </mat-card>

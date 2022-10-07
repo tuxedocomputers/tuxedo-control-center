@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,6 +21,7 @@
 
 @import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
 @import './app/profile-details-edit/profile-details-edit.component-theme.scss';
+@import './tcc-general-defs-theme.scss';
 @import './tcc-gauge-theme.scss';
 @import './tcc-changelog-theme.scss';
 @import './tcc-charts-theme.scss';
@@ -31,6 +32,7 @@
     @include profile-details-edit-theme($theme);
 
     // Other components
+    @include tcc-general-defs-theme($theme);
     @include tcc-gauge-theme($theme);
     @include tcc-changelog-theme($theme);
     @include tcc-charts-theme($theme);

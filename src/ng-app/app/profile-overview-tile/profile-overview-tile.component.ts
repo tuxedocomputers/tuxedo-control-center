@@ -28,6 +28,7 @@ import { CompatibilityService } from '../compatibility.service';
 import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 
 @Component({
     selector: 'app-profile-overview-tile',
@@ -51,9 +52,9 @@ export class ProfileOverviewTileComponent implements OnInit {
      */
     @Input() addProfileTile = false;
 
-    @Output() copyClick = new EventEmitter<string>();
+    @Input() showDetails = false;
 
-    public showOverlay = false;
+    @Output() copyClick = new EventEmitter<string>();
 
     public selectStateControl: FormControl;
     public stateInputArray: IStateInfo[];
@@ -66,6 +67,9 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
+
+    public odmPowerLimitInfos: TDPInfo[];
+    public selectedCPUTabIndex: number;
 
     constructor(
         private utils: UtilsService,
@@ -83,15 +87,15 @@ export class ProfileOverviewTileComponent implements OnInit {
 
         if (!this.addProfileTile) {
             if (this.selectStateControl === undefined) {
-                this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.name));
+                this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.id));
             } else {
-                this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
+                this.selectStateControl.reset(this.state.getProfileStates(this.profile.id));
             }
         }
 
         this.stateInputArray = this.state.getStateInputs();
         if (this.profile) {
-            this.isCustomProfile = this.config.getCustomProfileByName(this.profile.name) !== undefined;
+            this.isCustomProfile = this.config.getCustomProfileById(this.profile.id) !== undefined;
         }
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
@@ -105,6 +109,19 @@ export class ProfileOverviewTileComponent implements OnInit {
                 }
             }
         }));
+
+        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
+            if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
+                this.odmPowerLimitInfos = nextODMPowerLimits;
+                if (this.profile) {
+                    this.selectedCPUTabIndex = this.selectCPUCtlShown();
+                }
+            }
+        }));
+
+        if (this.profile) {
+            this.selectedCPUTabIndex = this.selectCPUCtlShown();
+        }
     }
 
     public getStateInputs(): IStateInfo[] {
@@ -119,30 +136,29 @@ export class ProfileOverviewTileComponent implements OnInit {
         return this.utils.formatFrequency(frequency);
     }
 
-    public activateOverlay(status: boolean): void {
-        if (!this.addProfileTile) {
-            if (status === true) {
-                this.selectStateControl.reset(this.state.getProfileStates(this.profile.name));
-            }
-            this.showOverlay = status;
+    public activateProfile(): void {
+        if (!this.active) {
+            this.tccDBus.setTempProfileById(this.profile.id);
         }
     }
 
     public selectProfile(): void {
         setImmediate(() => {
-            this.router.navigate(['profile-manager', this.profile.name], { relativeTo: this.route.parent });
+            this.router.navigate(['profile-manager', this.profile.id], { relativeTo: this.route.parent });
         });
     }
 
     public deleteProfile(): void {
-        this.config.deleteCustomProfile(this.profile.name);
-        this.utils.pageDisabled = false;
+        this.utils.pageDisabled = true;
+        this.config.deleteCustomProfile(this.profile.id).then(success => {
+            this.utils.pageDisabled = false;
+        });
     }
 
     public saveStateSelection(): void {
         this.utils.pageDisabled = true;
         const profileStateAssignments: string[] = this.selectStateControl.value;
-        this.config.writeProfile(this.profile.name, this.profile, profileStateAssignments).then(success => {
+        this.config.writeProfile(this.profile.id, this.profile, profileStateAssignments).then(success => {
             if (success) {
                 this.selectStateControl.markAsPristine();
             }
@@ -151,14 +167,38 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
 
     public getProfileIcon(profile: ITccProfile): string {
-        if (profileImageMap.get(profile.name) !== undefined) {
-            return profileImageMap.get(profile.name);
+        if (profileImageMap.get(profile.id) !== undefined) {
+            return profileImageMap.get(profile.id);
         } else {
             return profileImageMap.get('custom');
         }
     }
 
     public copyProfile() {
-        this.copyClick.emit(this.profile.name);
+        this.copyClick.emit(this.profile.id);
+    }
+
+    public selectCPUCtlShown(): number {
+        const defaultProfile = this.config.getDefaultProfiles()[0];
+        const powerNotDefault = JSON.stringify(this.profile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+        const cpufreqNotDefault = JSON.stringify(this.profile.cpu) !== JSON.stringify(defaultProfile.cpu);
+        const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
+
+        const INDEX_ODMCPUTDP = 0;
+        const INDEX_CPUFREQ = 1;
+
+        let selectedCPUTabIndex;
+
+        if (cpuFreqOnly) {
+            selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else if (powerNotDefault) {
+            selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        } else if (cpufreqNotDefault) {
+            selectedCPUTabIndex = INDEX_CPUFREQ;
+        } else {
+            selectedCPUTabIndex = INDEX_ODMCPUTDP;
+        }
+
+        return selectedCPUTabIndex;
     }
 }

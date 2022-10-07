@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -27,6 +27,12 @@ mat-toolbar {
         mat-button-toggle-group {
             transform: scale(0.7);
             transform-origin: right;
+
+            svg {
+                width: 40px;
+                height: 40px;
+                --icon-detail: var(--icon-main);
+            }
         }
 
         form {
@@ -64,7 +70,7 @@ mat-toolbar {
     left: 0px;
     margin: 0px;
     padding: 0px;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     &.offset {
         top: 100px;
