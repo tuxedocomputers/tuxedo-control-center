@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -41,6 +41,10 @@ Boolean GetModuleInfo(const CallbackInfo &info) {
     } else {
         moduleInfo.Set("activeInterface", "inactive");
     }
+    
+    std::string deviceIdStr;
+    io.DeviceModelIdStr(deviceIdStr);
+    moduleInfo.Set("model", deviceIdStr);
 
     return Boolean::New(info.Env(), result);
 }
@@ -232,6 +236,49 @@ Boolean GetDefaultODMPerformanceProfile(const CallbackInfo &info) {
     return Boolean::New(info.Env(), result);
 }
 
+Boolean GetTDPInfo(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsArray()) { throw Napi::Error::New(info.Env(), "GetTDPInfo - invalid argument"); }
+    Array tdpArray = info[0].As<Array>();
+    TuxedoIOAPI io;
+    bool result;
+    int nrTDPs = 0;
+    std::vector<std::string> tdpDescriptors;
+    io.GetTDPDescriptors(tdpDescriptors);
+    result = io.GetNumberTDPs(nrTDPs);
+    for (int i = 0; i < nrTDPs; ++i) {
+        Object tdpInfo = Object::New(info.Env());
+        int minValue, maxValue, currentValue;
+        io.GetTDPMin(i, minValue);
+        io.GetTDPMax(i, maxValue);
+        io.GetTDP(i, currentValue);
+        tdpInfo.Set("min", minValue);
+        tdpInfo.Set("max", maxValue);
+        tdpInfo.Set("current", currentValue);
+        tdpInfo.Set("descriptor", tdpDescriptors.at(i));
+        tdpArray[i] = tdpInfo;
+    }
+    return Boolean::New(info.Env(), result);
+}
+
+Boolean SetTDPValues(const CallbackInfo &info) {
+    if (info.Length() != 1 || !info[0].IsArray()) { throw Napi::Error::New(info.Env(), "SetTDP - invalid argument"); }
+    TuxedoIOAPI io;
+    Array tdpValues = info[0].As<Array>();
+    int nrInputs = tdpValues.Length();
+    bool result;
+    int nrTDPs = 0;
+    result = io.GetNumberTDPs(nrTDPs);
+    for (int i = 0; i < nrTDPs && i < nrInputs; ++i) {
+        int32_t tdpValue;
+        napi_status apiStatus = napi_get_value_int32(info.Env(), tdpValues.Get(i), &tdpValue);
+        if (apiStatus != napi_ok) {
+            throw Napi::Error::New(info.Env(), "SetTDP - invalid array element type");
+        }
+        io.SetTDP(i, tdpValue);
+    }
+    return Boolean::New(info.Env(), result);
+}
+
 Object Init(Env env, Object exports) {
     // General
     exports.Set(String::New(env, "getModuleInfo"), Function::New(env, GetModuleInfo));
@@ -257,6 +304,10 @@ Object Init(Env env, Object exports) {
     exports.Set(String::New(env, "getAvailableODMPerformanceProfiles"), Function::New(env, GetAvailableODMPerformanceProfiles));
     exports.Set(String::New(env, "setODMPerformanceProfile"), Function::New(env, SetODMPerformanceProfile));
     exports.Set(String::New(env, "getDefaultODMPerformanceProfile"), Function::New(env, GetDefaultODMPerformanceProfile));
+
+    // TDP Control
+    exports.Set(String::New(env, "getTDPInfo"), Function::New(env, GetTDPInfo));
+    exports.Set(String::New(env, "setTDPValues"), Function::New(env, SetTDPValues));
 
     return exports;
 }

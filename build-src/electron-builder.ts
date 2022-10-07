@@ -50,7 +50,7 @@ async function buildDeb(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
         ],
         linux: {
@@ -108,7 +108,7 @@ async function buildSuseRpm(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
         ],
         linux: {
@@ -167,7 +167,7 @@ async function buildAppImage(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
         ],
         linux: {

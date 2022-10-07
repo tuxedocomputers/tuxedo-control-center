@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of tuxedo-io.
  *
@@ -72,6 +72,8 @@
  */
 
 // Read
+#define R_UW_HW_IF_STR		_IOR(MAGIC_READ_UW, 0x00, char*)
+#define R_UW_MODEL_ID		_IOR(MAGIC_READ_UW, 0x01, int32_t*)
 #define R_UW_FANSPEED		_IOR(MAGIC_READ_UW, 0x10, int32_t*)
 #define R_UW_FANSPEED2		_IOR(MAGIC_READ_UW, 0x11, int32_t*)
 #define R_UW_FAN_TEMP		_IOR(MAGIC_READ_UW, 0x12, int32_t*)
@@ -82,11 +84,29 @@
 #define R_UW_FANS_OFF_AVAILABLE	_IOR(MAGIC_READ_UW, 0x16, int32_t*)
 #define R_UW_FANS_MIN_SPEED	_IOR(MAGIC_READ_UW, 0x17, int32_t*)
 
+#define R_UW_TDP0		_IOR(MAGIC_READ_UW, 0x16, int32_t*)
+#define R_UW_TDP1		_IOR(MAGIC_READ_UW, 0x17, int32_t*)
+#define R_UW_TDP2		_IOR(MAGIC_READ_UW, 0x18, int32_t*)
+#define R_UW_TDP0_MIN		_IOR(MAGIC_READ_UW, 0x19, int32_t*)
+#define R_UW_TDP1_MIN		_IOR(MAGIC_READ_UW, 0x1a, int32_t*)
+#define R_UW_TDP2_MIN		_IOR(MAGIC_READ_UW, 0x1b, int32_t*)
+#define R_UW_TDP0_MAX		_IOR(MAGIC_READ_UW, 0x1c, int32_t*)
+#define R_UW_TDP1_MAX		_IOR(MAGIC_READ_UW, 0x1d, int32_t*)
+#define R_UW_TDP2_MAX		_IOR(MAGIC_READ_UW, 0x1e, int32_t*)
+
+#define R_UW_PROFS_AVAILABLE	_IOR(MAGIC_READ_UW, 0x1f, int32_t*)
+
 // Write
 #define W_UW_FANSPEED		_IOW(MAGIC_WRITE_UW, 0x10, int32_t*)
 #define W_UW_FANSPEED2		_IOW(MAGIC_WRITE_UW, 0x11, int32_t*)
 #define W_UW_MODE		_IOW(MAGIC_WRITE_UW, 0x12, int32_t*)
 #define W_UW_MODE_ENABLE	_IOW(MAGIC_WRITE_UW, 0x13, int32_t*)
-#define W_UW_FANAUTO	_IO(MAGIC_WRITE_UW, 0x14) // undo all previous calls of W_UW_FANSPEED and W_UW_FANSPEED2
+#define W_UW_FANAUTO		_IO(MAGIC_WRITE_UW, 0x14) // undo all previous calls of W_UW_FANSPEED and W_UW_FANSPEED2
+
+#define W_UW_TDP0		_IOW(MAGIC_WRITE_UW, 0x15, int32_t*)
+#define W_UW_TDP1		_IOW(MAGIC_WRITE_UW, 0x16, int32_t*)
+#define W_UW_TDP2		_IOW(MAGIC_WRITE_UW, 0x17, int32_t*)
+
+#define W_UW_PERF_PROF		_IOW(MAGIC_WRITE_UW, 0x18, int32_t*)
 
 #endif
