@@ -89,6 +89,8 @@ public:
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) = 0;
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) = 0;
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) = 0;
+    virtual bool GetFansMinSpeed(int &minSpeed) = 0;
+    virtual bool GetFansOffAvailable(bool &offAvailable) = 0;
     virtual bool SetWebcam(const bool status) = 0;
     virtual bool GetWebcam(bool &status) = 0;
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
@@ -116,6 +118,16 @@ public:
 
     virtual bool SetEnableModeSet(bool enabled) {
         // Nothing to do (..yet)
+        return true;
+    }
+
+    virtual bool GetFansMinSpeed(int &minSpeed) {
+        minSpeed = 0;
+        return true;
+    }
+
+    virtual bool GetFansOffAvailable(bool &offAvailable) {
+        offAvailable = true;
         return true;
     }
 
@@ -273,6 +285,17 @@ public:
         return io->IoctlCall(W_UW_MODE_ENABLE, enabledSet);
     }
 
+    virtual bool GetFansMinSpeed(int &minSpeed) {
+        return io->IoctlCall(R_UW_FANS_MIN_SPEED, minSpeed);
+    }
+
+    virtual bool GetFansOffAvailable(bool &offAvailable) {
+        int result;
+        int ret = io->IoctlCall(R_UW_FANS_OFF_AVAILABLE, result);
+        offAvailable = result == 1;
+        return ret;
+    }
+
     virtual bool GetNumberFans(int &nrFans) {
         nrFans = 2;
         return true;
@@ -374,6 +397,24 @@ public:
 
 private:
     const int MAX_FAN_SPEED = 0xc8;
+
+    bool GetFanInfo(int fanNr, int &fanInfo) {
+        if (fanNr < 0 || fanNr >= 3) return false;
+        bool result = false;
+        int argument = 0;
+        if (fanNr == 0) {
+            result = io->IoctlCall(R_CL_FANINFO1, argument);
+        } else if (fanNr == 1) {
+            result = io->IoctlCall(R_CL_FANINFO2, argument);
+        } else if (fanNr == 2) {
+            result = io->IoctlCall(R_CL_FANINFO3, argument);
+        } else if (fanNr == 3) {
+            // result = IoctlCall(R_CL_FANINFO4, argument);
+        }
+
+        fanInfo = argument;
+        return result;
+    }
 };
 
 #define TUXEDO_IO_DEVICE_FILE "/dev/tuxedo_io"
@@ -434,6 +475,22 @@ public:
     virtual bool SetEnableModeSet(bool enabled) {
         if (activeInterface) {
             return activeInterface->SetEnableModeSet(enabled);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetFansMinSpeed(int &minSpeed) {
+        if (activeInterface) {
+            return activeInterface->GetFansMinSpeed(minSpeed);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetFansOffAvailable(bool &offAvailable) {
+        if (activeInterface) {
+            return activeInterface->GetFansOffAvailable(offAvailable);
         } else {
             return false;
         }

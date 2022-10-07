@@ -1,16 +1,24 @@
 # Changelog
 
+## [1.1.8] - 2022-10-06
+### Added
+- Checks to detect a valid ticket number to send with the systeminfos
+  plus info about what could be missing or wrong
+
+### Changed
+- Re-enable fan control for Stellaris AMD Gen 4
+- Fan control logic change for newer devices taking into account
+  min fan speed and fan off possibility from driver
+
 ## [1.1.7] - 2022-09-19
 ### Added
 - Basic support for Stellaris AMD Gen 4
 
 ## [1.1.6] - 2022-08-01
-
 ### Changed
 - Packaging dependency tweaks (RPM) for wider compatibility
 
 ## [1.1.5] - 2022-07-15
-
 ### Added
 - TUXEDO Aquaris control
   - Fan speed presets

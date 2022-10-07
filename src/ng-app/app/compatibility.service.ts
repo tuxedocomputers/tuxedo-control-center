@@ -59,11 +59,12 @@ export class CompatibilityService {
 
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
   get hasFanControl(): boolean {
-    const dmi = new DMIController('/sys/class/dmi/id');
+    /*const dmi = new DMIController('/sys/class/dmi/id');
     const boardName = dmi.boardName.readValueNT();
+    // when adding or removing devices here don't forget to also alter getFanControlStatus() from FanControlWorker.ts from tccd
     if (boardName === "GMxRGxx") {
       return false;
-    }
+    }*/
     return this.tccDbus.tuxedoWmiAvailable.value;
   }
 

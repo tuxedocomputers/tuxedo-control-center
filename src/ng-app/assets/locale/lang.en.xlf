@@ -139,10 +139,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -157,9 +157,9 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="41d9fbf1328af76c6a3d4c2282e9472b40388324" datatype="html">
-        <source>Please enter the ticket number you received with your support request. If you do not have a ticket number, please contact us via our </source>
-        <target state="translated">Please enter the ticket number you received with your support request. If you do not have a ticket number, please contact us via our </target>
+      <trans-unit id="cSupportPleaseEnterTicketnumber" datatype="html">
+        <source>Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </source>
+        <target state="translated">Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">75</context>
@@ -167,7 +167,7 @@
       </trans-unit>
       <trans-unit id="0f35774daf67e2f0a41f46b993cf1703729ce6eb" datatype="html">
         <source>online form</source>
-        <target state="translated">online form</target>
+        <target state="translated">online form.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">76</context>
@@ -194,15 +194,15 @@
         <target state="translated">Step2: Download and run system info collection program</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
-        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSysInfoButtonStart" datatype="html">
@@ -210,7 +210,7 @@
         <target state="translated">Start</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cce829a702e81f886537f80d26a35c42ca490493" datatype="html">
@@ -218,7 +218,7 @@
         <target state="translated">Step 3: Done</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSysInfoTextDone1" datatype="html">
@@ -226,7 +226,7 @@
         <target state="translated">Your system diagnostics data has been successfully sent.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSysInfoTextDone2" datatype="html">
@@ -234,7 +234,7 @@
         <target state="translated">We will come back to you as soon as this has been evaluated.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05334eb54d90e0decd20459303745a36c8e2fb6e" datatype="html">
@@ -242,19 +242,19 @@
         <target state="translated">Remote support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i> "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt; "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">116,118</context>
+          <context context-type="linenumber">120,122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c2c9a2834e262fceffd58430cbfbbc0940f4414d" datatype="html">
@@ -262,18 +262,18 @@
         <target state="translated">Restore system</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">143,144</context>
+          <context context-type="linenumber">147,148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f4c3c56f07426469538deb72dab3e760f1b6cc4" datatype="html">
@@ -284,12 +284,20 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cSupportTicketNumberInvalid" datatype="html">
+        <source>Ticket number may only contain numbers, starts with 990 and is 9 digits long.</source>
+        <target state="translated">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cSupportAnydeskInstallButton" datatype="html">
         <source>Install Anydesk</source>
         <target state="translated">Install AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportAnydeskRemoveButton" datatype="html">
@@ -297,7 +305,7 @@
         <target state="translated">Remove AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportAnydeskProgressButton" datatype="html">
@@ -305,7 +313,7 @@
         <target state="translated">Checking</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportAnydeskStartButton" datatype="html">
@@ -313,7 +321,7 @@
         <target state="translated">Start AnyDesk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebFAICreatorInstallButton" datatype="html">
@@ -321,7 +329,7 @@
         <target state="translated">Install WebFAI Creator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebFAICreatorRemoveButton" datatype="html">
@@ -329,7 +337,7 @@
         <target state="translated">Remove WebFAI Creator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebFAICreatorProgressButton" datatype="html">
@@ -337,7 +345,7 @@
         <target state="translated">Checking</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebFAICreatorStartButton" datatype="html">
@@ -345,7 +353,7 @@
         <target state="translated">Start WebFAI Creator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ProfMgrOverviewNewProfile" datatype="html">
@@ -605,14 +613,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cc363dec382fbe3f178f63e99e788a4bf6fb8053" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>&#10;                "/> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>&#10;                "/> With 3 premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
-        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;&#xA;                "/> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;&#xA;                "/> With 3 premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
                 With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
                 safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>
                 With 3 premade as well as any number of individually configurable profiles, you have
                 the greatest possible control and adaptability of your TUXEDO device to your needs.
-            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
+            <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">31,36</context>
@@ -965,8 +973,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="243c85168792d2dacd3e7a9868767d947b7df7ac" datatype="html">
-        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong> "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
-        <target state="needs-adaptation">On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> reset to default. Default settings need to be restored by hand or a system reboot.</target>
+        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
+        <target state="needs-adaptation">On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> reset to default. Default settings need to be restored by hand or a system reboot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1182,12 +1190,12 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
-        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
+        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target state="needs-adaptation">
-          <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
-          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to
-            reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending
-            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+          <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
+          <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to
+            reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
+            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
@@ -1399,7 +1407,6 @@ Commercial register number - Part B of the commercial register - 27755
       <trans-unit id="aqDialogConnectTitle" datatype="html">
         <source>Are you ready to connect to your Aquaris?</source>
         <target state="translated">Are you ready to connect to your Aquaris?</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">385</context>
@@ -1601,7 +1608,6 @@ Commercial register number - Part B of the commercial register - 27755
       <trans-unit id="aqLowFanSpeedNotice" datatype="html">
         <source>Low fan speeds (&lt; 50%) may cause interference noise</source>
         <target state="translated">Low fan speeds (&lt; 50%) may cause interference noise</target>
-        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">89</context>
@@ -1767,22 +1773,6 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU settings deactivated in Tools→Global Settings</source>
-        <target state="translated">CPU settings deactivated in Tools→Global Settings</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="messageFanControlOff" datatype="html">
-        <source>Fan control deactivated in Tools→Global Settings</source>
-        <target state="translated">Fan control deactivated in Tools→Global Settings</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">109</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
         <source>Mains</source>
         <target state="translated">Mains</target>
@@ -1815,12 +1805,28 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="messageCPUSettingsOff" datatype="html">
+        <source>CPU settings deactivated in Tools→Global Settings</source>
+        <target state="translated">CPU settings deactivated in Tools→Global Settings</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageFanControlOff" datatype="html">
+        <source>Fan control deactivated in Tools→Global Settings</source>
+        <target state="translated">Fan control deactivated in Tools→Global Settings</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
         <source>This feature is not supported on your model.</source>
         <target state="translated">This feature is not supported on your model.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
@@ -1828,7 +1834,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">This feature is not supported on your model.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
     </body>

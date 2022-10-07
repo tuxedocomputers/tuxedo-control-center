@@ -170,6 +170,22 @@ export class TccDBusController {
         }
     }
 
+    async getFansMinSpeed(): Promise<number> {
+        try {
+            return await this.interface.GetFansMinSpeed();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getFansOffAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.GetFansOffAvailable();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
     }
