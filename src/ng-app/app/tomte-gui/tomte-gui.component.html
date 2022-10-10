@@ -74,7 +74,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <button 
                             class ="tomte-no-button"
                             [disabled]="test[4] === 'prerequisite'" 
-                            (click)="tomteBlockButton(test[0])"
+                            (click)="tomteBlockButton(test[0],test[3])"
                             matTooltip="Block this module"
                     >
                         <ng-container>{{test[3]}}</ng-container>
@@ -84,7 +84,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <button 
                             class ="tomte-yes-button"
                             [disabled]="test[4] === 'prerequisite'" 
-                            (click)="tomteBlockButton(test[0])"
+                            (click)="tomteBlockButton(test[0],test[3])"
                             matTooltip="Unblock this module"
                     >
                         <ng-container>{{test[3]}}</ng-container>

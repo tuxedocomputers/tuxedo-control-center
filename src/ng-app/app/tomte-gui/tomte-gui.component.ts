@@ -103,27 +103,18 @@ export class TomteGuiComponent implements OnInit {
         this.tomtelist();
     }
 
-    private tomteBlockButton(name)
+    private async tomteBlockButton(name,yesno)
     {
-        // TODO just a mockup to see if I can make the html side of it working, later I have to add it actually doing something lololol
-        let j = 0;
-        for (var i = 0; i < this.tomteList.length; i++)
+        let command = "pkexec /bin/sh -c 'tomte block " + name + "'";
+        if (yesno === "yes")
         {
-            if (("" + this.tomteList[i]).match(name))
-            {
-                if (this.tomteList[i][3] == "no")
-                {
-                    this.tomteList[i][3] = "yes";
-                }
-                else
-                {
-                    this.tomteList[i][3] = "no";
-                }
-                j = i;
-                break;
-            }
+            command = "pkexec /bin/sh -c 'tomte unblock " + name + "'";
         }
-        console.log("hihi, someone pressed this button " + this.tomteList[j][3] + "  " + name);
+        let results = await this.utils.execCmd(command).catch((err) => {
+            console.error(err);
+            return;
+          });
+        this.tomtelist();
     }
  
 }
