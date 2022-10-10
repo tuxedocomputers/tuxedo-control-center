@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -34,15 +34,14 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ]
 })
 export class TomteGuiComponent implements OnInit {
-  tomteguitest = [];
-
+  tomteList = [];
+  tomteMode = "";
+  tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
   constructor(
     private electron: ElectronService,
     private utils: UtilsService
-    //private renderer: Renderer2
   ) { }
 
-  //@ViewChild('tomteList', { static: false }) tomteList: ElementRef;
 
   ngOnInit() {
   }
@@ -62,12 +61,10 @@ export class TomteGuiComponent implements OnInit {
     private async tomtelist() {
 
     let command = "tomte list"
-    let results = await this.utils.execCmd(command);
-    // return this.utils.execCmd(command).then((data) => {
-    //         this.parseTomteList(data);
-    //     }).catch(function(err) {
-    //         console.log("tomte list failed!", err);
-    //     })
+    let results = await this.utils.execCmd(command).catch((err) => {
+        console.error(err);
+        return;
+      });
 
     this.parseTomteList(results);
     }
@@ -76,6 +73,8 @@ export class TomteGuiComponent implements OnInit {
         data = "" + data;
         data = data.split("\n");
         let tomtelistarray = [];
+        let data2 = data[0].split(" ");
+        this.tomteMode = data2[data2.length -1];
         for (var i = 0; i < data.length; i++)
         {
             if (i < 2)
@@ -85,32 +84,42 @@ export class TomteGuiComponent implements OnInit {
             // fill array with proper values
             let data2 = "" + data[i];
             let array2 = (data2).split(/ +/);
-            //console.log("data[i]: ", data[i]);
-            //console.log("array2: ", array2);
+            if (!array2[0])
+            {
+                continue;
+            }
             tomtelistarray.push(array2);
         }
-        //console.log("tomtelistarray: ", tomtelistarray);
-        this.tomteguitest = tomtelistarray;
+        this.tomteList = tomtelistarray;
+    }
+
+    private tomteModeButton(mode)
+    {
+        // TODO change tomtemode as superuser here
+        this.tomteMode = mode;
     }
 
     private tomteBlockButton(name)
     {
         // TODO just a mockup to see if I can make the html side of it working, later I have to add it actually doing something lololol
-        for (var i = 0; i < this.tomteguitest.length; i++)
+        let j = 0;
+        for (var i = 0; i < this.tomteList.length; i++)
         {
-            if (this.tomteguitest[i] == name)
+            if (("" + this.tomteList[i]).match(name))
             {
-                if (this.tomteguitest[i][3] == "no")
+                if (this.tomteList[i][3] == "no")
                 {
-                    this.tomteguitest[i][3] = "yes";
+                    this.tomteList[i][3] = "yes";
                 }
                 else
                 {
-                    this.tomteguitest[i][3] = "no";
+                    this.tomteList[i][3] = "no";
                 }
+                j = i;
+                break;
             }
         }
-
+        console.log("hihi, someone pressed this button " + this.tomteList[j][3] + "  " + name);
     }
  
 }

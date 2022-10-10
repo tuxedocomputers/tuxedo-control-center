@@ -19,21 +19,36 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <h1>TUXEDO Tomte</h1>
 <br />
+<ng-container *ngIf="!tomteMode"> 
+    <p>loading information...</p>
+</ng-container>
 
-<ng-container > 
+<ng-container *ngIf="tomteMode"> 
+
+    <h2>Selected installation mode:</h2>                
+    <button mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[0]" (click)="tomteModeButton(tomteModes[0])">
+        <ng-container>{{tomteModes[0]}}</ng-container>
+    </button>               
+    <button mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[1]" (click)="tomteModeButton(tomteModes[1])">
+        <ng-container>{{tomteModes[1]}}</ng-container>
+    </button> 
+    <button mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[2]" (click)="tomteModeButton(tomteModes[2])">
+        <ng-container>{{tomteModes[2]}}</ng-container>
+    </button> 
+
+
+    <h2>Tomte Configuration:</h2>
     <table class="tomte-list-output-table">
-    <tr *ngFor="let test of tomteguitest; first as isFirst">
+    <tr *ngFor="let test of tomteList; first as isFirst">
         <ng-container *ngIf="isFirst">
-            <thead>
                 <th>{{test[0]}}</th><th>{{test[1]}}</th><th>{{test[2]}}</th><th>{{test[3]}}</th><th>{{test[4]}}</th>
-            </thead>
         </ng-container>
         <ng-container *ngIf="!isFirst">
             <td>{{test[0]}}</td>
             <td>{{test[1]}}</td>
             <td>{{test[2]}}</td>
             <td>                             
-                <button mat-raised-button color="primary" (click)="tomteBlockButton(test[0])">
+                <button mat-raised-button color="primary" [disabled]="test[4] === 'prerequisite'" (click)="tomteBlockButton(test[0])">
                     <ng-container>{{test[3]}}</ng-container>
                 </button>
             </td>
