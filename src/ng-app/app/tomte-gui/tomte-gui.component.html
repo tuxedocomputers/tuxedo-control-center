@@ -68,7 +68,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <ng-container *ngIf="!isFirst">
             <td class="tomte-table-padding">{{test[0]}}</td>
             <td>{{test[1]}}</td>
-            <td>{{test[2]}}</td>
+            <td>
+                <ng-container *ngIf="test[2]==='no'">                            
+                    <button 
+                            class ="tomte-yes-button"
+                            [disabled]="test[4] === 'prerequisite'" 
+                            (click)="tomteInstallButton(test[0],test[2],test[3])"
+                            matTooltip="Install this module"
+                    >
+                        <ng-container>{{test[2]}}</ng-container>
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="test[2]!=='no'">                            
+                    <button 
+                            class ="tomte-no-button"
+                            [disabled]="test[4] === 'prerequisite'" 
+                            (click)="tomteInstallButton(test[0],test[2],test[3])"
+                            matTooltip="Uninstall this module"
+                    >
+                        <ng-container>{{test[2]}}</ng-container>
+                    </button>
+                </ng-container>
+
+            </td>
             <td> 
                 <ng-container *ngIf="test[3]==='no'">                            
                     <button 
@@ -98,5 +120,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 </ng-container> 
 
-
+<br />
+<br />
 <br />

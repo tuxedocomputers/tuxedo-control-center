@@ -116,5 +116,25 @@ export class TomteGuiComponent implements OnInit {
           });
         this.tomtelist();
     }
+
+    private async tomteInstallButton(name,yesno,blocked)
+    {
+        if (blocked === "yes")
+        {
+            // TODO add dialogue box
+            console.log("error: unblock the module before trying to install it");
+            return;
+        }
+        let command = "pkexec /bin/sh -c 'tomte configure " + name + "'";
+        if (yesno === "yes")
+        {
+            command = "pkexec /bin/sh -c 'yes | tomte remove " + name + "'";
+        }
+        let results = await this.utils.execCmd(command).catch((err) => {
+            console.error(err);
+            return;
+          });
+        this.tomtelist();
+    }
  
 }
