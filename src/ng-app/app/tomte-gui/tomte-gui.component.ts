@@ -93,10 +93,14 @@ export class TomteGuiComponent implements OnInit {
         this.tomteList = tomtelistarray;
     }
 
-    private tomteModeButton(mode)
+    private async tomteModeButton(mode)
     {
-        // TODO change tomtemode as superuser here
-        this.tomteMode = mode;
+        let command = "pkexec /bin/sh -c 'tomte " + mode + "'";
+        let results = await this.utils.execCmd(command).catch((err) => {
+            console.error(err);
+            return;
+          });
+        this.tomtelist();
     }
 
     private tomteBlockButton(name)
