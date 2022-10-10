@@ -23,7 +23,8 @@ import * as path from 'path';
 
 import { ConfigHandler } from './ConfigHandler';
 import { ITccSettings, defaultSettings} from '../models/TccSettings';
-import { ITccProfile, defaultProfiles } from '../models/TccProfile';
+import { ITccProfile } from '../models/TccProfile';
+import { defaultProfiles } from '../models/profiles/LegacyProfiles';
 import { TccPaths } from './TccPaths';
 
 describe('ConfigHandler file IO', () => {

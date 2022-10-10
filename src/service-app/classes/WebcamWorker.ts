@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -30,7 +30,7 @@ export class WebcamWorker extends DaemonWorker {
     public onStart(): void {
         this.updateWebcamStatuses();
 
-        const activeProfile = this.tccd.getCurrentProfile();
+        const activeProfile = this.activeProfile;
         const settingsDefined = activeProfile.webcam !== undefined
             && activeProfile.webcam.useStatus !== undefined
             && activeProfile.webcam.status !== undefined;

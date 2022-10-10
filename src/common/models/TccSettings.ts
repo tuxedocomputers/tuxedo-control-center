@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -31,8 +31,8 @@ export interface ITccSettings {
 
 export const defaultSettings: ITccSettings = {
     stateMap: {
-        power_ac: 'Default',
-        power_bat: 'Default'
+        power_ac: '__default_custom_profile__',
+        power_bat: '__default_custom_profile__'
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,

@@ -235,4 +235,8 @@ export class FanControlLogic {
     public getFilteredTemp(): number {
         return this.tempBuffer.getFilteredValue();
     }
+
+    public getFanProfile(): ITccFanProfile {
+        return this.fanProfile;
+    }
 }
