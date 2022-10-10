@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.2.0] - UNRELEASED
+## [1.2.0] - 2022-10-10
 ### Added
 - Support for system profile selection for a number of devices like
   - BA1501
@@ -12,6 +12,9 @@
   - Polaris Gen 2/3
   - Stellaris Gen 2/3/4
 - TCC-profile description
+- Support for per-device profiles
+  - Old profiles stay for most devices
+  - New default profiles for TDP control capable devices
 
 ### Changed
 - Password prompt improvements.
@@ -24,6 +27,7 @@
   - Overlay to assign profiles to states removed
   - Switchable between "description view" and detailed view for
     profile comparison
+- Dashboard slimmed down
 
 ## [1.1.8] - 2022-10-06
 ### Added
