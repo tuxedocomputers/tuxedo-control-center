@@ -210,8 +210,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.tdpLabels = new Map();
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
-        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Slow (max. 28 sec) Power Limit (PL2)`);
-        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Fast (max. 8 sec) Power Limit (PL4)`);
+        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
+        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
 
         this.showCPUTabsCircles = this.compat.hasODMPowerLimitControl;
     }
