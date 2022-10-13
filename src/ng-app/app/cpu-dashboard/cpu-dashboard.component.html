@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -25,6 +25,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <ng-container i18n>System monitor</ng-container>
             </div>
             <hr />
+        </div>
+
+        <!-- Active profile -->
+        <div class="content-container active-profile" *ngIf="activeProfile">
+            <span class="text" i18n>Active profile:</span>
+            <a mat-button class="link" (click)="goToProfileEdit(activeProfile)">{{ activeProfile.name }}</a>
         </div>
 
         <!-- CPU -->
@@ -144,189 +150,5 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
     </div>
-
-    <div class="tcc-options-group" *ngIf="activeProfile">
-        <div class="title-row">
-            <hr />
-            <div class="title">
-                <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_settings.svg#Icon"></use></svg>
-                <ng-container i18n>Profile settings</ng-container>
-            </div>
-            <hr />
-        </div>
-
-        <div class="mat-title profile-overview-title">
-            <span class="text">{{ activeProfile.name }}</span>
-            <button mat-button (click)="goToProfileEdit(activeProfile)">
-                <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-            </button>
-        </div>
-        <div class="content-container profile-overview">
-            <div class="column">
-                <div class="item" [ngClass]="{'not-available': !getCPUSettingsEnabled()}" [matTooltip]="!getCPUSettingsEnabled() ? getCPUSettingsDisabledTooltip() : ''">
-                    <div class="title">
-                        <svg viewBox="0 0 320 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
-                        <span class="text" i18n *ngIf="cpuModelName === ''">CPU</span>
-                        <span class="text" *ngIf="cpuModelName !== ''">{{ cpuModelName }}</span>
-                    </div>
-                    <div class="tcc-info-bar" [hidden]="activeProfile.cpu.useMaxPerfGov">
-                        <div class="cpu-min-max-freq">
-                            <div class="label" i18n>Min</div>
-                            <div class="value left">{{ formatFrequency(activeProfile.cpu.scalingMinFrequency) }}</div>
-                            <div class="unit color-disabled">GHz</div>
-                            <div class="value right" *ngIf="cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq">{{ formatFrequency(activeProfile.cpu.scalingMaxFrequency) }}</div>
-                            <div class="value right" *ngIf="!(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)">Boost</div>
-                            <div class="label" i18n>Max</div>
-                        </div>
-                    </div>
-                    <div class="tcc-info-bar" [hidden]="!activeProfile.cpu.useMaxPerfGov">
-                        <div class="cpu-min-max-freq">
-                            <div class="label" *ngIf="cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq" i18n>Maximum performance ({{ formatFrequency(cpuInfo.maxFreq) }} GHz)</div>
-                            <div class="label" *ngIf="!(cpuInfo.boost === undefined || activeProfile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)" i18n>Maximum performance (Boost)</div>
-                        </div>
-                    </div>
-                    <div class="tcc-gauge small active-cores">
-                        <mwl-gauge
-                            [max]="cpuInfo.availableCores"
-                            [min]="0"
-                            [value]="activeProfile.cpu.onlineCores"
-                            [dialStartAngle]="150"
-                            [dialEndAngle]="30"
-                            [animated]="animatedGauges"
-                            [animationDuration]="0.3">
-                        </mwl-gauge>
-                        <div class="unit-text">/{{ cpuInfo.availableCores }}</div>
-                        <div class="legend">
-                            <div class="text small" i18n>Active cores</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item" [ngClass]="{'not-available': !compat.hasFanControl || !getFanControlEnabled()}" [matTooltip]="!compat.hasFanControl ? compat.fanControlCompatibilityMessage : !getFanControlEnabled() ? getFanControlDisabledTooltip() : ''">
-                    <div class="title">
-                        <svg viewBox="0 0 302 512" class="tcc-icons row"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
-                        <span class="text" i18n>Fan profile</span>
-                    </div>
-                    <div class="tcc-info-bar" *ngIf="activeProfile.fan.useControl">
-                        <div class="fan-profile-parameters">
-                            <div
-                                class="label"
-                                i18n="@@cDashboardMinFanSpeedLabel"
-                                [hidden]="activeProfile.fan.minimumFanspeed === 0">
-                                Min
-                            </div>
-                            <div
-                                class="value left color-disabled"
-                                [hidden]="activeProfile.fan.minimumFanspeed === 0">
-                                {{ activeProfile.fan.minimumFanspeed }}%
-                            </div>
-                            <div class="text-center">{{ activeProfile.fan.fanProfile }}</div>
-                            <div
-                                class="value right color-disabled"
-                                [hidden]="activeProfile.fan.offsetFanspeed === 0">
-                                {{ activeProfile.fan.offsetFanspeed > 0 ? '+' + activeProfile.fan.offsetFanspeed : activeProfile.fan.offsetFanspeed }}%
-                            </div>
-                            <div
-                                class="label"
-                                i18n="@@cDashboardOffsetFanSpeedLabel"
-                                [hidden]="activeProfile.fan.offsetFanspeed === 0">
-                                Offset
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tcc-progress tcc-info-bar" *ngIf="!activeProfile.fan.useControl">
-                        <mat-progress-bar [value]="0" class="disabled"></mat-progress-bar>
-                        <div class="label-text" i18n>Fan control: off</div>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="item">
-                    <div class="title">
-                        <svg viewBox="0 0 351 512" class="tcc-icons row"><use href="./assets/images/icon_monitor.svg#Icon"></use></svg>
-                        <span class="text">Display</span>
-                    </div>
-                    <div class="tcc-progress tcc-info-bar">
-                        <mat-progress-bar
-                            [value]="activeProfile.display.brightness"
-                            [ngClass]="{'disabled': !activeProfile.display.useBrightness }">
-                        </mat-progress-bar>
-                        <div class="label-text" *ngIf="activeProfile.display.useBrightness"><ng-container i18n>Brightness</ng-container>: {{ activeProfile.display.brightness }} %</div>
-                        <div class="label-text" *ngIf="!activeProfile.display.useBrightness"><ng-container i18n>Fixed brightness off</ng-container></div>
-                    </div>
-                </div>
-                <div class="item" [hidden]="!compat.hasODMProfileControl">
-                    <div class="title">
-                        <svg viewBox="0 0 512 512" class="tcc-icons row"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
-                        <span class="text" i18n>System profile</span>
-                    </div>
-                    <div class="tcc-progress tcc-info-bar">
-                        <mat-progress-bar [value]="odmProfileProgressMap.get(activeProfile.odmProfile.name)"></mat-progress-bar>
-                        <div class="label-text" *ngIf="activeProfile.fan.useControl">
-                            {{ odmProfileToName.get(activeProfile.odmProfile.name) }}
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="title" [hidden]="!compat.hasWebcamControl">
-                        <svg viewBox="0 0 258 512" class="tcc-icons row"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg>
-                        <span class="text" i18n>Webcam</span>
-                    </div>
-                    <div class="tcc-progress tcc-info-bar" [hidden]="!compat.hasWebcamControl" [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
-                        <mat-progress-bar
-                            [value]="activeProfile.webcam.status ? 100 : 0">
-                        </mat-progress-bar>
-                        <div class="label-text">
-                            <span *ngIf="activeProfile.webcam.status" i18n="@@cDashboardWebcamOnLabel">Webcam: on</span>
-                            <span *ngIf="!activeProfile.webcam.status" i18n="@@cDashboardWebcamOffLabel">Webcam: off</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--mat-expansion-panel hideToggle class="cpu-frequency-info">
-        <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@cCpuDashboardFreqPanelTitle">
-                Frequency
-            </mat-panel-title>
-            <mat-panel-description>
-                <ng-container i18n="@@cCpuDashboardFreqPanelTitle">Cpu frequency info</ng-container>
-                <mat-icon>flash_on</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <table>
-            <tr><th i18n="@@cCpuDashboardFreqDriver">Driver</th><td>{{ activeScalingDrivers.join(',') }}</td></tr>
-            <tr><th i18n="@@cCpuDashboardFreqTurbo">Turbo</th><td *ngIf="!pstateInfo.noTurbo" i18n="@@cCpuDashboardFreqTurboOn">on</td><td *ngIf="pstateInfo.noTurbo"><strong i18n="@@cCpuDashboardFreqTurboOff">off</strong></td></tr>
-            <tr><th i18n="@@cCpuDashboardFreqCores">Active logical cores</th><td>{{ cpuCoreInfo.length }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqCoresOf">of</ng-container>&nbsp;{{ cpuInfo.availableCores }}</td></tr>
-            <tr><th i18n="@@cCpuDashboardFreqFreq">Scaling frequency range</th><td>{{ formatFrequency(cpuCoreInfo[0].scalingMinFreq) }}&nbsp;<ng-container i18n="@@cCpuDashboardFreqFreqTo">to</ng-container>&nbsp;{{ formatFrequency(cpuCoreInfo[0].scalingMaxFreq) }} GHz</td></tr>
-            <tr><th i18n="@@cCpuDashboardFreqGovernor">Governor</th><td>{{ cpuCoreInfo[0].scalingGovernor }}</td></tr>
-        </table>
-    </mat-expansion-panel-->
-
-    <!--div class="tcc-options-group cpu-thermal-info">
-        <div class="title-row">
-            <hr />
-            <div class="title">
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-icon>
-                <ng-container>Other</ng-container>
-            </div>
-            <hr />
-        </div>
-        <div class="content">
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        More
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-chip-list>
-                    <mat-chip *ngFor="let core of cpuCoreInfo">
-                        <strong>#{{ core.index + 1 }}</strong>:&nbsp;{{ core.scalingCurFreq / 1000000 | number:'1.2-2' }} GHz
-                    </mat-chip>
-                </mat-chip-list>
-            </mat-expansion-panel>
-        </div>
-    </div-->
 </mat-card>
 <br />

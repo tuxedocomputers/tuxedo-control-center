@@ -27,6 +27,7 @@ import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
+import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -39,6 +40,7 @@ const availableLanguages = [
     'en',
     'de'
 ];
+const translation = new NgTranslations();
 let startTCCAccelerator;
 
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
@@ -90,11 +92,12 @@ app.whenReady().then( async () => {
         const systemLanguageId = app.getLocale().substring(0, 2);
         if (await userConfig.get('langId') === undefined) {
             if (availableLanguages.includes(systemLanguageId)) {
-                userConfig.set('langId', systemLanguageId);
+                await userConfig.set('langId', systemLanguageId);
             } else {
-                userConfig.set('langId', availableLanguages[0]);
+                await userConfig.set('langId', availableLanguages[0]);
             }
         }
+        await loadTranslation(await userConfig.get('langId'));
     } catch (err) {
         console.log('Error determining user language => ' + err);
         quitCurrentTccSession();
@@ -135,7 +138,7 @@ app.whenReady().then( async () => {
     tray.events.selectBuiltInClick = () => {
         if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
     };
-    tray.events.profileClick = (profileName: string) => { setTempProfile(profileName); };
+    tray.events.profileClick = (profileId: string) => { setTempProfileById(profileId); };
     tray.create();
 
     tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
@@ -311,6 +314,14 @@ async function setTempProfile(profileName: string) {
     return result;
 }
 
+async function setTempProfileById(profileId: string) {
+    const dbus = new TccDBusController();
+    await dbus.init();
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileById(profileId);
+    dbus.disconnect();
+    return result;
+}
+
 async function getActiveProfile(): Promise<TccProfile> {
     const dbus = new TccDBusController();
     await dbus.init();
@@ -326,7 +337,7 @@ async function getActiveProfile(): Promise<TccProfile> {
 
 function createTccWindow(langId: string, module?: string) {
     let windowWidth = 1040;
-    let windowHeight = 750;
+    let windowHeight = 770;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
         windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
     }
@@ -395,6 +406,21 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
     });
 });
 
+ipcMain.handle('exec-file-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        let strArg: string = arg;
+        let cmdList = strArg.split(' ');
+        let cmd = cmdList.shift();
+        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
+    });
+});
+
 ipcMain.on('spawn-external-async', (event, arg) => {
     child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
         console.log("\"" + arg + "\" could not be executed.")
@@ -402,12 +428,43 @@ ipcMain.on('spawn-external-async', (event, arg) => {
     });
 });
 
+async function loadTranslation(langId) {
+
+    // Watch mode Workaround: Waiting for translation when starting in watch mode
+    let canLoadTranslation = false;
+    while (watchOption && !canLoadTranslation) {
+        try {
+            await translation.loadLanguage(langId);
+            canLoadTranslation = true;
+        } catch (err) {
+            console.log('Watch mode: Waiting for translation');
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+    }
+    // End watch mode workaround
+
+    try {
+        await translation.loadLanguage(langId);
+    } catch (err) {
+        console.log('Failed loading translation => ' + err);
+        const fallbackLangId = 'en';
+        console.log('fallback to \'' + fallbackLangId + '\'');
+        try {
+            await translation.loadLanguage(fallbackLangId);
+        } catch (err) {
+            console.log('Failed loading fallback translation => ' + err);
+        }
+    }
+}
+
 async function changeLanguage(newLangId: string) {
     if (newLangId !== await userConfig.get('langId')) {
         await userConfig.set('langId', newLangId);
+        await loadTranslation(newLangId);
+        await updateTrayProfiles();
         if (tccWindow) {
             const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
-            tccWindow.loadFile(indexPath);
+            await tccWindow.loadFile(indexPath);
         }
     }
 }
@@ -529,6 +586,16 @@ async function updateTrayProfiles() {
     try {
         const updatedActiveProfile = await getActiveProfile();
         const updatedProfiles = await getProfiles();
+
+        // Replace default profile names/descriptions with translations
+        for (const profile of updatedProfiles) {
+            const profileTranslationId = profileIdToI18nId.get(profile.id);
+            if (profileTranslationId !== undefined) {
+                profile.name = translation.idToString(profileTranslationId.name);
+                profile.description = translation.idToString(profileTranslationId.description);
+            }
+        }
+
         if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
             JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
         ) {

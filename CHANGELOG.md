@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.2.0] - 2022-10-10
+### Added
+- Support for system profile selection for a number of devices like
+  - BA1501
+  - Pulse 14/15 Gen 1
+  - Polaris gen 1
+- Support for multiple TDP selection for a number of devices like
+  - Infinitybook Pro 14 Gen 6/7
+  - Pulse 15 Gen 2
+  - Polaris Gen 2/3
+  - Stellaris Gen 2/3/4
+- TCC-profile description
+- Support for per-device profiles
+  - Old profiles stay for most devices
+  - New default profiles for TDP control capable devices
+
+### Changed
+- Password prompt improvements.
+  - If asked to change settings to `tccd` there will not be another prompt for awhile.
+  - More descriptive password prompt text
+- Profile edit layout adjustments
+- Profile overview refresh
+  - Overview now shows profile description initially
+  - Button added to activate profile temporarily
+  - Overlay to assign profiles to states removed
+  - Switchable between "description view" and detailed view for
+    profile comparison
+- Dashboard slimmed down
+
 ## [1.1.8] - 2022-10-06
 ### Added
 - Checks to detect a valid ticket number to send with the systeminfos
