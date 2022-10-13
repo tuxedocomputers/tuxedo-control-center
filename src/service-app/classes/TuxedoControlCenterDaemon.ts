@@ -545,7 +545,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT()
         let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
         const boost = cpu.boost.readValueNT();
-        if (boost !== undefined) {
+        if (boost !== undefined && scalingAvailableFrequencies !== undefined) {
             maxFreq += 1000000;
         }
         const reducedAvailableFreq = boost === undefined ?

@@ -134,6 +134,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public fansMinSpeed = 0;
     public fansOffAvailable = true;
 
+    /**
+     * Condition where max freq workaround is applicable
+     * (aka max freq missing regulated through boost flag)
+     */
+    public hasMaxFreqWorkaround = false;
+
     @ViewChild('inputName') inputName: MatInput;
 
     public selectedCPUTabIndex: number = 0;
@@ -154,6 +160,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => {
             this.cpuInfo = generalCpuInfo;
             this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
+            this.hasMaxFreqWorkaround = this.cpuInfo.boost !== undefined && this.cpuInfo.scalingAvailableFrequencies !== undefined;
         }));
 
         this.stateInputArray = this.state.getStateInputs();
