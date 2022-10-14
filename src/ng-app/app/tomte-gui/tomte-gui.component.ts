@@ -119,10 +119,12 @@ export class TomteGuiComponent implements OnInit {
 
     private async tomteInstallButton(name,yesno,blocked)
     {
+        // TODO add a dialogue box reminding the user to reboot their PC for the changes to take effect
+        // TODO add a spinner that blocks the user from clicking things while tomte is working in the background and informs the user that it's actually doing something
         if (blocked === "yes")
         {
             // TODO add dialogue box
-            console.log("error: unblock the module before trying to install it");
+            console.log("error: unblock the module before trying to un-/install it");
             return;
         }
         let command = "pkexec /bin/sh -c 'tomte configure " + name + "'";

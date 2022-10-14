@@ -23,9 +23,14 @@
     th,
     td {
         text-align: center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     }  
     table, th, td {
-    border: 3px solid purple;
+    border: 3px solid #303030; //background color?  
+    // border: 3px solid #e22131; // tuxedo red?
+    }
+    .tomte-table-padding, th {
+        background-color: #303030;
     }
 }
 

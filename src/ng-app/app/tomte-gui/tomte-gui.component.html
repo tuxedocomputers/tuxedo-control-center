@@ -17,15 +17,35 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<h1>TUXEDO Tomte</h1>
-<br />
+<mat-card class="tcc-card card-support">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n>TUXEDO Tomte</ng-container>
+    </mat-card-title>
+    <hr />
+    
+    <div class="content-container centered">
+        <p i18n>TUXEDO Tomte is a configuration service that automatically recognizes the customer's device and checks for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving.</p>
+    </div>
+    </mat-card>
+
+
+
+
 <ng-container *ngIf="!tomteMode"> 
     <p>loading information...</p>
 </ng-container>
 
 <ng-container *ngIf="tomteMode"> 
 
-    <h2>Selected installation mode:</h2>                
+
+    <mat-card class="tcc-card card-support">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>Selected installation mode</ng-container>
+        </mat-card-title>
+        <hr />  
+        <div class="content-container centered">    
+            <p i18n>Select the mode in which tomte is supposed to operate. Do you want it to handle things automatically, or configure it on your own?</p>
+     
     <button 
             mat-raised-button 
             color="primary" 
@@ -53,9 +73,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     >
         <ng-container>{{tomteModes[2]}}</ng-container>
     </button> 
+</div></mat-card>
 
+<mat-card class="tcc-card card-support">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n>Tomte Configuration</ng-container>
+    </mat-card-title>
+    <hr />  
+    <div class="content-container centered">  
+        <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
 
-    <h2>Tomte Configuration:</h2>
     <table class="tomte-list-output-table">
     <tr *ngFor="let test of tomteList; first as isFirst">
         <ng-container *ngIf="isFirst">
@@ -117,6 +144,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </ng-container>
     </tr>
     </table>
+
+    </div></mat-card>
 
 </ng-container> 
 
