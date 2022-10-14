@@ -44,6 +44,7 @@ import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
 import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 
 const tccPackage = require('../../package.json');
 
@@ -542,10 +543,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.scalingMinFrequency = minFreq;
         }
     
-        const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT()
+        const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
+        const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
         let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
         const boost = cpu.boost.readValueNT();
-        if (boost !== undefined && scalingAvailableFrequencies !== undefined) {
+        if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;
         }
         const reducedAvailableFreq = boost === undefined ?

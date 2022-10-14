@@ -71,6 +71,8 @@ export class ProfileOverviewTileComponent implements OnInit {
     public odmPowerLimitInfos: TDPInfo[];
     public selectedCPUTabIndex: number;
 
+    public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+
     constructor(
         private utils: UtilsService,
         private state: StateService,

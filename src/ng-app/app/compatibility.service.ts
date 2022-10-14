@@ -17,7 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { DMIController } from '../../common/classes/DMIController';
+import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -27,7 +29,7 @@ export class CompatibilityService {
 
   private hasAquarisValue: boolean;
 
-  constructor(private tccDbus: TccDBusClientService) {
+  constructor(private tccDbus: TccDBusClientService, private sysfs: SysFsService) {
     // TODO: Manual read until general device id get merged
     const dmi = new DMIController('/sys/class/dmi/id');
     const deviceName = dmi.productSKU.readValueNT();
@@ -103,5 +105,19 @@ export class CompatibilityService {
 
   get hasAquaris() {
     return this.hasAquarisValue;
+  }
+
+  /**
+  * Condition where max freq workaround is applicable
+  * (aka max freq missing regulated through boost flag)
+  */
+  get hasMissingMaxFreqBoostWorkaround() {
+    if (this.sysfs.generalCpuInfo.value !== undefined && this.sysfs.logicalCoreInfo.value !== undefined) {
+        const boost = this.sysfs.generalCpuInfo.value.boost;
+        const scalingDriver = this.sysfs.logicalCoreInfo.value[0].scalingDriver;
+        return boost !== undefined && scalingDriver === ScalingDriver.acpi_cpufreq;
+    } else {
+        return false;
+    }
   }
 }
