@@ -21,6 +21,7 @@ import { CpuController } from '../../common/classes/CpuController';
 
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ITccProfile } from '../../common/models/TccProfile';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 
 export class CpuWorker extends DaemonWorker {
     private readonly basePath = '/sys/devices/system/cpu';
@@ -210,9 +211,11 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
+        let scalingDriver;
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
             if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+                scalingDriver = core.scalingDriver.readValueNT();
                 const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 const coreMinFreq = core.cpuinfoMinFreq.readValue();
                 const coreMaxFreq = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
@@ -235,10 +238,10 @@ export class CpuWorker extends DaemonWorker {
                     const maxFreq = core.scalingMaxFreq.readValue();
                     let maxFreqProfile = profile.cpu.scalingMaxFrequency;
                     if (maxFreqProfile === -1) {
-                        if (!this.cpuCtrl.boost.isAvailable()) {
-                            maxFreqProfile = core.getReducedAvailableFreq();
-                        } else {
+                        if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
                             maxFreqProfile = coreMaxFreq;
+                        } else {
+                            maxFreqProfile = core.getReducedAvailableFreq();
                         }
                     } else if (maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq || profile.cpu.useMaxPerfGov) {
                         maxFreqProfile = coreMaxFreq;
@@ -286,7 +289,7 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
-        if (this.cpuCtrl.boost.isAvailable()) {
+        if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
             const currentBoost = this.cpuCtrl.boost.readValue()
             const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
             const maxFreqProfile = profile.cpu.scalingMaxFrequency;

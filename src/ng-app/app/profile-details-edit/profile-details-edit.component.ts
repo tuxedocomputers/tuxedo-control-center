@@ -134,6 +134,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public fansMinSpeed = 0;
     public fansOffAvailable = true;
 
+    public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+
     @ViewChild('inputName') inputName: MatInput;
 
     public selectedCPUTabIndex: number = 0;
@@ -208,8 +210,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.tdpLabels = new Map();
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
-        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Slow (max. 28 sec) Power Limit (PL2)`);
-        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Fast (max. 8 sec) Power Limit (PL4)`);
+        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
+        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
 
         this.showCPUTabsCircles = this.compat.hasODMPowerLimitControl;
     }
@@ -237,12 +239,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
-        // Reset non chosen CPU tab to defaults on save
         const defaultProfile = this.config.getDefaultValuesProfile();
-        if (this.selectedCPUTabIndex === 0) {
-            this.setFormGroupValue('cpu', defaultProfile.cpu);
-        } else if (this.selectedCPUTabIndex === 1) {
-            this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+
+        // Reset non chosen CPU tab to defaults on save
+        if (this.compat.hasODMPowerLimitControl) {
+            if (this.selectedCPUTabIndex === 0) {
+                this.setFormGroupValue('cpu', defaultProfile.cpu);
+            } else if (this.selectedCPUTabIndex === 1) {
+                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+            }
         }
 
         if (this.profileFormGroup.valid) {
