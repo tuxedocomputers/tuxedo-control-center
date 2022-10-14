@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.1] - 2022-10-14
+### Changed
+- TDP Label text adjustments (EN)
+
+### Fixed
+- Old boost workaround for devices where max frequency is not available
+  broke frequency set GUI on newer AMD devices where the scaling driver is
+  `amd-pstate`. This has been fixed and the new driver allows more variable
+  frequency limits (similar to `intel_pstate`).
+- Frequency settings save fixed on some devices where TDP control is not available
+
 ## [1.2.0] - 2022-10-10
 ### Added
 - Support for system profile selection for a number of devices like
