@@ -133,7 +133,7 @@ public:
     }
 
     virtual bool GetFansMinSpeed(int &minSpeed) {
-        minSpeed = 0;
+        minSpeed = 20;
         return true;
     }
 
