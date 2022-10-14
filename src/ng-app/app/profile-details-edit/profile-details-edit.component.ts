@@ -134,6 +134,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public fansMinSpeed = 0;
     public fansOffAvailable = true;
 
+    public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+
     @ViewChild('inputName') inputName: MatInput;
 
     public selectedCPUTabIndex: number = 0;
@@ -237,12 +239,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
-        // Reset non chosen CPU tab to defaults on save
         const defaultProfile = this.config.getDefaultValuesProfile();
-        if (this.selectedCPUTabIndex === 0) {
-            this.setFormGroupValue('cpu', defaultProfile.cpu);
-        } else if (this.selectedCPUTabIndex === 1) {
-            this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+
+        // Reset non chosen CPU tab to defaults on save
+        if (this.compat.hasODMPowerLimitControl) {
+            if (this.selectedCPUTabIndex === 0) {
+                this.setFormGroupValue('cpu', defaultProfile.cpu);
+            } else if (this.selectedCPUTabIndex === 1) {
+                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
+            }
         }
 
         if (this.profileFormGroup.valid) {
