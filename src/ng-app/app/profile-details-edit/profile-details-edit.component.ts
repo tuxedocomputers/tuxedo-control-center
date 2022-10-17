@@ -224,6 +224,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (!this.fansOffAvailable) {
             let minimumFanspeedValue = this.profileFormGroup.get('fan.minimumFanspeed').value
             this.profileFormGroup.patchValue({fan: {minimumFanspeed: minimumFanspeedValue < this.fansMinSpeed ? this.fansMinSpeed : minimumFanspeedValue}});
+            this.viewProfile.fan.minimumFanspeed = this.viewProfile.fan.minimumFanspeed < this.fansMinSpeed ? this.fansMinSpeed : this.viewProfile.fan.minimumFanspeed;
         }
     }
 
