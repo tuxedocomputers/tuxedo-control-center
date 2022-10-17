@@ -35,7 +35,7 @@ const routes: Routes = [
         path: 'main-gui', component: MainGuiComponent,
         children: [
             { path: 'profile-manager', component: ProfileManagerComponent },
-            { path: 'profile-manager/:profileName', component: ProfileManagerComponent },
+            { path: 'profile-manager/:profileId', component: ProfileManagerComponent },
             { path: 'support', component: SupportComponent },
             { path: 'info', component: InfoComponent },
             { path: 'cpu-dashboard', component: CpuDashboardComponent },

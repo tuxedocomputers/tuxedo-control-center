@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -74,18 +74,34 @@ export class TccDBusData {
     public forceYUV420OutputSwitchAvailable: boolean;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
+    public tempProfileId: string;
     public activeProfileJSON: string;
     public profilesJSON: string;
     public customProfilesJSON: string;
     public defaultProfilesJSON: string;
+    public defaultValuesProfileJSON: string;
     public odmProfilesAvailable: string[];
+    public odmPowerLimitsJSON: string;
+    public fansMinSpeed: number;
+    public fansOffAvailable: boolean;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
 
+export class TccDBusOptions {
+    public triggerStateCheck?: () => Promise<void>;
+}
+
 export class TccDBusInterface extends dbus.interface.Interface {
-    constructor(private data: TccDBusData) {
+    private interfaceOptions: TccDBusOptions;
+
+    constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
         super('com.tuxedocomputers.tccd');
+
+        this.interfaceOptions = options;
+        if (this.interfaceOptions.triggerStateCheck === undefined) {
+            this.interfaceOptions.triggerStateCheck = async () => {};
+        }
     }
 
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -110,13 +126,22 @@ export class TccDBusInterface extends dbus.interface.Interface {
         this.data.tempProfileName = profileName;
         return true;
     }
+    SetTempProfileById(id: string) {
+        this.data.tempProfileId = id;
+        this.interfaceOptions.triggerStateCheck();
+        return true;
+    }
     GetProfilesJSON() { return this.data.profilesJSON; }
     GetCustomProfilesJSON() { return this.data.customProfilesJSON; }
     GetDefaultProfilesJSON() { return this.data.defaultProfilesJSON; }
+    GetDefaultValuesProfileJSON() { return this.data.defaultValuesProfileJSON; }
     ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
+    ODMPowerLimitsJSON() { return this.data.odmPowerLimitsJSON; }
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
     }
+    GetFansMinSpeed() { return this.data.fansMinSpeed; }
+    GetFansOffAvailable() { return this.data.fansOffAvailable; }
 }
 
 TccDBusInterface.configureMembers({
@@ -134,10 +159,15 @@ TccDBusInterface.configureMembers({
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },
+        SetTempProfileById: { inSignature: 's',  outSignature: 'b' },
         GetProfilesJSON: { outSignature: 's' },
         GetCustomProfilesJSON: { outSignature: 's' },
         GetDefaultProfilesJSON: { outSignature: 's' },
+        GetDefaultValuesProfileJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
+        ODMPowerLimitsJSON: { outSignature: 's' },
+        GetFansMinSpeed: { outSignature: 'i' },
+        GetFansOffAvailable: { outSignature: 'b' },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

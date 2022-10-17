@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -83,17 +83,26 @@ public:
 
     virtual bool Identify(bool &identified) = 0;
     virtual bool DeviceInterfaceIdStr(std::string &interfaceIdStr) = 0;
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) = 0;
     virtual bool SetEnableModeSet(bool enabled) = 0;
     virtual bool GetNumberFans(int &nrFans) = 0;
     virtual bool SetFansAuto() = 0;
     virtual bool SetFanSpeedPercent(const int fanNr, const int fanSpeedPercent) = 0;
     virtual bool GetFanSpeedPercent(const int fanNr, int &fanSpeedPercent) = 0;
     virtual bool GetFanTemperature(const int fanNr, int &temperatureCelcius) = 0;
+    virtual bool GetFansMinSpeed(int &minSpeed) = 0;
+    virtual bool GetFansOffAvailable(bool &offAvailable) = 0;
     virtual bool SetWebcam(const bool status) = 0;
     virtual bool GetWebcam(bool &status) = 0;
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) = 0;
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) = 0;
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) = 0;
+    virtual bool GetNumberTDPs(int &nrTDPs) = 0;
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) = 0;
+    virtual bool GetTDPMin(const int tdpInde, int &minValue) = 0;
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) = 0;
+    virtual bool SetTDP(const int tdpIndex, const int tdpValue) = 0;
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) = 0;
 
 protected:
     IO *io;
@@ -114,8 +123,22 @@ public:
         return io->IoctlCall(R_CL_HW_IF_STR, interfaceIdStr, 50);
     }
 
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) {
+        return false;
+    }
+
     virtual bool SetEnableModeSet(bool enabled) {
         // Nothing to do (..yet)
+        return true;
+    }
+
+    virtual bool GetFansMinSpeed(int &minSpeed) {
+        minSpeed = 20;
+        return true;
+    }
+
+    virtual bool GetFansOffAvailable(bool &offAvailable) {
+        offAvailable = true;
         return true;
     }
 
@@ -212,6 +235,13 @@ public:
         return true;
     }
 
+    virtual bool GetNumberTDPs(int &nrTDPs) { return false; }
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) { return false; }
+    virtual bool GetTDPMin(const int tdpIndex, int &minValue) { return false; }
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) { return false; }
+    virtual bool SetTDP(const int tdpIndex, int tdpValue) { return false; }
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) { return false; }
+
 private:
     const int MAX_FAN_SPEED = 0xff;
     const std::string PERF_PROF_STR_QUIET = "quiet";
@@ -268,9 +298,30 @@ public:
         return true;
     }
 
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) {
+        int32_t modelId;
+        modelIdStr = "";
+        bool success = io->IoctlCall(R_UW_MODEL_ID, modelId);
+        if (success) {
+            modelIdStr = std::to_string(modelId);
+        }
+        return success;
+    }
+
     virtual bool SetEnableModeSet(bool enabled) {
         int enabledSet = enabled ? 0x01 : 0x00;
         return io->IoctlCall(W_UW_MODE_ENABLE, enabledSet);
+    }
+
+    virtual bool GetFansMinSpeed(int &minSpeed) {
+        return io->IoctlCall(R_UW_FANS_MIN_SPEED, minSpeed);
+    }
+
+    virtual bool GetFansOffAvailable(bool &offAvailable) {
+        int result;
+        int ret = io->IoctlCall(R_UW_FANS_OFF_AVAILABLE, result);
+        offAvailable = result == 1;
+        return ret;
     }
 
     virtual bool GetNumberFans(int &nrFans) {
@@ -357,23 +408,135 @@ public:
     }
 
     virtual bool GetAvailableODMPerformanceProfiles(std::vector<std::string> &profiles) {
-        // Not implemented
+        int nrProfiles = 0;
         profiles.clear();
-        return false;
+        bool result = io->IoctlCall(R_UW_PROFS_AVAILABLE, nrProfiles);
+        if (nrProfiles < 2) {
+            result = false;
+        }
+        if (nrProfiles >= 2) {
+            profiles.push_back(PERF_PROF_STR_BALANCED);
+            profiles.push_back(PERF_PROF_STR_ENTHUSIAST);
+        }
+        if (nrProfiles >= 3) {
+            profiles.push_back(PERF_PROF_STR_OVERBOOST);
+        }
+        return result;
     }
 
     virtual bool SetODMPerformanceProfile(std::string performanceProfile) {
-        // Not implemented
-        return false;
+        bool result = false;
+        bool perfProfileExists = uniwillPerformanceProfilesToArgument.find(performanceProfile) != uniwillPerformanceProfilesToArgument.end();
+        if (perfProfileExists) {
+            int32_t perfProfileArgument = uniwillPerformanceProfilesToArgument.at(performanceProfile);
+            result = io->IoctlCall(W_UW_PERF_PROF, perfProfileArgument);
+        }
+        return result;
     }
 
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
-        profileName = "";
-        return false;
+        int nrProfiles = 0;
+        bool result = io->IoctlCall(R_UW_PROFS_AVAILABLE, nrProfiles);
+        if (result && nrProfiles > 0) {
+            profileName = PERF_PROF_STR_ENTHUSIAST;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    virtual bool GetNumberTDPs(int &nrTDPs) {
+
+        // Check return status of getters to figure out how many
+        // TDPs are configurable
+        for (int i = 2; i >= 0; --i) {
+            int status = 0;
+            bool success = GetTDP(i, status);
+            if (success && status >= 0) {
+                nrTDPs = i + 1;
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) {
+        int nrTDPs = 0;
+        bool result = this->GetNumberTDPs(nrTDPs);
+        if (nrTDPs >= 1) {
+            tdpDescriptors.push_back("pl1");
+        }
+        if (nrTDPs >= 2) {
+            tdpDescriptors.push_back("pl2");
+        }
+        if (nrTDPs >= 3) {
+            tdpDescriptors.push_back("pl4");
+        }
+        return result;
+    }
+
+    virtual bool GetTDPMin(const int tdpIndex, int &minValue) {
+        const unsigned long ioctl_tdp_min[] = { R_UW_TDP0_MIN, R_UW_TDP1_MIN, R_UW_TDP2_MIN };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_min[tdpIndex], minValue);
+    }
+
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) {
+        const unsigned long ioctl_tdp_max[] = { R_UW_TDP0_MAX, R_UW_TDP1_MAX, R_UW_TDP2_MAX };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_max[tdpIndex], maxValue);
+    }
+
+    virtual bool SetTDP(const int tdpIndex, int tdpValue) {
+        const unsigned long ioctl_tdp_set[] = { W_UW_TDP0, W_UW_TDP1, W_UW_TDP2 };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_set[tdpIndex], tdpValue);
+    }
+
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) {
+        const unsigned long ioctl_tdp_get[] = { R_UW_TDP0, R_UW_TDP1, R_UW_TDP2 };
+        if (tdpIndex < 0 || tdpIndex > 2) {
+            return -EINVAL;
+        }
+        return io->IoctlCall(ioctl_tdp_get[tdpIndex], tdpValue);
     }
 
 private:
     const int MAX_FAN_SPEED = 0xc8;
+    const std::string PERF_PROF_STR_BALANCED = "power_save";
+    const std::string PERF_PROF_STR_ENTHUSIAST = "enthusiast";
+    const std::string PERF_PROF_STR_OVERBOOST = "overboost";
+
+    const std::map<std::string, int> uniwillPerformanceProfilesToArgument = {
+        { PERF_PROF_STR_BALANCED,       0x01 },
+        { PERF_PROF_STR_ENTHUSIAST,     0x02 },
+        { PERF_PROF_STR_OVERBOOST,      0x03 }
+    };
+
+    bool GetFanInfo(int fanNr, int &fanInfo) {
+        if (fanNr < 0 || fanNr >= 3) return false;
+        bool result = false;
+        int argument = 0;
+        if (fanNr == 0) {
+            result = io->IoctlCall(R_CL_FANINFO1, argument);
+        } else if (fanNr == 1) {
+            result = io->IoctlCall(R_CL_FANINFO2, argument);
+        } else if (fanNr == 2) {
+            result = io->IoctlCall(R_CL_FANINFO3, argument);
+        } else if (fanNr == 3) {
+            // result = IoctlCall(R_CL_FANINFO4, argument);
+        }
+
+        fanInfo = argument;
+        return result;
+    }
 };
 
 #define TUXEDO_IO_DEVICE_FILE "/dev/tuxedo_io"
@@ -431,9 +594,33 @@ public:
         }
     }
 
+    virtual bool DeviceModelIdStr(std::string &modelIdStr) {
+        if (activeInterface) {
+            return activeInterface->DeviceModelIdStr(modelIdStr);
+        } else {
+            return false;
+        }
+    }
+
     virtual bool SetEnableModeSet(bool enabled) {
         if (activeInterface) {
             return activeInterface->SetEnableModeSet(enabled);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetFansMinSpeed(int &minSpeed) {
+        if (activeInterface) {
+            return activeInterface->GetFansMinSpeed(minSpeed);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetFansOffAvailable(bool &offAvailable) {
+        if (activeInterface) {
+            return activeInterface->GetFansOffAvailable(offAvailable);
         } else {
             return false;
         }
@@ -511,6 +698,54 @@ public:
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
         if (activeInterface) {
             return activeInterface->GetDefaultODMPerformanceProfile(profileName);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetNumberTDPs(int &nrTDPs) {
+        if (activeInterface) {
+            return activeInterface->GetNumberTDPs(nrTDPs);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDPDescriptors(std::vector<std::string> &tdpDescriptors) {
+        if (activeInterface) {
+            return activeInterface->GetTDPDescriptors(tdpDescriptors);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDPMin(const int tdpIndex, int &minValue) {
+        if (activeInterface) {
+            return activeInterface->GetTDPMin(tdpIndex, minValue);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDPMax(const int tdpIndex, int &maxValue) {
+        if (activeInterface) {
+            return activeInterface->GetTDPMax(tdpIndex, maxValue);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool SetTDP(const int tdpIndex, int tdpValue) {
+        if (activeInterface) {
+            return activeInterface->SetTDP(tdpIndex, tdpValue);
+        } else {
+            return false;
+        }
+    }
+
+    virtual bool GetTDP(const int tdpIndex, int &tdpValue) {
+        if (activeInterface) {
+            return activeInterface->GetTDP(tdpIndex, tdpValue);
         } else {
             return false;
         }

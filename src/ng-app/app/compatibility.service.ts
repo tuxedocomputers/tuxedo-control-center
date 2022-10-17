@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,7 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { DMIController } from '../../common/classes/DMIController';
+import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -27,7 +29,7 @@ export class CompatibilityService {
 
   private hasAquarisValue: boolean;
 
-  constructor(private tccDbus: TccDBusClientService) {
+  constructor(private tccDbus: TccDBusClientService, private sysfs: SysFsService) {
     // TODO: Manual read until general device id get merged
     const dmi = new DMIController('/sys/class/dmi/id');
     const deviceName = dmi.productSKU.readValueNT();
@@ -59,11 +61,12 @@ export class CompatibilityService {
 
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
   get hasFanControl(): boolean {
-    const dmi = new DMIController('/sys/class/dmi/id');
+    /*const dmi = new DMIController('/sys/class/dmi/id');
     const boardName = dmi.boardName.readValueNT();
+    // when adding or removing devices here don't forget to also alter getFanControlStatus() from FanControlWorker.ts from tccd
     if (boardName === "GMxRGxx") {
       return false;
-    }
+    }*/
     return this.tccDbus.tuxedoWmiAvailable.value;
   }
 
@@ -85,11 +88,36 @@ export class CompatibilityService {
         this.tccDbus.odmProfilesAvailable.value.length > 0;
   }
 
+  get hasODMPowerLimitControl(): boolean {
+      return this.tccDbus.tuxedoWmiAvailable.value &&
+        this.tccDbus.odmPowerLimits.value !== undefined &&
+        this.tccDbus.odmPowerLimits.value.length > 0;
+  }
+
+  get uwLEDOnlyMode(): boolean {
+      return this.hasODMPowerLimitControl &&
+        this.hasODMProfileControl;
+  }
+
   get tccDbusAvailable() {
     return this.tccDbus.available;
   }
 
   get hasAquaris() {
     return this.hasAquarisValue;
+  }
+
+  /**
+  * Condition where max freq workaround is applicable
+  * (aka max freq missing regulated through boost flag)
+  */
+  get hasMissingMaxFreqBoostWorkaround() {
+    if (this.sysfs.generalCpuInfo.value !== undefined && this.sysfs.logicalCoreInfo.value !== undefined) {
+        const boost = this.sysfs.generalCpuInfo.value.boost;
+        const scalingDriver = this.sysfs.logicalCoreInfo.value[0].scalingDriver;
+        return boost !== undefined && scalingDriver === ScalingDriver.acpi_cpufreq;
+    } else {
+        return false;
+    }
   }
 }

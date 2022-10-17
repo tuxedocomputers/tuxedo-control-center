@@ -59,7 +59,7 @@ export class SupportComponent implements OnInit {
     this.updateAnydeskInstallStatus();
     this.updateWebFAICreatorInstallStatus();
     this.formTicketNumber = new FormGroup({
-      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')])
+      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(990)([0-9]){6}')])
     });
   }
 

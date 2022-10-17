@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -37,6 +37,18 @@ export interface ITuxedoIOAPI {
      * @returns True if call succeeded, false otherwise
      */
     setEnableModeSet(enabled: boolean): boolean;
+
+    /**
+     * Get the minimum speed the fan must be running for not making noises
+     * because it is stuttering
+     */
+    getFansMinSpeed(): number;
+
+    /**
+     * Get the information if the firmware allows the fan to be turned off
+     * completely
+     */
+    getFansOffAvailable(): boolean;
 
     /**
      * Get number of controllable fan interfaces,
@@ -93,12 +105,31 @@ export interface ITuxedoIOAPI {
      *  @returns True if call succeeded, false otherwise
      */
     getDefaultODMPerformanceProfile(profileName: ObjWrapper<string>): boolean;
+    /**
+     *  Get TDP info array of available configurable options
+     *  @returns True if call succeeded, false otherwise
+     */
+    getTDPInfo(tdpInfo: TDPInfo[]): boolean;
+    /**
+     *  Set TDP values according to specified array. Numbers need to be
+     *  in range as listed by a call to TDPInfo
+     *  @returns True if call succeeded, false otherwise
+     */
+    setTDPValues(tdpValues: Number[]): boolean;
 }
 
 
 export class ModuleInfo {
     version = '';
     activeInterface = '';
+    model = '';
+}
+
+export class TDPInfo {
+    min: number;
+    max: number;
+    current: number;
+    descriptor: string;
 }
 
 export class ObjWrapper<T> {
