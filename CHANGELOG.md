@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.2] - 2022-10-17
+### Changed
+- Fan control logic tweaks and fixes
+
 ## [1.2.1] - 2022-10-14
 ### Changed
 - TDP Label text adjustments (EN)
