@@ -19,6 +19,7 @@
 import { Component, OnInit} from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
+import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 
@@ -34,12 +35,14 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ]
 })
 export class TomteGuiComponent implements OnInit {
+    tomteinstalled = "";
   tomteList = [];
   tomteMode = "";
   tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
   constructor(
     private electron: ElectronService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private pmgs: ProgramManagementService
   ) { }
 
 
@@ -59,17 +62,43 @@ export class TomteGuiComponent implements OnInit {
   }
 
     private async tomtelist() {
+        this.utils.pageDisabled = true;
+    let tomteinstalled = await this.pmgs.isInstalled("tuxedo-tomte");
+    if (tomteinstalled)
+        {
+            // TODO add retry mechanism, retry without timeout a bunch of times? should not eat too many ressources anyway
+            //await new Promise(resolve => setTimeout(resolve, 4000)); 
+            let command = "tuxedo-tomte list"
+            this.utils.pageDisabled = true;
+            let results = await this.utils.execCmd(command).catch((err) => {
+                this.throwErrorMessage(err);
+            });
+            this.utils.pageDisabled = false;
+            this.parseTomteList(results);
+            this.tomteinstalled = "true";
+        }
+    else
+        {
+            this.tomteinstalled = "false";
+            this.utils.pageDisabled = false;
+        }
 
-    let command = "tomte list"
-    let results = await this.utils.execCmd(command).catch((err) => {
-        console.error(err);
-        return;
-      });
+    }
 
-    this.parseTomteList(results);
+    private async installTomte()
+    {
+        this.utils.pageDisabled = true;
+        await this.pmgs.install("tuxedo-tomte");
+        this.tomteinstalled = "";
+        await this.tomtelist();
+        this.utils.pageDisabled = false;
     }
 
     private parseTomteList(data){
+        if (!data)
+        {
+            return;
+        }
         data = "" + data;
         data = data.split("\n");
         let tomtelistarray = [];
@@ -95,48 +124,69 @@ export class TomteGuiComponent implements OnInit {
 
     private async tomteModeButton(mode)
     {
-        let command = "pkexec /bin/sh -c 'tomte " + mode + "'";
+        this.utils.pageDisabled = true;
+        let command = "pkexec /bin/sh -c 'tuxedo-tomte " + mode + "'";
         let results = await this.utils.execCmd(command).catch((err) => {
             console.error(err);
             return;
           });
         this.tomtelist();
+        this.utils.pageDisabled = false;
     }
 
     private async tomteBlockButton(name,yesno)
     {
-        let command = "pkexec /bin/sh -c 'tomte block " + name + "'";
+        this.utils.pageDisabled = true;
+        let command = "pkexec /bin/sh -c 'tuxedo-tomte block " + name + "'";
         if (yesno === "yes")
         {
-            command = "pkexec /bin/sh -c 'tomte unblock " + name + "'";
+            command = "pkexec /bin/sh -c 'tuxedo-tomte unblock " + name + "'";
         }
         let results = await this.utils.execCmd(command).catch((err) => {
-            console.error(err);
+            this.throwErrorMessage(err);
             return;
           });
         this.tomtelist();
+        this.utils.pageDisabled = false;
     }
 
     private async tomteInstallButton(name,yesno,blocked)
     {
+        this.utils.pageDisabled = true;
         // TODO add a dialogue box reminding the user to reboot their PC for the changes to take effect
         // TODO add a spinner that blocks the user from clicking things while tomte is working in the background and informs the user that it's actually doing something
         if (blocked === "yes")
         {
-            // TODO add dialogue box
-            console.log("error: unblock the module before trying to un-/install it");
+            // TODO add dialogue box not dialogue box, just grey out the button in html and maybe add tooltip to the buttons? like in fan profile settings
+            this.throwErrorMessage("error: unblock the module before trying to un-/install it");
             return;
         }
-        let command = "pkexec /bin/sh -c 'tomte configure " + name + "'";
+        let command = "pkexec /bin/sh -c 'tuxedo-tomte configure " + name + "'";
         if (yesno === "yes")
         {
-            command = "pkexec /bin/sh -c 'yes | tomte remove " + name + "'";
+            command = "pkexec /bin/sh -c 'yes | tuxedo-tomte remove " + name + "'";
         }
         let results = await this.utils.execCmd(command).catch((err) => {
-            console.error(err);
+            this.throwErrorMessage(err);
             return;
           });
         this.tomtelist();
+        this.utils.pageDisabled = false;
+    }
+
+    private async throwErrorMessage(errormessage)
+    {
+        console.error(errormessage);
+        const askToClose = await this.utils.confirmDialog({
+            title: $localize `:@@aqDialogErrorTitle:An Error occured!`,
+            description: errormessage,
+            linkLabel: ``,
+            linkHref: null,
+            buttonAbortLabel: ``,
+            buttonConfirmLabel: `Ok`,
+            checkboxNoBotherLabel: `:`,
+            showCheckboxNoBother: false
+        });
     }
  
 }

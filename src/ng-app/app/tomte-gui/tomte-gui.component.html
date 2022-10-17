@@ -22,132 +22,110 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <ng-container i18n>TUXEDO Tomte</ng-container>
     </mat-card-title>
     <hr />
-    
+
     <div class="content-container centered">
-        <p i18n>TUXEDO Tomte is a configuration service that automatically recognizes the customer's device and checks for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving.</p>
+        <p i18n>TUXEDO Tomte is a configuration service that automatically recognizes the customer's device and checks
+            for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving.
+        </p>
     </div>
-    </mat-card>
+</mat-card>
 
 
+<ng-container *ngIf="tomteinstalled === 'false'">
 
+<p il18n> Tomte is not installed </p>
+<button mat-raised-button color="primary" (click)="installTomte()">Install tomte</button>
 
-<ng-container *ngIf="!tomteMode"> 
-    <p>loading information...</p>
 </ng-container>
 
-<ng-container *ngIf="tomteMode"> 
+<ng-container *ngIf="tomteMode && tomteinstalled === 'true'">
 
 
     <mat-card class="tcc-card card-support">
         <mat-card-title class="theme-page-title">
             <ng-container i18n>Selected installation mode</ng-container>
         </mat-card-title>
-        <hr />  
-        <div class="content-container centered">    
-            <p i18n>Select the mode in which tomte is supposed to operate. Do you want it to handle things automatically, or configure it on your own?</p>
-     
-    <button 
-            mat-raised-button 
-            color="primary" 
-            [disabled]="tomteMode===tomteModes[0]" 
-            (click)="tomteModeButton(tomteModes[0])"
-            matTooltip="This is the  default  mode.  Everything  will  be  installed/up‐dated/removed automatically by Tomte."
-    >
-        <ng-container>{{tomteModes[0]}}</ng-container>
-    </button>               
-    <button 
-            mat-raised-button 
-            color="primary" 
-            [disabled]="tomteMode===tomteModes[1]" 
-            (click)="tomteModeButton(tomteModes[1])"
-            matTooltip="Only updates will be handled automatically by Tomte. No modules will be installed or removed without user intervention."
-    >
-        <ng-container>{{tomteModes[1]}}</ng-container>
-    </button> 
-    <button 
-            mat-raised-button 
-            color="primary" 
-            [disabled]="tomteMode===tomteModes[2]" 
-            (click)="tomteModeButton(tomteModes[2])"
-            matTooltip="Nothing will be configured by Tomte."
-    >
-        <ng-container>{{tomteModes[2]}}</ng-container>
-    </button> 
-</div></mat-card>
+        <hr />
+        <div class="content-container centered">
+            <p i18n>Select the mode in which tomte is supposed to operate. Do you want it to handle things
+                automatically, or configure it on your own?</p>
 
-<mat-card class="tcc-card card-support">
-    <mat-card-title class="theme-page-title">
-        <ng-container i18n>Tomte Configuration</ng-container>
-    </mat-card-title>
-    <hr />  
-    <div class="content-container centered">  
-        <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
+            <button mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[0]"
+                (click)="tomteModeButton(tomteModes[0])"
+                matTooltip="This is the  default  mode.  Everything  will  be  installed/up‐dated/removed automatically by Tomte.">
+                <ng-container>Automatic</ng-container>
+            </button>
+            <button mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[1]"
+                (click)="tomteModeButton(tomteModes[1])"
+                matTooltip="Only updates will be handled automatically by Tomte. No modules will be installed or removed without user intervention.">
+                <ng-container>Updates Only</ng-container>
+            </button>
+            <button mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[2]"
+                (click)="tomteModeButton(tomteModes[2])" matTooltip="Nothing will be configured by Tomte.">
+                <ng-container>Disabled</ng-container>
+            </button>
+        </div>
+    </mat-card>
 
-    <table class="tomte-list-output-table">
-    <tr *ngFor="let test of tomteList; first as isFirst">
-        <ng-container *ngIf="isFirst">
-                <th class="tomte-table-padding">{{test[0]}}</th>
-                <th class="tomte-table-padding">{{test[1]}}</th>
-                <th class="tomte-table-padding">{{test[2]}}</th>
-                <th class="tomte-table-padding">{{test[3]}}</th>
-                <th class="tomte-table-padding">{{test[4]}}</th>
-        </ng-container>
-        <ng-container *ngIf="!isFirst">
-            <td class="tomte-table-padding">{{test[0]}}</td>
-            <td>{{test[1]}}</td>
-            <td>
-                <ng-container *ngIf="test[2]==='no'">                            
-                    <button 
-                            class ="tomte-yes-button"
-                            [disabled]="test[4] === 'prerequisite'" 
-                            (click)="tomteInstallButton(test[0],test[2],test[3])"
-                            matTooltip="Install this module"
-                    >
-                        <ng-container>{{test[2]}}</ng-container>
-                    </button>
-                </ng-container>
-                <ng-container *ngIf="test[2]!=='no'">                            
-                    <button 
-                            class ="tomte-no-button"
-                            [disabled]="test[4] === 'prerequisite'" 
-                            (click)="tomteInstallButton(test[0],test[2],test[3])"
-                            matTooltip="Uninstall this module"
-                    >
-                        <ng-container>{{test[2]}}</ng-container>
-                    </button>
-                </ng-container>
+    <mat-card class="tcc-card card-support">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>Tomte Configuration</ng-container>
+        </mat-card-title>
+        <hr />
+        <div class="content-container centered">
+            <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
 
-            </td>
-            <td> 
-                <ng-container *ngIf="test[3]==='no'">                            
-                    <button 
-                            class ="tomte-no-button"
-                            [disabled]="test[4] === 'prerequisite'" 
-                            (click)="tomteBlockButton(test[0],test[3])"
-                            matTooltip="Block this module"
-                    >
-                        <ng-container>{{test[3]}}</ng-container>
-                    </button>
-                </ng-container>
-                <ng-container *ngIf="test[3]!=='no'">                            
-                    <button 
-                            class ="tomte-yes-button"
-                            [disabled]="test[4] === 'prerequisite'" 
-                            (click)="tomteBlockButton(test[0],test[3])"
-                            matTooltip="Unblock this module"
-                    >
-                        <ng-container>{{test[3]}}</ng-container>
-                    </button>
-                </ng-container>
-            </td>
-            <td>{{test[4]}}</td>
-        </ng-container>
-    </tr>
-    </table>
+            <table class="tomte-list-output-table">
+                <tr *ngFor="let test of tomteList; first as isFirst">
+                    <ng-container *ngIf="isFirst">
+                        <th class="tomte-table-padding">{{test[0]}}</th>
+                        <th class="tomte-table-padding">{{test[1]}}</th>
+                        <th class="tomte-table-padding">{{test[2]}}</th>
+                        <th class="tomte-table-padding">{{test[3]}}</th>
+                        <th class="tomte-table-padding">{{test[4]}}</th>
+                    </ng-container>
+                    <ng-container *ngIf="!isFirst">
+                        <td class="tomte-table-padding">{{test[0]}}</td>
+                        <td>{{test[1]}}</td>
+                        <td>
+                            <ng-container *ngIf="test[2]==='no'">
+                                <button class="tomte-yes-button" [disabled]="test[4] === 'prerequisite'"
+                                    (click)="tomteInstallButton(test[0],test[2],test[3])"
+                                    matTooltip="Install this module">
+                                    <ng-container>{{test[2]}}</ng-container>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngIf="test[2]!=='no'">
+                                <button class="tomte-no-button" [disabled]="test[4] === 'prerequisite'"
+                                    (click)="tomteInstallButton(test[0],test[2],test[3])"
+                                    matTooltip="Uninstall this module">
+                                    <ng-container>{{test[2]}}</ng-container>
+                                </button>
+                            </ng-container>
 
-    </div></mat-card>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="test[3]==='no'">
+                                <button class="tomte-no-button" [disabled]="test[4] === 'prerequisite'"
+                                    (click)="tomteBlockButton(test[0],test[3])" matTooltip="Block this module">
+                                    <ng-container>{{test[3]}}</ng-container>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngIf="test[3]!=='no'">
+                                <button class="tomte-yes-button" [disabled]="test[4] === 'prerequisite'"
+                                    (click)="tomteBlockButton(test[0],test[3])" matTooltip="Unblock this module">
+                                    <ng-container>{{test[3]}}</ng-container>
+                                </button>
+                            </ng-container>
+                        </td>
+                        <td>{{test[4]}}</td>
+                    </ng-container>
+                </tr>
+            </table>
 
-</ng-container> 
+        </div>
+    </mat-card>
+</ng-container>
 
 <br />
 <br />

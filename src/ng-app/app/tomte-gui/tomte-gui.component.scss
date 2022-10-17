@@ -34,6 +34,17 @@
     }
 }
 
+
+.tomte-gui-overlay {
+    background-color:rgba(235, 223, 223, 0.116);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+
 .tomte-table-padding
 {
     padding:20px;
