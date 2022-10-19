@@ -89,11 +89,10 @@ export class FanControlLogic {
         } else {
             this._fansMinSpeedHWLimit = speed;
         }
-        this._minimumFanspeed = this._minimumFanspeed < this._fansMinSpeedHWLimit ? this._fansMinSpeedHWLimit : this._minimumFanspeed;
     }
 
     /**
-     * Jump from 0 to minimumFanspeed or never go below minimumFanspeed
+     * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
      */
     private _fansOffAvailable: boolean = true;
     get fansOffAvailable() { return this._fansOffAvailable; }
@@ -112,16 +111,16 @@ export class FanControlLogic {
     get minimumFanspeed() { return this._minimumFanspeed; }
     set minimumFanspeed(speed: number) {
         if (speed === undefined) {
-            this._minimumFanspeed = this._fansMinSpeedHWLimit;
+            this._minimumFanspeed = 0;
         } else if (speed < 0) {
-            this._minimumFanspeed = this._fansMinSpeedHWLimit;
+            this._minimumFanspeed = 0;
         } else if (speed > 100) {
             this._minimumFanspeed = 100;
         } else {
-            this._minimumFanspeed = speed < this._fansMinSpeedHWLimit ? this._fansMinSpeedHWLimit : speed;
+            this._minimumFanspeed = speed;
         }
     }
-
+ 
     /**
      * Number added to table value providing an offset fan table lookup
      */
@@ -137,7 +136,7 @@ export class FanControlLogic {
         } else {
             this._offsetFanspeed = speed;
         }
-    }
+    } 
 
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
@@ -195,22 +194,27 @@ export class FanControlLogic {
                 newSpeed = 0;
             }
         }
-        
+
+        // Adjust for minimum speed parameter
+        if (newSpeed < this.minimumFanspeed) {
+            newSpeed = this.minimumFanspeed;
+        }
+
+        // Adjust for hardware capabilities
+        if (newSpeed < this._fansMinSpeedHWLimit) {
+            if (this.fansOffAvailable && (newSpeed < (this._fansMinSpeedHWLimit / 2))) {
+                newSpeed = 0;
+            }
+            else if ((this.fansOffAvailable && !(newSpeed < (this._fansMinSpeedHWLimit / 2))) || !this.fansOffAvailable) {
+                newSpeed = this._fansMinSpeedHWLimit;
+            }
+        }
+
         // Limit falling speed change
         let speedJump = newSpeed - this.lastSpeed;
         if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
             speedJump = -MAX_SPEED_JUMP;
             newSpeed = this.lastSpeed + speedJump;
-        }
-
-        // Adjust for minimum speed parameter
-        if (newSpeed < this.minimumFanspeed) {
-            if (this.fansOffAvailable && (newSpeed < (this._fansMinSpeedHWLimit / 2))) {
-                newSpeed = 0;
-            }
-            else {
-                newSpeed = this.minimumFanspeed;
-            }
         }
 
         this.lastSpeed = newSpeed;
