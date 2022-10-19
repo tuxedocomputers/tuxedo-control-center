@@ -148,6 +148,7 @@ export class TomteGuiComponent implements OnInit {
         let command = "pkexec /bin/sh -c 'tuxedo-tomte " + mode + "'";
         let results = await this.utils.execCmd(command).catch((err) => {
             console.error(err);
+            this.utils.pageDisabled = false;
             return;
           });
         this.tomtelist();
@@ -164,13 +165,14 @@ export class TomteGuiComponent implements OnInit {
         }
         let results = await this.utils.execCmd(command).catch((err) => {
             this.throwErrorMessage(err);
+            this.utils.pageDisabled = false;
             return;
           });
         this.tomtelist();
         this.utils.pageDisabled = false;
     }
 
-    private async tomteInstallButton(name,yesno,blocked)
+    private async tomteUn_InstallButton(name,yesno,blocked)
     {
         this.utils.pageDisabled = true;
         // TODO add a dialogue box reminding the user to reboot their PC for the changes to take effect
@@ -178,6 +180,7 @@ export class TomteGuiComponent implements OnInit {
         {
             // TODO maybe remove dialogue box, just grey out the button in html and maybe add tooltip to the buttons? like in fan profile settings
             this.throwErrorMessage("error: unblock the module before trying to un-/install it");
+            this.utils.pageDisabled = false;
             return;
         }
         let command = "pkexec /bin/sh -c 'tuxedo-tomte configure " + name + "'";
@@ -187,6 +190,7 @@ export class TomteGuiComponent implements OnInit {
         }
         let results = await this.utils.execCmd(command).catch((err) => {
             this.throwErrorMessage(err);
+            this.utils.pageDisabled = false;
             return;
           });
         this.tomtelist();

@@ -88,35 +88,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <td class="tomte-table-padding" [matTooltip]="moduleToolTips.get(line[0])">{{line[0]}}</td>
                         <td>{{line[1]}}</td>
                         <td>
-                            <ng-container *ngIf="line[2]==='no'">
-                                <button class="tomte-yes-button" [disabled]="line[4] === 'prerequisite'"
-                                    (click)="tomteInstallButton(line[0],line[2],line[3])"
-                                    matTooltip="Install this module">
-                                    <ng-container>{{line[2]}}</ng-container>
-                                </button>
-                            </ng-container>
-                            <ng-container *ngIf="line[2]!=='no'">
-                                <button class="tomte-no-button" [disabled]="line[4] === 'prerequisite'"
-                                    (click)="tomteInstallButton(line[0],line[2],line[3])"
-                                    matTooltip="Uninstall this module">
-                                    <ng-container>{{line[2]}}</ng-container>
-                                </button>
-                            </ng-container>
+                            <button [class]="line[2] === 'no' ? 'tomte-yes-button' : 'tomte-no-button'" [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
+                                (click)="tomteUn_InstallButton(line[0],line[2],line[3])"
+                                [matTooltip]="line[2] === 'no' ? 'Install this module' : 'Uninstall this module'">
+                                <ng-container>{{line[2]}}</ng-container>
+                            </button>
 
                         </td>
                         <td>
-                            <ng-container *ngIf="line[3]==='no'">
-                                <button class="tomte-no-button" [disabled]="line[4] === 'prerequisite'"
-                                    (click)="tomteBlockButton(line[0],line[3])" matTooltip="Block this module">
-                                    <ng-container>{{line[3]}}</ng-container>
-                                </button>
-                            </ng-container>
-                            <ng-container *ngIf="line[3]!=='no'">
-                                <button class="tomte-yes-button" [disabled]="line[4] === 'prerequisite'"
-                                    (click)="tomteBlockButton(line[0],line[3])" matTooltip="Unblock this module">
-                                    <ng-container>{{line[3]}}</ng-container>
-                                </button>
-                            </ng-container>
+                            <button [class]="line[3] === 'yes' ? 'tomte-yes-button' : 'tomte-no-button'" [disabled]="line[4] === 'prerequisite'"
+                                (click)="tomteBlockButton(line[0],line[3])" [matTooltip]="line[3] === 'no' ? 'Block this module' : 'Unblock this module'">
+                                <ng-container>{{line[3]}}</ng-container>
+                            </button>
                         </td>
                         <td>{{line[4]}}</td>
                     </ng-container>
