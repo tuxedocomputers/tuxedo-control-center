@@ -35,8 +35,9 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ]
 })
 export class TomteGuiComponent implements OnInit {
-    tomteinstalled = "";
-  tomteList = [];
+    tomteIsInstalled = "";
+  tomteListArray = [];
+  moduleToolTips = new Map();
   tomteMode = "";
   tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
   constructor(
@@ -71,25 +72,44 @@ export class TomteGuiComponent implements OnInit {
             let command = "tuxedo-tomte list"
             this.utils.pageDisabled = true;
             let results = await this.utils.execCmd(command).catch((err) => {
-                this.throwErrorMessage(err);
+                this.throwErrorMessage("Information from command 'tomte list' could not be obtained. Is tomte already running?");
             });
             this.utils.pageDisabled = false;
             this.parseTomteList(results);
-            this.tomteinstalled = "true";
+            this.tomteIsInstalled = "true";
+            this.getModuleDescriptions();
         }
     else
         {
-            this.tomteinstalled = "false";
+            this.tomteIsInstalled = "false";
             this.utils.pageDisabled = false;
         }
 
     }
 
-    private async installTomte()
+    private async getModuleDescriptions()
+    {
+        console.log("Loading module information from " + this.tomteListArray.length +" modules");
+        if (this.moduleToolTips.size < 1)
+        {
+        for (let i = 1; i < this.tomteListArray.length; i++)
+            {
+                let modulename = this.tomteListArray[i][0];
+                let command = "tuxedo-tomte description " + modulename;
+                let results = await this.utils.execCmd(command).catch((err) => {
+                    // this.throwErrorMessage("Information from command 'tomte list' could not be obtained. Is tomte already running?");
+                });
+                this.moduleToolTips.set(modulename, results);
+                console.log((modulename + " " + results));
+            }
+        }
+    }
+
+    private async installTomteButton()
     {
         this.utils.pageDisabled = true;
         await this.pmgs.install("tuxedo-tomte");
-        this.tomteinstalled = "";
+        this.tomteIsInstalled = "";
         await this.tomtelist();
         this.utils.pageDisabled = false;
     }
@@ -101,7 +121,7 @@ export class TomteGuiComponent implements OnInit {
         }
         data = "" + data;
         data = data.split("\n");
-        let tomtelistarray = [];
+        let tomtelistarray2 = [];
         let data2 = data[0].split(" ");
         this.tomteMode = data2[data2.length -1];
         for (var i = 0; i < data.length; i++)
@@ -117,9 +137,9 @@ export class TomteGuiComponent implements OnInit {
             {
                 continue;
             }
-            tomtelistarray.push(array2);
+            tomtelistarray2.push(array2);
         }
-        this.tomteList = tomtelistarray;
+        this.tomteListArray = tomtelistarray2;
     }
 
     private async tomteModeButton(mode)
@@ -154,10 +174,9 @@ export class TomteGuiComponent implements OnInit {
     {
         this.utils.pageDisabled = true;
         // TODO add a dialogue box reminding the user to reboot their PC for the changes to take effect
-        // TODO add a spinner that blocks the user from clicking things while tomte is working in the background and informs the user that it's actually doing something
         if (blocked === "yes")
         {
-            // TODO add dialogue box not dialogue box, just grey out the button in html and maybe add tooltip to the buttons? like in fan profile settings
+            // TODO maybe remove dialogue box, just grey out the button in html and maybe add tooltip to the buttons? like in fan profile settings
             this.throwErrorMessage("error: unblock the module before trying to un-/install it");
             return;
         }
