@@ -247,10 +247,14 @@ export class TomteGuiComponent implements OnInit {
     private async installTomteButton()
     {
         this.utils.pageDisabled = true;
-        await this.pmgs.install("tuxedo-tomte");
+        let gotInstalled = await this.pmgs.install("tuxedo-tomte");
+        if (!gotInstalled)
+        {
+            this.throwErrorMessage("Tomte failed to install. Do you use a tuxedo device and are using the tuxedo mirrors?");
+        }
         this.tomteIsInstalled = "";
-        await this.tomtelist();
         this.utils.pageDisabled = false;
+        await this.tomtelist();
     }
 
  

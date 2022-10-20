@@ -33,8 +33,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <ng-container *ngIf="tomteIsInstalled === 'false'">
 
-<p il18n> Tomte is not installed </p>
-<button mat-raised-button color="primary" (click)="installTomteButton()">Install tomte</button>
+    <mat-card class="tcc-card card-support">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>Install TUXEDO Tomte</ng-container>
+        </mat-card-title>
+        <hr />
+    
+        <div class="content-container centered">
+            <p i18n>
+                Install TUXEDO Tomte now by pressing this button:
+            </p>
+            <button mat-raised-button color="primary" (click)="installTomteButton()">Install TUXEDO Tomte</button>
+        </div>
+    </mat-card>
+
 
 </ng-container>
 
