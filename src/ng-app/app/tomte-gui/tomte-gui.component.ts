@@ -72,7 +72,8 @@ export class TomteGuiComponent implements OnInit {
     let tomteinstalled = await this.pmgs.isInstalled("tuxedo-tomte");
     if (tomteinstalled)
         {
-            // TODO add retry mechanism, retry without timeout a bunch of times? should not eat too many ressources anyway
+            // retries to list the information a couple of times, this is only triggered if tomte is already running. 
+            // Performance impact seems minimal. If this turns out to be a problem we could add a timeout with:
             //await new Promise(resolve => setTimeout(resolve, 4000)); 
             for (let i = 0; i < 2000; i++)
             {
@@ -86,7 +87,7 @@ export class TomteGuiComponent implements OnInit {
                     this.parseTomteList(results);
                     this.tomteIsInstalled = "true";
                     this.getModuleDescriptions();
-                    break
+                    break;
                 }
                 catch (e)
                 {
@@ -117,10 +118,16 @@ export class TomteGuiComponent implements OnInit {
         {
             return;
         }
+        let data3 = data;
         data = "" + data;
         data = data.split("\n");
         let tomtelistarray2 = [];
         let data2 = data[0].split(" ");
+        if (data.length < 2)
+        {
+            this.throwErrorMessage(data);
+            return;
+        }
         this.tomteMode = data2[data2.length -1];
         for (var i = 0; i < data.length; i++)
         {

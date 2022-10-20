@@ -50,6 +50,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 </ng-container>
 
+<ng-container *ngIf="!tomteMode && tomteIsInstalled === 'true'">
+    <mat-card class="tcc-card card-support">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>TUXEDO Tomte not producing output</ng-container>
+        </mat-card-title>
+        <hr />
+    
+        <div class="content-container centered">
+            <p i18n>
+                TUXEDO Tomte seems to be installed, but is not producing any output. Are you using a Tuxedo-Device?
+            </p>
+        </div>
+    </mat-card>
+
+</ng-container>
+
 <ng-container *ngIf="tomteMode && tomteIsInstalled === 'true'">
 
 
