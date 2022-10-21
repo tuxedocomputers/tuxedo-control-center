@@ -214,6 +214,10 @@ export class CpuWorker extends DaemonWorker {
         let scalingDriver;
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
+            if (core.coreIndex !== 0 && !core.online.readValue()) {
+                // Skip offline cores
+                continue;
+            }
             if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
                 scalingDriver = core.scalingDriver.readValueNT();
                 const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
