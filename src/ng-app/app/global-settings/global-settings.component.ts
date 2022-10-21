@@ -117,11 +117,15 @@ export class GlobalSettingsComponent implements OnInit {
         }
     }
 
-    public buttonToggleTheme() {
+    public async buttonToggleTheme() {
         if (this.utils.getThemeClass() === 'light-theme') {
-            this.utils.setThemeDark();
+            await this.utils.setBrightnessMode('dark');
         } else {
-            this.utils.setThemeLight();
+            await this.utils.setBrightnessMode('light');
         }
+    }
+
+    public async buttonUseSystem() {
+        await this.utils.setBrightnessMode('system');
     }
 }

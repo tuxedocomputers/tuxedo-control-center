@@ -190,10 +190,16 @@ export class UtilsService {
     return this.themeClass.value;
   }
 
+  public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
+    return await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
+  }
+
+  /**
+   * Note: Only for updating web part, to change behaviour use setBrightnessMode
+   */
   public setThemeClass(className: string) {
     this.overlayContainer.getContainerElement().classList.add(className);
     this.themeClass.next(className);
-    localStorage.setItem('themeClass', className);
   }
 
   public setThemeLight() {

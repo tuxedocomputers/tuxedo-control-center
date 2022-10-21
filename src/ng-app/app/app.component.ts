@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 
@@ -31,14 +32,28 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    constructor(private utils: UtilsService) {}
+    constructor(private utils: UtilsService, private electron: ElectronService) {}
 
     ngOnInit(): void {
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
+
+        // Register light/dark update from main process
+        this.electron.ipcRenderer.on('update-brightness-mode', () => this.updateBrightnessMode());
+        // Trigger manual update for initial state
+        this.updateBrightnessMode();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    private async updateBrightnessMode() {
+        const shouldUseDarkColors = await this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
+        if (shouldUseDarkColors) {
+            this.utils.setThemeDark();
+        } else {
+            this.utils.setThemeLight();
+        }
     }
 
     public pageDisabled(): boolean {
