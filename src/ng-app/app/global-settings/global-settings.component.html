@@ -125,8 +125,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="theme-settings-content">
-            <button mat-raised-button (click)="buttonToggleTheme()" i18n>Light/Dark theme</button>
-            <button mat-raised-button (click)="buttonUseSystem()" i18n>System brightness setting</button>
+            <mat-button-toggle-group [formControl]="ctrlBrightnessMode" (change)="onBrightnessModeCtrlChange()">
+                <mat-button-toggle value="light" i18n="@@cGlobalSettingsBrightnessLabelLight">Light</mat-button-toggle>
+                <mat-button-toggle value="dark" i18n="@@cGlobalSettingsBrightnessLabelLight">Dark</mat-button-toggle>
+                <mat-button-toggle value="system" i18n="@@cGlobalSettingsBrightnessLabelLight">System setting</mat-button-toggle>
+            </mat-button-toggle-group>
         </div>
     </mat-expansion-panel>
 

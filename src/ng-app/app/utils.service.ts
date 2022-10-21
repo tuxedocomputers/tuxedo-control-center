@@ -194,6 +194,10 @@ export class UtilsService {
     return await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
   }
 
+  public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {
+    return await this.electron.ipcRenderer.invoke('get-brightness-mode');
+  }
+
   /**
    * Note: Only for updating web part, to change behaviour use setBrightnessMode
    */
