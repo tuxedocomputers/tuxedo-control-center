@@ -59,7 +59,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     
         <div class="content-container centered">
             <p i18n>
-                TUXEDO Tomte seems to be installed, but is not producing any output. Are you using a Tuxedo-Device?
+                TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. 
             </p>
         </div>
     </mat-card>
@@ -67,7 +67,58 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 </ng-container>
 
 <ng-container *ngIf="tomteMode && tomteIsInstalled === 'true'">
+   
 
+    <mat-card class="tcc-card card-support">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>Tomte Configuration</ng-container>
+        </mat-card-title>
+        <hr />
+        <div class="content-container centered">
+            <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
+
+            <table class="tomte-list-output-table">
+                <tr *ngFor="let line of tomteListArray; first as isFirst">
+                    <ng-container *ngIf="isFirst">
+                        <th i18n class="tomte-table-padding">Module name</th>
+                        <th i18n class="tomte-table-padding">Version</th>
+                        <th i18n class="tomte-table-padding">Installed</th>
+                        <th i18n class="tomte-table-padding">Active</th>
+                        <th i18n class="tomte-table-padding">Required</th>
+                    </ng-container>
+                    <ng-container *ngIf="!isFirst">
+                        <td class="tomte-table-padding" [matTooltip]="moduleToolTips.get(line[0])">{{line[0]}}</td>
+                        <td>{{line[1]}}</td>
+                        <td>
+                            <!-- TODO: mat sliders show tooltip when disabled. Change Tooltip to reflect why the slider is disabled-->
+                            <mat-slide-toggle 
+                                class="green-slide-toggle"
+                                [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
+                                [checked]="line[2] === 'yes'"
+                                (change)="tomteUn_InstallButton(line[0],line[2],line[3])"
+                                [matTooltip]="line[2] === 'no' ? 'Install this module' : 'Uninstall this module'"
+                            >
+                            
+                            </mat-slide-toggle>
+                        </td>
+                        <td>
+                            <mat-slide-toggle 
+                            class="green-slide-toggle"
+                            [disabled]="line[4] === 'prerequisite'"
+                            [checked]="line[3] === 'no'"
+                            (change)="tomteBlockButton(line[0],line[3])"
+                            [matTooltip]="line[3] === 'no' ? 'Block this module' : 'Unblock this module'"
+                            >
+                        
+                            </mat-slide-toggle>
+                        </td>
+                        <td>{{line[4]}}</td>
+                    </ng-container>
+                </tr>
+            </table>
+
+        </div>
+    </mat-card>
 
     <mat-card class="tcc-card card-support">
         <mat-card-title class="theme-page-title">
@@ -95,47 +146,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </mat-card>
 
-    <mat-card class="tcc-card card-support">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>Tomte Configuration</ng-container>
-        </mat-card-title>
-        <hr />
-        <div class="content-container centered">
-            <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
 
-            <table class="tomte-list-output-table">
-                <tr *ngFor="let line of tomteListArray; first as isFirst">
-                    <ng-container *ngIf="isFirst">
-                        <th class="tomte-table-padding">{{line[0]}}</th>
-                        <th class="tomte-table-padding">{{line[1]}}</th>
-                        <th class="tomte-table-padding">{{line[2]}}</th>
-                        <th class="tomte-table-padding">{{line[3]}}</th>
-                        <th class="tomte-table-padding">{{line[4]}}</th>
-                    </ng-container>
-                    <ng-container *ngIf="!isFirst">
-                        <td class="tomte-table-padding" [matTooltip]="moduleToolTips.get(line[0])">{{line[0]}}</td>
-                        <td>{{line[1]}}</td>
-                        <td>
-                            <button [class]="line[2] === 'no' ? 'tomte-yes-button' : 'tomte-no-button'" [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
-                                (click)="tomteUn_InstallButton(line[0],line[2],line[3])"
-                                [matTooltip]="line[2] === 'no' ? 'Install this module' : 'Uninstall this module'">
-                                <ng-container>{{line[2]}}</ng-container>
-                            </button>
 
-                        </td>
-                        <td>
-                            <button [class]="line[3] === 'yes' ? 'tomte-yes-button' : 'tomte-no-button'" [disabled]="line[4] === 'prerequisite'"
-                                (click)="tomteBlockButton(line[0],line[3])" [matTooltip]="line[3] === 'no' ? 'Block this module' : 'Unblock this module'">
-                                <ng-container>{{line[3]}}</ng-container>
-                            </button>
-                        </td>
-                        <td>{{line[4]}}</td>
-                    </ng-container>
-                </tr>
-            </table>
-
-        </div>
-    </mat-card>
 </ng-container>
 
 <br />
