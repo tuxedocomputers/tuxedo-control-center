@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
@@ -38,6 +38,7 @@ export class TomteGuiComponent implements OnInit {
     tomteIsInstalled = "";
   tomteListArray = [];
   moduleToolTips = new Map();
+  columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleRequired'];
   tomteMode = "";
   tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
   constructor(
@@ -131,7 +132,7 @@ export class TomteGuiComponent implements OnInit {
         this.tomteMode = data2[data2.length -1];
         for (var i = 0; i < data.length; i++)
         {
-            if (i < 2)
+            if (i < 3)
             {
                 continue;
             }
@@ -146,6 +147,7 @@ export class TomteGuiComponent implements OnInit {
         this.tomteListArray = tomtelistarray2;
     }
 
+
     /*
         Loads the descriptions for each module in the background and puts it into moduleToolTips Variable that is then
         read in the HTML file 
@@ -154,7 +156,7 @@ export class TomteGuiComponent implements OnInit {
     {
         if (this.moduleToolTips.size < 1)
         {
-        for (let i = 1; i < this.tomteListArray.length; i++)
+        for (let i = 0; i < this.tomteListArray.length; i++)
             {
                 let modulename = this.tomteListArray[i][0];
                 let command = "tuxedo-tomte description " + modulename;
@@ -196,7 +198,7 @@ export class TomteGuiComponent implements OnInit {
 ========================================================================
 */
 
-    private async tomteUn_InstallButton(name,yesno,blocked)
+    public async tomteUn_InstallButton(name,yesno,blocked)
     {
         this.utils.pageDisabled = true;
         // TODO add a dialogue box reminding the user to reboot their PC for the changes to take effect
@@ -221,7 +223,7 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    private async tomteBlockButton(name,yesno)
+    public async tomteBlockButton(name,yesno)
     {
         this.utils.pageDisabled = true;
         let command = "pkexec /bin/sh -c 'tuxedo-tomte block " + name + "'";
@@ -238,7 +240,7 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    private async tomteModeButton(mode)
+    public async tomteModeButton(mode)
     {
         this.utils.pageDisabled = true;
         let command = "pkexec /bin/sh -c 'tuxedo-tomte " + mode + "'";
@@ -251,7 +253,7 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    private async installTomteButton()
+    public async installTomteButton()
     {
         this.utils.pageDisabled = true;
         let gotInstalled = await this.pmgs.install("tuxedo-tomte");
