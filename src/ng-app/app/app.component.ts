@@ -18,7 +18,7 @@
  */
 import { Component, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { Subscription } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 
 @Component({
@@ -38,22 +38,15 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Register light/dark update from main process
-        this.electron.ipcRenderer.on('update-brightness-mode', () => this.updateBrightnessMode());
+        const observeBrightnessMode = fromEvent(this.electron.ipcRenderer, 'update-brightness-mode');
+        this.subscriptions.add(observeBrightnessMode.subscribe(() => this.utils.updateBrightnessMode()));
+
         // Trigger manual update for initial state
-        this.updateBrightnessMode();
+        this.utils.updateBrightnessMode();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    private async updateBrightnessMode() {
-        const shouldUseDarkColors = await this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
-        if (shouldUseDarkColors) {
-            this.utils.setThemeDark();
-        } else {
-            this.utils.setThemeLight();
-        }
     }
 
     public pageDisabled(): boolean {
