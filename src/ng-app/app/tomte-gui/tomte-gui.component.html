@@ -97,7 +97,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
                         [checked]="line[2] === 'yes'"
                         (change)="tomteUn_InstallButton(line[0],line[2],line[3])"
-                        [matTooltip]="line[2] === 'no' ? 'Install this module' : 'Uninstall this module'"
+                        [matTooltip]="line[3] === 'yes' ? 'Cannot un-/install a module that is blocked.' : (line[4] === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (line[2] === 'no' ? 'Install this module' : 'Uninstall this module'))"
                         >
                     
                         </mat-slide-toggle>
@@ -112,7 +112,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [disabled]="line[4] === 'prerequisite'"
                         [checked]="line[3] === 'no'"
                         (change)="tomteBlockButton(line[0],line[3])"
-                        [matTooltip]="line[3] === 'no' ? 'Block this module' : 'Unblock this module'"
+                        [matTooltip]="line[4] === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (line[3] === 'no' ? 'Block this module' : 'Unblock this module')"
                         >
                     
                         </mat-slide-toggle> 
@@ -127,45 +127,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-                <!--
-                <tr *ngFor="let line of tomteListArray; first as isFirst">
-                    <ng-container *ngIf="isFirst">
-                        <th i18n class="tomte-table-padding">Module name</th>
-                        <th i18n class="tomte-table-padding">Version</th>
-                        <th i18n class="tomte-table-padding">Installed</th>
-                        <th i18n class="tomte-table-padding">Active</th>
-                        <th i18n class="tomte-table-padding">Required</th>
-                    </ng-container>
-                    <ng-container *ngIf="!isFirst">
-                        <td class="tomte-table-padding" [matTooltip]="moduleToolTips.get(line[0])">{{line[0]}}</td>
-                        <td>{{line[1]}}</td>
-                        <td>
-                             TODO: mat sliders show tooltip when disabled. Change Tooltip to reflect why the slider is disabled
-                            <mat-slide-toggle 
-                                class="green-slide-toggle"
-                                [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
-                                [checked]="line[2] === 'yes'"
-                                (change)="tomteUn_InstallButton(line[0],line[2],line[3])"
-                                [matTooltip]="line[2] === 'no' ? 'Install this module' : 'Uninstall this module'"
-                            >
-                            
-                            </mat-slide-toggle>
-                        </td>
-                        <td>
-                            <mat-slide-toggle 
-                            class="green-slide-toggle"
-                            [disabled]="line[4] === 'prerequisite'"
-                            [checked]="line[3] === 'no'"
-                            (change)="tomteBlockButton(line[0],line[3])"
-                            [matTooltip]="line[3] === 'no' ? 'Block this module' : 'Unblock this module'"
-                            >
-                        
-                            </mat-slide-toggle>
-                        </td>
-                        <td>{{line[4]}}</td>
-                    </ng-container>
-                </tr>
-                -->
             </table>
 
         </div>
