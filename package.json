@@ -1,6 +1,6 @@
 {
   "name": "tuxedo-control-center",
-  "version": "1.1.7",
+  "version": "1.2.2",
   "main": "./dist/tuxedo-control-center/e-app/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -62,6 +62,7 @@
     "node-ble": "git+https://github.com/tuxedoxt/node-ble.git#match-and-event-leak-fixes",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
+    "xliff": "^6.0.3",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

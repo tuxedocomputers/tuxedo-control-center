@@ -26,6 +26,12 @@ import {
     SysFsPropertyNumList
 } from './SysFsProperties';
 
+export enum ScalingDriver {
+    acpi_cpufreq = 'acpi-cpufreq',
+    intel_pstate = 'intel_pstate',
+    amd_pstate = 'amd-pstate',
+}
+
 export class LogicalCpuController extends SysFsController {
 
     public readonly cpuPath: string = path.join(this.basePath, 'cpu' + this.coreIndex);

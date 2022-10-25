@@ -41,6 +41,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule, MatInput } from '@angular/material/input';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -130,6 +131,7 @@ declare const require;
     MatInputModule,
     MatTooltipModule,
     MatCheckboxModule,
+    MatRadioModule,
     MatDividerModule,
     MatSliderModule,
     MatGridListModule,

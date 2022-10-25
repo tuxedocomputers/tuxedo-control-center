@@ -75,6 +75,36 @@ export class FanControlLogic {
     private useTable: string
 
     /**
+     * Minimum fan speed hardware is capable of
+     */
+    private _fansMinSpeedHWLimit: number = 0;
+    get fansMinSpeedHWLimit() { return this._fansMinSpeedHWLimit; }
+    set fansMinSpeedHWLimit(speed: number) {
+        if (speed === undefined) {
+            this._fansMinSpeedHWLimit = 0;
+        } else if (speed < 0) {
+            this._fansMinSpeedHWLimit = 0;
+        } else if (speed > 100) {
+            this._fansMinSpeedHWLimit = 100;
+        } else {
+            this._fansMinSpeedHWLimit = speed;
+        }
+    }
+
+    /**
+     * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
+     */
+    private _fansOffAvailable: boolean = true;
+    get fansOffAvailable() { return this._fansOffAvailable; }
+    set fansOffAvailable(fansOffAvailableNew: boolean) {
+        if (fansOffAvailableNew === undefined) {
+            this._fansOffAvailable = true;
+        } else {
+            this._fansOffAvailable = fansOffAvailableNew;
+        }
+    }
+
+    /**
      * Minimum fan speed returned by logic
      */
     private _minimumFanspeed: number = 0;
@@ -90,7 +120,7 @@ export class FanControlLogic {
             this._minimumFanspeed = speed;
         }
     }
-
+ 
     /**
      * Number added to table value providing an offset fan table lookup
      */
@@ -106,7 +136,7 @@ export class FanControlLogic {
         } else {
             this._offsetFanspeed = speed;
         }
-    }
+    } 
 
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
@@ -169,13 +199,24 @@ export class FanControlLogic {
         if (newSpeed < this.minimumFanspeed) {
             newSpeed = this.minimumFanspeed;
         }
-        
+
+        // Adjust for hardware capabilities
+        if (newSpeed < this._fansMinSpeedHWLimit) {
+            if (this.fansOffAvailable && (newSpeed < (this._fansMinSpeedHWLimit / 2))) {
+                newSpeed = 0;
+            }
+            else if ((this.fansOffAvailable && !(newSpeed < (this._fansMinSpeedHWLimit / 2))) || !this.fansOffAvailable) {
+                newSpeed = this._fansMinSpeedHWLimit;
+            }
+        }
+
         // Limit falling speed change
         let speedJump = newSpeed - this.lastSpeed;
         if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
             speedJump = -MAX_SPEED_JUMP;
             newSpeed = this.lastSpeed + speedJump;
         }
+
         this.lastSpeed = newSpeed;
         return newSpeed;
     }
@@ -197,5 +238,9 @@ export class FanControlLogic {
 
     public getFilteredTemp(): number {
         return this.tempBuffer.getFilteredValue();
+    }
+
+    public getFanProfile(): ITccFanProfile {
+        return this.fanProfile;
     }
 }

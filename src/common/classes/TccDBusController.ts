@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,6 +18,7 @@
  */
 import * as dbus from 'dbus-next';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
+import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 
 export class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
@@ -138,6 +139,14 @@ export class TccDBusController {
         }
     }
 
+    async setTempProfileById(profileId: string): Promise<boolean> {
+        try {
+            return await this.interface.SetTempProfileById(profileId);
+        } catch (err) {
+            return false;
+        }
+    }
+
     async getProfilesJSON(): Promise<string> {
         try {
             return await this.interface.GetProfilesJSON();
@@ -162,9 +171,25 @@ export class TccDBusController {
         }
     }
 
+    async getDefaultValuesProfileJSON(): Promise<string> {
+        try {
+            return await this.interface.GetDefaultValuesProfileJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async odmProfilesAvailable(): Promise<string[]> {
         try {
             return await this.interface.ODMProfilesAvailable();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async odmPowerLimits(): Promise<TDPInfo[]> {
+        try {
+            return JSON.parse(await this.interface.ODMPowerLimitsJSON());
         } catch (err) {
             return undefined;
         }
@@ -189,6 +214,22 @@ export class TccDBusController {
     async setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): Promise<boolean> {
         try {
             return await this.interface.SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON);
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getFansMinSpeed(): Promise<number> {
+        try {
+            return await this.interface.GetFansMinSpeed();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getFansOffAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.GetFansOffAvailable();
         } catch (err) {
             return undefined;
         }

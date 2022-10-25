@@ -129,4 +129,19 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public getActiveProfile(): ITccProfile {
         return this.state.getActiveProfile();
     }
+
+    public getStateProfileName(state: IStateInfo) {
+        const stateProfileId = this.getSettings().stateMap[state.value];
+        const defaultProfileName = this.utils.getDefaultProfileName(stateProfileId);
+        if (defaultProfileName !== undefined) {
+            return defaultProfileName;
+        } else {
+            const profile = this.config.getProfileById(stateProfileId);
+            if (profile !== undefined) {
+                return profile.name;
+            } else {
+                return undefined;
+            }
+        }
+    }
 }

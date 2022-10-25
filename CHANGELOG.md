@@ -1,16 +1,68 @@
 # Changelog
 
+## [1.2.2] - 2022-10-17
+### Changed
+- Fan control logic tweaks and fixes
+
+## [1.2.1] - 2022-10-14
+### Changed
+- TDP Label text adjustments (EN)
+
+### Fixed
+- Old boost workaround for devices where max frequency is not available
+  broke frequency set GUI on newer AMD devices where the scaling driver is
+  `amd-pstate`. This has been fixed and the new driver allows more variable
+  frequency limits (similar to `intel_pstate`).
+- Frequency settings save fixed on some devices where TDP control is not available
+
+## [1.2.0] - 2022-10-10
+### Added
+- Support for system profile selection for a number of devices like
+  - BA1501
+  - Pulse 14/15 Gen 1
+  - Polaris gen 1
+- Support for multiple TDP selection for a number of devices like
+  - Infinitybook Pro 14 Gen 6/7
+  - Pulse 15 Gen 2
+  - Polaris Gen 2/3
+  - Stellaris Gen 2/3/4
+- TCC-profile description
+- Support for per-device profiles
+  - Old profiles stay for most devices
+  - New default profiles for TDP control capable devices
+
+### Changed
+- Password prompt improvements.
+  - If asked to change settings to `tccd` there will not be another prompt for awhile.
+  - More descriptive password prompt text
+- Profile edit layout adjustments
+- Profile overview refresh
+  - Overview now shows profile description initially
+  - Button added to activate profile temporarily
+  - Overlay to assign profiles to states removed
+  - Switchable between "description view" and detailed view for
+    profile comparison
+- Dashboard slimmed down
+
+## [1.1.8] - 2022-10-06
+### Added
+- Checks to detect a valid ticket number to send with the systeminfos
+  plus info about what could be missing or wrong
+
+### Changed
+- Re-enable fan control for Stellaris AMD Gen 4
+- Fan control logic change for newer devices taking into account
+  min fan speed and fan off possibility from driver
+
 ## [1.1.7] - 2022-09-19
 ### Added
 - Basic support for Stellaris AMD Gen 4
 
 ## [1.1.6] - 2022-08-01
-
 ### Changed
 - Packaging dependency tweaks (RPM) for wider compatibility
 
 ## [1.1.5] - 2022-07-15
-
 ### Added
 - TUXEDO Aquaris control
   - Fan speed presets
