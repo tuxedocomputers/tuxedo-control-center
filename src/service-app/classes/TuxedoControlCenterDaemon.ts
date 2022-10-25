@@ -53,6 +53,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     static readonly CMD_RESTART_SERVICE = 'systemctl restart tccd.service';
     static readonly CMD_START_SERVICE = 'systemctl start tccd.service';
     static readonly CMD_STOP_SERVICE = 'systemctl stop tccd.service';
+    static readonly CMD_RELOAD_CONFIGS = 'systemctl kill tccd.service -s SIGHUP';
 
     private config: ConfigHandler;
 
@@ -69,7 +70,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     protected started = false;
 
-    private stateWorker: DaemonWorker;
+    private stateWorker: StateSwitcherWorker;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -142,8 +143,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
-    public triggerStateCheck() {
+    public triggerStateCheck(reset?: boolean) {
+        if (reset === undefined) {
+            reset = false;
+        }
         if (this.stateWorker !== undefined) {
+            if (reset) {
+                this.stateWorker.reset();
+            }
             this.stateWorker.work();
         }
     }
@@ -204,9 +211,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // If new config is specified, replace standard config with new config
             const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            // If something changed, restart running service
+            // If something changed, reload configs
             if (settingsSaved || profilesSaved) {
-                child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);
+                child_process.exec(TuxedoControlCenterDaemon.CMD_RELOAD_CONFIGS);
             }
             process.exit(0);
         } else {
@@ -411,6 +418,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.logLine('SIGTERM - Exiting');
             this.onExit();
             process.exit(SIGTERM);
+        });
+
+        process.on('SIGHUP', () => {
+            this.logLine('Reload configs');
+            this.loadConfigsAndProfiles();
+            this.triggerStateCheck(true);
         });
     }
 
