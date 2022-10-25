@@ -58,20 +58,22 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsWhiteOnly + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
-        else {
-            if (fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
-                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
-                this.keyboardBacklightCapabilities.maxRed = 0xff;
-                this.keyboardBacklightCapabilities.maxGreen = 0xff;
-                this.keyboardBacklightCapabilities.maxBlue = 0xff;
-                this.keyboardBacklightCapabilities.zones = 1;
-                if (fileOK(this.ledsRGBZones[1] + "/max_brightness")) {
-                    this.keyboardBacklightCapabilities.zones++;
-                }
-                if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
-                    this.keyboardBacklightCapabilities.zones++;
-                }
+        else if (fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
+            this.keyboardBacklightCapabilities.maxRed = 0xff;
+            this.keyboardBacklightCapabilities.maxGreen = 0xff;
+            this.keyboardBacklightCapabilities.maxBlue = 0xff;
+            this.keyboardBacklightCapabilities.zones = 1;
+            if (fileOK(this.ledsRGBZones[1] + "/max_brightness")) {
+                this.keyboardBacklightCapabilities.zones++;
             }
+            if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
+                this.keyboardBacklightCapabilities.zones++;
+            }
+        }
+        else {
+            this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(undefined);
+            return;
         }
 
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
