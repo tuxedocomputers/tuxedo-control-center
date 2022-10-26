@@ -225,17 +225,14 @@ export class TomteGuiComponent implements OnInit {
             });
             if (askToClose.noBother) 
             {
-                return false;
-            }
-            if (askToClose.confirm) 
-            {
-                return true;
-            }    
+                localStorage.setItem('connectNoticeDisable', 'true');
+            }  
             if (!askToClose.confirm) 
             {
                 return false;
-            }         
-        }         
+            }      
+        }   
+        return true;      
     }
 
     private async confirmResetDialogue()
