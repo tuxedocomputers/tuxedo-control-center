@@ -104,7 +104,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="content-container centered">
                 <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
 
-                <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z8" style="width: 100%">
+                <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z2" style="width: 100%">
 
                     <ng-container matColumnDef="moduleName">
                         <th mat-header-cell *matHeaderCellDef> Module name </th>
@@ -173,7 +173,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </mat-card>
     </ng-container>
-
+    <!-- 
+    <mat-card class="tcc-card card-support">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>Reset to defaults</ng-container>
+        </mat-card-title>
+        <hr />
+        <div class="content-container centered">
+            <button mat-raised-button color="primary" (click)="tomteResetToDefaults()" matTooltip="Reset Configuration to defaults.">
+                <p i18n>Reset</p>
+        </button>
+        </div>
+    </mat-card>
+    -->
 </ng-container>
 
 <br />

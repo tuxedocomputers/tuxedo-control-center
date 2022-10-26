@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
@@ -197,20 +197,58 @@ export class TomteGuiComponent implements OnInit {
         });
     }
 
+    private async confirmChangesDialogue()
+    {
+        const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
+        if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
+            const askToClose = await this.utils.confirmDialog({
+                title: $localize `:@@tomteBreakingChangesTitle:Are you sure you want to issue this command?`,
+                description: $localize `:@@tomteBreakingChangesWarning:Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!`,
+                linkLabel: '',
+                linkHref: '',
+                buttonAbortLabel: $localize `:@@tomteAbortButtonLabel:Abort`,
+                buttonConfirmLabel: $localize `:@@tomteConfirmButtonLabel:I understand`,
+                checkboxNoBotherLabel: $localize `:@@tomteDialogCheckboxNoBotherLabel:Don't ask again`,
+                showCheckboxNoBother: true
+            });
+            if (askToClose.noBother) 
+            {
+                return false;
+            }
+            if (askToClose.confirm) 
+            {
+                return true;
+            }    
+            if (!askToClose.confirm) 
+            {
+                return false;
+            }         
+        }         
+    }
+
 /*
 ========================================================================
 ===================     BUTTON CLICK FUNCTIONS       ===================
 ========================================================================
 */
 
+    public async tomteResetToDefaults()
+    {
+        // TODO unblock all blocked, install all uninstalled then tomte reconfigure all
+    }
+
     public async tomteUn_InstallButton(name,yesno,blocked)
     {
         this.utils.pageDisabled = true;
-        // TODO add a dialogue box reminding the user to reboot their PC for the changes to take effect
+        let dialogueYes = await this.confirmChangesDialogue();
+        if (!dialogueYes)
+        {
+            this.tomtelist();
+            this.utils.pageDisabled = false;
+            return;
+        }
         if (blocked === "yes")
         {
-            // TODO maybe remove dialogue box, just grey out the button in html and maybe add tooltip to the buttons? like in fan profile settings
-            this.throwErrorMessage("error: unblock the module before trying to un-/install it");
             this.utils.pageDisabled = false;
             return;
         }
@@ -230,6 +268,13 @@ export class TomteGuiComponent implements OnInit {
 
     public async tomteBlockButton(name,yesno)
     {
+        let dialogueYes = await this.confirmChangesDialogue();
+        if (!dialogueYes)
+        {
+            this.tomtelist();
+            this.utils.pageDisabled = false;
+            return;
+        }
         this.utils.pageDisabled = true;
         let command = "pkexec /bin/sh -c 'tuxedo-tomte block " + name + "'";
         if (yesno === "yes")
@@ -247,6 +292,13 @@ export class TomteGuiComponent implements OnInit {
 
     public async tomteModeButton(mode)
     {
+        let dialogueYes = await this.confirmChangesDialogue();
+        if (!dialogueYes)
+        {
+            this.tomtelist();
+            this.utils.pageDisabled = false;
+            return;
+        }
         this.utils.pageDisabled = true;
         let command = "pkexec /bin/sh -c 'tuxedo-tomte " + mode + "'";
         let results = await this.utils.execCmd(command).catch((err) => {
@@ -264,7 +316,7 @@ export class TomteGuiComponent implements OnInit {
         let gotInstalled = await this.pmgs.install("tuxedo-tomte");
         if (!gotInstalled)
         {
-            this.throwErrorMessage("Tomte failed to install. Do you use a tuxedo device and are using the tuxedo mirrors?");
+            this.throwErrorMessage("Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?");
         }
         this.tomteIsInstalled = "";
         this.utils.pageDisabled = false;
