@@ -36,6 +36,18 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 })
 export class TomteGuiComponent implements OnInit {
     tomteIsInstalled = "";
+
+    /* 
+        This array is quite an important data structure. It is a two dimensional array, that is filled with information in parseTomteList(data) function
+        it reflects the structure that is given back by tomte list command 
+
+        [i][0] modulename - important for all the scripts 
+        [i][1] version - not needed for any functionality yet
+        [i][2] installation status - is this module installed or not?
+        [i][3] blocked status - is this module blocked or not? If it is, installation will not work.
+        [i][4] is this module a prerequisite? If yes it can't be blocked or uninstalled
+
+    */
   tomteListArray = [];
   moduleToolTips = new Map();
   columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
@@ -92,7 +104,7 @@ export class TomteGuiComponent implements OnInit {
                 }
                 catch (e)
                 {
-                    if(i === 100)
+                    if(i === 200)
                     {                                       
                         this.throwErrorMessage("Information from command 'tomte list' could not be obtained. Is tomte already running?");
                     }
@@ -226,6 +238,31 @@ export class TomteGuiComponent implements OnInit {
         }         
     }
 
+    private async confirmResetDialogue()
+    {
+        const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
+        if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
+            const askToClose = await this.utils.confirmDialog({
+                title: $localize `:@@tomteResetDefaultsTitle:Are you sure you want to reset to defaults?`,
+                description: $localize `:@@tomteResetDefaultsMessage:This will revert any manual configuration you did, are you sure you want to proceed?`,
+                linkLabel: '',
+                linkHref: '',
+                buttonAbortLabel: $localize `:@@tomteAbortButtonLabel:Abort`,
+                buttonConfirmLabel: $localize `:@@tomteConfirmButtonLabel:I understand`,
+                checkboxNoBotherLabel: '',
+                showCheckboxNoBother: false
+            });
+            if (askToClose.confirm) 
+            {
+                return true;
+            }    
+            if (!askToClose.confirm) 
+            {
+                return false;
+            }         
+        }   
+    }
+
 /*
 ========================================================================
 ===================     BUTTON CLICK FUNCTIONS       ===================
@@ -234,7 +271,30 @@ export class TomteGuiComponent implements OnInit {
 
     public async tomteResetToDefaults()
     {
-        // TODO unblock all blocked, install all uninstalled then tomte reconfigure all
+        this.utils.pageDisabled = true;
+        let dialogueYes = await this.confirmResetDialogue();
+        if (!dialogueYes)
+        {
+            this.tomtelist();
+            this.utils.pageDisabled = false;
+            return;
+        }
+        let command1 = "pkexec /bin/sh -c 'tuxedo-tomte AUTOMATIC'";
+        await this.utils.execCmd(command1).catch((err) => {
+            this.throwErrorMessage(err);
+        });
+        let command2 = "pkexec /bin/sh -c 'tuxedo-tomte unblock all'";
+        await this.utils.execCmd(command2).catch(err =>
+            {
+                this.throwErrorMessage(err);
+            });
+        let command3 = "pkexec /bin/sh -c 'tuxedo-tomte reconfigure all'";
+        await this.utils.execCmd(command3).catch(err =>
+            {
+                this.throwErrorMessage(err);
+            });
+        this.tomtelist();
+        this.utils.pageDisabled = false;
     }
 
     public async tomteUn_InstallButton(name,yesno,blocked)
