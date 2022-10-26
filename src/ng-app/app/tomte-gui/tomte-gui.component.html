@@ -67,70 +67,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 </ng-container>
 
 <ng-container *ngIf="tomteMode && tomteIsInstalled === 'true'">
-   
-
-    <mat-card class="tcc-card card-support">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>Tomte Configuration</ng-container>
-        </mat-card-title>
-        <hr />
-        <div class="content-container centered">
-            <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
-
-            <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z8" style="width: 100%">
-
-                <ng-container matColumnDef="moduleName">
-                    <th mat-header-cell *matHeaderCellDef> Module name </th>
-                    <td mat-cell *matCellDef="let line" [matTooltip]="moduleToolTips.get(line[0])"> {{line[0]}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="moduleVersion">
-                    <th mat-header-cell *matHeaderCellDef> Version </th>
-                    <td mat-cell *matCellDef="let line"> {{line[1]}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="moduleInstalled">
-                    <th mat-header-cell *matHeaderCellDef> Installed </th>
-                    <td mat-cell *matCellDef="let line">
-                        <mat-slide-toggle 
-                        class="green-slide-toggle"
-                        [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
-                        [checked]="line[2] === 'yes'"
-                        (change)="tomteUn_InstallButton(line[0],line[2],line[3])"
-                        [matTooltip]="line[3] === 'yes' ? 'Cannot un-/install a module that is blocked.' : (line[4] === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (line[2] === 'no' ? 'Install this module' : 'Uninstall this module'))"
-                        >
-                    
-                        </mat-slide-toggle>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="moduleBlocked">
-                    <th mat-header-cell *matHeaderCellDef> Active </th>
-                    <td mat-cell *matCellDef="let line">                       
-                        <mat-slide-toggle 
-                        class="green-slide-toggle"
-                        [disabled]="line[4] === 'prerequisite'"
-                        [checked]="line[3] === 'no'"
-                        (change)="tomteBlockButton(line[0],line[3])"
-                        [matTooltip]="line[4] === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (line[3] === 'no' ? 'Block this module' : 'Unblock this module')"
-                        >
-                    
-                        </mat-slide-toggle> 
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="moduleRequired">
-                    <th mat-header-cell *matHeaderCellDef> Required </th>
-                    <td mat-cell *matCellDef="let line"> {{line[4]}}</td>
-                </ng-container>
-
-
-                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-            </table>
-
-        </div>
-    </mat-card>
 
     <mat-card class="tcc-card card-support">
         <mat-card-title class="theme-page-title">
@@ -143,7 +79,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div style="text-align: center">
                 <button style="display: inline-block" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[0]"
                     (click)="tomteModeButton(tomteModes[0])"
-                    matTooltip="This is the  default  mode.  Everything  will  be  installed/up‐dated/removed automatically by Tomte.">
+                    matTooltip="This is the  default  mode.  Everything  will  be  installed/updated/removed automatically by Tomte.">
                     <ng-container>Automatic</ng-container>
                 </button>
                 <button style="display: inline-block; margin-left: 5px" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[1]"
@@ -159,7 +95,84 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </mat-card>
 
+    <ng-container *ngIf="tomteMode !== 'DONT_CONFIGURE'">
+        <mat-card class="tcc-card card-support">
+            <mat-card-title class="theme-page-title">
+                <ng-container i18n>Tomte Configuration</ng-container>
+            </mat-card-title>
+            <hr />
+            <div class="content-container centered">
+                <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
 
+                <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z8" style="width: 100%">
+
+                    <ng-container matColumnDef="moduleName">
+                        <th mat-header-cell *matHeaderCellDef> Module name </th>
+                        <td mat-cell *matCellDef="let line"> {{line[0]}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="moduleVersion">
+                        <th mat-header-cell *matHeaderCellDef> Version </th>
+                        <td mat-cell *matCellDef="let line"> {{line[1]}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="moduleInstalled">
+                        <th mat-header-cell *matHeaderCellDef> Installed </th>
+                        <td mat-cell *matCellDef="let line">
+                            <mat-slide-toggle 
+                            class="green-slide-toggle"
+                            [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
+                            [checked]="line[2] === 'yes'"
+                            (change)="tomteUn_InstallButton(line[0],line[2],line[3])"
+                            [matTooltip]="line[3] === 'yes' ? 'Cannot un-/install a module that is blocked.' : (line[4] === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (line[2] === 'no' ? 'Install this module' : 'Uninstall this module'))"
+                            >
+                        
+                            </mat-slide-toggle>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="moduleBlocked">
+                        <th mat-header-cell *matHeaderCellDef> Active </th>
+                        <td mat-cell *matCellDef="let line">                       
+                            <mat-slide-toggle 
+                            class="green-slide-toggle"
+                            [disabled]="line[4] === 'prerequisite'"
+                            [checked]="line[3] === 'no'"
+                            (change)="tomteBlockButton(line[0],line[3])"
+                            [matTooltip]="line[4] === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (line[3] === 'no' ? 'Block this module' : 'Unblock this module')"
+                            >
+                        
+                            </mat-slide-toggle> 
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="moduleRequired">
+                        <th mat-header-cell *matHeaderCellDef> Required </th>
+                        <td mat-cell *matCellDef="let line"> {{line[4]}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="moduleDescription">
+                        <th mat-header-cell *matHeaderCellDef> Info </th>
+                        <td mat-cell *matCellDef="let line"> 
+                            <mat-icon
+                            class="info-icon"
+                            [matTooltip]="moduleToolTips.get(line[0])"
+                            [matTooltipShowDelay]="infoTooltipShowDelay"
+                            >
+                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                        </mat-icon>
+
+                        </td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+
+            </div>
+        </mat-card>
+    </ng-container>
 
 </ng-container>
 

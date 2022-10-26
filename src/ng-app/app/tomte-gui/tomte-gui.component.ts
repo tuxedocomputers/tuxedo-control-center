@@ -38,7 +38,7 @@ export class TomteGuiComponent implements OnInit {
     tomteIsInstalled = "";
   tomteListArray = [];
   moduleToolTips = new Map();
-  columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleRequired'];
+  columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
   tomteMode = "";
   tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
   constructor(
@@ -132,6 +132,11 @@ export class TomteGuiComponent implements OnInit {
         this.tomteMode = data2[data2.length -1];
         for (var i = 0; i < data.length; i++)
         {
+            // TODO for when we do the translations it might be possible to use this $localize function to localize 'yes' 'no' and 'prerequisite' 
+            // similar to described here: https://stackoverflow.com/questions/60271964/angular-9-i18n-in-typescript
+            // ... if I do this I also have to change the 'if' in the html that looks for if something is prerequisite... mmmh
+            // nevermind, I think we should actually do this in the html. Maybe something along the lines of @@Tomte.yes:yes entry in languages file
+            // and then we just change what is displayed and not what is saved in the array??? Because that would be a nightmare to maintain!
             if (i < 3)
             {
                 continue;
