@@ -279,16 +279,16 @@ export class TomteGuiComponent implements OnInit {
             this.utils.pageDisabled = false;
             return;
         }
-        let command1 = "pkexec /bin/sh -c 'tuxedo-tomte AUTOMATIC'";
+        let command1 = "pkexec tuxedo-tomte AUTOMATIC";
         await this.utils.execCmd(command1).catch((err) => {
             this.throwErrorMessage(err);
         });
-        let command2 = "pkexec /bin/sh -c 'tuxedo-tomte unblock all'";
+        let command2 = "pkexec tuxedo-tomte unblock all";
         await this.utils.execCmd(command2).catch(err =>
             {
                 this.throwErrorMessage(err);
             });
-        let command3 = "pkexec /bin/sh -c 'tuxedo-tomte reconfigure all'";
+        let command3 = "pkexec tuxedo-tomte reconfigure all";
         await this.utils.execCmd(command3).catch(err =>
             {
                 this.throwErrorMessage(err);
@@ -312,10 +312,10 @@ export class TomteGuiComponent implements OnInit {
             this.utils.pageDisabled = false;
             return;
         }
-        let command = "pkexec /bin/sh -c 'tuxedo-tomte configure " + name + "'";
+        let command = "pkexec tuxedo-tomte configure " + name;
         if (yesno === "yes")
         {
-            command = "pkexec /bin/sh -c 'yes | tuxedo-tomte remove " + name + "'";
+            command = "yes | pkexec tuxedo-tomte remove " + name;
         }
         let results = await this.utils.execCmd(command).catch((err) => {
             this.throwErrorMessage(err);
@@ -336,10 +336,10 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        let command = "pkexec /bin/sh -c 'tuxedo-tomte block " + name + "'";
+        let command = "pkexec tuxedo-tomte block " + name;
         if (yesno === "yes")
         {
-            command = "pkexec /bin/sh -c 'tuxedo-tomte unblock " + name + "'";
+            command = "pkexec tuxedo-tomte unblock " + name ;
         }
         let results = await this.utils.execCmd(command).catch((err) => {
             this.throwErrorMessage(err);
@@ -360,7 +360,7 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        let command = "pkexec /bin/sh -c 'tuxedo-tomte " + mode + "'";
+        let command = "pkexec tuxedo-tomte " + mode ;
         let results = await this.utils.execCmd(command).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
