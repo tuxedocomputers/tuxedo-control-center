@@ -51,6 +51,7 @@ async function buildDeb(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tomte.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
         ],
         linux: {
