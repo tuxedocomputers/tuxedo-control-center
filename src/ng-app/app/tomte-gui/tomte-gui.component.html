@@ -30,6 +30,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 </mat-card>
 
+<ng-container *ngIf="showRetryButton">
+    <mat-card>
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>TUXEDO Tomte unable to load information</ng-container>
+        </mat-card-title>
+        <hr />
+    
+        <div class="content-container centered">
+            <p i18n>
+                TUXEDO Tomte ran into a timeout. Maybe it is already running. To retry press this button:
+            </p>
+            <button mat-raised-button color="primary" (click)="tomtelist()">Install TUXEDO Tomte</button>
+        </div>
+    </mat-card>
+
+</ng-container>
 
 <ng-container *ngIf="tomteIsInstalled === 'false'">
 
@@ -43,14 +59,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <p i18n>
                 Install TUXEDO Tomte now by pressing this button:
             </p>
-            <button mat-raised-button color="primary" (click)="installTomteButton()">Install TUXEDO Tomte</button>
+            <button mat-raised-button color="primary" (click)="installTomteButton()">Retry</button>
         </div>
     </mat-card>
 
 
 </ng-container>
 
-<ng-container *ngIf="!tomteMode && tomteIsInstalled === 'true'">
+<ng-container *ngIf="!tomteMode && tomteIsInstalled === 'true' && !loadingInformation">
     <mat-card class="tcc-card card-support">
         <mat-card-title class="theme-page-title">
             <ng-container i18n>TUXEDO Tomte not producing output</ng-container>

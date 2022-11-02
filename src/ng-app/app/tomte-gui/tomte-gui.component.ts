@@ -53,6 +53,8 @@ export class TomteGuiComponent implements OnInit {
   columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
   tomteMode = "";
   tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
+  showRetryButton = false;
+  loadingInformation = false;
   constructor(
     private electron: ElectronService,
     private utils: UtilsService,
@@ -82,43 +84,49 @@ export class TomteGuiComponent implements OnInit {
 
     private async tomtelist() {
         this.utils.pageDisabled = true;
-    let tomteinstalled = await this.pmgs.isInstalled("tuxedo-tomte");
-    if (tomteinstalled)
-        {
-            // retries to list the information a couple of times, this is only triggered if tomte is already running. 
-            // Performance impact seems minimal. If this turns out to be a problem we could add a timeout with:
-            //await new Promise(resolve => setTimeout(resolve, 4000)); 
-            for (let i = 0; i < 2000; i++)
+        this.showRetryButton = false;
+        this.loadingInformation = true;
+        let tomteinstalled = await this.pmgs.isInstalled("tuxedo-tomte");
+        if (tomteinstalled)
             {
-                let command = "tuxedo-tomte list"
-                this.utils.pageDisabled = true;
-                let results
-                try 
-                {
-                    results = await this.utils.execCmd(command);
-                    this.utils.pageDisabled = false;
-                    this.parseTomteList(results);
-                    this.tomteIsInstalled = "true";
-                    this.getModuleDescriptions();
-                    break;
-                }
-                catch (e)
-                {
-                    if(i === 200)
-                    {                                       
-                        this.throwErrorMessage("Information from command 'tomte list' could not be obtained. Is tomte already running?");
+                // retries to list the information a couple of times, this is only triggered if tomte is already running.      
+                for (let i = 0; i < 30; i++)
+                {             
+                    let command = "tuxedo-tomte list"
+                    this.utils.pageDisabled = true;
+                    let results
+                    try 
+                    {
+                        results = await this.utils.execCmd(command);
+                        this.utils.pageDisabled = false;
+                        this.parseTomteList(results);
+                        this.getModuleDescriptions();
+                        break;
                     }
-                    continue;
+                    catch (e)
+                    {
+                        if(i === 10)
+                        {                                       
+                            this.throwErrorMessage("Information from command 'tomte list' could not be obtained. Is tomte already running?");
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        if(i === 29)
+                        {
+                            this.showRetryButton = true;
+                        }
+                        continue;
+                    }
                 }
-            }
-            
+                this.tomteIsInstalled = "true";
+                this.utils.pageDisabled = false;
 
-        }
-    else
-        {
-            this.tomteIsInstalled = "false";
-            this.utils.pageDisabled = false;
-        }
+            }
+        else
+            {
+                this.tomteIsInstalled = "false";
+                this.utils.pageDisabled = false;
+            }
+        this.loadingInformation = true;
 
     }
 
