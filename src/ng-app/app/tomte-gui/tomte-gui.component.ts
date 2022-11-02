@@ -285,20 +285,28 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         let command1 = "pkexec tuxedo-tomte AUTOMATIC";
-        await this.utils.execFile(command1).catch((err) => {
-            this.throwErrorMessage(err);
-        });
         let command2 = "pkexec tuxedo-tomte unblock all";
-        await this.utils.execFile(command2).catch(err =>
-            {
-                this.throwErrorMessage(err);
-            });
         let command3 = "pkexec tuxedo-tomte reconfigure all";
-        await this.utils.execFile(command3).catch(err =>
-            {
-                this.throwErrorMessage(err);
-            });
-        this.tomtelist();
+        let res1;
+        let res2;
+        let res3;
+        try
+        {
+            
+            res1 = await this.utils.execFile(command1);
+            res2 = await this.utils.execFile(command2);
+            res3 = await this.utils.execFile(command3);
+            this.tomtelist();
+        }
+        catch
+        {
+            console.error("One of the reset commands failed, here is their output: Function 1 Command: " 
+            + command1 + " Results: " + res1 + 
+            " Function2 Command: " + command2 + " Results: " + res2 +
+            " Function2 Command: " + command3 + " Results: " + res3
+            );
+            this.throwErrorMessage("Reset failed. Maybe Tomte is already running? If that is the case simply try again later.");
+        }        
         this.utils.pageDisabled = false;
     }
 
