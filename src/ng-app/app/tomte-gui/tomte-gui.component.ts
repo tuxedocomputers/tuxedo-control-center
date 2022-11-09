@@ -126,7 +126,7 @@ export class TomteGuiComponent implements OnInit {
                 this.tomteIsInstalled = "false";
                 this.utils.pageDisabled = false;
             }
-        this.loadingInformation = true;
+        this.loadingInformation = false;
 
     }
 
@@ -139,6 +139,7 @@ export class TomteGuiComponent implements OnInit {
         {
             return;
         }
+        this.tomteListArray = [];
         let lines = rawTomteListOutput.split("\n");
         // TODO is it possible to clean this up further?
         let modeLine = lines[0].split(" ");
