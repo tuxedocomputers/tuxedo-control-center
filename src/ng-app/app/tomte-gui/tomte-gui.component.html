@@ -124,12 +124,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     <ng-container matColumnDef="moduleName">
                         <th mat-header-cell *matHeaderCellDef> Module name </th>
-                        <td mat-cell *matCellDef="let line"> {{line[0]}}</td>
+                        <td mat-cell *matCellDef="let line"> {{line.moduleName}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="moduleVersion">
                         <th mat-header-cell *matHeaderCellDef> Version </th>
-                        <td mat-cell *matCellDef="let line"> {{line[1]}}</td>
+                        <td mat-cell *matCellDef="let line"> {{line.version}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="moduleInstalled">
@@ -137,10 +137,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <td mat-cell *matCellDef="let line">
                             <mat-slide-toggle 
                             class="green-slide-toggle"
-                            [disabled]="line[4] === 'prerequisite' || line[3] === 'yes'"
-                            [checked]="line[2] === 'yes'"
-                            (change)="tomteUn_InstallButton(line[0],line[2],line[3])"
-                            [matTooltip]="line[3] === 'yes' ? 'Cannot un-/install a module that is blocked.' : (line[4] === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (line[2] === 'no' ? 'Install this module' : 'Uninstall this module'))"
+                            [disabled]="line.prerequisite === 'prerequisite' || line.blocked"
+                            [checked]="line.installed"
+                            (change)="tomteUn_InstallButton(line.moduleName,line.installed,line.blocked)"
+                            [matTooltip]="line.blocked ? 'Cannot un-/install a module that is blocked.' : (line.prerequisite === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (!line.installed ? 'Install this module' : 'Uninstall this module'))"
                             >
                         
                             </mat-slide-toggle>
@@ -152,10 +152,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <td mat-cell *matCellDef="let line">                       
                             <mat-slide-toggle 
                             class="green-slide-toggle"
-                            [disabled]="line[4] === 'prerequisite'"
-                            [checked]="line[3] === 'no'"
-                            (change)="tomteBlockButton(line[0],line[3])"
-                            [matTooltip]="line[4] === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (line[3] === 'no' ? 'Block this module' : 'Unblock this module')"
+                            [disabled]="line.prerequisite === 'prerequisite'"
+                            [checked]="!line.blocked"
+                            (change)="tomteBlockButton(line.moduleName,line.blocked)"
+                            [matTooltip]="line.prerequisite === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (!line.blocked ? 'Block this module' : 'Unblock this module')"
                             >
                         
                             </mat-slide-toggle> 
@@ -164,7 +164,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     <ng-container matColumnDef="moduleRequired">
                         <th mat-header-cell *matHeaderCellDef> Required </th>
-                        <td mat-cell *matCellDef="let line"> {{line[4]}}</td>
+                        <td mat-cell *matCellDef="let line"> {{line.prerequisite}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="moduleDescription">
@@ -172,7 +172,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <td mat-cell *matCellDef="let line"> 
                             <mat-icon
                             class="info-icon"
-                            [matTooltip]="moduleToolTips.get(line[0])"
+                            [matTooltip]="moduleToolTips.get(line.moduleName)"
                             [matTooltipShowDelay]="infoTooltipShowDelay"
                             >
                             <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>

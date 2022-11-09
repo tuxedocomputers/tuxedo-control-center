@@ -22,6 +22,13 @@ import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
+interface ITomteModule {
+    moduleName: string,
+    version: string,
+    installed: boolean,
+    blocked: boolean,
+    prerequisite: string
+}
 
 @Component({
   selector: 'app-tomte-gui',
@@ -35,53 +42,46 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ]
 })
 export class TomteGuiComponent implements OnInit {
+    // TODO remove nessesity of this function to be a string too (I need to handle not showing some component a different way I think it's checked in html)
+    // hm, thinking about it, maybe by instead using the loadingInformation variable from down there?
     tomteIsInstalled = "";
-
-    /* 
-        This array is quite an important data structure. It is a two dimensional array, that is filled with information in parseTomteList(data) function
-        it reflects the structure that is given back by tomte list command 
-
-        [i][0] modulename - important for all the scripts 
-        [i][1] version - not needed for any functionality yet
-        [i][2] installation status - is this module installed or not?
-        [i][3] blocked status - is this module blocked or not? If it is, installation will not work.
-        [i][4] is this module a prerequisite? If yes it can't be blocked or uninstalled
-
-    */
-  tomteListArray = [];
-  moduleToolTips = new Map();
-  columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
-  tomteMode = "";
-  tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
-  showRetryButton = false;
-  loadingInformation = false;
-  constructor(
-    private electron: ElectronService,
-    private utils: UtilsService,
-    private pmgs: ProgramManagementService
-  ) { }
+    tomteListArray: ITomteModule[] = [];
+    moduleToolTips = new Map();
+    columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
+    // TODO maybe there is a better way to handle this too :) 
+    tomteMode = "";
+    tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
+    // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
+    showRetryButton = false;
+    loadingInformation = false;
+    constructor(
+        private electron: ElectronService,
+        private utils: UtilsService,
+        private pmgs: ProgramManagementService
+    ) { }
 
 
-  ngOnInit() {
-  }
 
-  ngAfterViewInit() {
-    this.tomtelist();
-  }
 
-  public focusControl(control): void {
-    setImmediate(() => { control.focus(); });
-  }
+    ngOnInit() {
+    }
 
-  public openExternalUrl(url: string): void {
-    this.electron.shell.openExternal(url);
-  }
+    ngAfterViewInit() {
+        this.tomtelist();
+    }
+
+    public focusControl(control): void {
+        setImmediate(() => { control.focus(); });
+    }
+
+    public openExternalUrl(url: string): void {
+        this.electron.shell.openExternal(url);
+    }
 
 
     /*
         executes tomte list command and initiates follow up methods to parse information
     */
-
     private async tomtelist() {
         this.utils.pageDisabled = true;
         this.showRetryButton = false;
@@ -99,7 +99,7 @@ export class TomteGuiComponent implements OnInit {
                     {
                         results = await this.utils.execCmd(command);
                         this.utils.pageDisabled = false;
-                        this.parseTomteList(results);
+                        this.parseTomteList("" + results);
                         this.getModuleDescriptions();
                         break;
                     }
@@ -134,42 +134,29 @@ export class TomteGuiComponent implements OnInit {
         Parses the raw data from the comandline output and puts it into tomteListArray variable that is then 
         used by the HTML to build the corresponding table
     */
-    private parseTomteList(data){
-        if (!data)
+    private parseTomteList(rawTomteListOutput: string | undefined){
+        if (!rawTomteListOutput)
         {
             return;
         }
-        let data3 = data;
-        data = "" + data;
-        data = data.split("\n");
-        let tomtelistarray2 = [];
-        let data2 = data[0].split(" ");
-        if (data.length < 2)
+        let lines = rawTomteListOutput.split("\n");
+        // TODO is it possible to clean this up further?
+        let modeLine = lines[0].split(" ");
+        this.tomteMode = modeLine[modeLine.length -1];
+        if (lines.length < 2)
         {
-            this.throwErrorMessage(data);
+            this.throwErrorMessage(rawTomteListOutput);
             return;
         }
-        this.tomteMode = data2[data2.length -1];
-        for (var i = 0; i < data.length; i++)
-        {
-            // TODO for when we do the translations it might be possible to use this $localize function to localize 'yes' 'no' and 'prerequisite' 
-            // similar to described here: https://stackoverflow.com/questions/60271964/angular-9-i18n-in-typescript
-            // ... if I do this I also have to change the 'if' in the html that looks for if something is prerequisite... mmmh
-            // nevermind, I think we should actually do this in the html. Maybe something along the lines of @@Tomte.yes:yes entry in languages file
-            // and then we just change what is displayed and not what is saved in the array??? Because that would be a nightmare to maintain!
-            if (i < 3)
+        for (var i = 3; i < lines.length; i++)
+        {        
+            let line = lines[i].split(/ +/);
+            if (!line[0])
             {
                 continue;
             }
-            let data2 = "" + data[i];
-            let array2 = (data2).split(/ +/);
-            if (!array2[0])
-            {
-                continue;
-            }
-            tomtelistarray2.push(array2);
+            this.tomteListArray.push({moduleName: line[0], version: line[1], installed: line[2] === "yes", blocked: line[3] === "yes", prerequisite: line[4]});
         }
-        this.tomteListArray = tomtelistarray2;
     }
 
 
@@ -179,7 +166,8 @@ export class TomteGuiComponent implements OnInit {
     */
     private async getModuleDescriptions()
     {
-        if (this.moduleToolTips.size < 1)
+        if (this.moduleToolTips.size < 1) // TODO think about changing that to simply addding a check in the loop if there already is an entry for a tooltip in the map?
+        // or maybe something else to check if it already loaded all the modules, to keep the performance impact minimally? idk
         {
         for (let i = 0; i < this.tomteListArray.length; i++)
             {
@@ -188,7 +176,9 @@ export class TomteGuiComponent implements OnInit {
                 let results = await this.utils.execCmd(command).catch((err) => {
                     // add some kind of error message if you want
                 });
-                this.moduleToolTips.set(modulename, results);
+                this.moduleToolTips.set(modulename, results); // TODO change it so, that if it doesn't work it maybe retries or something? and if it still doesn't work leaves it empty?
+                // because this way it's probably gonna put the error message as tooltip if it fails.
+                // question is, if it fails to load a tooltip if it should show an error message or something, since we put the tooltip on the info icon 
             }
         }
     }
@@ -201,13 +191,14 @@ export class TomteGuiComponent implements OnInit {
 
     /*
         Opens Dialogue containing given errormessage
+        Also logs the error to the browser console
     */
-    private async throwErrorMessage(errormessage)
+    private async throwErrorMessage(errorMessage: string | undefined)
     {
-        console.error(errormessage);
+        console.error(errorMessage);
         const askToClose = await this.utils.confirmDialog({
             title: $localize `:@@aqDialogErrorTitle:An Error occured!`,
-            description: errormessage,
+            description: errorMessage,
             linkLabel: ``,
             linkHref: null,
             buttonAbortLabel: ``,
@@ -217,6 +208,10 @@ export class TomteGuiComponent implements OnInit {
         });
     }
 
+
+    /*
+        Opens Dialogue asking the user if they are sure to proceed 
+    */
     private async confirmChangesDialogue()
     {
         const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
@@ -243,6 +238,10 @@ export class TomteGuiComponent implements OnInit {
         return true;      
     }
 
+
+    /*
+        Opens Dialogue informing the user that everything they have customly configured will be rewoken by issueing this command
+    */
     private async confirmResetDialogue()
     {
         const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
@@ -274,6 +273,10 @@ export class TomteGuiComponent implements OnInit {
 ========================================================================
 */
 
+    /*
+        Tries to completely restore tomte to default configuration.
+        Throws exhaustive error message if it fails.
+    */
     public async tomteResetToDefaults()
     {
         this.utils.pageDisabled = true;
@@ -310,7 +313,12 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    public async tomteUn_InstallButton(name,yesno,blocked)
+
+    /*
+        Tries to either install or uninstall a given module, depending on if the module is already installed or not
+        Not to be confused with the installTomteButton() function that instead tries to install tomte
+    */
+    public async tomteUn_InstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
     {
         this.utils.pageDisabled = true;
         let dialogueYes = await this.confirmChangesDialogue();
@@ -320,12 +328,12 @@ export class TomteGuiComponent implements OnInit {
             this.utils.pageDisabled = false;
             return;
         }
-        if (blocked === "yes")
+        if (isBlocked)
         {
             this.utils.pageDisabled = false;
             return;
         }
-        if (yesno === "yes")
+        if (isInstalled)
         {
             let command = "yes | pkexec tuxedo-tomte remove " + name;
         
@@ -352,7 +360,11 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    public async tomteBlockButton(name,yesno)
+
+    /*
+        Tries to either block or unblock a given module, depending on if the module is already blocked or not
+    */
+    public async tomteBlockButton(name: string, isBlocked: boolean)
     {
         let dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
@@ -363,7 +375,7 @@ export class TomteGuiComponent implements OnInit {
         }
         this.utils.pageDisabled = true;
         let command = "pkexec tuxedo-tomte block " + name;
-        if (yesno === "yes")
+        if (isBlocked)
         {
             command = "pkexec tuxedo-tomte unblock " + name ;
         }
@@ -376,7 +388,11 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    public async tomteModeButton(mode)
+
+    /*
+        Changes the mode tomte is operating in to the mode given and throws an error message if this doesnt work
+    */
+    public async tomteModeButton(mode: string)
     {
         let dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
@@ -396,6 +412,11 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
+
+    /*
+        Tries to install tomte when button is clicked and throws error message if it fails.
+        Not to be confused with the tomteUn_InstallButton() function, which tries to un-/install a given module
+    */
     public async installTomteButton()
     {
         this.utils.pageDisabled = true;
