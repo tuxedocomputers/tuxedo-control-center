@@ -53,7 +53,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     static readonly CMD_RESTART_SERVICE = 'systemctl restart tccd.service';
     static readonly CMD_START_SERVICE = 'systemctl start tccd.service';
     static readonly CMD_STOP_SERVICE = 'systemctl stop tccd.service';
-    static readonly CMD_RELOAD_CONFIGS = 'systemctl kill tccd.service -s SIGHUP';
 
     private config: ConfigHandler;
 
@@ -213,7 +212,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
             // If something changed, reload configs
             if (settingsSaved || profilesSaved) {
-                child_process.exec(TuxedoControlCenterDaemon.CMD_RELOAD_CONFIGS);
+                const pidNumber = this.readPid();
+                if (isNaN(pidNumber)) {
+                    console.log('Failed to locate running tccd process. Cannot reload config.');
+                    process.exit(1);
+                } else {
+                    process.kill(pidNumber, 'SIGHUP');
+                }
             }
             process.exit(0);
         } else {
