@@ -66,10 +66,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 </ng-container>
 
-<ng-container *ngIf="loadingInformation">
-
-            <!-- TODO add Spinner --->
-
+<ng-container *ngIf="loadingInformation && !pageDisabled">
+    <div [ngClass]="{'global-spinner': true}">
+        <i class="fas fa-cog fa-spin"></i>
+    </div>
+    <mat-card class="tcc-card card-support" [ngClass]="{'blur-no-input': true}">
+        <mat-card-title class="theme-page-title">
+            <ng-container i18n>Loading Information</ng-container>
+        </mat-card-title>
+        <hr />
+    
+        <div class="content-container centered">
+            <p i18n>
+             Loading information, please wait...
+            </p>
+        </div>
+    </mat-card>
 </ng-container>
 
 <ng-container *ngIf="!isTuxedoDevice">
