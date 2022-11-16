@@ -42,9 +42,7 @@ interface ITomteModule {
   ]
 })
 export class TomteGuiComponent implements OnInit {
-    // TODO remove nessesity of this function to be a string too (I need to handle not showing some component a different way I think it's checked in html)
-    // hm, thinking about it, maybe by instead using the loadingInformation variable from down there?
-    tomteIsInstalled = "";
+    tomteIsInstalled = false;
     tomteListArray: ITomteModule[] = [];
     moduleToolTips = new Map();
     columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
@@ -54,6 +52,9 @@ export class TomteGuiComponent implements OnInit {
     // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
     showRetryButton = false;
     loadingInformation = false;
+    // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and 
+    // set this variable to false to output the correct error message in the control center
+    isTuxedoDevice = true;
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
@@ -83,22 +84,19 @@ export class TomteGuiComponent implements OnInit {
         executes tomte list command and initiates follow up methods to parse information
     */
     private async tomtelist() {
-        this.utils.pageDisabled = true;
         this.showRetryButton = false;
         this.loadingInformation = true;
-        let tomteinstalled = await this.pmgs.isInstalled("tuxedo-tomte");
-        if (tomteinstalled)
+        this.tomteIsInstalled = await this.pmgs.isInstalled("tuxedo-tomte");
+        if (this.tomteIsInstalled)
             {
                 // retries to list the information a couple of times, this is only triggered if tomte is already running.      
                 for (let i = 0; i < 30; i++)
                 {             
                     let command = "tuxedo-tomte list"
-                    this.utils.pageDisabled = true;
                     let results
                     try 
                     {
                         results = await this.utils.execCmd(command);
-                        this.utils.pageDisabled = false;
                         this.parseTomteList("" + results);
                         this.getModuleDescriptions();
                         break;
@@ -117,14 +115,6 @@ export class TomteGuiComponent implements OnInit {
                         continue;
                     }
                 }
-                this.tomteIsInstalled = "true";
-                this.utils.pageDisabled = false;
-
-            }
-        else
-            {
-                this.tomteIsInstalled = "false";
-                this.utils.pageDisabled = false;
             }
         this.loadingInformation = false;
 
@@ -167,20 +157,36 @@ export class TomteGuiComponent implements OnInit {
     */
     private async getModuleDescriptions()
     {
-        if (this.moduleToolTips.size < 1) // TODO think about changing that to simply addding a check in the loop if there already is an entry for a tooltip in the map?
-        // or maybe something else to check if it already loaded all the modules, to keep the performance impact minimally? idk
+        //console.log("tooltips saved: " + this.moduleToolTips.size + ", num of modules: " + this.tomteListArray.length);
+        if (this.moduleToolTips.size < this.tomteListArray.length) 
         {
+            //console.log("loading tooltips");
         for (let i = 0; i < this.tomteListArray.length; i++)
             {
-                let modulename = this.tomteListArray[i][0];
+                let modulename = this.tomteListArray[i].moduleName;
+                if(this.moduleToolTips.has(modulename))
+                {
+                    continue;
+                }
+                //console.log("loading tooltip of: " + modulename);
                 let command = "tuxedo-tomte description " + modulename;
-                let results = await this.utils.execCmd(command).catch((err) => {
-                    // add some kind of error message if you want
-                });
-                this.moduleToolTips.set(modulename, results); // TODO change it so, that if it doesn't work it maybe retries or something? and if it still doesn't work leaves it empty?
-                // because this way it's probably gonna put the error message as tooltip if it fails.
-                // question is, if it fails to load a tooltip if it should show an error message or something, since we put the tooltip on the info icon 
+                // using try catch so it doesn't fill the tooltip with garbage when it fails.
+                try 
+                {
+                    let results = await this.utils.execCmd(command);
+                    this.moduleToolTips.set(modulename, results);
+                    //console.log("Obtained Tooltip: " + results);
+                }
+                catch (err)
+                {
+                    //console.log("failed to obtain tooltip: " + err);
+                }
+
             }
+        }
+        else 
+        {
+            //console.log("already enough tooltips");
         }
     }
 
@@ -426,9 +432,8 @@ export class TomteGuiComponent implements OnInit {
         {
             this.throwErrorMessage("Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?");
         }
-        this.tomteIsInstalled = "";
         this.utils.pageDisabled = false;
-        await this.tomtelist();
+        this.tomtelist();
     }
 
  
