@@ -312,8 +312,8 @@ export class TomteGuiComponent implements OnInit {
         {
             console.error("One of the reset commands failed, here is their output: Function 1 Command: " 
             + command1 + " Results: " + res1 + 
-            " Function2 Command: " + command2 + " Results: " + res2 +
-            " Function2 Command: " + command3 + " Results: " + res3
+            " Function 2 Command: " + command2 + " Results: " + res2 +
+            " Function 3 Command: " + command3 + " Results: " + res3
             );
             this.throwErrorMessage("Reset failed. Maybe Tomte is already running? If that is the case simply try again later.");
         }        
