@@ -35,6 +35,7 @@ export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightStates: Array<KeyboardBacklightStateInterface>;
     public chosenBrightness: number;
     public chosenColorHex: Array<string>;
+    public selectedZone = 0;
     public brightnessSliderInUsage: boolean = false;
     public brightnessSliderInUsageReset: NodeJS.Timeout = undefined;
     public colorPickerInUsage: Array<boolean> = [false, false, false];
@@ -151,6 +152,7 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onBrightnessSliderInput(event: any) {
+        console.log("input");
         this.brightnessSliderInUsage = true;
         clearTimeout(this.brightnessSliderInUsageReset);
         this.brightnessSliderInUsageReset = setTimeout(() => {
@@ -161,6 +163,7 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onBrightnessSliderChange(event: any) {
+        console.log("changed");
         clearTimeout(this.brightnessSliderInUsageReset);
         this.brightnessSliderInUsageReset = setTimeout(() => {
             this.brightnessSliderInUsage = false;
@@ -198,5 +201,42 @@ export class KeyboardBacklightComponent implements OnInit {
                 this.colorPickerInUsage[i] = false;
             }, 2000);
         }
+    }
+
+    public onKeyboardImageClick(zone: number) {
+        this.selectedZone = zone;
+        console.log("click " + zone);
+    }
+
+    private buttonRepeatTimer: NodeJS.Timeout;
+    public buttonRepeatDown(action: () => void) {
+        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
+        const repeatDelayMS = 200;
+
+        action();
+        
+        this.buttonRepeatTimer = setInterval(() => {
+            action();
+        }, repeatDelayMS);
+    }
+
+    public buttonRepeatUp() {
+        clearInterval(this.buttonRepeatTimer);
+    }
+
+    public modifySliderInputFunc(slider, offset: number, min: number, max: number) {
+        return () => {
+            this.modifySliderInput(slider, offset, min, max);
+        }
+    }
+
+    public modifySliderInput(slider, offset: number, min: number, max: number) {
+            slider.value += offset;
+            if (slider.value < min) {
+                slider.value = min;
+            } else if (slider.value > max) {
+                slider.value = max;
+            }
+            this.onBrightnessSliderInput({value: slider.value});
     }
 }
