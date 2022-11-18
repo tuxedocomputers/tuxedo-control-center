@@ -35,7 +35,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
             </mat-button-toggle-group>
         </span>
+        <span>
+            <div class="save-reset-buttons">
+                <span i18n-matTooltip="@@cProfMgrButtonImportTooltip" matTooltip="Import Profile Settings">
+                    <button mat-icon-button color="basic" (click)="importProfiles()" >
+                        <svg viewBox="0 0 512 512">
+                            <use href="./assets/images/icon_download.svg#Icon"></use>
+                            </svg>
+                    </button>
+                </span>
+                <span i18n-matTooltip="@@cProfMgrButtonExportTooltip" matTooltip="Export Profile Settings">
+                    <button mat-icon-button color="basic" (click)="exportProfiles()" >
+                        <svg viewBox="0 0 512 512">
+                            <use href="./assets/images/icon_save.svg#Icon"></use>
+                            </svg>
+                    </button>
+                </span>
+            </div>
+        </span>
     </mat-toolbar-row>
+
     
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
         <span style="flex: 1 1 auto"></span>
@@ -51,6 +70,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <button mat-raised-button color="basic" (click)="cancelInput()" i18n>Cancel</button>
         </form>
     </mat-toolbar-row>
+
     <!--/div-->
 
     <!-- Description message -->

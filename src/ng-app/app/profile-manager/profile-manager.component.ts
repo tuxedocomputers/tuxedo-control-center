@@ -211,6 +211,22 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
     }
 
+    public async exportProfiles()
+    {
+        let res = await this.utils.saveFileDialog(['saveFile']);
+        console.log(res);
+        return;
+    }
+
+    public async importProfiles()
+    {
+        let res = await this.utils.openFileDialog({ properties: ['openFile', 'multiSelections'] });
+        console.log(res);
+        return;
+    }
+
+
+
     public deleteProfile(profileId): void {
         this.config.deleteCustomProfile(profileId).then((success => {
             if (success) {

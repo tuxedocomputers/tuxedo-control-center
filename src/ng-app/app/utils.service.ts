@@ -82,6 +82,35 @@ export class UtilsService {
     });
   }
 
+   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
+   // for selecting existing files
+   // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
+  public async openFileDialog(properties): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
+        if (result.canceled) {
+            reject(result.canceled);
+          } else {
+            resolve(result.filePaths);
+          }
+      });
+    });
+  }
+  // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
+  // for selecting a non existing file (saving)
+  // does not save anything, just returns a path
+  public async saveFileDialog(properties: string[]): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      this.electron.ipcRenderer.invoke('show-save-dialog', properties).then((result) => {
+        if (result.canceled) {
+          reject(result.canceled);
+        } else {
+          resolve(result.filePath);
+        }
+      });
+    });
+  }
+
   public async execFile(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('exec-file-async', command).then((result) => {
