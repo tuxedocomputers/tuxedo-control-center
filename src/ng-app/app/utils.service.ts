@@ -175,6 +175,24 @@ export class UtilsService {
     });
   }
 
+  // TODO test if it works
+
+  public async readTextFile(filePath: string, ): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      try {
+        fs.readFile(filePath,(err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data + "");
+          }
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   public async modFile(filePath: string, mode: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       fs.chmod(filePath, mode, err => {

@@ -236,7 +236,17 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public async importProfiles()
     {
         let res = await this.utils.openFileDialog({ properties: ['openFile', 'multiSelections'] });
-        console.log(res);
+        let txt = await this.utils.readTextFile(res[0] + "");
+        let profile;
+        try 
+        {
+            profile = JSON.parse(txt);
+            console.log(profile);
+        }
+        catch
+        {
+            console.error("not a valid JSON file");
+        }
         return;
     }
 
