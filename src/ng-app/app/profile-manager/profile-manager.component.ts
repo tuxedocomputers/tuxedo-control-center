@@ -237,11 +237,12 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     {
         let res = await this.utils.openFileDialog({ properties: ['openFile', 'multiSelections'] });
         let txt = await this.utils.readTextFile(res[0] + "");
-        let profile;
+        let profiles: ITccProfile[];
         try 
         {
-            profile = JSON.parse(txt);
-            console.log(profile);
+            profiles = JSON.parse(txt);
+            console.log(profiles);
+            console.log(this.config.importProfiles(profiles));
         }
         catch
         {
