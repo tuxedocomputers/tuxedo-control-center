@@ -211,13 +211,28 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
     }
 
+
+    // TODO
+    // in future we want to add the possibility to select which profiles to export
+    // I was thinking maybe through the normal overview but then grey out all of the default profiles
+    // that cannot be exported
     public async exportProfiles()
     {
         let res = await this.utils.saveFileDialog(['saveFile']);
-        console.log(res);
-        return;
+        let profiles = this.config.getCustomProfiles();
+        let txt = JSON.stringify(profiles);
+        // so when issue 99 is merged we could replace this with a popup error message (like in tomte gui interface)
+        try
+        {
+            await this.utils.writeTextFile("" + res,txt);
+        }
+        catch(err)              
+        {
+            console.error(err);
+        }
     }
 
+    // TODO
     public async importProfiles()
     {
         let res = await this.utils.openFileDialog({ properties: ['openFile', 'multiSelections'] });
