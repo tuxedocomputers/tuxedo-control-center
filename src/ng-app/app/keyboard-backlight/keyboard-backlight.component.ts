@@ -204,8 +204,9 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onKeyboardImageClick(zone: number) {
-        this.selectedZone = zone;
-        console.log("click " + zone);
+        if (this.keyboardBacklightCapabilities.zones > 1) {
+            this.selectedZone = zone;
+        }
     }
 
     private buttonRepeatTimer: NodeJS.Timeout;
