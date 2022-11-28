@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -426,6 +426,48 @@ ipcMain.on('spawn-external-async', (event, arg) => {
         console.log("\"" + arg + "\" could not be executed.")
         dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
     });
+});
+
+// Handle nativeTheme updated event, whether system triggered or from tcc
+nativeTheme.on('updated', () => {
+    if (tccWindow) {
+        tccWindow.webContents.send('update-brightness-mode');
+    }
+    if (aquarisWindow) {
+        aquarisWindow.webContents.send('update-brightness-mode');
+    }
+});
+
+type BrightnessModeString = 'light' | 'dark' | 'system';
+async function setBrightnessMode(mode: BrightnessModeString) {
+    // Save wish to user config
+    await userConfig.set('brightnessMode', mode);
+    // Update electron theme source
+    nativeTheme.themeSource = mode;
+}
+
+async function getBrightnessMode(): Promise<BrightnessModeString> {
+    let mode = await userConfig.get('brightnessMode') as BrightnessModeString | undefined;
+    switch (mode) {
+        case 'light':
+        case 'dark':
+            break;
+        default:
+            mode = 'system';
+    }
+    return mode;
+}
+
+// Renderer to main nativeTheme API
+ipcMain.handle('set-brightness-mode', (event, mode) => setBrightnessMode(mode));
+ipcMain.handle('get-brightness-mode', () => getBrightnessMode());
+ipcMain.handle('get-should-use-dark-colors', () => { return nativeTheme.shouldUseDarkColors; });
+
+// Initialize brightness mode from user config
+getBrightnessMode().then(async (mode) => {
+    await setBrightnessMode(mode);
+    // Trigger initial update manually
+    nativeTheme.emit('updated');
 });
 
 async function loadTranslation(langId) {
