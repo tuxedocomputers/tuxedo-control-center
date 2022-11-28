@@ -69,7 +69,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     protected started = false;
 
-    private stateWorker: DaemonWorker;
+    private stateWorker: StateSwitcherWorker;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -97,62 +97,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
 
         // If program is still running this is the start of the daemon
-        this.readOrCreateConfigurationFiles();
+        this.loadConfigsAndProfiles();
         this.setupSignalHandling();
-
-        const dev = this.identifyDevice();
-
-        // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
-        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
-
-        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
-
-        // Initialize active profile (fallback), will update when state is determined
-        this.activeProfile = this.getDefaultProfile();
-
-        // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
-        let settingsChanged = false;
-        let needsTuxedoDefault = false;
-        for (const stateId of Object.keys(ProfileStates)) {
-            const stateDescriptor = ProfileStates[stateId];
-            if (!this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
-                 defaultProfilesFilled.concat(customProfilesFilled).find(p => p.id === this.settings.stateMap[stateDescriptor]) === undefined) {
-                    // Attempt to find by name
-                    const profileByName = defaultProfilesFilled.concat(customProfilesFilled).find(p => p.name === this.settings.stateMap[stateDescriptor]);
-                    if (profileByName !== undefined) {
-                        console.log('Missing state id assignment for \'' + stateId + '\' but found profile by name \'' + profileByName.name + '\'');
-                        this.settings.stateMap[stateDescriptor] = profileByName.id;
-                    } else {
-                        // Otherwise default to default values profile
-                        console.log('Missing state id assignment for \'' + stateId + '\' default to + \'' + defaultValuesProfileFilled.id + '\'');
-                        this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
-                        needsTuxedoDefault = true;
-                    }
-                    settingsChanged = true;
-            }
-        }
-        if (settingsChanged) {
-            // Add default values profile if not existing
-            if (needsTuxedoDefault) {
-                if (customProfilesFilled.find(p => p.id === defaultValuesProfileFilled.id) === undefined) {
-                    customProfilesFilled = [ defaultValuesProfileFilled ].concat(customProfilesFilled);
-                    this.customProfiles = customProfilesFilled;
-                    this.config.writeProfiles(this.customProfiles);
-                    console.log(`Added '${defaultValuesProfileFilled.name}' to profiles`);
-                }
-            }
-
-            // Write updated settings
-            this.config.writeSettings(this.settings);
-            console.log('Saved updated settings');
-        }
-
-        const allProfilesFilled = defaultProfilesFilled.concat(customProfilesFilled);
-        this.dbusData.profilesJSON = JSON.stringify(allProfilesFilled);
-        this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
-        this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
-        this.dbusData.defaultValuesProfileJSON = JSON.stringify(defaultValuesProfileFilled);
 
         this.dbusData.tccdVersion = tccPackage.version;
 
@@ -196,8 +142,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
-    public triggerStateCheck() {
+    public triggerStateCheck(reset?: boolean) {
+        if (reset === undefined) {
+            reset = false;
+        }
         if (this.stateWorker !== undefined) {
+            if (reset) {
+                this.stateWorker.reset();
+            }
             this.stateWorker.work();
         }
     }
@@ -258,14 +210,78 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // If new config is specified, replace standard config with new config
             const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            // If something changed, restart running service
+            // If something changed, reload configs
             if (settingsSaved || profilesSaved) {
-                child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);
+                const pidNumber = this.readPid();
+                if (isNaN(pidNumber)) {
+                    console.log('Failed to locate running tccd process. Cannot reload config.');
+                    process.exit(1);
+                } else {
+                    process.kill(pidNumber, 'SIGHUP');
+                }
             }
             process.exit(0);
         } else {
             throw Error('No argument specified');
         }
+    }
+
+    public loadConfigsAndProfiles() {
+        const dev = this.identifyDevice();
+
+        this.readOrCreateConfigurationFiles();
+
+        // Fill exported profile lists (for GUI)
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
+        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+
+        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
+
+        // Initialize active profile (fallback), will update when state is determined
+        this.activeProfile = this.getDefaultProfile();
+
+        // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
+        let settingsChanged = false;
+        let needsTuxedoDefault = false;
+        for (const stateId of Object.keys(ProfileStates)) {
+            const stateDescriptor = ProfileStates[stateId];
+            if (!this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
+                 defaultProfilesFilled.concat(customProfilesFilled).find(p => p.id === this.settings.stateMap[stateDescriptor]) === undefined) {
+                    // Attempt to find by name
+                    const profileByName = defaultProfilesFilled.concat(customProfilesFilled).find(p => p.name === this.settings.stateMap[stateDescriptor]);
+                    if (profileByName !== undefined) {
+                        console.log('Missing state id assignment for \'' + stateId + '\' but found profile by name \'' + profileByName.name + '\'');
+                        this.settings.stateMap[stateDescriptor] = profileByName.id;
+                    } else {
+                        // Otherwise default to default values profile
+                        console.log('Missing state id assignment for \'' + stateId + '\' default to + \'' + defaultValuesProfileFilled.id + '\'');
+                        this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
+                        needsTuxedoDefault = true;
+                    }
+                    settingsChanged = true;
+            }
+        }
+        if (settingsChanged) {
+            // Add default values profile if not existing
+            if (needsTuxedoDefault) {
+                if (customProfilesFilled.find(p => p.id === defaultValuesProfileFilled.id) === undefined) {
+                    customProfilesFilled = [ defaultValuesProfileFilled ].concat(customProfilesFilled);
+                    this.customProfiles = customProfilesFilled;
+                    this.config.writeProfiles(this.customProfiles);
+                    console.log(`Added '${defaultValuesProfileFilled.name}' to profiles`);
+                }
+            }
+
+            // Write updated settings
+            this.config.writeSettings(this.settings);
+            console.log('Saved updated settings');
+        }
+
+        const allProfilesFilled = defaultProfilesFilled.concat(customProfilesFilled);
+        this.dbusData.profilesJSON = JSON.stringify(allProfilesFilled);
+        this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
+        this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
+        this.dbusData.defaultValuesProfileJSON = JSON.stringify(defaultValuesProfileFilled);
     }
 
     private syncOutputPortsSetting() {
@@ -407,6 +423,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.logLine('SIGTERM - Exiting');
             this.onExit();
             process.exit(SIGTERM);
+        });
+
+        process.on('SIGHUP', () => {
+            this.logLine('Reload configs');
+            this.loadConfigsAndProfiles();
+            this.triggerStateCheck(true);
         });
     }
 

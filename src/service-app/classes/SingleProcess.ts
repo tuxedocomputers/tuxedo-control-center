@@ -88,7 +88,7 @@ export class SingleProcess {
      *
      * @returns Process ID number if found, NaN if not
      */
-    private readPid(): number {
+    protected readPid(): number {
         try {
             const strPid = fs.readFileSync(this.pidPath);
             const intPid = parseInt(strPid.toString(), 10);

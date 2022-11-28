@@ -29,6 +29,10 @@ export class StateSwitcherWorker extends DaemonWorker {
         super(2000, tccd);
     }
 
+    public reset() {
+        this.currentState = undefined;
+    }
+
     public onStart(): void {
         // Check state and switch profile if appropriate
         const newState = determineState();
