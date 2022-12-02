@@ -27,6 +27,9 @@ import { ElectronService } from 'ngx-electron';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
+import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
+import { IProfileConflictDialogResult } from "../profile-conflict-dialog/profile-conflict-dialog.component";
+
 
 enum InputMode {
     New, Copy, Edit
@@ -54,7 +57,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public currentInputMode: InputMode;
     public inputProfileName: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
     public inputProfileNameLabel: string;
-
     private subscriptions: Subscription = new Subscription();
 
     public stateInputArray: IStateInfo[];
@@ -78,7 +80,10 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private state: StateService,
         private utils: UtilsService,
         private router: Router,
-        private electron: ElectronService) { }
+        private dialogService: ProfileConflictDialogService,
+        private electron: ElectronService
+        ) { }
+        
 
     ngOnInit() {
         this.defineButtons();
@@ -199,6 +204,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     break;
             }
         } else {
+            // TODO, this should probably be changed to not use remote module and instead using a function in
+            // utils.service that opens a message box like utils.service confirmDialog()
+            // for more uniform coding style and also remote module is deprecated.
             const choice = this.electron.remote.dialog.showMessageBox(
                 this.electron.remote.getCurrentWindow(),
                 {
@@ -213,12 +221,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
 
     // TODO
-    // in future we want to add the possibility to select which profiles to export
+    // in future we might want to add the possibility to select which profiles to export
     // I was thinking maybe through the normal overview but then grey out all of the default profiles
     // that cannot be exported
     public async exportProfiles()
     {
-        let res = await this.utils.saveFileDialog(['saveFile']);
+        let documentsPath = await this.utils.getPath('documents');
+        // TODO does thhis need try catch block?
+        let res = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
         let profiles = this.config.getCustomProfiles();
         let txt = JSON.stringify(profiles);
         // so when issue 99 is merged we could replace this with a popup error message (like in tomte gui interface)
@@ -235,21 +245,80 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     // TODO
     public async importProfiles()
     {
-        let res = await this.utils.openFileDialog({ properties: ['openFile', 'multiSelections'] });
-        let txt = await this.utils.readTextFile(res[0] + "");
+        this.utils.pageDisabled = true;
+        let documentsPath = await this.utils.getPath('documents');
+        let importLabel = "Import"; // TODO localize
+        let res;
+        let txt;
+        try
+        {
+            res = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile', 'multiSelections'] });
+            txt = await this.utils.readTextFile(res[0] + "");
+        }
+        catch (err)
+        {
+            console.log("import canceled");
+            this.utils.pageDisabled = false;
+            return;
+        }
+
         let profiles: ITccProfile[];
         try 
         {
             profiles = JSON.parse(txt);
-            console.log(profiles);
-            console.log(this.config.importProfiles(profiles));
+            // console.log(profiles);
         }
         catch
         {
             console.error("not a valid JSON file");
+            this.utils.pageDisabled = false;
+            return;
         }
-        return;
+        let oldProfiles = this.config.getCustomProfiles();
+        let newProfiles: ITccProfile[] = [];
+        for (var i = 0; i < profiles.length; i++)
+        {
+            let conflictProfileIndex = oldProfiles.findIndex(x => x.id === profiles[i].id);
+            if (conflictProfileIndex !== -1)
+            {
+                // TODO what if it has the same ID but different name?
+                let res = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
+                if(res.action === "keepNew")
+                {
+                    newProfiles.concat(profiles[i]);
+                } 
+                else if (res.action === "keepOld")
+                {
+                    continue;
+                }
+                else if (res.action === "keepBoth")
+                {
+                    let newProfile = profiles[i];
+                    newProfile.id = "nextfunctionwillreplacethisIDanyaway";
+                    newProfiles.concat(newProfile);
+                }
+                else if (res.action === "newName")
+                {
+                    let newProfile = profiles[i];
+                    newProfile.name = res.newName;
+                    newProfile.id = "nextfunctionwillreplacethisIDanyaway";
+                    newProfiles.concat(newProfile);
+                }
+            }
+            else
+            {
+                newProfiles.concat(profiles[i]);
+            }
+        }
+        let importSuccess = await this.config.importProfiles(profiles);
+        if (!importSuccess)
+        {
+            console.error("importing of Profiles failed");
+        }
+        this.utils.pageDisabled = false;
     }
+
+    
 
 
 

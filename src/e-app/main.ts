@@ -409,7 +409,7 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
 });
 
 
-// TODO
+
 ipcMain.handle('show-save-dialog', async (event, arg) => {
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
         let results = dialog.showSaveDialog(arg);
@@ -417,11 +417,18 @@ ipcMain.handle('show-save-dialog', async (event, arg) => {
     });
 });
 
-// TODO
+
 ipcMain.handle('show-open-dialog', async (event, arg) => {
     return new Promise<OpenDialogReturnValue>((resolve, reject) => {
         let results = dialog.showOpenDialog(arg);
         resolve(results);
+    });
+});
+
+ipcMain.handle('get-path', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        let requestedPath = app.getPath(arg);
+        resolve(requestedPath);
     });
 });
 

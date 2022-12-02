@@ -83,6 +83,8 @@ import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { ProfileConflictDialogService } from './profile-conflict-dialog/profile-conflict-dialog.service';
+import { ProfileConflictComponent } from './profile-conflict-dialog/profile-conflict-dialog.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -105,7 +107,8 @@ declare const require;
     MainGuiComponent,
     AquarisControlComponent,
     DialogInputTextComponent,
-    DialogConfirmComponent
+    DialogConfirmComponent,
+    ProfileConflictComponent
   ],
   imports: [
     BrowserModule,
@@ -149,7 +152,8 @@ declare const require;
   ],
   providers: [
     DecimalPipe,
-    ThemeService
+    ThemeService,
+    ProfileConflictDialogService
   ],
   bootstrap: [AppComponent]
 })
