@@ -39,10 +39,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule, MatInput } from '@angular/material/input';
-import { MatTooltipModule} from '@angular/material/tooltip';
-import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -52,7 +52,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule } from '@angular/material/menu'
+import { MatMenuModule } from '@angular/material/menu';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -73,7 +73,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { GaugeModule } from 'angular-gauge';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
-import { ToolsComponent } from "./tools/tool.component";
+import { ToolsComponent } from './tools/tool.component';
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
@@ -84,6 +84,8 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
+import { WebcamModule } from 'ngx-webcam2';
+import { CameraSettingsComponent } from './camera-settings/camera-settings.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -108,6 +110,7 @@ declare const require;
     DialogInputTextComponent,
     DialogConfirmComponent,
     ChargingSettingsComponent,
+    CameraSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -147,7 +150,8 @@ declare const require;
     GaugeModule.forRoot(),
     ChartsModule,
     ColorPickerModule,
-    MatMenuModule
+    MatMenuModule,
+    WebcamModule
   ],
   providers: [
     DecimalPipe,
@@ -155,4 +159,4 @@ declare const require;
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

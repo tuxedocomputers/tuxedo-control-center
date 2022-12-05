@@ -27,6 +27,7 @@ import { ToolsComponent } from "./tools/tool.component";
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+import { CameraSettingsComponent } from "./camera-settings/camera-settings.component";
 
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
@@ -39,6 +40,7 @@ const routes: Routes = [
             { path: 'info', component: InfoComponent },
             { path: 'cpu-dashboard', component: CpuDashboardComponent },
             { path: 'tools', component: ToolsComponent },
+            { path: "camera-settings", component: CameraSettingsComponent },
             { path: 'global-settings', component: GlobalSettingsComponent },
             { path: 'aquaris-control', component: AquarisControlComponent }
         ]

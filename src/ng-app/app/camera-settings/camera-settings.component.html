@@ -1,0 +1,52 @@
+<mat-card class="profile-details-edit">
+    <mat-card-content>
+        <div class="tcc-options-group">
+            <div class="title-row">
+                <hr />
+                <div class="title">
+                    <!-- todo: replace logo -->
+                    <svg viewBox="0 0 258 512" class="tcc-icons">
+                        <use href="./assets/images/icon_webcam.svg#Icon"></use>
+                    </svg>
+                    <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
+                </div>
+                <hr />
+            </div>
+            <mat-card-content class="content">
+                <div>
+                    <div class='container'>
+                        <div class='resize_fit_center'>
+                            <webcam [allowCameraSwitch]=false [switchCamera]="nextWebcamObservable"></webcam>
+                        </div>
+                    </div>
+
+                    <mat-form-field>
+                        <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId" placeholder="Webcam"
+                            (selectionChange)="setWebcam($event.value)">
+                            <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam.id">
+                                {{webcam.label}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header>Brightness</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+
+                        </mat-grid-tile>
+
+                        <mat-grid-tile>
+                            <mat-slider [max]="cameraBrightnessMax" [min]="cameraBrightnessMin"
+                                [step]="cameraBrightnessStep" (change)="setCameraBrightness($event)">
+                                <input matSliderThumb [(ngModel)]="cameraBrightnessValue">
+                            </mat-slider>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+                </div>
+            </mat-card-content>
+        </div>
+    </mat-card-content>
+</mat-card>
