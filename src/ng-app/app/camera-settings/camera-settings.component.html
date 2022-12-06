@@ -4,7 +4,6 @@
             <div class="title-row">
                 <hr />
                 <div class="title">
-                    <!-- todo: replace logo -->
                     <svg viewBox="0 0 258 512" class="tcc-icons">
                         <use href="./assets/images/icon_webcam.svg#Icon"></use>
                     </svg>
@@ -20,31 +19,109 @@
                         </div>
                     </div>
 
-                    <mat-form-field>
-                        <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId" placeholder="Webcam"
-                            (selectionChange)="setWebcam($event.value)">
-                            <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam.id">
-                                {{webcam.label}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header>Brightness</header>
+                            <header>Webcam</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-
-                        </mat-grid-tile>
-
+                        <mat-grid-tile></mat-grid-tile>
+                        <mat-grid-tile></mat-grid-tile>
                         <mat-grid-tile>
-                            <mat-slider [max]="cameraBrightnessMax" [min]="cameraBrightnessMin"
-                                [step]="cameraBrightnessStep" (change)="setCameraBrightness($event)">
-                                <input matSliderThumb [(ngModel)]="cameraBrightnessValue">
-                            </mat-slider>
+                            <mat-form-field>
+                                <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId" placeholder="Webcam"
+                                    (selectionChange)="setWebcam($event.value)">
+                                    <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam.id">
+                                        {{webcam.label}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </mat-grid-tile>
-
                     </mat-grid-list>
+
+                    <mat-accordion class="example-headers-align" multi class="list-group-item">
+                        <mat-expansion-panel *ngFor="let setting of webcamSettings">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{ setting.config_type }} / {{ setting.config_category }}
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div *ngFor="let config of setting.config_data">
+                                <!-- SLIDER -->
+                                <div *ngIf="config.type=='slider'">
+                                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                        class="profile-details-edit-grid">
+                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                            <header>{{config.title}}</header>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile></mat-grid-tile>
+                                        <mat-grid-tile>
+                                            <content class="value"></content>
+                                            <content class="value"></content>
+                                            <button mat-icon-button color="primary">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="primary">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile>
+                                            <content class="input">
+
+                                                <mat-slider [max]="cameraBrightnessMax" [min]="cameraBrightnessMin"
+                                                    [step]="cameraBrightnessStep"
+                                                    (change)="setCameraBrightness($event)">
+                                                    <input matSliderThumb [(ngModel)]="cameraBrightnessValue">
+                                                </mat-slider>
+                                            </content>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+
+                                    <mat-divider></mat-divider>
+                                </div>
+
+                                <!-- BOOL -->
+                                <div *ngIf="config.type=='bool'">
+                                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                        class="profile-details-edit-grid">
+                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                            <header>{{config.title}}</header>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile></mat-grid-tile>
+                                        <mat-grid-tile></mat-grid-tile>
+                                        <mat-grid-tile>
+                                            <content class="input">
+                                                <mat-checkbox color="primary">
+                                                </mat-checkbox>
+                                            </content>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                    <mat-divider></mat-divider>
+                                </div>
+
+                                <!-- MENU -->
+                                <div *ngIf="config.type=='menu'">
+                                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                        class="profile-details-edit-grid">
+                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                            <header>{{config.title}}</header>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile></mat-grid-tile>
+                                        <mat-grid-tile>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile>
+                                            <mat-select formControlName="name" [disableOptionCentering]="true">
+                                                <mat-option *ngFor="let option of config.options" color="primary">
+                                                    {{ option }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                    <mat-divider></mat-divider>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
                 </div>
             </mat-card-content>
         </div>

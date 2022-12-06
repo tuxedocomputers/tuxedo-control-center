@@ -1886,6 +1886,7 @@ class CameraCtrls:
                             config_parameter["active"] = True
                         config_data.append(config_parameter)
                     json_data.append({"config_type": page.title, "config_category": cat.title, "config_data": config_data})
+                    config_data = []
         print(json.dumps(json_data))
 
     def setup_ctrls(self, params):
