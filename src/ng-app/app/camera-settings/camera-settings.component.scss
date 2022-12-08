@@ -139,3 +139,8 @@
     max-height:100%;
     vertical-align: middle;
 }
+
+mat-expansion-panel,
+mat-expansion-panel * {
+  transition: none !important;
+}

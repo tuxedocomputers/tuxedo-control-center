@@ -39,7 +39,10 @@
                     </mat-grid-list>
 
                     <mat-accordion class="example-headers-align" multi class="list-group-item">
-                        <mat-expansion-panel *ngFor="let setting of webcamSettings">
+                        <mat-expansion-panel *ngFor="let setting of webcamSettings"
+                            (opened)="handleRegionPanelStateChange(setting.config_category, true)"
+                            (closed)="handleRegionPanelStateChange(setting.config_category, false)"
+                            [expanded]="expandedRegions[setting.config_category]">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     {{ setting.config_type }} / {{ setting.config_category }}
@@ -52,7 +55,7 @@
                                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                         class="profile-details-edit-grid">
                                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                            <header>{{config.title}}</header>
+                                            <header i18n>{{getConfigTranslation(config.title)}}</header>
                                         </mat-grid-tile>
                                         <mat-grid-tile></mat-grid-tile>
                                         <mat-grid-tile>
@@ -67,11 +70,10 @@
                                         </mat-grid-tile>
                                         <mat-grid-tile>
                                             <content class="input">
-
-                                                <mat-slider [max]="cameraBrightnessMax" [min]="cameraBrightnessMin"
-                                                    [step]="cameraBrightnessStep"
-                                                    (change)="setCameraBrightness($event)">
-                                                    <input matSliderThumb [(ngModel)]="cameraBrightnessValue">
+                                                <mat-slider max="{{config.max}}" min="{{config.min}}"
+                                                    value="{{config.current}}" step="{{config.step}}"
+                                                    disabled="{{!config.active}}"
+                                                    (change)="setSliderValue($event, config.name)">
                                                 </mat-slider>
                                             </content>
                                         </mat-grid-tile>
@@ -91,7 +93,9 @@
                                         <mat-grid-tile></mat-grid-tile>
                                         <mat-grid-tile>
                                             <content class="input">
-                                                <mat-checkbox color="primary">
+                                                <mat-checkbox color="primary" checked="{{config.current}}"
+                                                    disabled="{{!config.active}}"
+                                                    (change)="setCheckboxValue($event, config.name)">
                                                 </mat-checkbox>
                                             </content>
                                         </mat-grid-tile>
@@ -110,11 +114,15 @@
                                         <mat-grid-tile>
                                         </mat-grid-tile>
                                         <mat-grid-tile>
-                                            <mat-select formControlName="name" [disableOptionCentering]="true">
-                                                <mat-option *ngFor="let option of config.options" color="primary">
-                                                    {{ option }}
-                                                </mat-option>
-                                            </mat-select>
+                                            <mat-form-field appearance="fill">
+                                                <mat-select>
+                                                    <mat-option *ngFor="let option of config.options" color="primary"
+                                                        value="{{config.current}}" disabled="{{!config.active}}"
+                                                        (onSelectionChange)="setOptionsMenuValue($event, config.name, option)">
+                                                        {{ option }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
                                         </mat-grid-tile>
                                     </mat-grid-list>
                                     <mat-divider></mat-divider>

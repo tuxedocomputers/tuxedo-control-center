@@ -1440,7 +1440,7 @@ class V4L2Ctrls:
                 ctrl_type = V4L2Ctrls.to_type.get(qctrl.type)
                 if ctrl_type == 'integer' and qctrl.minimum == 0 and qctrl.maximum == 1 and qctrl.step == 1:
                     ctrl_type = 'boolean'
-                
+
                 if ctrl_type != 'button':
                     try:
                         ctrl = v4l2_control(qctrl.id)
@@ -1865,6 +1865,7 @@ class CameraCtrls:
                         config_parameter = {}
                         config_parameter["title"] = c.name
                         config_parameter["name"] = c.text_id
+                        config_parameter["current"] = c.value
                         if c.type == 'menu':
                             config_parameter["type"] = "menu"
                             if c.default:
@@ -1881,7 +1882,7 @@ class CameraCtrls:
                             if c.step:
                                 config_parameter["step"] = c.step
                         if c.inactive:
-                            config_parameter["active"] = False 
+                            config_parameter["active"] = False
                         else:
                             config_parameter["active"] = True
                         config_data.append(config_parameter)

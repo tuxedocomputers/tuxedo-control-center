@@ -7,6 +7,7 @@ export interface WebcamSettigs {
 
 export interface SliderInterface {
     active: boolean;
+    current: number;
     default: number;
     max: number;
     name: string;
@@ -17,6 +18,7 @@ export interface SliderInterface {
 
 export interface BoolInterface {
     active: boolean;
+    current: boolean;
     default: boolean;
     max: boolean;
     min: boolean;
@@ -28,6 +30,7 @@ export interface BoolInterface {
 
 export interface MenuInterface {
     active: boolean;
+    current: string;
     default: string;
     name: string;
     options: string[];
