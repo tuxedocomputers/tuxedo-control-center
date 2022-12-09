@@ -45,6 +45,7 @@ import { CpuController } from '../../common/classes/CpuController';
 import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { ChargingWorker } from './ChargingWorker';
 
 const tccPackage = require('../../package.json');
 
@@ -70,6 +71,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     protected started = false;
 
     private stateWorker: StateSwitcherWorker;
+    private chargingWorker: ChargingWorker;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -101,8 +103,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.setupSignalHandling();
 
         this.dbusData.tccdVersion = tccPackage.version;
-
         this.stateWorker = new StateSwitcherWorker(this);
+        this.chargingWorker = new ChargingWorker(this);
+        this.workers.push(this.chargingWorker);
         this.workers.push(this.stateWorker);
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
@@ -152,6 +155,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
             this.stateWorker.work();
         }
+    }
+
+    public getChargingWorker() {
+        return this.chargingWorker;
     }
 
     public catchError(err: Error) {
