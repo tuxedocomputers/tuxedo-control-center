@@ -19,208 +19,233 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-card class="tcc-card card-support">
     <mat-card-title class="theme-page-title">
-        <ng-container i18n>TUXEDO Tomte</ng-container>
+        <ng-container i18n="@@cTomteGuiTomteHeader">TUXEDO Tomte</ng-container>
     </mat-card-title>
     <hr />
-
     <div class="content-container centered">
-        <p i18n>TUXEDO Tomte is a configuration service that automatically recognizes the customer's device and checks
-            for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving.
+        <p i18n="@@cTomteGuiTomteDescription">
+            TUXEDO Tomte is a configuration service hat only works with TUXEDO 
+            hardware and automatically checks your computer for missing drivers 
+            or required packages, relieving users of tedious troubleshooting and problem solving.
         </p>
     </div>
-</mat-card>
-
-<ng-container *ngIf="showRetryButton">
-    <mat-card>
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>TUXEDO Tomte unable to load information</ng-container>
-        </mat-card-title>
-        <hr />
+    <br />
+    <ng-container *ngIf="showRetryButton">
+        <h2 class="tomte-gui-title" i18n="@@cTomteGuiUnableToLoadInformationHeader">
+            Unable to load information
+        </h2>
     
         <div class="content-container centered">
-            <p i18n>
-                TUXEDO Tomte ran into a timeout. Maybe it is already running. To retry press this button:
+            <p i18n="@@cTomteGuiUnableToLoadInformationDescription">
+                TUXEDO Tomte ran into a timeout. Maybe it is already running.
             </p>
-            <button mat-raised-button color="primary" (click)="tomtelist()">Retry</button>
+            <button mat-raised-button color="primary" (click)="tomtelist()" i18n="@@cTomteGuiUnableToLoadInformationRetryButton">
+                Retry
+            </button>
         </div>
-    </mat-card>
+        <br />
+    </ng-container>
 
-</ng-container>
-
-<ng-container *ngIf="!tomteIsInstalled && !loadingInformation">
-
-    <mat-card class="tcc-card card-support">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>Install TUXEDO Tomte</ng-container>
-        </mat-card-title>
+    <ng-container *ngIf="!tomteIsInstalled && !loadingInformation">
         <hr />
+        <h2 class="tomte-gui-title" i18n="@@cTomteGuiInstallTomteHeader">
+            Install TUXEDO Tomte
+        </h2>
+
     
         <div class="content-container centered">
-            <p i18n>
+            <p i18n="@@cTomteGuiInstallTomteDescription">
                 Install TUXEDO Tomte now by pressing this button:
             </p>
-            <button mat-raised-button color="primary" (click)="installTomteButton()">Retry</button>
+            <button mat-raised-button color="primary" (click)="installTomteButton()" i18n="@@cTomteGuiInstallTomteButtonLabel">
+                Install
+            </button>
         </div>
-    </mat-card>
+        <br />
+    </ng-container>
 
+    <ng-container *ngIf="loadingInformation">
+        <div [ngClass]="{'global-spinner': true}">
+            <i class="fas fa-cog fa-spin"></i>
+        </div>
+        <div [ngClass]="{'blur-no-input': true}">  
+            <!--
+            <hr />
+            <ng-container i18n="@@cTomteGuiLoadingInformationHeader">
+                Loading Information
+            </ng-container>
+            -->
+            <hr />
+        
+            <div class="content-container centered">
+                <p i18n="@@cTomteGuiLoadingInformationDescription">
+                Loading information, please wait...
+                </p>
+            </div>
+        </div>
+        <br />
+    </ng-container>
 
-</ng-container>
-
-<ng-container *ngIf="loadingInformation">
-    <div [ngClass]="{'global-spinner': true}">
-        <i class="fas fa-cog fa-spin"></i>
-    </div>
-    <mat-card class="tcc-card card-support" [ngClass]="{'blur-no-input': true}">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>Loading Information</ng-container>
-        </mat-card-title>
+    <ng-container *ngIf="!isTuxedoDevice">
         <hr />
+        <h2 class="tomte-gui-title" i18n="@@cTomteGuiNotTuxedoDeviceHeader">
+            TUXEDO Tomte not producing output
+        </h2>
     
         <div class="content-container centered">
-            <p i18n>
-             Loading information, please wait...
-            </p>
-        </div>
-    </mat-card>
-</ng-container>
-
-<ng-container *ngIf="!isTuxedoDevice">
-    <mat-card class="tcc-card card-support">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>TUXEDO Tomte not producing output</ng-container>
-        </mat-card-title>
-        <hr />
-    
-        <div class="content-container centered">
-            <p i18n>
+            <p i18n="@@cTomteGuiNotTuxedoDeviceDescription">
                 TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. 
             </p>
         </div>
-    </mat-card>
+        <br />
+    </ng-container>
 
-</ng-container>
+    <ng-container *ngIf="tomteMode && tomteIsInstalled">
 
-<ng-container *ngIf="tomteMode && tomteIsInstalled">
-
-    <mat-card class="tcc-card card-support">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>Selected installation mode</ng-container>
-        </mat-card-title>
         <hr />
+        <h2 class="tomte-gui-title" i18n="@@cTomteGuiTomteOperationModeHeader">
+            Tomte operation mode
+        </h2>
+
         <div class="content-container centered">
-            <p i18n>Select the mode in which tomte is supposed to operate. Do you want it to handle things
-                automatically, or configure it on your own?</p>
+            <p i18n="@@cTomteGuiTomteOperationModeDescription">
+                Select the mode in which tomte is supposed to operate. Do you want it to handle things
+                automatically, or configure it on your own?
+            </p>
             <div style="text-align: center">
                 <button style="display: inline-block" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[0]"
                     (click)="tomteModeButton(tomteModes[0])"
-                    matTooltip="This is the  default  mode.  Everything  will  be  installed/updated/removed automatically by Tomte.">
-                    <ng-container>Automatic</ng-container>
+                    matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer.">
+                    <ng-container i18n="@@cTomteGuiTomteOperationModeAutomaticButtonLabel">
+                        Full Service
+                    </ng-container>
                 </button>
                 <button style="display: inline-block; margin-left: 5px" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[1]"
                     (click)="tomteModeButton(tomteModes[1])"
-                    matTooltip="Only updates will be handled automatically by Tomte. No modules will be installed or removed without user intervention.">
-                    <ng-container>Updates Only</ng-container>
+                    matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available.">
+                    <ng-container i18n="@@cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel">
+                        Updates Only
+                    </ng-container>
                 </button>
                 <button style="display: inline-block; margin-left: 5px" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[2]"
-                    (click)="tomteModeButton(tomteModes[2])" matTooltip="Nothing will be configured by Tomte.">
-                    <ng-container>Disabled</ng-container>
+                    (click)="tomteModeButton(tomteModes[2])" matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active.">
+                    <ng-container i18n="@@cTomteGuiTomteOperationModeDisabledButtonLabel">
+                        Disabled
+                    </ng-container>
                 </button>
             </div>
         </div>
-    </mat-card>
-
-    <ng-container *ngIf="tomteMode !== 'DONT_CONFIGURE'">
-        <mat-card class="tcc-card card-support">
-            <mat-card-title class="theme-page-title">
-                <ng-container i18n>Tomte Configuration</ng-container>
-            </mat-card-title>
-            <hr />
-            <div class="content-container centered">
-                <p i18n>See what packages tomte is handling and block or uninstall them as needed.</p>
-
-                <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z2" style="width: 100%">
-
-                    <ng-container matColumnDef="moduleName">
-                        <th mat-header-cell *matHeaderCellDef> Module name </th>
-                        <td mat-cell *matCellDef="let line"> {{line.moduleName}}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="moduleVersion">
-                        <th mat-header-cell *matHeaderCellDef> Version </th>
-                        <td mat-cell *matCellDef="let line"> {{line.version}}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="moduleInstalled">
-                        <th mat-header-cell *matHeaderCellDef> Installed </th>
-                        <td mat-cell *matCellDef="let line">
-                            <mat-slide-toggle 
-                            class="green-slide-toggle"
-                            [disabled]="line.prerequisite === 'prerequisite' || line.blocked"
-                            [checked]="line.installed"
-                            (change)="tomteUn_InstallButton(line.moduleName,line.installed,line.blocked)"
-                            [matTooltip]="line.blocked ? 'Cannot un-/install a module that is blocked.' : (line.prerequisite === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (!line.installed ? 'Install this module' : 'Uninstall this module'))"
-                            >
-                        
-                            </mat-slide-toggle>
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="moduleBlocked">
-                        <th mat-header-cell *matHeaderCellDef> Active </th>
-                        <td mat-cell *matCellDef="let line">                       
-                            <mat-slide-toggle 
-                            class="green-slide-toggle"
-                            [disabled]="line.prerequisite === 'prerequisite'"
-                            [checked]="!line.blocked"
-                            (change)="tomteBlockButton(line.moduleName,line.blocked)"
-                            [matTooltip]="line.prerequisite === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (!line.blocked ? 'Block this module' : 'Unblock this module')"
-                            >
-                        
-                            </mat-slide-toggle> 
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="moduleRequired">
-                        <th mat-header-cell *matHeaderCellDef> Required </th>
-                        <td mat-cell *matCellDef="let line"> {{line.prerequisite}}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="moduleDescription">
-                        <th mat-header-cell *matHeaderCellDef> Info </th>
-                        <td mat-cell *matCellDef="let line"> 
-                            <mat-icon
-                            class="info-icon"
-                            [matTooltip]="moduleToolTips.get(line.moduleName)"
-                            [matTooltipShowDelay]="infoTooltipShowDelay"
-                            >
-                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                        </mat-icon>
-
-                        </td>
-                    </ng-container>
-
-
-                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-                </table>
-
-            </div>
-        </mat-card>
+        <br />
     </ng-container>
-    <mat-card class="tcc-card card-support">
-        <mat-card-title class="theme-page-title">
-            <ng-container i18n>Reset to defaults</ng-container>
-        </mat-card-title>
+
+    <ng-container *ngIf="tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton">
         <hr />
+            <h2 class="tomte-gui-title" i18n="@@cTomteGuiTomteConfigurationHeader">
+                Tomte Configuration
+            </h2>
+        <div class="content-container centered">
+            <p i18n="@@cTomteGuiTomteConfigurationDescription">
+                See what packages tomte is handling and block or uninstall them as needed.
+            </p>
+
+            <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z2 tomte-list-output-table" style="width: 100%">
+
+                <ng-container matColumnDef="moduleName">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleName">
+                        Module name 
+                    </th>
+                    <td mat-cell *matCellDef="let line"> 
+                        {{line.moduleName}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="moduleVersion">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleVersion">
+                        Version 
+                    </th>
+                    <td mat-cell *matCellDef="let line"> 
+                        {{line.version}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="moduleInstalled">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleInstalled"> 
+                        Installed 
+                    </th>
+                    <td mat-cell *matCellDef="let line">
+                        <mat-slide-toggle 
+                        class="green-slide-toggle"
+                        [disabled]="line.prerequisite === 'prerequisite' || line.blocked"
+                        [checked]="line.installed"
+                        (change)="tomteUn_InstallButton(line.moduleName,line.installed,line.blocked)"
+                        [matTooltip]="line.blocked ? 'Cannot un-/install a module that is blocked.' : (line.prerequisite === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (!line.installed ? 'Install this module' : 'Uninstall this module'))"
+                        >
+                    
+                        </mat-slide-toggle>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="moduleBlocked">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleActive"> 
+                        Active 
+                    </th>
+                    <td mat-cell *matCellDef="let line">                       
+                        <mat-slide-toggle 
+                        class="green-slide-toggle"
+                        [disabled]="line.prerequisite === 'prerequisite'"
+                        [checked]="!line.blocked"
+                        (change)="tomteBlockButton(line.moduleName,line.blocked)"
+                        [matTooltip]="line.prerequisite === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (!line.blocked ? 'Block this module' : 'Unblock this module')"
+                        >
+                    
+                        </mat-slide-toggle> 
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="moduleRequired">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleRequired"> 
+                        Required 
+                    </th>
+                    <td mat-cell *matCellDef="let line"> 
+                        {{line.prerequisite}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="moduleDescription">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo"> 
+                        Info 
+                    </th>
+                    <td mat-cell *matCellDef="let line"> 
+                        <mat-icon
+                        class="info-icon"
+                        [matTooltip]="moduleToolTips.get(line.moduleName)"
+                        [matTooltipShowDelay]="infoTooltipShowDelay"
+                        >
+                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                    </mat-icon>
+
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+            </table>
+        </div>
+        <br />
+       <!-- 
+        <hr />
+        <ng-container i18n="@@cTomteGuiTomteConfigurationResetDefaultsHeader">Reset to defaults</ng-container>
+        -->
         <div class="content-container centered">
             <button mat-raised-button color="primary" (click)="tomteResetToDefaults()" matTooltip="Reset Configuration to defaults.">
-                <p i18n>Reset</p>
-        </button>
+                <p i18n="@@cTomteGuiTomteConfigurationResetDefaultsButtonlabel">
+                    Reset Tomte to default settings
+                </p>
+            </button>
         </div>
-    </mat-card>
-
-</ng-container>
-
+    </ng-container>
+</mat-card>
 <br />
 <br />
 <br />

@@ -17,21 +17,23 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 .tomte-list-output-table {
-    table-layout: fixed;
-    width: 100%;
-    border-collapse: collapse;
+
     th,
-    td {
+    td 
+    {
         text-align: center;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    }  
-    table, th, td {
-    border: 3px solid #303030; //background color?  
-    // border: 3px solid #e22131; // tuxedo red?
     }
-    .tomte-table-padding, th {
-        background-color: #303030;
+    th
+    {
+        font-size: large;
     }
+}
+
+.tomte-gui-title
+{
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 
