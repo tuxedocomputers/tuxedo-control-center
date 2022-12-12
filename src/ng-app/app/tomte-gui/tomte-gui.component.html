@@ -101,7 +101,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <br />
     </ng-container>
 
-    <ng-container *ngIf="tomteMode && tomteIsInstalled">
+    <ng-container *ngIf="tomteMode && tomteIsInstalled && !loadingInformation">
 
         <hr />
         <h2 class="tomte-gui-title" i18n="@@cTomteGuiTomteOperationModeHeader">

@@ -345,7 +345,7 @@ export class TomteGuiComponent implements OnInit {
             let command = "yes | pkexec tuxedo-tomte remove " + name;
         
             let results = await this.utils.execCmd(command).catch((err) => {
-                this.throwErrorMessage(err);
+                console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -357,7 +357,7 @@ export class TomteGuiComponent implements OnInit {
             let command = "pkexec tuxedo-tomte configure " + name;
 
             let results = await this.utils.execFile(command).catch((err) => {
-                this.throwErrorMessage(err);
+                console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -387,7 +387,7 @@ export class TomteGuiComponent implements OnInit {
             command = "pkexec tuxedo-tomte unblock " + name ;
         }
         let results = await this.utils.execFile(command).catch((err) => {
-            this.throwErrorMessage(err);
+            console.error(err);
             this.utils.pageDisabled = false;
             return;
         });
