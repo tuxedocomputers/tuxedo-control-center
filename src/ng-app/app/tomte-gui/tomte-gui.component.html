@@ -31,6 +31,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
     <br />
     <ng-container *ngIf="showRetryButton">
+        <hr />
         <h2 class="tomte-gui-title" i18n="@@cTomteGuiUnableToLoadInformationHeader">
             Unable to load information
         </h2>
@@ -138,7 +139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <br />
     </ng-container>
 
-    <ng-container *ngIf="tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton">
+    <ng-container *ngIf="tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteIsInstalled">
         <hr />
             <h2 class="tomte-gui-title" i18n="@@cTomteGuiTomteConfigurationHeader">
                 Tomte Configuration
