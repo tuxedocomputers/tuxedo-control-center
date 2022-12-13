@@ -50,6 +50,8 @@ if (startTCCAccelerator === '') {
 
 let tccWindow: Electron.BrowserWindow;
 let aquarisWindow: Electron.BrowserWindow;
+let cameraWindow: Electron.BrowserWindow;
+
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
@@ -290,6 +292,74 @@ function activateAquarisGui() {
         });
     }
 }
+
+function createCameraPreview(langId: string) {
+    let windowWidth = 700;
+    let windowHeight = 700;
+
+    cameraWindow = new BrowserWindow({
+        title: "Camera Preview",
+        width: windowWidth,
+        height: windowHeight,
+        frame: true,
+        resizable: true,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
+        icon: path.join(
+            __dirname,
+            "../../data/dist-data/tuxedo-control-center_256.png"
+        ),
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+    });
+
+    cameraWindow.on("page-title-updated", function (e) {
+        e.preventDefault();
+    });
+
+    // Hide menu bar
+    cameraWindow.setMenuBarVisibility(false);
+    // Workaround to menu bar appearing after full screen state
+    cameraWindow.on("leave-full-screen", () => {
+        cameraWindow.setMenuBarVisibility(false);
+    });
+
+    cameraWindow.on("closed", async function () {
+        tccWindow.webContents.send("camera-window-closed", "test");
+        cameraWindow = null;
+    });
+
+    const indexPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "ng-app",
+        langId,
+        "index.html"
+    );
+    cameraWindow.loadFile(indexPath, { hash: "/webcam-preview" });
+}
+
+ipcMain.on("changing-active-webcamId", (event, arg) => {
+    if (cameraWindow != null) {
+        cameraWindow.webContents.send("updating-webcamId", arg);
+    }
+});
+
+ipcMain.on("createWebcamPreview", function (evt, message) {
+    if (cameraWindow) {
+        if (cameraWindow.isMinimized()) {
+            cameraWindow.restore();
+        }
+        cameraWindow.focus();
+    } else {
+        userConfig.get("langId").then((langId) => {
+            createCameraPreview(langId);
+        });
+    }
+});
 
 async function getProfiles(): Promise<TccProfile[]> {
     const dbus = new TccDBusController();

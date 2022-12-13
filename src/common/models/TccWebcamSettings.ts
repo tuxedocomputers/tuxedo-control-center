@@ -1,4 +1,9 @@
-// todo: product id / vendor id for profile check
+export interface WebcamJSON {
+    presetName: string;
+    webcamId: string;
+    webcamSettings: WebcamSettigs[];
+}
+
 export interface WebcamSettigs {
     config_category: string;
     config_data: [SliderInterface, BoolInterface, MenuInterface];

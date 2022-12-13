@@ -86,6 +86,7 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
 import { WebcamModule } from 'ngx-webcam2';
 import { CameraSettingsComponent } from './camera-settings/camera-settings.component';
+import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -110,7 +111,8 @@ declare const require;
     DialogInputTextComponent,
     DialogConfirmComponent,
     ChargingSettingsComponent,
-    CameraSettingsComponent
+    CameraSettingsComponent,
+    WebcamPreviewComponent
   ],
   imports: [
     BrowserModule,

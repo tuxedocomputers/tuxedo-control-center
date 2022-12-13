@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ElectronService } from "ngx-electron";
-import { Observable, Subject } from "rxjs";
-import { WebcamSettigs } from "src/common/models/TccWebcamSettings";
+import { fromEvent, Observable, Subject, Subscription } from "rxjs";
+import { WebcamJSON, WebcamSettigs } from "src/common/models/TccWebcamSettings";
 import { CompatibilityService } from "../compatibility.service";
 import { UtilsService } from "../utils.service";
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
     selector: "app-camera-settings",
@@ -21,25 +22,53 @@ export class CameraSettingsComponent implements OnInit {
 
     webcamDropdownData: any[] = [];
     selectedWebcamId: any;
-
     nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
     allowCameraSwitch: boolean = false;
     webcamSettings: WebcamSettigs[];
     expandedRegions: { [key: string]: boolean } = {};
+    newWindow = null;
+    tracks: any;
+    webcamDisabled: any = true;
+    showPortal: boolean = false;
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
-        public compat: CompatibilityService
+        public compat: CompatibilityService,
+        private cdref: ChangeDetectorRef
     ) {}
 
-    ngOnInit() {
-        this.setAllCameraMetadata();
+    async ngOnInit() {
+        const cameraWindowObservable = fromEvent(
+            this.electron.ipcRenderer,
+            "camera-window-closed"
+        );
+        this.subscriptions.add(
+            cameraWindowObservable.subscribe(() => {
+                this.enableCamera();
+            })
+        );
+
+        await this.setAllCameraMetadata().then((webcamData) => {
+            this.webcamDropdownData = webcamData;
+            this.selectedWebcamId = webcamData[0].id;
+            this.setWebcam(webcamData[0].id);
+        });
+    }
+
+    ngAfterContentChecked() {
+        this.cdref.detectChanges();
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+        this.disableCamera();
     }
 
     // support.component.ts
-    public async executeShellCommand(command: string): Promise<string> {
-        return new Promise<string>(async (resolve) => {
+    public executeShellCommand(command: string): Promise<string> {
+        return new Promise<string>((resolve) => {
             this.utils
                 .execCmd(command)
                 .then((result) => {
@@ -69,24 +98,26 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    public setCameraMetadata(device: any, cameraPathsWithStreams: any) {
+    public async setCameraMetadata(device: any, cameraPathsWithStreams: any) {
         let deviceId = device.label.match(/\((.*:.*)\)/);
         if (deviceId != null) {
-            this.getCameraPathsWithId(deviceId[1]).then((availableIds) => {
-                cameraPathsWithStreams.forEach((cameraPath) => {
-                    if (
-                        Object.values(JSON.parse(availableIds)).indexOf(
-                            cameraPath
-                        ) > -1
-                    ) {
-                        this.webcamDropdownData.push({
-                            label: device.label,
-                            id: device.deviceId,
-                            path: `/dev/${cameraPath}`,
-                        });
-                    }
-                });
-            });
+            await this.getCameraPathsWithId(deviceId[1]).then(
+                (availableIds) => {
+                    cameraPathsWithStreams.forEach((cameraPath) => {
+                        if (
+                            Object.values(JSON.parse(availableIds)).indexOf(
+                                cameraPath
+                            ) > -1
+                        ) {
+                            this.webcamDropdownData.push({
+                                label: device.label,
+                                id: device.deviceId,
+                                path: `/dev/${cameraPath}`,
+                            });
+                        }
+                    });
+                }
+            );
         }
     }
 
@@ -126,28 +157,37 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    public setAllCameraMetadata(): Promise<null> {
-        return new Promise<null>((resolve) => {
-            this.getCameraVideoStreamPaths().then((data) => {
+    public async setDevicesMetadata(devices: any, cameraPathsWithStreams: any) {
+        let filteredDevices = devices.filter(
+            (device) => device.kind == "videoinput"
+        );
+        for (const device of filteredDevices) {
+            await this.setCameraMetadata(device, cameraPathsWithStreams);
+        }
+    }
+
+    public setAllCameraMetadata(): Promise<any[]> {
+        return new Promise<any[]>((resolve) => {
+            this.getCameraVideoStreamPaths().then(async (data) => {
                 let cameraPathsWithStreams = JSON.parse(data);
-                navigator.mediaDevices
+                await navigator.mediaDevices
                     .getUserMedia({ audio: false, video: true })
-                    .then(() => {
-                        navigator.mediaDevices
+                    .then(async (stream) => {
+                        await navigator.mediaDevices
                             .enumerateDevices()
-                            .then((devices) => {
-                                devices.forEach((device) => {
-                                    this.setCameraMetadata(
-                                        device,
-                                        cameraPathsWithStreams
-                                    );
-                                });
+                            .then(async (devices) => {
+                                await this.setDevicesMetadata(
+                                    devices,
+                                    cameraPathsWithStreams
+                                );
                             })
                             .catch((error) => {
                                 console.log("Error :", error);
                             });
+
+                        this.tracks = stream.getVideoTracks();
                     });
-                resolve(null);
+                resolve(this.webcamDropdownData);
             });
         });
     }
@@ -159,12 +199,40 @@ export class CameraSettingsComponent implements OnInit {
         return webcamEntry["path"];
     }
 
+    public getWebcamId() {
+        let webcamEntry = this.webcamDropdownData.find(
+            (x) => x["id"] == this.selectedWebcamId
+        );
+        return webcamEntry["label"].match(/\((.*:.*)\)/)[1];
+    }
+
     public setWebcam(webcamId: string) {
         this.getCameraSettings(this.getWebcamPathWithId()).then((data) => {
             const settings: WebcamSettigs[] = JSON.parse(data);
             this.webcamSettings = settings;
         });
         this.nextWebcam.next(webcamId);
+        this.electron.ipcRenderer.send("changing-active-webcamId", webcamId);
+    }
+
+    public disableCamera() {
+        if (this.tracks != undefined) {
+            this.tracks.forEach((track) => {
+                track.stop();
+            });
+        }
+        this.webcamDisabled = false;
+    }
+
+    public openWindow(event: any) {
+        this.electron.ipcRenderer.send("createWebcamPreview");
+        this.disableCamera();
+        this.setWebcam(this.selectedWebcamId);
+    }
+
+    public enableCamera() {
+        this.webcamDisabled = true;
+        this.setWebcam(this.selectedWebcamId);
     }
 
     public get nextWebcamObservable(): Observable<boolean | string> {
@@ -173,12 +241,15 @@ export class CameraSettingsComponent implements OnInit {
 
     // todo: deduplicate code
     public setWhiteBalance(devicePath: string) {
-        this.webcamSettings.forEach((x) => {
-            if (x.config_category == "Balance" && x.config_type == "Color") {
-                x.config_data.forEach((y) => {
-                    if (y.name == "white_balance_temperature") {
+        this.webcamSettings.forEach((config) => {
+            if (
+                config.config_category == "Balance" &&
+                config.config_type == "Color"
+            ) {
+                config.config_data.forEach((configParameter) => {
+                    if (configParameter.name == "white_balance_temperature") {
                         this.executeShellCommand(
-                            `v4l2-ctl -d ${devicePath} -c white_balance_temperature=${y.current}`
+                            `v4l2-ctl -d ${devicePath} -c white_balance_temperature=${configParameter.current}`
                         );
                     }
                 });
@@ -187,17 +258,17 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     public setExposure(devicePath: string) {
-        this.webcamSettings.forEach((x) => {
+        this.webcamSettings.forEach((config) => {
             if (
-                x.config_category == "Exposure" &&
-                x.config_type == "Exposure"
+                config.config_category == "Exposure" &&
+                config.config_type == "Exposure"
             ) {
-                x.config_data.forEach((y) => {
-                    if (y.name == "exposure_absolute") {
+                config.config_data.forEach((configParameter) => {
+                    if (configParameter.name == "exposure_absolute") {
                         this.executeShellCommand(
                             "python3 " +
                                 this.electron.process.cwd() +
-                                `/src/cameractrls/cameractrls.py -d ${devicePath} -c exposure_absolute=${y.current}`
+                                `/src/cameractrls/cameractrls.py -d ${devicePath} -c exposure_absolute=${configParameter.current}`
                         );
                     }
                 });
@@ -237,6 +308,12 @@ export class CameraSettingsComponent implements OnInit {
         option: string
     ) {
         let devicePath = this.getWebcamPathWithId();
+
+        // if capture related, camera needs to be turned off to avoid "recourse is busy"
+        if (["pixelformat", "resolution", "fps"].includes(configParameter)) {
+            console.log("todo");
+        }
+
         this.executeShellCommand(
             "python3 " +
                 this.electron.process.cwd() +
@@ -263,6 +340,18 @@ export class CameraSettingsComponent implements OnInit {
 
     public handleRegionPanelStateChange(key: string, isOpen: boolean) {
         this.expandedRegions = { ...this.expandedRegions, [key]: isOpen };
+    }
+
+    // todo: multiple custom presets
+    public savingWebcamPresets(event: any) {
+        let mySettings: WebcamSettigs[] = this.webcamSettings;
+        let myWebcamJSON: WebcamJSON = {
+            presetName: "test",
+            webcamId: this.getWebcamId(),
+            webcamSettings: mySettings,
+        };
+        const fs = require("fs");
+        fs.writeFileSync("webcam_settings.json", JSON.stringify(myWebcamJSON));
     }
 
     // not possible to use variable to dynamically generate translations, because localize needs to know at compiletime
