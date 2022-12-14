@@ -211,6 +211,54 @@ export class TccDBusController {
         }
     }
 
+    async getChargingProfilesAvailable(): Promise<string[]> {
+        try {
+            return JSON.parse(await this.interface.getChargingProfilesAvailable());
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async getCurrentChargingProfile(): Promise<string> {
+        try {
+            return await this.interface.GetCurrentChargingProfile();
+        } catch (err) {
+            return '';
+        }
+    }
+
+    async setChargingProfile(profileDescriptor: string): Promise<boolean> {
+        try {
+            return await this.interface.SetChargingProfile(profileDescriptor);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargingPrioritiesAvailable(): Promise<string[]> {
+        try {
+            return JSON.parse(await this.interface.GetChargingPrioritiesAvailable());
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async getCurrentChargingPriority(): Promise<string> {
+        try {
+            return await this.interface.GetCurrentChargingPriority();
+        } catch (err) {
+            return '';
+        }
+    }
+
+    async setChargingPriority(priorityDescriptor: string): Promise<boolean> {
+        try {
+            return await this.interface.SetChargingPriority(priorityDescriptor);
+        } catch (err) {
+            return false;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
     }
