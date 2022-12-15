@@ -38,7 +38,8 @@ const tccConfigDir = path.join(os.homedir(), '.tcc');
 const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
 const availableLanguages = [
     'en',
-    'de'
+    'de',
+    'fr'
 ];
 const translation = new NgTranslations();
 let startTCCAccelerator;

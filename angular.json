@@ -8,7 +8,8 @@
       "i18n": {
           "locales": {
               "en": { "translation": "src/ng-app/assets/locale/lang.en.xlf", "baseHref": "" },
-              "de": { "translation": "src/ng-app/assets/locale/lang.de.xlf", "baseHref": "" }
+              "de": { "translation": "src/ng-app/assets/locale/lang.de.xlf", "baseHref": "" },
+              "fr": { "translation": "src/ng-app/assets/locale/lang.fr.xlf", "baseHref": "" }
           }
       },
       "schematics": {
