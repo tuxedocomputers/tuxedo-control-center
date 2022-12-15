@@ -213,7 +213,7 @@ export class TccDBusController {
 
     async getChargingProfilesAvailable(): Promise<string[]> {
         try {
-            return JSON.parse(await this.interface.getChargingProfilesAvailable());
+            return JSON.parse(await this.interface.GetChargingProfilesAvailable());
         } catch (err) {
             return [];
         }

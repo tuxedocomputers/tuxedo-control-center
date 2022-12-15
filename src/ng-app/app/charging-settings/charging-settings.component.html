@@ -17,6 +17,22 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div class="content">
-    
+<div *ngFor="let profile of chargingProfilesAvailable">
+    <button
+        mat-raised-button
+        [disabled]="profile === currentChargingProfile || chargingProfileProgress"
+        (click)="setChargingProfile(profile)">
+        {{ profile }}
+    </button>
+</div>
+
+<hr />
+
+<div *ngFor="let priority of chargingPriosAvailable">
+    <button
+        mat-raised-button
+        [disabled]="priority === currentChargingPriority || chargingPriorityProgress"
+        (click)="setChargingPriority(priority)">
+        {{ priority }}
+    </button>
 </div>
