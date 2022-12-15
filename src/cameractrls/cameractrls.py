@@ -1860,7 +1860,7 @@ class CameraCtrls:
         config_parameter = {}
         for page in self.get_ctrl_pages():
             for cat in page.categories:
-                if page.title in ["Exposure", "Color"]:
+                if page.title in ["Exposure", "Color", "Capture"]:
                     for c in cat.ctrls:
                         config_parameter = {}
                         config_parameter["title"] = c.name

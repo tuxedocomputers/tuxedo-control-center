@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ElectronService } from "ngx-electron";
 import { fromEvent, Observable, Subject, Subscription } from "rxjs";
 import { WebcamJSON, WebcamSettigs } from "src/common/models/TccWebcamSettings";
@@ -28,9 +28,11 @@ export class CameraSettingsComponent implements OnInit {
     expandedRegions: { [key: string]: boolean } = {};
     newWindow = null;
     tracks: any;
-    webcamDisabled: any = true;
-    showPortal: boolean = false;
     private subscriptions: Subscription = new Subscription();
+    webcamInitComplete: boolean = false;
+    spinnerActive: boolean = false;
+    @ViewChild("video", { static: true })
+    public video: ElementRef;
 
     constructor(
         private electron: ElectronService,
@@ -40,6 +42,7 @@ export class CameraSettingsComponent implements OnInit {
     ) {}
 
     async ngOnInit() {
+        this.utils.pageDisabled = true;
         const cameraWindowObservable = fromEvent(
             this.electron.ipcRenderer,
             "camera-window-closed"
@@ -53,7 +56,13 @@ export class CameraSettingsComponent implements OnInit {
         await this.setAllCameraMetadata().then((webcamData) => {
             this.webcamDropdownData = webcamData;
             this.selectedWebcamId = webcamData[0].id;
-            this.setWebcam(webcamData[0].id);
+
+            let webcamId: string = webcamData[0].id;
+            this.getCameraSettings(this.getWebcamPathWithId()).then;
+            this.setWebcamWithIdAndSettings(webcamId).then(() => {
+                this.utils.pageDisabled = false;
+                this.webcamInitComplete = true;
+            });
         });
     }
 
@@ -186,6 +195,7 @@ export class CameraSettingsComponent implements OnInit {
                             });
 
                         this.tracks = stream.getVideoTracks();
+                        this.video.nativeElement.srcObject = stream;
                     });
                 resolve(this.webcamDropdownData);
             });
@@ -206,32 +216,62 @@ export class CameraSettingsComponent implements OnInit {
         return webcamEntry["label"].match(/\((.*:.*)\)/)[1];
     }
 
+    async setWithWebcamId(webcamId: string) {
+        await navigator.mediaDevices
+            .getUserMedia({ video: { deviceId: webcamId } })
+            .then((stream) => {
+                this.video.nativeElement.srcObject = stream;
+                this.tracks = stream.getVideoTracks();
+            });
+    }
+
+    stopWebcam() {
+        if (this.video.nativeElement.srcObject != null) {
+            for (const track of this.video.nativeElement.srcObject.getTracks()) {
+                track.stop();
+            }
+        }
+        this.video.nativeElement.srcObject = null;
+    }
+
+    setWebcamWithIdAndSettings(webcamId: string) {
+        return this.getCameraSettings(this.getWebcamPathWithId()).then(
+            async (data) => {
+                const settings: WebcamSettigs[] = JSON.parse(data);
+                this.webcamSettings = settings;
+                await this.setWithWebcamId(webcamId);
+                return new Promise(
+                    (resolve) => (this.video.nativeElement.onplaying = resolve)
+                );
+            }
+        );
+    }
+
     public setWebcam(webcamId: string) {
-        this.getCameraSettings(this.getWebcamPathWithId()).then((data) => {
-            const settings: WebcamSettigs[] = JSON.parse(data);
-            this.webcamSettings = settings;
-        });
-        this.nextWebcam.next(webcamId);
-        this.electron.ipcRenderer.send("changing-active-webcamId", webcamId);
+        this.spinnerActive = true;
+        this.stopWebcam();
+        this.setWebcamWithIdAndSettings(webcamId).then(
+            () => (this.spinnerActive = false)
+        );
     }
 
     public disableCamera() {
-        if (this.tracks != undefined) {
-            this.tracks.forEach((track) => {
-                track.stop();
-            });
+        for (const track of this.video.nativeElement.srcObject.getTracks()) {
+            track.stop();
         }
-        this.webcamDisabled = false;
+        this.video.nativeElement.srcObject = null;
     }
 
     public openWindow(event: any) {
-        this.electron.ipcRenderer.send("createWebcamPreview");
         this.disableCamera();
-        this.setWebcam(this.selectedWebcamId);
+        this.electron.ipcRenderer.send("createWebcamPreview");
+        this.electron.ipcRenderer.send(
+            "changing-active-webcamId",
+            this.selectedWebcamId
+        );
     }
 
     public enableCamera() {
-        this.webcamDisabled = true;
         this.setWebcam(this.selectedWebcamId);
     }
 
