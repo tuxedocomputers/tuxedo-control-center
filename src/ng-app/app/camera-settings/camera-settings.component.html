@@ -1,4 +1,4 @@
-<div [hidden]="!webcamInitComplete">
+<div class="main" [hidden]="!webcamInitComplete">
     <mat-card class="profile-details-edit">
         <mat-card-content>
             <div class="tcc-options-group">
@@ -19,6 +19,10 @@
 
                 <button id="basic" type="button" mat-button (click)="openWindow($event)">
                     Open Window
+                </button>
+
+                <button id="basic" type="button" mat-button (click)="enableCamera()">
+                    Enable Camera
                 </button>
 
                 <button id="basic" type="button" mat-button (click)="disableCamera()">

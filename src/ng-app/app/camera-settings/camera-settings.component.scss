@@ -160,3 +160,15 @@ mat-expansion-panel * {
     vertical-align: middle;
 
 }
+
+.main {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+}

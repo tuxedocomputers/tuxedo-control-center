@@ -34,6 +34,10 @@ export class CameraSettingsComponent implements OnInit {
     @ViewChild("video", { static: true })
     public video: ElementRef;
 
+    webcamHeight: number = undefined;
+    webcamWidth: number = undefined;
+    webcamFPS: number = undefined;
+
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
@@ -72,7 +76,7 @@ export class CameraSettingsComponent implements OnInit {
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-        this.disableCamera();
+        this.stopWebcam();
     }
 
     // support.component.ts
@@ -216,9 +220,19 @@ export class CameraSettingsComponent implements OnInit {
         return webcamEntry["label"].match(/\((.*:.*)\)/)[1];
     }
 
-    async setWithWebcamId(webcamId: string) {
+    async setWithWebcamId(webcamId: string, config?: any): Promise<void> {
+        if (config == undefined) {
+            config = this.getWebcamConfig(
+                undefined,
+                undefined,
+                undefined,
+                webcamId
+            );
+        }
         await navigator.mediaDevices
-            .getUserMedia({ video: { deviceId: webcamId } })
+            .getUserMedia({
+                video: config,
+            })
             .then((stream) => {
                 this.video.nativeElement.srcObject = stream;
                 this.tracks = stream.getVideoTracks();
@@ -234,12 +248,12 @@ export class CameraSettingsComponent implements OnInit {
         this.video.nativeElement.srcObject = null;
     }
 
-    setWebcamWithIdAndSettings(webcamId: string) {
+    setWebcamWithIdAndSettings(webcamId: string, config?: any) {
         return this.getCameraSettings(this.getWebcamPathWithId()).then(
             async (data) => {
                 const settings: WebcamSettigs[] = JSON.parse(data);
                 this.webcamSettings = settings;
-                await this.setWithWebcamId(webcamId);
+                await this.setWithWebcamId(webcamId, config);
                 return new Promise(
                     (resolve) => (this.video.nativeElement.onplaying = resolve)
                 );
@@ -255,15 +269,8 @@ export class CameraSettingsComponent implements OnInit {
         );
     }
 
-    public disableCamera() {
-        for (const track of this.video.nativeElement.srcObject.getTracks()) {
-            track.stop();
-        }
-        this.video.nativeElement.srcObject = null;
-    }
-
     public openWindow(event: any) {
-        this.disableCamera();
+        this.stopWebcam();
         this.electron.ipcRenderer.send("createWebcamPreview");
         this.electron.ipcRenderer.send(
             "changing-active-webcamId",
@@ -317,7 +324,6 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     public setSliderValue(event: any, configParameter: string) {
-        console.log(this.webcamDropdownData);
         let devicePath = this.getWebcamPathWithId();
         this.executeShellCommand(
             `v4l2-ctl -d ${devicePath} -c ${configParameter}=${event.value}`
@@ -342,17 +348,114 @@ export class CameraSettingsComponent implements OnInit {
         this.reloadConfigValues();
     }
 
-    public setOptionsMenuValue(
-        event: any,
-        configParameter: string,
-        option: string
-    ) {
-        let devicePath = this.getWebcamPathWithId();
+    // todo: deduplicate
+    getResolution() {
+        this.webcamSettings.forEach((config) => {
+            if (
+                config.config_category == "Capture" &&
+                config.config_type == "Capture"
+            ) {
+                config.config_data.forEach((configParameter) => {
+                    if (configParameter.name == "resolution") {
+                        if (typeof configParameter.current === "string") {
+                            this.webcamWidth = Number(
+                                configParameter.current.split("x")[0]
+                            );
+                            this.webcamHeight = Number(
+                                configParameter.current.split("x")[1]
+                            );
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-        // if capture related, camera needs to be turned off to avoid "recourse is busy"
-        if (["pixelformat", "resolution", "fps"].includes(configParameter)) {
-            console.log("todo");
+    getFPS() {
+        this.webcamSettings.forEach((config) => {
+            if (
+                config.config_category == "Capture" &&
+                config.config_type == "Capture"
+            ) {
+                config.config_data.forEach((configParameter) => {
+                    if (configParameter.name == "fps") {
+                        this.webcamFPS = Number(configParameter.current);
+                    }
+                });
+            }
+        });
+    }
+
+    getWebcamConfig(
+        width?: number,
+        height?: number,
+        fps?: number,
+        webcamId?: string
+    ) {
+        if (width == undefined || height == undefined) {
+            if (
+                this.webcamWidth == undefined ||
+                this.webcamHeight == undefined
+            ) {
+                this.getResolution();
+            }
+
+            width = this.webcamWidth;
+            height = this.webcamHeight;
+        } else {
+            this.webcamWidth = width;
+            this.webcamHeight = height;
         }
+
+        if (fps == undefined) {
+            if (this.webcamFPS == undefined) {
+                this.getFPS();
+            }
+            fps = this.webcamFPS;
+        } else {
+            this.webcamFPS = fps;
+        }
+
+        if (webcamId == undefined) {
+            webcamId = this.selectedWebcamId;
+        } else {
+            this.selectedWebcamId = webcamId;
+        }
+
+        return {
+            deviceId: webcamId,
+            width: { exact: width },
+            height: { exact: height },
+            frameRate: { exact: fps },
+        };
+    }
+
+    setResolution(option: string) {
+        this.stopWebcam();
+        this.spinnerActive = true;
+
+        let width = Number(option.split("x")[0]);
+        let height = Number(option.split("x")[1]);
+        let config = this.getWebcamConfig(width, height);
+        this.setWebcamWithIdAndSettings(this.selectedWebcamId, config).then(
+            () => (this.spinnerActive = false)
+        );
+        return;
+    }
+
+    setFPS(option: string) {
+        this.stopWebcam();
+        this.spinnerActive = true;
+        let fps = Number(option);
+        let config = this.getWebcamConfig(undefined, undefined, fps);
+        this.setWebcamWithIdAndSettings(this.selectedWebcamId, config).then(
+            () => (this.spinnerActive = false)
+        );
+        return;
+    }
+
+    setMenuConfigValue(configParameter: string, option: string) {
+        let devicePath = this.getWebcamPathWithId();
 
         this.executeShellCommand(
             "python3 " +
@@ -365,7 +468,24 @@ export class CameraSettingsComponent implements OnInit {
         if (configParameter == "exposure_auto" && option == "manual_mode") {
             this.setExposure(devicePath);
         }
+    }
 
+    public setOptionsMenuValue(
+        event: any,
+        configParameter: string,
+        option: string
+    ) {
+        if (configParameter == "resolution") {
+            this.setResolution(option);
+            return;
+        }
+
+        if (configParameter == "fps") {
+            this.setFPS(option);
+            return;
+        }
+
+        this.setMenuConfigValue(configParameter, option);
         setTimeout(() => {
             this.reloadConfigValues();
         }, 100);

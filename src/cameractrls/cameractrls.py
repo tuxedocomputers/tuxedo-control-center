@@ -1854,6 +1854,14 @@ class CameraCtrls:
                         print(' | inactive', end = '')
                     print()
 
+    def get_all_resolutions(self):
+        resolutions = []
+        fmts = self.ctrls[1].get_fmts()
+        for fmt in fmts:
+            resolutions.append(self.ctrls[1].get_resolutions(str2pxf(fmt)))
+        resolutions = set(([item for sublist in resolutions for item in sublist]))
+        return sorted(list(resolutions),  key=lambda x: (len(x), x.split("x")[0]))
+
     def print_ctrls_json(self):
         json_data = []
         config_data = []
@@ -1870,7 +1878,12 @@ class CameraCtrls:
                             config_parameter["type"] = "menu"
                             if c.default:
                                 config_parameter["default"] = c.default
-                            config_parameter["options"] = [m.text_id for m in c.menu]
+                            if c.name == "Resolution":
+                                config_parameter["options"] = self.get_all_resolutions()
+                            elif c.name == "Pixel format":
+                                continue
+                            else:
+                                config_parameter["options"] = [m.text_id for m in c.menu]
                         elif c.type in ['integer', 'boolean']:
                             if c.type == 'integer':
                                 config_parameter["type"] = "slider"
