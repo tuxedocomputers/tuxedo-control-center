@@ -187,6 +187,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         });
         this.config.writeAutosave(this.autosave);
+        this.config.writeSettings(this.settings);
     }
 
     private async handleArgumentProgramFlow() {
