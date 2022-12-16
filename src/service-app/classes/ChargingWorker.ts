@@ -76,13 +76,13 @@ export class ChargingWorker extends DaemonWorker {
         }
 
         try {
-            console.log("applyChargingProfile()");
             if (this.hasChargingProfile()) {
                 const profileToSet = this.tccd.settings.chargingProfile;
                 const currentProfile = this.chargingProfile.chargingProfile.readValue();
                 const profilesAvailable = this.chargingProfile.chargingProfilesAvailable.readValue();
                 if (profileToSet !== null && profileToSet !== currentProfile && profilesAvailable.includes(profileToSet)) {
                     this.chargingProfile.chargingProfile.writeValue(profileToSet);
+                    this.tccd.logLine('Applied charging profile \'' + profileToSet + '\'');
                 }
                 return true;
             }
@@ -110,7 +110,6 @@ export class ChargingWorker extends DaemonWorker {
     }
 
     public async applyChargingPriority(chargingPrioDescriptor?: string) {
-        console.log("applyChargingPriority()");
         if (chargingPrioDescriptor !== undefined) {
             this.tccd.settings.chargingPriority = chargingPrioDescriptor;
         }
@@ -122,6 +121,7 @@ export class ChargingWorker extends DaemonWorker {
                 const priosAvailable = this.chargingPriority.chargingPriosAvailable.readValue();
                 if (prioToSet !== null && prioToSet !== currentPrio && priosAvailable.includes(prioToSet)) {
                     this.chargingPriority.chargingPrio.writeValue(prioToSet);
+                    this.tccd.logLine('Applied charging priority \'' + prioToSet + '\'');
                 }
                 return true;
             }
