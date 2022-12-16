@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 
 @Component({
@@ -25,6 +25,8 @@ import { TccDBusClientService } from "../tcc-dbus-client.service";
     styleUrls: ['./charging-settings.component.scss']
 })
 export class ChargingSettingsComponent implements OnInit, OnDestroy {
+
+    @Output() hasFeature = new EventEmitter<boolean>();
 
     public chargingPriosAvailable: string[] = [];
     public chargingProfilesAvailable: string[] = [];
@@ -56,6 +58,9 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
     private async periodicUpdate() {
         await this.readAvailableSettings();
+        if (this.chargingPriosAvailable.length > 0 || this.chargingProfilesAvailable.length > 0) {
+            this.hasFeature.emit(true);
+        }
     }
 
     public async readAvailableSettings() {
