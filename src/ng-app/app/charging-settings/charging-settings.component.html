@@ -16,11 +16,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<label class="charging-group-label" i18n="@@chargingProfileLabel">Charging profiles</label>
+<label class="charging-group-label" i18n="@@chargingProfileLabel" *ngIf="chargingProfilesAvailable.length > 0">Charging profiles</label>
 <mat-radio-group
     class="charging-radio-group"
     [ngModel]="currentChargingProfile"
-    (change)="setChargingProfile($event.value)">
+    (change)="setChargingProfile($event.value)"
+    *ngIf="chargingProfilesAvailable.length > 0">
     <mat-radio-button
         *ngFor="let profile of chargingProfilesAvailable"
         [value]="profile"
@@ -33,11 +34,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-radio-button>
 </mat-radio-group>
 
-<label class="charging-group-label" i18n="@@chargingPriorityLabel">USB-C PD charging priority</label>
+<label class="charging-group-label" i18n="@@chargingPriorityLabel" *ngIf="chargingPriosAvailable.length > 0">USB-C PD charging priority</label>
 <mat-radio-group
     class="charging-radio-group"
     [ngModel]="currentChargingPriority"
-    (change)="setChargingPriority($event.value)">
+    (change)="setChargingPriority($event.value)"
+    *ngIf="chargingPriosAvailable.length > 0">
     <mat-radio-button
         *ngFor="let priority of chargingPriosAvailable"
         [value]="priority"
