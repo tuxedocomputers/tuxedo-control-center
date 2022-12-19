@@ -17,6 +17,27 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-button {
-    margin: 2px;
+.charging-group-label {
+    font-size: 1.5em;
+    font-weight: bolder;
+}
+
+.charging-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+
+    mat-radio-button {
+        margin: 5px;
+
+        .inner-label {
+            padding-left: 8px;
+
+            header {
+                font-size: 1.2em;
+                font-weight: bolder;
+            }
+        }
+    }
 }

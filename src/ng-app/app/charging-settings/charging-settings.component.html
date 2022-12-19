@@ -16,23 +16,36 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
+<label class="charging-group-label">Charging profiles</label>
+<mat-radio-group
+    class="charging-radio-group"
+    [ngModel]="currentChargingProfile"
+    (change)="setChargingProfile($event.value)">
+    <mat-radio-button
+        *ngFor="let profile of chargingProfilesAvailable"
+        [value]="profile"
+        color="primary"
+        [disabled]="chargingProfileProgress">
+        <div class="inner-label">
+            <header>{{ profile }}</header>
+            {{ 'Placeholder description' }}
+        </div>
+    </mat-radio-button>
+</mat-radio-group>
 
-<div *ngFor="let profile of chargingProfilesAvailable">
-    <button
-        mat-raised-button
-        [disabled]="profile === currentChargingProfile || chargingProfileProgress"
-        (click)="setChargingProfile(profile)">
-        {{ profile }}
-    </button>
-</div>
-
-<hr />
-
-<div *ngFor="let priority of chargingPriosAvailable">
-    <button
-        mat-raised-button
-        [disabled]="priority === currentChargingPriority || chargingPriorityProgress"
-        (click)="setChargingPriority(priority)">
-        {{ priority }}
-    </button>
-</div>
+<label class="charging-group-label">Charging priority</label>
+<mat-radio-group
+    class="charging-radio-group"
+    [ngModel]="currentChargingPriority"
+    (change)="setChargingPriority($event.value)">
+    <mat-radio-button
+        *ngFor="let priority of chargingPriosAvailable"
+        [value]="priority"
+        color="primary"
+        [disabled]="chargingPriorityProgress">
+        <div class="inner-label">
+            <header>{{ priority }}</header>
+            {{ 'Placeholder description' }}
+        </div>
+    </mat-radio-button>
+</mat-radio-group>
