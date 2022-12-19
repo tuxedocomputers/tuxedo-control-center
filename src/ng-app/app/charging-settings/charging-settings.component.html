@@ -27,8 +27,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         color="primary"
         [disabled]="chargingProfileProgress">
         <div class="inner-label">
-            <header>{{ profile }}</header>
-            {{ 'Placeholder description' }}
+            <header>{{ chargingProfileLabels.get(profile) }}</header>
+            {{ chargingProfileDescriptions.get(profile) }}
         </div>
     </mat-radio-button>
 </mat-radio-group>
@@ -44,8 +44,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         color="primary"
         [disabled]="chargingPriorityProgress">
         <div class="inner-label">
-            <header>{{ priority }}</header>
-            {{ 'Placeholder description' }}
+            <header>{{ chargingPriorityLabels.get(priority) }}</header>
+            {{ chargingPriorityDescriptions.get(priority) }}
         </div>
     </mat-radio-button>
 </mat-radio-group>
