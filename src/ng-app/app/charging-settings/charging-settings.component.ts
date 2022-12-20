@@ -48,19 +48,19 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     constructor(
         private tccdbus: TccDBusClientService
     ) {
-        this.chargingProfileLabels.set('high_capacity', $localize `:@@chargingProfileHighCapacityLabel:High capacity`);
-        this.chargingProfileLabels.set('balanced', $localize `:@@chargingProfileBalancedLabel:Balanced`);
-        this.chargingProfileLabels.set('stationary', $localize `:@@chargingProfileStationaryLabel:Stationary`);
+        this.chargingProfileLabels.set('high_capacity', $localize `:@@chargingProfileHighCapacityLabel:Full capacity`);
+        this.chargingProfileLabels.set('balanced', $localize `:@@chargingProfileBalancedLabel:Reduced capacity`);
+        this.chargingProfileLabels.set('stationary', $localize `:@@chargingProfileStationaryLabel:Stationary use`);
 
-        this.chargingProfileDescriptions.set('high_capacity', $localize `:@@chargingProfileHighCapacityDescription:Optimize for charging speed and maximum capacity.`);
-        this.chargingProfileDescriptions.set('balanced', $localize `:@@chargingProfileBalancedDescription:Balance between battery capacity and battery lifetime. Charging speed and peak capacity reduced.`);
-        this.chargingProfileDescriptions.set('stationary', $localize `:@@chargingProfileStationaryDescription:Further reduced charging speed and peak capacity. Suitable when using external power supply almost extensively.`);
+        this.chargingProfileDescriptions.set('high_capacity', $localize `:@@chargingProfileHighCapacityDescription:This is the default setting. Fastest charging speed and 100% battery capacity for best possible runtimes.`);
+        this.chargingProfileDescriptions.set('balanced', $localize `:@@chargingProfileBalancedDescription:Reduced charging speed and battery capacity (~90 %) for better battery lifespan.`);
+        this.chargingProfileDescriptions.set('stationary', $localize `:@@chargingProfileStationaryDescription:Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.`);
 
-        this.chargingPriorityLabels.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryLabel:Charge battery`);
-        this.chargingPriorityLabels.set('performance', $localize `:@@chargingPriorityPerformanceLabel:Performance`);
+        this.chargingPriorityLabels.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryLabel:Priorize battery charging speed`);
+        this.chargingPriorityLabels.set('performance', $localize `:@@chargingPriorityPerformanceLabel:Priorize performance`);
 
-        this.chargingPriorityDescriptions.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryDescription:Prioritizes battery charging at the expense of performance.`);
-        this.chargingPriorityDescriptions.set('performance', $localize `:@@chargingPriorityPerformanceDescription:Prioritizes performance at the expense of battery charge speed.`);
+        this.chargingPriorityDescriptions.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryDescription:Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.`);
+        this.chargingPriorityDescriptions.set('performance', $localize `:@@chargingPriorityPerformanceDescription:Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.`);
     }
 
     ngOnInit() {
