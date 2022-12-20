@@ -1,7 +1,14 @@
 # Changelog
 
 ## [] - UNRELEASED
-## Changed
+### Added
+- Battery charging options for a number of devices
+  - Choose one of three "charging profiles" to influence peak charge and charging time
+  - Choose whether to priorize charging or performance when on USB-C PD
+  - For now available through "Settings" => "Battery charging options" (for devices with this feature)
+  - Tray shortcut coming soon
+
+### Changed
 - Dark/light mode adjustments
   - Now three options available light, dark and "system setting".
   - System setting attempts to use advertised system theme mode when
@@ -9,7 +16,7 @@
   - Also fixes some GUI details (like scrollbars) that were not rendered in the correct theme
 - Config reload/save logic of `tccd` no longer requires restart of service
 
-## Fixed
+### Fixed
 - Core available check on setting validation (should prevent some log
   messages when cores are disabled)
 - `xrandr` output on systeminfos execution
