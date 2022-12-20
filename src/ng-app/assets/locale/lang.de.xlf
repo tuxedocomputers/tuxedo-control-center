@@ -1027,7 +1027,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="9e83642b4db54975444db5b67e6056038afc27a9" datatype="html">
         <source>On deactivate, the default automatic fan control is restored directly.</source>
-        <target phase-name="approval-1" state="translated">Beim Deaktivieren wird unmittelbar die automatische standard Lüftersteuerung wiederhergestellt.</target>
+        <target phase-name="approval-1" state="translated">Beim Deaktivieren wird unmittelbar die automatische Standard-Lüftersteuerung wiederhergestellt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">79</context>
@@ -1237,9 +1237,9 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
         <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
-        <target phase-name="approval-1" state="needs-adaptation">
-        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>Wie es aussieht verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
-        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Die Festplattenverschlüsselung kann nur wärend der installation ihres Systems aktiviert werden. Wenn sie die Festplattenverschlüsselung verwenden wollen, müssen sie ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Wenn sie ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+        <target phase-name="approval-1" state="translated">
+        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Die Festplattenverschlüsselung kann nur während der installation ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Wenn Sie Ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
