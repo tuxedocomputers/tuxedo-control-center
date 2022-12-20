@@ -25,11 +25,11 @@
                     Enable Camera
                 </button>
 
-                <button id="basic" type="button" mat-button (click)="disableCamera()">
+                <button id="basic" type="button" mat-button (click)="stopWebcam()">
                     Disable Camera
                 </button>
 
-                <div class="webcam">
+                <div class="webcam" id="hidden">
                     <video #video id="video" width="640" height="480" autoplay="true"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
                 </div>
