@@ -1,5 +1,20 @@
 # Changelog
 
+## [] - UNRELEASED
+## Changed
+- Dark/light mode adjustments
+  - Now three options available light, dark and "system setting".
+  - System setting attempts to use advertised system theme mode when
+    choosing TCC theme.
+  - Also fixes some GUI details (like scrollbars) that were not rendered in the correct theme
+- Config reload/save logic of `tccd` no longer requires restart of service
+
+## Fixed
+- Core available check on setting validation (should prevent some log
+  messages when cores are disabled)
+- `xrandr` output on systeminfos execution
+- Disable cpu min/max freq validation for `intel_pstate` while interface is bugged
+
 ## [1.2.2] - 2022-10-17
 ### Changed
 - Fan control logic tweaks and fixes
