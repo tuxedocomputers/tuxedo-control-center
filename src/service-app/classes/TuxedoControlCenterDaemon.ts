@@ -699,6 +699,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
+    public saveSettings() {
+        this.config.writeSettings(this.settings);
+    }
+
     /**
      * Parse the command line arguments looking for a string and fetching the next argument
      *

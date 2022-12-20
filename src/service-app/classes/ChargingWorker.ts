@@ -35,6 +35,7 @@ export class ChargingWorker extends DaemonWorker {
             if (this.tccd.settings.chargingProfile === null || this.tccd.settings.chargingProfile === undefined) {
                 try {
                     this.tccd.settings.chargingProfile = this.chargingProfile.chargingProfile.readValue();
+                    this.tccd.saveSettings();
                 } catch (err) {
                     this.tccd.logLine('Error init charging profile => ' + err);
                 }
@@ -46,6 +47,7 @@ export class ChargingWorker extends DaemonWorker {
             if (this.tccd.settings.chargingPriority === null || this.tccd.settings.chargingPriority === undefined) {
                 try {
                     this.tccd.settings.chargingPriority = this.chargingPriority.chargingPrio.readValue();
+                    this.tccd.saveSettings();
                 } catch (err) {
                     this.tccd.logLine('Error init charging priority => ' + err);
                 }
@@ -73,6 +75,7 @@ export class ChargingWorker extends DaemonWorker {
     public async applyChargingProfile(chargingProfileDescriptor?: string) {
         if (chargingProfileDescriptor !== undefined) {
             this.tccd.settings.chargingProfile = chargingProfileDescriptor;
+            this.tccd.saveSettings();
         }
 
         try {
@@ -112,6 +115,7 @@ export class ChargingWorker extends DaemonWorker {
     public async applyChargingPriority(chargingPrioDescriptor?: string) {
         if (chargingPrioDescriptor !== undefined) {
             this.tccd.settings.chargingPriority = chargingPrioDescriptor;
+            this.tccd.saveSettings();
         }
 
         try {
