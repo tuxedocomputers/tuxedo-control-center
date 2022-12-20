@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [1.2.3] - 2022-12-21
 ### Added
 - Battery charging options for a number of devices
   - Choose one of three "charging profiles" to influence peak charge and charging time
