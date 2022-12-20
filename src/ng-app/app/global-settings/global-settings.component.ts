@@ -46,6 +46,8 @@ export class GlobalSettingsComponent implements OnInit {
 
     public ctrlBrightnessMode = new FormControl();
 
+    public hasChargingSettings = false;
+
     private subscriptions: Subscription = new Subscription();
 
     constructor(
