@@ -1033,12 +1033,20 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="chargingOptionsHeadingLabel" datatype="html">
+        <source>Battery charging options</source>
+        <target state="translated">Akku-Ladeoptionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
         <source>Theme</source>
         <target phase-name="approval-1" state="signed-off">Farbschema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsBrightnessLabelLight" datatype="html">
@@ -1046,7 +1054,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsBrightnessLabelDark" datatype="html">
@@ -1054,7 +1062,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Dunkel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsBrightnessLabelSystemSetting" datatype="html">
@@ -1062,7 +1070,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Systemeinstellung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fef6532d9612cea6b6a9afc2bb23f0f059ba08f" datatype="html">
@@ -1304,22 +1312,6 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
-        <source>CPU Fan</source>
-        <target state="translated">CPU Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
-        <source>GPU Fan</source>
-        <target state="translated">GPU Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
         <source>Service unavailable</source>
         <target state="translated">tccd Dienst nicht verfügbar</target>
@@ -1406,6 +1398,22 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
           <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
+        <source>CPU Fan</source>
+        <target state="translated">CPU Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
+        <source>GPU Fan</source>
+        <target state="translated">GPU Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">
@@ -1807,6 +1815,102 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">232</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityLabel" datatype="html">
+        <source>Full capacity</source>
+        <target state="translated">Maximale Kapazität</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedLabel" datatype="html">
+        <source>Reduced capacity</source>
+        <target state="translated">Reduzierte Kapazität</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryLabel" datatype="html">
+        <source>Stationary use</source>
+        <target state="translated">Stationärer Betrieb</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityDescription" datatype="html">
+        <source>This is the default setting. Fastest charging speed and 100% battery capacity for best possible runtimes.</source>
+        <target state="translated">Dies ist die Standardeinstellung. Maximale Aufladegeschwindigkeit und volle Kapazität für bestmögliche Akkulaufzeiten.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedDescription" datatype="html">
+        <source>Reduced charging speed and battery capacity (~90 %) for better battery lifespan.</source>
+        <target state="translated">Reduzierte Aufladegeschwindigkeit und Akkukapazität (~90 %) zugunsten der Akkulebensdauer.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryDescription" datatype="html">
+        <source>Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</source>
+        <target state="translated">Stark reduzierte Aufladegeschwindigkeit und Akkukapazität (~80 %) für eine größtmögliche Schonung der Akkulebensdauer. Eignet sich v.a. für den fast ausschließlich stationären Betrieb am Netzteil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryLabel" datatype="html">
+        <source>Priorize battery charging speed</source>
+        <target state="translated">Akku schnell laden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceLabel" datatype="html">
+        <source>Priorize performance</source>
+        <target state="translated">Beste Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryDescription" datatype="html">
+        <source>Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</source>
+        <target state="translated">Die schnelle Aufladung des Akkus hat Vorrang zulasten der Systemleistung. Sobald der Akku aufgeladen ist, steht die volle Systemleistung zur Verfügung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceDescription" datatype="html">
+        <source>Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</source>
+        <target state="translated">Die Leistung des PCs hat Vorrang vor der Aufladegeschwindigkeit. Unter hoher Last ist die Ladegeschwindigkeit zugunsten maximaler Leistung verringert; Bei geringer Last steht die volle Ladegeschwindigkeit zur Verfügung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileLabel" datatype="html">
+        <source>Charging profiles</source>
+        <target state="translated">Ladeprofile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityLabel" datatype="html">
+        <source>USB-C charging options (Power Delivery DC-In)</source>
+        <target state="translated">USB-C-Ladeoptionen (Power Delivery DC-In)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
