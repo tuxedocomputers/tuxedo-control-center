@@ -5,6 +5,7 @@ import { WebcamJSON, WebcamSettigs } from "src/common/models/TccWebcamSettings";
 import { CompatibilityService } from "../compatibility.service";
 import { UtilsService } from "../utils.service";
 import { ChangeDetectorRef } from "@angular/core";
+import { WebcamGuardService } from "../webcam.service";
 
 @Component({
     selector: "app-camera-settings",
@@ -36,14 +37,19 @@ export class CameraSettingsComponent implements OnInit {
     webcamConfig: any = undefined;
     previewWindowActive: boolean = false;
 
+    metadataStream: any;
+    mediaDeviceStream: any;
+
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
         public compat: CompatibilityService,
-        private cdref: ChangeDetectorRef
+        private cdref: ChangeDetectorRef,
+        private webcamGuard: WebcamGuardService
     ) {}
 
     async ngOnInit() {
+        this.webcamGuard.setLoadingStatus(true);
         this.utils.pageDisabled = true;
         const cameraWindowObservable = fromEvent(
             this.electron.ipcRenderer,
@@ -51,8 +57,6 @@ export class CameraSettingsComponent implements OnInit {
         );
         this.subscriptions.add(
             cameraWindowObservable.subscribe(async () => {
-                this.utils.pageDisabled = true;
-                this.webcamInitComplete = false;
                 document.getElementById("hidden").style.display = "flex";
                 this.setWebcam(this.selectedWebcamId);
             })
@@ -61,14 +65,9 @@ export class CameraSettingsComponent implements OnInit {
         await this.setAllCameraMetadata().then(async (webcamData) => {
             this.webcamDropdownData = webcamData;
             this.selectedWebcamId = webcamData[0].id;
-
-            let webcamId: string = webcamData[0].id;
             this.getCameraSettings().then;
             await this.reloadConfigValues();
-            await this.setWebcamWithId(webcamId);
-
-            this.utils.pageDisabled = false;
-            this.webcamInitComplete = true;
+            await this.setWebcamWithId(webcamData[0].id);
         });
     }
 
@@ -76,10 +75,9 @@ export class CameraSettingsComponent implements OnInit {
         this.cdref.detectChanges();
     }
 
-    ngOnDestroy() {
-        this.subscriptions.unsubscribe();
-        // todo: do not allow routing when webcam is loading, otherwise this is not reliable to stop
+    async ngOnDestroy() {
         this.stopWebcam();
+        this.subscriptions.unsubscribe();
     }
 
     // support.component.ts
@@ -191,6 +189,7 @@ export class CameraSettingsComponent implements OnInit {
                 await navigator.mediaDevices
                     .getUserMedia({ audio: false, video: true })
                     .then(async (stream) => {
+                        this.metadataStream = stream;
                         await navigator.mediaDevices
                             .enumerateDevices()
                             .then(async (devices) => {
@@ -202,9 +201,6 @@ export class CameraSettingsComponent implements OnInit {
                             .catch((error) => {
                                 console.log("Error :", error);
                             });
-
-                        this.tracks = stream.getVideoTracks();
-                        this.video.nativeElement.srcObject = stream;
                     });
                 resolve(this.webcamDropdownData);
             });
@@ -212,19 +208,21 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     async stopWebcam() {
-        this.video.nativeElement.pause();
-        if (this.video.nativeElement.srcObject != null) {
-            for (const track of this.video.nativeElement.srcObject.getTracks()) {
-                track.stop();
-            }
+        await this.video.nativeElement.pause();
+        for (const track of this.metadataStream.getTracks()) {
+            track.stop();
         }
+        for (const track of this.mediaDeviceStream.getTracks()) {
+            track.stop();
+        }
+
         this.video.nativeElement.srcObject = null;
     }
 
     async setWebcamWithId(webcamId: string) {
         let config = this.getDefaultWebcamConfig(this.selectedWebcamId);
         config.deviceId = { exact: webcamId };
-        await this.setWebcamWithConfig(config);
+        return this.setWebcamWithConfig(config);
     }
 
     async setWebcamWithConfig(config: any): Promise<any> {
@@ -241,11 +239,9 @@ export class CameraSettingsComponent implements OnInit {
     public async setWebcam(webcamId: string) {
         this.previewWindowActive = true;
         this.spinnerActive = true;
+        this.webcamGuard.setLoadingStatus(true);
         await this.stopWebcam();
         await this.setWebcamWithId(webcamId);
-        this.spinnerActive = false;
-        this.utils.pageDisabled = false;
-        this.webcamInitComplete = true;
     }
 
     public openWindow(event: any) {
@@ -330,7 +326,6 @@ export class CameraSettingsComponent implements OnInit {
         // exposure_absolute must be set after disabling auto to take effect
         // todo: check if other laptops have the same naming scheme
         if (configParameter == "exposure_auto" && option == "manual_mode") {
-            //this.setExposure(devicePath);
             let currentExposure = this.getCurrentCofigValue(
                 "Exposure",
                 "Exposure",
@@ -409,6 +404,7 @@ export class CameraSettingsComponent implements OnInit {
     async setResolution(option: string) {
         this.stopWebcam();
         this.spinnerActive = true;
+        this.webcamGuard.setLoadingStatus(true);
         if (this.webcamConfig == undefined) {
             this.webcamConfig = await this.getDefaultWebcamConfig(
                 this.selectedWebcamId
@@ -424,6 +420,7 @@ export class CameraSettingsComponent implements OnInit {
     async setFPS(option: string) {
         this.stopWebcam();
         this.spinnerActive = true;
+        this.webcamGuard.setLoadingStatus(true);
         if (this.webcamConfig == undefined) {
             this.webcamConfig = await this.getDefaultWebcamConfig(
                 this.selectedWebcamId
@@ -439,10 +436,17 @@ export class CameraSettingsComponent implements OnInit {
             .getUserMedia({
                 video: config,
             })
-            .then((stream) => {
+            .then(async (stream) => {
                 this.video.nativeElement.srcObject = stream;
-                this.tracks = stream.getVideoTracks();
+                this.mediaDeviceStream = stream;
             });
+    }
+
+    videoReady() {
+        this.spinnerActive = false;
+        this.webcamGuard.setLoadingStatus(false);
+        this.utils.pageDisabled = false;
+        this.webcamInitComplete = true;
     }
 
     getWebcamInformation() {

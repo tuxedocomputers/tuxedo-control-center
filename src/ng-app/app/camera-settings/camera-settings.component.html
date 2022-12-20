@@ -30,7 +30,7 @@
                 </button>
 
                 <div class="webcam" id="hidden">
-                    <video #video id="video" width="640" height="480" autoplay="true"></video>
+                    <video #video id="video" width="640" height="480" autoplay="false" (canplay)="videoReady()"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
                 </div>
 
