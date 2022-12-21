@@ -64,9 +64,6 @@ export class CameraSettingsComponent implements OnInit {
 
         await this.setAllCameraMetadata().then(async (webcamData) => {
             this.webcamDropdownData = webcamData;
-            this.selectedWebcamId = webcamData[0].id;
-            this.getCameraSettings().then;
-            await this.reloadConfigValues();
             await this.setWebcamWithId(webcamData[0].id);
         });
     }
@@ -168,6 +165,7 @@ export class CameraSettingsComponent implements OnInit {
                 })
                 .catch((error) => {
                     console.log(error);
+                    // todo: handle case when device got disconnected
                     resolve("");
                 });
         });
@@ -220,20 +218,11 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     async setWebcamWithId(webcamId: string) {
-        let config = this.getDefaultWebcamConfig(this.selectedWebcamId);
+        this.selectedWebcamId = webcamId;
+        await this.reloadConfigValues();
+        let config = this.getDefaultWebcamConfig(webcamId);
         config.deviceId = { exact: webcamId };
         return this.setWebcamWithConfig(config);
-    }
-
-    async setWebcamWithConfig(config: any): Promise<any> {
-        return this.getCameraSettings().then(async (data) => {
-            const settings: WebcamSettigs[] = JSON.parse(data);
-            this.webcamSettings = settings;
-            await this.setMediaDevice(config);
-            return new Promise(
-                (resolve) => (this.video.nativeElement.onplaying = resolve)
-            );
-        });
     }
 
     public async setWebcam(webcamId: string) {
@@ -257,10 +246,6 @@ export class CameraSettingsComponent implements OnInit {
 
     public enableCamera() {
         this.setWebcam(this.selectedWebcamId);
-    }
-
-    public get nextWebcamObservable(): Observable<boolean | string> {
-        return this.nextWebcam.asObservable();
     }
 
     getCurrentCofigValue(
@@ -413,7 +398,7 @@ export class CameraSettingsComponent implements OnInit {
         this.webcamConfig.width = { exact: Number(option.split("x")[0]) };
         this.webcamConfig.height = { exact: Number(option.split("x")[1]) };
 
-        await this.setMediaDevice(this.webcamConfig);
+        await this.setWebcamWithConfig(this.webcamConfig);
         return;
     }
 
@@ -427,11 +412,11 @@ export class CameraSettingsComponent implements OnInit {
             );
         }
         this.webcamConfig.frameRate = { exact: Number(option) };
-        await this.setMediaDevice(this.webcamConfig);
+        await this.setWebcamWithConfig(this.webcamConfig);
         return;
     }
 
-    async setMediaDevice(config?: any): Promise<void> {
+    async setWebcamWithConfig(config?: any): Promise<void> {
         await navigator.mediaDevices
             .getUserMedia({
                 video: config,
@@ -440,6 +425,9 @@ export class CameraSettingsComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
+        return new Promise(
+            (resolve) => (this.video.nativeElement.onplaying = resolve)
+        );
     }
 
     videoReady() {
