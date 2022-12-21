@@ -387,7 +387,7 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     async setResolution(option: string) {
-        this.stopWebcam();
+        await this.stopWebcam();
         this.spinnerActive = true;
         this.webcamGuard.setLoadingStatus(true);
         if (this.webcamConfig == undefined) {
@@ -397,13 +397,12 @@ export class CameraSettingsComponent implements OnInit {
         }
         this.webcamConfig.width = { exact: Number(option.split("x")[0]) };
         this.webcamConfig.height = { exact: Number(option.split("x")[1]) };
-
-        await this.setWebcamWithConfig(this.webcamConfig);
+        this.setWebcamWithConfig(this.webcamConfig);
         return;
     }
 
     async setFPS(option: string) {
-        this.stopWebcam();
+        await this.stopWebcam();
         this.spinnerActive = true;
         this.webcamGuard.setLoadingStatus(true);
         if (this.webcamConfig == undefined) {
@@ -412,7 +411,7 @@ export class CameraSettingsComponent implements OnInit {
             );
         }
         this.webcamConfig.frameRate = { exact: Number(option) };
-        await this.setWebcamWithConfig(this.webcamConfig);
+        this.setWebcamWithConfig(this.webcamConfig);
         return;
     }
 
@@ -425,9 +424,6 @@ export class CameraSettingsComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
-        return new Promise(
-            (resolve) => (this.video.nativeElement.onplaying = resolve)
-        );
     }
 
     videoReady() {
