@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policyconfig PUBLIC
     "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
-    "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+    "https://specifications.freedesktop.org/PolicyKit/1.0/policyconfig.dtd">
 <policyconfig>
 
     <vendor>TUXEDO Computers GmbH</vendor>
@@ -26,4 +26,3 @@
     </action>
 
 </policyconfig>
-

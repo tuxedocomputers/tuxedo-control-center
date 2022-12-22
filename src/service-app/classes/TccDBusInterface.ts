@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as dbus from 'dbus-next';
+import { ChargingWorker } from './ChargingWorker';
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
@@ -90,6 +91,7 @@ export class TccDBusData {
 
 export class TccDBusOptions {
     public triggerStateCheck?: () => Promise<void>;
+    public chargingWorker?: ChargingWorker;
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
@@ -142,6 +144,24 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
     GetFansMinSpeed() { return this.data.fansMinSpeed; }
     GetFansOffAvailable() { return this.data.fansOffAvailable; }
+    async GetChargingProfilesAvailable() {
+        return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingProfilesAvailable());
+    }
+    async GetCurrentChargingProfile() {
+        return await this.interfaceOptions.chargingWorker.getCurrentChargingProfile();
+    }
+    async SetChargingProfile(profileDescriptor: string) {
+        return await this.interfaceOptions.chargingWorker.applyChargingProfile(profileDescriptor);
+    }
+    async GetChargingPrioritiesAvailable() {
+        return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingPrioritiesAvailable());
+    }
+    async GetCurrentChargingPriority() {
+        return await this.interfaceOptions.chargingWorker.getCurrentChargingPriority();
+    }
+    async SetChargingPriority(priorityDescriptor: string) {
+        return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -168,6 +188,12 @@ TccDBusInterface.configureMembers({
         ODMPowerLimitsJSON: { outSignature: 's' },
         GetFansMinSpeed: { outSignature: 'i' },
         GetFansOffAvailable: { outSignature: 'b' },
+        GetChargingProfilesAvailable: { outSignature: 's' },
+        GetCurrentChargingProfile: { outSignature: 's' },
+        SetChargingProfile: { inSignature: 's', outSignature: 'b' },
+        GetChargingPrioritiesAvailable: { outSignature: 's' },
+        GetCurrentChargingPriority: { outSignature: 's' },
+        SetChargingPriority: { inSignature: 's', outSignature: 'b' },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

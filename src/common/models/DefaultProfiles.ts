@@ -64,7 +64,7 @@ const maxEnergySave: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined },
+    odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [5, 10, 15] }
 };
 
@@ -95,7 +95,7 @@ const silent: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined },
+    odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [10, 15, 25] }
 };
 
@@ -126,7 +126,7 @@ const office: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined },
+    odmProfile: { name: 'enthusiast' },
     odmPowerLimits: { tdpValues: [25, 35, 35] }
 };
 
@@ -157,7 +157,7 @@ const highPerformance: ITccProfile = {
         minimumFanspeed: 0,
         offsetFanspeed: 0
     },
-    odmProfile: { name: undefined },
+    odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] }
 };
 
