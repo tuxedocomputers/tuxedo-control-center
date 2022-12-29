@@ -30,6 +30,7 @@ import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from '
 import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
+import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 
 @Injectable({
   providedIn: 'root'
@@ -244,6 +245,14 @@ export class UtilsService {
     return result;
   }
 
+  public async inputTextDialog(config: any) {
+    const dialogRef = this.dialog.open(DialogInputTextComponent, {
+      minWidth: 350,
+      data: config,
+    });
+    return dialogRef.afterClosed().toPromise();
+  }
+  
   private defaultProfileInfos = new Map<string, IProfileTextMappings>();
 
   public fillDefaultProfileTexts(profile: ITccProfile) {

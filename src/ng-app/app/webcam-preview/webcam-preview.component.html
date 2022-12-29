@@ -1,2 +1,4 @@
-<webcam [allowCameraSwitch]=false [switchCamera]="nextWebcam">
-</webcam>
+<div class="webcam">
+    <video class="webcamTest" #video id="video" width="640" height="480" autoplay="false"></video>
+    <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
+</div>

@@ -17,6 +17,10 @@
                     Saving Presets
                 </button>
 
+                <button id="basic" type="button" mat-button (click)="loadingWebcamPresets()">
+                    Load Presets
+                </button>
+
                 <button id="basic" type="button" mat-button (click)="openWindow($event)">
                     Open Window
                 </button>
@@ -29,12 +33,23 @@
                     Disable Camera
                 </button>
 
+                <button id="basic" type="button" mat-button (click)="applyConfig()">
+                    apply config
+                </button>
+
+                <mat-select name="thisWebcamConfigs" [(value)]="thisWebcamConfigs" placeholder="Webcam"
+                    (selectionChange)="setWebcam($event.value)">
+                    <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config.webcamId">
+                        {{config.presetName}}
+                    </mat-option>
+                </mat-select>
+
                 <div class="webcam" id="hidden">
                     <video #video id="video" width="640" height="480" autoplay="false" (canplay)="videoReady()"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
                 </div>
 
-                <mat-card-content class="content">
+                <mat-card-content class="content" [formGroup]="webcamFormGroup">
                     <div>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
@@ -54,25 +69,16 @@
                                 </mat-form-field>
                             </mat-grid-tile>
                         </mat-grid-list>
-
-                        <mat-accordion class="example-headers-align" multi class="list-group-item">
-                            <mat-expansion-panel *ngFor="let setting of webcamSettings"
-                                (opened)="handleRegionPanelStateChange(setting.config_category, true)"
-                                (closed)="handleRegionPanelStateChange(setting.config_category, false)"
-                                [expanded]="expandedRegions[setting.config_category]">
-                                <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                        {{ setting.config_type }} / {{ setting.config_category }}
-                                    </mat-panel-title>
-                                </mat-expansion-panel-header>
-
-                                <div *ngFor="let config of setting.config_data">
+                        <!-- EASY MODE -->
+                        <ng-container *ngIf="easyModeActive">
+                            <ng-container *ngFor="let webcamConfig of webcamFormGroup.value | keyvalue">
+                                <ng-container *ngIf="easyOptions.includes(webcamConfig.key)">
                                     <!-- SLIDER -->
-                                    <div *ngIf="config.type=='slider'">
+                                    <div *ngIf="getOptionValue(webcamConfig.key, 'type')=='slider'">
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header i18n>{{getConfigTranslation(config.title)}}</header>
+                                                <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
                                             </mat-grid-tile>
                                             <mat-grid-tile></mat-grid-tile>
                                             <mat-grid-tile>
@@ -81,51 +87,51 @@
                                                 <button mat-icon-button color="primary">
                                                     <mat-icon>remove</mat-icon>
                                                 </button>
-                                                <button mat-icon-button color="primary">
+                                                <button mat-icon-button color="primary" (mousedown)="mousedown()"
+                                                    (mouseup)="mouseup()" (mouseleave)="mouseup()">
                                                     <mat-icon>add</mat-icon>
                                                 </button>
                                             </mat-grid-tile>
                                             <mat-grid-tile>
                                                 <content class="input">
-                                                    <mat-slider max="{{config.max}}" min="{{config.min}}"
-                                                        value="{{config.current}}" step="{{config.step}}"
-                                                        disabled="{{!config.active}}"
-                                                        (change)="setSliderValue($event, config.name)">
+                                                    <mat-slider [max]="getOptionValue(webcamConfig.key, 'max')"
+                                                        [min]="getOptionValue(webcamConfig.key, 'min')"
+                                                        [step]="getOptionValue(webcamConfig.key, 'step')"
+                                                        formControlName="{{webcamConfig.key}}"
+                                                        (change)="setSliderValue($event, webcamConfig.key)">
                                                     </mat-slider>
                                                 </content>
                                             </mat-grid-tile>
                                         </mat-grid-list>
-
-                                        <mat-divider></mat-divider>
                                     </div>
-
                                     <!-- BOOL -->
-                                    <div *ngIf="config.type=='bool'">
+                                    <div *ngIf="getOptionValue(webcamConfig.key, 'type')=='bool'">
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header>{{config.title}}</header>
+                                                <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
                                             </mat-grid-tile>
                                             <mat-grid-tile></mat-grid-tile>
                                             <mat-grid-tile></mat-grid-tile>
                                             <mat-grid-tile>
+
                                                 <content class="input">
-                                                    <mat-checkbox color="primary" checked="{{config.current}}"
-                                                        disabled="{{!config.active}}"
-                                                        (change)="setCheckboxValue($event, config.name)">
+                                                    <mat-checkbox color="primary" formControlName="{{webcamConfig.key}}"
+                                                        (change)="setCheckboxValue($event, webcamConfig.key)">
                                                     </mat-checkbox>
                                                 </content>
+
+
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                         <mat-divider></mat-divider>
                                     </div>
-
                                     <!-- MENU -->
-                                    <div *ngIf="config.type=='menu'">
+                                    <div *ngIf="getOptionValue(webcamConfig.key, 'type')=='menu'">
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header>{{config.title}}</header>
+                                                <header>{{webcamConfig.key}}</header>
                                             </mat-grid-tile>
                                             <mat-grid-tile></mat-grid-tile>
                                             <mat-grid-tile>
@@ -133,10 +139,10 @@
                                             <mat-grid-tile>
                                                 <mat-form-field appearance="fill">
                                                     <mat-select>
-                                                        <mat-option *ngFor="let option of config.options"
-                                                            color="primary" value="{{config.current}}"
-                                                            disabled="{{!config.active}}"
-                                                            (onSelectionChange)="setOptionsMenuValue($event, config.name, option)">
+                                                        <mat-option
+                                                            *ngFor="let option of getOptionValue(webcamConfig.key, 'options')"
+                                                            color="primary"
+                                                            (onSelectionChange)="setOptionsMenuValue($event, webcamConfig.key, option)">
                                                             {{ option }}
                                                         </mat-option>
                                                     </mat-select>
@@ -145,9 +151,116 @@
                                         </mat-grid-list>
                                         <mat-divider></mat-divider>
                                     </div>
-                                </div>
-                            </mat-expansion-panel>
-                        </mat-accordion>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                        <!-- ADVANCED MODE -->
+                        <ng-container *ngIf="!easyModeActive">
+                            <ng-container *ngFor="let category_test of categories_from_json">
+                                <mat-accordion class="example-headers-align" multi class="list-group-item">
+                                    <mat-expansion-panel (opened)="handleRegionPanelStateChange(category_test, true)"
+                                        (closed)="handleRegionPanelStateChange(category_test, false)"
+                                        [expanded]="expandedRegions[category_test]">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                {{ category_test }}
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <!-- SLIDER -->
+                                        <ng-container
+                                            *ngFor="let webcamConfig of webcamFormGroup.getRawValue() | keyvalue">
+                                            <div
+                                                *ngIf="getOptionValue(webcamConfig.key, 'category')==category_test && getOptionValue(webcamConfig.key, 'type') =='slider'">
+                                                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                                    class="profile-details-edit-grid">
+                                                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                                        <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                    </mat-grid-tile>
+                                                    <mat-grid-tile></mat-grid-tile>
+                                                    <mat-grid-tile>
+                                                        <content class="value"></content>
+                                                        <content class="value"></content>
+                                                        <button mat-icon-button color="primary">
+                                                            <mat-icon>remove</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button color="primary"
+                                                            (mousedown)="mousedown()" (mouseup)="mouseup()"
+                                                            (mouseleave)="mouseup()">
+                                                            <mat-icon>add</mat-icon>
+                                                        </button>
+                                                    </mat-grid-tile>
+                                                    <mat-grid-tile>
+                                                        <content class="input">
+                                                            <mat-slider [max]="getOptionValue(webcamConfig.key, 'max')"
+                                                                [min]="getOptionValue(webcamConfig.key, 'min')"
+                                                                [step]="getOptionValue(webcamConfig.key, 'step')"
+                                                                formControlName="{{webcamConfig.key}}"
+                                                                (change)="setSliderValue($event, webcamConfig.key)">
+                                                            </mat-slider>
+                                                        </content>
+                                                    </mat-grid-tile>
+                                                </mat-grid-list>
+                                            </div>
+                                            <!-- BOOL -->
+                                            <div
+                                                *ngIf="getOptionValue(webcamConfig.key, 'category')==category_test && getOptionValue(webcamConfig.key, 'type') =='bool'">
+                                                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                                    class="profile-details-edit-grid">
+                                                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                                        <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                    </mat-grid-tile>
+                                                    <mat-grid-tile></mat-grid-tile>
+                                                    <mat-grid-tile></mat-grid-tile>
+                                                    <mat-grid-tile>
+                                                        <content class="input">
+                                                            <mat-checkbox color="primary"
+                                                                formControlName="{{webcamConfig.key}}"
+                                                                (change)="setCheckboxValue($event, webcamConfig.key)">
+                                                            </mat-checkbox>
+                                                        </content>
+                                                    </mat-grid-tile>
+                                                </mat-grid-list>
+                                                <mat-divider></mat-divider>
+                                            </div>
+                                            <!-- MENU -->
+                                            <div
+                                                *ngIf="getOptionValue(webcamConfig.key, 'category')==category_test && getOptionValue(webcamConfig.key, 'type') =='menu'">
+                                                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                                    class="profile-details-edit-grid">
+                                                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                                        <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                    </mat-grid-tile>
+                                                    <mat-grid-tile></mat-grid-tile>
+                                                    <mat-grid-tile>
+                                                    </mat-grid-tile>
+                                                    <mat-grid-tile>
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-select>
+                                                                <mat-option
+                                                                    *ngFor="let option of getOptionValue(webcamConfig.key, 'options')"
+                                                                    color="primary"
+                                                                    (onSelectionChange)="setOptionsMenuValue($event, webcamConfig.key, option)">
+                                                                    {{ option }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                    </mat-grid-tile>
+                                                </mat-grid-list>
+                                                <mat-divider></mat-divider>
+                                            </div>
+                                        </ng-container>
+
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </ng-container>
+                        </ng-container>
+                        <button id=" basic" type="button" mat-button (click)="showAdvancedSettings()">
+                            Advanced Settings
+                        </button>
+
+                        <button id="basic" type="button" mat-button (click)="disableAdvancedSettings()">
+                            Disable Advanced Settings
+                        </button>
                     </div>
                 </mat-card-content>
             </div>

@@ -42,3 +42,27 @@ export interface MenuInterface {
     title: string;
     type: string;
 }
+
+export interface ExportWebcamJSON {
+    presetName: string;
+    webcamId: string;
+    webcamSettings: WebcamJSONValues;
+}
+
+export interface WebcamJSONValues {
+    backlight_compensation?: boolean;
+    brightness?: number;
+    contrast?: number;
+    exposure_absolute?: number;
+    exposure_auto?: string;
+    exposure_auto_priority?: boolean;
+    fps?: number;
+    gain?: number;
+    gamma?: number;
+    hue?: number;
+    resolution?: string;
+    saturation?: number;
+    sharpness?: number;
+    white_balance_temperature?: number;
+    white_balance_temperature_auto?: boolean;
+}

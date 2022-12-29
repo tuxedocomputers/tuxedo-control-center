@@ -1,0 +1,18 @@
+.spinner {
+    position: absolute;
+    justify-content: center;
+    align-items: center; 
+    vertical-align: middle;
+}
+    
+.webcam {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+}

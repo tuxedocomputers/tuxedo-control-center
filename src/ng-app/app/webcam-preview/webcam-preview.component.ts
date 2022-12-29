@@ -1,6 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import {
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnInit,
+    ViewChild,
+} from "@angular/core";
 import { ElectronService } from "ngx-electron";
-import { Observable, Subject } from "rxjs";
 
 @Component({
     selector: "app-webcam-preview",
@@ -8,20 +13,57 @@ import { Observable, Subject } from "rxjs";
     styleUrls: ["./webcam-preview.component.scss"],
 })
 export class WebcamPreviewComponent implements OnInit {
-    constructor(private electron: ElectronService) {}
+    constructor(
+        private electron: ElectronService,
+        private cdref: ChangeDetectorRef
+    ) {}
 
-    nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
-
-    // todo: deduplicate?
-    public get nextWebcamObservable(): Observable<boolean | string> {
-        return this.nextWebcam.asObservable();
-    }
+    @ViewChild("video", { static: true })
+    public video: ElementRef;
+    mediaDeviceStream: any;
+    spinnerActive: boolean = false;
 
     ngOnInit(): void {
-        this.electron.ipcRenderer.on("updating-webcamId", (event, webcamId) => {
-            this.nextWebcam.next(webcamId);
-        });
+        this.electron.ipcRenderer.on(
+            "setting-webcam-with-loading",
+            async (event, webcamConfig) => {
+                console.log("got something");
+                this.spinnerActive = true;
+                this.cdref.detectChanges();
+                await this.stopWebcam();
+                await this.setWebcamWithConfig(webcamConfig);
+                this.spinnerActive = false;
+                this.cdref.detectChanges();
+            }
+        );
     }
 
-    // todo: ngOnDestroy webcam
+    // todo: deduplicate
+    async setWebcamWithConfig(config?: any): Promise<void> {
+        await navigator.mediaDevices
+            .getUserMedia({
+                video: config,
+            })
+            .then(async (stream) => {
+                this.video.nativeElement.srcObject = stream;
+                this.mediaDeviceStream = stream;
+            });
+        return new Promise(
+            (resolve) => (this.video.nativeElement.onplaying = resolve)
+        );
+    }
+
+    async stopWebcam() {
+        await this.video.nativeElement.pause();
+        if (this.mediaDeviceStream != undefined) {
+            for (const track of this.mediaDeviceStream.getTracks()) {
+                track.stop();
+            }
+        }
+        this.video.nativeElement.srcObject = null;
+    }
+
+    async ngOnDestroy() {
+        this.stopWebcam();
+    }
 }

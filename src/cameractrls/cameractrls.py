@@ -1873,7 +1873,8 @@ class CameraCtrls:
                         config_parameter = {}
                         config_parameter["title"] = c.name
                         config_parameter["name"] = c.text_id
-                        config_parameter["current"] = c.value
+
+
                         if c.type == 'menu':
                             config_parameter["type"] = "menu"
                             if c.default:
@@ -1883,25 +1884,39 @@ class CameraCtrls:
                             elif c.name == "Pixel format":
                                 continue
                             else:
-                                config_parameter["options"] = [m.text_id for m in c.menu]
+                                config_parameter["options"] = [m.text_id if not m.text_id.isnumeric() else int(m.text_id) for m in c.menu]
+                            #config_parameter["current"] = c.value
+                            if c.value.isnumeric():
+                                config_parameter["current"] = int(c.value)
+                            else:
+                                config_parameter["current"] = c.value
+
                         elif c.type in ['integer', 'boolean']:
                             if c.type == 'integer':
                                 config_parameter["type"] = "slider"
+                                config_parameter["min"] = c.min
+                                config_parameter["max"] = c.max
+                                if c.step:
+                                    config_parameter["step"] = c.step
+                                config_parameter["default"] = c.default
+
                             if c.type == 'boolean':
                                 config_parameter["type"] = "bool"
-                            config_parameter["default"] = c.default
-                            config_parameter["min"] = c.min
-                            config_parameter["max"] = c.max
-                            if c.step:
-                                config_parameter["step"] = c.step
+                                config_parameter["default"] = bool(c.default)
+
+                                config_parameter["current"] = bool(c.value)
+                            else:
+                                config_parameter["current"] = c.value
+
+
                         if c.inactive:
                             config_parameter["active"] = False
                         else:
                             config_parameter["active"] = True
+
+                        config_parameter["category"] = cat.title
                         config_data.append(config_parameter)
-                    json_data.append({"config_type": page.title, "config_category": cat.title, "config_data": config_data})
-                    config_data = []
-        print(json.dumps(json_data))
+        print(json.dumps(config_data))
 
     def setup_ctrls(self, params):
         for c in self.ctrls:

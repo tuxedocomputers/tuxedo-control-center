@@ -293,9 +293,9 @@ function activateAquarisGui() {
     }
 }
 
-function createCameraPreview(langId: string) {
-    let windowWidth = 700;
-    let windowHeight = 700;
+async function createCameraPreview(langId: string, arg: any) {
+    let windowWidth = 640;
+    let windowHeight = 480;
 
     cameraWindow = new BrowserWindow({
         title: "Camera Preview",
@@ -340,15 +340,20 @@ function createCameraPreview(langId: string) {
         "index.html"
     );
     cameraWindow.loadFile(indexPath, { hash: "/webcam-preview" });
+
+    cameraWindow.webContents.once("dom-ready", () => {
+        cameraWindow.webContents.send("setting-webcam-with-loading", arg);
+    });
 }
 
-ipcMain.on("changing-active-webcamId", (event, arg) => {
+ipcMain.on("setting-webcam-with-loading", (event, arg) => {
     if (cameraWindow != null) {
-        cameraWindow.webContents.send("updating-webcamId", arg);
+        cameraWindow.webContents.send("setting-webcam-with-loading", arg);
     }
 });
 
-ipcMain.on("createWebcamPreview", function (evt, message) {
+ipcMain.on("createWebcamPreview", function (evt, arg) {
+    console.log(arg);
     if (cameraWindow) {
         if (cameraWindow.isMinimized()) {
             cameraWindow.restore();
@@ -356,7 +361,7 @@ ipcMain.on("createWebcamPreview", function (evt, message) {
         cameraWindow.focus();
     } else {
         userConfig.get("langId").then((langId) => {
-            createCameraPreview(langId);
+            createCameraPreview(langId, arg);
         });
     }
 });

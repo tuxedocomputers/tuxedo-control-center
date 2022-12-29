@@ -24,6 +24,7 @@ import { defaultProfiles, defaultCustomProfile } from '../models/profiles/Legacy
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
 import { deviceProfiles, TUXEDODevice } from '../models/DefaultProfiles';
+import { ExportWebcamJSON } from "../models/TccWebcamSettings";
 
 export class ConfigHandler {
     public settingsFileMod: number;
@@ -59,6 +60,13 @@ export class ConfigHandler {
         this.writeConfig<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
+    
+    writeWebcamSettings(settings: ExportWebcamJSON[], filePath: string = this.pathSettings) {
+        this.writeConfig<ExportWebcamJSON[]>(settings, filePath, {
+            mode: this.settingsFileMod,
+        });
+    }
+    
     readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
         let idUpdated = false;
         const profiles = this.readConfig<ITccProfile[]>(filePath).map(profile => {
