@@ -46,7 +46,8 @@
                 </mat-select>
 
                 <div class="webcam" id="hidden">
-                    <video #video id="video" width="640" height="480" autoplay="false" (canplay)="videoReady()"></video>
+                    <video #video id="video" width="640" height="480" autoplay="false"
+                        (canplay)="unsetLoading()"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
                 </div>
 
@@ -73,7 +74,7 @@
                         </mat-grid-list>
                         <!-- EASY MODE -->
                         <ng-container *ngIf="easyModeActive">
-                            <ng-container *ngFor="let webcamConfig of webcamFormGroup.value | keyvalue">
+                            <ng-container *ngFor="let webcamConfig of webcamFormGroup.getRawValue() | keyvalue">
                                 <ng-container *ngIf="easyOptions.includes(webcamConfig.key)">
                                     <!-- SLIDER -->
                                     <div *ngIf="getOptionValue(webcamConfig.key, 'type')=='slider'">
@@ -119,7 +120,7 @@
 
                                                 <content class="input">
                                                     <mat-checkbox color="primary" formControlName="{{webcamConfig.key}}"
-                                                        (change)="setCheckboxValue($event, webcamConfig.key)">
+                                                        (change)="setCheckboxValue($event.checked, webcamConfig.key)">
                                                     </mat-checkbox>
                                                 </content>
 
@@ -217,7 +218,7 @@
                                                         <content class="input">
                                                             <mat-checkbox color="primary"
                                                                 formControlName="{{webcamConfig.key}}"
-                                                                (change)="setCheckboxValue($event, webcamConfig.key)">
+                                                                (change)="setCheckboxValue($event.checked, webcamConfig.key)">
                                                             </mat-checkbox>
                                                         </content>
                                                     </mat-grid-tile>
