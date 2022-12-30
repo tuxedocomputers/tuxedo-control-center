@@ -57,7 +57,6 @@ export class CameraSettingsComponent implements OnInit {
     webcamFormGroup: FormGroup = new FormGroup({});
     selectedPreset: WebcamPreset;
 
-    metadataStream: MediaStream;
     mediaDeviceStream: MediaStream;
 
     // todo: get data from json
@@ -226,11 +225,6 @@ export class CameraSettingsComponent implements OnInit {
 
     async stopWebcam() {
         await this.video.nativeElement.pause();
-        if (this.metadataStream != undefined) {
-            for (const track of this.metadataStream.getTracks()) {
-                track.stop();
-            }
-        }
         if (this.mediaDeviceStream != undefined) {
             for (const track of this.mediaDeviceStream.getTracks()) {
                 track.stop();
@@ -635,53 +629,58 @@ export class CameraSettingsComponent implements OnInit {
         this.config.writeWebcamSettings(config, "webcamSettings.json");
     }
 
+    getPercentValue(preset: string, current: number) {
+        let max = this.getOptionValue(preset, "max");
+        let min = this.getOptionValue(preset, "min");
+        return Math.round(((current - min) * 100) / (max - min));
+    }
+
     // todo: put translations into json
-    // not possible to use variable to dynamically generate translations, because localize needs to know at compiletime
     getConfigTranslation(configText: string) {
         if (configText == "exposure_auto") {
-            return $localize`Exposure, Auto`;
+            return $localize`:@@exposure_auto:Exposure, Auto`;
         }
         if (configText == "exposure_absolute") {
-            return $localize`Exposure (Absolute)`;
+            return $localize`:@@exposure_auto:Exposure (Absolute)`;
         }
         if (configText == "exposure_auto_priority") {
-            return $localize`Exposure, Auto Priority`;
+            return $localize`:@@exposure_auto_priority:Exposure, Auto Priority`;
         }
         if (configText == "gain") {
-            return $localize`Gain`;
+            return $localize`:@@gain:Gain`;
         }
         if (configText == "backlight_compensation") {
-            return $localize`Backlight Compensation`;
+            return $localize`:@@backlight_compensation:Backlight Compensation`;
         }
         if (configText == "white_balance_temperature_auto") {
-            return $localize`White Balance Temperature, Auto`;
+            return $localize`:@@white_balance_temperature_auto:White Balance Temperature, Auto`;
         }
         if (configText == "white_balance_temperature") {
-            return $localize`White Balance Temperature`;
+            return $localize`:@@white_balance_temperature:White Balance Temperature`;
         }
         if (configText == "brightness") {
-            return $localize`Brightness`;
+            return $localize`:@@brightness:Brightness`;
         }
         if (configText == "contrast") {
-            return $localize`Contrast`;
+            return $localize`:@@contrast:Contrast`;
         }
         if (configText == "saturation") {
-            return $localize`Saturation`;
+            return $localize`:@@saturation:Saturation`;
         }
         if (configText == "sharpness") {
-            return $localize`Sharpness`;
+            return $localize`:@@sharpness:Sharpness`;
         }
         if (configText == "hue") {
-            return $localize`Hue`;
+            return $localize`:@@hue:Hue`;
         }
         if (configText == "gamma") {
-            return $localize`Gamma`;
+            return $localize`:@@hue:Gamma`;
         }
         if (configText == "resolution") {
-            return $localize`Resolution`;
+            return $localize`:@@resolution:Resolution`;
         }
         if (configText == "fps") {
-            return $localize`Frames per Second`;
+            return $localize`:@@fps:Frames per Second`;
         }
         return configText;
     }

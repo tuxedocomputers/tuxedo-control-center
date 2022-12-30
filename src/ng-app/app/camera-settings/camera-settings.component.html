@@ -54,14 +54,12 @@
                 <mat-card-content class="content" [formGroup]="webcamFormGroup">
                     <div>
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
                                 <header>Webcam</header>
                             </mat-grid-tile>
-                            <mat-grid-tile></mat-grid-tile>
-                            <mat-grid-tile></mat-grid-tile>
-                            <mat-grid-tile>
-                                <mat-form-field>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input">
                                     <!-- webcam -->
                                     <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId"
                                         placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
@@ -69,7 +67,7 @@
                                             {{webcam.label}}
                                         </mat-option>
                                     </mat-select>
-                                </mat-form-field>
+                                </content>
                             </mat-grid-tile>
                         </mat-grid-list>
                         <!-- EASY MODE -->
@@ -81,12 +79,13 @@
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                <header>{{getConfigTranslation(webcamConfig.key)}}</header>
                                             </mat-grid-tile>
-                                            <mat-grid-tile></mat-grid-tile>
-                                            <mat-grid-tile>
-                                                <content class="value"></content>
-                                                <content class="value"></content>
+                                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                                <content class="value">
+                                                    {{getPercentValue(webcamConfig.key, webcamConfig.value)}} %
+                                                </content>
+
                                                 <button mat-icon-button color="primary">
                                                     <mat-icon>remove</mat-icon>
                                                 </button>
@@ -95,7 +94,7 @@
                                                     <mat-icon>add</mat-icon>
                                                 </button>
                                             </mat-grid-tile>
-                                            <mat-grid-tile>
+                                            <mat-grid-tile [colspan]="gridParams.inputSpan">
                                                 <content class="input">
                                                     <mat-slider [max]="getOptionValue(webcamConfig.key, 'max')"
                                                         [min]="getOptionValue(webcamConfig.key, 'min')"
@@ -112,47 +111,41 @@
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                <header>{{getConfigTranslation(webcamConfig.key)}}</header>
                                             </mat-grid-tile>
-                                            <mat-grid-tile></mat-grid-tile>
-                                            <mat-grid-tile></mat-grid-tile>
+                                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
                                             <mat-grid-tile>
-
                                                 <content class="input">
                                                     <mat-checkbox color="primary" formControlName="{{webcamConfig.key}}"
                                                         (change)="setCheckboxValue($event.checked, webcamConfig.key)">
                                                     </mat-checkbox>
                                                 </content>
-
-
                                             </mat-grid-tile>
                                         </mat-grid-list>
-                                        <mat-divider></mat-divider>
                                     </div>
                                     <!-- MENU -->
                                     <div *ngIf="getOptionValue(webcamConfig.key, 'type')=='menu'">
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header>{{webcamConfig.key}}</header>
+                                                <header>{{getConfigTranslation(webcamConfig.key)}}</header>
                                             </mat-grid-tile>
-                                            <mat-grid-tile></mat-grid-tile>
-                                            <mat-grid-tile>
-                                            </mat-grid-tile>
-                                            <mat-grid-tile>
-                                                <mat-form-field appearance="fill">
-                                                    <mat-select>
+                                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                                <content class="input">
+                                                    <mat-select formControlName="{{webcamConfig.key}}">
+                                                        <!-- value -->
                                                         <mat-option
                                                             *ngFor="let option of getOptionValue(webcamConfig.key, 'options')"
                                                             color="primary"
-                                                            (onSelectionChange)="setOptionsMenuValue($event, webcamConfig.key, option)">
+                                                            (onSelectionChange)="setOptionsMenuValue($event, webcamConfig.key, option)"
+                                                            [value]="option">
                                                             {{ option }}
                                                         </mat-option>
                                                     </mat-select>
-                                                </mat-form-field>
+                                                </content>
                                             </mat-grid-tile>
                                         </mat-grid-list>
-                                        <mat-divider></mat-divider>
                                     </div>
                                 </ng-container>
                             </ng-container>
@@ -177,12 +170,13 @@
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                        <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                        <header>{{getConfigTranslation(webcamConfig.key)}}</header>
                                                     </mat-grid-tile>
-                                                    <mat-grid-tile></mat-grid-tile>
-                                                    <mat-grid-tile>
-                                                        <content class="value"></content>
-                                                        <content class="value"></content>
+                                                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                                        <content class="value">
+                                                            {{getPercentValue(webcamConfig.key, webcamConfig.value)}} %
+                                                        </content>
+
                                                         <button mat-icon-button color="primary">
                                                             <mat-icon>remove</mat-icon>
                                                         </button>
@@ -192,7 +186,7 @@
                                                             <mat-icon>add</mat-icon>
                                                         </button>
                                                     </mat-grid-tile>
-                                                    <mat-grid-tile>
+                                                    <mat-grid-tile [colspan]="gridParams.inputSpan">
                                                         <content class="input">
                                                             <mat-slider [max]="getOptionValue(webcamConfig.key, 'max')"
                                                                 [min]="getOptionValue(webcamConfig.key, 'min')"
@@ -210,10 +204,9 @@
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                        <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                        <header>{{getConfigTranslation(webcamConfig.key)}}</header>
                                                     </mat-grid-tile>
-                                                    <mat-grid-tile></mat-grid-tile>
-                                                    <mat-grid-tile></mat-grid-tile>
+                                                    <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
                                                     <mat-grid-tile>
                                                         <content class="input">
                                                             <mat-checkbox color="primary"
@@ -223,7 +216,6 @@
                                                         </content>
                                                     </mat-grid-tile>
                                                 </mat-grid-list>
-                                                <mat-divider></mat-divider>
                                             </div>
                                             <!-- MENU -->
                                             <div
@@ -231,28 +223,25 @@
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                        <header i18n>{{getConfigTranslation(webcamConfig.key)}}</header>
+                                                        <header>{{getConfigTranslation(webcamConfig.key)}}</header>
                                                     </mat-grid-tile>
-                                                    <mat-grid-tile></mat-grid-tile>
-                                                    <mat-grid-tile>
-                                                    </mat-grid-tile>
-                                                    <mat-grid-tile>
-                                                        <mat-form-field appearance="fill">
-                                                            <mat-select>
+                                                    <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                                        <content class="input">
+                                                            <mat-select formControlName="{{webcamConfig.key}}">
                                                                 <mat-option
                                                                     *ngFor="let option of getOptionValue(webcamConfig.key, 'options')"
                                                                     color="primary"
-                                                                    (onSelectionChange)="setOptionsMenuValue($event, webcamConfig.key, option)">
+                                                                    (onSelectionChange)="setOptionsMenuValue($event, webcamConfig.key, option)"
+                                                                    [value]="option">
                                                                     {{ option }}
                                                                 </mat-option>
                                                             </mat-select>
-                                                        </mat-form-field>
+                                                        </content>
                                                     </mat-grid-tile>
                                                 </mat-grid-list>
-                                                <mat-divider></mat-divider>
                                             </div>
                                         </ng-container>
-
                                     </mat-expansion-panel>
                                 </mat-accordion>
                             </ng-container>
