@@ -24,7 +24,7 @@ import { defaultProfiles, defaultCustomProfile } from '../models/profiles/Legacy
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
 import { deviceProfiles, TUXEDODevice } from '../models/DefaultProfiles';
-import { ExportWebcamJSON } from "../models/TccWebcamSettings";
+import { WebcamPreset } from '../models/TccWebcamSettings';
 
 export class ConfigHandler {
     public settingsFileMod: number;
@@ -56,13 +56,18 @@ export class ConfigHandler {
         return this.readConfig<ITccSettings>(filePath);
     }
 
-    writeSettings(settings: ITccSettings, filePath: string = this.pathSettings) {
-        this.writeConfig<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
+    readWebcamSettings(filePath: string = this.pathSettings): WebcamPreset[] {
+        return this.readConfig<WebcamPreset[]>(filePath);
     }
 
-    
-    writeWebcamSettings(settings: ExportWebcamJSON[], filePath: string = this.pathSettings) {
-        this.writeConfig<ExportWebcamJSON[]>(settings, filePath, {
+    writeSettings(settings: ITccSettings, filePath: string = this.pathSettings) {
+        this.writeConfig<ITccSettings>(settings, filePath, {
+            mode: this.settingsFileMod,
+        });
+    }
+
+    writeWebcamSettings(settings: WebcamPreset[], filePath: string = this.pathSettings) {
+        this.writeConfig<WebcamPreset[]>(settings, filePath, {
             mode: this.settingsFileMod,
         });
     }

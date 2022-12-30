@@ -13,15 +13,15 @@
                     <hr />
                 </div>
 
-                <button id="basic" type="button" mat-button (click)="savingWebcamPresets($event)">
+                <button id="basic" type="button" mat-button (click)="savingWebcamPresets()">
                     Saving Presets
                 </button>
 
-                <button id="basic" type="button" mat-button (click)="loadingWebcamPresets()">
+                <button id="basic" type="button" mat-button (click)="loadingConfigDataFromJSON()">
                     Load Presets
                 </button>
 
-                <button id="basic" type="button" mat-button (click)="openWindow($event)">
+                <button id="basic" type="button" mat-button (click)="openWindow()">
                     Open Window
                 </button>
 
@@ -33,13 +33,14 @@
                     Disable Camera
                 </button>
 
-                <button id="basic" type="button" mat-button (click)="applyConfig()">
-                    apply config
+                <button id="basic" type="button" mat-button (click)="deletePreset()">
+                    delete preset
                 </button>
 
-                <mat-select name="thisWebcamConfigs" [(value)]="thisWebcamConfigs" placeholder="Webcam"
-                    (selectionChange)="setWebcam($event.value)">
-                    <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config.webcamId">
+                <!-- presets -->
+                <mat-select placeholder="Webcam" (selectionChange)="applyConfig($event.value.webcamSettings)"
+                    [(ngModel)]="selectedPreset">
+                    <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config">
                         {{config.presetName}}
                     </mat-option>
                 </mat-select>
@@ -60,6 +61,7 @@
                             <mat-grid-tile></mat-grid-tile>
                             <mat-grid-tile>
                                 <mat-form-field>
+                                    <!-- webcam -->
                                     <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId"
                                         placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
                                         <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam.id">

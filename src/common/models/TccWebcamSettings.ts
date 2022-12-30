@@ -1,55 +1,24 @@
-export interface WebcamJSON {
+export interface WebcamDeviceInformation {
+    active: boolean;
+    cagegory: string;
+    current: string | number | boolean;
+    default: string | number | boolean;
+    max?: number;
+    min?: number;
+    name: string;
+    step?: number;
+    options?: string[];
+    title: string;
+    type: string;
+}
+
+export interface WebcamPreset {
     presetName: string;
     webcamId: string;
-    webcamSettings: WebcamSettigs[];
+    webcamSettings: WebcamPresetValues;
 }
 
-export interface WebcamSettigs {
-    config_category: string;
-    config_data: [SliderInterface, BoolInterface, MenuInterface];
-    config_type: string;
-}
-
-export interface SliderInterface {
-    active: boolean;
-    current: number;
-    default: number;
-    max: number;
-    name: string;
-    step: number;
-    title: string;
-    type: string;
-}
-
-export interface BoolInterface {
-    active: boolean;
-    current: boolean;
-    default: boolean;
-    max: boolean;
-    min: boolean;
-    name: string;
-    step: number;
-    title: string;
-    type: string;
-}
-
-export interface MenuInterface {
-    active: boolean;
-    current: string;
-    default: string;
-    name: string;
-    options: string[];
-    title: string;
-    type: string;
-}
-
-export interface ExportWebcamJSON {
-    presetName: string;
-    webcamId: string;
-    webcamSettings: WebcamJSONValues;
-}
-
-export interface WebcamJSONValues {
+export interface WebcamPresetValues {
     backlight_compensation?: boolean;
     brightness?: number;
     contrast?: number;
@@ -65,4 +34,17 @@ export interface WebcamJSONValues {
     sharpness?: number;
     white_balance_temperature?: number;
     white_balance_temperature_auto?: boolean;
+}
+
+export interface WebcamDevice {
+    id: string;
+    label: string;
+    path: string;
+}
+
+export interface WebcamConstraints {
+    deviceId: string | { exact: string };
+    frameRate: number | { exact: number };
+    height: number | { exact: number };
+    width: number | { exact: number };
 }
