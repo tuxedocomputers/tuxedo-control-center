@@ -27,7 +27,6 @@ export class WebcamPreviewComponent implements OnInit {
         this.electron.ipcRenderer.on(
             "setting-webcam-with-loading",
             async (event, webcamConfig) => {
-                console.log("got something");
                 this.spinnerActive = true;
                 this.cdref.detectChanges();
                 await this.stopWebcam();

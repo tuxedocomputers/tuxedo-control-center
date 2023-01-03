@@ -302,7 +302,7 @@ async function createCameraPreview(langId: string, arg: any) {
         width: windowWidth,
         height: windowHeight,
         frame: true,
-        resizable: true,
+        resizable: false,
         minWidth: windowWidth,
         minHeight: windowHeight,
         icon: path.join(
@@ -315,6 +315,7 @@ async function createCameraPreview(langId: string, arg: any) {
         },
     });
 
+    // Workaround to set window title
     cameraWindow.on("page-title-updated", function (e) {
         e.preventDefault();
     });
@@ -324,11 +325,6 @@ async function createCameraPreview(langId: string, arg: any) {
     // Workaround to menu bar appearing after full screen state
     cameraWindow.on("leave-full-screen", () => {
         cameraWindow.setMenuBarVisibility(false);
-    });
-
-    cameraWindow.on("closed", async function () {
-        tccWindow.webContents.send("camera-window-closed", "test");
-        cameraWindow = null;
     });
 
     const indexPath = path.join(
@@ -344,6 +340,11 @@ async function createCameraPreview(langId: string, arg: any) {
     cameraWindow.webContents.once("dom-ready", () => {
         cameraWindow.webContents.send("setting-webcam-with-loading", arg);
     });
+
+    cameraWindow.on("close", async function () {
+        tccWindow.webContents.send("external-camera-preview-closed");
+        cameraWindow = null;
+    });
 }
 
 ipcMain.on("setting-webcam-with-loading", (event, arg) => {
@@ -352,8 +353,7 @@ ipcMain.on("setting-webcam-with-loading", (event, arg) => {
     }
 });
 
-ipcMain.on("createWebcamPreview", function (evt, arg) {
-    console.log(arg);
+ipcMain.on("create-webcam-preview", function (evt, arg) {
     if (cameraWindow) {
         if (cameraWindow.isMinimized()) {
             cameraWindow.restore();
