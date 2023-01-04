@@ -136,7 +136,7 @@ export class TomteGuiComponent implements OnInit {
         this.tomteMode = modeLine[modeLine.length -1];
         if (lines.length < 2)
         {
-            this.throwErrorMessage(rawTomteListOutput);
+            console.error(rawTomteListOutput);
             return;
         }
         for (var i = 3; i < lines.length; i++)
