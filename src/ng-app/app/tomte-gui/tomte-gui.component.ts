@@ -399,8 +399,9 @@ export class TomteGuiComponent implements OnInit {
     /*
         Changes the mode tomte is operating in to the mode given and throws an error message if this doesnt work
     */
-    public async tomteModeButton(mode: string)
+    public async tomteModeButton(mode)
     {
+        console.log(mode);
         let dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
@@ -409,7 +410,7 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        let command = "pkexec tuxedo-tomte " + mode ;
+        let command = "pkexec tuxedo-tomte " + mode.value ;
         let results = await this.utils.execFile(command).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
