@@ -140,12 +140,12 @@
       </trans-unit>
       <trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
         <source>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </source>
         <target state="translated">
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Pour des problèmes plus complexes, il peut être nécessaire d'inspecter les données de diagnostic de votre PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Notre programme de dianostic ne collecte AUCUNE donnée personnelle ou informations de connexion ! Seules les informations à propos de vos configurations matérielle et logicielle sont collectées.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Pour des problèmes plus complexes, il peut être nécessaire d'inspecter les données de diagnostic de votre PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Notre programme de dianostic ne collecte AUCUNE donnée personnelle ou informations de connexion ! Seules les informations à propos de vos configurations matérielle et logicielle sont collectées.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -202,10 +202,10 @@
       </trans-unit>
       <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
         <source>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </source>
         <target state="translated">
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Lors de l'exécution, nos scripts de diagnostic collectent les données puis les envoient à notre support, accompagnées de votre numéro de ticket.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Lors de l'exécution, nos scripts de diagnostic collectent les données puis les envoient à notre support, accompagnées de votre numéro de ticket.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -254,38 +254,30 @@
       </trans-unit>
       <trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
         <source>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via 
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via 
                 <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i> "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </source>
         <target state="translated">
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Si votre problème ne peut pas être résolu par notre diagnostic système, nous sommes heureux de vous proposer notre support gratuit en direct via 
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si votre problème ne peut pas être résolu par notre diagnostic système, nous sommes heureux de vous proposer notre support gratuit en direct via 
                 <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i>"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i>"/> , logiciel de maintenance à distance.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Ainsi, un de nos employés de support peut se connecter en ligne sur votre ordinateur TUXEDO et résoudre le problème avec vous.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Notre support obtient l'accès à votre système uniquement de manière temporaire et en votre présence. AUCUNE donnée personnelle n'est connectée !<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Ainsi, un de nos employés de support peut se connecter en ligne sur votre ordinateur TUXEDO et résoudre le problème avec vous.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Notre support obtient l'accès à votre système uniquement de manière temporaire et en votre présence. AUCUNE donnée personnelle n'est connectée !<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">120,122</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c2c9a2834e262fceffd58430cbfbbc0940f4414d" datatype="html">
-        <source>Restore system</source>
-        <target state="translated">Restaurer le système</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">141</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
+       <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
         <source>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </source>
         <target state="needs-adaptation">
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Avec notre "Fully Automated Installation" (système d'installation automatisée), vous pouvez restaurer votre système Linux à son état de livraison en quelques minutes et quelques clics.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
-            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Grâce aux données stockées dans le cloud, vous obtiendrez toujours les dernières mises-à-jour système ! Le Créateur WebFAI TUXEDO vous aide à créer une clé USB de secours en seulement trois clics !<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Avec notre "Fully Automated Installation" (système d'installation automatisée), vous pouvez restaurer votre système Linux à son état de livraison en quelques minutes et quelques clics.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+            <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Grâce aux données stockées dans le cloud, vous obtiendrez toujours les dernières mises-à-jour système ! Le Créateur WebFAI TUXEDO vous aide à créer une clé USB de secours en seulement trois clics !<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -1009,8 +1001,8 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         </context-group>
       </trans-unit>
       <trans-unit id="243c85168792d2dacd3e7a9868767d947b7df7ac" datatype="html">
-        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong> "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
-        <target state="translated">Après désactivation, les paramètres du CPU ne sont <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>pas<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> réinitialisé. Les paramètres par défaut doivent être restaurés manuellement ou par un redémarrage du système. </target>
+        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong> "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
+        <target state="translated">Après désactivation, les paramètres du CPU ne sont <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pas<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> réinitialisé. Les paramètres par défaut doivent être restaurés manuellement ou par un redémarrage du système. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1046,6 +1038,14 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingOptionsHeadingLabel" datatype="html">
+        <source>Battery charging options</source>
+        <target state="translated">Options de chargement de la batterie</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
@@ -1147,8 +1147,8 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cShutdownTimerInformations" datatype="html">
-        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting "Delete Time" below.</source>
-        <target state="translated">Réglage d'un compte à rebours d'extinction à usage unique. Il sera automatiquement supprimé au prochain redémarrage, ou si vous sélectionnez "Supprimer compte à rebours" ci-dessous.</target>
+        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting &quot;Delete Time&quot; below.</source>
+        <target state="translated">Programme une heure d'arrêt à usage unique. Elle sera automatiquement supprimé au prochain démarrage, ou en sélectionnant &quot;Supprimer l'heure d'extinction&quot; below.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -1172,7 +1172,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
       </trans-unit>
       <trans-unit id="cShutdownTimerButtonDeleteTime" datatype="html">
         <source>Delete Time</source>
-        <target state="translated">Supprimer compte à rebours</target>
+        <target state="translated">Supprimer l'heure d'extinction</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">44</context>
@@ -1241,12 +1241,12 @@ Numéro de registre commercial - Partie B du registre commercial 27755
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
         <source>
-            <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
+            <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
             <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using 
                 <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending in "crypt". 
             <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
         <target state="translated">
-            <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>Il semble que vous n'utilisez pas le chiffrement de disque.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
+            <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Il semble que vous n'utilisez pas le chiffrement de disque.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
             <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Le chiffrement de disque ne peut être activé qu'au moment de l'installation de votre système. Si vous voulez l'utiliser, vous devez réinstaller votre appareil en utilisant  
                 <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. Sur l'écran de sélection de système d'exploitation, sélectionnez une option se terminant par "crypt". 
             <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Réinstaller votre PC supprimera toutes les données et programmes présents sur celui-ci !<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
@@ -1471,7 +1471,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectDescription" datatype="html">
-        <source>Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!</source>
+        <source>Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</source>
         <target state="translated">Veuillez vous assurer que les tubes de watercooling de votre Aquaris sont bien branchés dans votre appareil avant d'appuyer sur le bouton "connecter" !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
@@ -1503,8 +1503,8 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don't ask again</source>
-        <target state="translated">Ne pas demander à l'avenir</target>
+        <source>Don&apos;t ask again</source>
+        <target state="translated">Ne plus me demander</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">391</context>
@@ -1831,12 +1831,108 @@ Numéro de registre commercial - Partie B du registre commercial 27755
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityLabel" datatype="html">
+        <source>Full capacity</source>
+        <target state="translated">Pleine capacité</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedLabel" datatype="html">
+        <source>Reduced capacity</source>
+        <target state="translated">Capacité réduite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryLabel" datatype="html">
+        <source>Stationary use</source>
+        <target state="translated">Usage stationnaire</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityDescription" datatype="html">
+        <source>This is the default setting. Fastest charging speed and 100% battery capacity for best possible runtimes.</source>
+        <target state="translated">Réglage par défaut. Vitesse de charge la plus rapide, et 100% de capacité pour une autonomie maximisée.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedDescription" datatype="html">
+        <source>Reduced charging speed and battery capacity (~90 %) for better battery lifespan.</source>
+        <target state="translated">Vitesse de charge et capacité de batterie réduites (~90%) pour une longévité de batterie rallongée.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryDescription" datatype="html">
+        <source>Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</source>
+        <target state="translated">Vitesse de charge et capacité maximale très réduites (~80 %) pour une longévité de batterie maximisée. Recommandé si vous utilisez votre appareil de manière presque stationnaire sur chargeur.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryLabel" datatype="html">
+        <source>Priorize battery charging speed</source>
+        <target state="translated">Prioriser la vitesse de charge</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceLabel" datatype="html">
+        <source>Priorize performance</source>
+        <target state="translated">Prioriser la performance</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryDescription" datatype="html">
+        <source>Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</source>
+        <target state="translated">La vitesse de charge est priorisée par rapport aux performances. Quand la batterie sera chargée, les performances complètes seront à nouveau disponibles.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceDescription" datatype="html">
+        <source>Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</source>
+        <target state="translated">La performance est priorisée sur la vitesse de charge. En cas de forte charge de calcul la vitesse de charge est réduite pour maintenir les meilleures performances. En cas de charge de calcul faible la pleine vitesse de charge est disponible.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileLabel" datatype="html">
+        <source>Charging profiles</source>
+        <target state="translated">Profils de charge</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityLabel" datatype="html">
+        <source>USB-C charging options (Power Delivery DC-In)</source>
+        <target state="translated">Options de charge via USB-C</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
         <source>Quiet</source>
         <target state="translated">Silencieux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
@@ -1844,7 +1940,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Performances réduites pour tâches de bureau légères, pour une ventilation très silencieuse et une consommation minimale.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
@@ -1852,7 +1948,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Bureau et Multimédias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
@@ -1860,7 +1956,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Performances moyennes pour tâches de bureau plus exigentes ou utilisation multimédias et ventilation silencieuse.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
@@ -1868,7 +1964,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Performances élevées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
@@ -1876,7 +1972,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Performances élevées pour jeu-vidéo et tâches exigentes, en échange d'un bruit de ventilation de moyen à élevé, et de températures supérieures.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">258</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
@@ -1884,7 +1980,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Economie d'énergie'</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
@@ -1892,7 +1988,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Consommation la plus basse possible et ventilation silencieuse, en échange de performances très faibles.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
@@ -1900,7 +1996,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Défaut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
@@ -1908,15 +2004,15 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Performances maximales au dépends d'un bruit et de températures plus élevés.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">268</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
         <source>Cool and breezy</source>
-        <target state="translated">Frais et tranquille</target>
+        <target state="translated">Brise tranquille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
@@ -1924,7 +2020,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Puissance réduite au profit de faibles températures et d'une ventilation silencieuse.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
@@ -1932,7 +2028,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Economie d'énergie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
@@ -1940,7 +2036,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
         <target state="translated">Performances très faibles au profit de la consommation la plus basse possible et ventilation silencieuse.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
@@ -1977,7 +2073,7 @@ Numéro de registre commercial - Partie B du registre commercial 27755
       </trans-unit>
       <trans-unit id="stateLabelBattery" datatype="html">
         <source>Battery </source>
-        <target state="translated">Batterie </target>
+        <target state="translated">Batterie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">77</context>
