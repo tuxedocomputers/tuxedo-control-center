@@ -66,7 +66,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </ng-container>
 
     <ng-container *ngIf="loadingInformation">
-        <div [ngClass]="{'global-spinner': true}">
+        <div [ngClass]="{'tomte-local-spinner': true}">
             <i class="fas fa-cog fa-spin"></i>
         </div>
         <div [ngClass]="{'blur-no-input': true}">  
@@ -101,7 +101,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <br />
     </ng-container>
 
-    <ng-container *ngIf="tomteMode && tomteIsInstalled && !loadingInformation">
+    <ng-container *ngIf="tomteMode && tomteIsInstalled && !loadingInformation && !showRetryButton">
 
         <hr />
         <h2 class="tomte-gui-title" i18n="@@cTomteGuiTomteOperationModeHeader">

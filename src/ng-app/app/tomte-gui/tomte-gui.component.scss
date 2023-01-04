@@ -36,6 +36,15 @@
     font-weight: bold;
 }
 
+.tomte-local-spinner {
+    position: fixed;
+    left: 60%;
+    top: 60%;
+    transform: translate(-60%, -50%);
+    z-index: 1000;
+    font-size: 8rem;
+    color: rgb(133, 133, 133);
+}
 
 .tomte-gui-overlay {
     background-color:rgba(235, 223, 223, 0.116);
