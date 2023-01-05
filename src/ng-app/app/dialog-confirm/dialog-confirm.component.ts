@@ -27,7 +27,7 @@ export interface ConfirmDialogData {
     description: string,
     linkLabel?: string,
     linkHref?: string,
-    buttonAbortLabel: string,
+    buttonAbortLabel?: string,
     buttonConfirmLabel: string,
     showCheckboxNoBother?: boolean,
     checkboxNoBotherLabel?: string
@@ -51,7 +51,7 @@ export class DialogConfirmComponent {
         private electron: ElectronService,
         public dialogRef: MatDialogRef<DialogConfirmComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {
-            
+
             if (data.checkboxNoBotherLabel === undefined) {
                 data.checkboxNoBotherLabel = '';
             }

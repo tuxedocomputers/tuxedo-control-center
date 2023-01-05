@@ -26,10 +26,11 @@
                 <div class="title-row">
                     <hr />
                     <div class="title">
-                        <svg viewBox="0 0 258 512" class="tcc-icons">
+                        <svg viewBox="0 0 512 512" class="tcc-icons">
                             <use href="./assets/images/icon_webcam.svg#Icon"></use>
                         </svg>
-                        <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam</ng-container>
+                        <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam
+                        </ng-container>
                     </div>
                     <hr />
                 </div>
@@ -38,17 +39,13 @@
                     Open Window
                 </button>
 
-                <button id="basic" type="button" mat-button (click)="deletePreset()">
-                    delete preset
-                </button>
-
                 <div class="webcam" id="hidden">
                     <video #video id="video" width="640" height="480" autoplay="false"
                         (canplay)="unsetLoading()"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
                 </div>
 
-                <mat-card-content class="content" [formGroup]="webcamFormGroup">
+                <mat-card-content class="content">
                     <div>
                         <!-- webcam -->
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
@@ -61,11 +58,17 @@
                                     <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId"
                                         placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
                                         <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam.id">
-                                            {{webcam.label}}
+                                            {{ webcam.label }}
                                         </mat-option>
                                     </mat-select>
+
+                                    <button mat-icon-button color="primary" (click)="mapCameraPathsToDevice()">
+                                        <mat-icon>refresh</mat-icon>
+                                    </button>
+
                                 </content>
                             </mat-grid-tile>
+
                         </mat-grid-list>
                         <!-- presets -->
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
@@ -75,13 +78,19 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input">
-                                    <mat-select placeholder="Webcam"
-                                        (selectionChange)="applyConfig($event.value.webcamSettings)"
-                                        [(ngModel)]="selectedPreset" [ngModelOptions]="{standalone: true}">
+
+                                    <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparer"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (selectionChange)="applyConfig($event.value.webcamSettings)">
                                         <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config">
-                                            {{config.presetName}}
+                                            {{ config.presetName }}
                                         </mat-option>
                                     </mat-select>
+
+                                    <button mat-icon-button color="primary" (click)="deletePreset()">
+                                        <mat-icon>delete_forever</mat-icon>
+                                    </button>
+
                                 </content>
                             </mat-grid-tile>
                         </mat-grid-list>
@@ -94,11 +103,12 @@
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header>{{getConfigTranslation(webcamConfig)}}</header>
+                                                <header>{{ getConfigTranslation(webcamConfig) }}
+                                                </header>
                                             </mat-grid-tile>
                                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                                 <content class="value">
-                                                    {{getPercentValue(webcamConfig)}} %
+                                                    {{ getPercentValue(webcamConfig) }} %
                                                 </content>
                                                 <button mat-icon-button color="primary">
                                                     <mat-icon>remove</mat-icon>
@@ -132,9 +142,11 @@
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header>{{getConfigTranslation(webcamConfig)}}</header>
+                                                <header>{{ getConfigTranslation(webcamConfig) }}
+                                                </header>
                                             </mat-grid-tile>
-                                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                            </mat-grid-tile>
                                             <mat-grid-tile>
                                                 <content class="input">
                                                     <mat-checkbox color="primary" formControlName="{{webcamConfig}}"
@@ -149,7 +161,7 @@
                                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                             class="profile-details-edit-grid">
                                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                <header>{{getConfigTranslation(webcamConfig)}}
+                                                <header>{{ getConfigTranslation(webcamConfig) }}
                                                 </header>
                                             </mat-grid-tile>
                                             <mat-grid-tile [colspan]="gridParams.valueSpan">
@@ -196,12 +208,13 @@
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                        <header>{{getConfigTranslation(webcamConfig)}}</header>
+                                                        <header>
+                                                            {{ getConfigTranslation(webcamConfig) }}
+                                                        </header>
                                                     </mat-grid-tile>
                                                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                                                         <content class="value">
-                                                            {{getPercentValue(webcamConfig,
-                                                            webcamConfig.value)}} %
+                                                            {{ getPercentValue(webcamConfig, webcamConfig.value) }} %
                                                         </content>
                                                         <button mat-icon-button color="primary">
                                                             <mat-icon>remove</mat-icon>
@@ -222,7 +235,8 @@
                                                                 color="primary">
                                                             </mat-slider>
                                                             <button mat-icon-button color="primary"
-                                                                (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                                (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
+                                                                    setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
                                                                 [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : ((webcamFormGroup.get(webcamConfig).dirty) ? false : true)">
                                                                 <mat-icon>undo</mat-icon>
                                                             </button>
@@ -236,9 +250,12 @@
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                        <header>{{getConfigTranslation(webcamConfig)}}</header>
+                                                        <header>
+                                                            {{ getConfigTranslation(webcamConfig) }}
+                                                        </header>
                                                     </mat-grid-tile>
-                                                    <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                                    </mat-grid-tile>
                                                     <mat-grid-tile>
                                                         <content class="input">
                                                             <mat-checkbox color="primary"
@@ -255,7 +272,9 @@
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                                        <header>{{getConfigTranslation(webcamConfig)}}</header>
+                                                        <header>
+                                                            {{ getConfigTranslation(webcamConfig) }}
+                                                        </header>
                                                     </mat-grid-tile>
                                                     <mat-grid-tile [colspan]="gridParams.valueSpan">
                                                         <content class="value">

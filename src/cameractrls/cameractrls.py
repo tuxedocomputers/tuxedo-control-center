@@ -1877,19 +1877,22 @@ class CameraCtrls:
 
                         if c.type == 'menu':
                             config_parameter["type"] = "menu"
-                            if c.default:
-                                config_parameter["default"] = c.default
                             if c.name == "Resolution":
                                 config_parameter["options"] = self.get_all_resolutions()
                             elif c.name == "Pixel format":
                                 continue
                             else:
-                                config_parameter["options"] = [m.text_id if not m.text_id.isnumeric() else int(m.text_id) for m in c.menu]
+                                config_parameter["options"] = sorted([m.text_id if not m.text_id.isnumeric() else int(m.text_id) for m in c.menu])
                             #config_parameter["current"] = c.value
                             if c.value.isnumeric():
                                 config_parameter["current"] = int(c.value)
                             else:
                                 config_parameter["current"] = c.value
+
+                            if c.default:
+                                config_parameter["default"] = c.default
+                            else:
+                                config_parameter["default"] = config_parameter["options"][-1]
 
                         elif c.type in ['integer', 'boolean']:
                             if c.type == 'integer':
