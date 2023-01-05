@@ -58,15 +58,8 @@ export class CameraSettingsComponent implements OnInit {
     viewWebcam: WebcamPresetValues;
     selectedPreset: WebcamPreset;
     mediaDeviceStream: MediaStream;
+    webcamCategories: string[] = [];
 
-    // todo: get data from json
-    categories_from_json: string[] = [
-        "Balance",
-        "Capture",
-        "Color",
-        "Dynamic Range",
-        "Exposure",
-    ];
     // todo: getting from config?
     easyOptions: string[] = ["brightness", "contrast", "resolution"];
     easyModeActive: boolean = true;
@@ -419,12 +412,15 @@ export class CameraSettingsComponent implements OnInit {
     convertSettingsToFormGroup(settings: WebcamDeviceInformation[]) {
         this.presetSettings = settings;
         let group = {};
+        let categories = [];
         settings.forEach((setting) => {
             group[setting.name] = new FormControl({
                 value: setting.current,
                 disabled: !setting.active,
             });
+            categories.push(setting.category);
         });
+        this.webcamCategories = [...new Set(categories)];
         return new FormGroup(group);
     }
 

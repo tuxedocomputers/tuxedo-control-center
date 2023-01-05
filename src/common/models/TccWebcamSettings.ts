@@ -1,6 +1,6 @@
 export interface WebcamDeviceInformation {
     active: boolean;
-    cagegory: string;
+    category: string;
     current: string | number | boolean;
     default: string | number | boolean;
     max?: number;
