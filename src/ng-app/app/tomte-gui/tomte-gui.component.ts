@@ -286,27 +286,24 @@ export class TomteGuiComponent implements OnInit {
     */
     private async confirmResetDialogue()
     {
-        const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
-        if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
-            const askToClose = await this.utils.confirmDialog({
-                title: $localize `:@@tomteResetDefaultsTitle:Are you sure you want to reset to defaults?`,
-                description: $localize `:@@tomteResetDefaultsMessage:This will revert any manual configuration you did, are you sure you want to proceed?`,
-                linkLabel: '',
-                linkHref: '',
-                buttonAbortLabel: $localize `:@@tomteAbortButtonLabel:Abort`,
-                buttonConfirmLabel: $localize `:@@tomteConfirmButtonLabel:I understand`,
-                checkboxNoBotherLabel: '',
-                showCheckboxNoBother: false
-            });
-            if (askToClose.confirm) 
-            {
-                return true;
-            }    
-            if (!askToClose.confirm) 
-            {
-                return false;
-            }         
-        }   
+        const askToClose = await this.utils.confirmDialog({
+            title: $localize `:@@tomteResetDefaultsTitle:Are you sure you want to reset to defaults?`,
+            description: $localize `:@@tomteResetDefaultsMessage:This will revert any manual configuration you did, are you sure you want to proceed?`,
+            linkLabel: '',
+            linkHref: '',
+            buttonAbortLabel: $localize `:@@tomteAbortButtonLabel:Abort`,
+            buttonConfirmLabel: $localize `:@@tomteConfirmButtonLabel:I understand`,
+            checkboxNoBotherLabel: '',
+            showCheckboxNoBother: false
+        });
+        if (askToClose.confirm) 
+        {
+            return true;
+        }    
+        if (!askToClose.confirm) 
+        {
+            return false;
+        }                  
     }
 
 /*
