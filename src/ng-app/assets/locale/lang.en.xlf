@@ -2267,6 +2267,62 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipBlockRequisite" datatype="html">
+        <source>Cannot block a module that is a prerequisite</source>
+        <target state="translated">Cannot block a module that is a prerequisite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipUnblock" datatype="html">
+        <source>Unblock this module</source>
+        <target state="translated">Unblock this module</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipBlock" datatype="html">
+        <source>Block this module</source>
+        <target state="translated">Block this module</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipUninstallRequisite" datatype="html">
+        <source>Cannot uninstall a module that is a prerequisite</source>
+        <target state="translated">Cannot uninstall a module that is a prerequisite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">225</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipUnInstallBlocked" datatype="html">
+        <source>Cannot un-/install a module that is blocked.</source>
+        <target state="translated">Cannot un-/install a module that is blocked</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipInstall" datatype="html">
+        <source>Install this module</source>
+        <target state="translated">Install this module</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">233</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipBlockUninstall" datatype="html">
+        <source>Uninstall this module</source>
+        <target state="translated">Uninstall this module</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">237</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

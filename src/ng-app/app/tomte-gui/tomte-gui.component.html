@@ -201,7 +201,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [disabled]="line.prerequisite === 'prerequisite' || line.blocked"
                         [checked]="line.installed"
                         (change)="tomteUn_InstallButton(line.moduleName,line.installed,line.blocked)"
-                        [matTooltip]="line.blocked ? 'Cannot un-/install a module that is blocked.' : (line.prerequisite === 'prerequisite' ? 'Cannot uninstall a module that is a prerequisite' : (!line.installed ? 'Install this module' : 'Uninstall this module'))"
+                        [matTooltip]="getSliderToolTip('installed', line.prerequisite, line.blocked, line.installed)"
                         >
                     
                         </mat-slide-toggle>
@@ -218,7 +218,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [disabled]="line.prerequisite === 'prerequisite'"
                         [checked]="!line.blocked"
                         (change)="tomteBlockButton(line.moduleName,line.blocked)"
-                        [matTooltip]="line.prerequisite === 'prerequisite' ? 'Cannot block a module that is a prerequisite' : (!line.blocked ? 'Block this module' : 'Unblock this module')"
+                        [matTooltip]="getSliderToolTip('blocked',line.prerequisite,line.blocked,line.installed)"
                         >
                     
                         </mat-slide-toggle> 

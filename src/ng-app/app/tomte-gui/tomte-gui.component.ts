@@ -21,6 +21,7 @@ import { ElectronService } from 'ngx-electron';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { translate } from '@angular/localize/src/utils';
 
 interface ITomteModule {
     moduleName: string,
@@ -195,6 +196,50 @@ export class TomteGuiComponent implements OnInit {
 ===================       UTILITY FUNCTIONS          ===================
 ========================================================================
 */
+
+/*
+        Returns properly translated tooltip for the sliders in each of their proper conditions
+*/
+
+    public getSliderToolTip(whichButton, prerequisite, blocked, installed)
+    {
+        if (whichButton === 'blocked')
+        {
+            if (prerequisite)
+            {
+                return $localize `:@@tomteGuiSliderToolTipBlockRequisite:Cannot block a module that is a prerequisite`
+            }
+            if(blocked)
+            {
+                return $localize `:@@tomteGuiSliderToolTipUnblock:Unblock this module`
+            }
+            else
+            {
+                return $localize `:@@tomteGuiSliderToolTipBlock:Block this module`
+            }      
+        }
+        if (whichButton === 'installed')
+        {
+            if (prerequisite)
+            {
+                return $localize `:@@tomteGuiSliderToolTipUninstallRequisite:Cannot uninstall a module that is a prerequisite`
+            }
+            if(blocked)
+            {
+                return $localize `:@@tomteGuiSliderToolTipUnInstallBlocked:Cannot un-/install a module that is blocked.`
+            }
+            if (installed)
+            {
+                return $localize `:@@tomteGuiSliderToolTipInstall:Install this module`
+            }
+            else
+            {
+                return $localize `:@@tomteGuiSliderToolTipBlockUninstall:Uninstall this module`
+            }
+        }
+        
+    
+    }
 
     /*
         Opens Dialogue containing given errormessage
