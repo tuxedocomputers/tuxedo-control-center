@@ -1744,63 +1744,70 @@ Commercial register number - Part B of the commercial register - 27755
         <source> Tomte Configuration </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">187,188</context>
+          <context context-type="linenumber">163,164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationRebootWarning" datatype="html">
         <source> Some changes may not take affect until after reboot. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">196,197</context>
+          <context context-type="linenumber">172,173</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiResetConfigurationButtonTooltip" datatype="html">
+        <source>Reset Configuration to defaults.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationResetDefaultsButtonlabel" datatype="html">
         <source> Reset Tomte to default settings </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">290,291</context>
+          <context context-type="linenumber">266,267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleName" datatype="html">
         <source> Module name </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">202,203</context>
+          <context context-type="linenumber">178,179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleVersion" datatype="html">
         <source> Version </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">211,212</context>
+          <context context-type="linenumber">187,188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInstalled" datatype="html">
         <source> Installed </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">220,221</context>
+          <context context-type="linenumber">196,197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleActive" datatype="html">
         <source> Active </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">237,238</context>
+          <context context-type="linenumber">213,214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleRequired" datatype="html">
         <source> Required </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">254,255</context>
+          <context context-type="linenumber">230,231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo" datatype="html">
         <source> Info </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">263,264</context>
+          <context context-type="linenumber">239,240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">

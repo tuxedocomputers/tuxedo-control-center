@@ -153,30 +153,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <!--
-            <div style="text-align: center">
-                <button style="display: inline-block" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[0]"
-                    (click)="tomteModeButton(tomteModes[0])"
-                    matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer.">
-                    <ng-container i18n="@@cTomteGuiTomteOperationModeAutomaticButtonLabel">
-                        Full Service
-                    </ng-container>
-                </button>
-                <button style="display: inline-block; margin-left: 5px" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[1]"
-                    (click)="tomteModeButton(tomteModes[1])"
-                    matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available.">
-                    <ng-container i18n="@@cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel">
-                        Updates Only
-                    </ng-container>
-                </button>
-                <button style="display: inline-block; margin-left: 5px" mat-raised-button color="primary" [disabled]="tomteMode===tomteModes[2]"
-                    (click)="tomteModeButton(tomteModes[2])" matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active.">
-                    <ng-container i18n="@@cTomteGuiTomteOperationModeDisabledButtonLabel">
-                        Disabled
-                    </ng-container>
-                </button>
-            </div>
-            -->
         </div>
         <br />
     </ng-container>
@@ -285,7 +261,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <ng-container i18n="@@cTomteGuiTomteConfigurationResetDefaultsHeader">Reset to defaults</ng-container>
         -->
         <div class="content-container centered">
-            <button mat-raised-button color="primary" (click)="tomteResetToDefaults()" matTooltip="Reset Configuration to defaults.">
+            <button mat-raised-button color="primary" (click)="tomteResetToDefaults()" i18n-matTooltip="@@cTomteGuiResetConfigurationButtonTooltip" matTooltip="Reset Configuration to defaults.">
                 <p i18n="@@cTomteGuiTomteConfigurationResetDefaultsButtonlabel">
                     Reset Tomte to default settings
                 </p>
