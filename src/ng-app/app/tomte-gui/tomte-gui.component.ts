@@ -106,7 +106,7 @@ export class TomteGuiComponent implements OnInit {
                     {
                         if(i === 10)
                         {                                       
-                            this.throwErrorMessage("Information from command 'tomte list' could not be obtained. Is tomte already running?");
+                            this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
                         }
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         if(i === 29)
@@ -158,10 +158,8 @@ export class TomteGuiComponent implements OnInit {
     */
     private async getModuleDescriptions()
     {
-        //console.log("tooltips saved: " + this.moduleToolTips.size + ", num of modules: " + this.tomteListArray.length);
         if (this.moduleToolTips.size < this.tomteListArray.length) 
         {
-            //console.log("loading tooltips");
         for (let i = 0; i < this.tomteListArray.length; i++)
             {
                 let modulename = this.tomteListArray[i].moduleName;
@@ -169,25 +167,17 @@ export class TomteGuiComponent implements OnInit {
                 {
                     continue;
                 }
-                //console.log("loading tooltip of: " + modulename);
                 let command = "tuxedo-tomte description " + modulename;
-                // using try catch so it doesn't fill the tooltip with garbage when it fails.
                 try 
                 {
                     let results = await this.utils.execCmd(command);
                     this.moduleToolTips.set(modulename, results);
-                    //console.log("Obtained Tooltip: " + results);
                 }
                 catch (err)
                 {
-                    //console.log("failed to obtain tooltip: " + err);
                 }
 
             }
-        }
-        else 
-        {
-            //console.log("already enough tooltips");
         }
     }
 
@@ -249,7 +239,7 @@ export class TomteGuiComponent implements OnInit {
     {
         console.error(errorMessage);
         const askToClose = await this.utils.confirmDialog({
-            title: $localize `:@@aqDialogErrorTitle:An Error occured!`,
+            title: $localize `:@@tomteGuiDialogErrorTitle:An Error occured!`,
             description: errorMessage,
             linkLabel: ``,
             linkHref: null,
@@ -360,7 +350,7 @@ export class TomteGuiComponent implements OnInit {
             " Function 2 Command: " + command2 + " Results: " + res2 +
             " Function 3 Command: " + command3 + " Results: " + res3
             );
-            this.throwErrorMessage("Reset failed. Maybe Tomte is already running? If that is the case simply try again later.");
+            this.throwErrorMessage($localize `:@@tomteGuiResetFailedPopup:Reset failed. Maybe Tomte is already running? If that is the case simply try again later.`);
         }        
         this.utils.pageDisabled = false;
     }
@@ -476,7 +466,7 @@ export class TomteGuiComponent implements OnInit {
         let gotInstalled = await this.pmgs.install("tuxedo-tomte");
         if (!gotInstalled)
         {
-            this.throwErrorMessage("Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?");
+            this.throwErrorMessage($localize `:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`);
         }
         this.utils.pageDisabled = false;
         this.tomtelist();

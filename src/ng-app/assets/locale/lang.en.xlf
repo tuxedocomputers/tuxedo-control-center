@@ -2323,6 +2323,62 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="menuTomteGui" datatype="html">
+        <source>Tomte</source>
+        <target state="translated">Tomte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+           <trans-unit id="cTomteGuiTomteHeader" datatype="html">
+        <source>TUXEDO Tomte</source>
+        <target state="translated">TUXEDO Tomte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="tomteGuiDialogErrorTitle" datatype="html">
+        <source>An Error occured!</source>
+        <target state="translated">An Error occured!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">242</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
+        <source>Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</source>
+        <target state="translated">Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">469</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="tomteGuiTomteListErrorPopup" datatype="html">
+        <source>Information from command &apos;tomte list&apos; could not be obtained. Is tomte already running?</source>
+        <target state="translated">Information from command &apos;tomte list&apos; could not be obtained. Is tomte already running?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="tomteGuiResetFailedPopup" datatype="html">
+        <source>Reset failed. Maybe Tomte is already running? If that is the case simply try again later.</source>
+        <target state="translated">Reset failed. Maybe Tomte is already running? If that is the case simply try again later.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">353</context>
+        </context-group>
+      </trans-unit>
+            <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
+        <source>Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</source>
+        <target state="translated">Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">469</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>
