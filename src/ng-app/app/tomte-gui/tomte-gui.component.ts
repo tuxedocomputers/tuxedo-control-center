@@ -205,7 +205,7 @@ export class TomteGuiComponent implements OnInit {
     {
         if (whichButton === 'blocked')
         {
-            if (prerequisite)
+            if (prerequisite === 'prerequisite')
             {
                 return $localize `:@@tomteGuiSliderToolTipBlockRequisite:Cannot block a module that is a prerequisite`
             }
@@ -220,7 +220,7 @@ export class TomteGuiComponent implements OnInit {
         }
         if (whichButton === 'installed')
         {
-            if (prerequisite)
+            if (prerequisite === 'prerequisite')
             {
                 return $localize `:@@tomteGuiSliderToolTipUninstallRequisite:Cannot uninstall a module that is a prerequisite`
             }
