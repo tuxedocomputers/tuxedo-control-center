@@ -230,11 +230,11 @@ export class TomteGuiComponent implements OnInit {
             }
             if (installed)
             {
-                return $localize `:@@tomteGuiSliderToolTipInstall:Install this module`
+                return $localize `:@@tomteGuiSliderToolTipBlockUninstall:Uninstall this module`
             }
             else
             {
-                return $localize `:@@tomteGuiSliderToolTipBlockUninstall:Uninstall this module`
+                return $localize `:@@tomteGuiSliderToolTipInstall:Install this module`
             }
         }
         
