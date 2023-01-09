@@ -22,6 +22,7 @@ import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { translate } from '@angular/localize/src/utils';
+import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 
 interface ITomteModule {
     moduleName: string,
@@ -81,43 +82,125 @@ export class TomteGuiComponent implements OnInit {
     }
 
 
-    /*
-        executes tomte list command and initiates follow up methods to parse information
-    */
-    private async tomtelist() {
+    private async tomtelist()
+    {
+        // check for tomte version and then either use oldTomteList or tomteListJSON
+        // only check version once and then store it?
         this.showRetryButton = false;
         this.loadingInformation = true;
         this.tomteIsInstalled = await this.pmgs.isInstalled("tuxedo-tomte");
         if (this.tomteIsInstalled)
             {
-                // retries to list the information a couple of times, this is only triggered if tomte is already running.      
-                for (let i = 0; i < 30; i++)
-                {             
-                    let command = "tuxedo-tomte list"
-                    let results
-                    try 
-                    {
-                        results = await this.utils.execCmd(command);
-                        this.parseTomteList("" + results);
-                        this.getModuleDescriptions();
-                        break;
-                    }
-                    catch (e)
-                    {
-                        if(i === 10)
-                        {                                       
-                            this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
-                        }
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                        if(i === 29)
-                        {
-                            this.showRetryButton = true;
-                        }
-                        continue;
-                    }
+                // check for version
+                let command = "tuxedo-tomte | grep tuxedo-tomte"
+                let results = await this.utils.execCmd(command);
+                let version = "";
+                if (results[1] + "" === "2.8.0") // TODO temp. gotta find out how I can check if it's a version bigger than x?
+                {
+                    version = "old";
+                }
+                else
+                {
+                    version = "new";
+                }
+                if(version === "new")
+                {
+                    await this.tomteListJson();
+                }
+                if(version === "old")
+                {
+                    await this.oldTomteList();
                 }
             }
-        this.loadingInformation = false;
+            this.loadingInformation = false;
+    }
+
+    private async tomteListJson()
+    {
+        // retries to list the information a couple of times, this is only triggered if tomte is already running.      
+        for (let i = 0; i < 30; i++)
+        {             
+            let command = "tuxedo-tomte listjson"
+            let results
+            try 
+            {
+                results = await this.utils.execCmd(command + "");
+                this.parseTomteListJson(results.split("\n")[1]);
+                this.getModuleDescriptions();
+                break;
+            }
+            catch (e)
+            {
+                if(i === 10)
+                {                                       
+                    this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                if(i === 29)
+                {
+                    this.showRetryButton = true;
+                }
+                continue;
+            }
+        }
+    }
+
+    /*
+        executes tomte list command and initiates follow up methods to parse information
+    */
+    private async oldTomteList() {
+        // retries to list the information a couple of times, this is only triggered if tomte is already running.      
+        for (let i = 0; i < 30; i++)
+        {             
+            let command = "tuxedo-tomte list"
+            let results
+            try 
+            {
+                results = await this.utils.execCmd(command);
+                this.parseTomteList(results);
+                this.getModuleDescriptions();
+                break;
+            }
+            catch (e)
+            {
+                if(i === 10)
+                {                                       
+                    this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                if(i === 29)
+                {
+                    this.showRetryButton = true;
+                }
+                continue;
+            }
+        }
+
+    }
+
+    private parseTomteListJson(rawTomteListOutput: string | undefined)
+    {
+        if (!rawTomteListOutput)
+        {
+            return;
+        }
+        try 
+        {
+            let givenobject = JSON.parse(rawTomteListOutput);
+
+        // now let's get the mode, modules etc out of it
+        this.tomteMode = givenobject.mode;
+        this.tomteListArray = [];
+        for (let i = 0; i < givenobject.modules.length; i++)
+        {
+            let module = givenobject.modules[i];
+            this.tomteListArray.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
+        }
+        }
+        catch (e)
+        {
+            console.error("not valid json");
+        }
 
     }
 
