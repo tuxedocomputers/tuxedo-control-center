@@ -1970,6 +1970,293 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="tomteBreakingChangesTitle" datatype="html">
+        <source>Are you sure you want to issue this command?</source>
+        <target state="translated">Sind Sie sich sicher, dass Sie dieses Komando ausführen möchten?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteBreakingChangesWarning" datatype="html">
+        <source>Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!</source>
+        <target state="translated">Achtung: Änderungen an der Standard Tomte Konfiguration können dazu führen, dass ihr Gerät nicht mehr ordnungsgemäß funktioniert!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">228</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteAbortButtonLabel" datatype="html">
+        <source>Abort</source>
+        <target state="translated">Abbrechen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteConfirmButtonLabel" datatype="html">
+        <source>I understand</source>
+        <target state="translated">Ich verstehe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">262</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
+        <source>Don&apos;t ask again</source>
+        <target state="translated">Nicht nochmal fragen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">233</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteResetDefaultsTitle" datatype="html">
+        <source>Are you sure you want to reset to defaults?</source>
+        <target state="translated">Sind Sie sich sicher, dass sie die Einstellungen auf Standard zurücksetzen wollen?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">257</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteResetDefaultsMessage" datatype="html">
+        <source>This will revert any manual configuration you did, are you sure you want to proceed?</source>
+        <target state="translated">Dies wird alle manuel getätigten Änderungen verwerfen, sind Sie sich sicher, dass Sie fortfahren wollen?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">258</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteHeader" datatype="html">
+        <source>TUXEDO Tomte</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteDescription" datatype="html">
+        <source> TUXEDO Tomte is a configuration service hat only works with TUXEDO hardware and automatically checks your computer for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving. </source>
+        <target state="translated">TUXEDO Tomte ist ein Konfigurationsservice, der nur mit TUXEDO Hardware zusammen arbeitet. Er überprüft den Computer automatisch auf fehlende Treiber und benötigte Pakete, um nervigem Troubleshooting und Problemlösen vorzubeugen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">27,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiUnableToLoadInformationHeader" datatype="html">
+        <source> Unable to load information </source>
+        <target state="translated"> Informationen konnten nicht geladen werden </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiUnableToLoadInformationDescription" datatype="html">
+        <source> TUXEDO Tomte ran into a timeout. Maybe it is already running. </source>
+        <target state="translated"> TUXEDO Tomte ist in einen Timeout gelaufen. Möglicherweise läuft das Program bereits. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiUnableToLoadInformationRetryButton" datatype="html">
+        <source> Retry </source>
+        <target state="translated"> Erneut versuchen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiInstallTomteHeader" datatype="html">
+        <source> Install TUXEDO Tomte </source>
+        <target state="translated"> TUXEDO Tomte installieren </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiInstallTomteDescription" datatype="html">
+        <source> Install TUXEDO Tomte now by pressing this button: </source>
+        <target state="translated"> Drücken Sie jetzt diesen Knopf, um TUXEDO Tomte zu installieren: </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiInstallTomteButtonLabel" datatype="html">
+        <source> Install </source>
+        <target state="translated"> Installieren </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiLoadingInformationDescription" datatype="html">
+        <source> Loading information, please wait... </source>
+        <target state="translated"> Lade Informationen, bitte warten... </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiNotTuxedoDeviceHeader" datatype="html">
+        <source> TUXEDO Tomte not producing output </source>
+        <target state="translated"> TUXEDO Tomte gibt keine Ausgabe zurück </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">93,94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiNotTuxedoDeviceDescription" datatype="html">
+        <source> TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. </source>
+        <target state="translated"> TUXEDO Tomte scheint installiert zu sein, gibt allerdings keine Ausgabe zurück. Dies könnte bedeuten, dass Sie keinen TUXEDO Computer / Laptop benutzen. Sollten Sie ein TUXEDO Gerät benutzen, ist dies ein Fehler. Sollten deshalb Fehler auftreten, wie ein nicht funktionierendes Touchpad, kontaktieren Sie bitte unseren Support und teilen Sie ihm mit, dass Tomte installiert ist, aber scheinbar nicht richtig funktioniert. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">98,99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeHeader" datatype="html">
+        <source> Tomte operation mode </source>
+        <target state="translated"> Tomte Operations Modus </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeDescription" datatype="html">
+        <source> Select the mode in which tomte is supposed to operate. Do you want it to handle things automatically, or configure it on your own? </source>
+        <target state="translated"> Wählen Sie den Modus in welchem Tomte operieren soll. Möchten Sie, dass Tomte alles automatisch regelt, oder wollen Sie die Konfiguration selbst vornehmen? </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">113,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeAutomaticButtonLabel" datatype="html">
+        <source> Full Service </source>
+        <target state="translated"> Voller Service </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeAutomaticButtonTooltip" datatype="html">
+        <source>This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer.</source>
+        <target state="translated"> Dies ist der Standard Modus. Tomte installiert und updated Module automatisch. Außerdem entfernt es nicht mehr benötigte Module. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel" datatype="html">
+        <source> Updates Only </source>
+        <target state="translated"> Nur Updates </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">132,133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyTooltip" datatype="html">
+        <source>Tomte will only update the existing modules, but won&apos;t install or remove modules without your approval. You will be notified once new modules are available.</source>
+        <target state="translated"> Tomte hält die installierten Module aktuell, wird aber nicht ohne Zustimmung Module installieren oder entfernen. Sie werden informiert, sobald neue Module verfügbar sind. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeDisabledButtonLabel" datatype="html">
+        <source> Disabled </source>
+        <target state="translated"> Deaktiviert </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">144,145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeDisabledTooltip" datatype="html">
+        <source>Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active.</source>
+        <target state="translated"> Tomte wird weder exisierende Module entfernen, noch updaten, noch neue installieren. Die schon vorhandenen Module bleiben aktiv. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationHeader" datatype="html">
+        <source> Tomte Configuration </source>
+        <target state="translated"> Tomte Konfiguration </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">187,188</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationRebootWarning" datatype="html">
+        <source> Some changes may not take affect until after reboot. </source>
+        <target state="translated"> Manche Änderungen treten erst nach einem Neustart in Kraft. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">196,197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationResetDefaultsButtonlabel" datatype="html">
+        <source> Reset Tomte to default settings </source>
+        <target state="translated"> Tomte auf Standard Einstellungen zurücksetzen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">290,291</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleName" datatype="html">
+        <source> Module name </source>
+        <target state="translated"> Modulname</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">202,203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleVersion" datatype="html">
+        <source> Version </source>
+        <target state="translated"> Version </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">211,212</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInstalled" datatype="html">
+        <source> Installed </source>
+        <target state="translated"> Installiert </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">220,221</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleActive" datatype="html">
+        <source> Active </source>
+        <target state="translated"> Aktiv </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">237,238</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleRequired" datatype="html">
+        <source> Required </source>
+        <target state="translated"> Benötigt </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">254,255</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo" datatype="html">
+        <source> Info </source>
+        <target state="translated"> Info </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">263,264</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>
