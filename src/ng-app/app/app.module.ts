@@ -84,7 +84,6 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
-import { WebcamModule } from 'ngx-webcam2';
 import { CameraSettingsComponent } from './camera-settings/camera-settings.component';
 import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
 
@@ -153,7 +152,6 @@ declare const require;
     ChartsModule,
     ColorPickerModule,
     MatMenuModule,
-    WebcamModule
   ],
   providers: [
     DecimalPipe,
