@@ -103,8 +103,7 @@ export class FanControlWorker extends DaemonWorker {
         const tempSensorAvailable: boolean[] = [];
 
         const moduleInfo = new ModuleInfo();
-
-        const fanCtrlUnavailableCondition = !TuxedoIOAPI.wmiAvailable() || this.fans.keys.length === 0;
+        const fanCtrlUnavailableCondition = !TuxedoIOAPI.wmiAvailable() || this.fans.size === 0;
         if (fanCtrlUnavailableCondition) {
             if (this.controlAvailableMessage === false) {
                 this.tccd.logLine('FanControlWorker: Control unavailable');
