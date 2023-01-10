@@ -40,8 +40,7 @@
                 </button>
 
                 <div class="webcam" id="hidden">
-                    <video #video id="video" width="640" height="480" autoplay="false"
-                        (canplay)="unsetLoading()"></video>
+                    <video #video id="video" width="640" height="480" autoplay="false"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
                 </div>
 
@@ -191,20 +190,20 @@
                         </ng-container>
                         <!-- ADVANCED MODE -->
                         <ng-container *ngIf="!easyModeActive">
-                            <ng-container *ngFor="let category_test of categories_from_json">
+                            <ng-container *ngFor="let webcamCategory of webcamCategories">
                                 <mat-accordion class="example-headers-align" multi class="list-group-item">
-                                    <mat-expansion-panel (opened)="handleRegionPanelStateChange(category_test, true)"
-                                        (closed)="handleRegionPanelStateChange(category_test, false)"
-                                        [expanded]="expandedRegions[category_test]">
+                                    <mat-expansion-panel (opened)="handleRegionPanelStateChange(webcamCategory, true)"
+                                        (closed)="handleRegionPanelStateChange(webcamCategory, false)"
+                                        [expanded]="expandedRegions[webcamCategory]">
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                {{ category_test }}
+                                                {{ webcamCategory }}
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <!-- SLIDER -->
                                         <ng-container *ngFor="let webcamConfig of getWebcamSettingNames()">
                                             <div
-                                                *ngIf="getOptionValue(webcamConfig, 'category')==category_test && getOptionValue(webcamConfig, 'type') =='slider'">
+                                                *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='slider'">
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
@@ -246,7 +245,7 @@
                                             </div>
                                             <!-- BOOL -->
                                             <div
-                                                *ngIf="getOptionValue(webcamConfig, 'category')==category_test && getOptionValue(webcamConfig, 'type') =='bool'">
+                                                *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='bool'">
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
@@ -268,7 +267,7 @@
                                             </div>
                                             <!-- MENU -->
                                             <div
-                                                *ngIf="getOptionValue(webcamConfig, 'category')==category_test && getOptionValue(webcamConfig, 'type') =='menu'">
+                                                *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='menu'">
                                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                     class="profile-details-edit-grid">
                                                     <mat-grid-tile [colspan]="gridParams.headerSpan">

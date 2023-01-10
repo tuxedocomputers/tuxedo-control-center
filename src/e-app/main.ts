@@ -366,6 +366,11 @@ ipcMain.on("create-webcam-preview", function (evt, arg) {
     }
 });
 
+ipcMain.on("close-webcam-preview", (event, arg) => {
+    cameraWindow.close();
+    cameraWindow = null;
+});
+
 async function getProfiles(): Promise<TccProfile[]> {
     const dbus = new TccDBusController();
     await dbus.init();
