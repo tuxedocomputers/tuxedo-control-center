@@ -74,6 +74,17 @@ export class CameraSettingsComponent implements OnInit {
     private config: ConfigHandler;
 
     async ngOnInit() {
+        const cameraApplyObservable = fromEvent(
+            this.electron.ipcRenderer,
+            "apply-controls"
+        );
+        this.subscriptions.add(
+            cameraApplyObservable.subscribe(async () => {
+                let controls = this.getControls(this.viewWebcam);
+                await this.executeCameraCtrlsList(controls);
+            })
+        );
+
         this.config = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
@@ -89,17 +100,9 @@ export class CameraSettingsComponent implements OnInit {
         );
         this.subscriptions.add(
             cameraWindowObservable.subscribe(async () => {
-                this.spinnerActive = true;
-                this.webcamGuard.setLoadingStatus(true);
-
                 this.detachedWebcamWindowActive = false;
                 document.getElementById("hidden").style.display = "flex";
-                await this.stopWebcam();
-                let webcamConfig = await this.getDefaultWebcamConfig(
-                    this.selectedWebcamId
-                );
-                await this.setWebcamWithConfig(webcamConfig);
-                this.webcamGuard.setLoadingStatus(false);
+                this.applyConfig(this.viewWebcam);
             })
         );
 
@@ -278,12 +281,24 @@ export class CameraSettingsComponent implements OnInit {
         }
     }
 
+    getCurrentWebcamConfig() {
+        let [webcamWidth, webcamHeight] = this.webcamFormGroup
+            .getRawValue()
+            ["resolution"].split("x");
+        let fps = this.webcamFormGroup.getRawValue()["fps"];
+        return {
+            deviceId: { exact: this.selectedWebcamId },
+            width: { exact: Number(webcamWidth) },
+            height: { exact: Number(webcamHeight) },
+            frameRate: { exact: Number(fps) },
+        };
+    }
+
     public async openWindow() {
-        this.stopWebcam();
+        await this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
-        // todo: switching between preview windows can result in showing wrong video
-        let config = await this.getDefaultWebcamConfig(this.selectedWebcamId);
-        this.electron.ipcRenderer.send("create-webcam-preview", config);
+        let webcamConfig = this.getCurrentWebcamConfig();
+        this.electron.ipcRenderer.send("create-webcam-preview", webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
 
@@ -455,20 +470,7 @@ export class CameraSettingsComponent implements OnInit {
         return !presetNames.includes(checkPresetName);
     }
 
-    // todo: refactor
-    async applyConfig(config: WebcamPresetValues) {
-        this.setLoading();
-        await this.stopWebcam();
-        document.getElementById("video").style.visibility = "hidden";
-
-        this.viewWebcam = config;
-        this.webcamFormGroup.markAsPristine();
-
-        for (const field in this.webcamFormGroup.controls) {
-            this.webcamFormGroup.get(field).setValue(config[field]);
-        }
-        let [webcamWidth, webcamHeight] = config["resolution"].split("x");
-
+    getControls(config: any) {
         let controls = [];
         for (const field in this.webcamFormGroup.controls) {
             if (field != "resolution" && field != "fps") {
@@ -501,6 +503,24 @@ export class CameraSettingsComponent implements OnInit {
                 controls[field] = config[field];
             }
         }
+        return controls;
+    }
+
+    // todo: refactor
+    async applyConfig(config: WebcamPresetValues) {
+        this.setLoading();
+
+        if (!this.detachedWebcamWindowActive) {
+            document.getElementById("video").style.visibility = "hidden";
+        }
+
+        this.viewWebcam = config;
+        this.webcamFormGroup.markAsPristine();
+
+        for (const field in this.webcamFormGroup.controls) {
+            this.webcamFormGroup.get(field).setValue(config[field]);
+        }
+        let [webcamWidth, webcamHeight] = config["resolution"].split("x");
 
         let webcamConfig = {
             deviceId: { exact: this.selectedWebcamId },
@@ -509,24 +529,27 @@ export class CameraSettingsComponent implements OnInit {
             frameRate: { exact: Number(config["fps"]) },
         };
 
+        let controls = this.getControls(config);
+
+        await this.stopWebcam();
+
         if (!this.detachedWebcamWindowActive) {
             await this.setWebcamWithConfig(webcamConfig);
+            await this.executeCameraCtrlsList(controls);
+
+            setTimeout(async () => {
+                document.getElementById("video").style.visibility = "visible";
+                this.unsetLoading();
+                this.cdref.detectChanges();
+            }, 500);
         }
 
-        // todo: set webcam settings after applying on external window shows preview
         if (this.detachedWebcamWindowActive) {
             this.electron.ipcRenderer.send(
                 "setting-webcam-with-loading",
                 webcamConfig
             );
         }
-        await this.executeCameraCtrlsList(controls);
-
-        // applying configuration requires time, adding delay to not show transition
-        setTimeout(async () => {
-            document.getElementById("video").style.visibility = "visible";
-            this.unsetLoading();
-        }, 500);
     }
 
     public async getDefaultSettings(settings: WebcamDeviceInformation[]) {
@@ -550,13 +573,12 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    // todo: rename or adjust function
     async getDefaultWebcamConfig(webcamId: string) {
         let [webcamWidth, webcamHeight] = this.getOptionValue(
             "resolution",
-            "current"
+            "default"
         ).split("x");
-        let fps = this.getOptionValue("fps", "current");
+        let fps = this.getOptionValue("fps", "default");
         return {
             deviceId: { exact: webcamId },
             width: { exact: Number(webcamWidth) },

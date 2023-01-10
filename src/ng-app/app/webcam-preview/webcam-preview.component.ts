@@ -27,12 +27,20 @@ export class WebcamPreviewComponent implements OnInit {
         this.electron.ipcRenderer.on(
             "setting-webcam-with-loading",
             async (event, webcamConfig) => {
+                document.getElementById("video").style.visibility = "hidden";
+
                 this.spinnerActive = true;
                 this.cdref.detectChanges();
                 await this.stopWebcam();
                 await this.setWebcamWithConfig(webcamConfig);
-                this.spinnerActive = false;
-                this.cdref.detectChanges();
+                this.electron.ipcRenderer.send("apply-controls");
+                setTimeout(async () => {
+                    document.getElementById("video").style.visibility =
+                        "visible";
+
+                    this.spinnerActive = false;
+                    this.cdref.detectChanges();
+                }, 500);
             }
         );
     }

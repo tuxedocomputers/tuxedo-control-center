@@ -371,6 +371,10 @@ ipcMain.on("close-webcam-preview", (event, arg) => {
     cameraWindow = null;
 });
 
+ipcMain.on("apply-controls", (event) => {
+    tccWindow.webContents.send("apply-controls");
+});
+
 async function getProfiles(): Promise<TccProfile[]> {
     const dbus = new TccDBusController();
     await dbus.init();
