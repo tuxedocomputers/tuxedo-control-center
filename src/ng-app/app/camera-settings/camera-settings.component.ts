@@ -111,7 +111,7 @@ export class CameraSettingsComponent implements OnInit {
             this.selectedWebcamId = webcamData[0].id;
         });
 
-        this.loadingConfigDataFromJSON();
+        await this.loadingConfigDataFromJSON();
     }
 
     ngAfterContentChecked() {
@@ -231,10 +231,23 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    // todo: utilize unplug event
-    checkWebcamStatus() {
-        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
-            console.log("someone unplugged the webcam");
+    async cameraUnpluggedDialog() {
+        let config = {
+            title: "Camera unplugged",
+            description: "Camera got unplugged.",
+            buttonConfirmLabel: "Continue",
+        };
+        this.utils.confirmDialog(config).then();
+    }
+
+    async checkIfUnplugged() {
+        this.mediaDeviceStream.getVideoTracks()[0].onended = async () => {
+            await this.cameraUnpluggedDialog();
+            // todo: handle case where no webcam is available
+            await this.mapCameraPathsToDevice().then(async (webcamData) => {
+                this.selectedWebcamId = webcamData[0].id;
+            });
+            await this.loadingConfigDataFromJSON();
         };
     }
 
@@ -442,6 +455,7 @@ export class CameraSettingsComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
+        await this.checkIfUnplugged();
     }
 
     unsetLoading() {
@@ -661,17 +675,34 @@ export class CameraSettingsComponent implements OnInit {
         return this.getWebcamInformation()["label"].match(/\((.*:.*)\)/)[1];
     }
 
-    // todo: utilize for configuration of values
     public mouseup() {
-        //console.log("Mouse Up");
         if (this.timer) {
             clearInterval(this.timer);
         }
     }
 
-    public mousedown() {
+    valueOffsetFunc(configParameter: string, offset: any) {
+        this.webcamFormGroup.get(configParameter).markAsDirty();
+
+        let min = this.getOptionValue(configParameter, "min");
+        let max = this.getOptionValue(configParameter, "max");
+        let newValue =
+            this.webcamFormGroup.controls[configParameter].value + offset;
+        if (newValue < min) {
+            newValue = min;
+        } else if (newValue > max) {
+            newValue = max;
+        }
+
+        this.webcamFormGroup.controls[configParameter].setValue(newValue);
+        this.executeCameraCtrls(configParameter, newValue);
+        this.cdref.detectChanges();
+    }
+
+    public mousedown(preset: any, offset: any) {
+        this.valueOffsetFunc(preset, offset);
         this.timer = setInterval(() => {
-            //console.log("Mouse Down");
+            this.valueOffsetFunc(preset, offset);
         }, 200);
     }
 

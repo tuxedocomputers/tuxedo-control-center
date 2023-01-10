@@ -109,10 +109,13 @@
                                                 <content class="value">
                                                     {{ getPercentValue(webcamConfig) }} %
                                                 </content>
-                                                <button mat-icon-button color="primary">
+                                                <button mat-icon-button color="primary"
+                                                    (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
+                                                    (mouseup)="mouseup()" (mouseleave)="mouseup()">
                                                     <mat-icon>remove</mat-icon>
                                                 </button>
-                                                <button mat-icon-button color="primary" (mousedown)="mousedown()"
+                                                <button mat-icon-button color="primary"
+                                                    (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
                                                     (mouseup)="mouseup()" (mouseleave)="mouseup()">
                                                     <mat-icon>add</mat-icon>
                                                 </button>
@@ -215,12 +218,14 @@
                                                         <content class="value">
                                                             {{ getPercentValue(webcamConfig, webcamConfig.value) }} %
                                                         </content>
-                                                        <button mat-icon-button color="primary">
+                                                        <button mat-icon-button color="primary"
+                                                            (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
+                                                            (mouseup)="mouseup()" (mouseleave)="mouseup()">
                                                             <mat-icon>remove</mat-icon>
                                                         </button>
                                                         <button mat-icon-button color="primary"
-                                                            (mousedown)="mousedown()" (mouseup)="mouseup()"
-                                                            (mouseleave)="mouseup()">
+                                                            (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
+                                                            (mouseup)="mouseup()" (mouseleave)="mouseup()">
                                                             <mat-icon>add</mat-icon>
                                                         </button>
                                                     </mat-grid-tile>
