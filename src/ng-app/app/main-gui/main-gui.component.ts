@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
@@ -29,8 +29,7 @@ import { UtilsService } from '../utils.service';
 @Component({
   selector: 'app-main-gui',
   templateUrl: './main-gui.component.html',
-  styleUrls: ['./main-gui.component.scss'],
-  encapsulation: ViewEncapsulation.None // allows CSS overriding
+  styleUrls: ['./main-gui.component.scss']
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
 
