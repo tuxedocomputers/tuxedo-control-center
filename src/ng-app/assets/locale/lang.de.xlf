@@ -1360,6 +1360,14 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="menuLanguage" datatype="html" approved="yes">
+        <source>Language</source>
+        <target phase-name="approval-1" >Sprache</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="menuSupport" datatype="html" approved="yes">
         <source>Support</source>
         <target phase-name="approval-1" state="signed-off">Support</target>

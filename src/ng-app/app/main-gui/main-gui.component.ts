@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
@@ -29,7 +29,8 @@ import { UtilsService } from '../utils.service';
 @Component({
   selector: 'app-main-gui',
   templateUrl: './main-gui.component.html',
-  styleUrls: ['./main-gui.component.scss']
+  styleUrls: ['./main-gui.component.scss'],
+  encapsulation: ViewEncapsulation.None // allows CSS overriding
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
 
@@ -129,6 +130,12 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.updateLanguageName();
     }
 
+    // this allows the "mat-select" language list to open while using the existing UI as a trigger, instead of the regular "mat-select-trigger"
+    @ViewChild('selectLang') selectLang;
+    openSelectLang() {
+        this.selectLang.toggle();
+    }
+
     //old version with only two languages
     /* 
     public updateLanguageName(): void {
@@ -141,6 +148,10 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         let nextLangIndex: number = (curLangIndex + 1) % this.utils.getLanguagesMenuArray().length
         let nextLangLabel: string = this.utils.getLanguagesMenuArray()[nextLangIndex].label
         this.buttonLanguageLabel = nextLangLabel;
+    }
+
+    public languageOptionDisabled(langId: string){
+        return (this.utils.getCurrentLanguageId() === langId ? true : false);
     }
 
     public getStateInputs(): IStateInfo[] {

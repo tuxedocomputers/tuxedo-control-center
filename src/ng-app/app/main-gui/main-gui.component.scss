@@ -158,6 +158,7 @@
     overflow-y: auto;
 }
 
+/* unused
 .language-select {
     mat-select-trigger {
         display: flex;
@@ -167,5 +168,15 @@
         mat-icon {
             margin-right: 16px;
         }
+
+        
     }
 }
+*/
+
+.mat-select-arrow { 
+    opacity: 0; 
+}
+
+
+
