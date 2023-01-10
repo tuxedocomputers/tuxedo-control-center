@@ -16,24 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {
-    Component,
-    HostBinding,
-    OnInit,
-    OnDestroy,
-    ChangeDetectorRef,
-} from "@angular/core";
-import { ElectronService } from "ngx-electron";
-import { fromEvent, Subscription } from "rxjs";
-import { UtilsService } from "./utils.service";
+import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
+import { fromEvent, Subscription } from 'rxjs';
+import { UtilsService } from './utils.service';
 
 @Component({
-    selector: "app-root",
-    templateUrl: "./app.component.html",
-    styleUrls: ["./app.component.scss"],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    @HostBinding("class") componentThemeCssClass;
+
+    @HostBinding('class') componentThemeCssClass;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -44,22 +39,11 @@ export class AppComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        this.subscriptions.add(
-            this.utils.themeClass.subscribe((themeClassName) => {
-                this.componentThemeCssClass = themeClassName;
-            })
-        );
+        this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Register light/dark update from main process
-        const observeBrightnessMode = fromEvent(
-            this.electron.ipcRenderer,
-            "update-brightness-mode"
-        );
-        this.subscriptions.add(
-            observeBrightnessMode.subscribe(() =>
-                this.utils.updateBrightnessMode()
-            )
-        );
+        const observeBrightnessMode = fromEvent(this.electron.ipcRenderer, 'update-brightness-mode');
+        this.subscriptions.add(observeBrightnessMode.subscribe(() => this.utils.updateBrightnessMode()));
 
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
