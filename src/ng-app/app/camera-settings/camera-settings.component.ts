@@ -13,7 +13,12 @@ import { UtilsService } from "../utils.service";
 import { ChangeDetectorRef } from "@angular/core";
 import { WebcamGuardService } from "../webcam.service";
 import { setInterval, clearInterval } from "timers";
-import { FormControl } from "@angular/forms";
+import {
+    AbstractControl,
+    FormControl,
+    ValidationErrors,
+    ValidatorFn,
+} from "@angular/forms";
 import { FormGroup } from "@angular/forms";
 import { ConfigHandler } from "src/common/classes/ConfigHandler";
 import { TccPaths } from "src/common/classes/TccPaths";
@@ -431,15 +436,43 @@ export class CameraSettingsComponent implements OnInit {
         return config_stuff;
     }
 
+    setFormgroupValidator(setting: any): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            let errors = null;
+            const value = control.value;
+            if (setting.type == "slider") {
+                if (value < setting.min) {
+                    errors = { min: setting.min, actual: value };
+                }
+                if (value > setting.max) {
+                    errors = { max: setting.max, actual: value };
+                }
+            }
+            if (setting.type == "bool") {
+                if (typeof value != "boolean")
+                    errors = { type: "boolean", actual: typeof value };
+            }
+            if (setting.type == "menu") {
+                if (!setting.options.includes(value)) {
+                    errors = { options: setting.options, actual: value };
+                }
+            }
+            return errors;
+        };
+    }
+
     convertSettingsToFormGroup(settings: WebcamDeviceInformation[]) {
         this.presetSettings = settings;
         let group = {};
         let categories = [];
         settings.forEach((setting) => {
-            group[setting.name] = new FormControl({
-                value: setting.current,
-                disabled: !setting.active,
-            });
+            group[setting.name] = new FormControl(
+                {
+                    value: setting.current,
+                    disabled: !setting.active,
+                },
+                this.setFormgroupValidator(setting)
+            );
             categories.push(setting.category);
         });
         this.webcamCategories = [...new Set(categories)];
@@ -520,6 +553,28 @@ export class CameraSettingsComponent implements OnInit {
         return controls;
     }
 
+    checkIfFormgroupValid() {
+        let valid = true;
+        Object.keys(this.webcamFormGroup.controls).forEach((key) => {
+            const controlErrors: ValidationErrors =
+                this.webcamFormGroup.get(key).errors;
+            if (controlErrors != null) {
+                valid = false;
+            }
+        });
+        return valid;
+    }
+
+    async notValidPresetDialog() {
+        let config = {
+            title: "Camera preset faulty",
+            description:
+                "Camera preset contains invalid configurations and therefore won't be applied. Reverting to default preset.",
+            buttonConfirmLabel: "Continue",
+        };
+        this.utils.confirmDialog(config).then();
+    }
+
     // todo: refactor
     async applyConfig(config: WebcamPresetValues) {
         this.setLoading();
@@ -534,6 +589,13 @@ export class CameraSettingsComponent implements OnInit {
         for (const field in this.webcamFormGroup.controls) {
             this.webcamFormGroup.get(field).setValue(config[field]);
         }
+
+        if (!this.checkIfFormgroupValid()) {
+            await this.notValidPresetDialog();
+            this.applyConfig(this.defaultSettings);
+            return;
+        }
+
         let [webcamWidth, webcamHeight] = config["resolution"].split("x");
 
         let webcamConfig = {
