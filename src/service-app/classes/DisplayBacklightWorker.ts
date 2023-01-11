@@ -123,8 +123,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
                 brightnessRaw = Math.round((brightnessPercent * maxBrightness) / 100);
 
                 if (recheck && (currentBrightnessRaw !== brightnessRaw)) {
-                    this.tccd.logLine('DisplayBacklightWorker: Brightness not as expexted for '
-                    + controller.driver + ', applying value again..');
+                    this.tccd.logLine('DisplayBacklightWorker: Brightness not as expected for '
+                        + controller.driver + ', applying value again..');
                 }
                 if (!recheck) {
                     this.tccd.logLine('Set display brightness to '
