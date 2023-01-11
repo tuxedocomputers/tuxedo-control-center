@@ -25,6 +25,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
 
     private controllers: DisplayBacklightController[];
     private basePath = '/sys/class/backlight';
+    private useAutosave = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(3000, tccd);
@@ -57,10 +58,13 @@ export class DisplayBacklightWorker extends DaemonWorker {
         }
 
         // Write brightness percentage to driver(s)
-        this.writeBrightness(brightnessPercent);
-        // Recheck workaround for late loaded drivers and drivers that are not ready although
-        // already presenting an interface
-        setTimeout(() => { this.writeBrightness(brightnessPercent, true) }, 2000);
+        if (this.useAutosave || currentProfile.display.useBrightness) {
+            this.writeBrightness(brightnessPercent);
+
+            // Recheck workaround for late loaded drivers and drivers that are not ready although
+            // already presenting an interface
+            setTimeout(() => { this.writeBrightness(brightnessPercent, true) }, 2000);
+        }
     }
 
     public onWork(): void {
