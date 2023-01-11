@@ -1,3 +1,11 @@
+<!-- todo: making it visually better -->
+<div class="webcam-settings-edit">
+    No webcams found
+    <button id="basic" type="button" mat-button (click)="reloadWebcamList()">
+        reload webcams
+    </button>
+</div>
+
 <div class="webcam-settings-edit" [hidden]="!webcamInitComplete" [formGroup]="webcamFormGroup">
     <mat-card-title class="profile-title">
         <div></div>

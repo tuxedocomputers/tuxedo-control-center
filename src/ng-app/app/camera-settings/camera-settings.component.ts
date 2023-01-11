@@ -111,12 +111,22 @@ export class CameraSettingsComponent implements OnInit {
             })
         );
 
-        // todo: handle case where no webcam is available
-        await this.mapCameraPathsToDevice().then(async (webcamData) => {
-            this.selectedWebcamId = webcamData[0].id;
-        });
+        this.reloadWebcamList();
+    }
 
-        await this.loadingConfigDataFromJSON();
+    async reloadWebcamList() {
+        await this.mapCameraPathsToDevice().then(async (webcamData) => {
+            if (webcamData.length == 0) {
+                this.stopWebcam();
+                this.unsetLoading();
+                // todo: trying to make it cleaner
+                this.webcamInitComplete = false;
+                return;
+            } else {
+                this.selectedWebcamId = webcamData[0].id;
+                await this.loadingConfigDataFromJSON();
+            }
+        });
     }
 
     ngAfterContentChecked() {
@@ -248,11 +258,7 @@ export class CameraSettingsComponent implements OnInit {
     async checkIfUnplugged() {
         this.mediaDeviceStream.getVideoTracks()[0].onended = async () => {
             await this.cameraUnpluggedDialog();
-            // todo: handle case where no webcam is available
-            await this.mapCameraPathsToDevice().then(async (webcamData) => {
-                this.selectedWebcamId = webcamData[0].id;
-            });
-            await this.loadingConfigDataFromJSON();
+            this.reloadWebcamList();
         };
     }
 
