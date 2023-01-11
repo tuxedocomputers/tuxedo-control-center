@@ -1,13 +1,13 @@
 # Changelog
 
-## [] - UNRELEASED
+## [1.2.4] - 2023-01-11
 ### Changed
 - Display backlight brightness now only set when explicitly chosen in profile
+
 ### Fixed
 - Inadvertently blended out profile edit system control area now visible again
 - Fan availability conditions tweaked to not falsely show fan control for
   unsupported devices
-
 
 ## [1.2.3] - 2022-12-21
 ### Added
