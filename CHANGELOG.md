@@ -1,6 +1,8 @@
 # Changelog
 
 ## [] - UNRELEASED
+### Changed
+- Display backlight brightness now only set when explicitly chosen in profile
 ### Fixed
 - Inadvertently blended out profile edit system control area now visible again
 - Fan availability conditions tweaked to not falsely show fan control for
