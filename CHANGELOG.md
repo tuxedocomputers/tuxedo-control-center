@@ -1,5 +1,12 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Inadvertently blended out profile edit system control area now visible again
+- Fan availability conditions tweaked to not falsely show fan control for
+  unsupported devices
+
+
 ## [1.2.3] - 2022-12-21
 ### Added
 - Battery charging options for a number of devices
