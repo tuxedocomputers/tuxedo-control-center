@@ -56,7 +56,7 @@ export class CompatibilityService {
   }
 
   get hasFanInfo(): boolean {
-    return this.tccDbus.tuxedoWmiAvailable.value;
+    return this.hasFanControl;
   }
 
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
@@ -67,7 +67,7 @@ export class CompatibilityService {
     if (boardName === "GMxRGxx") {
       return false;
     }*/
-    return this.tccDbus.tuxedoWmiAvailable.value;
+    return this.tccDbus.tuxedoWmiAvailable.value && this.tccDbus.fanData.value.cpu.temp.data.value > 1;
   }
 
   get fanControlCompatibilityMessage(): string {
