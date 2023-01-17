@@ -20,6 +20,7 @@ import * as fs from 'fs';
 
 export class UserConfig {
     private data: object;
+    private inProgress = false;
 
     constructor(private configFile: string) {
         if (configFile === undefined) { throw Error('No config path defined'); }
@@ -27,28 +28,43 @@ export class UserConfig {
         this.validateValues();
     }
 
+    private async setInProgress() {
+        while (this.inProgress) await new Promise(resolve => setTimeout(resolve, 10));
+        this.inProgress = true;
+    }
+
+    private async setProgressDone() {
+        this.inProgress = false;
+    }
+
     public async set(property: string, value: string) {
+        await this.setInProgress();
         try {
             await this.readConfig();
         } catch (err) {
             if (err.code === 'ENOENT') {
                 console.log('Config file (' + this.configFile + ') does not exist. Will be created.');
             } else {
+                await this.setProgressDone();
                 throw err;
             }
         }
         this.data[property] = value;
         await this.writeConfig();
+        await this.setProgressDone();
     }
 
     public async get(property: string): Promise<string> {
+        await this.setInProgress();
         try {
             await this.readConfig();
         } catch (err) {
             if (err.code !== 'ENOENT') {
+                await this.setProgressDone();
                 throw err;
             }
         }
+        await this.setProgressDone();
         return this.data[property];
     }
 

@@ -63,11 +63,7 @@ export class UtilsService {
         this.languageMap[lang.id] = lang;
       }
 
-      if (localStorage.getItem('themeClass')) {
-        this.themeClass = new BehaviorSubject<string>(localStorage.getItem('themeClass'));
-      } else {
-        this.themeClass = new BehaviorSubject<string>('light-theme');
-      }
+      this.themeClass = new BehaviorSubject(undefined);
     }
 
   public async execCmd(command: string): Promise<Buffer> {
@@ -190,10 +186,24 @@ export class UtilsService {
     return this.themeClass.value;
   }
 
+  public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
+    return await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
+  }
+
+  public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {
+    return await this.electron.ipcRenderer.invoke('get-brightness-mode');
+  }
+
+  public async getShouldUseDarkColors(): Promise<boolean> {
+    return this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
+  }
+
+  /**
+   * Note: Only for updating web part, to change behaviour use setBrightnessMode
+   */
   public setThemeClass(className: string) {
     this.overlayContainer.getContainerElement().classList.add(className);
     this.themeClass.next(className);
-    localStorage.setItem('themeClass', className);
   }
 
   public setThemeLight() {
@@ -203,6 +213,14 @@ export class UtilsService {
   public setThemeDark() {
     this.setThemeClass('dark-theme');
   }
+
+  public async updateBrightnessMode() {
+    if (await this.getShouldUseDarkColors()) {
+        this.setThemeDark();
+    } else {
+        this.setThemeLight();
+    }
+}
 
   public async confirmDialog(config: ConfirmDialogData): Promise<ConfirmDialogResult> {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {

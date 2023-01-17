@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -188,5 +188,13 @@ export class TccDBusClientService implements OnDestroy {
   public async setTempProfileById(profileId: string) {
     const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
     return result;
+  }
+
+  public getInterface(): TccDBusController | undefined {
+    if (this.isAvailable) {
+        return this.tccDBusInterface;
+    } else {
+        return undefined;
+    }
   }
 }

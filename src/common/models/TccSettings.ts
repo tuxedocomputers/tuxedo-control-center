@@ -49,6 +49,8 @@ export interface ITccSettings {
     cpuSettingsEnabled: boolean;
     fanControlEnabled: boolean;
     ycbcr420Workaround: Array<Object>;
+    chargingProfile: string | null;
+    chargingPriority: string | null;
     keyboardBacklightBrightness: number;
     keyboardBacklightColorMode: KeyboardBacklightColorModes;
     keyboardBacklightColor: Array<number>;
@@ -63,6 +65,8 @@ export const defaultSettings: ITccSettings = {
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
     ycbcr420Workaround: [],
+    chargingProfile: null,
+    chargingPriority: null,
     keyboardBacklightBrightness: undefined, // undefined is interpreted as "default brightness" aka 50% by tccd
     keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
     keyboardBacklightColor: []
@@ -77,6 +81,8 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
     ycbcr420Workaround: [],
+    chargingProfile: null,
+    chargingPriority: null,
     keyboardBacklightBrightness: 0,
     keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
     keyboardBacklightColor: []

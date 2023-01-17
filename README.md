@@ -30,7 +30,7 @@ tuxedo-control-center
 1. Install git, gcc, g++, make, nodejs, npm and libudev-dev \
    Ex (deb):
    ```
-   curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+   curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
    sudo apt install -y git gcc g++ make nodejs libudev-dev
    ```
