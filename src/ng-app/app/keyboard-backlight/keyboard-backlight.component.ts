@@ -204,6 +204,7 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onKeyboardImageClick(zone: number) {
+        console.log(zone);
         if (this.keyboardBacklightCapabilities.zones > 1) {
             this.selectedZone = zone;
         }
