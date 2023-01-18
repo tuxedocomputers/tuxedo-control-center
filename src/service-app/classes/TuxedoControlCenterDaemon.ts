@@ -78,6 +78,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.config = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
+            TccPaths.WEBCAM_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -214,12 +215,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } else {
                 throw Error('Failed to stop daemon');
             }
-        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
+        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles') || process.argv.includes('--new_webcam')) {
             // If new config is specified, replace standard config with new config
             const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
+            const webcamSaved = this.saveNewConfig<ITccProfile[]>('--new_webcam', this.config.pathWebcam, this.config.webcamFileMod);
+
             // If something changed, reload configs
-            if (settingsSaved || profilesSaved) {
+            if (settingsSaved || profilesSaved || webcamSaved) {
                 const pidNumber = this.readPid();
                 if (isNaN(pidNumber)) {
                     console.log('Failed to locate running tccd process. Cannot reload config.');
@@ -563,16 +566,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (profile.cpu.onlineCores === undefined) {
             profile.cpu.onlineCores = cpu.cores.length;
         }
-    
+
         if (profile.cpu.useMaxPerfGov === undefined) {
             profile.cpu.useMaxPerfGov = false;
         }
-    
+
         const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
         if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
             profile.cpu.scalingMinFrequency = minFreq;
         }
-    
+
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
         let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
@@ -595,34 +598,34 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } else if (profile.cpu.scalingMaxFrequency > maxFreq) {
             profile.cpu.scalingMaxFrequency = maxFreq;
         }
-    
+
         if (profile.cpu.governor === undefined) {
             profile.cpu.governor = defaultCustomProfile.cpu.governor;
         }
-    
+
         if (profile.cpu.energyPerformancePreference === undefined) {
             profile.cpu.energyPerformancePreference = defaultCustomProfile.cpu.energyPerformancePreference;
         }
-    
+
         if (profile.cpu.noTurbo === undefined) {
             profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
         }
-    
+
         if (profile.webcam === undefined) {
             profile.webcam = {
                 useStatus: false,
                 status: true
             };
         }
-    
+
         if (profile.webcam.useStatus === undefined) {
             profile.webcam.useStatus = false;
         }
-    
+
         if (profile.webcam.status === undefined) {
             profile.webcam.status = true;
         }
-    
+
         if (profile.fan === undefined) {
             profile.fan = {
                 useControl: true,

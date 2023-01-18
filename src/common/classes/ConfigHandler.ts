@@ -29,6 +29,7 @@ import { WebcamPreset } from '../models/TccWebcamSettings';
 export class ConfigHandler {
     public settingsFileMod: number;
     public profileFileMod: number;
+    public webcamFileMod: number;
     public autosaveFileMod: number;
     public fantablesFileMod: number;
 
@@ -36,9 +37,10 @@ export class ConfigHandler {
     private loadedSettings: ITccSettings;
 
     // tslint:disable-next-line: variable-name
-    constructor(private _pathSettings: string, private _pathProfiles: string, private _pathAutosave: string, private _pathFantables) {
+    constructor(private _pathSettings: string, private _pathProfiles: string, private _pathWebcam: string, private _pathAutosave: string, private _pathFantables) {
         this.settingsFileMod = 0o644;
         this.profileFileMod = 0o644;
+        this.webcamFileMod = 0o644;
         this.autosaveFileMod = 0o644;
         this.fantablesFileMod = 0o644;
     }
@@ -47,6 +49,8 @@ export class ConfigHandler {
     set pathSettings(filename: string) { this._pathSettings = filename; }
     get pathProfiles() { return this._pathProfiles; }
     set pathProfiles(filename: string) { this._pathProfiles = filename; }
+    get pathWebcam() { return this._pathWebcam; }
+    set pathWebcam(filename: string) { this._pathWebcam = filename; }
     get pathAutosave() { return this._pathAutosave; }
     set pathAutosave(filename: string) { this._pathAutosave = filename; }
     get pathFanTables() { return this._pathFantables; }
@@ -56,7 +60,7 @@ export class ConfigHandler {
         return this.readConfig<ITccSettings>(filePath);
     }
 
-    readWebcamSettings(filePath: string = this.pathSettings): WebcamPreset[] {
+    readWebcamSettings(filePath: string = this.pathWebcam): WebcamPreset[] {
         return this.readConfig<WebcamPreset[]>(filePath);
     }
 

@@ -37,6 +37,7 @@ export interface WebcamPresetValues {
 }
 
 export interface WebcamDevice {
+    deviceId: string;
     id: string;
     label: string;
     path: string;
@@ -47,4 +48,8 @@ export interface WebcamConstraints {
     frameRate: number | { exact: number };
     height: number | { exact: number };
     width: number | { exact: number };
+}
+
+export interface WebcamPath {
+    [key: string]: string;
 }

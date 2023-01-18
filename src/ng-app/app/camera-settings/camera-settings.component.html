@@ -62,14 +62,13 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input">
-                                    <mat-select name="selectedWebcamId" [(value)]="selectedWebcamId"
+                                    <mat-select name="selectedCamera" [(value)]="selectedCamera"
                                         placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
-                                        <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam.id">
+                                        <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam">
                                             {{ webcam.label }}
                                         </mat-option>
                                     </mat-select>
-
-                                    <button mat-icon-button color="primary" (click)="setWebcamDeviceInformation()">
+                                    <button mat-icon-button color="primary" (click)="reloadWebcamList()">
                                         <mat-icon>refresh</mat-icon>
                                     </button>
 
@@ -86,7 +85,7 @@
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input">
 
-                                    <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparer"
+                                    <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
                                         [ngModelOptions]="{standalone: true}"
                                         (selectionChange)="applyConfig($event.value.webcamSettings)">
                                         <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config">
