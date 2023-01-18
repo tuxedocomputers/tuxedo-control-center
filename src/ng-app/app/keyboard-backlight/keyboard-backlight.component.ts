@@ -152,7 +152,6 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onBrightnessSliderInput(event: any) {
-        console.log("input");
         this.brightnessSliderInUsage = true;
         clearTimeout(this.brightnessSliderInUsageReset);
         this.brightnessSliderInUsageReset = setTimeout(() => {
@@ -163,7 +162,6 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onBrightnessSliderChange(event: any) {
-        console.log("changed");
         clearTimeout(this.brightnessSliderInUsageReset);
         this.brightnessSliderInUsageReset = setTimeout(() => {
             this.brightnessSliderInUsage = false;
@@ -204,7 +202,6 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public onKeyboardImageClick(zone: number) {
-        console.log(zone);
         if (this.keyboardBacklightCapabilities.zones > 1) {
             this.selectedZone = zone;
         }
