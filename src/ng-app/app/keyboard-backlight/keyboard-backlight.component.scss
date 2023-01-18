@@ -32,6 +32,7 @@ content.value {
 }
 
 .key-group {
+    stroke:darkslategrey;
     &.key-background-unselected .key_outline {
         stroke:darkslategrey;
     }
@@ -39,8 +40,8 @@ content.value {
         stroke:slategrey;
     }
     &:hover {
-        .key_outline,
-        .key_outline {
+        &.key-background-selected .key_outline,
+        &.key-background-selected .key_outline {
             stroke:LightGrey;
         }
     }
