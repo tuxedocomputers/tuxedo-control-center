@@ -74,6 +74,7 @@ export class ConfigService implements OnDestroy {
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
+            TccPaths.UDEV_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -300,19 +301,21 @@ export class ConfigService implements OnDestroy {
         });
     }
 
-
-    public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[]): Promise<boolean> {
+    public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[], udev: string): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const tmpWebcamPath = '/tmp/tmptccwebcam';
+            const tmpUdevPath = '/tmp/tmpudev';
             this.config.writeWebcamSettings(settings, tmpWebcamPath);
+            this.config.writeUdevSettings(udev, tmpUdevPath);
             let tccdExec: string;
             if (environment.production) {
                 tccdExec = TccPaths.TCCD_EXEC_FILE;
             } else {
                 tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
             }
+
             this.utils.execFile(
-                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
+                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath + ' --set_udev ' + tmpUdevPath
             ).then(data => {
                 resolve(true);
             }).catch(error => {
@@ -321,7 +324,7 @@ export class ConfigService implements OnDestroy {
         });
     }
 
-
+    
     private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const tmpProfilesPath = '/tmp/tmptccprofiles';

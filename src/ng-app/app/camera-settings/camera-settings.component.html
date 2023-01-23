@@ -68,7 +68,7 @@
                                             {{ webcam.label }}
                                         </mat-option>
                                     </mat-select>
-                                    <button mat-icon-button color="primary" (click)="reloadWebcamList()">
+                                    <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedCamera)">
                                         <mat-icon>refresh</mat-icon>
                                     </button>
 
@@ -87,7 +87,7 @@
 
                                     <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
                                         [ngModelOptions]="{standalone: true}"
-                                        (selectionChange)="applyConfig($event.value.webcamSettings)">
+                                        (selectionChange)="applyConfig($event.value.webcamSettings, true)">
                                         <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config">
                                             {{ config.presetName }}
                                         </mat-option>

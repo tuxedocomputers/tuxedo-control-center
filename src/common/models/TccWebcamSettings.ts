@@ -13,6 +13,7 @@ export interface WebcamDeviceInformation {
 }
 
 export interface WebcamPreset {
+    active: boolean;
     presetName: string;
     webcamId: string;
     webcamSettings: WebcamPresetValues;

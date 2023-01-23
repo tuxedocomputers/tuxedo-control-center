@@ -46,6 +46,7 @@ import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { ChargingWorker } from './ChargingWorker';
+import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
 const tccPackage = require('../../package.json');
 
@@ -79,6 +80,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
+            TccPaths.UDEV_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -215,14 +217,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } else {
                 throw Error('Failed to stop daemon');
             }
-        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles') || process.argv.includes('--new_webcam')) {
+        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles') || process.argv.includes('--new_webcam') || process.argv.includes('--set_udev')) {
             // If new config is specified, replace standard config with new config
             const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            const webcamSaved = this.saveNewConfig<ITccProfile[]>('--new_webcam', this.config.pathWebcam, this.config.webcamFileMod);
+            const webcamSaved = this.saveNewConfig<WebcamPreset[]>('--new_webcam', this.config.pathWebcam, this.config.webcamFileMod);
+            const udevSaved = this.saveNewConfig<string>('--set_udev', this.config.pathUdev, this.config.udevFileMod, false);
 
             // If something changed, reload configs
-            if (settingsSaved || profilesSaved || webcamSaved) {
+            if (settingsSaved || profilesSaved || webcamSaved || udevSaved) {
                 const pidNumber = this.readPid();
                 if (isNaN(pidNumber)) {
                     console.log('Failed to locate running tccd process. Cannot reload config.');
@@ -681,13 +684,21 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      *
      * @returns True if file is correctly parsed and written, false otherwise
      */
-    private saveNewConfig<T>(optionString: string, targetConfigPath: string, writeFileMode: number) {
+    private saveNewConfig<T>(optionString: string, targetConfigPath: string, writeFileMode: number, jsonParse: boolean = true) {
         const newConfigPath = this.getPathArgument(optionString);
         if (newConfigPath !== '') {
             try {
-                const newConfig: T = this.config.readConfig<T>(newConfigPath);
+                // todo: refactor?
+                let newConfig: any
+                if (jsonParse) {
+                    newConfig = this.config.readConfig<T>(newConfigPath);
+                }
+                if (!jsonParse) {
+                    newConfig = this.config.readConfigString(newConfigPath);
+                }
+
                 try {
-                    this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
+                    this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode }, jsonParse);
                 } catch (err) {
                     this.logLine('Error on write option ' + optionString);
                     return false;
