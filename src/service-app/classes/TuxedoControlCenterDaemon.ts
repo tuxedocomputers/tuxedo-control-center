@@ -223,6 +223,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
             const webcamSaved = this.saveNewConfig<WebcamPreset[]>('--new_webcam', this.config.pathWebcam, this.config.webcamFileMod);
             const udevSaved = this.saveNewConfig<string>('--set_udev', this.config.pathUdev, this.config.udevFileMod, false);
+            if (process.argv.includes('--set_udev')) {
+                await this.reloadUdevRules()
+            }
 
             // If something changed, reload configs
             if (settingsSaved || profilesSaved || webcamSaved || udevSaved) {
@@ -421,6 +424,18 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.logLine('Failed to write default fan tables: ' + this.config.pathFanTables);
             }
         }*/
+    }
+
+    private reloadUdevRules() {
+        return new Promise((resolve, reject) => {
+            child_process.exec("sudo udevadm control --reload-rules && sudo udevadm trigger", (err, stdout, stderr) => {
+                if (err) {
+                    resolve({ data: stderr, error: err });
+                } else {
+                    resolve({ data: stdout, error: err });
+                }
+            });
+        });
     }
 
     private setupSignalHandling() {

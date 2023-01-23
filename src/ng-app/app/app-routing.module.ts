@@ -29,7 +29,7 @@ import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { CameraSettingsComponent } from './camera-settings/camera-settings.component';
 import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
-import { WebcamGuardService } from './webcam.service';
+import { WebcamGuardService, CanDeactivateGuard } from './webcam.service';
 
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
@@ -42,7 +42,7 @@ const routes: Routes = [
             { path: 'info', component: InfoComponent, canActivate: [WebcamGuardService] },
             { path: 'cpu-dashboard', component: CpuDashboardComponent, canActivate: [WebcamGuardService] },
             { path: 'tools', component: ToolsComponent, canActivate: [WebcamGuardService] },
-            { path: 'camera-settings', component: CameraSettingsComponent, canActivate: [WebcamGuardService] },
+            { path: 'camera-settings', component: CameraSettingsComponent, canActivate: [WebcamGuardService], canDeactivate: [CanDeactivateGuard] },
             { path: 'global-settings', component: GlobalSettingsComponent, canActivate: [WebcamGuardService] },
             { path: 'aquaris-control', component: AquarisControlComponent, canActivate: [WebcamGuardService] }
         ]

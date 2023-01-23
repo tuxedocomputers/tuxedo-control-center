@@ -216,7 +216,7 @@ export class CameraSettingsComponent implements OnInit {
     async setWebcamDeviceInformation(): Promise<WebcamDevice[]> {
         let devices = await this.getWebcamDevices();
         return new Promise<WebcamDevice[]>((resolve) => {
-            let dropdownData = [];
+            let dropdownData: WebcamDevice[] = [];
             this.getWebcamPaths().then((webcamPaths) => {
                 for (const [cameraPath, cameraId] of Object.entries(
                     webcamPaths
