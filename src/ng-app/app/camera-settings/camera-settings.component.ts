@@ -208,6 +208,10 @@ export class CameraSettingsComponent implements OnInit {
         for (const device of devices) {
             let deviceId = device.label.match(/\((.*:.*)\)/)[1];
             if (deviceId == cameraId) {
+                const index = devices.indexOf(device, 0);
+                if (index > -1) {
+                    devices.splice(index, 1);
+                }
                 return [device.label, device.deviceId];
             }
         }
@@ -351,6 +355,17 @@ export class CameraSettingsComponent implements OnInit {
         this.detachedWebcamWindowActive = true;
     }
 
+    // using list with matching ids instead of one path value in case multiple devices have same id
+    getPathsWithId(id: string) {
+        let webcamPaths: string[] = [];
+        this.webcamDropdownData.forEach((x) => {
+            if (x.id == id) {
+                webcamPaths.push(x.path);
+            }
+        });
+        return webcamPaths;
+    }
+
     public async setSliderValue(sliderValue: number, configParameter: string) {
         this.mutex.runExclusive(() => {
             this.executeCameraCtrls(configParameter, sliderValue);
@@ -358,11 +373,14 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     async executeCameraCtrls(parameter: string, value: number | string) {
-        this.utils.execCmd(
-            "python3 " +
-                this.electron.process.cwd() +
-                `/src/cameractrls/cameractrls.py -d ${this.selectedCamera.path} -c ${parameter}=${value}`
-        );
+        let webcamPaths = this.getPathsWithId(this.selectedWebcamId);
+        webcamPaths.forEach(async (devicePath) => {
+            this.utils.execCmd(
+                "python3 " +
+                    this.electron.process.cwd() +
+                    `/src/cameractrls/cameractrls.py -d ${devicePath} -c ${parameter}=${value}`
+            );
+        });
     }
 
     async executeCameraCtrlsList(controls) {
@@ -373,11 +391,14 @@ export class CameraSettingsComponent implements OnInit {
             }
         });
 
-        await this.utils.execCmd(
-            "python3 " +
-                this.electron.process.cwd() +
-                `/src/cameractrls/cameractrls.py -d ${this.selectedCamera.path} -c ${controlStr}`
-        );
+        let webcamPaths = this.getPathsWithId(this.selectedWebcamId);
+        webcamPaths.forEach(async (devicePath) => {
+            this.utils.execCmd(
+                "python3 " +
+                    this.electron.process.cwd() +
+                    `/src/cameractrls/cameractrls.py -d ${devicePath} -c ${controlStr}`
+            );
+        });
     }
 
     setWhiteBalanceDisabledStatus(configParameter: String, checked: Boolean) {
@@ -405,6 +426,7 @@ export class CameraSettingsComponent implements OnInit {
                 configParameter,
                 String(Number(checked))
             );
+
             this.setWhiteBalanceDisabledStatus(configParameter, checked);
 
             // white_balance_temperature must be set after disabling auto to take effect and small delay required
@@ -422,13 +444,13 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    setMenuConfigValue(configParameter: string, option: string) {
-        this.executeCameraCtrls(configParameter, option);
+    async setMenuConfigValue(configParameter: string, option: string) {
+        await this.executeCameraCtrls(configParameter, option);
 
         // exposure_absolute must be set after disabling auto to take effect
         // todo: check if other laptops have the same naming scheme
         if (configParameter == "exposure_auto" && option == "manual_mode") {
-            this.executeCameraCtrls(
+            await this.executeCameraCtrls(
                 "exposure_absolute",
                 this.webcamFormGroup.get("exposure_absolute").value
             );
@@ -812,7 +834,7 @@ export class CameraSettingsComponent implements OnInit {
         }
     }
 
-    valueOffsetFunc(configParameter: string, offset: number) {
+    async valueOffsetFunc(configParameter: string, offset: number) {
         this.webcamFormGroup.get(configParameter).markAsDirty();
 
         let min = this.getOptionValue(configParameter, "min");
@@ -826,7 +848,7 @@ export class CameraSettingsComponent implements OnInit {
         }
 
         this.webcamFormGroup.controls[configParameter].setValue(newValue);
-        this.executeCameraCtrls(configParameter, newValue);
+        await this.executeCameraCtrls(configParameter, newValue);
         this.cdref.detectChanges();
     }
 
