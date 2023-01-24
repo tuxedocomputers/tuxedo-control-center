@@ -158,6 +158,7 @@ export class KeyboardBacklightComponent implements OnInit {
             this.brightnessSliderInUsage = false;
         }, 2000);
         let colorHex = (this.chosenColorHex === undefined) || (this.chosenColorHex.length == 0) ? undefined : this.chosenColorHex;
+        this.chosenBrightness = event.value;
         this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(event.value, colorHex));
     }
 
