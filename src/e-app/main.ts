@@ -375,6 +375,10 @@ ipcMain.on("apply-controls", (event) => {
     tccWindow.webContents.send("apply-controls");
 });
 
+ipcMain.on("video-ended", (event) => {
+    tccWindow.webContents.send("video-ended");
+});
+
 async function getProfiles(): Promise<TccProfile[]> {
     const dbus = new TccDBusController();
     await dbus.init();

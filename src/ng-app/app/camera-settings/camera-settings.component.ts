@@ -112,10 +112,20 @@ export class CameraSettingsComponent implements OnInit {
             "external-camera-preview-closed"
         );
         this.subscriptions.add(
-            cameraWindowObservable.subscribe(async () => {
+            cameraWindowObservable.subscribe(() => {
                 this.detachedWebcamWindowActive = false;
                 document.getElementById("hidden").style.display = "flex";
                 this.applyPreset(this.webcamFormGroup.getRawValue());
+            })
+        );
+
+        const videoEndedObservable = fromEvent(
+            this.electron.ipcRenderer,
+            "video-ended"
+        );
+        this.subscriptions.add(
+            videoEndedObservable.subscribe(() => {
+                this.handleVideoEnded();
             })
         );
 
@@ -267,11 +277,9 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    private checkIfUnplugged() {
-        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
-            this.cameraUnpluggedDialog();
-            this.reloadWebcamList();
-        };
+    private handleVideoEnded() {
+        this.cameraUnpluggedDialog();
+        this.reloadWebcamList();
     }
 
     private stopWebcam() {
@@ -519,7 +527,9 @@ export class CameraSettingsComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
-        this.checkIfUnplugged();
+        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
+            this.handleVideoEnded();
+        };
     }
 
     private unsetLoading() {

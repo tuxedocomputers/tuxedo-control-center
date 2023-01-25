@@ -44,7 +44,6 @@ export class WebcamPreviewComponent implements OnInit {
         );
     }
 
-    // todo: handle situation where webcam gets unplugged while external window is visible
     private async setWebcamWithConfig(
         config: WebcamConstraints
     ): Promise<void> {
@@ -56,6 +55,9 @@ export class WebcamPreviewComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
+        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
+            this.electron.ipcRenderer.send("video-ended");
+        };
     }
 
     private stopWebcam() {
