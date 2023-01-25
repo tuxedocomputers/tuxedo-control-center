@@ -43,10 +43,6 @@
                     <hr />
                 </div>
 
-                <button id="basic" type="button" mat-button (click)="openWindow()">
-                    Open Window
-                </button>
-
                 <div class="webcam" id="hidden">
                     <video #video id="video" width="640" height="480" autoplay="false"></video>
                     <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
@@ -54,54 +50,60 @@
 
                 <mat-card-content class="content">
                     <div>
-                        <!-- webcam -->
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                <header>Webcam</header>
-                            </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input">
-                                    <mat-select name="selectedCamera" [(value)]="selectedCamera"
-                                        placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
-                                        <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam">
-                                            {{ webcam.label }}
-                                        </mat-option>
-                                    </mat-select>
-                                    <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedCamera)">
-                                        <mat-icon>refresh</mat-icon>
-                                    </button>
-
-                                </content>
-                            </mat-grid-tile>
-
-                        </mat-grid-list>
-                        <!-- presets -->
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                <header>Preset</header>
-                            </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                <content class="input">
-
-                                    <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
-                                        [ngModelOptions]="{standalone: true}"
-                                        (selectionChange)="applyPreset($event.value.webcamSettings, true, true)">
-                                        <mat-option *ngFor="let preset of webcamPresetsCurrentDevice" [value]="preset">
-                                            {{ preset.presetName }}
-                                        </mat-option>
-                                    </mat-select>
-
-                                    <button mat-icon-button color="primary" (click)="deletePreset()">
-                                        <mat-icon>delete_forever</mat-icon>
-                                    </button>
-
-                                </content>
-                            </mat-grid-tile>
-                        </mat-grid-list>
                         <!-- EASY MODE -->
                         <ng-container *ngIf="easyModeActive">
+                            <!-- WEBCAM -->
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                    <header>Webcam</header>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <content class="input">
+                                        <mat-select name="selectedCamera" [(value)]="selectedCamera"
+                                            placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
+                                            <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam">
+                                                {{ webcam.label }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <button mat-icon-button color="primary"
+                                            (click)="reloadWebcamList(selectedCamera)">
+                                            <mat-icon>refresh</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="primary" [hidden]="detachedWebcamWindowActive"
+                                            (click)="openWindow()">
+                                            <mat-icon>open_in_new</mat-icon>
+                                        </button>
+                                    </content>
+                                </mat-grid-tile>
+
+                            </mat-grid-list>
+                            <!-- PRESETS -->
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                    <header>Preset</header>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <content class="input">
+
+                                        <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (selectionChange)="applyPreset($event.value.webcamSettings, true, true)">
+                                            <mat-option *ngFor="let preset of webcamPresetsCurrentDevice"
+                                                [value]="preset">
+                                                {{ preset.presetName }}
+                                            </mat-option>
+                                        </mat-select>
+
+                                        <button mat-icon-button color="primary" (click)="deletePreset()">
+                                            <mat-icon>delete_forever</mat-icon>
+                                        </button>
+
+                                    </content>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                            <!-- SETTINGS -->
                             <ng-container *ngFor="let webcamConfig of getWebcamSettingNames()">
                                 <ng-container *ngIf="easyOptions.includes(webcamConfig)">
                                     <!-- SLIDER -->
@@ -142,6 +144,7 @@
                                                         [hidden]="!webcamFormGroup.get(webcamConfig).dirty && !webcamFormGroup.get(webcamConfig).disabled">
                                                         <mat-icon>undo</mat-icon>
                                                     </button>
+
                                                 </content>
                                             </mat-grid-tile>
                                         </mat-grid-list>
@@ -191,7 +194,6 @@
                                                         </mat-option>
                                                     </mat-select>
                                                 </content>
-                                                <!-- <content class="input">{{ option }}</content> -->
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
@@ -200,6 +202,71 @@
                         </ng-container>
                         <!-- ADVANCED MODE -->
                         <ng-container *ngIf="!easyModeActive">
+                            <mat-accordion class="example-headers-align" multi class="list-group-item">
+                                <mat-expansion-panel (opened)="handleRegionPanelStateChange(webcamCategory, true)"
+                                    (closed)="handleRegionPanelStateChange(webcamCategory, false)"
+                                    [expanded]="expandedRegions[webcamCategory]">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            General
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <!-- WEBCAM -->
+                                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                        class="profile-details-edit-grid">
+                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                            <header>Webcam</header>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                            <content class="input">
+                                                <mat-select name="selectedCamera" [(value)]="selectedCamera"
+                                                    placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
+                                                    <mat-option *ngFor="let webcam of webcamDropdownData"
+                                                        [value]="webcam">
+                                                        {{ webcam.label }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <button mat-icon-button color="primary"
+                                                    (click)="reloadWebcamList(selectedCamera)">
+                                                    <mat-icon>refresh</mat-icon>
+                                                </button>
+                                                <button mat-icon-button color="primary"
+                                                    [hidden]="detachedWebcamWindowActive" (click)="openWindow()">
+                                                    <mat-icon>open_in_new</mat-icon>
+                                                </button>
+                                            </content>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                    <!-- PRESETS -->
+                                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+                                        class="profile-details-edit-grid">
+                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                            <header>Preset</header>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                            <content class="input">
+
+                                                <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (selectionChange)="applyPreset($event.value.webcamSettings, true, true)">
+                                                    <mat-option *ngFor="let preset of webcamPresetsCurrentDevice"
+                                                        [value]="preset">
+                                                        {{ preset.presetName }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <button mat-icon-button color="primary" (click)="deletePreset()">
+                                                    <mat-icon>delete_forever</mat-icon>
+                                                </button>
+
+                                            </content>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                            <!-- SETTINGS -->
                             <ng-container *ngFor="let webcamCategory of webcamCategories">
                                 <mat-accordion class="example-headers-align" multi class="list-group-item">
                                     <mat-expansion-panel (opened)="handleRegionPanelStateChange(webcamCategory, true)"
@@ -312,11 +379,12 @@
                                 </mat-accordion>
                             </ng-container>
                         </ng-container>
-                        <button id=" basic" type="button" mat-button (click)="showAdvancedSettings()">
+                        <button class="advanced-settings-button" id=" basic" type="button" [hidden]="!easyModeActive" mat-button
+                            (click)="showAdvancedSettings()">
                             Advanced Settings
                         </button>
-
-                        <button id="basic" type="button" mat-button (click)="disableAdvancedSettings()">
+                        <button class="advanced-settings-button" id="basic" type="button" [hidden]="easyModeActive" mat-button
+                            (click)="disableAdvancedSettings()">
                             Disable Advanced Settings
                         </button>
                     </div>
