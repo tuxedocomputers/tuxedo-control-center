@@ -9,7 +9,6 @@ import {
     WebcamPresetValues,
     WebcamPath,
 } from "src/common/models/TccWebcamSettings";
-import { CompatibilityService } from "../compatibility.service";
 import { UtilsService } from "../utils.service";
 import { ChangeDetectorRef } from "@angular/core";
 import { WebcamGuardService } from "../webcam.service";
@@ -35,7 +34,7 @@ import { ConfigService } from "../config.service";
 })
 export class CameraSettingsComponent implements OnInit {
     // from profile settings
-    public gridParams = {
+    gridParams = {
         cols: 9,
         headerSpan: 4,
         valueSpan: 2,
@@ -43,11 +42,10 @@ export class CameraSettingsComponent implements OnInit {
     };
 
     @ViewChild("video", { static: true })
-    public video: ElementRef;
+    video: ElementRef;
     mediaDeviceStream: MediaStream;
 
     expandedRegions: { [key: string]: boolean } = {};
-    newWindow = null;
     timer: NodeJS.Timeout = null;
     subscriptions: Subscription = new Subscription();
     mutex = new Mutex();
@@ -56,21 +54,17 @@ export class CameraSettingsComponent implements OnInit {
     detachedWebcamWindowActive: Boolean = false;
 
     webcamDropdownData: WebcamDevice[] = [];
-    selectedWebcamDeviceId: string;
-    selectedWebcamId: string;
     webcamInitComplete: boolean = false;
-    webcamConfig: WebcamConstraints = undefined;
-    notThisWebcamConfigs: WebcamPreset[] = [];
-    thisWebcamConfigs: WebcamPreset[] = [];
+    webcamPresetsOtherDevices: WebcamPreset[] = [];
+    webcamPresetsCurrentDevice: WebcamPreset[] = [];
     webcamFormGroup: FormGroup = new FormGroup({});
     webcamCategories: string[] = [];
 
-    presetDataFromJson: WebcamPreset[];
+    allPresetData: WebcamPreset[];
     presetSettings: WebcamDeviceInformation[];
     defaultPreset: WebcamPreset;
     selectedPreset: WebcamPreset;
     selectedCamera: WebcamDevice;
-    allPresets: WebcamPreset[];
 
     defaultSettings: WebcamPresetValues;
     viewWebcam: WebcamPresetValues;
@@ -82,7 +76,6 @@ export class CameraSettingsComponent implements OnInit {
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
-        public compat: CompatibilityService,
         private cdref: ChangeDetectorRef,
         private webcamGuard: WebcamGuardService,
         private config: ConfigService
@@ -108,10 +101,9 @@ export class CameraSettingsComponent implements OnInit {
         );
         this.subscriptions.add(
             cameraApplyObservable.subscribe(async () => {
-                let controls = this.getControls(
+                await this.executeCameraCtrlsList(
                     this.webcamFormGroup.getRawValue()
                 );
-                await this.executeCameraCtrlsList(controls);
             })
         );
 
@@ -123,42 +115,40 @@ export class CameraSettingsComponent implements OnInit {
             cameraWindowObservable.subscribe(async () => {
                 this.detachedWebcamWindowActive = false;
                 document.getElementById("hidden").style.display = "flex";
-                this.applyConfig(this.webcamFormGroup.getRawValue());
+                this.applyPreset(this.webcamFormGroup.getRawValue());
             })
         );
 
         await this.reloadWebcamList();
     }
 
-    public async reloadWebcamList(webcamDevice?: WebcamDevice) {
+    public async reloadWebcamList(
+        webcamDeviceReference?: WebcamDevice
+    ): Promise<void> {
         if (this.mutex.isLocked()) return;
         this.mutex.runExclusive(async () => {
             let webcamData = await this.setWebcamDeviceInformation();
             this.webcamDropdownData = webcamData;
             if (webcamData.length == 0) {
-                await this.stopWebcam();
-                // todo: trying to make it cleaner
+                this.stopWebcam();
                 this.webcamInitComplete = false;
                 this.webcamGuard.setLoadingStatus(false);
                 this.utils.pageDisabled = false;
                 this.cdref.detectChanges();
                 return;
             } else {
-                if (webcamDevice == undefined) {
-                    this.selectedWebcamDeviceId = webcamData[0].deviceId;
-                    this.selectedWebcamId = webcamData[0].id;
+                if (webcamDeviceReference == undefined) {
                     this.selectedCamera = webcamData[0];
                 }
-
-                if (webcamDevice != undefined) {
+                if (webcamDeviceReference != undefined) {
                     let filtered = webcamData.filter(
-                        (x) => x.deviceId == webcamDevice.deviceId
+                        (webcamDevice) =>
+                            webcamDevice.deviceId ==
+                            webcamDeviceReference.deviceId
                     );
-                    this.selectedWebcamDeviceId = filtered[0].deviceId;
-                    this.selectedWebcamId = filtered[0].id;
                     this.selectedCamera = filtered[0];
                 }
-                await this.loadingConfigDataFromJSON();
+                await this.loadingPresetData();
                 this.unsetLoading();
             }
         });
@@ -168,7 +158,7 @@ export class CameraSettingsComponent implements OnInit {
         this.cdref.detectChanges();
     }
 
-    getWebcamPaths() {
+    private getWebcamPaths(): Promise<WebcamPath> {
         return new Promise<WebcamPath>((resolve) => {
             this.utils
                 .execFile(
@@ -186,7 +176,7 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    getWebcamDevices() {
+    private getWebcamDevices(): Promise<(InputDeviceInfo | MediaDeviceInfo)[]> {
         return new Promise<(InputDeviceInfo | MediaDeviceInfo)[]>((resolve) => {
             navigator.mediaDevices
                 .enumerateDevices()
@@ -201,7 +191,7 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    getDeviceData(
+    private getDeviceData(
         devices: (InputDeviceInfo | MediaDeviceInfo)[],
         cameraId: string
     ): [string, string] {
@@ -217,7 +207,7 @@ export class CameraSettingsComponent implements OnInit {
         }
     }
 
-    async setWebcamDeviceInformation(): Promise<WebcamDevice[]> {
+    private async setWebcamDeviceInformation(): Promise<WebcamDevice[]> {
         let devices = await this.getWebcamDevices();
         return new Promise<WebcamDevice[]>((resolve) => {
             let dropdownData: WebcamDevice[] = [];
@@ -241,7 +231,7 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    async cameraNotAvailabledDialog() {
+    private async cameraNotAvailabledDialog(): Promise<void> {
         let config = {
             title: "Camera can not be accessed",
             description: "Camera can not be accessed.",
@@ -250,7 +240,7 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    public getCameraSettings(): Promise<string> {
+    private getCameraSettings(): Promise<string> {
         return new Promise<string>((resolve) => {
             this.utils
                 .execFile(
@@ -268,7 +258,7 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    async cameraUnpluggedDialog() {
+    private cameraUnpluggedDialog() {
         let config = {
             title: "Camera unplugged",
             description: "Camera got unplugged.",
@@ -277,15 +267,15 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    async checkIfUnplugged() {
-        this.mediaDeviceStream.getVideoTracks()[0].onended = async () => {
-            await this.cameraUnpluggedDialog();
+    private checkIfUnplugged() {
+        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
+            this.cameraUnpluggedDialog();
             this.reloadWebcamList();
         };
     }
 
-    async stopWebcam() {
-        await this.video.nativeElement.pause();
+    private stopWebcam() {
+        this.video.nativeElement.pause();
         if (this.mediaDeviceStream != undefined) {
             for (const track of this.mediaDeviceStream.getTracks()) {
                 track.stop();
@@ -294,88 +284,82 @@ export class CameraSettingsComponent implements OnInit {
         this.video.nativeElement.srcObject = null;
     }
 
-    setLoading() {
+    private setLoading() {
         this.spinnerActive = true;
         this.webcamGuard.setLoadingStatus(true);
         this.cdref.detectChanges();
     }
 
-    public async setWebcam(webcamPreset: WebcamDevice) {
+    public async setWebcam(webcamPreset: WebcamDevice): Promise<void> {
         this.setLoading();
-        await this.stopWebcam();
-        this.selectedWebcamId = webcamPreset.id;
-        this.selectedWebcamDeviceId = webcamPreset.deviceId;
+        this.stopWebcam();
         await this.reloadConfigValues();
-        await this.filterPresetsForCurrentDevice();
+        this.filterPresetsForCurrentDevice();
+        this.selectedCamera = webcamPreset;
 
-        let webcamConfig = await this.getDefaultWebcamConfig(
-            webcamPreset.deviceId
+        let preset = this.defaultSettings;
+        let filtered = this.webcamPresetsCurrentDevice.filter(
+            (webcamPreset) =>
+                webcamPreset.presetName != "Default" &&
+                webcamPreset.active == true
         );
 
-        if (this.detachedWebcamWindowActive) {
-            this.electron.ipcRenderer.send(
-                "setting-webcam-with-loading",
-                webcamConfig
-            );
+        if (filtered.length > 0) {
+            this.selectedPreset = filtered[0];
+            preset = filtered[0].webcamSettings;
         }
-
-        if (!this.detachedWebcamWindowActive) {
-            // todo: or set active to false in default?
-            let filtered = this.thisWebcamConfigs.filter(
-                (x) => x.active == true && x.presetName != "Default"
-            );
-
-            if (filtered.length > 0) {
-                this.selectedPreset = filtered[0];
-                await this.applyConfig(filtered[0].webcamSettings);
-            } else {
-                await this.applyConfig(this.defaultSettings);
-            }
-        }
+        await this.applyPreset(preset, false, true);
     }
 
-    getCurrentWebcamConfig() {
+    private getCurrentWebcamConstraints(): WebcamConstraints {
         let [webcamWidth, webcamHeight] = this.webcamFormGroup
             .getRawValue()
             ["resolution"].split("x");
         let fps = this.webcamFormGroup.getRawValue()["fps"];
         return {
-            deviceId: { exact: this.selectedWebcamDeviceId },
+            deviceId: { exact: this.selectedCamera.deviceId },
             width: { exact: Number(webcamWidth) },
             height: { exact: Number(webcamHeight) },
             frameRate: { exact: Number(fps) },
         };
     }
 
-    public async openWindow() {
-        await this.stopWebcam();
+    public async openWindow(): Promise<void> {
+        this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
-        let webcamConfig = this.getCurrentWebcamConfig();
+        let webcamConfig = this.getCurrentWebcamConstraints();
         this.electron.ipcRenderer.send("create-webcam-preview", webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
 
     // using list with matching ids instead of one path value in case multiple devices have same id
-    getPathsWithId(id: string) {
+    private getPathsWithId(id: string): string[] {
         let webcamPaths: string[] = [];
-        this.webcamDropdownData.forEach((x) => {
-            if (x.id == id) {
-                webcamPaths.push(x.path);
+        this.webcamDropdownData.forEach((webcamDevice) => {
+            if (webcamDevice.id == id) {
+                webcamPaths.push(webcamDevice.path);
             }
         });
         return webcamPaths;
     }
 
-    public async setSliderValue(sliderValue: number, configParameter: string) {
+    public async setSliderValue(
+        sliderValue: number,
+        configParameter: string
+    ): Promise<void> {
         this.mutex.runExclusive(() => {
             this.executeCameraCtrls(configParameter, sliderValue);
         });
     }
 
-    async executeCameraCtrls(parameter: string, value: number | string) {
-        let webcamPaths = this.getPathsWithId(this.selectedWebcamId);
+    private async executeCameraCtrls(
+        parameter: string,
+        value: number | string
+    ): Promise<void> {
+        let webcamPaths = this.getPathsWithId(this.selectedCamera.id);
+
         webcamPaths.forEach(async (devicePath) => {
-            this.utils.execCmd(
+            await this.utils.execCmd(
                 "python3 " +
                     this.electron.process.cwd() +
                     `/src/cameractrls/cameractrls.py -d ${devicePath} -c ${parameter}=${value}`
@@ -383,17 +367,25 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    async executeCameraCtrlsList(controls) {
+    private async executeCameraCtrlsList(
+        controls: WebcamPresetValues
+    ): Promise<void> {
         let controlStr = "";
-        Object.entries(controls).forEach((x) => {
-            if (x[1] != undefined) {
-                controlStr = controlStr + `${x[0]}=${x[1]},`;
+        Object.entries(controls).forEach((webcamPresetEntry) => {
+            if (
+                webcamPresetEntry[1] != undefined &&
+                webcamPresetEntry[0] != "fps" &&
+                webcamPresetEntry[0] != "resolution"
+            ) {
+                controlStr =
+                    controlStr +
+                    `${webcamPresetEntry[0]}=${webcamPresetEntry[1]},`;
             }
         });
 
-        let webcamPaths = this.getPathsWithId(this.selectedWebcamId);
+        let webcamPaths = this.getPathsWithId(this.selectedCamera.id);
         webcamPaths.forEach(async (devicePath) => {
-            this.utils.execCmd(
+            await this.utils.execCmd(
                 "python3 " +
                     this.electron.process.cwd() +
                     `/src/cameractrls/cameractrls.py -d ${devicePath} -c ${controlStr}`
@@ -401,33 +393,16 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    setWhiteBalanceDisabledStatus(configParameter: String, checked: Boolean) {
-        let whiteBalanceTemperatureAvailable =
-            this.webcamFormGroup.get("white_balance_temperature") != null;
-        if (
-            configParameter == "white_balance_temperature_auto" &&
-            checked == true &&
-            whiteBalanceTemperatureAvailable
-        ) {
-            this.webcamFormGroup.get("white_balance_temperature").disable();
-        }
-        if (
-            configParameter == "white_balance_temperature_auto" &&
-            checked == false &&
-            whiteBalanceTemperatureAvailable
-        ) {
-            this.webcamFormGroup.get("white_balance_temperature").enable();
-        }
-    }
-
-    public async setCheckboxValue(checked: Boolean, configParameter: string) {
+    public async setCheckboxValue(
+        checked: Boolean,
+        configParameter: string
+    ): Promise<void> {
         this.mutex.runExclusive(async () => {
             await this.executeCameraCtrls(
                 configParameter,
                 String(Number(checked))
             );
-
-            this.setWhiteBalanceDisabledStatus(configParameter, checked);
+            this.setSliderEnabledStatus(this.webcamFormGroup.getRawValue());
 
             // white_balance_temperature must be set after disabling auto to take effect and small delay required
             if (
@@ -444,7 +419,10 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    async setMenuConfigValue(configParameter: string, option: string) {
+    public async setMenuConfigValue(
+        configParameter: string,
+        option: string
+    ): Promise<void> {
         await this.executeCameraCtrls(configParameter, option);
 
         // exposure_absolute must be set after disabling auto to take effect
@@ -457,46 +435,35 @@ export class CameraSettingsComponent implements OnInit {
         }
     }
 
-    setExposureDisabledStatus(configParameter: string, option: string) {
-        if (
-            configParameter == "exposure_auto" &&
-            option == "aperture_priority_mode"
-        ) {
-            this.webcamFormGroup.get("exposure_absolute").disable();
-        }
-
-        if (configParameter == "exposure_auto" && option == "manual_mode") {
-            this.webcamFormGroup.get("exposure_absolute").enable();
-        }
-    }
-
     public async setOptionsMenuValue(
         event: MatOptionSelectionChange,
         configParameter: string,
         option: string
-    ) {
+    ): Promise<void> {
         if (event.isUserInput) {
             this.mutex.runExclusive(async () => {
                 this.setLoading();
                 this.webcamFormGroup.get(configParameter).markAsDirty();
-                this.setExposureDisabledStatus(configParameter, option);
-                this.webcamFormGroup.controls[configParameter].setValue(option);
-                await this.applyConfig(this.webcamFormGroup.getRawValue());
+                this.webcamFormGroup.get(configParameter).setValue(option);
+
+                this.setSliderEnabledStatus(this.webcamFormGroup.getRawValue());
+                await this.applyPreset(this.webcamFormGroup.getRawValue());
             });
         }
     }
 
-    convertFormgroupToSettings(presetName: string) {
-        let config_stuff: WebcamPreset = {
+    private getWebcamPreset(presetName: string): WebcamPreset {
+        return {
             presetName: presetName,
             active: true,
-            webcamId: this.selectedWebcamId,
+            webcamId: this.selectedCamera.id,
             webcamSettings: this.webcamFormGroup.getRawValue(),
         };
-        return config_stuff;
     }
 
-    setFormgroupValidator(setting: WebcamDeviceInformation): ValidatorFn {
+    private setFormgroupValidator(
+        setting: WebcamDeviceInformation
+    ): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
             let errors = null;
             const value = control.value;
@@ -521,7 +488,9 @@ export class CameraSettingsComponent implements OnInit {
         };
     }
 
-    convertSettingsToFormGroup(settings: WebcamDeviceInformation[]) {
+    private convertSettingsToFormGroup(
+        settings: WebcamDeviceInformation[]
+    ): FormGroup {
         this.presetSettings = settings;
         let group = {};
         let categories = [];
@@ -539,7 +508,9 @@ export class CameraSettingsComponent implements OnInit {
         return new FormGroup(group);
     }
 
-    async setWebcamWithConfig(config: WebcamConstraints): Promise<void> {
+    private async setWebcamWithConfig(
+        config: WebcamConstraints
+    ): Promise<void> {
         await navigator.mediaDevices
             .getUserMedia({
                 video: config,
@@ -548,10 +519,10 @@ export class CameraSettingsComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
-        await this.checkIfUnplugged();
+        this.checkIfUnplugged();
     }
 
-    unsetLoading() {
+    private unsetLoading() {
         this.spinnerActive = false;
         this.webcamGuard.setLoadingStatus(false);
         this.utils.pageDisabled = false;
@@ -559,55 +530,45 @@ export class CameraSettingsComponent implements OnInit {
         this.cdref.detectChanges();
     }
 
-    getWebcamSettingNames() {
+    public getWebcamSettingNames(): string[] {
         return Object.keys(this.webcamFormGroup.getRawValue());
     }
 
-    checkIfPresetNameAvailable(checkPresetName: string): boolean {
+    private checkIfPresetNameAvailable(checkPresetName: string): boolean {
         let presetNames: string[] = [];
-        this.thisWebcamConfigs.forEach((preset) => {
+        this.webcamPresetsCurrentDevice.forEach((preset) => {
             presetNames.push(preset.presetName);
         });
         return !presetNames.includes(checkPresetName);
     }
 
-    getControls(config: WebcamPresetValues) {
-        let controls = [];
-        for (const field in this.webcamFormGroup.controls) {
-            if (field != "resolution" && field != "fps") {
-                if (
-                    "white_balance_temperature_auto" in config &&
-                    "white_balance_temperature" in config
-                ) {
-                    if (config.white_balance_temperature_auto) {
-                        this.webcamFormGroup
-                            .get("white_balance_temperature")
-                            .disable();
-                    }
-                    if (!config.white_balance_temperature_auto) {
-                        this.webcamFormGroup
-                            .get("white_balance_temperature")
-                            .enable();
-                    }
-                }
-                if (
-                    "exposure_auto_priority" in config &&
-                    "exposure_absolute" in config
-                ) {
-                    if (config.exposure_auto == "aperture_priority_mode") {
-                        this.webcamFormGroup.get("exposure_absolute").disable();
-                    }
-                    if (config.exposure_auto != "aperture_priority_mode") {
-                        this.webcamFormGroup.get("exposure_absolute").enable();
-                    }
-                }
-                controls[field] = config[field];
+    // Some configurations depend on each other and while one is active, another can't be active
+    private setSliderEnabledStatus(config: WebcamPresetValues) {
+        if (
+            "white_balance_temperature_auto" in config &&
+            "white_balance_temperature" in config
+        ) {
+            if (config.white_balance_temperature_auto) {
+                this.webcamFormGroup.get("white_balance_temperature").disable();
+            }
+            if (!config.white_balance_temperature_auto) {
+                this.webcamFormGroup.get("white_balance_temperature").enable();
             }
         }
-        return controls;
+        if (
+            "exposure_auto_priority" in config &&
+            "exposure_absolute" in config
+        ) {
+            if (config.exposure_auto == "aperture_priority_mode") {
+                this.webcamFormGroup.get("exposure_absolute").disable();
+            }
+            if (config.exposure_auto != "aperture_priority_mode") {
+                this.webcamFormGroup.get("exposure_absolute").enable();
+            }
+        }
     }
 
-    checkIfFormgroupValid() {
+    private checkIfFormgroupValid(): Boolean {
         let valid = true;
         Object.keys(this.webcamFormGroup.controls).forEach((key) => {
             const controlErrors: ValidationErrors =
@@ -619,7 +580,7 @@ export class CameraSettingsComponent implements OnInit {
         return valid;
     }
 
-    async notValidPresetDialog() {
+    private notValidPresetDialog() {
         let config = {
             title: "Camera preset faulty",
             description:
@@ -629,23 +590,24 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    createWebcamConfig(config: WebcamPresetValues) {
+    private createWebcamConfig(config: WebcamPresetValues): WebcamConstraints {
         let [webcamWidth, webcamHeight] = config["resolution"].split("x");
         return {
-            deviceId: { exact: this.selectedWebcamDeviceId },
+            deviceId: { exact: this.selectedCamera.deviceId },
             width: { exact: Number(webcamWidth) },
             height: { exact: Number(webcamHeight) },
             frameRate: { exact: Number(config["fps"]) },
         };
     }
 
-    async applyConfig(
+    public async applyPreset(
         config: WebcamPresetValues,
-        markAsPristine: boolean = false
-    ) {
+        markAsPristine: boolean = false,
+        setViewWebcam: boolean = false
+    ): Promise<void> {
         this.mutex.runExclusive(async () => {
             this.setLoading();
-            await this.stopWebcam();
+            this.stopWebcam();
 
             if (markAsPristine) {
                 this.webcamFormGroup.markAsPristine();
@@ -655,27 +617,23 @@ export class CameraSettingsComponent implements OnInit {
                 document.getElementById("video").style.visibility = "hidden";
             }
 
-            for (const field in this.webcamFormGroup.controls) {
-                this.webcamFormGroup.get(field).setValue(config[field]);
-            }
-
+            this.webcamFormGroup.setValue(config);
             if (!this.checkIfFormgroupValid()) {
-                await this.notValidPresetDialog();
-                this.applyConfig(this.defaultSettings);
+                this.notValidPresetDialog();
+                this.applyPreset(this.defaultSettings);
                 return;
             }
 
             let webcamConfig = this.createWebcamConfig(config);
-            let controls = this.getControls(config);
+            this.setSliderEnabledStatus(config);
 
             if (!this.detachedWebcamWindowActive) {
                 await this.setWebcamWithConfig(webcamConfig);
-                await this.executeCameraCtrlsList(controls);
+                await this.executeCameraCtrlsList(config);
                 await this.setTimeout(500);
 
                 document.getElementById("video").style.visibility = "visible";
                 this.unsetLoading();
-                this.cdref.detectChanges();
             }
 
             if (this.detachedWebcamWindowActive) {
@@ -684,10 +642,13 @@ export class CameraSettingsComponent implements OnInit {
                     webcamConfig
                 );
             }
+            if (setViewWebcam) {
+                this.viewWebcam = config;
+            }
         });
     }
 
-    public async getDefaultSettings(settings: WebcamDeviceInformation[]) {
+    private setDefaultSettings(settings: WebcamDeviceInformation[]) {
         this.defaultSettings = {};
         settings.forEach((setting) => {
             if (setting.default != undefined) {
@@ -698,52 +659,37 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    public async reloadConfigValues() {
+    private async reloadConfigValues(): Promise<void> {
         await this.getCameraSettings().then(async (data) => {
             this.webcamFormGroup = this.convertSettingsToFormGroup(
                 JSON.parse(data)
             );
-            await this.getDefaultSettings(JSON.parse(data));
             this.viewWebcam = this.webcamFormGroup.getRawValue();
+            this.setDefaultSettings(JSON.parse(data));
         });
     }
 
-    async getDefaultWebcamConfig(webcamId: string) {
-        let [webcamWidth, webcamHeight] = this.getOptionValue(
-            "resolution",
-            "default"
-        ).split("x");
-        let fps = this.getOptionValue("fps", "default");
-        return {
-            deviceId: { exact: webcamId },
-            width: { exact: Number(webcamWidth) },
-            height: { exact: Number(webcamHeight) },
-            frameRate: { exact: Number(fps) },
-        };
-    }
-
-    async filterPresetsForCurrentDevice() {
-        this.thisWebcamConfigs = [];
-        this.notThisWebcamConfigs = [];
+    private filterPresetsForCurrentDevice() {
+        this.webcamPresetsCurrentDevice = [];
+        this.webcamPresetsOtherDevices = [];
         this.setDefaultPreset();
-        this.allPresets = this.presetDataFromJson;
 
-        if (this.presetDataFromJson != undefined) {
-            this.presetDataFromJson = this.presetDataFromJson.filter(
-                (x) => x.presetName != "Default"
+        if (this.allPresetData != undefined) {
+            this.allPresetData = this.allPresetData.filter(
+                (webcamPreset) => webcamPreset.presetName != "Default"
             );
 
-            this.presetDataFromJson.forEach((config) => {
-                if (config.webcamId == this.selectedWebcamId) {
-                    this.thisWebcamConfigs.push(config);
+            this.allPresetData.forEach((config) => {
+                if (config.webcamId == this.selectedCamera.id) {
+                    this.webcamPresetsCurrentDevice.push(config);
                 } else {
-                    this.notThisWebcamConfigs.push(config);
+                    this.webcamPresetsOtherDevices.push(config);
                 }
             });
         }
     }
 
-    askOverwritePreset(presetName: string) {
+    private askOverwritePreset(presetName: string) {
         let config = {
             title: "Preset name not avaiable",
             description: "Do you want to overwrite the preset?",
@@ -757,42 +703,42 @@ export class CameraSettingsComponent implements OnInit {
         });
     }
 
-    async savePreset(presetName: string) {
+    private async savePreset(presetName: string): Promise<void> {
         this.utils.pageDisabled = true;
-        let preset = this.convertFormgroupToSettings(presetName);
+        let preset = this.getWebcamPreset(presetName);
 
-        let webcamConfigs = this.thisWebcamConfigs.filter(
-            (x) => x.presetName != "Default"
+        let webcamConfigs = this.webcamPresetsCurrentDevice
+            .filter((webcamPreset) => {
+                webcamPreset.presetName != "Default";
+                webcamPreset.active = false;
+            })
+            .concat(preset);
+
+        let allWebcamConfigs = webcamConfigs.concat(
+            this.webcamPresetsOtherDevices
         );
-        webcamConfigs.forEach((x) => {
-            x.active = false;
-        });
-        webcamConfigs.push(preset);
-
-        let allWebcamConfigs = webcamConfigs.concat(this.notThisWebcamConfigs);
-        let activePresets = allWebcamConfigs.filter((x) => x.active == true);
-
-        // todo: moving saving functionality into config service
+        let activePresets = allWebcamConfigs.filter(
+            (webcamPreset) => webcamPreset.active == true
+        );
         let udevRules = this.getUdevRules(activePresets);
 
         await this.config
             .pkexecWriteWebcamConfigAsync(allWebcamConfigs, udevRules)
-            .then((x) => {
-                if (x) {
-                    this.thisWebcamConfigs = webcamConfigs;
-                    this.thisWebcamConfigs.unshift(this.defaultPreset);
+            .then((confirm) => {
+                if (confirm) {
+                    this.webcamPresetsCurrentDevice = webcamConfigs;
+                    this.webcamPresetsCurrentDevice.unshift(this.defaultPreset);
 
-                    this.allPresets = allWebcamConfigs;
                     this.viewWebcam = this.webcamFormGroup.getRawValue();
                     this.webcamFormGroup.markAsPristine();
                     this.selectedPreset = preset;
-                    this.presetDataFromJson.push(preset);
+                    this.allPresetData.push(preset);
                 }
             });
         this.utils.pageDisabled = false;
     }
 
-    noPresetNameWarningDialog() {
+    private noPresetNameWarningDialog() {
         let config = {
             title: "Preset was not saved",
             description:
@@ -834,7 +780,10 @@ export class CameraSettingsComponent implements OnInit {
         }
     }
 
-    async valueOffsetFunc(configParameter: string, offset: number) {
+    private async valueOffsetFunc(
+        configParameter: string,
+        offset: number
+    ): Promise<void> {
         this.webcamFormGroup.get(configParameter).markAsDirty();
 
         let min = this.getOptionValue(configParameter, "min");
@@ -859,65 +808,71 @@ export class CameraSettingsComponent implements OnInit {
         }, 200);
     }
 
-    showAdvancedSettings() {
+    public showAdvancedSettings() {
         this.easyModeActive = false;
     }
 
-    disableAdvancedSettings() {
+    public disableAdvancedSettings() {
         this.easyModeActive = true;
     }
 
-    getOptionValue(configName: string, configVar: string) {
-        let value;
-        this.presetSettings.forEach((x) => {
-            if (x.name == configName) {
-                value = x[configVar];
+    public getOptionValue(
+        configName: string,
+        configVar: string
+    ): number | string {
+        let value: number | string;
+        this.presetSettings.forEach((webcamDeviceInformationEntry) => {
+            if (webcamDeviceInformationEntry.name == configName) {
+                value = webcamDeviceInformationEntry[configVar];
             }
         });
         return value;
     }
 
-    setDefaultPreset() {
+    private setDefaultPreset() {
         this.defaultPreset = {
             presetName: "Default",
             active: false,
-            webcamId: this.selectedWebcamId,
+            webcamId: this.selectedCamera.id,
             webcamSettings: this.defaultSettings,
         };
         this.selectedPreset = this.defaultPreset;
 
-        this.thisWebcamConfigs = this.thisWebcamConfigs.filter(
-            (x) => x.presetName != "Default"
-        );
-        this.thisWebcamConfigs.unshift(this.defaultPreset);
+        this.webcamPresetsCurrentDevice =
+            this.webcamPresetsCurrentDevice.filter(
+                (webcamPreset) => webcamPreset.presetName != "Default"
+            );
+        this.webcamPresetsCurrentDevice.unshift(this.defaultPreset);
     }
 
-    async loadingConfigDataFromJSON() {
+    private async loadingPresetData(): Promise<void> {
+        await this.reloadConfigValues();
         if (fs.existsSync(TccPaths.WEBCAM_FILE)) {
-            await this.reloadConfigValues();
-            let presetData = this.configHandler.readWebcamSettings();
-            this.presetDataFromJson = presetData;
-            await this.filterPresetsForCurrentDevice();
-            let filtered = this.thisWebcamConfigs.filter(
-                (x) => x.active == true
+            this.allPresetData = this.configHandler.readWebcamSettings();
+            this.filterPresetsForCurrentDevice();
+            let filtered = this.webcamPresetsCurrentDevice.filter(
+                (webcamPreset) => webcamPreset.active == true
             );
 
             if (filtered.length > 0) {
                 this.selectedPreset = filtered[0];
-                await this.applyConfig(filtered[0].webcamSettings);
+                await this.applyPreset(filtered[0].webcamSettings, false, true);
             }
             if (filtered.length == 0) {
                 this.setDefaultPreset();
-                await this.applyConfig(this.defaultSettings);
+                await this.applyPreset(this.defaultSettings, false, true);
             }
         } else {
-            await this.reloadConfigValues();
             this.setDefaultPreset();
-            await this.applyConfig(this.webcamFormGroup.getRawValue());
+            await this.applyPreset(
+                this.webcamFormGroup.getRawValue(),
+                false,
+                true
+            );
         }
     }
 
-    defaultPresetWarningDialog() {
+    private defaultPresetWarningDialog() {
         let config = {
             title: "Deleting Preset",
             description: "You are not allowed to delete the default preset.",
@@ -926,7 +881,7 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    async deletePreset() {
+    public async deletePreset(): Promise<void> {
         this.mutex.runExclusive(async () => {
             if (this.selectedPreset.presetName == "Default") {
                 this.defaultPresetWarningDialog();
@@ -935,64 +890,74 @@ export class CameraSettingsComponent implements OnInit {
 
             this.utils.pageDisabled = true;
 
-            let currentConfigs = this.thisWebcamConfigs.filter(
-                (x) =>
-                    x.presetName != this.selectedPreset.presetName &&
-                    x.presetName != "Default"
+            let currentConfigs = this.webcamPresetsCurrentDevice.filter(
+                (webcamPreset) =>
+                    webcamPreset.presetName != this.selectedPreset.presetName &&
+                    webcamPreset.presetName != "Default"
             );
             let webcamConfigs = currentConfigs.concat(
-                this.notThisWebcamConfigs
+                this.webcamPresetsOtherDevices
             );
 
-            let activePresets = webcamConfigs.filter((x) => x.active == true);
+            let activePresets = webcamConfigs.filter(
+                (webcamPreset) => webcamPreset.active == true
+            );
             let udevRules = this.getUdevRules(activePresets);
 
             await this.config
                 .pkexecWriteWebcamConfigAsync(webcamConfigs, udevRules)
-                .then((x) => {
-                    if (x) {
-                        this.thisWebcamConfigs = currentConfigs;
-                        this.thisWebcamConfigs.unshift(this.defaultPreset);
+                .then((confirm) => {
+                    if (confirm) {
+                        this.webcamPresetsCurrentDevice = currentConfigs;
+                        this.webcamPresetsCurrentDevice.unshift(
+                            this.defaultPreset
+                        );
 
-                        this.allPresets = webcamConfigs;
-                        this.presetDataFromJson = webcamConfigs;
+                        this.allPresetData = webcamConfigs;
                         this.webcamFormGroup.markAsPristine();
                         this.selectedPreset = this.defaultPreset;
-                        this.applyConfig(this.defaultSettings);
+                        this.applyPreset(this.defaultSettings);
                     }
                 });
             this.utils.pageDisabled = false;
         });
     }
 
-    getPercentValue(preset: string) {
-        let max = this.getOptionValue(preset, "max");
-        let min = this.getOptionValue(preset, "min");
+    public getPercentValue(preset: string): number {
+        let max = Number(this.getOptionValue(preset, "max"));
+        let min = Number(this.getOptionValue(preset, "min"));
         let current = this.webcamFormGroup.get(preset).value;
         return Math.round(((current - min) * 100) / (max - min));
     }
 
-    async discardFormInput() {
+    public async discardFormInput(): Promise<void> {
         this.webcamFormGroup.markAsPristine();
-        this.applyConfig(this.viewWebcam);
+        this.applyPreset(this.viewWebcam);
     }
 
-    comparePresets(o1: WebcamPreset, o2: WebcamPreset): boolean {
-        return o1 && o2 ? o1.presetName === o2.presetName : o2 === o2;
+    public comparePresets(
+        preset1: WebcamPreset,
+        preset2: WebcamPreset
+    ): boolean {
+        return preset1 && preset2
+            ? preset1.presetName === preset2.presetName
+            : preset2 === preset2;
     }
 
-    setTimeout(delay: number) {
+    private setTimeout(delay: number) {
         return new Promise((resolve) => setTimeout(resolve, delay));
     }
 
-    getUdevRules(activePresets: WebcamPreset[]) {
+    private getUdevRules(activePresets: WebcamPreset[]): string {
         let cameraCtrlsPath =
             this.electron.process.cwd() + "src/cameractrls/cameractrls.py";
         let configString = "";
-        activePresets.forEach((x) => {
-            let [vendorId, productId] = x.webcamId.split(":");
+        activePresets.forEach((webcamPreset) => {
+            let [vendorId, productId] = webcamPreset.webcamId.split(":");
             let controlStr = "";
-            for (const [setting, value] of Object.entries(x.webcamSettings)) {
+            for (const [setting, value] of Object.entries(
+                webcamPreset.webcamSettings
+            )) {
                 if (setting != "fps" && setting != "resolution") {
                     controlStr = controlStr + `${setting}=${value},`;
                 }
@@ -1005,7 +970,7 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     // todo: put translations into json
-    getConfigTranslation(configText: string) {
+    public getConfigTranslation(configText: string): string {
         if (configText == "exposure_auto") {
             return $localize`:@@exposure_auto:Exposure, Auto`;
         }
@@ -1054,7 +1019,7 @@ export class CameraSettingsComponent implements OnInit {
         return configText;
     }
 
-    async ngOnDestroy() {
+    ngOnDestroy() {
         this.stopWebcam();
         this.subscriptions.unsubscribe();
 

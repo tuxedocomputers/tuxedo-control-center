@@ -6,6 +6,7 @@ import {
     ViewChild,
 } from "@angular/core";
 import { ElectronService } from "ngx-electron";
+import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 
 @Component({
     selector: "app-webcam-preview",
@@ -26,18 +27,16 @@ export class WebcamPreviewComponent implements OnInit {
     ngOnInit(): void {
         this.electron.ipcRenderer.on(
             "setting-webcam-with-loading",
-            async (event, webcamConfig) => {
+            async (event, config) => {
                 document.getElementById("video").style.visibility = "hidden";
-
                 this.spinnerActive = true;
                 this.cdref.detectChanges();
-                await this.stopWebcam();
-                await this.setWebcamWithConfig(webcamConfig);
+                this.stopWebcam();
+                await this.setWebcamWithConfig(config);
                 this.electron.ipcRenderer.send("apply-controls");
                 setTimeout(async () => {
                     document.getElementById("video").style.visibility =
                         "visible";
-
                     this.spinnerActive = false;
                     this.cdref.detectChanges();
                 }, 500);
@@ -45,8 +44,10 @@ export class WebcamPreviewComponent implements OnInit {
         );
     }
 
-    // todo: deduplicate
-    async setWebcamWithConfig(config?: any): Promise<void> {
+    // todo: handle situation where webcam gets unplugged while external window is visible
+    private async setWebcamWithConfig(
+        config: WebcamConstraints
+    ): Promise<void> {
         await navigator.mediaDevices
             .getUserMedia({
                 video: config,
@@ -55,13 +56,10 @@ export class WebcamPreviewComponent implements OnInit {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
-        return new Promise(
-            (resolve) => (this.video.nativeElement.onplaying = resolve)
-        );
     }
 
-    async stopWebcam() {
-        await this.video.nativeElement.pause();
+    private stopWebcam() {
+        this.video.nativeElement.pause();
         if (this.mediaDeviceStream != undefined) {
             for (const track of this.mediaDeviceStream.getTracks()) {
                 track.stop();

@@ -87,9 +87,9 @@
 
                                     <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
                                         [ngModelOptions]="{standalone: true}"
-                                        (selectionChange)="applyConfig($event.value.webcamSettings, true)">
-                                        <mat-option *ngFor="let config of thisWebcamConfigs" [value]="config">
-                                            {{ config.presetName }}
+                                        (selectionChange)="applyPreset($event.value.webcamSettings, true, true)">
+                                        <mat-option *ngFor="let preset of webcamPresetsCurrentDevice" [value]="preset">
+                                            {{ preset.presetName }}
                                         </mat-option>
                                     </mat-select>
 
