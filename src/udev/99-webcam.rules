@@ -1,0 +1,1 @@
+SUBSYSTEM=="video4linux", ACTION=="add", KERNEL=="video[0-9]*", RUN+="/usr/bin/python3 [PLACEHOLDER]/cameractrls.py -s $devnode,$env{ID_VENDOR_ID},$env{ID_MODEL_ID}"

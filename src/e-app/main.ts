@@ -313,6 +313,7 @@ async function createCameraPreview(langId: string, arg: any) {
             nodeIntegration: true,
             contextIsolation: false,
         },
+        show: false
     });
 
     // Workaround to set window title
@@ -345,6 +346,11 @@ async function createCameraPreview(langId: string, arg: any) {
         tccWindow.webContents.send("external-camera-preview-closed");
         cameraWindow = null;
     });
+
+    cameraWindow.once('ready-to-show', () => {
+        cameraWindow.webContents.send("setting-webcam-with-loading", arg);
+        cameraWindow.show()
+    })
 }
 
 ipcMain.on("setting-webcam-with-loading", (event, arg) => {
@@ -523,6 +529,9 @@ nativeTheme.on('updated', () => {
     }
     if (aquarisWindow) {
         aquarisWindow.webContents.send('update-brightness-mode');
+    }
+    if (cameraWindow) {
+        cameraWindow.webContents.send('update-brightness-mode');
     }
 });
 

@@ -80,7 +80,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
-            TccPaths.UDEV_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -217,18 +216,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } else {
                 throw Error('Failed to stop daemon');
             }
-        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles') || process.argv.includes('--new_webcam') || process.argv.includes('--set_udev')) {
+        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles') || process.argv.includes('--new_webcam')) {
             // If new config is specified, replace standard config with new config
             const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
             const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
             const webcamSaved = this.saveNewConfig<WebcamPreset[]>('--new_webcam', this.config.pathWebcam, this.config.webcamFileMod);
-            const udevSaved = this.saveNewConfig<string>('--set_udev', this.config.pathUdev, this.config.udevFileMod, false);
-            if (process.argv.includes('--set_udev')) {
-                await this.reloadUdevRules()
-            }
 
             // If something changed, reload configs
-            if (settingsSaved || profilesSaved || webcamSaved || udevSaved) {
+            if (settingsSaved || profilesSaved || webcamSaved) {
                 const pidNumber = this.readPid();
                 if (isNaN(pidNumber)) {
                     console.log('Failed to locate running tccd process. Cannot reload config.');
@@ -424,18 +419,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.logLine('Failed to write default fan tables: ' + this.config.pathFanTables);
             }
         }*/
-    }
-
-    private reloadUdevRules() {
-        return new Promise((resolve, reject) => {
-            child_process.exec("sudo udevadm control --reload-rules && sudo udevadm trigger", (err, stdout, stderr) => {
-                if (err) {
-                    resolve({ data: stderr, error: err });
-                } else {
-                    resolve({ data: stdout, error: err });
-                }
-            });
-        });
     }
 
     private setupSignalHandling() {
@@ -699,21 +682,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      *
      * @returns True if file is correctly parsed and written, false otherwise
      */
-    private saveNewConfig<T>(optionString: string, targetConfigPath: string, writeFileMode: number, jsonParse: boolean = true) {
+    private saveNewConfig<T>(optionString: string, targetConfigPath: string, writeFileMode: number) {
         const newConfigPath = this.getPathArgument(optionString);
         if (newConfigPath !== '') {
             try {
-                // todo: refactor?
-                let newConfig: any
-                if (jsonParse) {
-                    newConfig = this.config.readConfig<T>(newConfigPath);
-                }
-                if (!jsonParse) {
-                    newConfig = this.config.readConfigString(newConfigPath);
-                }
+                let newConfig: T = this.config.readConfig<T>(newConfigPath);
+                
 
                 try {
-                    this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode }, jsonParse);
+                    this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
                 } catch (err) {
                     this.logLine('Error on write option ' + optionString);
                     return false;

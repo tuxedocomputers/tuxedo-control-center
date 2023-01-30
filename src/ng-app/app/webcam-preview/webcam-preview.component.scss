@@ -16,3 +16,13 @@
     overflow-y: hidden !important;
     overflow-x: hidden !important;
 }
+
+*, *.light {
+    background-color: #F5F5F5;
+}
+
+@media (prefers-color-scheme: dark) {
+*, *.dark {
+    background-color: #252525;
+}
+}

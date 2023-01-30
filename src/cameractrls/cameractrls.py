@@ -2060,13 +2060,30 @@ def usage():
     print(f'  -l, --list         list the controls and values')
     print(f'  -L, --list-devices list capture devices')
     print(f'  -c CONTROLS        set CONTROLS (eg.: hdr=on,fov=wide)')
+    print(f'  -s DEVICE_PATH,VENDOR_ID,DEVICE_ID,CONFIG_PATH   apply latest TUXEDO webcam preset')
     print()
     print(f'example:')
     print(f'  {sys.argv[0]} -c brightness=128,kiyo_pro_hdr=on,kiyo_pro_fov=wide')
 
+def get_ctrlsmap_from_config(config_path: str, vendor_id: str, product_id: str):
+    for config in json.load(open(config_path)):
+        if config["active"] == True and config["webcamId"] == vendor_id + ":" + product_id:
+            webcam_settings = {key: value for (key, value) in config["webcamSettings"].items() if key not in ["fps", "resolution"]}
+            return webcam_settings
+    return ''
+
+def get_ctrlsmap(controls):
+    ctrlsmap = {}
+    for control in controls.split(','):
+        kv = control.split('=', maxsplit=1)
+        if len(kv) != 2:
+            logging.warning(f'invalid value: {control}')
+            continue
+        ctrlsmap[kv[0]]=kv[1]
+    return ctrlsmap
+
 def main():
-    #try:
-    arguments, values = getopt.getopt(sys.argv[1:], 'hd:lLc:', ['help', 'list', 'list-devices'])
+    arguments, values = getopt.getopt(sys.argv[1:], 'hd:lLc:s:', ['help', 'list', 'list-devices', 'set'])
     """
     except getopt.error as err:
         print(err)
@@ -2080,7 +2097,12 @@ def main():
     list_controls = True
     list_devices = False
     device = '/dev/video0'
-    controls = ''
+    ctrlsmap = {}
+
+    if list_devices:
+        for d in get_devices(v4ldirs):
+            print(d)
+        sys.exit(0)
 
     for current_argument, current_value in arguments:
         if current_argument in ('-h', '--help'):
@@ -2093,12 +2115,11 @@ def main():
         elif current_argument in ('-L', '--list-devices'):
             list_devices = True
         elif current_argument in ('-c'):
-            controls = current_value
-
-    if list_devices:
-        for d in get_devices(v4ldirs):
-            print(d)
-        sys.exit(0)
+            ctrlsmap = get_ctrlsmap(current_value)
+        elif current_argument in ('-s'):
+            device, vendor_id, product_id, config_path = current_value.split(",")
+            if os.path.isfile(config_path):
+                ctrlsmap = get_ctrlsmap_from_config(config_path, vendor_id, product_id)
 
     try:
         fd = os.open(device, os.O_RDWR, 0)
@@ -2107,18 +2128,9 @@ def main():
         sys.exit(2)
 
     camera_ctrls = CameraCtrls(device, fd)
-
     camera_ctrls.print_ctrls_json()
 
-    if controls != '':
-        ctrlsmap = {}
-        for control in controls.split(','):
-            kv = control.split('=', maxsplit=1)
-            if len(kv) != 2:
-                logging.warning(f'invalid value: {control}')
-                continue
-            ctrlsmap[kv[0]]=kv[1]
-
+    if ctrlsmap:
         camera_ctrls.setup_ctrls(ctrlsmap)
 
 if __name__ == '__main__':

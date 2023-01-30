@@ -90,7 +90,6 @@ export class CameraSettingsComponent implements OnInit {
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
-            TccPaths.UDEV_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -730,10 +729,9 @@ export class CameraSettingsComponent implements OnInit {
         let activePresets = allWebcamConfigs.filter(
             (webcamPreset) => webcamPreset.active == true
         );
-        let udevRules = this.getUdevRules(activePresets);
 
         await this.config
-            .pkexecWriteWebcamConfigAsync(allWebcamConfigs, udevRules)
+            .pkexecWriteWebcamConfigAsync(allWebcamConfigs)
             .then((confirm) => {
                 if (confirm) {
                     this.webcamPresetsCurrentDevice = webcamConfigs;
@@ -912,10 +910,9 @@ export class CameraSettingsComponent implements OnInit {
             let activePresets = webcamConfigs.filter(
                 (webcamPreset) => webcamPreset.active == true
             );
-            let udevRules = this.getUdevRules(activePresets);
 
             await this.config
-                .pkexecWriteWebcamConfigAsync(webcamConfigs, udevRules)
+                .pkexecWriteWebcamConfigAsync(webcamConfigs)
                 .then((confirm) => {
                     if (confirm) {
                         this.webcamPresetsCurrentDevice = currentConfigs;
@@ -956,27 +953,6 @@ export class CameraSettingsComponent implements OnInit {
 
     private setTimeout(delay: number) {
         return new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    private getUdevRules(activePresets: WebcamPreset[]): string {
-        let cameraCtrlsPath =
-            this.electron.process.cwd() + "src/cameractrls/cameractrls.py";
-        let configString = "";
-        activePresets.forEach((webcamPreset) => {
-            let [vendorId, productId] = webcamPreset.webcamId.split(":");
-            let controlStr = "";
-            for (const [setting, value] of Object.entries(
-                webcamPreset.webcamSettings
-            )) {
-                if (setting != "fps" && setting != "resolution") {
-                    controlStr = controlStr + `${setting}=${value},`;
-                }
-            }
-            configString +=
-                `SUBSYSTEM=="video4linux", ACTION=="add", KERNEL=="video[0-9]*", ATTRS{idVendor}=="${vendorId}", ` +
-                `ATTRS{idProduct}=="${productId}", RUN+="/usr/bin/python3 '${cameraCtrlsPath}' -c '${controlStr}' -d $devnode"\n`;
-        });
-        return configString;
     }
 
     // todo: put translations into json
