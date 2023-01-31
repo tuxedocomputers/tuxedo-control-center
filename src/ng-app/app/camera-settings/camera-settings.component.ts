@@ -26,6 +26,7 @@ import { MatOptionSelectionChange } from "@angular/material/core";
 import { Mutex } from "async-mutex";
 import * as fs from "fs";
 import { ConfigService } from "../config.service";
+import { environment } from "../../environments/environment";
 
 @Component({
     selector: "app-camera-settings",
@@ -60,7 +61,7 @@ export class CameraSettingsComponent implements OnInit {
     webcamFormGroup: FormGroup = new FormGroup({});
     webcamCategories: string[] = [];
 
-    allPresetData: WebcamPreset[];
+    allPresetData: WebcamPreset[] = [];
     presetSettings: WebcamDeviceInformation[];
     defaultPreset: WebcamPreset;
     selectedPreset: WebcamPreset;
@@ -167,14 +168,22 @@ export class CameraSettingsComponent implements OnInit {
         this.cdref.detectChanges();
     }
 
+    private getCameraListBashPath() {
+        let bashPath: String;
+        if (environment.production) {
+            bashPath = TccPaths.TCCD_BASH_CAMERAPATHS_FILE;
+        } else {
+            bashPath =
+                this.electron.process.cwd() +
+                "/src/bash-scripts/get_camera_paths.sh";
+        }
+        return bashPath;
+    }
+
     private getWebcamPaths(): Promise<WebcamPath> {
         return new Promise<WebcamPath>((resolve) => {
             this.utils
-                .execFile(
-                    "bash " +
-                        this.electron.process.cwd() +
-                        "/src/bash-scripts/get_camera_paths.sh"
-                )
+                .execFile("bash " + this.getCameraListBashPath())
                 .then((data) => {
                     resolve(JSON.parse(data.toString()));
                 })
@@ -249,13 +258,24 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
+    private getCameraCtrlPythonPath() {
+        let cameraCtrolsPath: String;
+        if (environment.production) {
+            cameraCtrolsPath = TccPaths.TCCD_PYTHON_CAMERACTRL_FILE;
+        } else {
+            cameraCtrolsPath =
+                this.electron.process.cwd() + "/src/cameractrls/cameractrls.py";
+        }
+        return cameraCtrolsPath;
+    }
+
     private getCameraSettings(): Promise<string> {
         return new Promise<string>((resolve) => {
             this.utils
                 .execFile(
                     "python3 " +
-                        this.electron.process.cwd() +
-                        `/src/cameractrls/cameractrls.py -d ${this.selectedCamera.path}`
+                        this.getCameraCtrlPythonPath() +
+                        ` -d ${this.selectedCamera.path}`
                 )
                 .then((data) => {
                     resolve(data.toString());
@@ -368,8 +388,8 @@ export class CameraSettingsComponent implements OnInit {
         webcamPaths.forEach(async (devicePath) => {
             await this.utils.execCmd(
                 "python3 " +
-                    this.electron.process.cwd() +
-                    `/src/cameractrls/cameractrls.py -d ${devicePath} -c ${parameter}=${value}`
+                    this.getCameraCtrlPythonPath() +
+                    ` -d ${devicePath} -c ${parameter}=${value}`
             );
         });
     }
@@ -394,8 +414,8 @@ export class CameraSettingsComponent implements OnInit {
         webcamPaths.forEach(async (devicePath) => {
             await this.utils.execCmd(
                 "python3 " +
-                    this.electron.process.cwd() +
-                    `/src/cameractrls/cameractrls.py -d ${devicePath} -c ${controlStr}`
+                    this.getCameraCtrlPythonPath() +
+                    ` -d ${devicePath} -c ${controlStr}`
             );
         });
     }
@@ -716,22 +736,17 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.pageDisabled = true;
         let preset = this.getWebcamPreset(presetName);
 
-        let webcamConfigs = this.webcamPresetsCurrentDevice
-            .filter((webcamPreset) => {
-                webcamPreset.presetName != "Default";
-                webcamPreset.active = false;
-            })
-            .concat(preset);
-
-        let allWebcamConfigs = webcamConfigs.concat(
-            this.webcamPresetsOtherDevices
+        let webcamConfigs = this.webcamPresetsCurrentDevice.filter(
+            (webcamPreset) => webcamPreset.presetName !== "Default"
         );
-        let activePresets = allWebcamConfigs.filter(
-            (webcamPreset) => webcamPreset.active == true
+        webcamConfigs.forEach((x) => (x.active = false));
+        webcamConfigs = webcamConfigs.concat(
+            preset,
+            this.webcamPresetsOtherDevices
         );
 
         await this.config
-            .pkexecWriteWebcamConfigAsync(allWebcamConfigs)
+            .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
                     this.webcamPresetsCurrentDevice = webcamConfigs;
@@ -876,11 +891,7 @@ export class CameraSettingsComponent implements OnInit {
             }
         } else {
             this.setDefaultPreset();
-            await this.applyPreset(
-                this.webcamFormGroup.getRawValue(),
-                false,
-                true
-            );
+            await this.applyPreset(this.defaultSettings, false, true);
         }
     }
 
