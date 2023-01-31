@@ -783,9 +783,11 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     public mouseup() {
-        if (this.timer) {
-            clearInterval(this.timer);
-        }
+        this.mutex.runExclusive(() => {
+            if (this.timer) {
+                clearInterval(this.timer);
+            }
+        });
     }
 
     private async valueOffsetFunc(
@@ -810,10 +812,12 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     public mousedown(configParameter: string, offset: number) {
-        this.valueOffsetFunc(configParameter, offset);
-        this.timer = setInterval(() => {
+        this.mutex.runExclusive(() => {
             this.valueOffsetFunc(configParameter, offset);
-        }, 200);
+            this.timer = setInterval(() => {
+                this.valueOffsetFunc(configParameter, offset);
+            }, 200);
+        });
     }
 
     public showAdvancedSettings() {
