@@ -749,9 +749,7 @@ export class CameraSettingsComponent implements OnInit {
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
-                    this.webcamPresetsCurrentDevice = webcamConfigs;
-                    this.webcamPresetsCurrentDevice.unshift(this.defaultPreset);
-
+                    this.webcamPresetsCurrentDevice.push(preset);
                     this.viewWebcam = this.webcamFormGroup.getRawValue();
                     this.webcamFormGroup.markAsPristine();
                     this.selectedPreset = preset;
