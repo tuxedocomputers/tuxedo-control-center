@@ -54,7 +54,8 @@ async function buildDeb(): Promise<void> {
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
             distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/camera/get_camera_paths.sh'
+            distSrc + '/data/camera/get_camera_paths.sh',
+            distSrc + '/data/dist-data/99-webcam.rules'
         ],
         linux: {
             target: [
@@ -114,7 +115,8 @@ async function buildSuseRpm(): Promise<void> {
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
             distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/camera/get_camera_paths.sh'
+            distSrc + '/data/camera/get_camera_paths.sh',
+            distSrc + '/data/dist-data/99-webcam.rules'
         ],
         linux: {
             target: [
@@ -175,7 +177,8 @@ async function buildAppImage(): Promise<void> {
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
             distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/camera/get_camera_paths.sh'
+            distSrc + '/data/camera/get_camera_paths.sh',
+            distSrc + '/data/dist-data/99-webcam.rules'
         ],
         linux: {
             target: [

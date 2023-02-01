@@ -24,3 +24,7 @@ systemctl restart tccd
 
 # chmod +x /opt/tuxedocc/resources/output/dist/data/tuxedocc-pkexec
 ln -s /opt/tuxedo-control-center/tuxedo-control-center /usr/bin/tuxedo-control-center || true
+
+# set up udev rules
+mv ${DIST_DATA}/99-webcam.rules /etc/udev/rules.d/99-webcam.rules
+udevadm control --reload-rules && udevadm trigger
