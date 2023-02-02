@@ -1,0 +1,53 @@
+<!--
+Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<label class="charging-group-label" i18n="@@chargingProfileLabel" *ngIf="chargingProfilesAvailable.length > 0">Charging profiles</label>
+<mat-radio-group
+    class="charging-radio-group"
+    [ngModel]="currentChargingProfile"
+    (change)="setChargingProfile($event.value)"
+    *ngIf="chargingProfilesAvailable.length > 0">
+    <mat-radio-button
+        *ngFor="let profile of chargingProfilesAvailable"
+        [value]="profile"
+        color="primary"
+        [disabled]="chargingProfileProgress">
+        <div class="inner-label">
+            <header>{{ chargingProfileLabels.get(profile) }}</header>
+            {{ chargingProfileDescriptions.get(profile) }}
+        </div>
+    </mat-radio-button>
+</mat-radio-group>
+
+<label class="charging-group-label" i18n="@@chargingPriorityLabel" *ngIf="chargingPriosAvailable.length > 0">USB-C charging options (Power Delivery DC-In)</label>
+<mat-radio-group
+    class="charging-radio-group"
+    [ngModel]="currentChargingPriority"
+    (change)="setChargingPriority($event.value)"
+    *ngIf="chargingPriosAvailable.length > 0">
+    <mat-radio-button
+        *ngFor="let priority of chargingPriosAvailable"
+        [value]="priority"
+        color="primary"
+        [disabled]="chargingPriorityProgress">
+        <div class="inner-label">
+            <header>{{ chargingPriorityLabels.get(priority) }}</header>
+            {{ chargingPriorityDescriptions.get(priority) }}
+        </div>
+    </mat-radio-button>
+</mat-radio-group>

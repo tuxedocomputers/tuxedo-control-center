@@ -214,7 +214,14 @@ export class CpuWorker extends DaemonWorker {
         let scalingDriver;
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
-            if (profile.cpu.noTurbo !== true) { // Only attempt to enforce frequencies if noTurbo isn't set
+            if (core.coreIndex !== 0 && !core.online.readValue()) {
+                // Skip offline cores
+                continue;
+            }
+
+            // Also Skip min/max freq validation on intel_pstate meanwhile bugged
+            // ie scaling_max_freq readout does not stay at cpuinfo_max_freq
+            if (profile.cpu.noTurbo !== true && this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate') { // Only attempt to enforce frequencies if noTurbo isn't set
                 scalingDriver = core.scalingDriver.readValueNT();
                 const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 const coreMinFreq = core.cpuinfoMinFreq.readValue();

@@ -84,6 +84,7 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
+import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -107,7 +108,8 @@ declare const require;
     AquarisControlComponent,
     DialogInputTextComponent,
     DialogConfirmComponent,
-    TomteGuiComponent
+    TomteGuiComponent,
+    ChargingSettingsComponent
   ],
   imports: [
     BrowserModule,

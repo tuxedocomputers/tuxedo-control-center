@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.2.4] - 2023-01-11
+### Changed
+- Display backlight brightness now only set when explicitly chosen in profile
+
+### Fixed
+- Inadvertently blended out profile edit system control area now visible again
+- Fan availability conditions tweaked to not falsely show fan control for
+  unsupported devices
+
+## [1.2.3] - 2022-12-21
+### Added
+- Battery charging options for a number of devices
+  - Choose one of three "charging profiles" to influence peak charge and charging time
+  - Choose whether to priorize charging or performance when on USB-C PD
+  - For now available through "Settings" => "Battery charging options" (for devices with this feature)
+  - Tray shortcut coming soon
+
+### Changed
+- Dark/light mode adjustments
+  - Now three options available light, dark and "system setting".
+  - System setting attempts to use advertised system theme mode when
+    choosing TCC theme.
+  - Also fixes some GUI details (like scrollbars) that were not rendered in the correct theme
+- Config reload/save logic of `tccd` no longer requires restart of service
+
+### Fixed
+- Core available check on setting validation (should prevent some log
+  messages when cores are disabled)
+- `xrandr` output on systeminfos execution
+- Disable cpu min/max freq validation for `intel_pstate` while interface is bugged
+
+## [1.2.2] - 2022-10-17
+### Changed
+- Fan control logic tweaks and fixes
+
 ## [1.2.1] - 2022-10-14
 ### Changed
 - TDP Label text adjustments (EN)
