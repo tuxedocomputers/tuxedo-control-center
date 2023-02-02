@@ -168,22 +168,10 @@ export class CameraSettingsComponent implements OnInit {
         this.cdref.detectChanges();
     }
 
-    private getCameraListBashPath() {
-        let bashPath: String;
-        if (environment.production) {
-            bashPath = TccPaths.TCCD_BASH_CAMERAPATHS_FILE;
-        } else {
-            bashPath =
-                this.electron.process.cwd() +
-                "/src/bash-scripts/get_camera_paths.sh";
-        }
-        return bashPath;
-    }
-
     private getWebcamPaths(): Promise<WebcamPath> {
         return new Promise<WebcamPath>((resolve) => {
             this.utils
-                .execFile("bash " + this.getCameraListBashPath())
+                .execFile("python3 " + this.getCameraCtrlPythonPath() + " -i")
                 .then((data) => {
                     resolve(JSON.parse(data.toString()));
                 })
@@ -241,7 +229,7 @@ export class CameraSettingsComponent implements OnInit {
                         label: label,
                         deviceId: deviceId,
                         id: cameraId,
-                        path: `/dev/${cameraPath}`,
+                        path: cameraPath,
                     });
                 }
                 resolve(dropdownData);
@@ -275,12 +263,13 @@ export class CameraSettingsComponent implements OnInit {
                 .execFile(
                     "python3 " +
                         this.getCameraCtrlPythonPath() +
-                        ` -d ${this.selectedCamera.path}`
+                        ` -d ${this.selectedCamera.path} -j`
                 )
                 .then((data) => {
                     resolve(data.toString());
                 })
                 .catch((error) => {
+                    console.log(error)
                     this.cameraNotAvailabledDialog();
                     this.reloadWebcamList();
                 });
@@ -771,6 +760,17 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
+    // todo: maybe reopen saving webcam presets?
+    private defaultOverwriteNotAllowed() {
+        let config = {
+            title: "Not possible to overwrite the default preset",
+            description:
+                "It is not possible to overwrite the default preset. Please select a different name for your preset.",
+            buttonConfirmLabel: "Continue",
+        };
+        this.utils.confirmDialog(config).then();
+    }
+
     public savingWebcamPresets() {
         let config = {
             title: "Saving Preset",
@@ -780,6 +780,11 @@ export class CameraSettingsComponent implements OnInit {
         this.utils.inputTextDialog(config).then((presetName) => {
             if (!presetName) {
                 this.noPresetNameWarningDialog();
+                return;
+            }
+
+            if (presetName == "Default") {
+                this.defaultOverwriteNotAllowed();
                 return;
             }
 

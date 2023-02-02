@@ -3,6 +3,8 @@
 import ctypes, logging, os.path, getopt, sys, subprocess
 from fcntl import ioctl
 import json
+import subprocess
+import re
 
 ghurl = 'https://github.com/soyersoyer/cameractrls'
 version = 'v0.4.11'
@@ -1862,8 +1864,17 @@ class CameraCtrls:
         resolutions = set(([item for sublist in resolutions for item in sublist]))
         return sorted(list(resolutions),  key=lambda x: (len(x), x.split("x")[0]))
 
+    def get_is_not_gray_pixelformat(self):
+        for page in self.get_ctrl_pages():
+            for cat in page.categories:
+                for c in cat.ctrls:
+                    if c.text_id == "pixelformat":
+                        pixel_formats = [m.text_id for m in c.menu]
+                        if ["GREY"] != pixel_formats and pixel_formats:
+                            return True
+        return False
+
     def print_ctrls_json(self):
-        json_data = []
         config_data = []
         config_parameter = {}
         for page in self.get_ctrl_pages():
@@ -2051,20 +2062,6 @@ class CameraCtrls:
 
         return pages
 
-
-def usage():
-    print(f'usage: {sys.argv[0]} [--help] [-d DEVICE] [--list] [-c CONTROLS]\n')
-    print(f'optional arguments:')
-    print(f'  -h, --help         show this help message and exit')
-    print(f'  -d DEVICE          use DEVICE, default /dev/video0')
-    print(f'  -l, --list         list the controls and values')
-    print(f'  -L, --list-devices list capture devices')
-    print(f'  -c CONTROLS        set CONTROLS (eg.: hdr=on,fov=wide)')
-    print(f'  -s DEVICE_PATH,VENDOR_ID,DEVICE_ID,CONFIG_PATH   apply latest TUXEDO webcam preset')
-    print()
-    print(f'example:')
-    print(f'  {sys.argv[0]} -c brightness=128,kiyo_pro_hdr=on,kiyo_pro_fov=wide')
-
 def get_ctrlsmap_from_config(config_path: str, vendor_id: str, product_id: str):
     for config in json.load(open(config_path)):
         if config["active"] == True and config["webcamId"] == vendor_id + ":" + product_id:
@@ -2082,9 +2079,54 @@ def get_ctrlsmap(controls):
         ctrlsmap[kv[0]]=kv[1]
     return ctrlsmap
 
+def get_available_webcams(ignore_grey: bool = True):
+    camera_info = {}
+    for device in get_devices(v4ldirs):
+        device_information = subprocess.check_output(['udevadm', 'info', '--query=all', device], stderr=subprocess.DEVNULL).decode(sys.stdout.encoding)
+
+        for line in device_information.splitlines():
+            if re.findall('VENDOR_ID', line):
+                vendor_id = line.split("=",1)[1]
+            if re.findall('MODEL_ID', line):
+                product_id = line.split("=",1)[1]
+            if re.findall('DEVNAME', line):
+                dev_name = line.split("=",1)[1]
+
+        if ignore_grey and dev_name and vendor_id and product_id:
+            fd = os.open(device, os.O_RDWR, 0)
+            camera_ctrls = CameraCtrls(device, fd)
+            if camera_ctrls.get_is_not_gray_pixelformat():
+                camera_info[dev_name] = f"{vendor_id}:{product_id}"
+        elif dev_name and vendor_id and product_id:
+            camera_info[dev_name] = f"{vendor_id}:{product_id}"
+    return camera_info
+
+def usage():
+    print(f'usage: {sys.argv[0]} [--help] [-d DEVICE] [--list] [-c CONTROLS]\n')
+    print(f'optional arguments:')
+    print(f'  -h, --help         show this help message and exit')
+    print(f'  -d DEVICE          use DEVICE, default /dev/video0')
+    print(f'  -l, --list         list the controls and values')
+    print(f'  -L, --list-devices list capture devices')
+    print(f'  -c CONTROLS        set CONTROLS (eg.: hdr=on,fov=wide)')
+    print(f'  -s DEVICE_PATH,VENDOR_ID,DEVICE_ID,CONFIG_PATH   apply latest TUXEDO webcam preset')
+    print(f'  -i --info          print a json string with {{"camera_path":"vendor_id:product_id"}} to show all available rgb cameras')
+    print()
+    print(f'example:')
+    print(f'  {sys.argv[0]} -c brightness=128,kiyo_pro_hdr=on,kiyo_pro_fov=wide')
+
+def open_camera(device: str):
+    try:
+        fd = os.open(device, os.O_RDWR, 0)
+    except Exception as e:
+        logging.error(f'os.open({device}, os.O_RDWR, 0) failed: {e}')
+        sys.exit(2)
+    return CameraCtrls(device, fd)
+
 def main():
-    arguments, values = getopt.getopt(sys.argv[1:], 'hd:lLc:s:', ['help', 'list', 'list-devices', 'set'])
-    """
+    logging.getLogger().setLevel(logging.ERROR)
+    try:
+        arguments, values = getopt.getopt(sys.argv[1:], 'hd:lLc:s:ijg', ['help', 'list', 'list-devices', 'set', 'info', 'json-list', 'grey'])
     except getopt.error as err:
         print(err)
         usage()
@@ -2093,16 +2135,14 @@ def main():
     if len(arguments) == 0:
         usage()
         sys.exit(0)
-    """
-    list_controls = True
+
+    list_controls = False
     list_devices = False
+    list_controls_json = False
+    ignore_grey = True
+    list_information = False
     device = '/dev/video0'
     ctrlsmap = {}
-
-    if list_devices:
-        for d in get_devices(v4ldirs):
-            print(d)
-        sys.exit(0)
 
     for current_argument, current_value in arguments:
         if current_argument in ('-h', '--help'):
@@ -2112,25 +2152,38 @@ def main():
             device = current_value
         elif current_argument in ('-l', '--list'):
             list_controls = True
+        elif current_argument in ('-j', '--json-list'):
+            list_controls_json = True
         elif current_argument in ('-L', '--list-devices'):
             list_devices = True
         elif current_argument in ('-c'):
             ctrlsmap = get_ctrlsmap(current_value)
+        elif current_argument in ('-g', '--grey'):
+            ignore_grey = False
         elif current_argument in ('-s'):
             device, vendor_id, product_id, config_path = current_value.split(",")
             if os.path.isfile(config_path):
                 ctrlsmap = get_ctrlsmap_from_config(config_path, vendor_id, product_id)
+        elif current_argument in ('-i', '--info'):
+            list_information = True
 
-    try:
-        fd = os.open(device, os.O_RDWR, 0)
-    except Exception as e:
-        logging.error(f'os.open({device}, os.O_RDWR, 0) failed: {e}')
-        sys.exit(2)
 
-    camera_ctrls = CameraCtrls(device, fd)
-    camera_ctrls.print_ctrls_json()
+    if list_information:
+        print(json.dumps(get_available_webcams(ignore_grey)))
+        sys.exit(0)
+    elif list_devices:
+        for d in get_devices(v4ldirs):
+            print(d)
+        sys.exit(0)
 
-    if ctrlsmap:
+    camera_ctrls = open_camera(device)
+    if list_controls:
+        camera_ctrls.print_ctrls()
+    elif list_controls_json:
+        camera_ctrls.print_ctrls_json()
+    elif ctrlsmap and not ignore_grey:
+        camera_ctrls.setup_ctrls(ctrlsmap)
+    elif ctrlsmap and camera_ctrls.get_is_not_gray_pixelformat():
         camera_ctrls.setup_ctrls(ctrlsmap)
 
 if __name__ == '__main__':

@@ -20,8 +20,6 @@ export class TccPaths {
     static readonly PID_FILE: string = '/var/run/tccd.pid';
     static readonly TCCD_EXEC_FILE: string =
         '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/service/tccd';
-    static readonly TCCD_BASH_CAMERAPATHS_FILE: string =
-        '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/camera/get_camera_paths.sh';
     static readonly TCCD_PYTHON_CAMERACTRL_FILE: string =
         '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/camera/cameractrls.py';
     static readonly SETTINGS_FILE: string = '/etc/tcc/settings';
