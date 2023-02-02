@@ -180,9 +180,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 See what packages tomte is handling and block or uninstall them as needed.
             </p>
             -->
-            <p class="tomte-warning-text" i18n="@@cTomteGuiTomteConfigurationRebootWarning">
-                Some changes may not take affect until after reboot.
-            </p>    
+            <ng-container *ngIf="rebootRequired" >
+                <p class="tomte-warning-text" i18n="@@cTomteGuiTomteConfigurationRebootWarning">
+                    Some changes may not take affect until after reboot.
+                </p>    
+            </ng-container>
             <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z2 tomte-list-output-table" style="width: 100%">
 
                 <ng-container matColumnDef="moduleName">

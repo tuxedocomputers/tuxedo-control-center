@@ -46,6 +46,7 @@ interface ITomteModule {
 export class TomteGuiComponent implements OnInit {
     tomteIsInstalled = false;
     jsonError = false;
+    rebootRequired = false;
     tomteListArray: ITomteModule[] = [];
     moduleToolTips = new Map();
     columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
@@ -142,6 +143,7 @@ export class TomteGuiComponent implements OnInit {
         // now let's get the mode, modules etc out of it
         this.tomteMode = givenobject.mode;
         this.tomteListArray = [];
+        this.rebootRequired = givenobject.restart === "yes";
         for (let i = 0; i < givenobject.modules.length; i++)
         {
             let module = givenobject.modules[i];
