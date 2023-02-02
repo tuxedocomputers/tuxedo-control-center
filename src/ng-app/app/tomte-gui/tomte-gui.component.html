@@ -156,8 +156,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <br />
     </ng-container>
-
-    <ng-container *ngIf="tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteIsInstalled">
+    <ng-container *ngIf="jsonError">
+        <hr />
+        <h2 class="tomte-gui-title" i18n="@@cTomteGuiJsonErrorHeader">
+            Could not parse output
+        </h2>
+    <div class="content-container centered">
+        <p class="tomte-warning-text" i18n="@@cTomteGuiJsonErrorWarning">
+            An error occured while trying to parse the output of TUXEDO Tomte. 
+            Maybe you are running an outdated version of TUXEDO Tomte. Try updating and see if this error persists.
+            If it does, feel free to create a support ticket.
+        </p>    
+    </div>
+    </ng-container>
+    <ng-container *ngIf="!jsonError && tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteIsInstalled">
         <hr />
             <h2 class="tomte-gui-title" i18n="@@cTomteGuiTomteConfigurationHeader">
                 Tomte Configuration

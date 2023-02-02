@@ -2347,7 +2347,23 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">242</context>
         </context-group>
       </trans-unit>
-            <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
+      <trans-unit id="cTomteGuiJsonErrorHeader" datatype="html">
+        <source> Could not parse output </source>
+        <target state="translated"> Could not parse output </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">162,163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiJsonErrorWarning" datatype="html">
+        <source> An error occured while trying to parse the output of TUXEDO Tomte. Maybe you are running an outdated version of TUXEDO Tomte. Try updating and see if this error persists. If it does, feel free to create a support ticket. </source>
+        <target state="translated"> An error occured while trying to parse the output of TUXEDO Tomte. Maybe you are running an outdated version of TUXEDO Tomte. Try updating and see if this error persists. If it does, feel free to create a support ticket. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">166,169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
         <source>Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</source>
         <target state="translated">Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</target>
         <context-group purpose="location">

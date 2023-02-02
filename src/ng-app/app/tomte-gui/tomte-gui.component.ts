@@ -45,6 +45,7 @@ interface ITomteModule {
 })
 export class TomteGuiComponent implements OnInit {
     tomteIsInstalled = false;
+    jsonError = false;
     tomteListArray: ITomteModule[] = [];
     moduleToolTips = new Map();
     columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
@@ -90,27 +91,8 @@ export class TomteGuiComponent implements OnInit {
         this.loadingInformation = true;
         this.tomteIsInstalled = await this.pmgs.isInstalled("tuxedo-tomte");
         if (this.tomteIsInstalled)
-            {
-                // check for version
-                let command = "tuxedo-tomte | grep tuxedo-tomte"
-                let results = await this.utils.execCmd(command);
-                let version = "";
-                if (results[1] + "" === "2.8.0") // TODO temp. gotta find out how I can check if it's a version bigger than x?
-                {
-                    version = "old";
-                }
-                else
-                {
-                    version = "new";
-                }
-                if(version === "new")
-                {
-                    await this.tomteListJson();
-                }
-                if(version === "old")
-                {
-                    await this.oldTomteList();
-                }
+            {   
+                await this.tomteListJson();
             }
             this.loadingInformation = false;
     }
@@ -125,7 +107,8 @@ export class TomteGuiComponent implements OnInit {
             try 
             {
                 results = await this.utils.execCmd(command + "");
-                this.parseTomteListJson(results.split("\n")[1]);
+                results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
+                this.parseTomteListJson(results);
                 this.getModuleDescriptions();
                 break;
             }
@@ -143,39 +126,6 @@ export class TomteGuiComponent implements OnInit {
                 continue;
             }
         }
-    }
-
-    /*
-        executes tomte list command and initiates follow up methods to parse information
-    */
-    private async oldTomteList() {
-        // retries to list the information a couple of times, this is only triggered if tomte is already running.      
-        for (let i = 0; i < 30; i++)
-        {             
-            let command = "tuxedo-tomte list"
-            let results
-            try 
-            {
-                results = await this.utils.execCmd(command);
-                this.parseTomteList(results);
-                this.getModuleDescriptions();
-                break;
-            }
-            catch (e)
-            {
-                if(i === 10)
-                {                                       
-                    this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
-                }
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                if(i === 29)
-                {
-                    this.showRetryButton = true;
-                }
-                continue;
-            }
-        }
-
     }
 
     private parseTomteListJson(rawTomteListOutput: string | undefined)
@@ -187,6 +137,7 @@ export class TomteGuiComponent implements OnInit {
         try 
         {
             let givenobject = JSON.parse(rawTomteListOutput);
+            this.jsonError = false;
 
         // now let's get the mode, modules etc out of it
         this.tomteMode = givenobject.mode;
@@ -200,40 +151,10 @@ export class TomteGuiComponent implements OnInit {
         catch (e)
         {
             console.error("not valid json");
+            this.jsonError = true;
         }
 
     }
-
-    /*
-        Parses the raw data from the comandline output and puts it into tomteListArray variable that is then 
-        used by the HTML to build the corresponding table
-    */
-    private parseTomteList(rawTomteListOutput: string | undefined){
-        if (!rawTomteListOutput)
-        {
-            return;
-        }
-        this.tomteListArray = [];
-        let lines = rawTomteListOutput.split("\n");
-        // TODO is it possible to clean this up further?
-        let modeLine = lines[0].split(" ");
-        this.tomteMode = modeLine[modeLine.length -1];
-        if (lines.length < 2)
-        {
-            console.error(rawTomteListOutput);
-            return;
-        }
-        for (var i = 3; i < lines.length; i++)
-        {        
-            let line = lines[i].split(/ +/);
-            if (!line[0])
-            {
-                continue;
-            }
-            this.tomteListArray.push({moduleName: line[0], version: line[1], installed: line[2] === "yes", blocked: line[3] === "yes", prerequisite: line[4]});
-        }
-    }
-
 
     /*
         Loads the descriptions for each module in the background and puts it into moduleToolTips Variable that is then
