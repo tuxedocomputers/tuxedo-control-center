@@ -21,8 +21,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <h1 mat-dialog-title> Importing Conflict </h1>
 </div>
 <div mat-dialog-content >
-    <p class="dialog-message"> There has been an ID conflict between the following two profiles: </p>
-    
+    <!--<p class="dialog-message"> There has been an ID conflict between the following two profiles: </p>
+    -->
     <!--
         add names of old and new profile and a few infos maybe
         just copying the html and css of the profile overview etc sadly didn't turn out to be 
@@ -62,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div class="profile-compare-box">
     <div style="float:left;">  
         
-        <h1 > Old Profile </h1>
+        <h1 class="profile_old_new"> Old Profile </h1>
 
         <mat-card class="profile-overview-tile"> 
             <header>
@@ -87,9 +87,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg class="status-icon-container" viewBox="0 0 512 512" >
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                         </svg>
-                        <span *ngIf="!data.oldProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - {{ formatFrequency(data.oldProfile.cpu.scalingMaxFrequency) }} GHz</span>
-                        <span *ngIf="!data.oldProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - Boost</span>
-                        <span *ngIf="data.oldProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
+                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - {{ formatFrequency(data.oldProfile.cpu.scalingMaxFrequency) }} GHz</p>
+                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - Boost</p>
+                        <p class="status-info" *ngIf="data.oldProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</p>
                     </div>
 
                     <div class="status-component" [class.inactive]="!data.oldProfile.cpu.governor">
@@ -117,8 +117,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg class="status-icon-container" viewBox="0 0 512 512" >
                             <use href="./assets/images/icon_webcam.svg#Icon"></use>
                         </svg>
-                        <p class="status-info"*ngIf="data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status"> on </p>
-                        <p class="status-info"*ngIf="!data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status"> off </p>
+                        <p class="status-info" *ngIf="data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status"> on </p>
+                        <p class="status-info" *ngIf="!data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status"> off </p>
                     </div>
         
 
@@ -127,7 +127,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 
     <div style="float:right;">
-        <h1 > New Profile </h1>
+        <h1 class="profile_old_new"> New Profile </h1>
         <mat-card class="profile-overview-tile"> 
             <header>
                 <p class="profile-name"> {{ data.newProfile.name }} </p>
@@ -191,7 +191,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 </div>
 
-<div mat-dialog-actions *ngIf="!rename">
+<div style="padding-bottom: 20px" mat-dialog-actions *ngIf="!rename">
     <button mat-raised-button color="primary" (click)="action('keepOld')"> Keep Old </button>
     <button mat-raised-button color="primary" (click)="action('keepNew')" > Keep New </button>
     <button mat-raised-button color="primary" (click)="action('keepBoth')" > Keep Both </button>

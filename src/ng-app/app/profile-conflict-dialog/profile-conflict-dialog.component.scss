@@ -17,11 +17,50 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+.mat-dialog-container
+{
+    min-height: 600px !important;
+    min-width: 520px !important;
+}
+
+.dark-theme .mat-dialog-container{
+    background-color: #303030;
+}
+.dark-theme .profile-overview-tile
+{
+    background-color: #252525;
+}
+
+.light-theme .mat-dialog-container{
+    background-color: #fafafa;
+}
+.light-theme .profile-overview-tile
+{
+    background-color: white;
+}
 .profile-compare-box{
 
     justify-content: space-between;
     width: 99%;
+    min-width: 520px;
     overflow: hidden;
+}
+
+.mat-dialog-container
+{
+    // https://github.com/twbs/bootstrap/issues/13608
+    overflow-y: auto;
+}
+
+.mat-dialog-actions
+{
+   // https://github.com/angular/components/issues/20344
+   margin-bottom: 30px !important; 
+}
+.profile_old_new
+{
+    font-size: 1.5em;
+    text-align: center;
 }
 
  .profile-overview-tile{
@@ -87,7 +126,8 @@
 
             .status-icon-container {
                 width: 48px;
-                height: 48px;
+                height: 48px;    
+                text-align: center;
                 svg {
                     width: inherit;
                     height: inherit;
@@ -97,7 +137,8 @@
             }
 
             .status-info {
-                transform: translateY(-5px);
+                margin-top: 5px;
+                margin-bottom: 5px;
             }
 
             &.inactive {
