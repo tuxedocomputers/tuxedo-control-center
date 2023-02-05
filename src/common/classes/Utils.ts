@@ -38,6 +38,16 @@ export function getFiles(source) {
     }
 }
 
+export function getSymbolicLinks(source: string) {
+    try {
+        return fs.readdirSync(source, { withFileTypes: true })
+            .filter(dirent => dirent.isSymbolicLink())
+            .map(dirent => dirent.name);
+    } catch (err) {
+        return [];
+    }
+}
+
 export function findClosestValue(value: number, array: number[]): number {
     if (array === undefined) { return value; }
 
