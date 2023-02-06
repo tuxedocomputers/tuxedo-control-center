@@ -226,23 +226,21 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     // that cannot be exported
     public async exportProfiles()
     {
-        let documentsPath = await this.utils.getPath('documents');
-        // TODO does thhis need try catch block?
-        let res = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
-        let profiles = this.config.getCustomProfiles();
-        let txt = JSON.stringify(profiles);
-        // so when issue 99 is merged we could replace this with a popup error message (like in tomte gui interface)
-        try
-        {
+        try{
+            let documentsPath = await this.utils.getPath('documents');
+            let res = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
+            let profiles = this.config.getCustomProfiles();
+            let txt = JSON.stringify(profiles);
             await this.utils.writeTextFile("" + res,txt);
         }
-        catch(err)              
+        catch(err)
         {
-            console.error(err);
+            console.log("export canceled");
         }
+
     }
 
-    // TODO
+    
     public async importProfiles()
     {
         this.utils.pageDisabled = true;
@@ -285,9 +283,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 let res = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
                 if(res.action === "keepNew")
                 {
-                    newProfiles.concat(profiles[i]);
+                    newProfiles = newProfiles.concat(profiles[i]);
                 } 
-                else if (res.action === "keepOld")
+                else if (res.action === "keepOld") // basically same thing as cancel
                 {
                     continue;
                 }
@@ -295,25 +293,28 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 {
                     let newProfile = profiles[i];
                     newProfile.id = "nextfunctionwillreplacethisIDanyaway";
-                    newProfiles.concat(newProfile);
+                    newProfiles = newProfiles.concat(newProfile);
                 }
                 else if (res.action === "newName")
                 {
                     let newProfile = profiles[i];
                     newProfile.name = res.newName;
                     newProfile.id = "nextfunctionwillreplacethisIDanyaway";
-                    newProfiles.concat(newProfile);
+                    newProfiles = newProfiles.concat(newProfile);
                 }
             }
             else
             {
-                newProfiles.concat(profiles[i]);
+                newProfiles = newProfiles.concat(profiles[i]);
             }
         }
-        let importSuccess = await this.config.importProfiles(profiles);
-        if (!importSuccess)
+        if(newProfiles.length > 0)
         {
-            console.error("importing of Profiles failed");
+            let importSuccess = await this.config.importProfiles(newProfiles);
+            if (!importSuccess)
+            {
+                console.error("importing of Profiles failed");
+            }
         }
         this.utils.pageDisabled = false;
     }
