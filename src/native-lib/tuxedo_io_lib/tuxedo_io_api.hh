@@ -436,9 +436,17 @@ public:
 
     virtual bool GetDefaultODMPerformanceProfile(std::string &profileName) {
         int nrProfiles = 0;
+        int nrTDPs = 0;
+
         bool result = io->IoctlCall(R_UW_PROFS_AVAILABLE, nrProfiles);
         if (result && nrProfiles > 0) {
-            profileName = PERF_PROF_STR_ENTHUSIAST;
+            GetNumberTDPs(nrTDPs);
+            if (nrTDPs > 0) {
+                // LEDs only case (default to LEDs off)
+                profileName = PERF_PROF_STR_OVERBOOST;
+            } else {
+                profileName = PERF_PROF_STR_ENTHUSIAST;
+            }
         } else {
             result = false;
         }

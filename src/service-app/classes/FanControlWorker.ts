@@ -61,6 +61,10 @@ export class FanControlWorker extends DaemonWorker {
             if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
         }
 
+        if (nrFans === 0) {
+            return;
+        }
+
         // Update fan logic
         const currentFanProfile = this.tccd.getCurrentFanProfile(this.activeProfile);
         for (const fanNumber of this.fans.keys()) {
@@ -99,8 +103,8 @@ export class FanControlWorker extends DaemonWorker {
         const tempSensorAvailable: boolean[] = [];
 
         const moduleInfo = new ModuleInfo();
-
-        if (!TuxedoIOAPI.wmiAvailable()) {
+        const fanCtrlUnavailableCondition = !TuxedoIOAPI.wmiAvailable() || this.fans.size === 0;
+        if (fanCtrlUnavailableCondition) {
             if (this.controlAvailableMessage === false) {
                 this.tccd.logLine('FanControlWorker: Control unavailable');
             }

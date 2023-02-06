@@ -1036,20 +1036,44 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
-        <source>Theme</source>
-        <target state="translated">Theme</target>
+      <trans-unit id="chargingOptionsHeadingLabel" datatype="html">
+        <source>Battery charging options</source>
+        <target state="translated">Battery charging options</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="411a2a734bf65023e9d3b14a71d2e08ddf4032df" datatype="html">
-        <source>Light/Dark theme</source>
-        <target state="translated">Light/Dark theme</target>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
+        <source>Theme</source>
+        <target state="translated">Theme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cGlobalSettingsBrightnessLabelLight" datatype="html">
+        <source>Light</source>
+        <target state="translated">Light</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cGlobalSettingsBrightnessLabelDark" datatype="html">
+        <source>Dark</source>
+        <target state="translated">Dark</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cGlobalSettingsBrightnessLabelSystemSetting" datatype="html">
+        <source>System setting</source>
+        <target state="translated">System setting</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fef6532d9612cea6b6a9afc2bb23f0f059ba08f" datatype="html">
@@ -1292,22 +1316,6 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
-        <source>CPU Fan</source>
-        <target state="translated">CPU Fan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
-        <source>GPU Fan</source>
-        <target state="translated">GPU Fan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
         <source>Service unavailable</source>
         <target state="translated">Service unavailable</target>
@@ -1394,6 +1402,22 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
           <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
+        <source>CPU Fan</source>
+        <target state="translated">CPU Fan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
+        <source>GPU Fan</source>
+        <target state="translated">GPU Fan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">
@@ -1797,12 +1821,108 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityLabel" datatype="html">
+        <source>Full capacity</source>
+        <target state="translated">Full capacity</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedLabel" datatype="html">
+        <source>Reduced capacity</source>
+        <target state="translated">Reduced capacity</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryLabel" datatype="html">
+        <source>Stationary use</source>
+        <target state="translated">Stationary use</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityDescription" datatype="html">
+        <source>This is the default setting. Fastest charging speed and 100% battery capacity for best possible runtimes.</source>
+        <target state="translated">This is the default setting. Fastest charging speed and 100% battery capacity for best possible runtimes.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedDescription" datatype="html">
+        <source>Reduced charging speed and battery capacity (~90 %) for better battery lifespan.</source>
+        <target state="translated">Reduced charging speed and battery capacity (~90 %) for better battery lifespan.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryDescription" datatype="html">
+        <source>Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</source>
+        <target state="translated">Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryLabel" datatype="html">
+        <source>Priorize battery charging speed</source>
+        <target state="translated">Priorize battery charging speed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceLabel" datatype="html">
+        <source>Priorize performance</source>
+        <target state="translated">Priorize performance</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryDescription" datatype="html">
+        <source>Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</source>
+        <target state="translated">Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceDescription" datatype="html">
+        <source>Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</source>
+        <target state="translated">Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileLabel" datatype="html">
+        <source>Charging profiles</source>
+        <target state="translated">Charging profiles</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityLabel" datatype="html">
+        <source>USB-C charging options (Power Delivery DC-In)</source>
+        <target state="translated">USB-C charging options (Power Delivery DC-In)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
         <source>Quiet</source>
         <target state="translated">Quiet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
@@ -1810,7 +1930,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Low performance for light office tasks for very quiet fans and low power consumption.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
@@ -1818,7 +1938,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Office and Multimedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
@@ -1826,7 +1946,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
@@ -1834,7 +1954,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">High Performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
@@ -1842,7 +1962,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
@@ -1850,7 +1970,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
@@ -1858,7 +1978,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Lowest possible power consumption and silent fans at the cost of extremely low performance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">244</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
@@ -1866,7 +1986,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
@@ -1874,7 +1994,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Full performance at the expense of more noise and high temperatures.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
@@ -1882,7 +2002,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Cool and breezy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">254</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
@@ -1890,7 +2010,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Reduced power in favor of low temperatures and quiet fan noise.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
@@ -1898,7 +2018,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
@@ -1906,7 +2026,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Heavily reduced performance in favor of lowest possible power consumption and silent cooling.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">

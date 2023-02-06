@@ -22,6 +22,7 @@ import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-global-settings',
@@ -42,6 +43,10 @@ export class GlobalSettingsComponent implements OnInit {
     public fanControlEnabled: boolean = true;
     public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
+
+    public ctrlBrightnessMode = new FormControl();
+
+    public hasChargingSettings = false;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -64,6 +69,8 @@ export class GlobalSettingsComponent implements OnInit {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
             }
         }
+
+        this.utils.getBrightnessMode().then((mode) => { this.ctrlBrightnessMode.setValue(mode) });
     }
 
     onCPUSettingsEnabledChanged(event: any) {
@@ -117,11 +124,7 @@ export class GlobalSettingsComponent implements OnInit {
         }
     }
 
-    public buttonToggleTheme() {
-        if (this.utils.getThemeClass() === 'light-theme') {
-            this.utils.setThemeDark();
-        } else {
-            this.utils.setThemeLight();
-        }
+    public async onBrightnessModeCtrlChange() {
+        await this.utils.setBrightnessMode(this.ctrlBrightnessMode.value);
     }
 }

@@ -85,6 +85,7 @@ import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ProfileConflictDialogService } from './profile-conflict-dialog/profile-conflict-dialog.service';
 import { ProfileConflictComponent } from './profile-conflict-dialog/profile-conflict-dialog.component';
+import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -108,7 +109,8 @@ declare const require;
     AquarisControlComponent,
     DialogInputTextComponent,
     DialogConfirmComponent,
-    ProfileConflictComponent
+    ProfileConflictComponent,
+    ChargingSettingsComponent
   ],
   imports: [
     BrowserModule,

@@ -1027,10 +1027,18 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="9e83642b4db54975444db5b67e6056038afc27a9" datatype="html">
         <source>On deactivate, the default automatic fan control is restored directly.</source>
-        <target phase-name="approval-1" state="translated">Beim Deaktivieren wird unmittelbar die automatische standard Lüftersteuerung wiederhergestellt.</target>
+        <target phase-name="approval-1" state="translated">Beim Deaktivieren wird unmittelbar die automatische Standard-Lüftersteuerung wiederhergestellt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingOptionsHeadingLabel" datatype="html">
+        <source>Battery charging options</source>
+        <target state="translated">Akku-Ladeoptionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
@@ -1038,15 +1046,31 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Farbschema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="411a2a734bf65023e9d3b14a71d2e08ddf4032df" datatype="html">
-        <source>Light/Dark theme</source>
-        <target state="translated">Farbschema Hell/Dunkel</target>
+      <trans-unit id="cGlobalSettingsBrightnessLabelLight" datatype="html">
+        <source>Light</source>
+        <target state="translated">Hell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cGlobalSettingsBrightnessLabelDark" datatype="html">
+        <source>Dark</source>
+        <target state="translated">Dunkel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cGlobalSettingsBrightnessLabelSystemSetting" datatype="html">
+        <source>System setting</source>
+        <target state="translated">Systemeinstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fef6532d9612cea6b6a9afc2bb23f0f059ba08f" datatype="html">
@@ -1213,9 +1237,9 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
         <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
-        <target phase-name="approval-1" state="needs-adaptation">
-        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>Wie es aussieht verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
-        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Die Festplattenverschlüsselung kann nur wärend der installation ihres Systems aktiviert werden. Wenn sie die Festplattenverschlüsselung verwenden wollen, müssen sie ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Wenn sie ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+        <target phase-name="approval-1" state="translated">
+        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3>"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3>"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Die Festplattenverschlüsselung kann nur während der installation ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b>"/>Wenn Sie Ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b>"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
@@ -1286,22 +1310,6 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">62,63</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
-        <source>CPU Fan</source>
-        <target state="translated">CPU Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
-        <source>GPU Fan</source>
-        <target state="translated">GPU Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
@@ -1390,6 +1398,22 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
           <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
+        <source>CPU Fan</source>
+        <target state="translated">CPU Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
+        <source>GPU Fan</source>
+        <target state="translated">GPU Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">
@@ -1793,12 +1817,108 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityLabel" datatype="html">
+        <source>Full capacity</source>
+        <target state="translated">Maximale Kapazität</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedLabel" datatype="html">
+        <source>Reduced capacity</source>
+        <target state="translated">Reduzierte Kapazität</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryLabel" datatype="html">
+        <source>Stationary use</source>
+        <target state="translated">Stationärer Betrieb</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileHighCapacityDescription" datatype="html">
+        <source>This is the default setting. Fastest charging speed and 100% battery capacity for best possible runtimes.</source>
+        <target state="translated">Dies ist die Standardeinstellung. Maximale Aufladegeschwindigkeit und volle Kapazität für bestmögliche Akkulaufzeiten.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileBalancedDescription" datatype="html">
+        <source>Reduced charging speed and battery capacity (~90 %) for better battery lifespan.</source>
+        <target state="translated">Reduzierte Aufladegeschwindigkeit und Akkukapazität (~90 %) zugunsten der Akkulebensdauer.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileStationaryDescription" datatype="html">
+        <source>Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</source>
+        <target state="translated">Stark reduzierte Aufladegeschwindigkeit und Akkukapazität (~80 %) für eine größtmögliche Schonung der Akkulebensdauer. Eignet sich v.a. für den fast ausschließlich stationären Betrieb am Netzteil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryLabel" datatype="html">
+        <source>Priorize battery charging speed</source>
+        <target state="translated">Akku schnell laden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceLabel" datatype="html">
+        <source>Priorize performance</source>
+        <target state="translated">Beste Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityChargeBatteryDescription" datatype="html">
+        <source>Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</source>
+        <target state="translated">Die schnelle Aufladung des Akkus hat Vorrang zulasten der Systemleistung. Sobald der Akku aufgeladen ist, steht die volle Systemleistung zur Verfügung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityPerformanceDescription" datatype="html">
+        <source>Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</source>
+        <target state="translated">Die Leistung des PCs hat Vorrang vor der Aufladegeschwindigkeit. Unter hoher Last ist die Ladegeschwindigkeit zugunsten maximaler Leistung verringert; Bei geringer Last steht die volle Ladegeschwindigkeit zur Verfügung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingProfileLabel" datatype="html">
+        <source>Charging profiles</source>
+        <target state="translated">Ladeprofile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chargingPriorityLabel" datatype="html">
+        <source>USB-C charging options (Power Delivery DC-In)</source>
+        <target state="translated">USB-C-Ladeoptionen (Power Delivery DC-In)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
         <source>Quiet</source>
         <target state="translated">Leise</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
@@ -1806,7 +1926,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Geringe Systemleistung zugunsten sehr leiser Lüfter und geringem Energieverbrauch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
@@ -1814,7 +1934,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Office und Multimedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
@@ -1822,7 +1942,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Mittlere Systemleistung zugunsten niedriger bis mittlerer Lautstärke und geringem bis moderatem Stromverbrauch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
@@ -1830,7 +1950,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hohe Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
@@ -1838,7 +1958,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hohe Systemleistung für Gaming und anspruchsvolle Arbeiten zulasten von lautem Lüfter und hohen Temperaturen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
@@ -1846,7 +1966,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Energie sparen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
@@ -1854,7 +1974,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">244</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
@@ -1862,7 +1982,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
@@ -1870,7 +1990,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Volle Leistung zulasten von hoher Lautstärke und hohen Temperaturen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
@@ -1878,7 +1998,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Cool and breezy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">254</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
@@ -1886,7 +2006,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Reduzierte Leistung zugunsten von geringen Gehäusetemperaturen und leisem bis mittlerem Lüftergeräusch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
@@ -1894,7 +2014,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
@@ -1902,7 +2022,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">

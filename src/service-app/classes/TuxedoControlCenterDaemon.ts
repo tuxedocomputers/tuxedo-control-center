@@ -45,6 +45,7 @@ import { CpuController } from '../../common/classes/CpuController';
 import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { ChargingWorker } from './ChargingWorker';
 
 const tccPackage = require('../../package.json');
 
@@ -69,7 +70,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     protected started = false;
 
-    private stateWorker: DaemonWorker;
+    private stateWorker: StateSwitcherWorker;
+    private chargingWorker: ChargingWorker;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -97,10 +99,145 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
 
         // If program is still running this is the start of the daemon
-        this.readOrCreateConfigurationFiles();
+        this.loadConfigsAndProfiles();
         this.setupSignalHandling();
 
+        this.dbusData.tccdVersion = tccPackage.version;
+        this.stateWorker = new StateSwitcherWorker(this);
+        this.chargingWorker = new ChargingWorker(this);
+        this.workers.push(this.chargingWorker);
+        this.workers.push(this.stateWorker);
+        this.workers.push(new DisplayBacklightWorker(this));
+        this.workers.push(new CpuWorker(this));
+        this.workers.push(new WebcamWorker(this));
+        this.workers.push(new FanControlWorker(this));
+        this.workers.push(new YCbCr420WorkaroundWorker(this));
+        this.workers.push(new TccDBusService(this, this.dbusData));
+        this.workers.push(new ODMProfileWorker(this));
+        this.workers.push(new ODMPowerLimitWorker(this));
+
+        this.startWorkers();
+
+        this.started = true;
+        this.logLine('Daemon started');
+
+        // Start continuous work for each worker with individual interval
+        for (const worker of this.workers) {
+            worker.timer = setInterval(() => {
+                try {
+                    worker.work();
+                } catch (err) {
+                    this.logLine('Failed executing onWork() => ' + err);
+                }
+            }, worker.timeout);
+        }
+
+    }
+
+    public startWorkers(): void {
+        for (const worker of this.workers) {
+            try {
+                worker.updateProfile(this.getCurrentProfile());
+                worker.start();
+            } catch (err) {
+                this.logLine('Failed executing onStart() => ' + err);
+            }
+        }
+    }
+
+    public triggerStateCheck(reset?: boolean) {
+        if (reset === undefined) {
+            reset = false;
+        }
+        if (this.stateWorker !== undefined) {
+            if (reset) {
+                this.stateWorker.reset();
+            }
+            this.stateWorker.work();
+        }
+    }
+
+    public getChargingWorker() {
+        return this.chargingWorker;
+    }
+
+    public catchError(err: Error) {
+        this.logLine('Tccd Exception');
+        const errorLine = err.name + ': ' + err.message;
+        this.logLine(errorLine);
+        if (err.stack !== undefined) {
+            this.logLine(err.stack);
+        }
+        if (this.started) {
+            this.onExit();
+        }
+        process.exit();
+    }
+
+    public onExit() {
+        this.workers.forEach((worker) => {
+            clearInterval(worker.timer);
+        });
+        this.workers.forEach((worker) => {
+            // On exit events for each worker before exiting and saving settings
+            try {
+                worker.exit();
+            } catch (err) {
+                this.logLine('Failed executing onExit() => ' + err);
+            }
+        });
+        this.config.writeAutosave(this.autosave);
+        this.config.writeSettings(this.settings);
+    }
+
+    private async handleArgumentProgramFlow() {
+        if (process.argv.includes('--start')) {
+            // Start daemon as this process
+            if (!await this.start()) {
+                throw Error('Couldn\'t start daemon. It is probably already running');
+            } else {
+                this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
+                const modInfo = new ModuleInfo();
+                if (TuxedoIOAPI.wmiAvailable()) {
+                    TuxedoIOAPI.getModuleInfo(modInfo);
+                    this.logLine('tuxedo-io ver ' + modInfo.version + ' [ interface: ' + modInfo.activeInterface + ' ]');
+                } else {
+                    this.logLine('No tuxedo-io found on start');
+                }
+            }
+        } else if (process.argv.includes('--stop')) {
+            // Signal running process to stop
+            this.logLine('Stopping daemon..');
+            if (await this.stop()) {
+                this.logLine('Daemon is stopped');
+                process.exit(0);
+            } else {
+                throw Error('Failed to stop daemon');
+            }
+        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
+            // If new config is specified, replace standard config with new config
+            const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
+            const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
+            // If something changed, reload configs
+            if (settingsSaved || profilesSaved) {
+                const pidNumber = this.readPid();
+                if (isNaN(pidNumber)) {
+                    console.log('Failed to locate running tccd process. Cannot reload config.');
+                    process.exit(1);
+                } else {
+                    process.kill(pidNumber, 'SIGHUP');
+                }
+            }
+            process.exit(0);
+        } else {
+            throw Error('No argument specified');
+        }
+    }
+
+    public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
+
+        this.readOrCreateConfigurationFiles();
 
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
@@ -153,119 +290,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
         this.dbusData.defaultValuesProfileJSON = JSON.stringify(defaultValuesProfileFilled);
-
-        this.dbusData.tccdVersion = tccPackage.version;
-
-        this.stateWorker = new StateSwitcherWorker(this);
-        this.workers.push(this.stateWorker);
-        this.workers.push(new DisplayBacklightWorker(this));
-        this.workers.push(new CpuWorker(this));
-        this.workers.push(new WebcamWorker(this));
-        this.workers.push(new FanControlWorker(this));
-        this.workers.push(new YCbCr420WorkaroundWorker(this));
-        this.workers.push(new TccDBusService(this, this.dbusData));
-        this.workers.push(new ODMProfileWorker(this));
-        this.workers.push(new ODMPowerLimitWorker(this));
-
-        this.startWorkers();
-
-        this.started = true;
-        this.logLine('Daemon started');
-
-        // Start continuous work for each worker with individual interval
-        for (const worker of this.workers) {
-            worker.timer = setInterval(() => {
-                try {
-                    worker.work();
-                } catch (err) {
-                    this.logLine('Failed executing onWork() => ' + err);
-                }
-            }, worker.timeout);
-        }
-
-    }
-
-    public startWorkers(): void {
-        for (const worker of this.workers) {
-            try {
-                worker.updateProfile(this.getCurrentProfile());
-                worker.start();
-            } catch (err) {
-                this.logLine('Failed executing onStart() => ' + err);
-            }
-        }
-    }
-
-    public triggerStateCheck() {
-        if (this.stateWorker !== undefined) {
-            this.stateWorker.work();
-        }
-    }
-
-    public catchError(err: Error) {
-        this.logLine('Tccd Exception');
-        const errorLine = err.name + ': ' + err.message;
-        this.logLine(errorLine);
-        if (err.stack !== undefined) {
-            this.logLine(err.stack);
-        }
-        if (this.started) {
-            this.onExit();
-        }
-        process.exit();
-    }
-
-    public onExit() {
-        this.workers.forEach((worker) => {
-            clearInterval(worker.timer);
-        });
-        this.workers.forEach((worker) => {
-            // On exit events for each worker before exiting and saving settings
-            try {
-                worker.exit();
-            } catch (err) {
-                this.logLine('Failed executing onExit() => ' + err);
-            }
-        });
-        this.config.writeAutosave(this.autosave);
-    }
-
-    private async handleArgumentProgramFlow() {
-        if (process.argv.includes('--start')) {
-            // Start daemon as this process
-            if (!await this.start()) {
-                throw Error('Couldn\'t start daemon. It is probably already running');
-            } else {
-                this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
-                const modInfo = new ModuleInfo();
-                if (TuxedoIOAPI.wmiAvailable()) {
-                    TuxedoIOAPI.getModuleInfo(modInfo);
-                    this.logLine('tuxedo-io ver ' + modInfo.version + ' [ interface: ' + modInfo.activeInterface + ' ]');
-                } else {
-                    this.logLine('No tuxedo-io found on start');
-                }
-            }
-        } else if (process.argv.includes('--stop')) {
-            // Signal running process to stop
-            this.logLine('Stopping daemon..');
-            if (await this.stop()) {
-                this.logLine('Daemon is stopped');
-                process.exit(0);
-            } else {
-                throw Error('Failed to stop daemon');
-            }
-        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles')) {
-            // If new config is specified, replace standard config with new config
-            const settingsSaved = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
-            const profilesSaved = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            // If something changed, restart running service
-            if (settingsSaved || profilesSaved) {
-                child_process.exec(TuxedoControlCenterDaemon.CMD_RESTART_SERVICE);
-            }
-            process.exit(0);
-        } else {
-            throw Error('No argument specified');
-        }
     }
 
     private syncOutputPortsSetting() {
@@ -407,6 +431,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.logLine('SIGTERM - Exiting');
             this.onExit();
             process.exit(SIGTERM);
+        });
+
+        process.on('SIGHUP', () => {
+            this.logLine('Reload configs');
+            this.loadConfigsAndProfiles();
+            this.triggerStateCheck(true);
         });
     }
 
@@ -667,6 +697,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } else {
             return false;
         }
+    }
+
+    public saveSettings() {
+        this.config.writeSettings(this.settings);
     }
 
     /**
