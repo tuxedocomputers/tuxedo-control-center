@@ -152,6 +152,7 @@ declare const require;
     ChartsModule,
     ColorPickerModule,
     MatMenuModule,
+    MatRadioModule
   ],
   providers: [
     DecimalPipe,

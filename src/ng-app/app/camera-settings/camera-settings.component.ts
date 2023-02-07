@@ -27,6 +27,7 @@ import { Mutex } from "async-mutex";
 import * as fs from "fs";
 import { ConfigService } from "../config.service";
 import { environment } from "../../environments/environment";
+import { MatTab } from "@angular/material/tabs";
 
 @Component({
     selector: "app-camera-settings",
@@ -76,6 +77,8 @@ export class CameraSettingsComponent implements OnInit {
     // todo: getting from config?
     easyOptions: string[] = ["brightness", "contrast", "resolution"];
     easyModeActive: boolean = true;
+
+    selectedModeTabIndex: string = "Simple";
 
     constructor(
         private electron: ElectronService,
@@ -136,9 +139,13 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     public async reloadWebcamList(
-        webcamDeviceReference?: WebcamDevice
+        webcamDeviceReference?: WebcamDevice,
+        bypassLocked?: boolean
     ): Promise<void> {
-        if (this.mutex.isLocked()) return;
+        if (bypassLocked) {
+            if (this.mutex.isLocked()) return;
+        }
+
         this.mutex.runExclusive(async () => {
             let webcamData = await this.setWebcamDeviceInformation();
             this.webcamDropdownData = webcamData;
@@ -275,9 +282,8 @@ export class CameraSettingsComponent implements OnInit {
                     resolve(data.toString());
                 })
                 .catch((error) => {
-                    console.log(error);
                     this.cameraNotAvailabledDialog();
-                    this.reloadWebcamList();
+                    this.reloadWebcamList(null, true);
                 });
         });
     }
@@ -409,11 +415,15 @@ export class CameraSettingsComponent implements OnInit {
 
         let webcamPaths = this.getPathsWithId(this.selectedCamera.id);
         webcamPaths.forEach(async (devicePath) => {
-            await this.utils.execCmd(
-                "python3 " +
-                    this.getCameraCtrlPythonPath() +
-                    ` -d ${devicePath} -c ${controlStr}`
-            );
+            await this.utils
+                .execCmd(
+                    "python3 " +
+                        this.getCameraCtrlPythonPath() +
+                        ` -d ${devicePath} -c ${controlStr}`
+                )
+                .catch(async (error) => {
+                    await this.reloadWebcamList(null, true);
+                });
         });
     }
 
@@ -1065,14 +1075,14 @@ export class CameraSettingsComponent implements OnInit {
         return new Promise((resolve) => setTimeout(resolve, delay));
     }
 
-    public modeSelectionTriggered(mode: string) {
-        if (mode == "Simple") {
+    public modeSelectionTriggered(mode: MatTab) {
+        if (mode.textLabel == "Simple") {
             this.disableAdvancedSettings();
-            this.selectedWebcamMode = "Simple";
+            this.selectedModeTabIndex = "Simple";
         }
-        if (mode == "Advanced") {
+        if (mode.textLabel == "Advanced") {
             this.showAdvancedSettings();
-            this.selectedWebcamMode = "Advanced";
+            this.selectedModeTabIndex = "Advanced";
         }
     }
 

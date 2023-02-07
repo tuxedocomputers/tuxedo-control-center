@@ -437,89 +437,6 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">143,144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
-        <source>Info</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
-        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
-        <target state="translated">Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">32,34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
-        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
-        <target state="translated">Mit vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">36,38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
-        <source>Installed version</source>
-        <target phase-name="approval-1" state="translated">Installierte Version</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
-        <source>Changelog</source>
-        <target phase-name="approval-1" state="translated">Änderungsprotokoll</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintPanelTitle" datatype="html" approved="yes">
-        <source>Imprint</source>
-        <target phase-name="approval-1" state="signed-off">Impressum</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">122</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintText" datatype="html" approved="yes">
-        <source>
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Germany
-
-Telephone: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876
-WEEE reg. no.: DE 93420497
-listed in the commercial register of the local court Augsburg
-Commercial register number - Part B of the commercial register - 27755
-        </source>
-        <target phase-name="approval-1" state="needs-adaptation">
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Deutschland
-
-Telefon: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-USt-IdNr.: DE815420876
-WEEE-Reg.-Nr.: DE 93420497
-eingetragen im Handelsregister des Amtsgerichtes Augsburg
-Handelsregisternummer HRB 27755
-        </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">127,140</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="odmLEDNone" datatype="html">
         <source>all LEDs off</source>
         <target state="translated">alle LEDs aus</target>
@@ -585,7 +502,7 @@ Handelsregisternummer HRB 27755
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonSaveTooltip" datatype="html" approved="yes">
@@ -605,7 +522,7 @@ Handelsregisternummer HRB 27755
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNameLabel" datatype="html">
@@ -721,7 +638,7 @@ Handelsregisternummer HRB 27755
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">53,54</context>
+          <context context-type="linenumber">59,60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
@@ -850,6 +767,89 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">493</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
+        <source>Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
+        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
+        <target state="translated">Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
+        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
+        <target state="translated">Mit vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
+        <source>Installed version</source>
+        <target phase-name="approval-1" state="translated">Installierte Version</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
+        <source>Changelog</source>
+        <target phase-name="approval-1" state="translated">Änderungsprotokoll</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintPanelTitle" datatype="html" approved="yes">
+        <source>Imprint</source>
+        <target phase-name="approval-1" state="signed-off">Impressum</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintText" datatype="html" approved="yes">
+        <source>
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </source>
+        <target phase-name="approval-1" state="needs-adaptation">
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Deutschland
+
+Telefon: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+USt-IdNr.: DE815420876
+WEEE-Reg.-Nr.: DE 93420497
+eingetragen im Handelsregister des Amtsgerichtes Augsburg
+Handelsregisternummer HRB 27755
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanTempValue" datatype="html">
@@ -1929,7 +1929,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Belichtung, Auto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1075</context>
+          <context context-type="linenumber">1085</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamExposureAbsolute" datatype="html">
@@ -1937,7 +1937,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Belichtung (Absolut)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1078</context>
+          <context context-type="linenumber">1088</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamExposureAutoPriority" datatype="html">
@@ -1945,7 +1945,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Belichtung, automatische Priorität</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1081</context>
+          <context context-type="linenumber">1091</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamGain" datatype="html">
@@ -1953,7 +1953,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Verstärkung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1084</context>
+          <context context-type="linenumber">1094</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamBacklightCompensation" datatype="html">
@@ -1961,7 +1961,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Korrektur der Hintergrundbeleuchtung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1087</context>
+          <context context-type="linenumber">1097</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamWhiteBalanceTemperatureAuto" datatype="html">
@@ -1969,7 +1969,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Automatischer Weißabgleich (Temperatur)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1090</context>
+          <context context-type="linenumber">1100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="whiteBalanceTemperature" datatype="html">
@@ -1977,7 +1977,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Weißabgleich (Temperatur)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1093</context>
+          <context context-type="linenumber">1103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamBrightness" datatype="html">
@@ -1985,7 +1985,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Helligkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1096</context>
+          <context context-type="linenumber">1106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamContrast" datatype="html">
@@ -1993,7 +1993,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Kontrast</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1099</context>
+          <context context-type="linenumber">1109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamSaturation" datatype="html">
@@ -2001,7 +2001,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sättigung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1102</context>
+          <context context-type="linenumber">1112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamSharpness" datatype="html">
@@ -2009,7 +2009,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Schärfe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1105</context>
+          <context context-type="linenumber">1115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamHue" datatype="html">
@@ -2017,7 +2017,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Farbe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1108</context>
+          <context context-type="linenumber">1118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamGamma" datatype="html">
@@ -2025,7 +2025,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Gamma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1111</context>
+          <context context-type="linenumber">1121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamResolution" datatype="html">
@@ -2033,7 +2033,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Auflösung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1114</context>
+          <context context-type="linenumber">1124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamFps" datatype="html">
@@ -2041,7 +2041,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Bilder pro Sekunde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1117</context>
+          <context context-type="linenumber">1127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamAperturePriorityMode" datatype="html">
@@ -2049,7 +2049,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Blendenprioritätsmodus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1120</context>
+          <context context-type="linenumber">1130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamManualMode" datatype="html">
@@ -2057,7 +2057,23 @@ Handelsregisternummer HRB 27755
         <target state="translated">Manueller Modus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
-          <context context-type="linenumber">1123</context>
+          <context context-type="linenumber">1133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamNotFoundInfoText" datatype="html">
+        <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, you can press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
+        <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, können Sie auf Neu laden klicken, und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">12,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonApplyTooltip" datatype="html">
+        <source>Apply changes</source>
+        <target state="translated">Einstellungen übernehmen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
