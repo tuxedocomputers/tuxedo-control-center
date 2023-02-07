@@ -16,6 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+ .tcc-card {
+    z-index: 1;
+
+    .center {
+        text-align: center;
+    }
+ }
+
  .webcam-settings-edit {
     display: block;
     position: absolute;
@@ -46,13 +55,6 @@
     
     }
 
-    .profile-details-edit {
-        .advanced-settings-button {
-            display: flex;
-            margin-left:  auto;
-        }
-    }
-
     .profile-title {
         position: fixed;
         top: 10px;
@@ -63,9 +65,22 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        
+
+        mat-button-toggle-group {
+            transform: scale(0.7);
+            transform-origin: right;
+        }
+        
 
         .save-reset-buttons {
             --icon-detail: var(--icon-main);
+            position: relative;
+        }
+
+        .mode-toggle {
+            margin-right: 20px;
+            position: relative;
         }
 
         .name {
@@ -125,21 +140,6 @@
                     }
                 }
             }
-
-            mat-button-toggle-group {
-                transform: scale(0.8);
-                transform-origin: left;
-
-                mat-button-toggle {
-                    font-size: 1.6em;
-                    svg {
-                        width: 40px;
-                        height: 40px;
-
-                        --icon-detail: var(--icon-main);
-                    }
-                }
-            }
         }
     }
 
@@ -161,4 +161,10 @@
 
 mat-expansion-panel * {
     transition: none !important;
+}
+
+.advanced-mode-toggle {
+    transform: scale(0.6);
+    transform-origin: left;
+    font-size: 160%;
 }

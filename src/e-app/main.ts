@@ -430,7 +430,7 @@ async function getActiveProfile(): Promise<TccProfile> {
 }
 
 function createTccWindow(langId: string, module?: string) {
-    let windowWidth = 1040;
+    let windowWidth = 1250;
     let windowHeight = 770;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
         windowWidth = screen.getPrimaryDisplay().workAreaSize.width;

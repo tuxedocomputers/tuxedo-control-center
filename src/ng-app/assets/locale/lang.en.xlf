@@ -7,7 +7,7 @@
         <target state="translated">Invalid input</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrInvalidNameMessage" datatype="html">
@@ -15,7 +15,7 @@
         <target state="translated">A name for the profile is required</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewProfileLabel" datatype="html">
@@ -23,7 +23,7 @@
         <target state="translated">New profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">244</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewButtonTooltip" datatype="html">
@@ -31,7 +31,7 @@
         <target state="translated">Create a new profile with default settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrCopyProfileLabel" datatype="html">
@@ -39,7 +39,7 @@
         <target state="translated">Copy this profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrTitle" datatype="html">
@@ -430,12 +430,94 @@
       </trans-unit>
       <trans-unit id="ProfOverviewTileNewProfileDescription" datatype="html">
         <source> Create a new profile and configure it as you want </source>
-        <target state="needs-adaptation">
-                Create a new profile and configure it as you want
-            </target>
+        <target state="translated"> Create a new profile and configure it as you want </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">143,144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
+        <source>Info</source>
+        <target state="translated">Info</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
+        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
+        <target state="translated"> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
+        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
+        <target state="translated"> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
+        <source>Installed version</source>
+        <target state="translated">Installed version</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
+        <source>Changelog</source>
+        <target state="translated">Changelog</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintPanelTitle" datatype="html">
+        <source>Imprint</source>
+        <target state="translated">Imprint</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintText" datatype="html">
+        <source>
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </source>
+        <target state="needs-adaptation">
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDNone" datatype="html">
@@ -501,6 +583,10 @@
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonSaveTooltip" datatype="html">
         <source>Save changes</source>
@@ -508,6 +594,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsProfileSettingsLabel" datatype="html">
@@ -628,6 +718,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">356</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html">
@@ -756,90 +850,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">493</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
-        <source>Info</source>
-        <target state="translated">Info</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
-        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
-        <target state="translated"> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">32,34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
-        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
-        <target state="translated"> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">36,38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
-        <source>Installed version</source>
-        <target state="translated">Installed version</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
-        <source>Changelog</source>
-        <target state="translated">Changelog</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintPanelTitle" datatype="html">
-        <source>Imprint</source>
-        <target state="translated">Imprint</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">122</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintText" datatype="html">
-        <source>
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Germany
-
-Telephone: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
-WEEE reg. no.: DE 93420497
-listed in the commercial register of the local court Augsburg
-Commercial register number - Part B of the commercial register - 27755
-        </source>
-        <target state="needs-adaptation">
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Germany
-
-Telephone: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
-WEEE reg. no.: DE 93420497
-listed in the commercial register of the local court Augsburg
-Commercial register number - Part B of the commercial register - 27755
-        </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanTempValue" datatype="html">
@@ -1337,7 +1347,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Dashboard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuProfiles" datatype="html">
@@ -1345,7 +1355,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Profiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuTools" datatype="html">
@@ -1353,7 +1363,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Tools</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuUsedProfilesLabel" datatype="html">
@@ -1361,7 +1371,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Used profiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuSupport" datatype="html">
@@ -1369,7 +1379,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
@@ -1377,7 +1387,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
@@ -1385,7 +1395,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
@@ -1401,7 +1411,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
@@ -1917,12 +1927,148 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="webcamExposureAuto" datatype="html">
+        <source>Exposure, Auto</source>
+        <target state="translated">Exposure, Auto</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1075</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamExposureAbsolute" datatype="html">
+        <source>Exposure (Absolute)</source>
+        <target state="translated">Exposure (Absolute)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1078</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamExposureAutoPriority" datatype="html">
+        <source>Exposure, Auto Priority</source>
+        <target state="translated">Exposure, Auto Priority</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1081</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamGain" datatype="html">
+        <source>Gain</source>
+        <target state="translated">Gain</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1084</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamBacklightCompensation" datatype="html">
+        <source>Backlight Compensation</source>
+        <target state="translated">Backlight Compensation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1087</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamWhiteBalanceTemperatureAuto" datatype="html">
+        <source>White Balance Temperature, Auto</source>
+        <target state="translated">White Balance Temperature, Auto</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1090</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="whiteBalanceTemperature" datatype="html">
+        <source>White Balance Temperature</source>
+        <target state="translated">White Balance Temperature</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1093</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamBrightness" datatype="html">
+        <source>Brightness</source>
+        <target state="translated">Brightness</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1096</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamContrast" datatype="html">
+        <source>Contrast</source>
+        <target state="translated">Contrast</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1099</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamSaturation" datatype="html">
+        <source>Saturation</source>
+        <target state="translated">Saturation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamSharpness" datatype="html">
+        <source>Sharpness</source>
+        <target state="translated">Sharpness</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamHue" datatype="html">
+        <source>Hue</source>
+        <target state="translated">Hue</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamGamma" datatype="html">
+        <source>Gamma</source>
+        <target state="translated">Gamma</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamResolution" datatype="html">
+        <source>Resolution</source>
+        <target state="translated">Resolution</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamFps" datatype="html">
+        <source>Frames per Second</source>
+        <target state="translated">Frames per Second</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamAperturePriorityMode" datatype="html">
+        <source>Aperture Priority Mode</source>
+        <target state="translated">Aperture Priority Mode</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamManualMode" datatype="html">
+        <source>Manual Mode</source>
+        <target state="translated">Manual Mode</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1123</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
         <source>Quiet</source>
         <target state="translated">Quiet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
@@ -1930,7 +2076,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Low performance for light office tasks for very quiet fans and low power consumption.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
@@ -1938,7 +2084,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Office and Multimedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
@@ -1946,7 +2092,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
@@ -1954,7 +2100,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">High Performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
@@ -1962,7 +2108,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
@@ -1970,7 +2116,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
@@ -1978,7 +2124,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Lowest possible power consumption and silent fans at the cost of extremely low performance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
@@ -1986,7 +2132,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
@@ -1994,7 +2140,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Full performance at the expense of more noise and high temperatures.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">268</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
@@ -2002,7 +2148,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Cool and breezy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
@@ -2010,7 +2156,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Reduced power in favor of low temperatures and quiet fan noise.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
@@ -2018,7 +2164,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">286</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
@@ -2026,7 +2172,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Heavily reduced performance in favor of lowest possible power consumption and silent cooling.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
@@ -2034,7 +2180,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">CPU settings deactivated in Tools→Global Settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFanControlOff" datatype="html">
@@ -2042,7 +2188,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Fan control deactivated in Tools→Global Settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">

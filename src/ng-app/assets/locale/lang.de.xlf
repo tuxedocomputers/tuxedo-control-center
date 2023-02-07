@@ -7,7 +7,7 @@
         <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrInvalidNameMessage" datatype="html" approved="yes">
@@ -15,7 +15,7 @@
         <target phase-name="approval-1" state="signed-off">Ein Name für das Profil ist nötig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewProfileLabel" datatype="html" approved="yes">
@@ -23,7 +23,7 @@
         <target phase-name="approval-1" state="signed-off">Neues Profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">244</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewButtonTooltip" datatype="html" approved="yes">
@@ -31,7 +31,7 @@
         <target phase-name="approval-1" state="signed-off">Ein neues Profil mit Standardeinstellungen erstellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrCopyProfileLabel" datatype="html" approved="yes">
@@ -39,7 +39,7 @@
         <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrTitle" datatype="html" approved="yes">
@@ -199,7 +199,7 @@
       </trans-unit>
       <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
         <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></source>
-        <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. 
+        <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm.
 Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
@@ -437,6 +437,89 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">143,144</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
+        <source>Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
+        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
+        <target state="translated">Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
+        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
+        <target state="translated">Mit vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
+        <source>Installed version</source>
+        <target phase-name="approval-1" state="translated">Installierte Version</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
+        <source>Changelog</source>
+        <target phase-name="approval-1" state="translated">Änderungsprotokoll</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintPanelTitle" datatype="html" approved="yes">
+        <source>Imprint</source>
+        <target phase-name="approval-1" state="signed-off">Impressum</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintText" datatype="html" approved="yes">
+        <source>
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </source>
+        <target phase-name="approval-1" state="needs-adaptation">
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Deutschland
+
+Telefon: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+USt-IdNr.: DE815420876
+WEEE-Reg.-Nr.: DE 93420497
+eingetragen im Handelsregister des Amtsgerichtes Augsburg
+Handelsregisternummer HRB 27755
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">127,140</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="odmLEDNone" datatype="html">
         <source>all LEDs off</source>
         <target state="translated">alle LEDs aus</target>
@@ -500,6 +583,10 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonSaveTooltip" datatype="html" approved="yes">
         <source>Save changes</source>
@@ -515,6 +602,10 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNameLabel" datatype="html">
@@ -627,6 +718,10 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">356</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
@@ -755,90 +850,6 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">493</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoInfoPanelTitle" datatype="html" approved="yes">
-        <source>Info</source>
-        <target phase-name="approval-1" state="signed-off">Informationen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
-        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
-        <target state="translated">Mit dem TUXEDO Control Center haben wir ein einzigartiges Werkzeug für Sie entwickelt, mit dem Sie sämtliche Sicherheits-, Leistungs-, Energie-, Komfort- und Lebensdauerfunktionen Ihres TUXEDO Computers steuern und überwachen können.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">32,34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
-        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
-        <target state="translated">Mit vorgefertigten sowie beliebig vielen individuell konfigurierbaren Profilen erhalten Sie größtmögliche Kontrolle und Anpassbarkeit Ihres TUXEDO Gerätes an Ihre Bedürfnisse.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">36,38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
-        <source>Installed version</source>
-        <target phase-name="approval-1" state="translated">Installierte Version</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
-        <source>Changelog</source>
-        <target phase-name="approval-1" state="translated">Änderungsprotokoll</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintPanelTitle" datatype="html" approved="yes">
-        <source>Imprint</source>
-        <target phase-name="approval-1" state="signed-off">Impressum</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">122</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintText" datatype="html" approved="yes">
-        <source>
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Germany
-
-Telephone: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
-WEEE reg. no.: DE 93420497
-listed in the commercial register of the local court Augsburg
-Commercial register number - Part B of the commercial register - 27755
-        </source>
-        <target phase-name="approval-1" state="needs-adaptation">
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Deutschland
-
-Telefon: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-USt-IdNr.: DE815420876
-WEEE-Reg.-Nr.: DE 93420497
-eingetragen im Handelsregister des Amtsgerichtes Augsburg
-Handelsregisternummer HRB 27755
-        </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanTempValue" datatype="html">
@@ -1333,7 +1344,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Dashboard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuProfiles" datatype="html" approved="yes">
@@ -1341,7 +1352,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuTools" datatype="html">
@@ -1349,7 +1360,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Tools</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuUsedProfilesLabel" datatype="html">
@@ -1357,7 +1368,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Aktuell verwendete Profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuSupport" datatype="html" approved="yes">
@@ -1365,7 +1376,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
@@ -1373,7 +1384,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
@@ -1381,7 +1392,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
@@ -1397,7 +1408,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
@@ -1913,12 +1924,148 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="webcamExposureAuto" datatype="html">
+        <source>Exposure, Auto</source>
+        <target state="translated">Belichtung, Auto</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1075</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamExposureAbsolute" datatype="html">
+        <source>Exposure (Absolute)</source>
+        <target state="translated">Belichtung (Absolut)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1078</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamExposureAutoPriority" datatype="html">
+        <source>Exposure, Auto Priority</source>
+        <target state="translated">Belichtung, automatische Priorität</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1081</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamGain" datatype="html">
+        <source>Gain</source>
+        <target state="translated">Verstärkung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1084</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamBacklightCompensation" datatype="html">
+        <source>Backlight Compensation</source>
+        <target state="translated">Korrektur der Hintergrundbeleuchtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1087</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamWhiteBalanceTemperatureAuto" datatype="html">
+        <source>White Balance Temperature, Auto</source>
+        <target state="translated">Automatischer Weißabgleich (Temperatur)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1090</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="whiteBalanceTemperature" datatype="html">
+        <source>White Balance Temperature</source>
+        <target state="translated">Weißabgleich (Temperatur)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1093</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamBrightness" datatype="html">
+        <source>Brightness</source>
+        <target state="translated">Helligkeit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1096</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamContrast" datatype="html">
+        <source>Contrast</source>
+        <target state="translated">Kontrast</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1099</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamSaturation" datatype="html">
+        <source>Saturation</source>
+        <target state="translated">Sättigung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamSharpness" datatype="html">
+        <source>Sharpness</source>
+        <target state="translated">Schärfe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamHue" datatype="html">
+        <source>Hue</source>
+        <target state="translated">Farbe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamGamma" datatype="html">
+        <source>Gamma</source>
+        <target state="translated">Gamma</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamResolution" datatype="html">
+        <source>Resolution</source>
+        <target state="translated">Auflösung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamFps" datatype="html">
+        <source>Frames per Second</source>
+        <target state="translated">Bilder pro Sekunde</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamAperturePriorityMode" datatype="html">
+        <source>Aperture Priority Mode</source>
+        <target state="translated">Blendenprioritätsmodus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamManualMode" datatype="html">
+        <source>Manual Mode</source>
+        <target state="translated">Manueller Modus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1123</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
         <source>Quiet</source>
         <target state="translated">Leise</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
@@ -1926,7 +2073,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Geringe Systemleistung zugunsten sehr leiser Lüfter und geringem Energieverbrauch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
@@ -1934,7 +2081,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Office und Multimedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
@@ -1942,7 +2089,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Mittlere Systemleistung zugunsten niedriger bis mittlerer Lautstärke und geringem bis moderatem Stromverbrauch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
@@ -1950,7 +2097,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hohe Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
@@ -1958,7 +2105,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hohe Systemleistung für Gaming und anspruchsvolle Arbeiten zulasten von lautem Lüfter und hohen Temperaturen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
@@ -1966,7 +2113,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Energie sparen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
@@ -1974,7 +2121,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
@@ -1982,7 +2129,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
@@ -1990,7 +2137,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Volle Leistung zulasten von hoher Lautstärke und hohen Temperaturen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">268</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
@@ -1998,7 +2145,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Cool and breezy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
@@ -2006,7 +2153,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Reduzierte Leistung zugunsten von geringen Gehäusetemperaturen und leisem bis mittlerem Lüftergeräusch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
@@ -2014,7 +2161,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">286</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
@@ -2022,7 +2169,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
@@ -2030,7 +2177,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">CPU-Einstellungen deaktiviert in Tools→Globale Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFanControlOff" datatype="html">
@@ -2038,7 +2185,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Lüftersteuerung deaktiviert in Tools→Globale Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html" approved="yes">

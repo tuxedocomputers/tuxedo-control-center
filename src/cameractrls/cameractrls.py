@@ -1874,6 +1874,16 @@ class CameraCtrls:
                             return True
         return False
 
+    def get_default_preset(self):
+        config_parameter = {}
+        for page in self.get_ctrl_pages():
+            for cat in page.categories:
+                if page.title in ["Exposure", "Color", "Capture"]:
+                    for c in cat.ctrls:
+                        if c.default is not None:
+                            config_parameter[c.text_id] = c.default
+        return config_parameter
+
     def print_ctrls_json(self):
         config_data = []
         config_parameter = {}
@@ -1900,7 +1910,7 @@ class CameraCtrls:
                             else:
                                 config_parameter["current"] = c.value
 
-                            if c.default:
+                            if c.default is not None:
                                 config_parameter["default"] = c.default
                             else:
                                 config_parameter["default"] = config_parameter["options"][-1]
@@ -2063,10 +2073,11 @@ class CameraCtrls:
         return pages
 
 def get_ctrlsmap_from_config(config_path: str, vendor_id: str, product_id: str):
-    for config in json.load(open(config_path)):
-        if config["active"] == True and config["webcamId"] == vendor_id + ":" + product_id:
-            webcam_settings = {key: value for (key, value) in config["webcamSettings"].items() if key not in ["fps", "resolution"]}
-            return webcam_settings
+    if os.path.exists(config_path):
+        for config in json.load(open(config_path)):
+            if config["active"] == True and config["webcamId"] == vendor_id + ":" + product_id:
+                webcam_settings = {key: value for (key, value) in config["webcamSettings"].items() if key not in ["fps", "resolution"]}
+                return webcam_settings
     return ''
 
 def get_ctrlsmap(controls):
@@ -2181,9 +2192,14 @@ def main():
         camera_ctrls.print_ctrls()
     elif list_controls_json:
         camera_ctrls.print_ctrls_json()
-    elif ctrlsmap and not ignore_grey:
+
+    # setting default preset if no config values
+    if not ctrlsmap:
+        ctrlsmap = camera_ctrls.get_default_preset()
+
+    if not ignore_grey:
         camera_ctrls.setup_ctrls(ctrlsmap)
-    elif ctrlsmap and camera_ctrls.get_is_not_gray_pixelformat():
+    elif camera_ctrls.get_is_not_gray_pixelformat():
         camera_ctrls.setup_ctrls(ctrlsmap)
 
 if __name__ == '__main__':
