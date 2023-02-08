@@ -62,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div class="profile-compare-box">
     <div style="float:left;">  
         
-        <h1 class="profile_old_new"> Old Profile </h1>
+        <h1 class="profile_old_new" i18n="@@@cProfMgrConflictTitleOldProfile"> Old Profile </h1>
 
         <mat-card class="profile-overview-tile"> 
             <header>
@@ -127,7 +127,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 
     <div style="float:right;">
-        <h1 class="profile_old_new"> New Profile </h1>
+        <h1 class="profile_old_new" i18n="@@@cProfMgrConflictTitleNewProfile"> New Profile </h1>
         <mat-card class="profile-overview-tile"> 
             <header>
                 <p class="profile-name"> {{ data.newProfile.name }} </p>
@@ -191,21 +191,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 </div>
 
-<div style="padding-bottom: 20px" mat-dialog-actions *ngIf="!rename">
-    <button mat-raised-button color="primary" (click)="action('keepOld')"> Keep Old </button>
-    <button mat-raised-button color="primary" (click)="action('keepNew')" > Keep New </button>
-    <button mat-raised-button color="primary" (click)="action('keepBoth')" > Keep Both </button>
-    <button mat-raised-button color="primary" (click)="renameProfile()" > Rename Imported Profile </button>
-    <button mat-raised-button color="basic" (click)="cancel()" > Cancel </button>
+<div mat-dialog-actions *ngIf="!rename">
+    <button mat-raised-button color="primary" (click)="action('keepOld')" i18n="@@@cProfMgrConflictButtonKeepOld"> Keep Old </button>
+    <button mat-raised-button color="primary" (click)="action('keepNew')" i18n="@@@cProfMgrConflictButtonKeepNew"> Keep New </button>
+    <button mat-raised-button color="primary" (click)="action('keepBoth')" i18n="@@@cProfMgrConflictButtonKeepBoth"> Keep Both </button>
+    <button mat-raised-button color="primary" (click)="renameProfile()" i18n="@@@cProfMgrConflictButtonRename"> Rename Imported Profile </button>
+    <button mat-raised-button color="basic" (click)="cancel()" i18n="@@@cProfMgrConflictButtonCancel"> Cancel </button>
 </div>
 
 <div mat-dialog-actions *ngIf="rename">
         <form (ngSubmit)="submitNewname()">
             <mat-form-field class="new-profile-name-input">
-                <mat-label> Input a new name </mat-label>
+                <mat-label i18n="@@@cProfMgrConflictFormFieldInputNewName"> Input a new name </mat-label>
                 <input matInput #inputFocus="matInput" type="text" [formControl]="inputNewProfileName" (keyup.esc)="cancelInput()" placeholder="New profile name" minLength="1" maxLength="50" />
             </mat-form-field>
-            <button mat-raised-button color="primary" i18n [disabled]="profileNameExist(inputFocus.value)">Save</button>
-            <button mat-raised-button color="basic" (click)="cancelRename()" i18n> Go back </button>
+            <button mat-raised-button color="primary" i18n="@@@cProfMgrConflictButtonSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button mat-raised-button color="basic" (click)="cancelRename()" i18n="@@@cProfMgrConflictButtonGoBack"> Go back </button>
         </form>
 </div>

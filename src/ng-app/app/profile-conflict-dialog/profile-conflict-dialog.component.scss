@@ -23,21 +23,6 @@
     min-width: 520px !important;
 }
 
-.dark-theme .mat-dialog-container{
-    background-color: #303030;
-}
-.dark-theme .profile-overview-tile
-{
-    background-color: #252525;
-}
-
-.light-theme .mat-dialog-container{
-    background-color: #fafafa;
-}
-.light-theme .profile-overview-tile
-{
-    background-color: white;
-}
 .profile-compare-box{
 
     justify-content: space-between;
@@ -46,6 +31,11 @@
     overflow: hidden;
 }
 
+
+// both issues don't seem to remove the scrollbar, even tho content has enough space...
+// don't want to deactivate scrollbar completely, since the content might get longer and need it.
+// never mind, the scrollbar magically vanished...
+// kind of convinced CSS is cursed at this point.
 .mat-dialog-container
 {
     // https://github.com/twbs/bootstrap/issues/13608
