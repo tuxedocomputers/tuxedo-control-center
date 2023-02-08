@@ -245,7 +245,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     {
         this.utils.pageDisabled = true;
         let documentsPath = await this.utils.getPath('documents');
-        let importLabel = "Import"; // TODO localize
+        let importLabel = $localize `:@@pMgrImportLabelFileDialoge:Import`; 
         let res;
         let txt;
         try

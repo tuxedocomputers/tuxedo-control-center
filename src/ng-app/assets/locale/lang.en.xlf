@@ -2093,6 +2093,118 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="@cProfMgrConflictTitleOldProfile" datatype="html">
+        <source> Old Profile </source>
+        <target state="translated"> Old Profile </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictTitleNewProfile" datatype="html">
+        <source> New Profile </source>
+        <target state="translated"> New Profile </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepOld" datatype="html">
+        <source> Keep Old </source>
+        <target state="translated"> Keep Old </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepNew" datatype="html">
+        <source> Keep New </source>
+        <target state="translated"> Keep New </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepBoth" datatype="html">
+        <source> Keep Both </source>
+        <target state="translated"> Keep Both </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonRename" datatype="html">
+        <source> Rename Imported Profile </source>
+        <target state="translated"> Rename Imported Profile </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonCancel" datatype="html">
+        <source> Cancel </source>
+        <target state="translated"> Cancel </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictFormFieldInputNewName" datatype="html">
+        <source> Input a new name </source>
+        <target state="translated"> Input a new name </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonSave" datatype="html">
+        <source>Save</source>
+        <target state="translated">Save</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonGoBack" datatype="html">
+        <source> Go back </source>
+        <target state="translated"> Go back </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonImportTooltip" datatype="html">
+        <source>Import Profile Settings</source>
+        <target state="translated">Import Profile Settings</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonExportTooltip" datatype="html">
+        <source>Export Profile Settings</source>
+        <target state="translated">Export Profile Settings</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictWindowTitle" datatype="html">
+        <source> Importing Conflict </source>
+        <target state="translated"> Importing Conflict </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
+        <source>Import</source>
+        <target state="translated">Import</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">248</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>
