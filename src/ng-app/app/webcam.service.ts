@@ -32,11 +32,10 @@ export class CanDeactivateGuard
 
     askUnsavedPreset() {
         let config = {
-            title: "Unsaved changes",
-            description:
-                "Changes were not saved. Are you sure that you want to leave before saving?",
-            buttonAbortLabel: "Go back",
-            buttonConfirmLabel: "Leave",
+            title: $localize`:@@webcamDialogUnsavedChangesTitle:Unsaved changes`,
+            description: $localize`:@@webcamDialogUnsavedChangesDescription:Changes were not saved. Are you sure that you want to leave before saving?`,
+            buttonAbortLabel: $localize`:@@dialogReturn:Go back`,
+            buttonConfirmLabel: $localize`:@@dialogLeave:Leave`,
         };
         return this.utils.confirmDialog(config);
     }

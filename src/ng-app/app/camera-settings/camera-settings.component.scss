@@ -36,7 +36,9 @@
     padding: 0px;
     overflow-y: scroll;
 
-    margin: 0 10px 10px 10px;
+    .inner-webcam-settings-edit {
+        margin: 0 10px 10px 10px;
+    }
 
     .webcam {
         display: flex;
@@ -72,32 +74,14 @@
             transform-origin: right;
         }
         
-
         .save-reset-buttons {
+            background-color: white;
             --icon-detail: var(--icon-main);
             position: relative;
-        }
-
-        .mode-toggle {
-            margin-right: 20px;
-            position: relative;
-        }
-
-        .name {
-            width: 400px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size:20px;
-
-            input {
-                width: 400px;
-            }
         }
     }
 
     .profile-details-edit-grid {
-        
         .inactive {
             opacity: 0.2;
             pointer-events: none;
@@ -142,29 +126,8 @@
             }
         }
     }
-
-    .fan-graph-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        margin-top: 20px;
-        width: 100%;
-
-        app-fan-graph {
-            width: 100%;
-            margin-top: 20px;
-        }
-    }
-
 }
 
 mat-expansion-panel * {
     transition: none !important;
-}
-
-.advanced-mode-toggle {
-    transform: scale(0.6);
-    transform-origin: left;
-    font-size: 160%;
 }

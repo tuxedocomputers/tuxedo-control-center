@@ -98,6 +98,86 @@
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ProfOverviewTileMenuCopy" datatype="html">
+        <source>Copy</source>
+        <target state="needs-translation">Kopieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfOverviewTileMenuDelete" datatype="html">
+        <source>Delete</source>
+        <target state="needs-translation">Löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfOverviewTileMenuEdit" datatype="html">
+        <source>Edit</source>
+        <target state="needs-translation">Bearbeiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfOverviewTileMenuView" datatype="html">
+        <source>View</source>
+        <target state="needs-translation">Detailansicht</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfMgrOverviewNewProfile" datatype="html" approved="yes">
+        <source>New profile</source>
+        <target phase-name="approval-1" state="signed-off">Neues Profil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrOverviewCores" datatype="html">
+        <source>cores</source>
+        <target state="translated">Kerne</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrOverviewMaxPerf" datatype="html">
+        <source>Max performance</source>
+        <target state="translated">Max. Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html" approved="yes">
+        <source>On</source>
+        <target phase-name="approval-1" state="translated">An</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrOverviewWebcamStatusOff" datatype="html" approved="yes">
+        <source>Off</source>
+        <target phase-name="approval-1" state="translated">Aus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfOverviewTileNewProfileDescription" datatype="html">
+        <source> Create a new profile and configure it as you want </source>
+        <target state="needs-translation">Erstellen Sie ein neues Profil und konfigurieren Sie es nach Belieben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">143,144</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8708ca72ec9216a3a521940eeef0be356eebb8dd" datatype="html">
         <source>TUXEDO Support</source>
         <target phase-name="approval-1" state="signed-off">TUXEDO Support</target>
@@ -357,86 +437,6 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ProfOverviewTileMenuCopy" datatype="html">
-        <source>Copy</source>
-        <target state="needs-translation">Kopieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfOverviewTileMenuDelete" datatype="html">
-        <source>Delete</source>
-        <target state="needs-translation">Löschen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfOverviewTileMenuEdit" datatype="html">
-        <source>Edit</source>
-        <target state="needs-translation">Bearbeiten</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfOverviewTileMenuView" datatype="html">
-        <source>View</source>
-        <target state="needs-translation">Detailansicht</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfMgrOverviewNewProfile" datatype="html" approved="yes">
-        <source>New profile</source>
-        <target phase-name="approval-1" state="signed-off">Neues Profil</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrOverviewCores" datatype="html">
-        <source>cores</source>
-        <target state="translated">Kerne</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrOverviewMaxPerf" datatype="html">
-        <source>Max performance</source>
-        <target state="translated">Max. Leistung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">98</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html" approved="yes">
-        <source>On</source>
-        <target phase-name="approval-1" state="translated">An</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">134</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrOverviewWebcamStatusOff" datatype="html" approved="yes">
-        <source>Off</source>
-        <target phase-name="approval-1" state="translated">Aus</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">135</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfOverviewTileNewProfileDescription" datatype="html">
-        <source> Create a new profile and configure it as you want </source>
-        <target state="needs-translation">Erstellen Sie ein neues Profil und konfigurieren Sie es nach Belieben</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">143,144</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="odmLEDNone" datatype="html">
         <source>all LEDs off</source>
         <target state="translated">alle LEDs aus</target>
@@ -502,7 +502,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonSaveTooltip" datatype="html" approved="yes">
@@ -510,7 +510,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Änderungen speichern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsProfileSettingsLabel" datatype="html">
@@ -638,7 +638,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">59,60</context>
+          <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html" approved="yes">
@@ -1347,6 +1347,14 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="menuWebcam" datatype="html">
+        <source>Webcam</source>
+        <target state="translated">Webcam</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="menuProfiles" datatype="html" approved="yes">
         <source>Profiles</source>
         <target phase-name="approval-1" state="signed-off">Profile</target>
@@ -1924,6 +1932,186 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="webcamDialogNotAvailableTitle" datatype="html">
+        <source>Camera can not be accessed</source>
+        <target state="translated">Auf die Kamera kann nicht zugegriffen werden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogNotAvailableDescription" datatype="html">
+        <source>Camera can not be accessed</source>
+        <target state="translated">Auf die Kamera kann nicht zugegriffen werden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">256</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogContinue" datatype="html">
+        <source>Continue</source>
+        <target state="translated">Weiter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">257</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">626</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">735</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">811</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">823</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1003</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogNotValidPresetTitle" datatype="html">
+        <source>Camera preset faulty</source>
+        <target state="translated">Preset der Kamera ist fehlerhaft</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">624</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogNotValidPresetDialog" datatype="html">
+        <source>Camera preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
+        <target state="translated">Kameravoreinstellung enthält ungültige Konfigurationen und wird daher nicht angewendet. Zurückkehren zur Standardvoreinstellung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">625</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskOverwriteTitle" datatype="html">
+        <source>Preset name not avaiable</source>
+        <target state="translated">Preset nicht verfügbar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">732</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskOverwriteDescription" datatype="html">
+        <source>Do you want to overwrite the preset?</source>
+        <target state="translated">Möchten Sie das Preset überschreiben?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">733</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogAbort" datatype="html">
+        <source>Cancel</source>
+        <target state="translated">Abbrechen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">734</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogPresetNameUnsetTitle" datatype="html">
+        <source>Preset was not saved</source>
+        <target state="translated">Preset wurde nicht gespeichert</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">809</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogPresetNameUnsetDescription" datatype="html">
+        <source>The preset name was no set and thus the preset was not saved.</source>
+        <target state="translated">Der Name vom Preset war nicht festgelegt und die Voreinstellung wurde daher nicht gespeichert.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">810</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogDefaultCanNotOverwriteTitle" datatype="html">
+        <source>Not possible to overwrite the default preset</source>
+        <target state="translated">Es ist nicht möglich, die Standardvoreinstellung zu überschreiben.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">821</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogDefaultCanNotOverwriteDescription" datatype="html">
+        <source>It is not possible to overwrite the default preset. Please select a different name for your preset.</source>
+        <target state="translated">Es ist nicht möglich, die Standardvoreinstellung zu überschreiben. Bitte wählen Sie einen anderen Namen für Ihre Voreinstellung.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">822</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskPresetOverwriteTitle" datatype="html">
+        <source>Overwrite preset</source>
+        <target state="translated">Preset überschreiben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">831</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskPresetOverwriteDescription" datatype="html">
+        <source>Do you want to overwrite the current preset? Selecting no will result in providing a preset name.</source>
+        <target state="translated">Möchten Sie das aktuelle Preset überschreiben? Wenn Sie Nein wählen, müssen Sie einen Namen angeben.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">832</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogNo" datatype="html">
+        <source>No</source>
+        <target state="translated">Nein</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">833</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogYes" datatype="html">
+        <source>Yes</source>
+        <target state="translated">Ja</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">834</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskPresetNameTitle" datatype="html">
+        <source>Saving Preset</source>
+        <target state="translated">Preset Speichern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">843</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskPresetNameDescription" datatype="html">
+        <source>Set the preset name</source>
+        <target state="translated">Presetnamen auswählen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">844</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogDefaultCanNotDeleteTitle" datatype="html">
+        <source>Deleting Preset</source>
+        <target state="translated">Lösche Preset</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1001</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogDefaultCanNotDeleteDescription" datatype="html">
+        <source>You are not allowed to delete the default preset.</source>
+        <target state="translated">Sie können das Standartpreset nicht löschen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1002</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="webcamExposureAuto" datatype="html">
         <source>Exposure, Auto</source>
         <target state="translated">Belichtung, Auto</target>
@@ -2060,12 +2248,76 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">1133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="webcamNotFoundInfoText" datatype="html">
+      <trans-unit id="webcamTitleGeneral" datatype="html">
+        <source>General</source>
+        <target state="translated">Allgemein</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTitleExposure" datatype="html">
+        <source>Exposure</source>
+        <target state="translated">Belichtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTitleDynamicRange" datatype="html">
+        <source>Dynamic Range</source>
+        <target state="translated">Dynamikbereich</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1146</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTitleBalance" datatype="html">
+        <source>Balance</source>
+        <target state="translated">Balance</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTitleColor" datatype="html">
+        <source>Color</source>
+        <target state="translated">Farbe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTitleCapture" datatype="html">
+        <source>Capture</source>
+        <target state="translated">Erfassung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="linenumber">1155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="noWebcamFoundInfoTitle" datatype="html">
+        <source>No available Webcams found</source>
+        <target state="translated">Keine verfügbaren Webcams gefunden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="noWebcamFoundInfoContent" datatype="html">
         <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, you can press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
         <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, können Sie auf Neu laden klicken, und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">12,16</context>
+          <context context-type="linenumber">9,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="noWebcamFoundInfoReloadButton" datatype="html">
+        <source> Reload </source>
+        <target state="translated">Neu laden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonApplyTooltip" datatype="html">
@@ -2073,7 +2325,55 @@ Handelsregisternummer HRB 27755
         <target state="translated">Einstellungen übernehmen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTabSimpleLabel" datatype="html">
+        <source>Simple</source>
+        <target state="translated">Einfach</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamTabAdvancedLabel" datatype="html">
+        <source>Advanced</source>
+        <target state="translated">Fortgeschritten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogUnsavedChangesTitle" datatype="html">
+        <source>Unsaved changes</source>
+        <target state="translated">Nicht gespeicherte Änderungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogUnsavedChangesDescription" datatype="html">
+        <source>Changes were not saved. Are you sure that you want to leave before saving?</source>
+        <target state="translated">Die Änderungen wurden nicht gespeichert. Sind Sie sicher, dass Sie die Seite vor dem Speichern verlassen wollen?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogReturn" datatype="html">
+        <source>Go back</source>
+        <target state="translated">Zurückgehen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogLeave" datatype="html">
+        <source>Leave</source>
+        <target state="translated">Verlassen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">

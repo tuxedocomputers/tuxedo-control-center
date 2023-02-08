@@ -2076,7 +2076,7 @@ def get_ctrlsmap_from_config(config_path: str, vendor_id: str, product_id: str):
     if os.path.exists(config_path):
         for config in json.load(open(config_path)):
             if config["active"] == True and config["webcamId"] == vendor_id + ":" + product_id:
-                webcam_settings = {key: value for (key, value) in config["webcamSettings"].items() if key not in ["fps", "resolution"]}
+                webcam_settings = {key: value for (key, value) in config["webcamSettings"].items()}
                 return webcam_settings
     return ''
 
