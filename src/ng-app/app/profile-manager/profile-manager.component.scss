@@ -41,6 +41,41 @@ mat-toolbar {
         }
     }
 }
+.import-export-buttons
+{
+    height: 33.6px;
+    border: 0;
+    padding: 0;
+    align-items: center;
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    white-space: nowrap;
+    overflow: hidden;
+    box-shadow: none;
+    border: solid 1px rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    button 
+     {
+        margin : 0 !important;
+     }
+    svg {
+        width: 24px;
+        height: 24px;
+        --icon-detail: var(--icon-main);
+    }
+}
+
+.light-theme .import-export-buttons
+{
+    background-color: white;
+}
+
+
+.dark-theme .import-export-buttons
+{
+    background-color: #373737;
+}
 
 .profile-name-input {
     width: 250px;
