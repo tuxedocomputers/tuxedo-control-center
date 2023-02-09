@@ -30,7 +30,6 @@ export class ConfigHandler {
     public settingsFileMod: number;
     public profileFileMod: number;
     public webcamFileMod: number;
-    public udevFileMod: number;
     public autosaveFileMod: number;
     public fantablesFileMod: number;
 
@@ -126,8 +125,7 @@ export class ConfigHandler {
     }
 
     public writeConfig<T>(config: T, filePath: string, writeFileOptions): void {
-        let fileData: string
-        fileData = JSON.stringify(config);
+        const fileData = JSON.stringify(config);
 
         try {
             if (!fs.existsSync(path.dirname(filePath))) {

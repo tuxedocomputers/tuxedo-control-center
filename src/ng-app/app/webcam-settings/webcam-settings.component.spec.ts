@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CameraSettingsComponent } from './camera-settings.component';
+import { WebcamSettingsComponent } from './webcam-settings.component';
 
-describe('CameraSettingsComponent', () => {
-  let component: CameraSettingsComponent;
-  let fixture: ComponentFixture<CameraSettingsComponent>;
+describe('WebcamSettingsComponent', () => {
+  let component: WebcamSettingsComponent;
+  let fixture: ComponentFixture<WebcamSettingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CameraSettingsComponent ]
+      declarations: [ WebcamSettingsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CameraSettingsComponent);
+    fixture = TestBed.createComponent(WebcamSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

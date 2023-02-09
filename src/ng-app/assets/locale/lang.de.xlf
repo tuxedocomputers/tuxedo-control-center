@@ -501,7 +501,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
@@ -521,7 +521,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">46</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
@@ -637,7 +637,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">356</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
@@ -1936,7 +1936,7 @@ Handelsregisternummer HRB 27755
         <source>Camera can not be accessed</source>
         <target state="translated">Auf die Kamera kann nicht zugegriffen werden</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
@@ -1944,7 +1944,7 @@ Handelsregisternummer HRB 27755
         <source>Camera can not be accessed</source>
         <target state="translated">Auf die Kamera kann nicht zugegriffen werden</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
@@ -1952,27 +1952,27 @@ Handelsregisternummer HRB 27755
         <source>Continue</source>
         <target state="translated">Weiter</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">257</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">626</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">735</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">811</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">823</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1003</context>
         </context-group>
       </trans-unit>
@@ -1980,7 +1980,7 @@ Handelsregisternummer HRB 27755
         <source>Camera preset faulty</source>
         <target state="translated">Preset der Kamera ist fehlerhaft</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">624</context>
         </context-group>
       </trans-unit>
@@ -1988,7 +1988,7 @@ Handelsregisternummer HRB 27755
         <source>Camera preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
         <target state="translated">Kameravoreinstellung enthält ungültige Konfigurationen und wird daher nicht angewendet. Zurückkehren zur Standardvoreinstellung.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">625</context>
         </context-group>
       </trans-unit>
@@ -1996,7 +1996,7 @@ Handelsregisternummer HRB 27755
         <source>Preset name not avaiable</source>
         <target state="translated">Preset nicht verfügbar</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">732</context>
         </context-group>
       </trans-unit>
@@ -2004,7 +2004,7 @@ Handelsregisternummer HRB 27755
         <source>Do you want to overwrite the preset?</source>
         <target state="translated">Möchten Sie das Preset überschreiben?</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">733</context>
         </context-group>
       </trans-unit>
@@ -2012,7 +2012,7 @@ Handelsregisternummer HRB 27755
         <source>Cancel</source>
         <target state="translated">Abbrechen</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">734</context>
         </context-group>
       </trans-unit>
@@ -2020,7 +2020,7 @@ Handelsregisternummer HRB 27755
         <source>Preset was not saved</source>
         <target state="translated">Preset wurde nicht gespeichert</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">809</context>
         </context-group>
       </trans-unit>
@@ -2028,7 +2028,7 @@ Handelsregisternummer HRB 27755
         <source>The preset name was no set and thus the preset was not saved.</source>
         <target state="translated">Der Name vom Preset war nicht festgelegt und die Voreinstellung wurde daher nicht gespeichert.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">810</context>
         </context-group>
       </trans-unit>
@@ -2036,7 +2036,7 @@ Handelsregisternummer HRB 27755
         <source>Not possible to overwrite the default preset</source>
         <target state="translated">Es ist nicht möglich, die Standardvoreinstellung zu überschreiben.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">821</context>
         </context-group>
       </trans-unit>
@@ -2044,7 +2044,7 @@ Handelsregisternummer HRB 27755
         <source>It is not possible to overwrite the default preset. Please select a different name for your preset.</source>
         <target state="translated">Es ist nicht möglich, die Standardvoreinstellung zu überschreiben. Bitte wählen Sie einen anderen Namen für Ihre Voreinstellung.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">822</context>
         </context-group>
       </trans-unit>
@@ -2052,7 +2052,7 @@ Handelsregisternummer HRB 27755
         <source>Overwrite preset</source>
         <target state="translated">Preset überschreiben</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">831</context>
         </context-group>
       </trans-unit>
@@ -2060,7 +2060,7 @@ Handelsregisternummer HRB 27755
         <source>Do you want to overwrite the current preset? Selecting no will result in providing a preset name.</source>
         <target state="translated">Möchten Sie das aktuelle Preset überschreiben? Wenn Sie Nein wählen, müssen Sie einen Namen angeben.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">832</context>
         </context-group>
       </trans-unit>
@@ -2068,7 +2068,7 @@ Handelsregisternummer HRB 27755
         <source>No</source>
         <target state="translated">Nein</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">833</context>
         </context-group>
       </trans-unit>
@@ -2076,7 +2076,7 @@ Handelsregisternummer HRB 27755
         <source>Yes</source>
         <target state="translated">Ja</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">834</context>
         </context-group>
       </trans-unit>
@@ -2084,7 +2084,7 @@ Handelsregisternummer HRB 27755
         <source>Saving Preset</source>
         <target state="translated">Preset Speichern</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">843</context>
         </context-group>
       </trans-unit>
@@ -2092,7 +2092,7 @@ Handelsregisternummer HRB 27755
         <source>Set the preset name</source>
         <target state="translated">Presetnamen auswählen</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">844</context>
         </context-group>
       </trans-unit>
@@ -2100,7 +2100,7 @@ Handelsregisternummer HRB 27755
         <source>Deleting Preset</source>
         <target state="translated">Lösche Preset</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1001</context>
         </context-group>
       </trans-unit>
@@ -2108,7 +2108,7 @@ Handelsregisternummer HRB 27755
         <source>You are not allowed to delete the default preset.</source>
         <target state="translated">Sie können das Standartpreset nicht löschen.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1002</context>
         </context-group>
       </trans-unit>
@@ -2116,7 +2116,7 @@ Handelsregisternummer HRB 27755
         <source>Exposure, Auto</source>
         <target state="translated">Belichtung, Auto</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1085</context>
         </context-group>
       </trans-unit>
@@ -2124,7 +2124,7 @@ Handelsregisternummer HRB 27755
         <source>Exposure (Absolute)</source>
         <target state="translated">Belichtung (Absolut)</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1088</context>
         </context-group>
       </trans-unit>
@@ -2132,7 +2132,7 @@ Handelsregisternummer HRB 27755
         <source>Exposure, Auto Priority</source>
         <target state="translated">Belichtung, automatische Priorität</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1091</context>
         </context-group>
       </trans-unit>
@@ -2140,7 +2140,7 @@ Handelsregisternummer HRB 27755
         <source>Gain</source>
         <target state="translated">Verstärkung</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1094</context>
         </context-group>
       </trans-unit>
@@ -2148,7 +2148,7 @@ Handelsregisternummer HRB 27755
         <source>Backlight Compensation</source>
         <target state="translated">Korrektur der Hintergrundbeleuchtung</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1097</context>
         </context-group>
       </trans-unit>
@@ -2156,7 +2156,7 @@ Handelsregisternummer HRB 27755
         <source>White Balance Temperature, Auto</source>
         <target state="translated">Automatischer Weißabgleich (Temperatur)</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1100</context>
         </context-group>
       </trans-unit>
@@ -2164,7 +2164,7 @@ Handelsregisternummer HRB 27755
         <source>White Balance Temperature</source>
         <target state="translated">Weißabgleich (Temperatur)</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1103</context>
         </context-group>
       </trans-unit>
@@ -2172,7 +2172,7 @@ Handelsregisternummer HRB 27755
         <source>Brightness</source>
         <target state="translated">Helligkeit</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1106</context>
         </context-group>
       </trans-unit>
@@ -2180,7 +2180,7 @@ Handelsregisternummer HRB 27755
         <source>Contrast</source>
         <target state="translated">Kontrast</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1109</context>
         </context-group>
       </trans-unit>
@@ -2188,7 +2188,7 @@ Handelsregisternummer HRB 27755
         <source>Saturation</source>
         <target state="translated">Sättigung</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1112</context>
         </context-group>
       </trans-unit>
@@ -2196,7 +2196,7 @@ Handelsregisternummer HRB 27755
         <source>Sharpness</source>
         <target state="translated">Schärfe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1115</context>
         </context-group>
       </trans-unit>
@@ -2204,7 +2204,7 @@ Handelsregisternummer HRB 27755
         <source>Hue</source>
         <target state="translated">Farbe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1118</context>
         </context-group>
       </trans-unit>
@@ -2212,7 +2212,7 @@ Handelsregisternummer HRB 27755
         <source>Gamma</source>
         <target state="translated">Gamma</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1121</context>
         </context-group>
       </trans-unit>
@@ -2220,7 +2220,7 @@ Handelsregisternummer HRB 27755
         <source>Resolution</source>
         <target state="translated">Auflösung</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1124</context>
         </context-group>
       </trans-unit>
@@ -2228,7 +2228,7 @@ Handelsregisternummer HRB 27755
         <source>Frames per Second</source>
         <target state="translated">Bilder pro Sekunde</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1127</context>
         </context-group>
       </trans-unit>
@@ -2236,7 +2236,7 @@ Handelsregisternummer HRB 27755
         <source>Aperture Priority Mode</source>
         <target state="translated">Blendenprioritätsmodus</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1130</context>
         </context-group>
       </trans-unit>
@@ -2244,7 +2244,7 @@ Handelsregisternummer HRB 27755
         <source>Manual Mode</source>
         <target state="translated">Manueller Modus</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1133</context>
         </context-group>
       </trans-unit>
@@ -2252,7 +2252,7 @@ Handelsregisternummer HRB 27755
         <source>General</source>
         <target state="translated">Allgemein</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1140</context>
         </context-group>
       </trans-unit>
@@ -2260,7 +2260,7 @@ Handelsregisternummer HRB 27755
         <source>Exposure</source>
         <target state="translated">Belichtung</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1143</context>
         </context-group>
       </trans-unit>
@@ -2268,7 +2268,7 @@ Handelsregisternummer HRB 27755
         <source>Dynamic Range</source>
         <target state="translated">Dynamikbereich</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1146</context>
         </context-group>
       </trans-unit>
@@ -2276,7 +2276,7 @@ Handelsregisternummer HRB 27755
         <source>Balance</source>
         <target state="translated">Balance</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1149</context>
         </context-group>
       </trans-unit>
@@ -2284,7 +2284,7 @@ Handelsregisternummer HRB 27755
         <source>Color</source>
         <target state="translated">Farbe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1152</context>
         </context-group>
       </trans-unit>
@@ -2292,7 +2292,7 @@ Handelsregisternummer HRB 27755
         <source>Capture</source>
         <target state="translated">Erfassung</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1155</context>
         </context-group>
       </trans-unit>
@@ -2300,7 +2300,7 @@ Handelsregisternummer HRB 27755
         <source>No available Webcams found</source>
         <target state="translated">Keine verfügbaren Webcams gefunden</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
@@ -2308,7 +2308,7 @@ Handelsregisternummer HRB 27755
         <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, you can press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
         <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, können Sie auf Neu laden klicken, und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">9,13</context>
         </context-group>
       </trans-unit>
@@ -2316,7 +2316,7 @@ Handelsregisternummer HRB 27755
         <source> Reload </source>
         <target state="translated">Neu laden</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
@@ -2324,7 +2324,7 @@ Handelsregisternummer HRB 27755
         <source>Apply changes</source>
         <target state="translated">Einstellungen übernehmen</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
@@ -2332,7 +2332,7 @@ Handelsregisternummer HRB 27755
         <source>Simple</source>
         <target state="translated">Einfach</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
@@ -2340,7 +2340,7 @@ Handelsregisternummer HRB 27755
         <source>Advanced</source>
         <target state="translated">Fortgeschritten</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>

@@ -84,8 +84,8 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
-import { CameraSettingsComponent } from './camera-settings/camera-settings.component';
-import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
+import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
+import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -110,7 +110,7 @@ declare const require;
     DialogInputTextComponent,
     DialogConfirmComponent,
     ChargingSettingsComponent,
-    CameraSettingsComponent,
+    WebcamSettingsComponent,
     WebcamPreviewComponent
   ],
   imports: [

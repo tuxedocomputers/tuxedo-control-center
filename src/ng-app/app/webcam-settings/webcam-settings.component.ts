@@ -30,12 +30,11 @@ import { environment } from "../../environments/environment";
 import { MatTab } from "@angular/material/tabs";
 
 @Component({
-    selector: "app-camera-settings",
-    templateUrl: "./camera-settings.component.html",
-    styleUrls: ["./camera-settings.component.scss"],
+    selector: 'app-webcam-settings',
+    templateUrl: './webcam-settings.component.html',
+    styleUrls: ['./webcam-settings.component.scss'],
 })
-export class CameraSettingsComponent implements OnInit {
-    // from profile settings
+export class WebcamSettingsComponent implements OnInit {
     gridParams = {
         cols: 9,
         headerSpan: 4,
@@ -74,7 +73,6 @@ export class CameraSettingsComponent implements OnInit {
     selectedWebcamMode: string = "Simple";
     activePreset: WebcamPreset;
 
-    // todo: getting from config?
     easyOptions: string[] = ["brightness", "contrast", "resolution"];
     easyModeActive: boolean = true;
 
@@ -458,7 +456,6 @@ export class CameraSettingsComponent implements OnInit {
         await this.executeCameraCtrls(configParameter, option);
 
         // exposure_absolute must be set after disabling auto to take effect
-        // todo: check if other laptops have the same naming scheme
         if (configParameter == "exposure_auto" && option == "manual_mode") {
             await this.executeCameraCtrls(
                 "exposure_absolute",
@@ -746,18 +743,18 @@ export class CameraSettingsComponent implements OnInit {
         overwrite: boolean = false
     ): Promise<void> {
         this.utils.pageDisabled = true;
-        let preset = this.getWebcamPreset(presetName);
+        let currentPreset = this.getWebcamPreset(presetName);
 
         let webcamConfigs = this.webcamPresetsCurrentDevice.filter(
             (webcamPreset) => webcamPreset.presetName !== "Default"
         );
 
         if (overwrite) {
-            webcamConfigs.forEach((x) => {
-                x.active = false;
-                if (x.presetName == presetName) {
-                    x.active = true;
-                    x.webcamSettings = preset.webcamSettings;
+            webcamConfigs.forEach((preset) => {
+                preset.active = false;
+                if (preset.presetName == presetName) {
+                    preset.active = true;
+                    preset.webcamSettings = currentPreset.webcamSettings;
                 }
             });
 
@@ -766,9 +763,9 @@ export class CameraSettingsComponent implements OnInit {
             );
         }
         if (!overwrite) {
-            webcamConfigs.forEach((x) => (x.active = false));
+            webcamConfigs.forEach((preset) => (preset.active = false));
             webcamConfigs = webcamConfigs.concat(
-                preset,
+                currentPreset,
                 this.webcamPresetsOtherDevices
             );
         }
@@ -777,27 +774,27 @@ export class CameraSettingsComponent implements OnInit {
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
-                    this.activePreset = preset;
+                    this.activePreset = currentPreset;
 
                     this.viewWebcam = this.webcamFormGroup.getRawValue();
                     this.webcamFormGroup.markAsPristine();
-                    this.selectedPreset = preset;
+                    this.selectedPreset = currentPreset;
 
                     if (overwrite) {
-                        this.webcamPresetsCurrentDevice.forEach((x) => {
-                            if (x.presetName == presetName) {
-                                x.webcamSettings = preset.webcamSettings;
+                        this.webcamPresetsCurrentDevice.forEach((preset) => {
+                            if (preset.presetName == presetName) {
+                                preset.webcamSettings = currentPreset.webcamSettings;
                             }
                         });
-                        this.allPresetData.forEach((x) => {
-                            if (x.presetName == presetName) {
-                                x.webcamSettings = preset.webcamSettings;
+                        this.allPresetData.forEach((preset) => {
+                            if (preset.presetName == presetName) {
+                                preset.webcamSettings = currentPreset.webcamSettings;
                             }
                         });
                     }
                     if (!overwrite) {
-                        this.webcamPresetsCurrentDevice.push(preset);
-                        this.allPresetData.push(preset);
+                        this.webcamPresetsCurrentDevice.push(currentPreset);
+                        this.allPresetData.push(currentPreset);
                     }
                 }
             });
@@ -810,12 +807,9 @@ export class CameraSettingsComponent implements OnInit {
             description: $localize`:@@webcamDialogPresetNameUnsetDescription:The preset name was no set and thus the preset was not saved.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
-        // todo: decide if retry
-        //this.utils.confirmDialog(config).then(() => this.savingWebcamPresets());
         this.utils.confirmDialog(config).then();
     }
 
-    // todo: maybe reopen saving webcam presets?
     private defaultOverwriteNotAllowed() {
         let config = {
             title: $localize`:@@webcamDialogDefaultCanNotOverwriteTitle:Not possible to overwrite the default preset`,
@@ -826,19 +820,19 @@ export class CameraSettingsComponent implements OnInit {
     }
 
     // Todo: maybe use overwrite / new message box, but would need customized dialog
-    private async askOverwriteOrNewPreset(): Promise<any> {
+    private async askOverwriteOrNewPreset(): Promise<boolean> {
         let config = {
             title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite preset`,
             description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current preset? Selecting no will result in providing a preset name.`,
             buttonAbortLabel: $localize`:@@dialogNo:No`,
             buttonConfirmLabel: $localize`:@@dialogYes:Yes`,
         };
-        return this.utils.confirmDialog(config).then((x) => {
-            return x["confirm"];
+        return this.utils.confirmDialog(config).then((dialogResult) => {
+            return dialogResult["confirm"];
         });
     }
 
-    async askPresetNameDialog(): Promise<any> {
+    async askPresetNameDialog(): Promise<string> {
         let config = {
             title: $localize`:@@webcamDialogAskPresetNameTitle:Saving Preset`,
             description: $localize`:@@webcamDialogAskPresetNameDescription:Set the preset name`,

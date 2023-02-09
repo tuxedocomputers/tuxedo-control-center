@@ -500,7 +500,7 @@
           <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
@@ -512,7 +512,7 @@
           <context context-type="linenumber">30</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
@@ -636,7 +636,7 @@
           <context context-type="linenumber">356</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
@@ -1939,7 +1939,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Camera can not be accessed</source>
         <target state="translated">Camera can not be accessed</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
@@ -1947,7 +1947,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Camera can not be accessed</source>
         <target state="translated">Camera can not be accessed</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
@@ -1955,27 +1955,27 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Continue</source>
         <target state="translated">Continue</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">257</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">626</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">735</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">811</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">823</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1002</context>
         </context-group>
       </trans-unit>
@@ -1983,7 +1983,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Camera preset faulty</source>
         <target state="translated">Camera preset faulty</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">624</context>
         </context-group>
       </trans-unit>
@@ -1991,7 +1991,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Camera preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
         <target state="translated">Camera preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">625</context>
         </context-group>
       </trans-unit>
@@ -1999,7 +1999,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Preset name not avaiable</source>
         <target state="translated">Preset name not avaiable</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">732</context>
         </context-group>
       </trans-unit>
@@ -2007,7 +2007,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Do you want to overwrite the preset?</source>
         <target state="translated">Do you want to overwrite the preset?</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">733</context>
         </context-group>
       </trans-unit>
@@ -2015,7 +2015,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Cancel</source>
         <target state="translated">Cancel</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">734</context>
         </context-group>
       </trans-unit>
@@ -2023,7 +2023,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Preset was not saved</source>
         <target state="translated">Preset was not saved</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">809</context>
         </context-group>
       </trans-unit>
@@ -2031,7 +2031,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>The preset name was no set and thus the preset was not saved.</source>
         <target state="translated">The preset name was no set and thus the preset was not saved.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">810</context>
         </context-group>
       </trans-unit>
@@ -2039,7 +2039,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Not possible to overwrite the default preset</source>
         <target state="translated">Not possible to overwrite the default preset</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">821</context>
         </context-group>
       </trans-unit>
@@ -2047,7 +2047,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>It is not possible to overwrite the default preset. Please select a different name for your preset.</source>
         <target state="translated">It is not possible to overwrite the default preset. Please select a different name for your preset.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">822</context>
         </context-group>
       </trans-unit>
@@ -2055,7 +2055,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Overwrite preset</source>
         <target state="translated">Overwrite preset</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">831</context>
         </context-group>
       </trans-unit>
@@ -2063,7 +2063,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Do you want to overwrite the current preset? Selecting no will result in providing a preset name.</source>
         <target state="translated">Do you want to overwrite the current preset? Selecting no will result in providing a preset name.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">832</context>
         </context-group>
       </trans-unit>
@@ -2071,7 +2071,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>No</source>
         <target state="translated">No</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">833</context>
         </context-group>
       </trans-unit>
@@ -2079,7 +2079,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Yes</source>
         <target state="translated">Yes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">834</context>
         </context-group>
       </trans-unit>
@@ -2087,7 +2087,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Saving Preset</source>
         <target state="translated">Saving Preset</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">843</context>
         </context-group>
       </trans-unit>
@@ -2095,21 +2095,21 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Set the preset name</source>
         <target state="translated">Set the preset name</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">844</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogAskPresetNameTitle" datatype="html">
         <source>Saving Preset</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">843</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogAskPresetNameDescription" datatype="html">
         <source>&quot;Set the preset name</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">844</context>
         </context-group>
       </trans-unit>
@@ -2117,7 +2117,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Deleting Preset</source>
         <target state="translated">Deleting Preset</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1000</context>
         </context-group>
       </trans-unit>
@@ -2125,7 +2125,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>You are not allowed to delete the default preset.</source>
         <target state="translated">You are not allowed to delete the default preset.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1001</context>
         </context-group>
       </trans-unit>
@@ -2133,7 +2133,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Exposure, Auto</source>
         <target state="translated">Exposure, Auto</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1084</context>
         </context-group>
       </trans-unit>
@@ -2141,7 +2141,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Exposure (Absolute)</source>
         <target state="translated">Exposure (Absolute)</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1087</context>
         </context-group>
       </trans-unit>
@@ -2149,7 +2149,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Exposure, Auto Priority</source>
         <target state="translated">Exposure, Auto Priority</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1090</context>
         </context-group>
       </trans-unit>
@@ -2157,7 +2157,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Gain</source>
         <target state="translated">Gain</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1093</context>
         </context-group>
       </trans-unit>
@@ -2165,7 +2165,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Backlight Compensation</source>
         <target state="translated">Backlight Compensation</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1096</context>
         </context-group>
       </trans-unit>
@@ -2173,7 +2173,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>White Balance Temperature, Auto</source>
         <target state="translated">White Balance Temperature, Auto</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1099</context>
         </context-group>
       </trans-unit>
@@ -2181,7 +2181,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>White Balance Temperature</source>
         <target state="translated">White Balance Temperature</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1102</context>
         </context-group>
       </trans-unit>
@@ -2189,7 +2189,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Brightness</source>
         <target state="translated">Brightness</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1105</context>
         </context-group>
       </trans-unit>
@@ -2197,7 +2197,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Contrast</source>
         <target state="translated">Contrast</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1108</context>
         </context-group>
       </trans-unit>
@@ -2205,7 +2205,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Saturation</source>
         <target state="translated">Saturation</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1111</context>
         </context-group>
       </trans-unit>
@@ -2213,7 +2213,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Sharpness</source>
         <target state="translated">Sharpness</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1114</context>
         </context-group>
       </trans-unit>
@@ -2221,7 +2221,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Hue</source>
         <target state="translated">Hue</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1117</context>
         </context-group>
       </trans-unit>
@@ -2229,7 +2229,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Gamma</source>
         <target state="translated">Gamma</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1120</context>
         </context-group>
       </trans-unit>
@@ -2237,7 +2237,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Resolution</source>
         <target state="translated">Resolution</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1123</context>
         </context-group>
       </trans-unit>
@@ -2245,7 +2245,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Frames per Second</source>
         <target state="translated">Frames per Second</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1126</context>
         </context-group>
       </trans-unit>
@@ -2253,7 +2253,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Aperture Priority Mode</source>
         <target state="translated">Aperture Priority Mode</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1129</context>
         </context-group>
       </trans-unit>
@@ -2261,7 +2261,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Manual Mode</source>
         <target state="translated">Manual Mode</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1132</context>
         </context-group>
       </trans-unit>
@@ -2269,7 +2269,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>General</source>
         <target state="translated">General</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1139</context>
         </context-group>
       </trans-unit>
@@ -2277,7 +2277,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Exposure</source>
         <target state="translated">Exposure</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1142</context>
         </context-group>
       </trans-unit>
@@ -2285,7 +2285,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Dynamic Range</source>
         <target state="translated">Dynamic Range</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1145</context>
         </context-group>
       </trans-unit>
@@ -2293,7 +2293,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Balance</source>
         <target state="translated">Balance</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1148</context>
         </context-group>
       </trans-unit>
@@ -2301,7 +2301,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Color</source>
         <target state="translated">Color</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1151</context>
         </context-group>
       </trans-unit>
@@ -2309,7 +2309,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Capture</source>
         <target state="translated">Capture</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.ts</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">1154</context>
         </context-group>
       </trans-unit>
@@ -2317,7 +2317,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>No available Webcams found</source>
         <target state="translated">No available Webcams found</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
@@ -2325,7 +2325,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, you can press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
         <target state="translated"> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, you can press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">9,13</context>
         </context-group>
       </trans-unit>
@@ -2333,7 +2333,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source> Reload </source>
         <target state="translated">Reload</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
@@ -2341,7 +2341,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Apply changes</source>
         <target state="translated">Apply changes</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
@@ -2349,7 +2349,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Simple</source>
         <target state="translated">Simple</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
@@ -2357,7 +2357,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Advanced</source>
         <target state="translated">Advanced</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/camera-settings/camera-settings.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
