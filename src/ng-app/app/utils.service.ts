@@ -202,6 +202,12 @@ export class UtilsService {
    * Note: Only for updating web part, to change behaviour use setBrightnessMode
    */
   public setThemeClass(className: string) {
+    if (className == "light-theme") {
+        this.overlayContainer.getContainerElement().classList.remove("dark-theme");
+    }
+    if (className == "dark-theme") {
+        this.overlayContainer.getContainerElement().classList.remove("light-theme");
+    }
     this.overlayContainer.getContainerElement().classList.add(className);
     this.themeClass.next(className);
   }
