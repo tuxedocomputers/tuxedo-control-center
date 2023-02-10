@@ -17,6 +17,8 @@
     </div>
 </mat-card>
 
+<mat-spinner class="globalSpinner" [hidden]="webcamInitComplete || noWebcams"></mat-spinner>
+
 <div class="webcam-settings-edit" [hidden]="!webcamInitComplete" [formGroup]="webcamFormGroup">
     <div class="inner-webcam-settings-edit">
         <mat-card-title class="webcam-title">

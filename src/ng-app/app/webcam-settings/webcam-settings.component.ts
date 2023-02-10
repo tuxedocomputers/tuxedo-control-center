@@ -30,9 +30,9 @@ import { environment } from "../../environments/environment";
 import { MatTab } from "@angular/material/tabs";
 
 @Component({
-    selector: 'app-webcam-settings',
-    templateUrl: './webcam-settings.component.html',
-    styleUrls: ['./webcam-settings.component.scss'],
+    selector: "app-webcam-settings",
+    templateUrl: "./webcam-settings.component.html",
+    styleUrls: ["./webcam-settings.component.scss"],
 })
 export class WebcamSettingsComponent implements OnInit {
     gridParams = {
@@ -89,7 +89,6 @@ export class WebcamSettingsComponent implements OnInit {
 
     async ngOnInit() {
         this.webcamGuard.setLoadingStatus(true);
-        this.utils.pageDisabled = true;
 
         this.configHandler = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
@@ -151,7 +150,6 @@ export class WebcamSettingsComponent implements OnInit {
                 this.stopWebcam();
                 this.webcamInitComplete = false;
                 this.webcamGuard.setLoadingStatus(false);
-                this.utils.pageDisabled = false;
                 this.cdref.detectChanges();
                 this.noWebcams = true;
                 return;
@@ -558,11 +556,13 @@ export class WebcamSettingsComponent implements OnInit {
         };
     }
 
-    private unsetLoading() {
+    private unsetLoading(initComplete: boolean = false) {
+        if (initComplete) {
+            this.webcamInitComplete = true;
+        }
         this.spinnerActive = false;
         this.webcamGuard.setLoadingStatus(false);
         this.utils.pageDisabled = false;
-        this.webcamInitComplete = true;
         this.cdref.detectChanges();
     }
 
@@ -668,7 +668,7 @@ export class WebcamSettingsComponent implements OnInit {
                 await this.setTimeout(500);
 
                 document.getElementById("video").style.visibility = "visible";
-                this.unsetLoading();
+                this.unsetLoading(true);
             }
 
             if (this.detachedWebcamWindowActive) {
@@ -783,12 +783,14 @@ export class WebcamSettingsComponent implements OnInit {
                     if (overwrite) {
                         this.webcamPresetsCurrentDevice.forEach((preset) => {
                             if (preset.presetName == presetName) {
-                                preset.webcamSettings = currentPreset.webcamSettings;
+                                preset.webcamSettings =
+                                    currentPreset.webcamSettings;
                             }
                         });
                         this.allPresetData.forEach((preset) => {
                             if (preset.presetName == presetName) {
-                                preset.webcamSettings = currentPreset.webcamSettings;
+                                preset.webcamSettings =
+                                    currentPreset.webcamSettings;
                             }
                         });
                     }
