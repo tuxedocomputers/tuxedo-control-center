@@ -169,16 +169,23 @@ export class KeyboardBacklightComponent implements OnInit {
         }, 2000);
     }
 
-    public onColorPickerInput(event: any, i: number) {
+    public onColorPickerInput(event: any, selectedZone: number) {
         if (event.valid === undefined || event.valid === true) {
-            this.colorPickerInUsage[i] = true;
-            clearTimeout(this.colorPickerInUsageReset[i]);
-            this.colorPickerInUsageReset[i] = setTimeout(() => {
-                this.colorPickerInUsage[i] = false;
+            this.colorPickerInUsage[selectedZone] = true;
+            clearTimeout(this.colorPickerInUsageReset[selectedZone]);
+            this.colorPickerInUsageReset[selectedZone] = setTimeout(() => {
+                this.colorPickerInUsage[selectedZone] = false;
             }, 2000);
 
             let colorHex = this.chosenColorHex;
-            colorHex[i] = event.color;
+            if (this. keyboardBacklightCapabilities.zones <= 4) {
+                colorHex[selectedZone] = event.color;
+            }
+            else {
+                for (let i = 0; i < colorHex.length; ++i) {
+                    colorHex[i] = event.color;
+                }
+            }
             this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(this.chosenBrightness, colorHex));
         }
     }
