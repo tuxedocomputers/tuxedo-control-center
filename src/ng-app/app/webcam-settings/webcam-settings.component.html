@@ -74,13 +74,13 @@
                         <mat-tab value="Simple" label="Simple">
                             <ng-template mat-tab-label>
                                 <mat-radio-button color="primary" [checked]="selectedModeTabIndex === 'Simple'"
-                                    i18n="@@webcamTabSimpleLabel">Simple</mat-radio-button>
+                                    i18n="@@webcamTabSimpleLabel">Basic settings</mat-radio-button>
                             </ng-template>
                         </mat-tab>
                         <mat-tab value="Advanced" label="Advanced">
                             <ng-template mat-tab-label>
                                 <mat-radio-button color="primary" [checked]="selectedModeTabIndex === 'Advanced'"
-                                    i18n="@@webcamTabAdvancedLabel">Advanced</mat-radio-button>
+                                    i18n="@@webcamTabAdvancedLabel">Detailed settings</mat-radio-button>
                             </ng-template>
                         </mat-tab>
                     </mat-tab-group>
@@ -138,8 +138,8 @@
                                                 </mat-option>
                                             </mat-select>
 
-                                            <button mat-icon-button color="primary" (click)="deletePreset()">
-                                                <mat-icon>delete_forever</mat-icon>
+                                            <button mat-icon-button color="primary" (click)="deletePreset()" class="icons">
+                                                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
                                             </button>
 
                                         </content>
@@ -294,7 +294,6 @@
                             <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input">
-
                                     <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
                                         [ngModelOptions]="{standalone: true}"
                                         (selectionChange)="applyPreset($event.value.webcamSettings, true, true)">
@@ -302,11 +301,9 @@
                                             {{ preset.presetName }}
                                         </mat-option>
                                     </mat-select>
-
-                                    <button mat-icon-button color="primary" (click)="deletePreset()">
-                                        <mat-icon>delete_forever</mat-icon>
+                                    <button mat-icon-button color="primary" (click)="deletePreset()" class="icons">
+                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
                                     </button>
-
                                 </content>
                             </mat-grid-tile>
                         </mat-grid-list>
@@ -326,12 +323,12 @@
                                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                         class="profile-details-edit-grid">
                                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                            <header>
+                                            <header [ngClass]="{'inactive': !checkValid(webcamConfig)}">
                                                 {{ getConfigTranslation(webcamConfig) }}
                                             </header>
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                                            <content class="value">
+                                            <content class="value" [ngClass]="{'inactive': !checkValid(webcamConfig)}">
                                                 {{ getPercentValue(webcamConfig, webcamConfig.value) }}
                                                 %
                                             </content>

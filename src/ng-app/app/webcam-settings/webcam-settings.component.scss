@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-
  .tcc-card {
     z-index: 1;
 
@@ -137,4 +136,12 @@ mat-expansion-panel * {
     position: absolute; 
     margin-left: -4em; 
     margin-top: -4em;
+}
+
+.icons {
+    svg {
+        width: 24px;
+        height: 24px;
+        --icon-detail: var(--icon-main);
+    }
 }

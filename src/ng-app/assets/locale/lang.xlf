@@ -6,35 +6,35 @@
         <source>Invalid input</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrInvalidNameMessage" datatype="html">
         <source>A name for the profile is required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewProfileLabel" datatype="html">
         <source>New profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewButtonTooltip" datatype="html">
         <source>Create a new profile with default settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrCopyProfileLabel" datatype="html">
         <source>Copy this profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">268</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrTitle" datatype="html">
@@ -430,7 +430,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonSaveTooltip" datatype="html">
@@ -441,7 +441,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsProfileSettingsLabel" datatype="html">
@@ -550,7 +550,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
-          <context context-type="linenumber">58,59</context>
+          <context context-type="linenumber">60,61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatus" datatype="html">
@@ -665,6 +665,69 @@
           <context context-type="linenumber">493</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
+        <source>Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
+        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
+        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
+        <source>Installed version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
+        <source>Changelog</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintPanelTitle" datatype="html">
+        <source>Imprint</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintText" datatype="html">
+        <source>
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876 
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">127,140</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="noFanTempValue" datatype="html">
         <source>N/A</source>
         <context-group purpose="location">
@@ -754,69 +817,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">148</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
-        <source>Info</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
-        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">32,34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
-        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">36,38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
-        <source>Installed version</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
-        <source>Changelog</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintPanelTitle" datatype="html">
-        <source>Imprint</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">122</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintText" datatype="html">
-        <source>
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Germany
-
-Telephone: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
-WEEE reg. no.: DE 93420497
-listed in the commercial register of the local court Augsburg
-Commercial register number - Part B of the commercial register - 27755
-        </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="globalSettingsHeaderLabel" datatype="html">
@@ -1131,6 +1131,20 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
+        <source>CPU Fan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
+        <source>GPU Fan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
         <source>Service unavailable</source>
         <context-group purpose="location">
@@ -1213,20 +1227,6 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
           <context context-type="linenumber">86</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
-        <source>CPU Fan</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
-        <source>GPU Fan</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">
@@ -1666,324 +1666,354 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogNotAvailableTitle" datatype="html">
-        <source>Camera can not be accessed</source>
+        <source>Access error</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogNotAvailableDescription" datatype="html">
-        <source>Camera can not be accessed</source>
+        <source>Webcam can not be accessed.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dialogContinue" datatype="html">
         <source>Continue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">253</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">626</context>
+          <context context-type="linenumber">623</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">735</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">811</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">823</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1003</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="webcamDialogNotValidPresetTitle" datatype="html">
-        <source>Camera preset faulty</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">624</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="webcamDialogNotValidPresetDialog" datatype="html">
-        <source>Camera preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">625</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="webcamDialogAskOverwriteTitle" datatype="html">
-        <source>Preset name not avaiable</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">732</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="webcamDialogAskOverwriteDescription" datatype="html">
-        <source>Do you want to overwrite the preset?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">733</context>
+          <context context-type="linenumber">810</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">819</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">842</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">1000</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">1012</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogNotValidPresetTitle" datatype="html">
+        <source>Webcam preset faulty</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">621</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogNotValidPresetDialog" datatype="html">
+        <source>Webcam preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">622</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskOverwriteTitle" datatype="html">
+        <source>Webcam preset not avaiable</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">729</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogAskOverwriteDescription" datatype="html">
+        <source>Do you want to overwrite the webcam preset?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">730</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dialogAbort" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">734</context>
+          <context context-type="linenumber">731</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">841</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">1011</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogPresetNameUnsetTitle" datatype="html">
-        <source>Preset was not saved</source>
+        <source>Webcam preset was not saved</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">808</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogPresetNameUnsetDescription" datatype="html">
+        <source>The webcam preset name was no set and thus the preset was not saved.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">809</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="webcamDialogPresetNameUnsetDescription" datatype="html">
-        <source>The preset name was no set and thus the preset was not saved.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">810</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="webcamDialogDefaultCanNotOverwriteTitle" datatype="html">
-        <source>Not possible to overwrite the default preset</source>
+        <source>Overwriting default settings failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">821</context>
+          <context context-type="linenumber">817</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogDefaultCanNotOverwriteDescription" datatype="html">
-        <source>It is not possible to overwrite the default preset. Please select a different name for your preset.</source>
+        <source>Please select a different name for your webcam preset.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">822</context>
+          <context context-type="linenumber">818</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogAskPresetOverwriteTitle" datatype="html">
-        <source>Overwrite preset</source>
+        <source>Overwrite webcam preset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">831</context>
+          <context context-type="linenumber">826</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogAskPresetOverwriteDescription" datatype="html">
-        <source>Do you want to overwrite the current preset? Selecting no will result in providing a preset name.</source>
+        <source>Do you want to overwrite the current webcam preset or create a new one?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">832</context>
+          <context context-type="linenumber">827</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="dialogNo" datatype="html">
-        <source>No</source>
+      <trans-unit id="dialogNewPreset" datatype="html">
+        <source>New webcam preset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">833</context>
+          <context context-type="linenumber">828</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="dialogYes" datatype="html">
-        <source>Yes</source>
+      <trans-unit id="dialogOverwrite" datatype="html">
+        <source>Overwrite</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">834</context>
+          <context context-type="linenumber">829</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogAskPresetNameTitle" datatype="html">
-        <source>Saving Preset</source>
+        <source>Saving webcam preset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">843</context>
+          <context context-type="linenumber">838</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogAskPresetNameDescription" datatype="html">
-        <source>Set the preset name</source>
+        <source>Set name for webcam preset.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">844</context>
+          <context context-type="linenumber">839</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogDefaultCanNotDeleteTitle" datatype="html">
-        <source>Deleting Preset</source>
+        <source>Deleteting default webcam preset failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1001</context>
+          <context context-type="linenumber">998</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogDefaultCanNotDeleteDescription" datatype="html">
         <source>You are not allowed to delete the default preset.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1002</context>
+          <context context-type="linenumber">999</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogDeletePresetConfirmTitle" datatype="html">
+        <source>Deleting webcam preset</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">1009</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogDeletePresetConfirmDescription" datatype="html">
+        <source>Are you sure that you want to delete this webcam preset?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">1010</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamExposureAuto" datatype="html">
         <source>Exposure, Auto</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1085</context>
+          <context context-type="linenumber">1104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamExposureAbsolute" datatype="html">
         <source>Exposure (Absolute)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1088</context>
+          <context context-type="linenumber">1107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamExposureAutoPriority" datatype="html">
         <source>Exposure, Auto Priority</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1091</context>
+          <context context-type="linenumber">1110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamGain" datatype="html">
         <source>Gain</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1094</context>
+          <context context-type="linenumber">1113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamBacklightCompensation" datatype="html">
         <source>Backlight Compensation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1097</context>
+          <context context-type="linenumber">1116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamWhiteBalanceTemperatureAuto" datatype="html">
         <source>White Balance Temperature, Auto</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1100</context>
+          <context context-type="linenumber">1119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="whiteBalanceTemperature" datatype="html">
         <source>White Balance Temperature</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1103</context>
+          <context context-type="linenumber">1122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamBrightness" datatype="html">
         <source>Brightness</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1106</context>
+          <context context-type="linenumber">1125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamContrast" datatype="html">
         <source>Contrast</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1109</context>
+          <context context-type="linenumber">1128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamSaturation" datatype="html">
         <source>Saturation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1112</context>
+          <context context-type="linenumber">1131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamSharpness" datatype="html">
         <source>Sharpness</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1115</context>
+          <context context-type="linenumber">1134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamHue" datatype="html">
         <source>Hue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1118</context>
+          <context context-type="linenumber">1137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamGamma" datatype="html">
         <source>Gamma</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1121</context>
+          <context context-type="linenumber">1140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamResolution" datatype="html">
         <source>Resolution</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1124</context>
+          <context context-type="linenumber">1143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamFps" datatype="html">
         <source>Frames per Second</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1127</context>
+          <context context-type="linenumber">1146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamAperturePriorityMode" datatype="html">
         <source>Aperture Priority Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1130</context>
+          <context context-type="linenumber">1149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamManualMode" datatype="html">
         <source>Manual Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1133</context>
+          <context context-type="linenumber">1152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTitleGeneral" datatype="html">
         <source>General</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1140</context>
+          <context context-type="linenumber">1159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTitleExposure" datatype="html">
         <source>Exposure</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1143</context>
+          <context context-type="linenumber">1162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTitleDynamicRange" datatype="html">
         <source>Dynamic Range</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1146</context>
+          <context context-type="linenumber">1165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTitleBalance" datatype="html">
         <source>Balance</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1149</context>
+          <context context-type="linenumber">1168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTitleColor" datatype="html">
         <source>Color</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1152</context>
+          <context context-type="linenumber">1171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTitleCapture" datatype="html">
         <source>Capture</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1155</context>
+          <context context-type="linenumber">1174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noWebcamFoundInfoTitle" datatype="html">
@@ -2011,21 +2041,21 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Apply changes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTabSimpleLabel" datatype="html">
-        <source>Simple</source>
+        <source>Basic settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamTabAdvancedLabel" datatype="html">
-        <source>Advanced</source>
+        <source>Detailed settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogUnsavedChangesTitle" datatype="html">
@@ -2060,112 +2090,98 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Quiet</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
         <source>Low performance for light office tasks for very quiet fans and low power consumption.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
         <source>Office and Multimedia</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
         <source>Mid-tier performance for more demanding office tasks or multimedia usage and quiet fans.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
         <source>High Performance</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">265</context>
+          <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
         <source>High performance for gaming and demanding computing tasks at the cost of moderate to high fan noise and higher temperatures.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">266</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
         <source>Powersave extreme</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">270</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
         <source>Lowest possible power consumption and silent fans at the cost of extremely low performance.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">271</context>
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
         <source>Default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">276</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
         <source>Full performance at the expense of more noise and high temperatures.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
         <source>Cool and breezy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">287</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
         <source>Reduced power in favor of low temperatures and quiet fan noise.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
         <source>Powersave extreme</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">286</context>
+          <context context-type="linenumber">292</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
         <source>Heavily reduced performance in favor of lowest possible power consumption and silent cooling.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">287</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU settings deactivated in Tools→Global Settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">118</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="messageFanControlOff" datatype="html">
-        <source>Fan control deactivated in Tools→Global Settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
@@ -2194,6 +2210,20 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageCPUSettingsOff" datatype="html">
+        <source>CPU settings deactivated in Tools→Global Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageFanControlOff" datatype="html">
+        <source>Fan control deactivated in Tools→Global Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoFanControl" datatype="html">

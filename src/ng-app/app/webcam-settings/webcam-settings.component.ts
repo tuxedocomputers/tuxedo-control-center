@@ -248,8 +248,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async cameraNotAvailabledDialog(): Promise<void> {
         let config = {
-            title: $localize`:@@webcamDialogNotAvailableTitle:Camera can not be accessed`,
-            description: $localize`:@@webcamDialogNotAvailableDescription:Camera can not be accessed`,
+            title: $localize`:@@webcamDialogNotAvailableTitle:Access error`,
+            description: $localize`:@@webcamDialogNotAvailableDescription:Webcam can not be accessed.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
@@ -618,8 +618,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     private notValidPresetDialog() {
         let config = {
-            title: $localize`:@@webcamDialogNotValidPresetTitle:Camera preset faulty`,
-            description: $localize`:@@webcamDialogNotValidPresetDialog:Camera preset contains invalid configurations and therefore won't be applied. Reverting to default preset.`,
+            title: $localize`:@@webcamDialogNotValidPresetTitle:Webcam preset faulty`,
+            description: $localize`:@@webcamDialogNotValidPresetDialog:Webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
@@ -726,8 +726,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     private askOverwritePreset(presetName: string) {
         let config = {
-            title: $localize`:@@webcamDialogAskOverwriteTitle:Preset name not avaiable`,
-            description: $localize`:@@webcamDialogAskOverwriteDescription:Do you want to overwrite the preset?`,
+            title: $localize`:@@webcamDialogAskOverwriteTitle:Webcam preset not avaiable`,
+            description: $localize`:@@webcamDialogAskOverwriteDescription:Do you want to overwrite the webcam preset?`,
             buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
@@ -805,7 +805,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private noPresetNameWarningDialog() {
         let config = {
-            title: $localize`:@@webcamDialogPresetNameUnsetTitle:Preset was not saved`,
+            title: $localize`:@@webcamDialogPresetNameUnsetTitle:Webcam preset was not saved`,
             description: $localize`:@@webcamDialogPresetNameUnsetDescription:The preset name was no set and thus the preset was not saved.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
@@ -814,20 +814,20 @@ export class WebcamSettingsComponent implements OnInit {
 
     private defaultOverwriteNotAllowed() {
         let config = {
-            title: $localize`:@@webcamDialogDefaultCanNotOverwriteTitle:Not possible to overwrite the default preset`,
-            description: $localize`:@@webcamDialogDefaultCanNotOverwriteDescription:It is not possible to overwrite the default preset. Please select a different name for your preset.`,
+            title: $localize`:@@webcamDialogDefaultCanNotOverwriteTitle:Overwriting default settings failed`,
+            description: $localize`:@@webcamDialogDefaultCanNotOverwriteDescription:Please select a different name for your webcam preset.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
     }
 
-    // Todo: maybe use overwrite / new message box, but would need customized dialog
+    // todo: this dialog has 2 options and thus has unwanted behaviour with only yes/no
     private async askOverwriteOrNewPreset(): Promise<boolean> {
         let config = {
-            title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite preset`,
-            description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current preset? Selecting no will result in providing a preset name.`,
-            buttonAbortLabel: $localize`:@@dialogNo:No`,
-            buttonConfirmLabel: $localize`:@@dialogYes:Yes`,
+            title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite webcam preset`,
+            description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current preset or create a new one?`,
+            buttonConfirmLabel: $localize`:@@dialogNewPreset:New webcam preset`,
+            buttonAbortLabel: $localize`:@@dialogOverwrite:Overwrite`,
         };
         return this.utils.confirmDialog(config).then((dialogResult) => {
             return dialogResult["confirm"];
@@ -836,9 +836,11 @@ export class WebcamSettingsComponent implements OnInit {
 
     async askPresetNameDialog(): Promise<string> {
         let config = {
-            title: $localize`:@@webcamDialogAskPresetNameTitle:Saving Preset`,
-            description: $localize`:@@webcamDialogAskPresetNameDescription:Set the preset name`,
+            title: $localize`:@@webcamDialogAskPresetNameTitle:Saving webcam preset`,
+            description: $localize`:@@webcamDialogAskPresetNameDescription:Set the webcam preset name.`,
             prefill: "",
+            buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
+            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         return this.utils.inputTextDialog(config).then((x) => {
             return x;
@@ -853,12 +855,12 @@ export class WebcamSettingsComponent implements OnInit {
             overwrite = await this.askOverwriteOrNewPreset();
         }
 
-        if (overwrite) {
+        if (!overwrite) {
             presetName = this.selectedPreset.presetName;
             await this.savePreset(presetName, true);
             return;
         }
-        if (!overwrite) {
+        if (overwrite) {
             presetName = await this.askPresetNameDialog();
             if (presetName == undefined) {
                 this.noPresetNameWarningDialog();
@@ -994,49 +996,65 @@ export class WebcamSettingsComponent implements OnInit {
 
     private defaultPresetWarningDialog() {
         let config = {
-            title: $localize`:@@webcamDialogDefaultCanNotDeleteTitle:Deleting Preset`,
+            title: $localize`:@@webcamDialogDefaultCanNotDeleteTitle:Deleteting default webcam preset failed`,
             description: $localize`:@@webcamDialogDefaultCanNotDeleteDescription:You are not allowed to delete the default preset.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
     }
 
+    private async presetDeleteConfirmDialog() {
+        let config = {
+            title: $localize`:@@webcamDialogDeletePresetConfirmTitle:Deleting webcam preset`,
+            description: $localize`:@@webcamDialogDeletePresetConfirmDescription:Are you sure that you want to delete this webcam preset?`,
+            buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
+            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+        };
+        return this.utils.confirmDialog(config).then((dialogResult) => {
+            return dialogResult["confirm"];
+        });
+    }
+
     public async deletePreset(): Promise<void> {
         this.mutex.runExclusive(async () => {
-            if (this.selectedPreset.presetName == "Default") {
-                this.defaultPresetWarningDialog();
-                return;
+            let confirmed = await this.presetDeleteConfirmDialog();
+            if (confirmed) {
+                if (this.selectedPreset.presetName == "Default") {
+                    this.defaultPresetWarningDialog();
+                    return;
+                }
+
+                this.utils.pageDisabled = true;
+
+                let currentConfigs = this.webcamPresetsCurrentDevice.filter(
+                    (webcamPreset) =>
+                        webcamPreset.presetName !=
+                            this.selectedPreset.presetName &&
+                        webcamPreset.presetName != "Default"
+                );
+                let webcamConfigs = currentConfigs.concat(
+                    this.webcamPresetsOtherDevices
+                );
+
+                await this.config
+                    .pkexecWriteWebcamConfigAsync(webcamConfigs)
+                    .then((confirm) => {
+                        if (confirm) {
+                            this.activePreset = this.defaultPreset;
+
+                            this.webcamPresetsCurrentDevice = currentConfigs;
+                            this.webcamPresetsCurrentDevice.unshift(
+                                this.defaultPreset
+                            );
+
+                            this.allPresetData = webcamConfigs;
+                            this.webcamFormGroup.markAsPristine();
+                            this.selectedPreset = this.defaultPreset;
+                            this.applyPreset(this.defaultSettings);
+                        }
+                    });
+                this.utils.pageDisabled = false;
             }
-
-            this.utils.pageDisabled = true;
-
-            let currentConfigs = this.webcamPresetsCurrentDevice.filter(
-                (webcamPreset) =>
-                    webcamPreset.presetName != this.selectedPreset.presetName &&
-                    webcamPreset.presetName != "Default"
-            );
-            let webcamConfigs = currentConfigs.concat(
-                this.webcamPresetsOtherDevices
-            );
-
-            await this.config
-                .pkexecWriteWebcamConfigAsync(webcamConfigs)
-                .then((confirm) => {
-                    if (confirm) {
-                        this.activePreset = this.defaultPreset;
-
-                        this.webcamPresetsCurrentDevice = currentConfigs;
-                        this.webcamPresetsCurrentDevice.unshift(
-                            this.defaultPreset
-                        );
-
-                        this.allPresetData = webcamConfigs;
-                        this.webcamFormGroup.markAsPristine();
-                        this.selectedPreset = this.defaultPreset;
-                        this.applyPreset(this.defaultSettings);
-                    }
-                });
-            this.utils.pageDisabled = false;
         });
     }
 
@@ -1074,6 +1092,10 @@ export class WebcamSettingsComponent implements OnInit {
             this.showAdvancedSettings();
             this.selectedModeTabIndex = "Advanced";
         }
+    }
+
+    checkValid(setting: string) {
+        return this.webcamFormGroup.get(setting).status == "VALID";
     }
 
     public getConfigTranslation(configText: string): string {
