@@ -38,7 +38,7 @@
                     </button>
                 </span>
                 <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes">
-                    <button mat-icon-button color="basic" (click)="savingWebcamPresets()"
+                    <button mat-icon-button color="basic" (click)="savingWebcamPreset()"
                         [disabled]="!webcamFormGroup.dirty">
                         <svg viewBox="0 0 512 512">
                             <use href="./assets/images/icon_save.svg#Icon"></use>
@@ -138,8 +138,11 @@
                                                 </mat-option>
                                             </mat-select>
 
-                                            <button mat-icon-button color="primary" (click)="deletePreset()" class="icons">
-                                                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+                                            <button mat-icon-button color="primary" (click)="deletePreset()"
+                                                class="icons">
+                                                <svg viewBox="0 0 512 512">
+                                                    <use href="./assets/images/icon_trash.svg#Icon"></use>
+                                                </svg>
                                             </button>
 
                                         </content>
@@ -302,7 +305,9 @@
                                         </mat-option>
                                     </mat-select>
                                     <button mat-icon-button color="primary" (click)="deletePreset()" class="icons">
-                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_trash.svg#Icon"></use></svg>
+                                        <svg viewBox="0 0 512 512">
+                                            <use href="./assets/images/icon_trash.svg#Icon"></use>
+                                        </svg>
                                     </button>
                                 </content>
                             </mat-grid-tile>

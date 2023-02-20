@@ -821,16 +821,23 @@ export class WebcamSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    // todo: this dialog has 2 options and thus has unwanted behaviour with only yes/no
-    private async askOverwriteOrNewPreset(): Promise<boolean> {
+    private async askOverwriteOrNewPreset(): Promise<string | undefined> {
         let config = {
             title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite webcam preset`,
             description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current preset or create a new one?`,
-            buttonConfirmLabel: $localize`:@@dialogNewPreset:New webcam preset`,
-            buttonAbortLabel: $localize`:@@dialogOverwrite:Overwrite`,
+            labelData: [
+                {
+                    name: "overwrite",
+                    value: $localize`:@@dialogOverwrite:Overwrite`,
+                },
+                {
+                    name: "new",
+                    value: $localize`:@@dialogNewPreset:New webcam preset`,
+                },
+            ],
         };
-        return this.utils.confirmDialog(config).then((dialogResult) => {
-            return dialogResult["confirm"];
+        return this.utils.choiseDialog(config).then((dialogResult) => {
+            return dialogResult["value"];
         });
     }
 
@@ -847,36 +854,42 @@ export class WebcamSettingsComponent implements OnInit {
         });
     }
 
-    public async savingWebcamPresets() {
-        let presetName: string;
-        let overwrite: boolean = false;
-
-        if (this.selectedPreset.presetName != "Default") {
-            overwrite = await this.askOverwriteOrNewPreset();
-        }
-
-        if (!overwrite) {
-            presetName = this.selectedPreset.presetName;
-            await this.savePreset(presetName, true);
+    public async handlePresetName() {
+        let presetName = await this.askPresetNameDialog();
+        if (presetName == undefined) {
+            this.noPresetNameWarningDialog();
             return;
         }
-        if (overwrite) {
-            presetName = await this.askPresetNameDialog();
-            if (presetName == undefined) {
-                this.noPresetNameWarningDialog();
-                return;
-            }
-        }
-
         if (presetName == "Default") {
             this.defaultOverwriteNotAllowed();
             return;
         }
-
         if (this.checkIfPresetNameAvailable(presetName)) {
             this.savePreset(presetName);
         } else {
             this.askOverwritePreset(presetName);
+        }
+    }
+
+    public async savingWebcamPreset() {
+        let selection: string | undefined;
+
+        if (this.selectedPreset.presetName == "Default") {
+            return;
+        }
+
+        selection = await this.askOverwriteOrNewPreset();
+
+        if (selection == undefined) {
+            return;
+        }
+
+        if (selection == "overwrite") {
+            this.savePreset(this.selectedPreset.presetName, true);
+        }
+
+        if (selection == "new") {
+            await this.handlePresetName();
         }
     }
 

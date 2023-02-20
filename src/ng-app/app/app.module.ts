@@ -86,6 +86,7 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
 import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
+import { DialogChoiseComponent } from './dialog-choise/dialog-choise.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -111,7 +112,8 @@ declare const require;
     DialogConfirmComponent,
     ChargingSettingsComponent,
     WebcamSettingsComponent,
-    WebcamPreviewComponent
+    WebcamPreviewComponent,
+    DialogChoiseComponent
   ],
   imports: [
     BrowserModule,
