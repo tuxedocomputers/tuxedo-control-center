@@ -119,37 +119,43 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <ng-container i18n="@@cTomteGuiTomteOperationModeAutomaticButtonLabel">
                             Full Service
                         </ng-container>
-                        <mat-icon
-                        class="info-icon"
-                        i18n-matTooltip="@@cTomteGuiTomteOperationModeAutomaticButtonTooltip"
-                        matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer."
-                        [matTooltipShowDelay]="infoTooltipShowDelay">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                        </mat-icon>
+                        <div style="float: right">
+                            <mat-icon
+                            class="info-icon"
+                            i18n-matTooltip="@@cTomteGuiTomteOperationModeAutomaticButtonTooltip"
+                            matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer."
+                            [matTooltipShowDelay]="infoTooltipShowDelay">
+                                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                            </mat-icon>
+                        </div>
                     </mat-option>
                     <mat-option [value]="tomteModes[1]" color="primary">
                         <ng-container i18n="@@cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel">
                             Updates Only
                         </ng-container>
-                        <mat-icon
-                        class="info-icon"
-                        i18n-matTooltip="@@cTomteGuiTomteOperationModeUpdatesOnlyTooltip"
-                        matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available."
-                        [matTooltipShowDelay]="infoTooltipShowDelay">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                        </mat-icon>
+                        <div style="float: right">
+                            <mat-icon
+                            class="info-icon"
+                            i18n-matTooltip="@@cTomteGuiTomteOperationModeUpdatesOnlyTooltip"
+                            matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available."
+                            [matTooltipShowDelay]="infoTooltipShowDelay">
+                                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                            </mat-icon>
+                        </div>
                     </mat-option>
                     <mat-option [value]="tomteModes[2]" color="primary">
                         <ng-container i18n="@@cTomteGuiTomteOperationModeDisabledButtonLabel">
                             Disabled
                         </ng-container>
-                        <mat-icon
-                        class="info-icon"
-                        i18n-matTooltip="@@cTomteGuiTomteOperationModeDisabledTooltip"
-                        matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active."
-                        [matTooltipShowDelay]="infoTooltipShowDelay">
-                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                        </mat-icon>
+                        <div style="float: right">
+                            <mat-icon
+                            class="info-icon"
+                            i18n-matTooltip="@@cTomteGuiTomteOperationModeDisabledTooltip"
+                            matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active."
+                            [matTooltipShowDelay]="infoTooltipShowDelay">
+                                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                            </mat-icon>
+                        </div>
                     </mat-option>
                 </mat-select>
             </mat-form-field>
