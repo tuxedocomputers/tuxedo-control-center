@@ -207,8 +207,13 @@ export class ConfigService implements OnDestroy {
             }
             else
             {
+                // TODO when we want to override the old profile or there is no conflict we want to keep the
+                // original ID
                 let newProfile = newProfiles[i];
-                newProfile.id = generateProfileId();
+                if (newProfile.id === "generateNewID")
+                {
+                    newProfile.id = generateProfileId();
+                }
                 newProfileList = newProfileList.concat(newProfile);
             }
         }

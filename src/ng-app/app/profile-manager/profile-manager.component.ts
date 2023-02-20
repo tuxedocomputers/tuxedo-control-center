@@ -292,14 +292,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 else if (res.action === "keepBoth")
                 {
                     let newProfile = profiles[i];
-                    newProfile.id = "nextfunctionwillreplacethisIDanyaway";
+                    newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
                 }
                 else if (res.action === "newName")
                 {
                     let newProfile = profiles[i];
                     newProfile.name = res.newName;
-                    newProfile.id = "nextfunctionwillreplacethisIDanyaway";
+                    newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
                 }
             }
