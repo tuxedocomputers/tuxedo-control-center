@@ -50,7 +50,7 @@ if (startTCCAccelerator === '') {
 
 let tccWindow: Electron.BrowserWindow;
 let aquarisWindow: Electron.BrowserWindow;
-let cameraWindow: Electron.BrowserWindow;
+let webcamWindow: Electron.BrowserWindow;
 
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
@@ -293,12 +293,12 @@ function activateAquarisGui() {
     }
 }
 
-async function createCameraPreview(langId: string, arg: any) {
+async function createWebcamPreview(langId: string, arg: any) {
     let windowWidth = 640;
     let windowHeight = 480;
 
-    cameraWindow = new BrowserWindow({
-        title: "Camera Preview",
+    webcamWindow = new BrowserWindow({
+        title: "Webcam",
         width: windowWidth,
         height: windowHeight,
         frame: true,
@@ -317,15 +317,15 @@ async function createCameraPreview(langId: string, arg: any) {
     });
 
     // Workaround to set window title
-    cameraWindow.on("page-title-updated", function (e) {
+    webcamWindow.on("page-title-updated", function (e) {
         e.preventDefault();
     });
 
     // Hide menu bar
-    cameraWindow.setMenuBarVisibility(false);
+    webcamWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
-    cameraWindow.on("leave-full-screen", () => {
-        cameraWindow.setMenuBarVisibility(false);
+    webcamWindow.on("leave-full-screen", () => {
+        webcamWindow.setMenuBarVisibility(false);
     });
 
     const indexPath = path.join(
@@ -336,45 +336,45 @@ async function createCameraPreview(langId: string, arg: any) {
         langId,
         "index.html"
     );
-    cameraWindow.loadFile(indexPath, { hash: "/webcam-preview" });
+    webcamWindow.loadFile(indexPath, { hash: "/webcam-preview" });
 
-    cameraWindow.webContents.once("dom-ready", () => {
-        cameraWindow.webContents.send("setting-webcam-with-loading", arg);
+    webcamWindow.webContents.once("dom-ready", () => {
+        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
     });
 
-    cameraWindow.on("close", async function () {
-        tccWindow.webContents.send("external-camera-preview-closed");
-        cameraWindow = null;
+    webcamWindow.on("close", async function () {
+        tccWindow.webContents.send("external-webcam-preview-closed");
+        webcamWindow = null;
     });
 
-    cameraWindow.once('ready-to-show', () => {
-        cameraWindow.webContents.send("setting-webcam-with-loading", arg);
-        cameraWindow.show()
+    webcamWindow.once('ready-to-show', () => {
+        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
+        webcamWindow.show()
     })
 }
 
 ipcMain.on("setting-webcam-with-loading", (event, arg) => {
-    if (cameraWindow != null) {
-        cameraWindow.webContents.send("setting-webcam-with-loading", arg);
+    if (webcamWindow != null) {
+        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
     }
 });
 
 ipcMain.on("create-webcam-preview", function (evt, arg) {
-    if (cameraWindow) {
-        if (cameraWindow.isMinimized()) {
-            cameraWindow.restore();
+    if (webcamWindow) {
+        if (webcamWindow.isMinimized()) {
+            webcamWindow.restore();
         }
-        cameraWindow.focus();
+        webcamWindow.focus();
     } else {
         userConfig.get("langId").then((langId) => {
-            createCameraPreview(langId, arg);
+            createWebcamPreview(langId, arg);
         });
     }
 });
 
 ipcMain.on("close-webcam-preview", (event, arg) => {
-    cameraWindow.close();
-    cameraWindow = null;
+    webcamWindow.close();
+    webcamWindow = null;
 });
 
 ipcMain.on("apply-controls", (event) => {
@@ -530,8 +530,8 @@ nativeTheme.on('updated', () => {
     if (aquarisWindow) {
         aquarisWindow.webContents.send('update-brightness-mode');
     }
-    if (cameraWindow) {
-        cameraWindow.webContents.send('update-brightness-mode');
+    if (webcamWindow) {
+        webcamWindow.webContents.send('update-brightness-mode');
     }
 });
 

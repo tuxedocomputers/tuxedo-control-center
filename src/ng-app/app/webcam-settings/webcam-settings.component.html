@@ -101,14 +101,14 @@
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.inputSpan">
                                         <content class="input">
-                                            <mat-select name="selectedCamera" [(value)]="selectedCamera"
+                                            <mat-select name="selectedWebcam" [(value)]="selectedWebcam"
                                                 placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
                                                 <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam">
                                                     {{ webcam.label }}
                                                 </mat-option>
                                             </mat-select>
                                             <button mat-icon-button color="primary"
-                                                (click)="reloadWebcamList(selectedCamera)">
+                                                (click)="reloadWebcamList(selectedWebcam)">
                                                 <mat-icon>refresh</mat-icon>
                                             </button>
                                             <button mat-icon-button color="primary"
@@ -123,7 +123,7 @@
                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                     class="profile-details-edit-grid">
                                     <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                        <header>Preset</header>
+                                        <header i18n="@@webcamPreset">Preset</header>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.inputSpan">
@@ -273,13 +273,13 @@
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input">
-                                    <mat-select name="selectedCamera" [(value)]="selectedCamera" placeholder="Webcam"
+                                    <mat-select name="selectedWebcam" [(value)]="selectedWebcam" placeholder="Webcam"
                                         (selectionChange)="setWebcam($event.value)">
                                         <mat-option *ngFor="let webcam of webcamDropdownData" [value]="webcam">
                                             {{ webcam.label }}
                                         </mat-option>
                                     </mat-select>
-                                    <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedCamera)">
+                                    <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
                                         <mat-icon>refresh</mat-icon>
                                     </button>
                                     <button mat-icon-button color="primary" [hidden]="detachedWebcamWindowActive"
