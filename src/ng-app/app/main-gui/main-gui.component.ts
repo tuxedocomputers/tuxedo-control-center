@@ -114,6 +114,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public buttonToggleLanguage() {
+        this.electron.ipcRenderer.send("close-webcam-preview");
         this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
         this.updateLanguageName();
     }

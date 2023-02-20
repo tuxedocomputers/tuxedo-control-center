@@ -373,8 +373,10 @@ ipcMain.on("create-webcam-preview", function (evt, arg) {
 });
 
 ipcMain.on("close-webcam-preview", (event, arg) => {
-    webcamWindow.close();
-    webcamWindow = null;
+    if (webcamWindow) {
+        webcamWindow.close();
+        webcamWindow = null;
+    }
 });
 
 ipcMain.on("apply-controls", (event) => {
