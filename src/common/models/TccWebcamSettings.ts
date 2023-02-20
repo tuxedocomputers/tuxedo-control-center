@@ -20,12 +20,15 @@ export interface WebcamPreset {
 }
 
 export interface WebcamPresetValues {
+    auto_exposure?: string;
     backlight_compensation?: boolean;
     brightness?: number;
     contrast?: number;
     exposure_absolute?: number;
     exposure_auto?: string;
     exposure_auto_priority?: boolean;
+    exposure_dynamic_framerate?: boolean;
+    exposure_time_absolute?: number;
     fps?: number;
     gain?: number;
     gamma?: number;
@@ -33,6 +36,7 @@ export interface WebcamPresetValues {
     resolution?: string;
     saturation?: number;
     sharpness?: number;
+    white_balance_automatic?: boolean;
     white_balance_temperature?: number;
     white_balance_temperature_auto?: boolean;
 }

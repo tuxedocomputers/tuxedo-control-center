@@ -434,7 +434,8 @@ export class WebcamSettingsComponent implements OnInit {
 
             // white_balance_temperature must be set after disabling auto to take effect and small delay required
             if (
-                configParameter == "white_balance_temperature_auto" &&
+                (configParameter == "white_balance_temperature_auto" ||
+                    configParameter == "white_balance_automatic") &&
                 checked == false &&
                 this.webcamFormGroup.get("white_balance_temperature") != null
             ) {
@@ -453,11 +454,17 @@ export class WebcamSettingsComponent implements OnInit {
     ): Promise<void> {
         await this.executeWebcamCtrls(configParameter, option);
 
-        // exposure_absolute must be set after disabling auto to take effect
+        // absolute exposure must be set after disabling auto to take effect
         if (configParameter == "exposure_auto" && option == "manual_mode") {
             await this.executeWebcamCtrls(
                 "exposure_absolute",
                 this.webcamFormGroup.get("exposure_absolute").value
+            );
+        }
+        if (configParameter == "auto_exposure" && option == "manual_mode") {
+            await this.executeWebcamCtrls(
+                "exposure_time_absolute",
+                this.webcamFormGroup.get("exposure_time_absolute").value
             );
         }
     }
@@ -581,16 +588,22 @@ export class WebcamSettingsComponent implements OnInit {
     // Some configurations depend on each other and while one is active, another can't be active
     private setSliderEnabledStatus(config: WebcamPresetValues) {
         if (
-            "white_balance_temperature_auto" in config &&
+            (config?.white_balance_temperature_auto ||
+                config?.white_balance_automatic) &&
             "white_balance_temperature" in config
         ) {
-            if (config.white_balance_temperature_auto) {
-                this.webcamFormGroup.get("white_balance_temperature").disable();
-            }
-            if (!config.white_balance_temperature_auto) {
-                this.webcamFormGroup.get("white_balance_temperature").enable();
-            }
+            this.webcamFormGroup.get("white_balance_temperature").disable();
         }
+        if (
+            !(
+                config?.white_balance_temperature_auto ||
+                config?.white_balance_automatic
+            ) &&
+            "white_balance_temperature" in config
+        ) {
+            this.webcamFormGroup.get("white_balance_temperature").enable();
+        }
+
         if (
             "exposure_auto_priority" in config &&
             "exposure_absolute" in config
@@ -600,6 +613,15 @@ export class WebcamSettingsComponent implements OnInit {
             }
             if (config.exposure_auto != "aperture_priority_mode") {
                 this.webcamFormGroup.get("exposure_absolute").enable();
+            }
+        }
+
+        if ("auto_exposure" in config && "exposure_time_absolute" in config) {
+            if (config.auto_exposure == "aperture_priority_mode") {
+                this.webcamFormGroup.get("exposure_time_absolute").disable();
+            }
+            if (config.auto_exposure != "aperture_priority_mode") {
+                this.webcamFormGroup.get("exposure_time_absolute").enable();
             }
         }
     }
@@ -1112,8 +1134,14 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public getConfigTranslation(configText: string): string {
-        if (configText == "exposure_auto") {
+        if (configText == "exposure_auto" || configText == "auto_exposure") {
             return $localize`:@@webcamExposureAuto:Exposure, Auto`;
+        }
+        if (configText == "exposure_time_absolute") {
+            return $localize`:@@webcamExposureTimeAbsolute:Exposure time (absolute)`;
+        }
+        if (configText == "exposure_dynamic_framerate") {
+            return $localize`:@@webcamExposureDynamicFramerate:Exposure dynamic framerate`;
         }
         if (configText == "exposure_absolute") {
             return $localize`:@@webcamExposureAbsolute:Exposure (Absolute)`;
@@ -1126,6 +1154,9 @@ export class WebcamSettingsComponent implements OnInit {
         }
         if (configText == "backlight_compensation") {
             return $localize`:@@webcamBacklightCompensation:Backlight Compensation`;
+        }
+        if (configText == "white_balance_automatic") {
+            return $localize`:@@webcamWhiteBalanceAutomatic:White Balance, Auto`;
         }
         if (configText == "white_balance_temperature_auto") {
             return $localize`:@@webcamWhiteBalanceTemperatureAuto:White Balance Temperature, Auto`;
