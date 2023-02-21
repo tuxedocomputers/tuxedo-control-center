@@ -29,26 +29,26 @@ import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
 import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
-import { WebcamGuardService, CanDeactivateGuard } from './webcam.service';
+import { WebcamSettingsGuard } from './webcam.service';
 
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
     {
-        path: 'main-gui', component: MainGuiComponent, canActivate: [WebcamGuardService],
+        path: 'main-gui', component: MainGuiComponent,
         children: [
-            { path: 'profile-manager', component: ProfileManagerComponent, canActivate: [WebcamGuardService] },
-            { path: 'profile-manager/:profileId', component: ProfileManagerComponent, canActivate: [WebcamGuardService] },
-            { path: 'support', component: SupportComponent, canActivate: [WebcamGuardService] },
-            { path: 'info', component: InfoComponent, canActivate: [WebcamGuardService] },
-            { path: 'cpu-dashboard', component: CpuDashboardComponent, canActivate: [WebcamGuardService] },
-            { path: 'tools', component: ToolsComponent, canActivate: [WebcamGuardService] },
-            { path: 'camera-settings', component: WebcamSettingsComponent, canActivate: [WebcamGuardService], canDeactivate: [CanDeactivateGuard] },
-            { path: 'global-settings', component: GlobalSettingsComponent, canActivate: [WebcamGuardService] },
-            { path: 'aquaris-control', component: AquarisControlComponent, canActivate: [WebcamGuardService] }
+            { path: 'profile-manager', component: ProfileManagerComponent },
+            { path: 'profile-manager/:profileId', component: ProfileManagerComponent },
+            { path: 'support', component: SupportComponent },
+            { path: 'info', component: InfoComponent },
+            { path: 'cpu-dashboard', component: CpuDashboardComponent },
+            { path: 'tools', component: ToolsComponent },
+            { path: 'camera-settings', component: WebcamSettingsComponent, canDeactivate: [WebcamSettingsGuard] },
+            { path: 'global-settings', component: GlobalSettingsComponent },
+            { path: 'aquaris-control', component: AquarisControlComponent }
         ]
     },
-    { path: 'webcam-preview', component: WebcamPreviewComponent, canActivate: [WebcamGuardService] },
-    { path: 'aquaris-control', component: AquarisControlComponent, canActivate: [WebcamGuardService] },
+    { path: 'webcam-preview', component: WebcamPreviewComponent },
+    { path: 'aquaris-control', component: AquarisControlComponent },
 ];
 
 @NgModule({

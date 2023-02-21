@@ -1,22 +1,7 @@
 import { Injectable } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { CanActivate, CanDeactivate } from "@angular/router";
+import { CanDeactivate } from "@angular/router";
 import { UtilsService } from "./utils.service";
-
-@Injectable({ providedIn: "root" })
-export class WebcamGuardService implements CanActivate {
-    loading: boolean;
-    public setLoadingStatus(status: boolean) {
-        this.loading = status;
-    }
-
-    public canActivate(): boolean {
-        if (this.loading) {
-            return false;
-        }
-        return true;
-    }
-}
 
 export interface CanComponentDeactivate {
     webcamFormGroup: FormGroup;
@@ -25,10 +10,11 @@ export interface CanComponentDeactivate {
 @Injectable({
     providedIn: "root",
 })
-export class CanDeactivateGuard
+export class WebcamSettingsGuard
     implements CanDeactivate<CanComponentDeactivate>
 {
     constructor(private utils: UtilsService) {}
+    loading: boolean = false;
 
     askUnsavedPreset() {
         let config = {
@@ -40,6 +26,10 @@ export class CanDeactivateGuard
         return this.utils.confirmDialog(config);
     }
 
+    public setLoadingStatus(status: boolean) {
+        this.loading = status;
+    }
+
     public async canDeactivate(component: CanComponentDeactivate) {
         if (component.webcamFormGroup.dirty) {
             let canRoute: boolean;
@@ -48,6 +38,11 @@ export class CanDeactivateGuard
             });
             return canRoute;
         }
+
+        if (this.loading) {
+            return false;
+        }
+
         return true;
     }
 }

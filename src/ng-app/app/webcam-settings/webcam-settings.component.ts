@@ -11,7 +11,7 @@ import {
 } from "src/common/models/TccWebcamSettings";
 import { UtilsService } from "../utils.service";
 import { ChangeDetectorRef } from "@angular/core";
-import { WebcamGuardService } from "../webcam.service";
+import { WebcamSettingsGuard } from "../webcam.service";
 import { setInterval, clearInterval } from "timers";
 import {
     AbstractControl,
@@ -82,7 +82,7 @@ export class WebcamSettingsComponent implements OnInit {
         private electron: ElectronService,
         private utils: UtilsService,
         private cdref: ChangeDetectorRef,
-        private webcamGuard: WebcamGuardService,
+        private webcamGuard: WebcamSettingsGuard,
         private config: ConfigService
     ) {}
     private configHandler: ConfigHandler;
