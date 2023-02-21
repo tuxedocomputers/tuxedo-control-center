@@ -895,21 +895,17 @@ export class WebcamSettingsComponent implements OnInit {
 
     public async savingWebcamPreset() {
         let selection: string | undefined;
-
         if (this.selectedPreset.presetName == "Default") {
+            await this.handlePresetName();
             return;
         }
-
         selection = await this.askOverwriteOrNewPreset();
-
         if (selection == undefined) {
             return;
         }
-
         if (selection == "overwrite") {
             this.savePreset(this.selectedPreset.presetName, true);
         }
-
         if (selection == "new") {
             await this.handlePresetName();
         }
