@@ -21,7 +21,7 @@ import { FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ElectronService } from "ngx-electron";
 
-export interface ChoiseDialogData {
+export interface ChoiceDialogData {
     title: string;
     heading?: string;
     description: string;
@@ -37,23 +37,23 @@ interface SingleLabelData {
     value: string;
 }
 
-export interface ConfirmChoiseResult {
+export interface ConfirmChoiceResult {
     value: string | undefined;
     noBother: boolean;
 }
 
 @Component({
-    selector: "app-dialog-choise",
-    templateUrl: "./dialog-choise.component.html",
-    styleUrls: ["./dialog-choise.component.scss"],
+    selector: "app-dialog-choice",
+    templateUrl: "./dialog-choice.component.html",
+    styleUrls: ["./dialog-choice.component.scss"],
 })
-export class DialogChoiseComponent {
+export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
         private electron: ElectronService,
-        public dialogRef: MatDialogRef<DialogChoiseComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ChoiseDialogData
+        public dialogRef: MatDialogRef<DialogChoiceComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: ChoiceDialogData
     ) {
         if (data.checkboxNoBotherLabel === undefined) {
             data.checkboxNoBotherLabel = "";
@@ -65,7 +65,7 @@ export class DialogChoiseComponent {
     }
 
     closeDialog(result?: string) {
-        let dialogResult: ConfirmChoiseResult;
+        let dialogResult: ConfirmChoiceResult;
         const noBotherValue = this.ctrlCheckboxNoBother.value as boolean;
         if (result != undefined) {
             dialogResult = {

@@ -27,7 +27,7 @@ import * as path from 'path';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
-import { ChoiseDialogData, ConfirmChoiseResult, DialogChoiseComponent } from './dialog-choise/dialog-choise.component';
+import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
@@ -247,14 +247,14 @@ export class UtilsService {
     return result;
   }
 
-  public async choiseDialog(config: ChoiseDialogData): Promise<ConfirmChoiseResult> {
-    const dialogRef = this.dialog.open(DialogChoiseComponent, {
+  public async choiceDialog(config: ChoiceDialogData): Promise<ConfirmChoiceResult> {
+    const dialogRef = this.dialog.open(DialogChoiceComponent, {
       minWidth: 350,
       maxWidth: 550,
       data: config,
       autoFocus: false
     });
-    let result: ConfirmChoiseResult =  await dialogRef.afterClosed().toPromise();
+    let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
     if (result === undefined) {
       result = {
         value: undefined,

@@ -858,7 +858,7 @@ export class WebcamSettingsComponent implements OnInit {
                 },
             ],
         };
-        return this.utils.choiseDialog(config).then((dialogResult) => {
+        return this.utils.choiceDialog(config).then((dialogResult) => {
             return dialogResult["value"];
         });
     }
