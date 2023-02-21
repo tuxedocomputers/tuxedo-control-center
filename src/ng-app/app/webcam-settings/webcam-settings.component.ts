@@ -1052,6 +1052,10 @@ export class WebcamSettingsComponent implements OnInit {
 
     public async deletePreset(): Promise<void> {
         this.mutex.runExclusive(async () => {
+            if (this.selectedPreset.presetName == "Default") {
+                this.defaultPresetWarningDialog();
+                return;
+            }
             let confirmed = await this.presetDeleteConfirmDialog();
             if (confirmed) {
                 if (this.selectedPreset.presetName == "Default") {
