@@ -2190,8 +2190,10 @@ def main():
     camera_ctrls = open_camera(device)
     if list_controls:
         camera_ctrls.print_ctrls()
+        sys.exit(0)
     elif list_controls_json:
         camera_ctrls.print_ctrls_json()
+        sys.exit(0)
 
     # setting default preset if no config values
     if not ctrlsmap:
