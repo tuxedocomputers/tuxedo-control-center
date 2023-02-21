@@ -376,18 +376,18 @@ export class WebcamSettingsComponent implements OnInit {
     ): Promise<void> {
         let webcamPaths = this.getPathsWithId(this.selectedWebcam.id);
 
-        webcamPaths.forEach(async (devicePath) => {
-            await this.utils
-                .execCmd(
+        for (let devicePath of webcamPaths) {
+            try {
+                await this.utils.execCmd(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${devicePath} -c ${parameter}=${value}`
-                )
-                .catch(async (error) => {
-                    console.log(error);
-                    await this.reloadWebcamList(null, true);
-                });
-        });
+                );
+            } catch (error) {
+                console.log(error);
+                await this.reloadWebcamList(null, true);
+            }
+        }
     }
 
     private async executeWebcamCtrlsList(
@@ -407,18 +407,19 @@ export class WebcamSettingsComponent implements OnInit {
         });
 
         let webcamPaths = this.getPathsWithId(this.selectedWebcam.id);
-        webcamPaths.forEach(async (devicePath) => {
-            await this.utils
-                .execCmd(
+
+        for (let devicePath of webcamPaths) {
+            try {
+                await this.utils.execCmd(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${devicePath} -c ${controlStr}`
-                )
-                .catch(async (error) => {
-                    console.log(error);
-                    await this.reloadWebcamList(null, true);
-                });
-        });
+                );
+            } catch (error) {
+                console.log(error);
+                await this.reloadWebcamList(null, true);
+            }
+        }
     }
 
     public async setCheckboxValue(
