@@ -642,7 +642,7 @@ export class WebcamSettingsComponent implements OnInit {
     private notValidPresetDialog() {
         let config = {
             title: $localize`:@@webcamDialogNotValidPresetTitle:Webcam preset faulty`,
-            description: $localize`:@@webcamDialogNotValidPresetDialog:Webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.`,
+            description: $localize`:@@webcamDialogNotValidPresetDialog:The webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
@@ -828,7 +828,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private noPresetNameWarningDialog() {
         let config = {
-            title: $localize`:@@webcamDialogPresetNameUnsetTitle:Webcam preset was not saved`,
+            title: $localize`:@@webcamDialogPresetNameUnsetTitle:The webcam preset was not saved`,
             description: $localize`:@@webcamDialogPresetNameUnsetDescription:The webcam preset name was no set and thus the preset was not saved.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
@@ -846,7 +846,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async askOverwriteOrNewPreset(): Promise<string | undefined> {
         let config = {
-            title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite webcam preset`,
+            title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite webcam preset?`,
             description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current webcam preset or create a new one?`,
             labelData: [
                 {
@@ -1028,8 +1028,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     private defaultPresetWarningDialog() {
         let config = {
-            title: $localize`:@@webcamDialogDefaultCanNotDeleteTitle:Deleteting default webcam preset failed`,
-            description: $localize`:@@webcamDialogDefaultCanNotDeleteDescription:You are not allowed to delete the default preset.`,
+            title: $localize`:@@webcamDialogDefaultCanNotDeleteTitle:Deleting default webcam preset failed`,
+            description: $localize`:@@webcamDialogDefaultCanNotDeleteDescription:The default preset cannot be deleted.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
