@@ -55,8 +55,16 @@ export class ConfigHandler {
         return this.readConfig<ITccSettings>(filePath);
     }
 
+    async readSettingsAsync(filePath: string = this.pathSettings): Promise<ITccSettings> {
+        return await this.readConfigAsync<ITccSettings>(filePath);
+    }
+
     writeSettings(settings: ITccSettings, filePath: string = this.pathSettings) {
         this.writeConfig<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
+    }
+
+    async writeSettingsAsync(settings: ITccSettings, filePath: string = this.pathSettings) {
+        await this.writeConfigAsync<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
     readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
@@ -107,6 +115,17 @@ export class ConfigHandler {
         return config;
     }
 
+    public async readConfigAsync<T>(filename: string): Promise<T> {
+        let config: T;
+        try {
+            const fileData = await fs.promises.readFile(filename);
+            config = JSON.parse(fileData.toString());
+        } catch (err) {
+            throw err;
+        }
+        return config;
+    }
+
     public writeConfig<T>(config: T, filePath: string, writeFileOptions): void {
         const fileData = JSON.stringify(config);
         try {
@@ -114,6 +133,19 @@ export class ConfigHandler {
                 fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
             }
             fs.writeFileSync(filePath, fileData, writeFileOptions);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public async writeConfigAsync<T>(config: T, filePath: string, writeFileOptions): Promise<void> {
+        const fileData = JSON.stringify(config);
+        try {
+            let dirStat = await fs.promises.stat(path.dirname(filePath));
+            if (!dirStat.isDirectory()) {
+                await fs.promises.mkdir(path.dirname(filePath), { mode: 0o755, recursive: true });
+            }
+            await fs.promises.writeFile(filePath, fileData, writeFileOptions);
         } catch (err) {
             throw err;
         }

@@ -42,6 +42,7 @@ import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/T
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
+import { KeyboardBacklightWorker } from './KeyboardBacklightWorker';
 import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
@@ -55,7 +56,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     static readonly CMD_START_SERVICE = 'systemctl start tccd.service';
     static readonly CMD_STOP_SERVICE = 'systemctl stop tccd.service';
 
-    private config: ConfigHandler;
+    public config: ConfigHandler;
 
     public settings: ITccSettings;
     public customProfiles: ITccProfile[];
@@ -112,6 +113,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new YCbCr420WorkaroundWorker(this));
+        this.workers.push(new KeyboardBacklightWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));

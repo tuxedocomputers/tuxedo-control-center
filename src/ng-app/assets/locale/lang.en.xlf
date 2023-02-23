@@ -1201,6 +1201,46 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cKeyboardBacklightLabel" datatype="html">
+        <source>Keyboard Backlight</source>
+        <target state="translated">Keyboard Backlight</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription" datatype="html">
+        <source>Control the Keyboard Backlight</source>
+        <target state="translated">Control the Keyboard Backlight</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
+        <source>Your device has no keyboard backlight or is not (yet) supported by this control interface.</source>
+        <target state="translated">Your device has no keyboard backlight or is not (yet) supported by this control interface.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
+        <source>Backlight Brightness:</source>
+        <target state="translated">Backlight Brightness:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">473</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
+        <source>Backlight Color:</source>
+        <target state="translated">Backlight Color:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">508</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
         <source>Show Passwords</source>
         <target state="translated">Show Passwords</target>
@@ -1316,6 +1356,22 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
+        <source>CPU Fan</source>
+        <target state="translated">CPU Fan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
+        <source>GPU Fan</source>
+        <target state="translated">GPU Fan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
         <source>Service unavailable</source>
         <target state="translated">Service unavailable</target>
@@ -1356,12 +1412,20 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="menuKeyboardBacklight" datatype="html">
+        <source>Keyboard Backlight</source>
+        <target state="translated">Keyboard Backlight</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="menuUsedProfilesLabel" datatype="html">
         <source>Used profiles</source>
         <target state="translated">Used profiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuSupport" datatype="html">
@@ -1369,7 +1433,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
@@ -1377,7 +1441,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
@@ -1385,7 +1449,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
@@ -1401,23 +1465,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
-        <source>CPU Fan</source>
-        <target state="translated">CPU Fan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
-        <source>GPU Fan</source>
-        <target state="translated">GPU Fan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">

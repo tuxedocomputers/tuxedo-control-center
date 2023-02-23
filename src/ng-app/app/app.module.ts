@@ -74,6 +74,7 @@ import { GaugeModule } from 'angular-gauge';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
 import { ToolsComponent } from "./tools/tool.component";
+import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
@@ -101,6 +102,7 @@ declare const require;
     GlobalSettingsComponent,
     ShutdownTimerComponent,
     ToolsComponent,
+    KeyboardBacklightComponent,
     ChangeCryptPasswordComponent,
     FanGraphComponent,
     MainGuiComponent,

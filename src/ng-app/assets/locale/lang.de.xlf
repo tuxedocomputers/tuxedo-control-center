@@ -1199,6 +1199,46 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cKeyboardBacklightLabel" datatype="html">
+        <source>Keyboard Backlight</source>
+        <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription" datatype="html">
+        <source>Control the Keyboard Backlight</source>
+        <target phase-name="approval-1" state="translated">Steueren sie die Tastaturbeleuchtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
+        <source>Your device has no keyboard backlight or is not (yet) supported by this control interface.</source>
+        <target phase-name="approval-1" state="translated">Dein Gerät hat keine Tastaturbeleuchtung oder ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
+        <source>Backlight Brightness:</source>
+        <target phase-name="approval-1" state="translated">Beleuchtungshelligkeit:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">473</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
+        <source>Backlight Color:</source>
+        <target phase-name="approval-1" state="translated">Beleuchtungsfarbe:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">508</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
         <source>Show Passwords</source>
         <target phase-name="approval-1" state="translated">Passwörter anzeigen</target>
@@ -1312,6 +1352,22 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
+        <source>CPU Fan</source>
+        <target state="translated">CPU Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
+        <source>GPU Fan</source>
+        <target state="translated">GPU Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
         <source>Service unavailable</source>
         <target state="translated">tccd Dienst nicht verfügbar</target>
@@ -1352,12 +1408,20 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="menuKeyboardBacklight" datatype="html">
+        <source>Keyboard Backlight</source>
+        <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="menuUsedProfilesLabel" datatype="html">
         <source>Used profiles</source>
         <target phase-name="approval-1" state="signed-off">Aktuell verwendete Profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuSupport" datatype="html" approved="yes">
@@ -1365,7 +1429,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
@@ -1373,7 +1437,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
@@ -1381,7 +1445,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
@@ -1397,23 +1461,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
-        <source>CPU Fan</source>
-        <target state="translated">CPU Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanChartGPULabel" datatype="html">
-        <source>GPU Fan</source>
-        <target state="translated">GPU Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/fan-graph/fan-graph.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">

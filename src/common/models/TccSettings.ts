@@ -21,6 +21,28 @@ export enum ProfileStates {
     BAT = 'power_bat'
 }
 
+export enum KeyboardBacklightColorModes {
+    static,
+    breathing
+}
+
+export interface KeyboardBacklightCapabilitiesInterface {
+    modes: Array<KeyboardBacklightColorModes>;
+    zones: number;
+    maxBrightness: number;
+    maxRed: number;
+    maxGreen: number;
+    maxBlue: number;
+}
+
+export interface KeyboardBacklightStateInterface {
+    mode: KeyboardBacklightColorModes;
+    brightness: number;
+    red: number;
+    green: number;
+    blue: number;
+}
+
 export interface ITccSettings {
     stateMap: any;
     shutdownTime: string | null;
@@ -29,6 +51,9 @@ export interface ITccSettings {
     ycbcr420Workaround: Array<Object>;
     chargingProfile: string | null;
     chargingPriority: string | null;
+    keyboardBacklightBrightness: number;
+    keyboardBacklightColorMode: KeyboardBacklightColorModes;
+    keyboardBacklightColor: Array<number>;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -42,6 +67,9 @@ export const defaultSettings: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
+    keyboardBacklightBrightness: undefined, // undefined is interpreted as "default brightness" aka 50% by tccd
+    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
+    keyboardBacklightColor: []
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -55,4 +83,7 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
+    keyboardBacklightBrightness: 0,
+    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
+    keyboardBacklightColor: []
 };

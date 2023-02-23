@@ -66,6 +66,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-list-item>
                 <mat-divider></mat-divider>
 
+                <mat-list-item routerLink="keyboard-backlight" routerLinkActive="true">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_kb_backlight.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n="@@menuKeyboardBacklight">Keyboard Backlight</ng-container>
+                    </content>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
                 <mat-list-item routerLink="aquaris-control" routerLinkActive="true" *ngIf="compat.hasAquaris">
                     <content>
                         <mat-icon><svg viewBox="0 0 512 512">
