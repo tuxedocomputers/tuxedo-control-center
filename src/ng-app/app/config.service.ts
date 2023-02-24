@@ -29,6 +29,7 @@ import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
+import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
 @Injectable({
     providedIn: 'root'
@@ -72,6 +73,7 @@ export class ConfigService implements OnDestroy {
         this.config = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
+            TccPaths.WEBCAM_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -154,7 +156,7 @@ export class ConfigService implements OnDestroy {
         const result = this.electron.ipcRenderer.sendSync(
             'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
         );
-        
+
         this.updateConfigData();
     }
 
@@ -298,6 +300,28 @@ export class ConfigService implements OnDestroy {
         });
     }
 
+    public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[]): Promise<boolean> {
+        return new Promise<boolean>(resolve => {
+            const tmpWebcamPath = '/tmp/tmptccwebcam';
+            this.config.writeWebcamSettings(settings, tmpWebcamPath);
+            let tccdExec: string;
+            if (environment.production) {
+                tccdExec = TccPaths.TCCD_EXEC_FILE;
+            } else {
+                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+            }
+
+            this.utils.execFile(
+                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
+            ).then(data => {
+                resolve(true);
+            }).catch(error => {
+                resolve(false);
+            });
+        });
+    }
+
+    
     private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const tmpProfilesPath = '/tmp/tmptccprofiles';

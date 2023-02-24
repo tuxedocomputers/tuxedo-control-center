@@ -27,6 +27,7 @@ import { ElectronService } from 'ngx-electron';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
+import { ChangeDetectorRef } from '@angular/core';
 
 enum InputMode {
     New, Copy, Edit
@@ -78,7 +79,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private state: StateService,
         private utils: UtilsService,
         private router: Router,
-        private electron: ElectronService) { }
+        private electron: ElectronService,
+        private cdref: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.defineButtons();
@@ -116,6 +118,10 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    ngAfterContentChecked() {
+        this.cdref.detectChanges();
+    }
+    
     public isProfileActive(profileId: string): boolean {
         return this.state.getActiveProfile().id === profileId;
     }

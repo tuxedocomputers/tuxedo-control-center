@@ -39,10 +39,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule, MatInput } from '@angular/material/input';
-import { MatTooltipModule} from '@angular/material/tooltip';
-import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatDividerModule} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -52,7 +52,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule } from '@angular/material/menu'
+import { MatMenuModule } from '@angular/material/menu';
 
 import { DecimalPipe, registerLocaleData } from '@angular/common';
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
@@ -85,6 +85,9 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
+import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
+import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
+import { DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -110,6 +113,9 @@ declare const require;
     DialogInputTextComponent,
     DialogConfirmComponent,
     ChargingSettingsComponent,
+    WebcamSettingsComponent,
+    WebcamPreviewComponent,
+    DialogChoiceComponent
   ],
   imports: [
     BrowserModule,
@@ -149,7 +155,8 @@ declare const require;
     GaugeModule.forRoot(),
     ChartsModule,
     ColorPickerModule,
-    MatMenuModule
+    MatMenuModule,
+    MatRadioModule
   ],
   providers: [
     DecimalPipe,

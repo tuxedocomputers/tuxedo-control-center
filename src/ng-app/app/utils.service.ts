@@ -27,9 +27,12 @@ import * as path from 'path';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
+
 import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
+import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 
 @Injectable({
   providedIn: 'root'
@@ -244,6 +247,31 @@ export class UtilsService {
     return result;
   }
 
+  public async choiceDialog(config: ChoiceDialogData): Promise<ConfirmChoiceResult> {
+    const dialogRef = this.dialog.open(DialogChoiceComponent, {
+      minWidth: 350,
+      maxWidth: 550,
+      data: config,
+      autoFocus: false
+    });
+    let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
+    if (result === undefined) {
+      result = {
+        value: undefined,
+        noBother: false
+      };
+    }
+    return result;
+  }
+
+  public async inputTextDialog(config: any) {
+    const dialogRef = this.dialog.open(DialogInputTextComponent, {
+      minWidth: 350,
+      data: config,
+    });
+    return dialogRef.afterClosed().toPromise();
+  }
+  
   private defaultProfileInfos = new Map<string, IProfileTextMappings>();
 
   public fillDefaultProfileTexts(profile: ITccProfile) {

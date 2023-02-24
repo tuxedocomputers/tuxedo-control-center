@@ -19,19 +19,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="mat-typography">
     <h3 *ngIf="data.heading">{{ data.heading }}</h3>
-    <mat-form-field class="input-text">
-        <input matInput #inputText="matInput"
-            cdkFocusInitial
-            type="text"
-            minLength="1"
-            maxLength="30"
-            [value]="data.prefill"
-            (keyup.enter)="closeDialog(inputText.value)"
-            (focus)="$event.target.select()">
-    </mat-form-field>
     <p>{{ data.description }}</p>
+    <p *ngIf="data.linkHref"><a (click)="openExternalUrl(data.linkHref)" class="link-style">{{ data.linkHref }}</a></p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="closeDialog()">{{ data.buttonAbortLabel }}</button>
-    <button mat-button (click)="closeDialog(inputText.value)">{{ data.buttonConfirmLabel }}</button>
+    <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{
+        data.checkboxNoBotherLabel }}</mat-checkbox>
+    <div class="bx--row" *ngFor="let label of data.labelData; let i = index;">
+        <button mat-button (click)="closeDialog(label.name)">{{ label.value }}</button>
+    </div>
 </mat-dialog-actions>
