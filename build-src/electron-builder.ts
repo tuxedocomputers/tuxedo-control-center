@@ -54,7 +54,8 @@ async function buildDeb(): Promise<void> {
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
             distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
             distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/dist-data/99-webcam.rules'
+            distSrc + '/data/dist-data/99-webcam.rules',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tomte.policy'
         ],
         linux: {
             target: [

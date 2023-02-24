@@ -84,6 +84,7 @@ import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
 import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
@@ -112,10 +113,11 @@ declare const require;
     AquarisControlComponent,
     DialogInputTextComponent,
     DialogConfirmComponent,
+    DialogChoiceComponent,
     ChargingSettingsComponent,
     WebcamSettingsComponent,
     WebcamPreviewComponent,
-    DialogChoiceComponent
+    TomteGuiComponent,
   ],
   imports: [
     BrowserModule,

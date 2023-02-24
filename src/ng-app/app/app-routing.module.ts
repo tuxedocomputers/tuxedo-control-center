@@ -31,6 +31,7 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
 import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
 import { WebcamSettingsGuard } from './webcam.service';
+import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
@@ -46,7 +47,8 @@ const routes: Routes = [
             { path: 'keyboard-backlight', component: KeyboardBacklightComponent },
             { path: 'camera-settings', component: WebcamSettingsComponent, canDeactivate: [WebcamSettingsGuard] },
             { path: 'global-settings', component: GlobalSettingsComponent },
-            { path: 'aquaris-control', component: AquarisControlComponent }
+            { path: 'aquaris-control', component: AquarisControlComponent },
+            { path: 'tomte-gui', component: TomteGuiComponent }
         ]
     },
     { path: 'webcam-preview', component: WebcamPreviewComponent },
