@@ -22,7 +22,7 @@ import * as fs from 'fs';
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
-import { fileOK, fileOKAsync } from '../../common/classes/Utils';
+import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../common/classes/Utils';
 
 export class KeyboardBacklightWorker extends DaemonWorker {
     private ledsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
@@ -39,6 +39,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1500, tccd);
+        this.updateLEDSPerKey();
     }
 
     // Converts Int Value: 0xRRGGBBAA to string value "RRR GGG BBB" (in decimal)
@@ -47,6 +48,24 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         let green = (input >> 16) & 0xff;
         let blue = (input >> 8) & 0xff;
         return red.toString(10) + " " + green.toString(10) + " " + blue.toString(10);
+    }
+
+    private updateLEDSPerKey(): void {
+        let iteKeyboardDevices: Array<string> =
+            getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
+                .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
+        let ledsPerKey = []
+        for (const iteKeyboardDevice of iteKeyboardDevices) {
+            if (fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds")) {
+                ledsPerKey = ledsPerKey.concat(
+                    getDirectories("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds")
+                        .filter(name => name.includes("rgb:kbd_backlight"))
+                        .map(name => "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds/" + name));
+            }
+        }
+        if (ledsPerKey.length > 0) {
+            this.ledsRGBZones = ledsPerKey;
+        }
     }
 
     private getKeyboardBacklightCapabilities(): void {
@@ -58,7 +77,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsWhiteOnly + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
-        else if (fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+        else if (this.ledsRGBZones.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
             this.keyboardBacklightCapabilities.maxRed = 0xff;
             this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -71,6 +90,13 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                 this.keyboardBacklightCapabilities.zones++;
             }
         }
+        else if (this.ledsRGBZones.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
+            this.keyboardBacklightCapabilities.maxRed = 0xff;
+            this.keyboardBacklightCapabilities.maxGreen = 0xff;
+            this.keyboardBacklightCapabilities.maxBlue = 0xff;
+            this.keyboardBacklightCapabilities.zones = this.ledsRGBZones.length;
+        }
         else {
             this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(undefined);
             return;
@@ -80,15 +106,17 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     }
 
     private async updateSettingsFromValue(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): Promise<void> {
-        this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
-        this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
-        this.tccd.settings.keyboardBacklightColor = [];
-        for (let i: number = 0; i < keyboardBacklightStatesNew.length ; ++i) {
-            this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
-                                                            (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
-                                                            (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
+        if (keyboardBacklightStatesNew.length > 0) {
+            this.tccd.settings.keyboardBacklightColorMode = keyboardBacklightStatesNew[0].mode;
+            this.tccd.settings.keyboardBacklightBrightness = keyboardBacklightStatesNew[0].brightness;
+            this.tccd.settings.keyboardBacklightColor = [];
+            for (let i: number = 0; i < keyboardBacklightStatesNew.length ; ++i) {
+                this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
+                                                                (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
+                                                                (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
+            }
+            await this.tccd.config.writeSettingsAsync(this.tccd.settings);
         }
-        await this.tccd.config.writeSettingsAsync(this.tccd.settings);
     }
 
     private async updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>): Promise<void> {
