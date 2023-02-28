@@ -1,6 +1,6 @@
 {
     "name": "tuxedo-control-center",
-    "version": "1.2.4-webcam.3",
+    "version": "1.2.4-webcam.4",
     "main": "./e-app/e-app/main.js",
     "bin": "./service-app/main.js",
     "license": "GPL-3.0"

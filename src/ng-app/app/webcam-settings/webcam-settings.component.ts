@@ -78,6 +78,14 @@ export class WebcamSettingsComponent implements OnInit {
 
     selectedModeTabIndex: string = "Simple";
 
+    // variable names can change based on kernel version
+    knownRenames = [
+        ["auto_exposure", "exposure_auto"],
+        ["exposure_time_absolute", "exposure_absolute"],
+        ["exposure_dynamic_framerate", "exposure_auto_priority"],
+        ["white_balance_automatic", "white_balance_temperature_auto"],
+    ];
+
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
@@ -658,12 +666,104 @@ export class WebcamSettingsComponent implements OnInit {
         };
     }
 
+    private async configMismatchDialog(unknownConfigs: any) {
+        let config = {
+            title: $localize`:@@webcamDialogMismatchConfigValuesTitle:Mismatch of config values`,
+            description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Not all config values could be exactly matched and this is most likely caused because of recent renaming of variables in the linux kernel. ${unknownConfigs.join(
+                ", "
+            )} will be skipped to make the preset usable and it won't be guranteed that the values will apply like desired.`,
+            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+        };
+        return this.utils.confirmDialog(config).then((result) => {
+            if (!result.confirm) {
+                return this.configMismatchDialog(unknownConfigs);
+            }
+        });
+    }
+
+    private async configRenamedDialog() {
+        let config = {
+            title: $localize`:@@webcamDialogRenamedConfigValuesTitle:Renamed config values`,
+            description: $localize`:@@webcamDialogRenamedConfigValuesDialog:Your current linux kernel version config variables do not match the names in the config files. The preset will be resaved with adjusted variables to make it usable.`,
+            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+        };
+        return this.utils.confirmDialog(config).then((result) => {
+            if (!result.confirm) {
+                return this.configRenamedDialog();
+            }
+        });
+    }
+
+    // config names depend on linux kernel version and this function adjusts in case rename was found
+    private async checkConfig(config: WebcamPresetValues) {
+        let formGroupKeys = Object.keys(this.webcamFormGroup.getRawValue());
+        let configKeys = Object.keys(config);
+        let renamedConfigs = [];
+        let unknownConfigs = [];
+
+        this.knownRenames.forEach((knownRename) => {
+            let includedFormGroupKey = knownRename.find((configName) =>
+                formGroupKeys.includes(configName)
+            );
+            let includedConfigKey = knownRename.find((configName) =>
+                configKeys.includes(configName)
+            );
+
+            if (includedFormGroupKey && includedConfigKey) {
+                if (includedFormGroupKey != includedConfigKey) {
+                    renamedConfigs.push([
+                        includedFormGroupKey,
+                        includedConfigKey,
+                    ]);
+                    let value = config[includedConfigKey];
+                    delete config[includedConfigKey];
+                    config[includedFormGroupKey] = value;
+                }
+            }
+            if (
+                (includedFormGroupKey && !includedConfigKey) ||
+                (!includedFormGroupKey && includedConfigKey)
+            ) {
+                unknownConfigs.push(includedConfigKey);
+                delete config[includedConfigKey];
+            }
+        });
+
+        if (unknownConfigs.length > 0) {
+            await this.configMismatchDialog(unknownConfigs);
+            unknownConfigs.forEach((configName) => {
+                config[configName] = this.defaultSettings[configName];
+            });
+        }
+
+        if (renamedConfigs.length > 0) {
+            await this.configRenamedDialog();
+            this.webcamFormGroup.patchValue(config);
+            let finished = await this.savePreset(
+                this.selectedPreset.presetName,
+                true,
+                false
+            );
+            while (!finished) {
+                finished = await this.savePreset(
+                    this.selectedPreset.presetName,
+                    true,
+                    false
+                );
+            }
+        }
+        return config;
+    }
+
     public async applyPreset(
         config: WebcamPresetValues,
         markAsPristine: boolean = false,
         setViewWebcam: boolean = false
     ): Promise<void> {
         this.mutex.runExclusive(async () => {
+            this.unsetLoading(true);
+            config = await this.checkConfig(config);
+
             this.setLoading();
             this.stopWebcam();
 
@@ -675,7 +775,7 @@ export class WebcamSettingsComponent implements OnInit {
                 document.getElementById("video").style.visibility = "hidden";
             }
 
-            this.webcamFormGroup.setValue(config);
+            this.webcamFormGroup.patchValue(config);
             if (!this.checkIfFormgroupValid()) {
                 this.notValidPresetDialog();
                 this.applyPreset(this.defaultSettings);
@@ -763,8 +863,10 @@ export class WebcamSettingsComponent implements OnInit {
 
     public async savePreset(
         presetName: string,
-        overwrite: boolean = false
-    ): Promise<void> {
+        overwrite: boolean = false,
+        setActive: boolean = true
+    ): Promise<boolean> {
+        let saveComplete: boolean = false;
         this.utils.pageDisabled = true;
         let currentPreset = this.getWebcamPreset(presetName);
 
@@ -774,10 +876,18 @@ export class WebcamSettingsComponent implements OnInit {
 
         if (overwrite) {
             webcamConfigs.forEach((preset) => {
-                preset.active = false;
-                if (preset.presetName == presetName) {
-                    preset.active = true;
-                    preset.webcamSettings = currentPreset.webcamSettings;
+                if (setActive) {
+                    preset.active = false;
+                    if (preset.presetName == presetName) {
+                        preset.active = true;
+                        preset.webcamSettings = currentPreset.webcamSettings;
+                    }
+                }
+
+                if (!setActive) {
+                    if (preset.presetName == presetName) {
+                        preset.webcamSettings = currentPreset.webcamSettings;
+                    }
                 }
             });
 
@@ -797,11 +907,13 @@ export class WebcamSettingsComponent implements OnInit {
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
-                    this.activePreset = currentPreset;
+                    if (setActive) {
+                        this.activePreset = currentPreset;
+                        this.selectedPreset = currentPreset;
+                    }
 
                     this.viewWebcam = this.webcamFormGroup.getRawValue();
                     this.webcamFormGroup.markAsPristine();
-                    this.selectedPreset = currentPreset;
 
                     if (overwrite) {
                         this.webcamPresetsCurrentDevice.forEach((preset) => {
@@ -821,9 +933,12 @@ export class WebcamSettingsComponent implements OnInit {
                         this.webcamPresetsCurrentDevice.push(currentPreset);
                         this.allPresetData.push(currentPreset);
                     }
+                    saveComplete = true;
                 }
             });
+
         this.utils.pageDisabled = false;
+        return saveComplete;
     }
 
     private noPresetNameWarningDialog() {
