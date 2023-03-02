@@ -2072,13 +2072,38 @@ class CameraCtrls:
 
         return pages
 
-def get_ctrlsmap_from_config(config_path: str, vendor_id: str, product_id: str):
+    def get_webcam_keys(self):
+        control_keys = []
+        for page in self.get_ctrl_pages():
+            for cat in page.categories:
+                if page.title in ["Exposure", "Color", "Capture"]:
+                    for c in cat.ctrls:
+                        control_keys.append(c.text_id)
+        return control_keys
+
+
+def get_ctrlsmap_from_config(camera_ctls, config_path: str, kernel_names_path: str, vendor_id: str, product_id: str):
+    webcam_settings = {}
+    webcam_keys_from_config = []
+    webcam_keys = camera_ctls.get_webcam_keys()
+
     if os.path.exists(config_path):
         for config in json.load(open(config_path)):
             if config["active"] == True and config["webcamId"] == vendor_id + ":" + product_id:
                 webcam_settings = {key: value for (key, value) in config["webcamSettings"].items()}
-                return webcam_settings
-    return ''
+                webcam_keys_from_config = [key for key in config["webcamSettings"].keys()]
+
+    if os.path.exists(kernel_names_path):
+        for renamed_keys in json.load(open(kernel_names_path)):
+            included_control_keys = list(set(renamed_keys).intersection(set(webcam_keys)))
+            included_config_keys = list(set(renamed_keys).intersection(set(webcam_keys_from_config)))
+
+            if (included_control_keys and included_config_keys):
+                value = webcam_settings[included_config_keys[0]]
+                del webcam_settings[included_config_keys[0]]
+                webcam_settings[included_control_keys[0]] = value
+
+    return webcam_settings
 
 def get_ctrlsmap(controls):
     ctrlsmap = {}
@@ -2154,6 +2179,7 @@ def main():
     list_information = False
     device = '/dev/video0'
     ctrlsmap = {}
+    set_webcam_config = False
 
     for current_argument, current_value in arguments:
         if current_argument in ('-h', '--help'):
@@ -2172,12 +2198,9 @@ def main():
         elif current_argument in ('-g', '--grey'):
             ignore_grey = False
         elif current_argument in ('-s'):
-            device, vendor_id, product_id, config_path = current_value.split(",")
-            if os.path.isfile(config_path):
-                ctrlsmap = get_ctrlsmap_from_config(config_path, vendor_id, product_id)
+            set_webcam_config = True
         elif current_argument in ('-i', '--info'):
             list_information = True
-
 
     if list_information:
         print(json.dumps(get_available_webcams(ignore_grey)))
@@ -2193,6 +2216,13 @@ def main():
         sys.exit(0)
     elif list_controls_json:
         camera_ctrls.print_ctrls_json()
+        sys.exit(0)
+
+    if set_webcam_config:
+        device, vendor_id, product_id, config_path, kernel_names_file = current_value.split(",")
+        if os.path.isfile(config_path):
+            ctrlsmap = get_ctrlsmap_from_config(camera_ctrls, config_path, kernel_names_file, vendor_id, product_id)
+        camera_ctrls.setup_ctrls(ctrlsmap)
         sys.exit(0)
 
     # setting default preset if no config values

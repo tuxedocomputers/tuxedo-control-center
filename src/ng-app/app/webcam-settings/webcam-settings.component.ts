@@ -78,13 +78,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     selectedModeTabIndex: string = "Simple";
 
-    // variable names can change based on kernel version
-    knownRenames = [
-        ["auto_exposure", "exposure_auto"],
-        ["exposure_time_absolute", "exposure_absolute"],
-        ["exposure_dynamic_framerate", "exposure_auto_priority"],
-        ["white_balance_automatic", "white_balance_temperature_auto"],
-    ];
+    v4l2Renames: string[][];
 
     constructor(
         private electron: ElectronService,
@@ -102,6 +96,7 @@ export class WebcamSettingsComponent implements OnInit {
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
+            TccPaths.V4L2_NAMES_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -404,6 +399,7 @@ export class WebcamSettingsComponent implements OnInit {
         controls: WebcamPresetValues
     ): Promise<void> {
         let controlStr = "";
+        // todo: make cleaner
         Object.entries(controls).forEach((webcamPresetEntry) => {
             if (
                 webcamPresetEntry[1] != undefined &&
@@ -680,20 +676,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
         });
     }
-
-    private async configRenamedDialog() {
-        let config = {
-            title: $localize`:@@webcamDialogRenamedConfigValuesTitle:Adjusting config values`,
-            description: $localize`:@@webcamDialogRenamedConfigValuesDialog:Due to a Linux kernel update, the webcam profiles for this device need to be updated for compatibility reasons.`,
-            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
-        };
-        return this.utils.confirmDialog(config).then((result) => {
-            if (!result.confirm) {
-                return this.configRenamedDialog();
-            }
-        });
-    }
-
+    
     // config names depend on linux kernel version and this function adjusts in case rename was found
     private async checkConfig(preset: WebcamPreset) {
         let formGroupKeys = Object.keys(this.webcamFormGroup.getRawValue());
@@ -702,7 +685,7 @@ export class WebcamSettingsComponent implements OnInit {
         let renamed: boolean = false;
         let unknown: boolean = false;
 
-        this.knownRenames.forEach((knownRename) => {
+        this.v4l2Renames.forEach((knownRename) => {
             let includedFormGroupKey = knownRename.find((configName) =>
                 formGroupKeys.includes(configName)
             );
@@ -737,19 +720,19 @@ export class WebcamSettingsComponent implements OnInit {
             let renamed_all = [];
             let unknown_all = [];
 
+            if (environment.production) {
+                this.v4l2Renames = this.configHandler.readV4l2Names();
+            } else {
+                this.v4l2Renames = this.configHandler.readV4l2Names(
+                    this.electron.process.cwd() +
+                        "/src/cameractrls/v4l2_kernel_names.json"
+                );
+            }
+
             for (const profile of this.webcamPresetsCurrentDevice) {
                 let [renamed, unknown] = await this.checkConfig(profile);
                 renamed_all.push(renamed);
                 unknown_all.push(unknown);
-            }
-
-            if (renamed_all.includes(true)) {
-                await this.configRenamedDialog();
-                await this.savePreset(
-                    this.selectedPreset.presetName,
-                    true,
-                    false
-                );
             }
 
             if (unknown_all.includes(true)) {
