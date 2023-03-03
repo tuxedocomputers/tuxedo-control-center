@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.5] - 2023-03-03
+### Fixed
+- Certain icon sizes and alignment
+- Theme colors sometimes not being applied correctly (like in dropdown menus)
+- Support ticket number validation range extended
+
 ## [1.2.4] - 2023-01-11
 ### Changed
 - Display backlight brightness now only set when explicitly chosen in profile
