@@ -158,12 +158,11 @@ export class WebcamSettingsComponent implements OnInit {
                     this.selectedWebcam = webcamData[0];
                 }
                 if (webcamDeviceReference != undefined) {
-                    let filtered = webcamData.filter(
+                    this.selectedWebcam = webcamData.find(
                         (webcamDevice) =>
                             webcamDevice.deviceId ==
                             webcamDeviceReference.deviceId
                     );
-                    this.selectedWebcam = filtered[0];
                 }
                 await this.loadingPresetData();
                 this.noWebcams = false;
