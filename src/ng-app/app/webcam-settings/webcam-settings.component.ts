@@ -139,12 +139,9 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public async reloadWebcamList(
-        webcamDeviceReference?: WebcamDevice,
-        bypassLocked?: boolean
+        webcamDeviceReference?: WebcamDevice
     ): Promise<void> {
-        if (bypassLocked) {
-            if (this.mutex.isLocked()) return;
-        }
+        if (this.mutex.isLocked()) return;
 
         this.mutex.runExclusive(async () => {
             let webcamData = await this.setWebcamDeviceInformation();
@@ -252,7 +249,7 @@ export class WebcamSettingsComponent implements OnInit {
     private async webcamNotAvailabledDialog(): Promise<void> {
         let config = {
             title: $localize`:@@webcamDialogNotAvailableTitle:Access error`,
-            description: $localize`:@@webcamDialogNotAvailableDescription:Webcam can not be accessed.`,
+            description: $localize`:@@webcamDialogNotAvailableDescription:Webcam can not be accessed. Reloading all webcams.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
@@ -270,21 +267,20 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private getWebcamSettings(): Promise<string> {
-        return new Promise<string>((resolve) => {
-            this.utils
-                .execFile(
+        return new Promise<string>(async (resolve) => {
+            try {
+                let data = await this.utils.execCmd(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${this.selectedWebcam.path} -j`
-                )
-                .then((data) => {
-                    resolve(data.toString());
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.webcamNotAvailabledDialog();
-                    this.reloadWebcamList(null, true);
-                });
+                );
+                resolve(data.toString());
+            } catch (error) {
+                console.log(error);
+                this.mutex.release();
+                this.webcamNotAvailabledDialog();
+                await this.reloadWebcamList(undefined);
+            }
         });
     }
 
@@ -390,7 +386,9 @@ export class WebcamSettingsComponent implements OnInit {
                 );
             } catch (error) {
                 console.log(error);
-                await this.reloadWebcamList(null, true);
+                this.mutex.release();
+                this.webcamNotAvailabledDialog();
+                await this.reloadWebcamList(undefined);
             }
         }
     }
@@ -423,7 +421,9 @@ export class WebcamSettingsComponent implements OnInit {
                 );
             } catch (error) {
                 console.log(error);
-                await this.reloadWebcamList(null, true);
+                this.mutex.release();
+                this.webcamNotAvailabledDialog();
+                await this.reloadWebcamList(undefined);
             }
         }
     }
@@ -437,8 +437,7 @@ export class WebcamSettingsComponent implements OnInit {
                 configParameter,
                 String(Number(checked))
             );
-            this.setSliderEnabledStatus(this.webcamFormGroup.getRawValue());
-
+            this.setSliderEnabledStatus();
             // white_balance_temperature must be set after disabling auto to take effect and small delay required
             if (
                 (configParameter == "white_balance_temperature_auto" ||
@@ -487,7 +486,7 @@ export class WebcamSettingsComponent implements OnInit {
                 this.webcamFormGroup.get(configParameter).markAsDirty();
                 this.webcamFormGroup.get(configParameter).setValue(option);
 
-                this.setSliderEnabledStatus(this.webcamFormGroup.getRawValue());
+                this.setSliderEnabledStatus();
                 await this.applyPreset(this.webcamFormGroup.getRawValue());
             });
         }
@@ -593,41 +592,58 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     // Some configurations depend on each other and while one is active, another can't be active
-    private setSliderEnabledStatus(config: WebcamPresetValues) {
+    private setSliderEnabledStatus() {
         if (
-            (config?.white_balance_temperature_auto ||
-                config?.white_balance_automatic) &&
-            "white_balance_temperature" in config
+            (this.webcamFormGroup.getRawValue()
+                ?.white_balance_temperature_auto ||
+                this.webcamFormGroup.getRawValue()?.white_balance_automatic) &&
+            "white_balance_temperature" in this.webcamFormGroup.getRawValue()
         ) {
             this.webcamFormGroup.get("white_balance_temperature").disable();
         }
         if (
             !(
-                config?.white_balance_temperature_auto ||
-                config?.white_balance_automatic
+                this.webcamFormGroup.getRawValue()
+                    ?.white_balance_temperature_auto ||
+                this.webcamFormGroup.getRawValue()?.white_balance_automatic
             ) &&
-            "white_balance_temperature" in config
+            "white_balance_temperature" in this.webcamFormGroup.getRawValue()
         ) {
             this.webcamFormGroup.get("white_balance_temperature").enable();
         }
 
         if (
-            "exposure_auto_priority" in config &&
-            "exposure_absolute" in config
+            "exposure_auto_priority" in this.webcamFormGroup.getRawValue() &&
+            "exposure_absolute" in this.webcamFormGroup.getRawValue()
         ) {
-            if (config.exposure_auto == "aperture_priority_mode") {
+            if (
+                this.webcamFormGroup.getRawValue().exposure_auto ==
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_absolute").disable();
             }
-            if (config.exposure_auto != "aperture_priority_mode") {
+            if (
+                this.webcamFormGroup.getRawValue().exposure_auto !=
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_absolute").enable();
             }
         }
 
-        if ("auto_exposure" in config && "exposure_time_absolute" in config) {
-            if (config.auto_exposure == "aperture_priority_mode") {
+        if (
+            "auto_exposure" in this.webcamFormGroup.getRawValue() &&
+            "exposure_time_absolute" in this.webcamFormGroup.getRawValue()
+        ) {
+            if (
+                this.webcamFormGroup.getRawValue().auto_exposure ==
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_time_absolute").disable();
             }
-            if (config.auto_exposure != "aperture_priority_mode") {
+            if (
+                this.webcamFormGroup.getRawValue().auto_exposure !=
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_time_absolute").enable();
             }
         }
@@ -676,7 +692,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
         });
     }
-    
+
     // config names depend on linux kernel version and this function adjusts in case rename was found
     private async checkConfig(preset: WebcamPreset) {
         let formGroupKeys = Object.keys(this.webcamFormGroup.getRawValue());
@@ -772,7 +788,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             let webcamConfig = this.createWebcamConfig(config);
-            this.setSliderEnabledStatus(config);
+            this.setSliderEnabledStatus();
 
             if (!this.detachedWebcamWindowActive) {
                 await this.setWebcamWithConfig(webcamConfig);
