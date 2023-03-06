@@ -29,7 +29,7 @@
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
     "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
     "copy-changelog": "cp CHANGELOG.md ./src/ng-app/assets/",
-    "copy-cameractls": "mkdir -p ./dist/tuxedo-control-center/data/camera && cp ./src/cameractrls/cameractrls.py ./dist/tuxedo-control-center/data/camera",
+    "copy-cameractls": "mkdir -p ./dist/tuxedo-control-center/data/camera && cp ./src/cameractrls/cameractrls.py ./src/cameractrls/v4l2_kernel_names.json ./dist/tuxedo-control-center/data/camera",
     "copy-udev-rule": "cp ./src/udev/99-webcam.rules ./dist/tuxedo-control-center/data/dist-data",
     "pack": "npm run build && ts-node ./build-src/electron-builder.ts",
     "pack-prod": "npm run build-prod && TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/electron-builder.ts",

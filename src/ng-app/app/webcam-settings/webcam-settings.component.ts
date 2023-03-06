@@ -78,6 +78,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     selectedModeTabIndex: string = "Simple";
 
+    v4l2Renames: string[][];
+
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
@@ -94,6 +96,7 @@ export class WebcamSettingsComponent implements OnInit {
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
+            TccPaths.V4L2_NAMES_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -136,12 +139,9 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public async reloadWebcamList(
-        webcamDeviceReference?: WebcamDevice,
-        bypassLocked?: boolean
+        webcamDeviceReference?: WebcamDevice
     ): Promise<void> {
-        if (bypassLocked) {
-            if (this.mutex.isLocked()) return;
-        }
+        if (this.mutex.isLocked()) return;
 
         this.mutex.runExclusive(async () => {
             let webcamData = await this.setWebcamDeviceInformation();
@@ -158,12 +158,11 @@ export class WebcamSettingsComponent implements OnInit {
                     this.selectedWebcam = webcamData[0];
                 }
                 if (webcamDeviceReference != undefined) {
-                    let filtered = webcamData.filter(
+                    this.selectedWebcam = webcamData.find(
                         (webcamDevice) =>
                             webcamDevice.deviceId ==
                             webcamDeviceReference.deviceId
                     );
-                    this.selectedWebcam = filtered[0];
                 }
                 await this.loadingPresetData();
                 this.noWebcams = false;
@@ -249,7 +248,7 @@ export class WebcamSettingsComponent implements OnInit {
     private async webcamNotAvailabledDialog(): Promise<void> {
         let config = {
             title: $localize`:@@webcamDialogNotAvailableTitle:Access error`,
-            description: $localize`:@@webcamDialogNotAvailableDescription:Webcam can not be accessed.`,
+            description: $localize`:@@webcamDialogNotAvailableDescription:Webcam can not be accessed. Reloading all webcams.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         this.utils.confirmDialog(config).then();
@@ -267,21 +266,20 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private getWebcamSettings(): Promise<string> {
-        return new Promise<string>((resolve) => {
-            this.utils
-                .execFile(
+        return new Promise<string>(async (resolve) => {
+            try {
+                let data = await this.utils.execCmd(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${this.selectedWebcam.path} -j`
-                )
-                .then((data) => {
-                    resolve(data.toString());
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.webcamNotAvailabledDialog();
-                    this.reloadWebcamList(null, true);
-                });
+                );
+                resolve(data.toString());
+            } catch (error) {
+                console.log(error);
+                this.mutex.release();
+                this.webcamNotAvailabledDialog();
+                await this.reloadWebcamList(undefined);
+            }
         });
     }
 
@@ -311,6 +309,8 @@ export class WebcamSettingsComponent implements OnInit {
         this.stopWebcam();
         await this.reloadConfigValues();
         this.filterPresetsForCurrentDevice();
+        await this.checkAllPresetsForCurrentDevice();
+
         this.selectedWebcam = webcamPreset;
 
         let preset = this.defaultSettings;
@@ -385,7 +385,9 @@ export class WebcamSettingsComponent implements OnInit {
                 );
             } catch (error) {
                 console.log(error);
-                await this.reloadWebcamList(null, true);
+                this.mutex.release();
+                this.webcamNotAvailabledDialog();
+                await this.reloadWebcamList(undefined);
             }
         }
     }
@@ -394,6 +396,7 @@ export class WebcamSettingsComponent implements OnInit {
         controls: WebcamPresetValues
     ): Promise<void> {
         let controlStr = "";
+        // todo: make cleaner
         Object.entries(controls).forEach((webcamPresetEntry) => {
             if (
                 webcamPresetEntry[1] != undefined &&
@@ -417,7 +420,9 @@ export class WebcamSettingsComponent implements OnInit {
                 );
             } catch (error) {
                 console.log(error);
-                await this.reloadWebcamList(null, true);
+                this.mutex.release();
+                this.webcamNotAvailabledDialog();
+                await this.reloadWebcamList(undefined);
             }
         }
     }
@@ -431,8 +436,7 @@ export class WebcamSettingsComponent implements OnInit {
                 configParameter,
                 String(Number(checked))
             );
-            this.setSliderEnabledStatus(this.webcamFormGroup.getRawValue());
-
+            this.setSliderEnabledStatus();
             // white_balance_temperature must be set after disabling auto to take effect and small delay required
             if (
                 (configParameter == "white_balance_temperature_auto" ||
@@ -481,7 +485,7 @@ export class WebcamSettingsComponent implements OnInit {
                 this.webcamFormGroup.get(configParameter).markAsDirty();
                 this.webcamFormGroup.get(configParameter).setValue(option);
 
-                this.setSliderEnabledStatus(this.webcamFormGroup.getRawValue());
+                this.setSliderEnabledStatus();
                 await this.applyPreset(this.webcamFormGroup.getRawValue());
             });
         }
@@ -587,41 +591,58 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     // Some configurations depend on each other and while one is active, another can't be active
-    private setSliderEnabledStatus(config: WebcamPresetValues) {
+    private setSliderEnabledStatus() {
         if (
-            (config?.white_balance_temperature_auto ||
-                config?.white_balance_automatic) &&
-            "white_balance_temperature" in config
+            (this.webcamFormGroup.getRawValue()
+                ?.white_balance_temperature_auto ||
+                this.webcamFormGroup.getRawValue()?.white_balance_automatic) &&
+            "white_balance_temperature" in this.webcamFormGroup.getRawValue()
         ) {
             this.webcamFormGroup.get("white_balance_temperature").disable();
         }
         if (
             !(
-                config?.white_balance_temperature_auto ||
-                config?.white_balance_automatic
+                this.webcamFormGroup.getRawValue()
+                    ?.white_balance_temperature_auto ||
+                this.webcamFormGroup.getRawValue()?.white_balance_automatic
             ) &&
-            "white_balance_temperature" in config
+            "white_balance_temperature" in this.webcamFormGroup.getRawValue()
         ) {
             this.webcamFormGroup.get("white_balance_temperature").enable();
         }
 
         if (
-            "exposure_auto_priority" in config &&
-            "exposure_absolute" in config
+            "exposure_auto_priority" in this.webcamFormGroup.getRawValue() &&
+            "exposure_absolute" in this.webcamFormGroup.getRawValue()
         ) {
-            if (config.exposure_auto == "aperture_priority_mode") {
+            if (
+                this.webcamFormGroup.getRawValue().exposure_auto ==
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_absolute").disable();
             }
-            if (config.exposure_auto != "aperture_priority_mode") {
+            if (
+                this.webcamFormGroup.getRawValue().exposure_auto !=
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_absolute").enable();
             }
         }
 
-        if ("auto_exposure" in config && "exposure_time_absolute" in config) {
-            if (config.auto_exposure == "aperture_priority_mode") {
+        if (
+            "auto_exposure" in this.webcamFormGroup.getRawValue() &&
+            "exposure_time_absolute" in this.webcamFormGroup.getRawValue()
+        ) {
+            if (
+                this.webcamFormGroup.getRawValue().auto_exposure ==
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_time_absolute").disable();
             }
-            if (config.auto_exposure != "aperture_priority_mode") {
+            if (
+                this.webcamFormGroup.getRawValue().auto_exposure !=
+                "aperture_priority_mode"
+            ) {
                 this.webcamFormGroup.get("exposure_time_absolute").enable();
             }
         }
@@ -658,12 +679,101 @@ export class WebcamSettingsComponent implements OnInit {
         };
     }
 
+    private async configMismatchDialog() {
+        let config = {
+            title: $localize`:@@webcamDialogMismatchConfigValuesTitle:Mismatch of config values`,
+            description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Due to a recent linux kernel update or due to a misconfigured config file unknown values were found and it can not be guranteed that the preset is unchanged since the last time it was saved. Do you want to resave all presets with adjusted values? This will fix compatibility issues but may result in changed presets. If you decline, the adjusted presets will only be saved the next time you save a preset, because presets need to be adjusted to be fully usable again. If you did not modify the config file manually, make sure that you use the latest version of TCC. If the issue persists, please inform Tuxedo about this and mention the used linux kernel version and devices used.`,
+            buttonConfirmLabel: $localize`:@@dialogSaveAdjustedPresets:Save adjusted presets`,
+            buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
+        };
+        return this.utils.confirmDialog(config).then((result) => {
+            return result.confirm;
+        });
+    }
+
+    // config names depend on linux kernel version and this function adjusts in case rename was found
+    private async checkConfig(preset: WebcamPreset) {
+        let formGroupKeys = Object.keys(this.webcamFormGroup.getRawValue());
+        let configKeys = Object.keys(preset.webcamSettings);
+
+        let renamed: boolean = false;
+        let unknown: boolean = false;
+        let renamedKeys: string[] = [];
+
+        this.v4l2Renames.forEach((knownRename) => {
+            let includedFormGroupKey = knownRename.find((configName) =>
+                formGroupKeys.includes(configName)
+            );
+
+            let includedConfigKey = knownRename.find((configName) =>
+                configKeys.includes(configName)
+            );
+
+            if (includedFormGroupKey && includedConfigKey) {
+                if (includedFormGroupKey != includedConfigKey) {
+                    let value = preset.webcamSettings[includedConfigKey];
+                    delete preset.webcamSettings[includedConfigKey];
+                    preset.webcamSettings[includedFormGroupKey] = value;
+                    renamed = true;
+                    renamedKeys.push(includedConfigKey);
+                }
+            }
+            if (
+                (includedFormGroupKey && !includedConfigKey) ||
+                (!includedFormGroupKey && includedConfigKey)
+            ) {
+                delete preset.webcamSettings[includedConfigKey];
+                unknown = true;
+            }
+        });
+
+        let unresolvedKeys = configKeys
+            .filter((item) => formGroupKeys.indexOf(item) < 0)
+            .filter((item) => renamedKeys.indexOf(item) < 0);
+        if (unresolvedKeys.length > 0) {
+            unknown = true;
+        }
+
+        return unknown;
+    }
+
+    async checkAllPresetsForCurrentDevice() {
+        this.mutex.runExclusive(async () => {
+            let unknown_all = [];
+
+            if (environment.production) {
+                this.v4l2Renames = this.configHandler.readV4l2Names();
+            } else {
+                this.v4l2Renames = this.configHandler.readV4l2Names(
+                    this.electron.process.cwd() +
+                        "/src/cameractrls/v4l2_kernel_names.json"
+                );
+            }
+
+            for (const profile of this.webcamPresetsCurrentDevice) {
+                let unknown = await this.checkConfig(profile);
+                unknown_all.push(unknown);
+            }
+
+            if (unknown_all.includes(true)) {
+                if (await this.configMismatchDialog()) {
+                    await this.savePreset(
+                        this.selectedPreset.presetName,
+                        true,
+                        false
+                    );
+                }
+            }
+        });
+    }
+
     public async applyPreset(
         config: WebcamPresetValues,
         markAsPristine: boolean = false,
         setViewWebcam: boolean = false
     ): Promise<void> {
         this.mutex.runExclusive(async () => {
+            this.unsetLoading(true);
             this.setLoading();
             this.stopWebcam();
 
@@ -675,7 +785,7 @@ export class WebcamSettingsComponent implements OnInit {
                 document.getElementById("video").style.visibility = "hidden";
             }
 
-            this.webcamFormGroup.setValue(config);
+            this.webcamFormGroup.patchValue(config);
             if (!this.checkIfFormgroupValid()) {
                 this.notValidPresetDialog();
                 this.applyPreset(this.defaultSettings);
@@ -683,7 +793,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             let webcamConfig = this.createWebcamConfig(config);
-            this.setSliderEnabledStatus(config);
+            this.setSliderEnabledStatus();
 
             if (!this.detachedWebcamWindowActive) {
                 await this.setWebcamWithConfig(webcamConfig);
@@ -763,21 +873,30 @@ export class WebcamSettingsComponent implements OnInit {
 
     public async savePreset(
         presetName: string,
-        overwrite: boolean = false
-    ): Promise<void> {
+        overwrite: boolean = false,
+        setActive: boolean = true
+    ): Promise<boolean> {
+        let saveComplete: boolean = false;
         this.utils.pageDisabled = true;
         let currentPreset = this.getWebcamPreset(presetName);
 
         let webcamConfigs = this.webcamPresetsCurrentDevice.filter(
             (webcamPreset) => webcamPreset.presetName !== "Default"
         );
-
         if (overwrite) {
             webcamConfigs.forEach((preset) => {
-                preset.active = false;
-                if (preset.presetName == presetName) {
-                    preset.active = true;
-                    preset.webcamSettings = currentPreset.webcamSettings;
+                if (setActive) {
+                    preset.active = false;
+                    if (preset.presetName == presetName) {
+                        preset.active = true;
+                        preset.webcamSettings = currentPreset.webcamSettings;
+                    }
+                }
+
+                if (!setActive) {
+                    if (preset.presetName == presetName) {
+                        preset.webcamSettings = currentPreset.webcamSettings;
+                    }
                 }
             });
 
@@ -797,11 +916,13 @@ export class WebcamSettingsComponent implements OnInit {
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
-                    this.activePreset = currentPreset;
+                    if (setActive) {
+                        this.activePreset = currentPreset;
+                        this.selectedPreset = currentPreset;
+                    }
 
                     this.viewWebcam = this.webcamFormGroup.getRawValue();
                     this.webcamFormGroup.markAsPristine();
-                    this.selectedPreset = currentPreset;
 
                     if (overwrite) {
                         this.webcamPresetsCurrentDevice.forEach((preset) => {
@@ -821,9 +942,12 @@ export class WebcamSettingsComponent implements OnInit {
                         this.webcamPresetsCurrentDevice.push(currentPreset);
                         this.allPresetData.push(currentPreset);
                     }
+                    saveComplete = true;
                 }
             });
+
         this.utils.pageDisabled = false;
+        return saveComplete;
     }
 
     private noPresetNameWarningDialog() {
@@ -1002,6 +1126,9 @@ export class WebcamSettingsComponent implements OnInit {
         if (fs.existsSync(TccPaths.WEBCAM_FILE)) {
             this.allPresetData = this.configHandler.readWebcamSettings();
             this.filterPresetsForCurrentDevice();
+
+            await this.checkAllPresetsForCurrentDevice();
+
             let activePresets = this.webcamPresetsCurrentDevice.filter(
                 (webcamPreset) => webcamPreset.active == true
             );
