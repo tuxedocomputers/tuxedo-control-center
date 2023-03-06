@@ -220,10 +220,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     }
 
 
-    // TODO
-    // in future we might want to add the possibility to select which profiles to export
-    // I was thinking maybe through the normal overview but then grey out all of the default profiles
-    // that cannot be exported
     public async exportProfiles()
     {
         try{
@@ -279,7 +275,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             let conflictProfileIndex = oldProfiles.findIndex(x => x.id === profiles[i].id);
             if (conflictProfileIndex !== -1)
             {
-                // TODO what if it has the same ID but different name?
                 let res = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
                 if(res.action === "keepNew")
                 {
