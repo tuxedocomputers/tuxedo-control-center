@@ -682,13 +682,12 @@ export class WebcamSettingsComponent implements OnInit {
     private async configMismatchDialog() {
         let config = {
             title: $localize`:@@webcamDialogMismatchConfigValuesTitle:Mismatch of config values`,
-            description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Unknown config values were found for this device and it can not be guranteed that the preset is unchanged. Resaving updated preset for compatibility reasons.`,
-            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+            description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Due to a recent linux kernel update or due to a misconfigured config file unknown values were found and it can not be guranteed that the preset is unchanged since the last time it was saved. Do you want to resave all presets with adjusted values? This will fix compatibility issues but may result in changed presets. If you decline, the adjusted presets will only be saved the next time you save a preset, because presets need to be adjusted to be fully usable again. If you did not modify the config file manually, make sure that you use the latest version of TCC. If the issue persists, please inform Tuxedo about this and mention the used linux kernel version and devices used.`,
+            buttonConfirmLabel: $localize`:@@dialogSaveAdjustedPresets:Save adjusted presets`,
+            buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
         };
         return this.utils.confirmDialog(config).then((result) => {
-            if (!result.confirm) {
-                return this.configMismatchDialog();
-            }
+            return result.confirm;
         });
     }
 
@@ -699,6 +698,7 @@ export class WebcamSettingsComponent implements OnInit {
 
         let renamed: boolean = false;
         let unknown: boolean = false;
+        let renamedKeys: string[] = [];
 
         this.v4l2Renames.forEach((knownRename) => {
             let includedFormGroupKey = knownRename.find((configName) =>
@@ -715,6 +715,7 @@ export class WebcamSettingsComponent implements OnInit {
                     delete preset.webcamSettings[includedConfigKey];
                     preset.webcamSettings[includedFormGroupKey] = value;
                     renamed = true;
+                    renamedKeys.push(includedConfigKey);
                 }
             }
             if (
@@ -722,17 +723,22 @@ export class WebcamSettingsComponent implements OnInit {
                 (!includedFormGroupKey && includedConfigKey)
             ) {
                 delete preset.webcamSettings[includedConfigKey];
-
                 unknown = true;
             }
         });
 
-        return [renamed, unknown];
+        let unresolvedKeys = configKeys
+            .filter((item) => formGroupKeys.indexOf(item) < 0)
+            .filter((item) => renamedKeys.indexOf(item) < 0);
+        if (unresolvedKeys.length > 0) {
+            unknown = true;
+        }
+
+        return unknown;
     }
 
     async checkAllPresetsForCurrentDevice() {
         this.mutex.runExclusive(async () => {
-            let renamed_all = [];
             let unknown_all = [];
 
             if (environment.production) {
@@ -745,18 +751,18 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             for (const profile of this.webcamPresetsCurrentDevice) {
-                let [renamed, unknown] = await this.checkConfig(profile);
-                renamed_all.push(renamed);
+                let unknown = await this.checkConfig(profile);
                 unknown_all.push(unknown);
             }
 
             if (unknown_all.includes(true)) {
-                await this.configMismatchDialog();
-                await this.savePreset(
-                    this.selectedPreset.presetName,
-                    true,
-                    false
-                );
+                if (await this.configMismatchDialog()) {
+                    await this.savePreset(
+                        this.selectedPreset.presetName,
+                        true,
+                        false
+                    );
+                }
             }
         });
     }
