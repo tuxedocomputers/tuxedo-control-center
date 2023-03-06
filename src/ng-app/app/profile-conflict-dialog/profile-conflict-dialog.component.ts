@@ -83,7 +83,7 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
 
     public action(action: string)
     {
-        let newname = this.inputNewProfileName.value; // TODO get from text input field
+        let newname = this.inputNewProfileName.value; 
         this.close({action: action, newName: newname});
     }
 
