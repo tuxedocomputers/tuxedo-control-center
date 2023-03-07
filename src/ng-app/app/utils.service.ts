@@ -81,6 +81,52 @@ export class UtilsService {
     });
   }
 
+  // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
+  public async getPath(path: string): Promise<string>
+  {
+    return new Promise<string>((resolve, reject) => {
+        this.electron.ipcRenderer.invoke('get-path', path).then((result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(result);
+          }
+        });
+      });
+  }
+
+
+   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
+   // for selecting existing files
+   // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
+  public async openFileDialog(properties): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
+        if (result.canceled) {
+            reject(result.canceled);
+          } else {
+            resolve(result.filePaths);
+          }
+      });
+    });
+  }
+
+
+  // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
+  // for selecting a non existing file (saving)
+  // does not save anything, just returns a path
+  public async saveFileDialog(properties): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      this.electron.ipcRenderer.invoke('show-save-dialog', properties).then((result) => {
+        if (result.canceled) {
+          reject(result.canceled);
+        } else {
+          resolve(result.filePath);
+        }
+      });
+    });
+  }
+
   public async execFile(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('exec-file-async', command).then((result) => {
@@ -137,6 +183,23 @@ export class UtilsService {
             reject(err);
           } else {
             resolve();
+          }
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+
+  public async readTextFile(filePath: string, ): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      try {
+        fs.readFile(filePath,(err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data + "");
           }
         });
       } catch (err) {

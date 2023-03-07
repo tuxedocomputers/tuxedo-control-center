@@ -85,6 +85,8 @@ import { AquarisControlComponent } from './aquaris-control/aquaris-control.compo
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
+import { ProfileConflictDialogService } from './profile-conflict-dialog/profile-conflict-dialog.service';
+import { ProfileConflictComponent } from './profile-conflict-dialog/profile-conflict-dialog.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
 import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
@@ -118,6 +120,7 @@ declare const require;
     WebcamSettingsComponent,
     WebcamPreviewComponent,
     TomteGuiComponent,
+    ProfileConflictComponent,
   ],
   imports: [
     BrowserModule,
@@ -162,7 +165,8 @@ declare const require;
   ],
   providers: [
     DecimalPipe,
-    ThemeService
+    ThemeService,
+    ProfileConflictDialogService
   ],
   bootstrap: [AppComponent]
 })

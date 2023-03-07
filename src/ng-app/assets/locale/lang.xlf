@@ -13,7 +13,14 @@
         <source>A name for the profile is required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
+        <source>Import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewProfileLabel" datatype="html">
@@ -44,46 +51,60 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrButtonImportTooltip" datatype="html">
+        <source>Import Profile Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonExportTooltip" datatype="html">
+        <source>Export Profile Settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrFilterAll" datatype="html">
         <source>All</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrFilterPreset" datatype="html">
         <source>Preset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrFilterCustom" datatype="html">
         <source>Custom</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrFilterUsed" datatype="html">
         <source>In use</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
         <source>Save</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8708ca72ec9216a3a521940eeef0be356eebb8dd" datatype="html">
@@ -350,6 +371,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">98</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html">
@@ -1980,7 +2009,84 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
           <context context-type="linenumber">251,252</context>
         </context-group>
-        </trans-unit>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictWindowTitle" datatype="html">
+        <source> Importing Conflict </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictTitleOldProfile" datatype="html">
+        <source> Old Profile </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictTitleNewProfile" datatype="html">
+        <source> New Profile </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepOld" datatype="html">
+        <source> Keep Old </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepNew" datatype="html">
+        <source> Keep New </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepBoth" datatype="html">
+        <source> Keep Both </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonRename" datatype="html">
+        <source> Rename Imported Profile </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonCancel" datatype="html">
+        <source> Cancel </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictFormFieldInputNewName" datatype="html">
+        <source> Input a new name </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonSave" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonGoBack" datatype="html">
+        <source> Go back </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="chargingProfileHighCapacityLabel" datatype="html">
         <source>Full capacity</source>
         <context-group purpose="location">

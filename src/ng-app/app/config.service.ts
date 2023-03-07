@@ -195,6 +195,41 @@ export class ConfigService implements OnDestroy {
         }
     }
 
+    // appends given profiles to custom profiles but replaces all of those where IDs conflict!
+    // generates a new ID for new profiles
+    public async importProfiles(newProfiles: ITccProfile[])
+    {
+        let newProfileList = this.getCustomProfiles();
+        for (let i = 0; i < newProfiles.length; i++)
+        {
+            // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
+            let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+            if(oldProfileIndex !== -1)
+            {
+                newProfileList[oldProfileIndex] = newProfiles[i];
+            }
+            else
+            {
+                // when we want to override the old profile or there is no conflict we want to keep the
+                // original ID
+                let newProfile = newProfiles[i];
+                if (newProfile.id === "generateNewID")
+                {
+                    newProfile.id = generateProfileId();
+                }
+                newProfileList = newProfileList.concat(newProfile);
+            }
+        }
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public async deleteCustomProfile(profileIdToDelete: string) {
         const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
         if (newProfileList.length === this.getCustomProfiles().length) {

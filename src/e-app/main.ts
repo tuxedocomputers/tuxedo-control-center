@@ -28,6 +28,8 @@ import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
+import { resolve } from 'path';
+import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -501,6 +503,31 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
         });
     });
 });
+
+
+
+ipcMain.handle('show-save-dialog', async (event, arg) => {
+    return new Promise<SaveDialogReturnValue>((resolve, reject) => {
+        let results = dialog.showSaveDialog(arg);
+        resolve(results);
+    });
+});
+
+
+ipcMain.handle('show-open-dialog', async (event, arg) => {
+    return new Promise<OpenDialogReturnValue>((resolve, reject) => {
+        let results = dialog.showOpenDialog(arg);
+        resolve(results);
+    });
+});
+
+ipcMain.handle('get-path', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        let requestedPath = app.getPath(arg);
+        resolve(requestedPath);
+    });
+});
+
 
 ipcMain.handle('exec-file-async', async (event, arg) => {
     return new Promise((resolve, reject) => {

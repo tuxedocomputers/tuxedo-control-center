@@ -24,7 +24,7 @@ mat-toolbar {
             margin-right: 10px;
         }
 
-        mat-button-toggle-group {
+        mat-button-toggle-group, .import-export-buttons {
             transform: scale(0.7);
             transform-origin: right;
 
@@ -41,6 +41,18 @@ mat-toolbar {
         }
     }
 }
+.import-export-buttons
+{
+    box-shadow: none;
+    button 
+     {
+        margin : 0 !important;
+        background: none;
+        border: 0;
+        cursor: pointer;
+     }
+
+} 
 
 .profile-name-input {
     width: 250px;
