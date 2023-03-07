@@ -391,11 +391,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         // Find largest allowed min value
         let minValue = this.odmPowerLimitInfos[sliderIndex].min;
 
-        for (let i = 0; i < sliderIndex; ++i) {
+        /*for (let i = 0; i < sliderIndex; ++i) {
             if (minValue === undefined || tdpValues.controls[i].value > minValue) {
                 minValue = tdpValues.controls[i].value;
             }
-        }
+        }*/
 
         return minValue;
     }
@@ -407,11 +407,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         // Find smallest allowed max value
         let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
 
-        for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
+        /*for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
             if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
                 maxValue = tdpValues.controls[i].value;
             }
-        }
+        }*/
 
         return maxValue;
     }
@@ -430,9 +430,23 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             newValue = minValue;
         }
 
+        // Adjust lower sliders
+        for (let i = 0; i < movedSliderIndex; ++i) {
+            if (tdpValues.controls[i].value > newValue) {
+                tdpValues.controls[i].setValue(newValue);
+            }
+        }
+
         // Ensure new value is below chosen max value
         if (newValue > maxValue) {
             newValue = maxValue;
+        }
+
+        // Adjust higher sliders
+        for (let i = movedSliderIndex + 1; i < tdpValues.controls.length; ++i) {
+            if (tdpValues.controls[i].value < newValue) {
+                tdpValues.controls[i].setValue(newValue);
+            }
         }
 
         if (newValue !== undefined) {
