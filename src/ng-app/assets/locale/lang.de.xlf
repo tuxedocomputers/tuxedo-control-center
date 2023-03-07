@@ -7,7 +7,7 @@
         <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrInvalidNameMessage" datatype="html" approved="yes">
@@ -15,7 +15,15 @@
         <target phase-name="approval-1" state="signed-off">Ein Name für das Profil ist nötig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
+        <source>Import</source>
+        <target state="translated">Importieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewProfileLabel" datatype="html" approved="yes">
@@ -23,7 +31,7 @@
         <target phase-name="approval-1" state="signed-off">Neues Profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrNewButtonTooltip" datatype="html" approved="yes">
@@ -31,7 +39,7 @@
         <target phase-name="approval-1" state="signed-off">Ein neues Profil mit Standardeinstellungen erstellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">363</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrCopyProfileLabel" datatype="html" approved="yes">
@@ -39,7 +47,7 @@
         <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">266</context>
+          <context context-type="linenumber">372</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrTitle" datatype="html" approved="yes">
@@ -50,12 +58,28 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrButtonImportTooltip" datatype="html">
+        <source>Import Profile Settings</source>
+        <target state="translated">Profile importieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonExportTooltip" datatype="html">
+        <source>Export Profile Settings</source>
+        <target state="translated">Profile exportieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrFilterAll" datatype="html" approved="yes">
         <source>All</source>
         <target phase-name="approval-1" state="signed-off">Alle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrFilterPreset" datatype="html" approved="yes">
@@ -63,7 +87,7 @@
         <target phase-name="approval-1" state="signed-off">Voreinstellung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrFilterCustom" datatype="html" approved="yes">
@@ -71,7 +95,7 @@
         <target phase-name="approval-1" state="signed-off">Individuell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrFilterUsed" datatype="html" approved="yes">
@@ -79,7 +103,7 @@
         <target phase-name="approval-1" state="signed-off">In Verwendung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
@@ -87,7 +111,7 @@
         <target phase-name="approval-1" state="signed-off">Speichern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
@@ -95,7 +119,7 @@
         <target phase-name="approval-1" state="signed-off">Abbrechen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8708ca72ec9216a3a521940eeef0be356eebb8dd" datatype="html">
@@ -267,9 +291,9 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         </context-group>
       </trans-unit>
       <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our &quot;fully automated installation&quot;, you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer &quot;fully automated installation&quot; können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer "fully automated installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
                 <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur 3 Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
             </target>
         <context-group purpose="location">
@@ -412,6 +436,14 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
           <context context-type="linenumber">98</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">156</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrOverviewWebcamStatusOn" datatype="html" approved="yes">
         <source>On</source>
@@ -490,7 +522,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off"> (bereits festgelegt)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">505</context>
+          <context context-type="linenumber">519</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html" approved="yes">
@@ -771,6 +803,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
+        <target state="needs-translation"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">21</context>
@@ -827,7 +860,7 @@ Germany
 Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
 E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876
+VAT No.: DE815420876 
 WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
@@ -847,6 +880,7 @@ WEEE-Reg.-Nr.: DE 93420497
 eingetragen im Handelsregister des Amtsgerichtes Augsburg
 Handelsregisternummer HRB 27755
         </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">127,140</context>
@@ -1093,8 +1127,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsYCbCr420WorkaroundHeader" datatype="html">
-        <source>Force Chroma Subsampling (Y&apos;CbCr 4:2:0) if available:</source>
-        <target phase-name="approval-1" state="translated">Erzwinge Chroma Subsampling (Y&apos;CbCr 4:2:0) wenn verfügbar:</target>
+        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</source>
+        <target phase-name="approval-1" state="translated">Erzwinge Chroma Subsampling (Y'CbCr 4:2:0) wenn verfügbar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">92</context>
@@ -1151,9 +1185,9 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cShutdownTimerInformations" datatype="html">
-        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting &quot;Delete Time&quot; below.</source>
+        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting "Delete Time" below.</source>
         <target phase-name="approval-1" state="needs-adaptation">Dies setzt einen Einmalzeitpunkt zum Herunterfahren.
-        Er wird beim nächsten Hochfahren automatisch oder wenn sie unten &quot;Zeit löschen&quot; auswählen gelöscht.
+        Er wird beim nächsten Hochfahren automatisch oder wenn sie unten "Zeit löschen" auswählen gelöscht.
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
@@ -1287,10 +1321,10 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
-        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in &quot;crypt&quot;. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target phase-name="approval-1" state="translated">
         <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
-        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur während der installation ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit &quot;crypt&quot; endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn Sie Ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur während der installation ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn Sie Ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
     </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
@@ -1381,7 +1415,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
         <source>Service unavailable</source>
-        <target state="translated">tccd Dienst nicht verfügbar</target> 
+        <target state="translated">tccd Dienst nicht verfügbar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -1427,12 +1461,20 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="menuTomteGui" datatype="html">
+        <source>Tomte</source>
+        <target state="translated">Tomte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="menuKeyboardBacklight" datatype="html">
         <source>Keyboard Backlight</source>
         <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuUsedProfilesLabel" datatype="html">
@@ -1440,7 +1482,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Aktuell verwendete Profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuSupport" datatype="html">
@@ -1448,7 +1490,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Support</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
@@ -1456,7 +1498,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
@@ -1464,7 +1506,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="signed-off">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494ff5730f58a11907e572e45af00dfe74f329bc" datatype="html">
@@ -1480,7 +1522,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectLinkHref" datatype="html">
@@ -1524,8 +1566,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectDescription" datatype="html">
-        <source>Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</source>
-        <target state="translated">Bitte stellen Sie sicher, dass beide Wasserkühlungsschläuche Ihrer Aquaris an Ihr TUXEDO Notebook angeschlossen sind, bevor Sie auf &quot;Verbinden&quot; klicken!</target>
+        <source>Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!</source>
+        <target state="translated">Bitte stellen Sie sicher, dass beide Wasserkühlungsschläuche Ihrer Aquaris an Ihr TUXEDO Notebook angeschlossen sind, bevor Sie auf "Verbinden" klicken!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">386</context>
@@ -1556,7 +1598,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don&apos;t ask again</source>
+        <source>Don't ask again</source>
         <target state="translated">Nicht erneut fragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
@@ -1774,7 +1816,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="aqChooseAquarisText" datatype="html">
         <source>Please choose your TUXEDO Aquaris and click on the connect button</source>
-        <target state="translated">Bitte wählen Sie Ihre TUXEDO Aquaris und klicken Sie auf &quot;Verbinden&quot;</target>
+        <target state="translated">Bitte wählen Sie Ihre TUXEDO Aquaris und klicken Sie auf "Verbinden"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">195</context>
@@ -1853,7 +1895,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
-        <source>Your Aquaris is connected to your TUXEDO notebook&apos;s power supply, which is connected to a power outlet.</source>
+        <source>Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</source>
         <target state="translated">Ihre Aquaris mit dem Notebook-Netzteil am Stromnetz verbunden ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
@@ -1861,7 +1903,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
-        <source>Your Aquaris&apos; power cable is plugged into your TUXEDO notebook.</source>
+        <source>Your Aquaris' power cable is plugged into your TUXEDO notebook.</source>
         <target state="translated">Das Verlängerungs-Stromkabel Ihrer Aquaris mit Ihrem Notebook verbunden ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
@@ -1882,6 +1924,494 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">232</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiTomteListErrorPopup" datatype="html">
+        <source>Information from command 'tomte list' could not be obtained. Is tomte already running?</source>
+        <target state="translated">Es konnte 'tomte list' nicht ausgeführt werden. Läuft tomte bereits?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipBlockRequisite" datatype="html">
+        <source>Cannot block a module that is a prerequisite</source>
+        <target state="translated">Module die als benötigt gekennzeichnet sind, können nicht blockiert werden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">206</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipUnblock" datatype="html">
+        <source>Unblock this module</source>
+        <target state="translated">Blockierung des Moduls aufheben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipBlock" datatype="html">
+        <source>Block this module</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipUninstallRequisite" datatype="html">
+        <source>Cannot uninstall a module that is a prerequisite</source>
+        <target state="translated">Ein Modul das als benötigt gekennzeichnet ist, kann nicht deinstalliert werden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipUnInstallBlocked" datatype="html">
+        <source>Cannot un-/install a module that is blocked.</source>
+        <target state="translated">Ein Modul das blockiert ist, kann nicht de-/installiert werden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">225</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipBlockUninstall" datatype="html">
+        <source>Uninstall this module</source>
+        <target state="translated">Dieses Modul entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiSliderToolTipInstall" datatype="html">
+        <source>Install this module</source>
+        <target state="translated">Dieses Modul installieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">233</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiDialogErrorTitle" datatype="html">
+        <source>An Error occured!</source>
+        <target state="translated">Ein Fehler ist aufgetreten!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">248</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteBreakingChangesTitle" datatype="html">
+        <source>Are you sure you want to issue this command?</source>
+        <target state="translated">Sind Sie sich sicher, dass Sie dieses Komando ausführen möchten?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">268</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteBreakingChangesWarning" datatype="html">
+        <source>Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!</source>
+        <target state="translated">Achtung: Änderungen an der Standard Tomte Konfiguration können dazu führen, dass ihr Gerät nicht mehr ordnungsgemäß funktioniert!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">269</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteAbortButtonLabel" datatype="html">
+        <source>Abort</source>
+        <target state="translated">Abbrechen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">272</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">300</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteConfirmButtonLabel" datatype="html">
+        <source>I understand</source>
+        <target state="translated">Ich verstehe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">273</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">301</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
+        <source>Don't ask again</source>
+        <target state="translated">Nicht nochmal fragen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">274</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteResetDefaultsTitle" datatype="html">
+        <source>Are you sure you want to reset to defaults?</source>
+        <target state="translated">Sind Sie sich sicher, dass sie die Einstellungen auf Standard zurücksetzen wollen?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">296</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteResetDefaultsMessage" datatype="html">
+        <source>This will revert any manual configuration you did, are you sure you want to proceed?</source>
+        <target state="translated">Dies wird alle manuel getätigten Änderungen verwerfen, sind Sie sich sicher, dass Sie fortfahren wollen?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">297</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiResetFailedPopup" datatype="html">
+        <source>Reset failed. Maybe Tomte is already running? If that is the case simply try again later.</source>
+        <target state="translated">Zurücksetzen fehlgeschlagen. Läuft Tomte bereits? In diesem Fall versuchen Sie es später nochmal.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">356</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
+        <source>Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</source>
+        <target state="translated">Tomte konnte nicht installiert werden. Benutzen Sie ein TUXEDO Gerät und die TUXEDO Repos?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
+          <context context-type="linenumber">472</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteHeader" datatype="html">
+        <source>TUXEDO Tomte</source>
+        <target state="needs-translation"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteDescription" datatype="html">
+        <source> TUXEDO Tomte is a configuration service hat only works with TUXEDO hardware and automatically checks your computer for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving. </source>
+        <target state="translated">TUXEDO Tomte ist ein Konfigurationsservice, der nur mit TUXEDO Hardware zusammen arbeitet. Er überprüft den Computer automatisch auf fehlende Treiber und benötigte Pakete, um nervigem Troubleshooting und Problemlösen vorzubeugen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">27,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiUnableToLoadInformationHeader" datatype="html">
+        <source> Unable to load information </source>
+        <target state="translated"> Informationen konnten nicht geladen werden </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiUnableToLoadInformationDescription" datatype="html">
+        <source> TUXEDO Tomte ran into a timeout. Maybe it is already running. </source>
+        <target state="translated"> TUXEDO Tomte ist in einen Timeout gelaufen. Möglicherweise läuft das Program bereits. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiUnableToLoadInformationRetryButton" datatype="html">
+        <source> Retry </source>
+        <target state="translated"> Erneut versuchen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiInstallTomteHeader" datatype="html">
+        <source> Install TUXEDO Tomte </source>
+        <target state="translated"> TUXEDO Tomte installieren </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiInstallTomteDescription" datatype="html">
+        <source> Install TUXEDO Tomte now by pressing this button: </source>
+        <target state="translated"> Drücken Sie jetzt diesen Knopf, um TUXEDO Tomte zu installieren: </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiInstallTomteButtonLabel" datatype="html">
+        <source> Install </source>
+        <target state="translated"> Installieren </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiLoadingInformationDescription" datatype="html">
+        <source> Loading information, please wait... </source>
+        <target state="translated"> Lade Informationen, bitte warten... </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiNotTuxedoDeviceHeader" datatype="html">
+        <source> TUXEDO Tomte not producing output </source>
+        <target state="translated"> TUXEDO Tomte gibt keine Ausgabe zurück </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">93,94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiNotTuxedoDeviceDescription" datatype="html">
+        <source> TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. </source>
+        <target state="translated"> TUXEDO Tomte scheint installiert zu sein, gibt allerdings keine Ausgabe zurück. Dies könnte bedeuten, dass Sie keinen TUXEDO Computer / Laptop benutzen. Sollten Sie ein TUXEDO Gerät benutzen, ist dies ein Fehler. Sollten deshalb Fehler auftreten, wie ein nicht funktionierendes Touchpad, kontaktieren Sie bitte unseren Support und teilen Sie ihm mit, dass Tomte installiert ist, aber scheinbar nicht richtig funktioniert. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">98,99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeHeader" datatype="html">
+        <source> Tomte operation mode </source>
+        <target state="translated"> Tomte Operations Modus </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeDescription" datatype="html">
+        <source> Select the mode in which tomte is supposed to operate. Do you want it to handle things automatically, or configure it on your own? </source>
+        <target state="translated"> Wählen Sie den Modus in welchem Tomte operieren soll. Möchten Sie, dass Tomte alles automatisch regelt, oder wollen Sie die Konfiguration selbst vornehmen? </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">113,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeAutomaticButtonLabel" datatype="html">
+        <source> Full Service </source>
+        <target state="translated"> Voller Service </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeAutomaticButtonTooltip" datatype="html">
+        <source>This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer.</source>
+        <target state="translated"> Dies ist der Standard Modus. Tomte installiert und updated Module automatisch. Außerdem entfernt es nicht mehr benötigte Module. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel" datatype="html">
+        <source> Updates Only </source>
+        <target state="translated"> Nur Updates </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">134,135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyTooltip" datatype="html">
+        <source>Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available.</source>
+        <target state="translated"> Tomte hält die installierten Module aktuell, wird aber nicht ohne Zustimmung Module installieren oder entfernen. Sie werden informiert, sobald neue Module verfügbar sind. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeDisabledButtonLabel" datatype="html">
+        <source> Disabled </source>
+        <target state="translated"> Deaktiviert </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">148,149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteOperationModeDisabledTooltip" datatype="html">
+        <source>Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active.</source>
+        <target state="translated"> Tomte wird weder exisierende Module entfernen, noch updaten, noch neue installieren. Die schon vorhandenen Module bleiben aktiv. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiJsonErrorHeader" datatype="html">
+        <source> Could not parse output </source>
+        <target state="translated"> Output konnte nicht verarbeitet werden </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">168,169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiJsonErrorWarning" datatype="html">
+        <source> An error occured while trying to parse the output of TUXEDO Tomte. Maybe you are running an outdated version of TUXEDO Tomte. Try updating and see if this error persists. If it does, feel free to create a support ticket. </source>
+        <target state="translated"> Beim Verarbeiten des Outputs von TUXEDO Tomte ist ein Fehler aufgetreten. Möglicherweise ist Ihre TUXEDO Tomte Version veraltet. Sollte dieser Fehler nach einem Update von TUXEDO Tomte weiterhin bestehen, können Sie sehr gerne ein Supportticket diesbezüglich erstellen. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">172,175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationHeader" datatype="html">
+        <source> Tomte Configuration </source>
+        <target state="translated"> Tomte Konfiguration </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">181,182</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiResetConfigurationButtonTooltip" datatype="html">
+        <source>Reset Configuration to defaults.</source>
+        <target state="translated">Konfiguration zu Standards zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">284</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationResetDefaultsButtonlabel" datatype="html">
+        <source> Reset Tomte to default settings </source>
+        <target state="translated"> Tomte auf Standard Einstellungen zurücksetzen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">286,287</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationRebootWarning" datatype="html">
+        <source> Some changes may not take affect until after reboot. </source>
+        <target state="translated"> Manche Änderungen treten erst nach einem Neustart in Kraft. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">191,192</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleName" datatype="html">
+        <source> Module name </source>
+        <target state="translated"> Modulname</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">198,199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleVersion" datatype="html">
+        <source> Version </source>
+        <target state="translated"> Version </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">207,208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInstalled" datatype="html">
+        <source> Installed </source>
+        <target state="translated"> Installiert </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">216,217</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleActive" datatype="html">
+        <source> Active </source>
+        <target state="translated"> Aktiv </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">233,234</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleRequired" datatype="html">
+        <source> Required </source>
+        <target state="translated"> Benötigt </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">250,251</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo" datatype="html">
+        <source> Info </source>
+        <target state="translated"> Info </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
+          <context context-type="linenumber">259,260</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictWindowTitle" datatype="html">
+        <source> Importing Conflict </source>
+        <target state="translated"> Import Konflikt </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictTitleOldProfile" datatype="html">
+        <source> Old Profile </source>
+        <target state="translated"> Altes Profil </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictTitleNewProfile" datatype="html">
+        <source> New Profile </source>
+        <target state="translated"> Neues Profil </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepOld" datatype="html">
+        <source> Keep Old </source>
+        <target state="translated"> Behalte Alt </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepNew" datatype="html">
+        <source> Keep New </source>
+        <target state="translated"> Behalte Neu </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonKeepBoth" datatype="html">
+        <source> Keep Both </source>
+        <target state="translated"> Behalte Beide </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonRename" datatype="html">
+        <source> Rename Imported Profile </source>
+        <target state="translated"> Importiertes Profil umbenennen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonCancel" datatype="html">
+        <source> Cancel </source>
+        <target state="translated"> Abbrechen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictFormFieldInputNewName" datatype="html">
+        <source> Input a new name </source>
+        <target state="translated"> Neuen Namen eingeben </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonSave" datatype="html">
+        <source>Save</source>
+        <target state="translated">Speichern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="@cProfMgrConflictButtonGoBack" datatype="html">
+        <source> Go back </source>
+        <target state="translated"> Zurück </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="chargingProfileHighCapacityLabel" datatype="html">
@@ -2041,7 +2571,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogNotValidPresetDialog" datatype="html">
-        <source>The webcam preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
+        <source>The webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.</source>
         <target state="translated">Das Webcam-Profil enthält ungültige Konfigurationen und wird daher nicht angewendet. Es werden die Standardeinstellungen wiederhergestellt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
@@ -2064,6 +2594,34 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">685</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="dialogSaveAdjustedPresets" datatype="html">
+        <source>Save adjusted presets</source>
+        <target state="new">Re-save adjusted presets</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">686</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogAbort" datatype="html">
+        <source>Cancel</source>
+        <target state="translated">Abbrechen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">687</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">864</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">996</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
+          <context context-type="linenumber">1169</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="webcamDialogAskOverwriteTitle" datatype="html">
         <source>Webcam preset not avaiable</source>
         <target state="translated">Webcam-Profil nicht verfügbar</target>
@@ -2080,23 +2638,6 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">863</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="dialogAbort" datatype="html">
-        <source>Cancel</source>
-        <target state="translated">Abbrechen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">687</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">864</context>
-        </context-group><context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">996</context>
-        </context-group><context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">1169</context>
-        </context-group></trans-unit>
       <trans-unit id="webcamDialogPresetNameUnsetTitle" datatype="html">
         <source>The webcam preset was not saved</source>
         <target state="translated">Das Webcam-Profil wurde nicht gespeichert</target>
@@ -2426,8 +2967,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="noWebcamFoundInfoContent" datatype="html">
-        <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
-        <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, klicken Sie bitte auf &quot;Neu laden&quot;, und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
+        <source> To configure your webcams, you'll need to plug in an external webcam or turn on the internal webcam. Once you've done that, press reload and you'll be presented with a configuration menu. If you've previously disabled the internal webcam in the profile settings, you'll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
+        <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, klicken Sie bitte auf "Neu laden", und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">9,13</context>
@@ -2510,7 +3051,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Leise</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">280</context>
+          <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescQuiet" datatype="html">
@@ -2518,7 +3059,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Geringe Systemleistung zugunsten sehr leiser Lüfter und geringem Energieverbrauch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">344</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameOffice" datatype="html">
@@ -2526,7 +3067,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Office und Multimedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">285</context>
+          <context context-type="linenumber">348</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescOffice" datatype="html">
@@ -2534,7 +3075,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Mittlere Systemleistung zugunsten niedriger bis mittlerer Lautstärke und geringem bis moderatem Stromverbrauch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">286</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameHighPerformance" datatype="html">
@@ -2542,7 +3083,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hohe Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">290</context>
+          <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescHighPerformance" datatype="html">
@@ -2550,7 +3091,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Hohe Systemleistung für Gaming und anspruchsvolle Arbeiten zulasten von lautem Lüfter und hohen Temperaturen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">354</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNamePowersaveExtreme" datatype="html">
@@ -2558,7 +3099,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Energie sparen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">295</context>
+          <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescPowersaveExtreme" datatype="html">
@@ -2566,7 +3107,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">296</context>
+          <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyDefault" datatype="html">
@@ -2574,15 +3115,15 @@ Handelsregisternummer HRB 27755
         <target state="translated">Default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">301</context>
+          <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyDefault" datatype="html">
         <source>Full performance at the expense of more noise and high temperatures.</source>
-         <target state="translated">Volle Leistung zulasten von hoher Lautstärke und hohen Temperaturen.</target>
+        <target state="translated">Volle Leistung zulasten von hoher Lautstärke und hohen Temperaturen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">302</context>
+          <context context-type="linenumber">365</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyCoolAndBreezy" datatype="html">
@@ -2590,7 +3131,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Cool and breezy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">306</context>
+          <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyCoolAndBreezy" datatype="html">
@@ -2598,7 +3139,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Reduzierte Leistung zugunsten von geringen Gehäusetemperaturen und leisem bis mittlerem Lüftergeräusch.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">370</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileNameLegacyPowersaveExtreme" datatype="html">
@@ -2606,7 +3147,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Powersave extreme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">311</context>
+          <context context-type="linenumber">374</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profileDescLegacyPowersaveExtreme" datatype="html">
@@ -2614,23 +3155,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sehr stark reduzierte Leistung zugunsten geringstmöglichem Stromverbrauchs und lautloser Kühlung.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/utils.service.ts</context>
-          <context context-type="linenumber">312</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU settings deactivated in Tools→Global Settings</source>
-        <target state="translated">CPU-Einstellungen deaktiviert in Tools→Globale Einstellungen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">119</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="messageFanControlOff" datatype="html">
-        <source>Fan control deactivated in Tools→Global Settings</source>
-        <target state="translated">Lüftersteuerung deaktiviert in Tools→Globale Einstellungen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
@@ -2665,6 +3190,22 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="messageCPUSettingsOff" datatype="html">
+        <source>CPU settings deactivated in Tools→Global Settings</source>
+        <target state="translated">CPU-Einstellungen deaktiviert in Tools→Globale Einstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageFanControlOff" datatype="html">
+        <source>Fan control deactivated in Tools→Global Settings</source>
+        <target state="translated">Lüftersteuerung deaktiviert in Tools→Globale Einstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
         <source>This feature is not supported on your model.</source>
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
@@ -2679,541 +3220,6 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
           <context context-type="linenumber">82</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteBreakingChangesTitle" datatype="html">
-        <source>Are you sure you want to issue this command?</source>
-        <target state="translated">Sind Sie sich sicher, dass Sie dieses Komando ausführen möchten?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">227</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteBreakingChangesWarning" datatype="html">
-        <source>Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!</source>
-        <target state="translated">Achtung: Änderungen an der Standard Tomte Konfiguration können dazu führen, dass ihr Gerät nicht mehr ordnungsgemäß funktioniert!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">228</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteAbortButtonLabel" datatype="html">
-        <source>Abort</source>
-        <target state="translated">Abbrechen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">231</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">261</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteConfirmButtonLabel" datatype="html">
-        <source>I understand</source>
-        <target state="translated">Ich verstehe</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">232</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">262</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don&apos;t ask again</source>
-        <target state="translated">Nicht nochmal fragen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">233</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteResetDefaultsTitle" datatype="html">
-        <source>Are you sure you want to reset to defaults?</source>
-        <target state="translated">Sind Sie sich sicher, dass sie die Einstellungen auf Standard zurücksetzen wollen?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">257</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteResetDefaultsMessage" datatype="html">
-        <source>This will revert any manual configuration you did, are you sure you want to proceed?</source>
-        <target state="translated">Dies wird alle manuel getätigten Änderungen verwerfen, sind Sie sich sicher, dass Sie fortfahren wollen?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">258</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteHeader" datatype="html">
-        <source>TUXEDO Tomte</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteDescription" datatype="html">
-        <source> TUXEDO Tomte is a configuration service hat only works with TUXEDO hardware and automatically checks your computer for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving. </source>
-        <target state="translated">TUXEDO Tomte ist ein Konfigurationsservice, der nur mit TUXEDO Hardware zusammen arbeitet. Er überprüft den Computer automatisch auf fehlende Treiber und benötigte Pakete, um nervigem Troubleshooting und Problemlösen vorzubeugen.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">27,30</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiUnableToLoadInformationHeader" datatype="html">
-        <source> Unable to load information </source>
-        <target state="translated"> Informationen konnten nicht geladen werden </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">36,37</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiUnableToLoadInformationDescription" datatype="html">
-        <source> TUXEDO Tomte ran into a timeout. Maybe it is already running. </source>
-        <target state="translated"> TUXEDO Tomte ist in einen Timeout gelaufen. Möglicherweise läuft das Program bereits. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">41,42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiUnableToLoadInformationRetryButton" datatype="html">
-        <source> Retry </source>
-        <target state="translated"> Erneut versuchen </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">44,45</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiInstallTomteHeader" datatype="html">
-        <source> Install TUXEDO Tomte </source>
-        <target state="translated"> TUXEDO Tomte installieren </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">53,54</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiInstallTomteDescription" datatype="html">
-        <source> Install TUXEDO Tomte now by pressing this button: </source>
-        <target state="translated"> Drücken Sie jetzt diesen Knopf, um TUXEDO Tomte zu installieren: </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">59,60</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiInstallTomteButtonLabel" datatype="html">
-        <source> Install </source>
-        <target state="translated"> Installieren </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">62,63</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiLoadingInformationDescription" datatype="html">
-        <source> Loading information, please wait... </source>
-        <target state="translated"> Lade Informationen, bitte warten... </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">83,84</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiNotTuxedoDeviceHeader" datatype="html">
-        <source> TUXEDO Tomte not producing output </source>
-        <target state="translated"> TUXEDO Tomte gibt keine Ausgabe zurück </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">93,94</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiNotTuxedoDeviceDescription" datatype="html">
-        <source> TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. </source>
-        <target state="translated"> TUXEDO Tomte scheint installiert zu sein, gibt allerdings keine Ausgabe zurück. Dies könnte bedeuten, dass Sie keinen TUXEDO Computer / Laptop benutzen. Sollten Sie ein TUXEDO Gerät benutzen, ist dies ein Fehler. Sollten deshalb Fehler auftreten, wie ein nicht funktionierendes Touchpad, kontaktieren Sie bitte unseren Support und teilen Sie ihm mit, dass Tomte installiert ist, aber scheinbar nicht richtig funktioniert. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">98,99</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeHeader" datatype="html">
-        <source> Tomte operation mode </source>
-        <target state="translated"> Tomte Operations Modus </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">108,109</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeDescription" datatype="html">
-        <source> Select the mode in which tomte is supposed to operate. Do you want it to handle things automatically, or configure it on your own? </source>
-        <target state="translated"> Wählen Sie den Modus in welchem Tomte operieren soll. Möchten Sie, dass Tomte alles automatisch regelt, oder wollen Sie die Konfiguration selbst vornehmen? </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">113,115</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeAutomaticButtonLabel" datatype="html">
-        <source> Full Service </source>
-        <target state="translated"> Voller Service </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">120,121</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeAutomaticButtonTooltip" datatype="html">
-        <source>This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer.</source>
-        <target state="translated"> Dies ist der Standard Modus. Tomte installiert und updated Module automatisch. Außerdem entfernt es nicht mehr benötigte Module. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">125</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel" datatype="html">
-        <source> Updates Only </source>
-        <target state="translated"> Nur Updates </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">132,133</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyTooltip" datatype="html">
-        <source>Tomte will only update the existing modules, but won&apos;t install or remove modules without your approval. You will be notified once new modules are available.</source>
-        <target state="translated"> Tomte hält die installierten Module aktuell, wird aber nicht ohne Zustimmung Module installieren oder entfernen. Sie werden informiert, sobald neue Module verfügbar sind. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">137</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeDisabledButtonLabel" datatype="html">
-        <source> Disabled </source>
-        <target state="translated"> Deaktiviert </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">144,145</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteOperationModeDisabledTooltip" datatype="html">
-        <source>Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active.</source>
-        <target state="translated"> Tomte wird weder exisierende Module entfernen, noch updaten, noch neue installieren. Die schon vorhandenen Module bleiben aktiv. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">149</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationHeader" datatype="html">
-        <source> Tomte Configuration </source>
-        <target state="translated"> Tomte Konfiguration </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">187,188</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationRebootWarning" datatype="html">
-        <source> Some changes may not take affect until after reboot. </source>
-        <target state="translated"> Manche Änderungen treten erst nach einem Neustart in Kraft. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">196,197</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationResetDefaultsButtonlabel" datatype="html">
-        <source> Reset Tomte to default settings </source>
-        <target state="translated"> Tomte auf Standard Einstellungen zurücksetzen </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">290,291</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleName" datatype="html">
-        <source> Module name </source>
-        <target state="translated"> Modulname</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">202,203</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleVersion" datatype="html">
-        <source> Version </source>
-        <target state="translated"> Version </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">211,212</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInstalled" datatype="html">
-        <source> Installed </source>
-        <target state="translated"> Installiert </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">220,221</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleActive" datatype="html">
-        <source> Active </source>
-        <target state="translated"> Aktiv </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">237,238</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleRequired" datatype="html">
-        <source> Required </source>
-        <target state="translated"> Benötigt </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">254,255</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo" datatype="html">
-        <source> Info </source>
-        <target state="translated"> Info </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">263,264</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiResetConfigurationButtonTooltip" datatype="html">
-        <source>Reset Configuration to defaults.</source>
-        <target state="translated">Konfiguration zu Standards zurücksetzen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">264</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipBlockRequisite" datatype="html">
-        <source>Cannot block a module that is a prerequisite</source>
-        <target state="translated">Module die als benötigt gekennzeichnet sind, können nicht blockiert werden</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">210</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipUnblock" datatype="html">
-        <source>Unblock this module</source>
-        <target state="translated">Blockierung des Moduls aufheben</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipBtomteBreakingChangesTitlelock" datatype="html">
-        <source>Block this module</source>
-        <target state="translated">Dieses Modul blockieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">218</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipUninstallRequisite" datatype="html">
-        <source>Cannot uninstall a module that is a prerequisite</source>
-        <target state="translated">Ein Modul das als benötigt gekennzeichnet ist, kann nicht deinstalliert werden</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">225</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipUnInstallBlocked" datatype="html">
-        <source>Cannot un-/install a module that is blocked.</source>
-        <target state="translated">Ein Modul das blockiert ist, kann nicht de-/installiert werden</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">229</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipInstall" datatype="html">
-        <source>Install this module</source>
-        <target state="translated">Dieses Modul installieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">233</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiSliderToolTipBlockUninstall" datatype="html">
-        <source>Uninstall this module</source>
-        <target state="translated">Dieses Modul entfernen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">237</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="menuTomteGui" datatype="html">
-        <source>Tomte</source>
-        <target state="translated">Tomte</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.html</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
-           <trans-unit id="cTomteGuiTomteHeader" datatype="html">
-        <source>TUXEDO Tomte</source>
-        <target state="translated">TUXEDO Tomte</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-            <trans-unit id="tomteGuiDialogErrorTitle" datatype="html">
-        <source>An Error occured!</source>
-        <target state="translated">Ein Fehler ist aufgetreten!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">242</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="tomteGuiTomteListErrorPopup" datatype="html">
-        <source>Information from command &apos;tomte list&apos; could not be obtained. Is tomte already running?</source>
-        <target state="translated">Es konnte &apos;tomte list&apos; nicht ausgeführt werden. Läuft tomte bereits?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">109</context>
-        </context-group>
-      </trans-unit>
-            <trans-unit id="tomteGuiResetFailedPopup" datatype="html">
-        <source>Reset failed. Maybe Tomte is already running? If that is the case simply try again later.</source>
-        <target state="translated">Zurücksetzen fehlgeschlagen. Läuft Tomte bereits? In diesem Fall versuchen Sie es später nochmal.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">353</context>
-        </context-group>
-      </trans-unit>
-            <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
-        <source>Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</source>
-        <target state="translated">Tomte konnte nicht installiert werden. Benutzen Sie ein TUXEDO Gerät und die TUXEDO Repos?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">469</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiJsonErrorHeader" datatype="html">
-        <source> Could not parse output </source>
-        <target state="translated"> Output konnte nicht verarbeitet werden </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">162,163</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cTomteGuiJsonErrorWarning" datatype="html">
-        <source> An error occured while trying to parse the output of TUXEDO Tomte. Maybe you are running an outdated version of TUXEDO Tomte. Try updating and see if this error persists. If it does, feel free to create a support ticket. </source>
-        <target state="translated"> Beim Verarbeiten des Outputs von TUXEDO Tomte ist ein Fehler aufgetreten. Möglicherweise ist Ihre TUXEDO Tomte Version veraltet. Sollte dieser Fehler nach einem Update von TUXEDO Tomte weiterhin bestehen, können Sie sehr gerne ein Supportticket diesbezüglich erstellen. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">166,169</context>
-        </context-group>
-      </trans-unit>
-    <trans-unit id="dialogSaveAdjustedPresets" datatype="html">
-        <source>Save adjusted presets</source><target state="new">Re-save adjusted presets</target>
-        <target state="translated">Angespasste Webcam-Presets speichern</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
-          <context context-type="linenumber">686</context>
-        </context-group>
-    </trans-unit>
-    <trans-unit id="@cProfMgrConflictTitleOldProfile" datatype="html">
-        <source> Old Profile </source>
-        <target state="translated"> Altes Profil </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">65</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictTitleNewProfile" datatype="html">
-        <source> New Profile </source>
-        <target state="translated"> Neues Profil </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">130</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonKeepOld" datatype="html">
-        <source> Keep Old </source>
-        <target state="translated"> Behalte Alt </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">195</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonKeepNew" datatype="html">
-        <source> Keep New </source>
-        <target state="translated"> Behalte Neu </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">196</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonKeepBoth" datatype="html">
-        <source> Keep Both </source>
-        <target state="translated"> Behalte Beide </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">197</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonRename" datatype="html">
-        <source> Rename Imported Profile </source>
-        <target state="translated"> Importiertes Profil umbenennen </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">198</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonCancel" datatype="html">
-        <source> Cancel </source>
-        <target state="translated"> Abbrechen </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">199</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictFormFieldInputNewName" datatype="html">
-        <source> Input a new name </source>
-        <target state="translated"> Neuen Namen eingeben </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">205</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonSave" datatype="html">
-        <source>Save</source>
-        <target state="translated">Speichern</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">208</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictButtonGoBack" datatype="html">
-        <source> Go back </source>
-        <target state="translated"> Zurück </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">209</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrButtonImportTooltip" datatype="html">
-        <source>Import Profile Settings</source>
-        <target state="translated">Profile importieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrButtonExportTooltip" datatype="html">
-        <source>Export Profile Settings</source>
-        <target state="translated">Profile exportieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="@cProfMgrConflictWindowTitle" datatype="html">
-        <source> Importing Conflict </source>
-        <target state="translated"> Import Konflikt </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-conflict-dialog/profile-conflict-dialog.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
-        <source>Import</source>
-        <target state="translated">Importieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
     </body>
