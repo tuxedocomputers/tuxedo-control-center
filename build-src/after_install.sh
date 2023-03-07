@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # In case TFC service is active, deactivate
-systemctl stop tuxedofancontrol || true
-systemctl disable tuxedofancontrol || true
+systemctl stop tuxedofancontrol > /dev/null 2>&1 || true
+systemctl disable tuxedofancontrol > /dev/null 2>&1 || true
 
 DIST_DATA=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data
 
