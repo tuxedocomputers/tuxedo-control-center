@@ -25,12 +25,20 @@ export class StateSwitcherWorker extends DaemonWorker {
 
     private currentState: ProfileStates;
 
+    private refreshProfile = false;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(2000, tccd);
     }
 
+    /** Reset state */
     public reset() {
         this.currentState = undefined;
+    }
+
+    /** Refresh profile application */
+    public reapplyProfile() {
+        this.refreshProfile = true;
     }
 
     public onStart(): void {
@@ -58,6 +66,11 @@ export class StateSwitcherWorker extends DaemonWorker {
         const oldActiveProfileId = this.tccd.activeProfile.id;
 
         if (newState !== this.currentState) {
+            // Deactivate temp profile choices on real state change
+            this.tccd.dbusData.tempProfileName = undefined;
+            this.tccd.dbusData.tempProfileId = undefined;
+
+            // Set active profile according to state map
             this.currentState = newState;
             const newActiveProfileId = this.tccd.settings.stateMap[newState.toString()];
             if (newActiveProfileId === undefined) {
@@ -71,19 +84,18 @@ export class StateSwitcherWorker extends DaemonWorker {
                 if (this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName)) {
                     this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileName + '" selected');
                 }
-                this.tccd.dbusData.tempProfileName = undefined;
             }
             if (this.tccd.dbusData.tempProfileId !== undefined) {
                 if (this.tccd.setCurrentProfileById(this.tccd.dbusData.tempProfileId)) {
                     this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileId + '" selected');
                 }
-                this.tccd.dbusData.tempProfileId = undefined;
             }
         }
 
         // Run worker start procedure / application of profile
         // if the profile changed
-        if (oldActiveProfileId !== this.tccd.activeProfile.id) {
+        if (oldActiveProfileId !== this.tccd.activeProfile.id || this.refreshProfile) {
+            this.refreshProfile = false;
             this.tccd.updateDBusActiveProfileData();
             this.tccd.startWorkers();
         }

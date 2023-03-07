@@ -156,7 +156,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
         if (this.stateWorker !== undefined) {
             if (reset) {
-                this.stateWorker.reset();
+                this.stateWorker.reapplyProfile();
             }
             this.stateWorker.work();
         }
