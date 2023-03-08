@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -64,6 +64,7 @@ export class StateSwitcherWorker extends DaemonWorker {
         // Check state and switch profile if appropriate
         const newState = determineState();
         const oldActiveProfileId = this.tccd.activeProfile.id;
+        const oldActiveProfileName = this.tccd.activeProfile.name;
 
         if (newState !== this.currentState) {
             // Deactivate temp profile choices on real state change
@@ -80,14 +81,15 @@ export class StateSwitcherWorker extends DaemonWorker {
             }
         } else {
             // If state didn't change, a manual temporary profile can still be set
-            if (this.tccd.dbusData.tempProfileName !== undefined) {
+            if (this.tccd.dbusData.tempProfileName !== undefined && this.tccd.dbusData.tempProfileName !== oldActiveProfileName) {
                 if (this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName)) {
-                    this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileName + '" selected');
+                    this.tccd.logLine(`StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`);
                 }
             }
-            if (this.tccd.dbusData.tempProfileId !== undefined) {
+            if (this.tccd.dbusData.tempProfileId !== undefined && this.tccd.dbusData.tempProfileId !== oldActiveProfileId) {
                 if (this.tccd.setCurrentProfileById(this.tccd.dbusData.tempProfileId)) {
-                    this.tccd.logLine('StateSwitcherWorker: Temp profile "' + this.tccd.dbusData.tempProfileId + '" selected');
+                    this.tccd.logLine(`StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`);
+                    this.tccd.dbusData.tempProfileName = undefined;
                 }
             }
         }
