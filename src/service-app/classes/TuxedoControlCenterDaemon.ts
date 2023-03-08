@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -252,9 +252,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
 
-        // Initialize active profile (fallback), will update when state is determined
-        this.activeProfile = this.getDefaultProfile();
-
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged = false;
         let needsTuxedoDefault = false;
@@ -297,6 +294,25 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
         this.dbusData.defaultValuesProfileJSON = JSON.stringify(defaultValuesProfileFilled);
+
+        // Initialize or update active profile
+        if (this.getCurrentProfile() === undefined) {
+            // Fallback
+            this.activeProfile = this.getDefaultProfile();
+        } else {
+            const activeProfileId = this.activeProfile.id;
+            const activeProfileName = this.activeProfile.name;
+            let foundSameProfile = this.setCurrentProfileById(activeProfileId);
+            if (!foundSameProfile) {
+                console.log('loadConfigsAndProfiles: profile by id not found: ' + activeProfileId)
+                foundSameProfile = this.setCurrentProfileByName(activeProfileName);
+            }
+            if (!foundSameProfile) {
+                console.log('loadConfigsAndProfiles: profile by name not found: ' + activeProfileName);
+                // Fallback
+                this.activeProfile = this.getDefaultProfile();
+            }
+        }
     }
 
     private syncOutputPortsSetting() {
@@ -504,9 +520,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -514,9 +530,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
