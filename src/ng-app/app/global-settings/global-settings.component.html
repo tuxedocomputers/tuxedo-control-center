@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -142,6 +142,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-button-toggle value="dark" i18n="@@cGlobalSettingsBrightnessLabelDark">Dark</mat-button-toggle>
                 <mat-button-toggle value="system" i18n="@@cGlobalSettingsBrightnessLabelSystemSetting">System setting</mat-button-toggle>
             </mat-button-toggle-group>
+        </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (click)="gotoComponent('tomte-gui')" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_tomte.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n="@@menuTomteGui">Tomte</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="content">
         </div>
     </mat-expansion-panel>
 

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -23,6 +23,7 @@ import { UtilsService } from '../utils.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-global-settings',
@@ -53,7 +54,9 @@ export class GlobalSettingsComponent implements OnInit {
     constructor(
         private config: ConfigService,
         private utils: UtilsService,
-        private tccdbus: TccDBusClientService
+        private tccdbus: TccDBusClientService,
+        private router: Router,
+        private route: ActivatedRoute,
     ) { }
 
     ngOnInit() {
@@ -126,5 +129,9 @@ export class GlobalSettingsComponent implements OnInit {
 
     public async onBrightnessModeCtrlChange() {
         await this.utils.setBrightnessMode(this.ctrlBrightnessMode.value);
+    }
+
+    gotoComponent(component: string) {
+        this.router.navigate([ component ], { relativeTo: this.route.parent });
     }
 }
