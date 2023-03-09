@@ -1,5 +1,34 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Keyboard backlight GUI (Tools => Keyboard backlight)
+  - Set brightness
+  - Set color for single zone RGB keyboards
+  - Set colors for three-zone RGB keyboards
+  - Implements part of linux' `/sys/class/leds` interface: `kbd_backlight` for (single brightness, multi color/intensity)
+  - Restore last settings on boot
+- Webcam settings (Tools => Webcam)
+  - A number of useful and non-useful parameters exposed to tweak and play around with
+  - Preview of webcam picture while tweaking
+  - Save and restore presets
+  - Chosen preset restored on boot or reconnect of device
+- Tomte GUI (Settings => Tomte)
+  - Graphical interface to TUXEDO Tomte
+  - Exposes most of the knobs Tomte allows you to configure such as
+    - Choose operation mode
+    - View which modules are applied for your device
+    - Change behaviour of modules
+
+### Changed
+- TDP slider validation behaviour now moves other sliders accordingly instead of limiting currently changed slider
+- Battery charging settings icon replaced
+- Removed CPU settings tabs and consequently allowing setting CPU TDP and CPU frequency settings simultaneously
+
+### Fixed
+- Temporary set profile retained when saving tccd settings or profiles
+- Fixes related to keeping and re-applying profiles on save
+
 ## [1.2.4] - 2023-01-11
 ### Changed
 - Display backlight brightness now only set when explicitly chosen in profile
