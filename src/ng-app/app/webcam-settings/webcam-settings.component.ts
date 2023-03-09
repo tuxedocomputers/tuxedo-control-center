@@ -80,6 +80,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     v4l2Renames: string[][];
 
+    warnedOnceWebcamAccessError: boolean = false;
+
     constructor(
         private electron: ElectronService,
         private utils: UtilsService,
@@ -547,6 +549,15 @@ export class WebcamSettingsComponent implements OnInit {
         return new FormGroup(group);
     }
 
+    private async webcamNotAvailableOtherAccessDialog(): Promise<void> {
+        let config = {
+            title: $localize`:@@webcamDialogNotAvailableTitle:Access error`,
+            description: $localize`:@@webcamDialogNotAvailableOtherAccessDescription:Current Webcam can not be accessed. Another application is most likely accessing your webcam. Resolution and frames per second settings only apply for TCC preview.`,
+            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+        };
+        this.utils.confirmDialog(config).then();
+    }
+
     private async setWebcamWithConfig(
         config: WebcamConstraints
     ): Promise<void> {
@@ -556,16 +567,25 @@ export class WebcamSettingsComponent implements OnInit {
             })
             .then(
                 async (stream) => {
+                    document.getElementById("hidden").style.display = "flex";
                     this.video.nativeElement.srcObject = stream;
                     this.mediaDeviceStream = stream;
                 },
                 async (err) => {
-                    await this.reloadWebcamList();
+                    document.getElementById("hidden").style.display = "none";
+                    if (!this.warnedOnceWebcamAccessError) {
+                        this.warnedOnceWebcamAccessError = true;
+                        await this.webcamNotAvailableOtherAccessDialog();
+                        await this.reloadWebcamList();
+                    }
                 }
             );
-        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
-            this.handleVideoEnded();
-        };
+
+        if (this.mediaDeviceStream) {
+            this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
+                this.handleVideoEnded();
+            };
+        }
     }
 
     private unsetLoading(initComplete: boolean = false) {
