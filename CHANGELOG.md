@@ -22,8 +22,9 @@
 
 ### Changed
 - TDP slider validation behaviour now moves other sliders accordingly instead of limiting currently changed slider
-- Battery charging settings icon replaced
 - Removed CPU settings tabs and consequently allowing setting CPU TDP and CPU frequency settings simultaneously
+- Battery charging settings icon replaced
+- Tools icon replaced
 
 ### Fixed
 - Temporary set profile retained when saving tccd settings or profiles
