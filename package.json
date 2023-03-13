@@ -82,7 +82,7 @@
     "angular-gauge": "^3.1.3",
     "codelyzer": "^5.1.2",
     "electron": "^13.6.9",
-    "electron-builder": "^20.44.4",
+    "electron-builder": "^21.2.0",
     "electron-reload": "^1.5.0",
     "hammerjs": "^2.0.8",
     "jasmine": "^3.99.0",
