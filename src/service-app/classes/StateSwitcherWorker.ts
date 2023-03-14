@@ -24,6 +24,7 @@ import { determineState } from '../../common/classes/StateUtils';
 export class StateSwitcherWorker extends DaemonWorker {
 
     private currentState: ProfileStates;
+    private currentStateProfileId: string;
 
     private refreshProfile = false;
 
@@ -48,6 +49,7 @@ export class StateSwitcherWorker extends DaemonWorker {
         if (newState !== this.currentState) {
             this.currentState = newState;
             const newActiveProfileId = this.tccd.settings.stateMap[newState.toString()];
+            this.currentStateProfileId = newActiveProfileId;
             if (newActiveProfileId !== undefined) {
                 this.tccd.setCurrentProfileById(newActiveProfileId);
             } else {
@@ -66,18 +68,25 @@ export class StateSwitcherWorker extends DaemonWorker {
         const oldActiveProfileId = this.tccd.activeProfile.id;
         const oldActiveProfileName = this.tccd.activeProfile.name;
 
-        if (newState !== this.currentState) {
+        const newStateProfileId = this.tccd.settings.stateMap[newState.toString()];
+
+        if (newState !== this.currentState || newStateProfileId !== this.currentStateProfileId) {
+            /*
+             * If state changed or assigned profile depending on state changed,
+             * unset temp profile and set state selected profile
+             */
+
             // Deactivate temp profile choices on real state change
             this.tccd.dbusData.tempProfileName = undefined;
             this.tccd.dbusData.tempProfileId = undefined;
 
             // Set active profile according to state map
             this.currentState = newState;
-            const newActiveProfileId = this.tccd.settings.stateMap[newState.toString()];
-            if (newActiveProfileId === undefined) {
+            this.currentStateProfileId = newStateProfileId;
+            if (newStateProfileId === undefined) {
                 this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
             } else {
-                this.tccd.setCurrentProfileById(newActiveProfileId);
+                this.tccd.setCurrentProfileById(newStateProfileId);
             }
         } else {
             // If state didn't change, a manual temporary profile can still be set
