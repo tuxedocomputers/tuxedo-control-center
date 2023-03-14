@@ -562,6 +562,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     (change)="sliderMinFreqChange()"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('cpu').get('scalingMinFrequency').reset(viewProfile.cpu.scalingMinFrequency)"
+                                    [hidden]="!profileFormGroup.get('cpu').get('scalingMinFrequency').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                             <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                                 <mat-slider #inputScalingMinFrequencyDummy
@@ -617,6 +623,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     (change)="sliderMaxFreqChange()"
                                     color="primary">
                                 </mat-slider>
+                                <button mat-icon-button
+                                    color="primary"
+                                    (click)="profileFormGroup.get('cpu').get('scalingMaxFrequency').reset(viewProfile.cpu.scalingMaxFrequency)"
+                                    [hidden]="!profileFormGroup.get('cpu').get('scalingMaxFrequency').dirty">
+                                    <mat-icon>undo</mat-icon>
+                                </button>
                             </content>
                             <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                                 <mat-slider #inputScalingMaxFrequencyDummy
