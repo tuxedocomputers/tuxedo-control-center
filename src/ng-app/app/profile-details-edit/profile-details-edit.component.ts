@@ -516,9 +516,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifySliderInputFunc(slider, offset: number, min: number, max: number) {
+    public modifySliderInputFunc(slider, offset: number, min: number, max: number, hackTrigger?) {
         return () => {
             this.modifySliderInput(slider, offset, min, max);
+            /*
+             * Note: hackTrigger added as workaround for change event not triggering on
+             *       setValue, should be removed as soon as it works again.
+             */
+            if (hackTrigger !== undefined) { hackTrigger.call(this); }
         }
     }
 
@@ -530,6 +535,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 newValue = max;
             }
             slider.setValue(newValue);
+            slider.markAsDirty();
     }
 
     @ViewChild('fancontrolHeader') fancontrolHeaderE;

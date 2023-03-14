@@ -537,6 +537,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
                             <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
                             <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), +100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
@@ -555,6 +569,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                     [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                     step="100000"
+                                    (change)="sliderMinFreqChange()"
                                     color="primary">
                                 </mat-slider>
                             </content>
@@ -577,6 +592,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 Boost</content>
                             <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && hasMaxFreqWorkaround)" [ngClass]="{'inactive': true}">
                                 Boost</content>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), -100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                [hidden]="!editProfile"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), +100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                (mouseup)="buttonRepeatUp()"
+                                (mouseleave)="buttonRepeatUp()">
+                                <mat-icon>add</mat-icon>
+                            </button>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
@@ -595,6 +624,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     [max]="cpuInfo.maxFreq"
                                     [value]="cpuInfo.maxFreq"
                                     step="100000"
+                                    (change)="sliderMaxFreqChange()"
                                     color="primary">
                                 </mat-slider>
                             </content>
