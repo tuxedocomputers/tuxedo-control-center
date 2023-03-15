@@ -516,14 +516,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifySliderInputFunc(slider, offset: number, min: number, max: number, hackTrigger?) {
+    public modifySliderInputFunc(slider, offset: number, min: number, max: number, hackTrigger?, hackArg?) {
         return () => {
             this.modifySliderInput(slider, offset, min, max);
             /*
              * Note: hackTrigger added as workaround for change event not triggering on
              *       setValue, should be removed as soon as it works again.
              */
-            if (hackTrigger !== undefined) { hackTrigger.call(this); }
+            if (hackTrigger !== undefined) { hackTrigger.call(this, hackArg); }
         }
     }
 
