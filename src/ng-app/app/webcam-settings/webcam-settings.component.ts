@@ -793,7 +793,7 @@ export class WebcamSettingsComponent implements OnInit {
         setViewWebcam: boolean = false
     ): Promise<void> {
         this.mutex.runExclusive(async () => {
-            this.unsetLoading(true);
+            this.unsetLoading(false);
             this.setLoading();
             this.stopWebcam();
 
