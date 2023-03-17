@@ -141,7 +141,7 @@ app.whenReady().then( async () => {
     const messageBoxPrimeSelectAccept = {
         type: 'question',
         buttons: [ 'yes', 'cancel' ],
-        message: 'Change graphics configuration and shutdown?'
+        message: 'Change graphics configuration and reboot?'
     };
 
     tray.events.fnLockClick = (status: boolean) => {
@@ -152,7 +152,7 @@ app.whenReady().then( async () => {
     const messageBoxPrimeSelectAcceptOnDemand = {
         type: 'question',
         buttons: [ 'yes', 'cancel' ],
-        message: 'To learn how to use the on-demand mode please follow this guide: https://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and shutdown?'
+        message: 'To learn how to use the on-demand mode please follow this guide: https://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and reboot?'
     };
     tray.events.selectNvidiaClick = () => {
         if (dialog.showMessageBoxSync(messageBoxPrimeSelectAccept) === 0) { primeSelectSet('on'); }
@@ -761,11 +761,11 @@ function primeSelectSet(status: string): boolean {
     let result: boolean;
     try {
         if (status === 'on') {
-            child_process.execSync('pkexec bash -c "prime-select nvidia; shutdown -h now"');
+            child_process.execSync('pkexec bash -c "prime-select nvidia; shutdown -r now"');
         } else if (status === 'on-demand') {
-            child_process.execSync('pkexec bash -c "prime-select on-demand; shutdown -h now"');
+            child_process.execSync('pkexec bash -c "prime-select on-demand; shutdown -r now"');
         } else if (status === 'off') {
-            child_process.execSync('pkexec bash -c "prime-select intel; shutdown -h now"');
+            child_process.execSync('pkexec bash -c "prime-select intel; shutdown -r now"');
         }
         result = true;
     } catch (err) {
