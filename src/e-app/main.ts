@@ -138,7 +138,7 @@ app.whenReady().then( async () => {
         tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
         tray.create();
     };
-    const messageBoxprimeSelectAccept = {
+    const messageBoxPrimeSelectAccept = {
         type: 'question',
         buttons: [ 'yes', 'cancel' ],
         message: 'Change graphics configuration and shutdown?'
@@ -149,14 +149,19 @@ app.whenReady().then( async () => {
         tccDBus.setFnLockStatus(tray.state.fnLockStatus);
     };
 
+    const messageBoxPrimeSelectAcceptOnDemand = {
+        type: 'question',
+        buttons: [ 'yes', 'cancel' ],
+        message: 'To learn how to use the on-demand mode please follow this guide: https://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and shutdown?'
+    };
     tray.events.selectNvidiaClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
+        if (dialog.showMessageBoxSync(messageBoxPrimeSelectAccept) === 0) { primeSelectSet('on'); }
     };
     tray.events.selectOnDemandClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on-demand'); }
+        if (dialog.showMessageBoxSync(messageBoxPrimeSelectAcceptOnDemand) === 0) { primeSelectSet('on-demand'); }
     };
     tray.events.selectBuiltInClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
+        if (dialog.showMessageBoxSync(messageBoxPrimeSelectAccept) === 0) { primeSelectSet('off'); }
     };
     tray.events.profileClick = (profileId: string) => { setTempProfileById(tccDBus, profileId); };
     tray.create();

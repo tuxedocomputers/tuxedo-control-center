@@ -119,19 +119,19 @@ export class TccTray {
                 visible: this.state.isPrimeSupported,
                 submenu: [
                     {
-                        label: 'Select NVIDIA',
+                        label: 'Select dedicated GPU only',
                         type: 'normal',
                         click: () => this.events.selectNvidiaClick(),
                         visible: this.state.primeQuery !== 'on'
                     },
                     {
-                        label: 'Select on-demand',
+                        label: 'Select on-demand GPU mode',
                         type: 'normal',
                         click: () => this.events.selectOnDemandClick(),
                         visible: this.state.primeQuery !== 'on-demand'
                     },
                     {
-                        label: 'Select built-in',
+                        label: 'Select integrated GPU only',
                         type: 'normal',
                         click: () => this.events.selectBuiltInClick(),
                         visible: this.state.primeQuery !== 'off'
