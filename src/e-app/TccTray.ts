@@ -125,7 +125,7 @@ export class TccTray {
                         visible: this.state.primeQuery !== 'on'
                     },
                     {
-                        label: 'Select on-demand GPU mode',
+                        label: 'Select GPU on-demand mode',
                         type: 'normal',
                         click: () => this.events.selectOnDemandClick(),
                         visible: this.state.primeQuery !== 'on-demand'
