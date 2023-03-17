@@ -152,7 +152,7 @@ app.whenReady().then( async () => {
     const messageBoxPrimeSelectAcceptOnDemand = {
         type: 'question',
         buttons: [ 'yes', 'cancel' ],
-        message: 'To learn how to use the on-demand mode please follow this guide: https://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and reboot?'
+        message: 'To learn how to use the on-demand mode please follow this guide:\nhttps://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and reboot?'
     };
     tray.events.selectNvidiaClick = () => {
         if (dialog.showMessageBoxSync(messageBoxPrimeSelectAccept) === 0) { primeSelectSet('on'); }
