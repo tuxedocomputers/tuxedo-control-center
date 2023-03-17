@@ -125,6 +125,12 @@ export class TccTray {
                         visible: this.state.primeQuery !== 'on'
                     },
                     {
+                        label: 'Select on-demand',
+                        type: 'normal',
+                        click: () => this.events.selectOnDemandClick(),
+                        visible: this.state.primeQuery !== 'on-demand'
+                    },
+                    {
                         label: 'Select built-in',
                         type: 'normal',
                         click: () => this.events.selectBuiltInClick(),
@@ -159,6 +165,7 @@ export class TrayEvents {
     exitClick: () => void;
     autostartTrayToggle: () => void;
     selectNvidiaClick: () => void;
+    selectOnDemandClick: () => void;
     selectBuiltInClick: () => void;
     profileClick: (profileId: string) => void;
     powersaveBlockerClick: () => void;

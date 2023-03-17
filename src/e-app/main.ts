@@ -152,6 +152,9 @@ app.whenReady().then( async () => {
     tray.events.selectNvidiaClick = () => {
         if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
     };
+    tray.events.selectOnDemandClick = () => {
+        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on-demand'); }
+    };
     tray.events.selectBuiltInClick = () => {
         if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
     };
@@ -733,6 +736,8 @@ function primeSelectQuery(): string {
         query = child_process.execSync('prime-select query').toString();
         if (query.includes('nvidia')) {
             result = 'on';
+        } else if (query.includes('on-demand')) {
+            result = 'on-demand';
         } else if (query.includes('intel')) {
             result = 'off';
         } else {
@@ -752,6 +757,8 @@ function primeSelectSet(status: string): boolean {
     try {
         if (status === 'on') {
             child_process.execSync('pkexec bash -c "prime-select nvidia; shutdown -h now"');
+        } else if (status === 'on-demand') {
+            child_process.execSync('pkexec bash -c "prime-select on-demand; shutdown -h now"');
         } else if (status === 'off') {
             child_process.execSync('pkexec bash -c "prime-select intel; shutdown -h now"');
         }
