@@ -222,7 +222,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
         if (this.tccd.settings.keyboardBacklightControlEnabled) {
             this.updateSysFsFromSettings().then(() => {
-                setTimeout(this.onWork, 500); // There is a small delay between writing SysFS and getting the correct value back.
+                setTimeout(() => { this.onWork() }, 500); // There is a small delay between writing SysFS and getting the correct value back.
             });
         }
 
