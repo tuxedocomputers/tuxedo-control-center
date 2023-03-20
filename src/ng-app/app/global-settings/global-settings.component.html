@@ -77,6 +77,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-grid-tile>
             </mat-grid-list>
             <div i18n>On deactivate, the default automatic fan control is restored directly.</div>
+
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cGlobalSettingsKeyboardBacklightControlLabel">Keyboard Backlight Control</header></mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                    <content class="value">
+                        <span [hidden]="!inputKeyboardBacklightControl.checked" i18n="@@cGlobalSettingsKeyboardBacklightControlActivated">activated</span>
+                        <span [hidden]="inputKeyboardBacklightControl.checked" i18n="@@cGlobalSettingsKeyboardBacklightControlDeactivated">deactivated</span>
+                    </content>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                    <content class="input">
+                        <mat-checkbox #inputKeyboardBacklightControl
+                            color="primary"
+                            [(ngModel)]="keyboardBacklightControlEnabled"
+                            (change)="onKeyboardBacklightControlEnabledChanged($event)">
+                        </mat-checkbox>
+                    </content>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <div i18n>On deactivate, keyboard backlight settings are <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.</div>
         </div>
     </mat-expansion-panel>
 

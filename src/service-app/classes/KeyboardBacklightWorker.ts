@@ -220,15 +220,17 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     public onStart(): void {
         this.getKeyboardBacklightCapabilities();
 
-        this.updateSysFsFromSettings().then(() => {
-            setTimeout(this.onWork, 500); // There is a small delay between writing SysFS and getting the correct value back.
-        });
+        if (this.tccd.settings.keyboardBacklightControlEnabled) {
+            this.updateSysFsFromSettings().then(() => {
+                setTimeout(this.onWork, 500); // There is a small delay between writing SysFS and getting the correct value back.
+            });
+        }
 
         this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(this.keyboardBacklightStatesNewJSONSubscriptionHandler.bind(this));
     }
 
     public onWork(): void {
-        if (this.keyboardBacklightStatesUpdating === false) {
+        if (this.tccd.settings.keyboardBacklightControlEnabled && this.keyboardBacklightStatesUpdating === false) {
             this.updateKeyboardBacklightStatesFromSysFS().then(() => {
                 this.updateSettingsFromKeyboardBacklightStates();
             });

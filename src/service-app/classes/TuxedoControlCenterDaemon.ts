@@ -382,6 +382,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.settings.fanControlEnabled = this.config.getDefaultSettings().fanControlEnabled;
                 missingSetting = true;
             }
+            if (this.settings.keyboardBacklightControlEnabled === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing keyboardBacklightControlEnabled setting');
+                this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings().keyboardBacklightControlEnabled;
+                missingSetting = true;
+            }
             if (this.settings.ycbcr420Workaround === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing ycbcr420Workaround setting');

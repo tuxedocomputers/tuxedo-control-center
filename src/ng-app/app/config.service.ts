@@ -123,6 +123,10 @@ export class ConfigService implements OnDestroy {
         return $localize `:@@messageFanControlOff:Fan control deactivated in Tools→Global\u00A0Settings`;
     }
 
+    get keyboardBacklightControlDisabledMessage(): string {
+        return $localize `:@@messageKeyboardBacklightControlOff:Keyboard backlight control deactivated in Tools→Global\u00A0Settings`;
+    }
+
     public getCustomProfiles(): ITccProfile[] {
         return this.customProfiles;
     }
