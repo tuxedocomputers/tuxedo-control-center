@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfigService } from '../config.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
@@ -26,7 +26,8 @@ import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightColorModes, Ke
 @Component({
     selector: 'app-keyboard-backlight',
     templateUrl: './keyboard-backlight.component.html',
-    styleUrls: ['./keyboard-backlight.component.scss']
+    styleUrls: ['./keyboard-backlight.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class KeyboardBacklightComponent implements OnInit {
     Object = Object;
