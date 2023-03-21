@@ -42,6 +42,7 @@ export class GlobalSettingsComponent implements OnInit {
 
     public cpuSettingsEnabled: boolean = true;
     public fanControlEnabled: boolean = true;
+    public keyboardBacklightControlEnabled: boolean = true;
     public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
 
@@ -66,6 +67,7 @@ export class GlobalSettingsComponent implements OnInit {
 
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
+        this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
         for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
             this.ycbcr420Workaround[card] = {};
             for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
@@ -103,6 +105,22 @@ export class GlobalSettingsComponent implements OnInit {
             }
 
             this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
+
+            this.utils.pageDisabled = false;
+        });
+    }
+
+    onKeyboardBacklightControlEnabledChanged(event: any) {
+        this.utils.pageDisabled = true;
+
+        this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
+        
+        this.config.saveSettings().then(success => {
+            if (!success) {
+                this.config.getSettings().keyboardBacklightControlEnabled = !event.checked;
+            }
+
+            this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
 
             this.utils.pageDisabled = false;
         });

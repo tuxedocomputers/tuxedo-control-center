@@ -31,7 +31,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight or is not (yet) supported by this control interface.</p>
     </div>
 
-    <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined">
+    <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined"
+        [ngClass]="{'not-available': !this.config.getSettings().keyboardBacklightControlEnabled }"
+        [matTooltip]="!this.config.getSettings().keyboardBacklightControlEnabled ? this.config.keyboardBacklightControlDisabledMessage : ''"
+        matTooltipClass="wider-tooltip">
+
         <div *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
             <div *ngIf="keyboardBacklightCapabilities.zones >= 1">
                 <mat-grid-list [cols]="9" rowHeight="1227:2709" class="keyboard-color-grid">

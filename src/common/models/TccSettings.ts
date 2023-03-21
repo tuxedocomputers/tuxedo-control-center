@@ -48,6 +48,7 @@ export interface ITccSettings {
     shutdownTime: string | null;
     cpuSettingsEnabled: boolean;
     fanControlEnabled: boolean;
+    keyboardBacklightControlEnabled: boolean;
     ycbcr420Workaround: Array<Object>;
     chargingProfile: string | null;
     chargingPriority: string | null;
@@ -64,6 +65,7 @@ export const defaultSettings: ITccSettings = {
     shutdownTime: null,
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
+    keyboardBacklightControlEnabled: true,
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
@@ -80,6 +82,7 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     shutdownTime: null,
     cpuSettingsEnabled: true,
     fanControlEnabled: true,
+    keyboardBacklightControlEnabled: true,
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
