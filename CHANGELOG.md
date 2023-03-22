@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.0.0] - 2023-03-22
 ### Added
 - Keyboard backlight GUI (Tools => Keyboard backlight)
   - Set brightness
@@ -19,6 +19,9 @@
     - Choose operation mode
     - View which modules are applied for your device
     - Change behaviour of modules
+- Backup profile settings
+  - Exporting current custom profiles to file
+  - Importing custom profiles from file
 
 ### Changed
 - TDP slider validation behaviour now moves other sliders accordingly instead of limiting currently changed slider
