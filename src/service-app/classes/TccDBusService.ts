@@ -38,6 +38,7 @@ export class TccDBusService extends DaemonWorker {
         const options: TccDBusOptions = new TccDBusOptions();
         options.triggerStateCheck = async () => { this.tccd.triggerStateCheck(); }
         options.chargingWorker = this.tccd.getChargingWorker();
+        //TODO add our worker too
 
         try {
             this.bus = dbus.systemBus();

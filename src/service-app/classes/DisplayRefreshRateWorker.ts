@@ -18,7 +18,7 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
-
+import { IDisplayFreqRes, IDisplayMode} from '../../common/models/DisplayFreqRes';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
@@ -26,6 +26,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     // if we decide to put in wayland support we simply have to make a new controller?
     private isX11: boolean;
+    private displayInfo: IDisplayFreqRes;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(9000, tccd); // TODO see if this worker ID thing is still free
@@ -37,53 +38,64 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     }
 
     public onWork(): void {
-
+        if (!this.isX11)
+        {
+            // TODO switch this to output on the dbus I guess
+            return "Wayland is not supported at this point!"
+            // TODO would it make sense to just turn the worker off if it's wayland, or should it poll this regularly for if someone switches to x11
+            // is this even possible without restarting tccd anyway?
+        }
+        
+        
+        // TODO 
+        // get current display settings from controller and save them into data structure
+        this.getAllInfo();
+        // look into what the active profile says and if it's different from currently active settings,
+        // if yes then use private functions to activate the differing settings.
+        // uhm so we need to look into tccd. ??? activeprofile yadayadayada 
+        // most importantly we need to check the variable bool userefreshrate or whatever
+        // to see if refreshrate should even be set on profile activation
+        this.tccd.activeProfile.display.useRefRate
+        var newRefRate = this.tccd.activeProfile.display.refreshRate
+        // look at current resolution and see if ref rate is available for this resolution
+        this.displayInfo.activeMode // == .find() or whatever is newRefRate
+        this.tccd.activeProfile.display.useResolution
+        // look at current refresh rate and see if it's supported with this resolution
+        // TODO what to do if it fails?
     }
 
     public onExit(): void {
         
     }
 
-    public getActiveRefRate()
+    private getAllInfo()
     {
-        if (!this.isX11)
-        {
-            return "Wayland is not supported at this point!"
-        }
+        this.displayInfo = this.controller.getDisplayModes();
+    }
+
+    private getActiveRefRate()
+    {
         return this.controller.getDisplayModes().activeMode.refreshRates[0];
     }
 
-    public getAvailableRefRates()
+    private getAvailableRefRates()
     {
-        if (!this.isX11)
-        {
-            return "Wayland is not supported at this point!"
-        }
+
         return this.controller.getDisplayModes();
     }
 
-    public setRefRate(rate: number)
+    private setRefRate(rate: number)
     {
-        if (!this.isX11)
-        {
-            return "Wayland is not supported at this point!"
-        }
-        else
-        {
-            this.controller.setRefreshRate(rate);
-        }
+        // TODO should this function in generel check if the refresh rate is available for the display mode?
+        this.controller.setRefreshRate(rate);
+
     }
 
-    public setRes(xRes: number, yRes: number)
+    private setRes(xRes: number, yRes: number)
     {
-        if (!this.isX11)
-        {
-            return "Wayland is not supported at this point!"
-        }
-        else
-        {
-            this.controller.setResolution(xRes, yRes);
-        }
+        // TODO should this function in generel check if the resolution is available for the display mode?
+        this.controller.setResolution(xRes, yRes);
+
     }
 
    

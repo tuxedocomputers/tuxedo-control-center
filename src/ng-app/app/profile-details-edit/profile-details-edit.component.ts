@@ -113,7 +113,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
-
+    // TODO do I need to add my displays res and refRate here?
     public stateInputArray: IStateInfo[];
 
     public selectableFrequencies;

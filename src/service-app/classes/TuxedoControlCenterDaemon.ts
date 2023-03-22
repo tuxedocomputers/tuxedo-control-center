@@ -115,6 +115,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
+        //TODO add Display Refresh Rate worker
 
         this.startWorkers();
 
@@ -160,6 +161,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public getChargingWorker() {
         return this.chargingWorker;
     }
+
+    // TODO do we need to add a similar function for getting displayrefres worker?
 
     public catchError(err: Error) {
         this.logLine('Tccd Exception');

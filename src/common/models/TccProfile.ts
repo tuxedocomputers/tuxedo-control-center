@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { NumericLiteral } from "typescript";
 import { DefaultProfileIDs, LegacyDefaultProfileIDs } from "./DefaultProfiles";
 import { defaultProfiles } from "./profiles/LegacyProfiles";
 
@@ -57,6 +58,11 @@ export class TccProfile implements ITccProfile {
 interface ITccProfileDisplay {
     brightness: number;
     useBrightness: boolean;
+    refreshRate: number;
+    useRefRate: boolean;
+    resolutionX: number;
+    resolutionY: number;
+    useResolution: boolean;
 }
 
 interface ITccProfileCpu {

@@ -162,12 +162,14 @@ export class TccDBusInterface extends dbus.interface.Interface {
     async SetChargingPriority(priorityDescriptor: string) {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
+    // TODO add functions for changing and getting current display refrate and resolution
 }
 
 TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        // TODO add refresh rate and resolution
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
