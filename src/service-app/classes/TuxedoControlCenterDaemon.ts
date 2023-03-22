@@ -29,6 +29,7 @@ import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { defaultCustomProfile } from '../../common/models/profiles/LegacyProfiles';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
+import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
@@ -72,6 +73,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private stateWorker: StateSwitcherWorker;
     private chargingWorker: ChargingWorker;
+    private displayWorker: DisplayRefreshRateWorker;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -105,6 +107,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.tccdVersion = tccPackage.version;
         this.stateWorker = new StateSwitcherWorker(this);
         this.chargingWorker = new ChargingWorker(this);
+        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.workers.push(this.chargingWorker);
         this.workers.push(this.stateWorker);
         this.workers.push(new DisplayBacklightWorker(this));
@@ -115,7 +118,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
-        //TODO add Display Refresh Rate worker
+        this.workers.push(this.displayWorker);
 
         this.startWorkers();
 
@@ -162,7 +165,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return this.chargingWorker;
     }
 
-    // TODO do we need to add a similar function for getting displayrefres worker?
+    public getDisplayWorker() {
+        return this.displayWorker;
+    }
 
     public catchError(err: Error) {
         this.logLine('Tccd Exception');

@@ -41,15 +41,19 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         if (!this.isX11)
         {
             // TODO switch this to output on the dbus I guess
-            return "Wayland is not supported at this point!"
+            //return "Wayland is not supported at this point!"
             // TODO would it make sense to just turn the worker off if it's wayland, or should it poll this regularly for if someone switches to x11
             // is this even possible without restarting tccd anyway?
+            return;
         }
-        
-        
+                // get current display settings from controller and save them into data structure
+                this.getAllInfo();
+                // TODO now send those infos to the gui through tccd? something like this?
+                this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+        /*
+        ok all of this goes into the functions themselves I guess
         // TODO 
-        // get current display settings from controller and save them into data structure
-        this.getAllInfo();
+
         // look into what the active profile says and if it's different from currently active settings,
         // if yes then use private functions to activate the differing settings.
         // uhm so we need to look into tccd. ??? activeprofile yadayadayada 
@@ -62,6 +66,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.tccd.activeProfile.display.useResolution
         // look at current refresh rate and see if it's supported with this resolution
         // TODO what to do if it fails?
+        */
     }
 
     public onExit(): void {
@@ -73,28 +78,36 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.displayInfo = this.controller.getDisplayModes();
     }
 
-    private getActiveRefRate()
+    public getActiveRefRate()
     {
         return this.controller.getDisplayModes().activeMode.refreshRates[0];
     }
 
-    private getAvailableRefRates()
-    {
+    // private getAvailableRefRates()
+    // {
 
-        return this.controller.getDisplayModes();
-    }
+    //     return this.controller.getDisplayModes().displayModes;
+    // }
 
-    private setRefRate(rate: number)
+    public setRefRate(rate: number)
     {
         // TODO should this function in generel check if the refresh rate is available for the display mode?
         this.controller.setRefreshRate(rate);
+        return true;
 
     }
 
-    private setRes(xRes: number, yRes: number)
+    public setRes(xRes: number, yRes: number)
     {
         // TODO should this function in generel check if the resolution is available for the display mode?
         this.controller.setResolution(xRes, yRes);
+        return true;
+    }
+
+    public setMode(xRes: number, yRes: number, refRate: number)
+    {
+        this.controller.setRefreshResolution(refRate,xRes,yRes);
+        return true;
 
     }
 

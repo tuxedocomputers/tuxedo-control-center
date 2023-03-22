@@ -18,6 +18,8 @@
  */
 import * as dbus from 'dbus-next';
 import { ChargingWorker } from './ChargingWorker';
+import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
+
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
@@ -67,6 +69,7 @@ export class FanData {
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public displayModes: string;
     public tuxedoWmiAvailable: boolean;
     public tccdVersion: string;
     public fans: FanData[];
@@ -92,6 +95,7 @@ export class TccDBusData {
 export class TccDBusOptions {
     public triggerStateCheck?: () => Promise<void>;
     public chargingWorker?: ChargingWorker;
+    public displayWorker?: DisplayRefreshRateWorker;
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {
@@ -105,7 +109,12 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
-
+    GetDisplaymodes() { return this.data.displayModes; }
+    // TODO should this be turned into promises?
+    // on the other hand, it probably doesn't matter as setting those variables will introduce some lag by default? idk
+    SetDisplayRefresh(refRate: number) { return this.interfaceOptions.displayWorker.setRefRate(refRate) }
+    SetDisplayResolution(xRes: number, yRes: number) { return this.interfaceOptions.displayWorker.setRes(xRes,yRes)}
+    SetDisplaymode(refRate: number, xRes: number, yRes: number) { return this.interfaceOptions.displayWorker.setMode(xRes,yRes,refRate)}
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
@@ -169,7 +178,10 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
-        // TODO add refresh rate and resolution
+        GetDisplayModes: {outSignature: 's'},
+        SetDisplayRefresh: { inSignature: 's',  outSignature: 'b' },
+        SetDisplayResolution: { inSignature: 's',  outSignature: 'b' },
+        SetDisplaymode: { inSignature: 's',  outSignature: 'b' },
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
