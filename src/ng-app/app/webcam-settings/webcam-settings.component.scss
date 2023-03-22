@@ -1,0 +1,139 @@
+/*!
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+ .tcc-card {
+    z-index: 1;
+
+    .center {
+        text-align: center;
+    }
+ }
+
+ .webcam-settings-edit {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+
+    .inner-webcam-settings-edit {
+        margin: 0 10px 10px 10px;
+    }
+
+    .webcam {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        width: 100%;
+        height: 100%;
+        margin-bottom: 20px;
+    }
+
+    .spinner {
+        position: absolute;
+        justify-content: center;
+        align-items: center; 
+        vertical-align: middle;
+    
+    }
+
+    .webcam-title {
+        position: fixed;
+        top: 10px;
+        right: 40px;
+        z-index: 100;
+
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+
+        mat-button-toggle-group {
+            transform: scale(0.7);
+            transform-origin: right;
+        }
+        
+        .save-reset-buttons {
+            --icon-detail: var(--icon-main);
+            position: relative;
+        }
+    }
+
+    .profile-details-edit-grid {
+        .inactive {
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+
+            width: 100%;
+            text-align: left;
+            font-size: 1.10em;
+        }
+
+        content.value {
+            width: 100%;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.15em;
+        }
+
+        content.input {
+            width: 100%;
+
+            mat-slider {
+                width: 200px;
+            }
+
+            mat-select {
+                width: 200px;
+            }
+
+            mat-form-field {
+                width: 360px;
+
+                &.input-description {
+
+                    textarea {
+                        resize: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+mat-expansion-panel * {
+    transition: none !important;
+}
+
+.globalSpinner {
+    top: 50%; 
+    left: 50%; 
+    position: absolute; 
+    margin-left: -4em; 
+    margin-top: -4em;
+}

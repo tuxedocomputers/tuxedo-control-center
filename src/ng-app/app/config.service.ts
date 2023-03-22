@@ -29,6 +29,7 @@ import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
+import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
 @Injectable({
     providedIn: 'root'
@@ -72,6 +73,8 @@ export class ConfigService implements OnDestroy {
         this.config = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
+            TccPaths.WEBCAM_FILE,
+            TccPaths.V4L2_NAMES_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
@@ -120,6 +123,10 @@ export class ConfigService implements OnDestroy {
         return $localize `:@@messageFanControlOff:Fan control deactivated in Tools→Global\u00A0Settings`;
     }
 
+    get keyboardBacklightControlDisabledMessage(): string {
+        return $localize `:@@messageKeyboardBacklightControlOff:Keyboard backlight control deactivated in Tools→Global\u00A0Settings`;
+    }
+
     public getCustomProfiles(): ITccProfile[] {
         return this.customProfiles;
     }
@@ -154,7 +161,7 @@ export class ConfigService implements OnDestroy {
         const result = this.electron.ipcRenderer.sendSync(
             'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
         );
-        
+
         this.updateConfigData();
     }
 
@@ -189,6 +196,41 @@ export class ConfigService implements OnDestroy {
             return newProfile.id;
         } else {
             return undefined;
+        }
+    }
+
+    // appends given profiles to custom profiles but replaces all of those where IDs conflict!
+    // generates a new ID for new profiles
+    public async importProfiles(newProfiles: ITccProfile[])
+    {
+        let newProfileList = this.getCustomProfiles();
+        for (let i = 0; i < newProfiles.length; i++)
+        {
+            // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
+            let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+            if(oldProfileIndex !== -1)
+            {
+                newProfileList[oldProfileIndex] = newProfiles[i];
+            }
+            else
+            {
+                // when we want to override the old profile or there is no conflict we want to keep the
+                // original ID
+                let newProfile = newProfiles[i];
+                if (newProfile.id === "generateNewID")
+                {
+                    newProfile.id = generateProfileId();
+                }
+                newProfileList = newProfileList.concat(newProfile);
+            }
+        }
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -298,6 +340,28 @@ export class ConfigService implements OnDestroy {
         });
     }
 
+    public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[]): Promise<boolean> {
+        return new Promise<boolean>(resolve => {
+            const tmpWebcamPath = '/tmp/tmptccwebcam';
+            this.config.writeWebcamSettings(settings, tmpWebcamPath);
+            let tccdExec: string;
+            if (environment.production) {
+                tccdExec = TccPaths.TCCD_EXEC_FILE;
+            } else {
+                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+            }
+
+            this.utils.execFile(
+                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
+            ).then(data => {
+                resolve(true);
+            }).catch(error => {
+                resolve(false);
+            });
+        });
+    }
+
+    
     private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const tmpProfilesPath = '/tmp/tmptccprofiles';

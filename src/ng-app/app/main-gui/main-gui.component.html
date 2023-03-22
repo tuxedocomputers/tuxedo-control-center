@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -39,12 +39,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-nav-list>
                 <mat-list-item routerLink="cpu-dashboard" routerLinkActive="true">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_dashboard.svg#Icon"></use>
-                            </svg></mat-icon>
+                            </svg>
+                        </mat-icon>
                         <ng-container i18n="@@menuDashboard">Dashboard</ng-container>
                     </content>
                 </mat-list-item>
+
                 <mat-divider></mat-divider>
                 <mat-list-item routerLink="profile-manager" routerLinkActive="true">
                     <content>
@@ -59,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-list-item routerLink="tools" routerLinkActive="true">
                     <content>
                         <mat-icon><svg viewBox="0 0 512 512">
-                                <use href="./assets/images/icon_gear.svg#Icon"></use>
+                                <use href="./assets/images/icon_tools.svg#Icon"></use>
                             </svg></mat-icon>
                         <ng-container i18n="@@menuTools">Tools</ng-container>
                     </content>

@@ -32,6 +32,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <p>{{ data.description }}</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button (click)="closeDialog(inputText.value)">Ok</button>
+    <button mat-button (click)="closeDialog()">{{ data.buttonAbortLabel }}</button>
+    <button mat-button (click)="closeDialog(inputText.value)">{{ data.buttonConfirmLabel }}</button>
 </mat-dialog-actions>

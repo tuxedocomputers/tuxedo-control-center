@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -34,5 +34,9 @@ export class ToolsComponent implements OnInit {
 
     ngOnInit() {
         
+    }
+
+    gotoComponent(component: string) {
+        this.router.navigate([ component ], { relativeTo: this.route.parent });
     }
 }
