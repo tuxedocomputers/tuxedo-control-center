@@ -23,7 +23,9 @@ export interface InputDialogData {
     title: string,
     heading: string,
     description: string,
-    prefill: string
+    prefill: string,
+    buttonAbortLabel: string,
+    buttonConfirmLabel: string
 }
 
 @Component({

@@ -38,6 +38,16 @@ export function getFiles(source) {
     }
 }
 
+export function getSymbolicLinks(source: string) {
+    try {
+        return fs.readdirSync(source, { withFileTypes: true })
+            .filter(dirent => dirent.isSymbolicLink())
+            .map(dirent => dirent.name);
+    } catch (err) {
+        return [];
+    }
+}
+
 export function findClosestValue(value: number, array: number[]): number {
     if (array === undefined) { return value; }
 
@@ -51,4 +61,22 @@ export function findClosestValue(value: number, array: number[]): number {
         }
     }
     return closest;
+}
+
+export function fileOK(path: string): boolean {
+    try {
+        fs.accessSync(path, fs.constants.F_OK |  fs.constants.R_OK | fs.constants.W_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
+export async function fileOKAsync(path: string): Promise<boolean> {
+    try {
+        await fs.promises.access(path, fs.constants.F_OK |  fs.constants.R_OK | fs.constants.W_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
 }

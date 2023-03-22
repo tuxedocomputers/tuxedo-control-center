@@ -1,0 +1,533 @@
+<!--
+Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<mat-card class="tcc-card card-keyboard-backlight">
+    <mat-card-title class="theme-page-title">
+        <ng-container i18n="@@cKeyboardBacklightLabel">Keyboard Backlight</ng-container>
+    </mat-card-title>
+    <hr />
+    
+    <div class="content-container centered">
+        <p i18n="@@cKeyboardBacklightDescription">Control the Keyboard Backlight</p>
+    </div>
+
+    <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined">
+        <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight or is not (yet) supported by this control interface.</p>
+    </div>
+
+    <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined"
+        [ngClass]="{'not-available': !this.config.getSettings().keyboardBacklightControlEnabled }"
+        [matTooltip]="!this.config.getSettings().keyboardBacklightControlEnabled ? this.config.keyboardBacklightControlDisabledMessage : ''"
+        matTooltipClass="wider-tooltip">
+
+        <div *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
+            <div *ngIf="keyboardBacklightCapabilities.zones >= 1">
+                <mat-grid-list [cols]="9" rowHeight="1227:2709" class="keyboard-color-grid">
+                    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+                    <mat-grid-tile [colspan]="7">
+                        <svg viewBox="0 0 728 205.00003">
+                            <g transform="translate(832.61151,535.06891)">
+                                <g id="Zone0" class="key-group" (click)="onKeyboardImageClick(0)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 && selectedZone == 0, 'key-background-unselected': keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 && selectedZone != 0 }">
+                                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0" d="M 0,3.0517578e-5 V 205.00003 h 181.14736 v -34.51565 h 36.46397 V 133.71094 H 200.41602 V 97.126953 h -19.3418 V 3.0517578e-5 Z" transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone0" />
+                                    <g id="Esc">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-534.06891" x="-831.61151" height="20" width="30.6" id="rect1552" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1752" width="20.6" height="10" x="-826.61151" y="-529.06891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(36.599976,-32.5)" id="F1">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1758" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1760" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(73.199977,-32.5)" id="F2">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1772" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1774" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(109.79998,-32.5)" id="F3">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1782" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1784" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(146.39998,-32.5)" id="F4">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1792" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1794" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(0,-21.899994)" id="°">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2110" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2112" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(36.599976,-21.899994)" id="1">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2118" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2120" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(73.199977,-21.899994)" id="2">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2124" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2126" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(109.79998,-21.899994)" id="3">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2130" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2132" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(146.39998,-21.899994)" id="4">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2136" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2138" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(73.199989)" id="Q">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2364" width="30.6" height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151" height="20.6" width="20.6" id="rect2366" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(109.79999)" id="W">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2372" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2374" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(146.39999)" id="E">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2386" width="30.6" height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151" height="20.6" width="20.6" id="rect2388" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="rotate(-90,-450.31155,-126.76892)" id="Tab">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156" height="67.199997" width="30.6" id="rect2542" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2544" width="20.6" height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g id="CapsLock">
+                                        <rect transform="rotate(-90)" style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2548" width="30.599998" height="86.380257" x="404.26889" y="-831.61151" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect transform="rotate(-90)" class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-826.61157" x="409.26889" height="76.380005" width="20.6" id="rect2550" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(92.400004,51.300028)" id="A">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2554" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2556" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(129,51.300028)" id="S">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2562" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2564" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g id="D" transform="translate(165.6,51.300028)">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2570" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2572" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(73.199989,87.900026)" id="&lt;">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2778" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2780" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(109.79999,87.900026)" id="Y">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2786" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2788" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(146.39999,87.900026)" id="X" style="display:inline">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2794" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2796" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(182.99999,73.200014)" id="C" style="display:inline">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2802" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2804" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="rotate(-90,-413.71154,-90.168911)" id="Shift_links">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2980" width="30.6" height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156" height="57.200001" width="20.6" id="rect2982" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="rotate(-90,-395.41154,-71.868909)" id="Strg_links">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156" height="67.199997" width="30.6" id="rect3069" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3071" width="20.6" height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(73.199989,124.50003)" id="Fn">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect3075" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3077" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                    <g transform="translate(109.79999,124.50003)" id="Tux">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3083" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="chosenColorHex[0]"ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect3085" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(146.39999,124.50003)" id="Alt">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect3091" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3093" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="chosenColorHex[0]"/>
+                                    </g>
+                                </g>
+                                <g id="Zone1" class="key-group" (click)="onKeyboardImageClick(1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 && selectedZone == 1, 'key-background-unselected': keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 && selectedZone != 1 }">
+                                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0" d="m -651.53729,-535.06888 v 97.12692 h 19.3418 v 36.58399 h 17.19531 v 36.77344 h -36.46397 v 34.51565 h 329.30975 v -34.53573 h -36.53795 V -400.964 h 19.16542 v -36.92969 h -19.16593 v -73.10165 h 36.53846 v -24.07354 z" id="SelectionDummyZone1" />    
+                                    <g transform="translate(182.99998,-32.5)" id="F5">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1802" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1804" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(219.59998,-32.5)" id="F6">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1812" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1814" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(256.19998,-32.5)" id="F7">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1822" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1824" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(292.79998,-32.5)" id="F8">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1832" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1834" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(329.39998,-32.5)" id="F9">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1842" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1844" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g id="F10">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1856" width="30.6" height="20" x="-465.61154" y="-534.06891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-529.06891" x="-460.61154" height="10" width="20.6" id="rect1858" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(402.59995,-32.5)" id="F11">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1860" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1862" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(439.19995,-32.5)" id="F12">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1868" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1870" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(475.79995,-32.5)" id="Druck">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1878" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1880" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(182.99998,-21.899994)" id="5">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2142" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2144" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(219.59998,-21.899994)" id="6">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2148" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2150" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(256.19998,-21.899994)" id="7">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2154" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2156" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(292.79998,-21.899994)" id="8">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2160" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2162" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(329.39998,-21.899994)" id="9">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2166" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2168" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(365.99997,-21.899994)" id="0">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2172" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2174" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(402.59995,-21.899994)" id="?">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2178" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2180" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(439.19995,-21.899994)" id="`">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2184" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2186" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(182.99999)" id="R">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2406" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2408" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(219.59999)" id="T">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2414" width="30.6" height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151" height="20.6" width="20.6" id="rect2416" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(256.19999)" id="Z">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2422" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2424" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(292.79999)" id="U">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2430" width="30.6" height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151" height="20.6" width="20.6" id="rect2432" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(329.39999)" id="I">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2438" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2440" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(365.99999)" id="O">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2446" width="30.6" height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151" height="20.6" width="20.6" id="rect2448" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(402.59998)" id="P">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2454" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2456" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(439.19996)" id="Ü">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2462" width="30.6" height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151" height="20.6" width="20.6" id="rect2464" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(202.2,51.300028)" id="F">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2578" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2580" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(238.8,51.300028)" id="G">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2586" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2588" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(275.40001,51.300028)" id="H">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2594" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2596" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(312,51.300028)" id="J">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2602" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2604" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(348.6,51.300028)" id="K">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2610" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2612" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(385.20001,36.600016)" id="L">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2618" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2620" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(421.8,51.300028)" id="Ö" style="display:inline">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2626" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2628" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(458.39997,51.300028)" id="Ä">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2634" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2636" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(219.59999,87.900026)" id="V">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2810" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2812" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(256.19999,73.200014)" id="B">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2818" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2820" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(292.79999,87.900026)" id="N">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2826" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2828" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(329.39999,87.900026)" id="M">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2834" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2836" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(365.99999,87.900026)" id=",">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2842" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2844" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(402.59998,73.200014)" id=".">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151" height="30.6" width="30.6" id="rect2850" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2852" width="20.6" height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(439.19996,87.900026)" id="-">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2858" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2860" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g id="Space">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3099" width="177" height="30.6" x="-648.61157" y="-361.66888" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-356.66888" x="-643.61151" height="20.6" width="167" id="rect3101" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(365.99999,124.50003)" id="AltGr">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect3112" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3114" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(402.59998,124.50003)" id="Kontextmenü">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3120" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect3122" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="rotate(-90,-175.81156,-291.46889)" id="Strg_rechts">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156" height="67.199997" width="30.6" id="rect3136" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3138" width="20.6" height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                                    </g>
+                                </g>
+                                <g id="Zone2" class="key-group" (click)="onKeyboardImageClick(2)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 && selectedZone == 2, 'key-background-unselected': keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 && selectedZone != 2 }">
+                                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0" d="m -322.1544,-535.06888 v 24.07354 h -36.53846 v 73.10165 h 19.16593 v 36.92969 h -19.16542 v 36.35939 h 36.53795 v 34.53573 h 217.54289 v -205 z" id="SelectionDummyZone2" />    
+                                    <g transform="translate(512.39995,-32.5)" id="Einfg">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1888" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1890" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(548.99995,-32.5)" id="Entf">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1898" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1900" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(585.59995,-32.5)" id="Pos1">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1908" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1910" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(622.19995,-32.5)" id="Ende">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1918" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1920" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(658.79995,-32.5)" id="Bild hoch">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1928" width="30.6" height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1930" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(695.39995,-32.5)" id="Bild runter">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151" height="20" width="30.6" id="rect1938" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1940" width="20.6" height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g id="Backspace">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06891" x="-355.81155" height="30.6" width="103.8" id="rect2190" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2192" width="93.800003" height="20.6" x="-350.81152" y="-503.06891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(585.59995,-21.899994)" id="Num">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2198" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2200" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(622.19995,-21.899994)" id="Numpad_/">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2204" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2206" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(658.79995,-21.899994)" id="Numpad_*">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2210" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2212" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(695.39995,-21.899994)" id="Numpad_-">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2216" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2218" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(585.59995,14.700012)" id="Numpad_7">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2228" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2230" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(622.19995,14.700012)" id="Numpad_8">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2234" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2236" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(658.79995,14.700012)" id="Numpad_9">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2240" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2242" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(0,36.599975)" id="Numpad_+">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156" height="67.199997" width="30.6" id="rect2246" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2248" width="20.6" height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(0,109.79996)" id="Numpad_Enter">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2284" width="30.6" height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156" height="57.200001" width="20.6" id="rect2286" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(585.59995,51.300018)" id="Numpad_4">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2290" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2292" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(622.19995,51.300018)" id="Numpad_5">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2296" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2298" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(658.79995,51.300018)" id="Numpad_6">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2302" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2304" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(585.59995,87.900024)" id="Numpad_1">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2319" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2321" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(622.19995,87.900024)" id="Numpad_2">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2325" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2327" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(658.79995,87.900024)" id="Numpad_3">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2331" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2333" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(585.59995,124.50003)" id="Pfeiltaste_rechts">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2339" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2341" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(622.19995,124.50003)" id="Numpad_0">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2345" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2347" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(658.79995,124.50003)" id="Numpad_,">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2351" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2353" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(475.79996,14.700012)" id="+">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect2470" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2472" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g id="Enter">
+                                        <path id="rect2486" d="m -314.88086,-471.46875 c -2.39939,0 -4.33008,1.93069 -4.33008,4.33008 v 21.93945 c 0,2.39939 1.93069,4.33008 4.33008,4.33008 h 14.86914 v 32.26953 c 0,2.39939 1.93264,4.33008 4.33203,4.33008 h 39.33789 c 2.39939,0 4.33008,-1.93069 4.33008,-4.33008 v -36.59961 -2.30859 -19.63086 c 0,-2.39939 -1.93069,-4.33008 -4.33008,-4.33008 z" style="display:inline;fill:none;stroke-width:2;stroke-linecap:round" class="key_outline" />
+                                        <path id="rect2488" d="m -313.76953,-466.46875 c -0.24484,0 -0.44141,0.19657 -0.44141,0.44141 v 19.71679 c 0,0.24484 0.19657,0.44141 0.44141,0.44141 h 18.75781 v 36.1582 c 0,0.24484 0.19657,0.44141 0.44141,0.44141 h 37.11719 c 0.24483,0 0.4414,-0.19657 0.4414,-0.44141 v -36.59961 -8.11718 -11.59961 c 0,-0.24484 -0.19657,-0.44141 -0.4414,-0.44141 z" style="fill:none;stroke-width:4;stroke-linecap:round" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(494.99997,51.300028)" id="#">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2642" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect2644" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="rotate(-90,-175.81156,-328.06889)" id="Shift_rechts">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3034" width="30.6" height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156" height="57.200001" width="20.6" id="rect3036" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(548.99979,87.900026)" id="Pfeiltaste_hoch">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect3040" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3042" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                    <g transform="translate(512.39996,124.50003)" id="Pfeiltaste_links">
+                                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3057" width="30.6" height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289" class="key_outline" />
+                                        <rect class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151" height="20.6" width="20.6" id="rect3059" style="fill:none;stroke-width:4;stroke-linecap:round" />
+                                    </g>
+                                    <g transform="translate(548.99979,124.50003)" id="Pfeiltaste_runter">
+                                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151" height="30.6" width="30.6" id="rect3063" style="fill:none;stroke-width:2;stroke-linecap:round" />
+                                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3065" width="20.6" height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174" class="key_color" [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+                </mat-grid-list>
+            </div>
+        </div>
+
+        <mat-grid-list [cols]="9" rowHeight="3em" class="keyboard-backlight-grid" *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
+            <mat-grid-tile [colspan]="1"></mat-grid-tile>
+            <mat-grid-tile [colspan]="3"><header i18n="@@cKeyboardBacklightBrightnessLabel">Backlight Brightness:</header></mat-grid-tile>
+            <mat-grid-tile [colspan]="1"><content class="value" style="text-align: center">{{ brightnessSlider.percent * 100 | number: '1.0-1' }}%</content></mat-grid-tile>
+            <mat-grid-tile [colspan]="3" style="overflow: visible">
+                <div class="align-top-right-container">
+                    <button mat-icon-button color="primary"
+                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max))"
+                        (mouseup)="buttonRepeatUp()"
+                        (mouseleave)="buttonRepeatUp()">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary"
+                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max))"
+                        (mouseup)="buttonRepeatUp()"
+                        (mouseleave)="buttonRepeatUp()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <mat-slider #brightnessSlider
+                        [value]="chosenBrightness"
+                        min="0"
+                        [max]="keyboardBacklightCapabilities.maxBrightness"
+                        step="1"
+                        color="primary"
+                        (input)="onBrightnessSliderInput($event)"
+                        (onTouched)="onBrightnessSliderTouched($event)"
+                        (change)="onBrightnessSliderChange($event)">
+                    </mat-slider>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="1"></mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-grid-list [cols]="9" rowHeight="20em" class="keyboard-backlight-grid" *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
+            <mat-grid-tile [colspan]="1"></mat-grid-tile>
+            <mat-grid-tile [colspan]="3">
+                <div class="align-top-container">
+                    <header i18n="@@cKeyboardBacklightColorLabel">Backlight Color:</header>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="1"></mat-grid-tile>
+            <mat-grid-tile [colspan]="3" style="overflow: visible">
+                <div class="align-top-right-container">
+                    <span class="color-visualizer"
+                    [style.background]="chosenColorHex[selectedZone]"
+                    [colorPicker]="chosenColorHex[selectedZone]"
+                    cpToggle="true"
+                    cpDialogDisplay="inline"
+                    cpAlphaChannel="disabled"
+                    (cpSliderChange)="onColorPickerInput($event, selectedZone)"
+                    (cpInputChange)="onColorPickerInput($event, selectedZone)"
+                    (cpSliderDragStart)="onColorPickerDragStart($event, selectedZone)"
+                    (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZone)"></span>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="1"></mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</mat-card>

@@ -27,6 +27,9 @@ import { ElectronService } from 'ngx-electron';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
+import { ChangeDetectorRef } from '@angular/core';
+import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
+
 
 enum InputMode {
     New, Copy, Edit
@@ -54,7 +57,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public currentInputMode: InputMode;
     public inputProfileName: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
     public inputProfileNameLabel: string;
-
     private subscriptions: Subscription = new Subscription();
 
     public stateInputArray: IStateInfo[];
@@ -78,7 +80,11 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private state: StateService,
         private utils: UtilsService,
         private router: Router,
-        private electron: ElectronService) { }
+        private electron: ElectronService,
+        private cdref: ChangeDetectorRef,
+        private dialogService: ProfileConflictDialogService,
+        ) { }
+        
 
     ngOnInit() {
         this.defineButtons();
@@ -116,6 +122,10 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    ngAfterContentChecked() {
+        this.cdref.detectChanges();
+    }
+    
     public isProfileActive(profileId: string): boolean {
         return this.state.getActiveProfile().id === profileId;
     }
@@ -199,6 +209,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     break;
             }
         } else {
+            // TODO, this should probably be changed to not use remote module and instead using a function in
+            // utils.service that opens a message box like utils.service confirmDialog()
+            // for more uniform coding style and also remote module is deprecated.
             const choice = this.electron.remote.dialog.showMessageBox(
                 this.electron.remote.getCurrentWindow(),
                 {
@@ -210,6 +223,105 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             );
         }
     }
+
+
+    public async exportProfiles()
+    {
+        try{
+            let documentsPath = await this.utils.getPath('documents');
+            let res = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
+            let profiles = this.config.getCustomProfiles();
+            let txt = JSON.stringify(profiles);
+            await this.utils.writeTextFile("" + res,txt);
+        }
+        catch(err)
+        {
+            console.log("export canceled");
+        }
+
+    }
+
+    
+    public async importProfiles()
+    {
+        this.utils.pageDisabled = true;
+        let documentsPath = await this.utils.getPath('documents');
+        let importLabel = $localize `:@@pMgrImportLabelFileDialoge:Import`; 
+        let res;
+        let txt;
+        try
+        {
+            res = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile', 'multiSelections'] });
+            txt = await this.utils.readTextFile(res[0] + "");
+        }
+        catch (err)
+        {
+            console.log("import canceled");
+            this.utils.pageDisabled = false;
+            return;
+        }
+
+        let profiles: ITccProfile[];
+        try 
+        {
+            profiles = JSON.parse(txt);
+            // console.log(profiles);
+        }
+        catch
+        {
+            console.error("not a valid JSON file");
+            this.utils.pageDisabled = false;
+            return;
+        }
+        let oldProfiles = this.config.getCustomProfiles();
+        let newProfiles: ITccProfile[] = [];
+        for (var i = 0; i < profiles.length; i++)
+        {
+            let conflictProfileIndex = oldProfiles.findIndex(x => x.id === profiles[i].id);
+            if (conflictProfileIndex !== -1)
+            {
+                let res = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
+                if(res.action === "keepNew")
+                {
+                    newProfiles = newProfiles.concat(profiles[i]);
+                } 
+                else if (res.action === "keepOld") // basically same thing as cancel
+                {
+                    continue;
+                }
+                else if (res.action === "keepBoth")
+                {
+                    let newProfile = profiles[i];
+                    newProfile.id = "generateNewID";
+                    newProfiles = newProfiles.concat(newProfile);
+                }
+                else if (res.action === "newName")
+                {
+                    let newProfile = profiles[i];
+                    newProfile.name = res.newName;
+                    newProfile.id = "generateNewID";
+                    newProfiles = newProfiles.concat(newProfile);
+                }
+            }
+            else
+            {
+                newProfiles = newProfiles.concat(profiles[i]);
+            }
+        }
+        if(newProfiles.length > 0)
+        {
+            let importSuccess = await this.config.importProfiles(newProfiles);
+            if (!importSuccess)
+            {
+                console.error("importing of Profiles failed");
+            }
+        }
+        this.utils.pageDisabled = false;
+    }
+
+    
+
+
 
     public deleteProfile(profileId): void {
         this.config.deleteCustomProfile(profileId).then((success => {
