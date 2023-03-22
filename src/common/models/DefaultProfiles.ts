@@ -43,7 +43,12 @@ const maxEnergySave: ITccProfile = {
     description: '',
     display: {
         brightness: 40,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: 60,
+        useRefRate: false,
+        resolutionX: 1920,
+        resolutionY: 1080,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -74,7 +79,12 @@ const silent: ITccProfile = {
     description: '',
     display: {
         brightness: 50,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: 60,
+        useRefRate: false,
+        resolutionX: 1920,
+        resolutionY: 1080,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -105,7 +115,12 @@ const office: ITccProfile = {
     description: '',
     display: {
         brightness: 60,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: 60,
+        useRefRate: false,
+        resolutionX: 1920,
+        resolutionY: 1080,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -136,7 +151,13 @@ const highPerformance: ITccProfile = {
     description: '',
     display: {
         brightness: 60,
-        useBrightness: true
+        useBrightness: true,
+        // TODO which defaults would make most sense?
+        refreshRate: 60,
+        useRefRate: false,
+        resolutionX: 1920,
+        resolutionY: 1080,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,

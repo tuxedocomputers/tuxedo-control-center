@@ -19,6 +19,7 @@
 import * as dbus from 'dbus-next';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 
 export class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
@@ -81,6 +82,34 @@ export class TccDBusController {
         } catch (err) {
             return new FanData();
         }
+    }
+
+    async getDisplayModes(): Promise<IDisplayFreqRes | string>
+    {
+        try {
+            let modes = await this.interface.getDisplayModes();
+            console.log(modes);
+            return modes;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    // TODO ok we should not need those, as everything should be handled by tccd directly? maybe?
+    // if we need them we need to add the variables to them.
+    SetDisplayRefresh()
+    {
+        this.interface.SetDisplayRefresh();
+    }
+
+    SetDisplayResolution()
+    {
+        this.interface.SetDisplayResolution();
+    }
+
+    SetDisplaymode()
+    {
+        this.interface.SetDisplaymode();
     }
 
     async getFanDataGPU2(): Promise<FanData> {

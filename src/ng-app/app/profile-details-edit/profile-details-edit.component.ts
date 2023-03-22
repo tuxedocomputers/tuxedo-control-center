@@ -31,6 +31,7 @@ import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -200,7 +201,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             }
         ));
-
+            // TODO do we need it as a subscription too? 
+            // I mean I don't really expect it to change, unless we want to add the functionality to 
+            // use all monitors instead of just the laptop screen?
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
@@ -489,6 +492,30 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public getFanProfileNames(): string[] {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
+    }
+
+    public getActiveDisplayMode(): IDisplayMode
+    {
+        return this.tccDBus.displayModes.activeMode;
+    }
+
+    public getDisplayModes(): IDisplayMode[]
+    {
+        return this.tccDBus.displayModes.displayModes;
+    }
+
+    public getRefreshRates(): number[]
+    {
+        let displayModes = this.getDisplayModes();
+        let activeMode = this.tccDBus.displayModes.activeMode;
+        for (let i = 0; i < displayModes.length; i++)
+        {
+            let mode = displayModes[i];
+            if (mode.xResolution === activeMode.xResolution && mode.yResolution === activeMode.yResolution)
+            {
+                return mode.refreshRates;
+            }
+        }
     }
 
     public governorSelectionChange() {
