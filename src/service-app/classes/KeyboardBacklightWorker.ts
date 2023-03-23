@@ -132,8 +132,8 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             this.tccd.settings.keyboardBacklightColor = [];
             for (let i: number = 0; i < keyboardBacklightStatesNew.length ; ++i) {
                 this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
-                                                                (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
-                                                                (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
+                                                               (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
+                                                               (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
             }
             await this.tccd.config.writeSettingsAsync(this.tccd.settings);
         }
