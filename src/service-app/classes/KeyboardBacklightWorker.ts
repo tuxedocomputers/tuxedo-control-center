@@ -74,10 +74,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
 
         if (fileOK(this.ledsWhiteOnly + "/max_brightness")) {
+            console.log("Detected white only keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsWhiteOnly + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
         else if (this.ledsRGBZones.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            console.log("Detected RGB zone keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
             this.keyboardBacklightCapabilities.maxRed = 0xff;
             this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -87,10 +89,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                 this.keyboardBacklightCapabilities.zones++;
             }
             if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
+                console.log("Detected RGB 3 zone keyboard backlight");
                 this.keyboardBacklightCapabilities.zones++;
             }
         }
         else if (this.ledsRGBZones.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            console.log("Detected per-key RGB keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
             this.keyboardBacklightCapabilities.maxRed = 0xff;
             this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -98,6 +102,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             this.keyboardBacklightCapabilities.zones = this.ledsRGBZones.length;
         }
         else {
+            console.log("Detected no keyboard backlight");
             this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(undefined);
             return;
         }
