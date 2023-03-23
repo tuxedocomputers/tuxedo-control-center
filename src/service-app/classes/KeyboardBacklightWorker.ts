@@ -51,10 +51,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     }
 
     private updateLEDSPerKey(): void {
-        let iteKeyboardDevices: Array<string> =
+        let ledsPerKey = [];
+        let iteKeyboardDevices: Array<string>;
+
+        iteKeyboardDevices =
             getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
                 .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
-        let ledsPerKey = []
         for (const iteKeyboardDevice of iteKeyboardDevices) {
             if (fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds")) {
                 ledsPerKey = ledsPerKey.concat(
@@ -63,6 +65,19 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                         .map(name => "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds/" + name));
             }
         }
+
+        iteKeyboardDevices =
+            getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
+                .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
+        for (const iteKeyboardDevice of iteKeyboardDevices) {
+            if (fileOK("/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds")) {
+                ledsPerKey = ledsPerKey.concat(
+                    getDirectories("/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds")
+                        .filter(name => name.includes("rgb:kbd_backlight"))
+                        .map(name => "/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds/" + name));
+            }
+        }
+
         if (ledsPerKey.length > 0) {
             this.ledsRGBZones = ledsPerKey;
         }
