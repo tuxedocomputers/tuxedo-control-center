@@ -290,12 +290,9 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer "fully automated installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur 3 Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            </target>
+      <trans-unit id="59f767ae4a7773ab07970a8ea52a9407899541c0" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="needs-translation"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">147,148</context>
@@ -860,7 +857,7 @@ Germany
 Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
 E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
+VAT No.: DE815420876
 WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
@@ -880,6 +877,7 @@ WEEE-Reg.-Nr.: DE 93420497
 eingetragen im Handelsregister des Amtsgerichtes Augsburg
 Handelsregisternummer HRB 27755
         </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">127,140</context>
@@ -1328,7 +1326,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Beleuchtungshelligkeit:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">475</context>
+          <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
@@ -1336,7 +1334,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Beleuchtungsfarbe:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">510</context>
+          <context context-type="linenumber">512</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
