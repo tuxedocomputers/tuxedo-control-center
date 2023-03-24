@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
-        <target state="needs-translation"/>
+        <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1973,7 +1973,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipBlock" datatype="html">
         <source>Block this module</source>
-        <target state="needs-translation"/>
+        <target state="translated">Modul blockieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -2101,7 +2101,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cTomteGuiTomteHeader" datatype="html">
         <source>TUXEDO Tomte</source>
-        <target state="needs-translation"/>
+        <target state="translated">TUXEDO Tomte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
           <context context-type="linenumber">22</context>
