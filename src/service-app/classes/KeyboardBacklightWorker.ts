@@ -51,10 +51,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     }
 
     private updateLEDSPerKey(): void {
-        let iteKeyboardDevices: Array<string> =
+        let ledsPerKey = [];
+        let iteKeyboardDevices: Array<string>;
+
+        iteKeyboardDevices =
             getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
                 .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
-        let ledsPerKey = []
         for (const iteKeyboardDevice of iteKeyboardDevices) {
             if (fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds")) {
                 ledsPerKey = ledsPerKey.concat(
@@ -63,6 +65,19 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                         .map(name => "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds/" + name));
             }
         }
+
+        iteKeyboardDevices =
+            getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
+                .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
+        for (const iteKeyboardDevice of iteKeyboardDevices) {
+            if (fileOK("/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds")) {
+                ledsPerKey = ledsPerKey.concat(
+                    getDirectories("/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds")
+                        .filter(name => name.includes("rgb:kbd_backlight"))
+                        .map(name => "/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds/" + name));
+            }
+        }
+
         if (ledsPerKey.length > 0) {
             this.ledsRGBZones = ledsPerKey;
         }
@@ -74,10 +89,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
 
         if (fileOK(this.ledsWhiteOnly + "/max_brightness")) {
+            console.log("Detected white only keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsWhiteOnly + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
         else if (this.ledsRGBZones.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            console.log("Detected RGB zone keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
             this.keyboardBacklightCapabilities.maxRed = 0xff;
             this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -87,10 +104,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
                 this.keyboardBacklightCapabilities.zones++;
             }
             if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
+                console.log("Detected RGB 3 zone keyboard backlight");
                 this.keyboardBacklightCapabilities.zones++;
             }
         }
         else if (this.ledsRGBZones.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            console.log("Detected per-key RGB keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
             this.keyboardBacklightCapabilities.maxRed = 0xff;
             this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -98,6 +117,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             this.keyboardBacklightCapabilities.zones = this.ledsRGBZones.length;
         }
         else {
+            console.log("Detected no keyboard backlight");
             this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(undefined);
             return;
         }
@@ -112,8 +132,8 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             this.tccd.settings.keyboardBacklightColor = [];
             for (let i: number = 0; i < keyboardBacklightStatesNew.length ; ++i) {
                 this.tccd.settings.keyboardBacklightColor[i] = (keyboardBacklightStatesNew[i].red << 24 >>> 0) +
-                                                                (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
-                                                                (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
+                                                               (keyboardBacklightStatesNew[i].green << 16 >>> 0) +
+                                                               (keyboardBacklightStatesNew[i].blue << 8 >>> 0);
             }
             await this.tccd.config.writeSettingsAsync(this.tccd.settings);
         }
