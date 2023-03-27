@@ -116,7 +116,7 @@ export class ConfigService implements OnDestroy {
     }
 
     get cpuSettingsDisabledMessage(): string {
-        return $localize `:@@messageCPUSettingsOff:CPU settings deactivated in Tools→Global\u00A0Settings`;
+        return $localize `:@@messageCPUSettingsOff:CPU frequency control deactivated in Tools→Global\u00A0Settings`;
     }
 
     get fanControlDisabledMessage(): string {

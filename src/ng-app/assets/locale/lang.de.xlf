@@ -1035,7 +1035,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="f214da8cdd03f1e7c109616e8d71c770db16356c" datatype="html">
         <source>On deactivate, CPU frequency control is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
-        <target phase-name="approval-1" state="translated">Beim Deaktivieren werden die CPU-Frequenzeinstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
+        <target phase-name="approval-1" state="translated">Beim Deaktivieren werden die CPU-Frequenzeinstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
@@ -3195,8 +3195,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU settings deactivated in Tools→Global Settings</source>
-        <target state="translated">CPU-Einstellungen deaktiviert in Tools→Globale Einstellungen</target>
+        <source>CPU frequency control deactivated in Tools→Global Settings</source>
+        <target state="translated">CPU-Frequenzeinstellungen deaktiviert in Tools→Globale Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">119</context>
