@@ -58,11 +58,13 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
                 .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            if (fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds")) {
+            let path = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds"
+            if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
-                    getDirectories("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds")
+                    getDirectories(path)
                         .filter(name => name.includes("rgb:kbd_backlight"))
-                        .map(name => "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds/" + name));
+                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map(name => path + "/" + name));
             }
         }
 
@@ -70,11 +72,13 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
                 .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            if (fileOK("/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds")) {
+            let path = "/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds"
+            if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
-                    getDirectories("/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds")
+                    getDirectories(path)
                         .filter(name => name.includes("rgb:kbd_backlight"))
-                        .map(name => "/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds/" + name));
+                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map(name => path + "/" + name));
             }
         }
 
