@@ -482,7 +482,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <h4 i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</h4>
 
-                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                    [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
+                    [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage : ''"
+                >
                     <div formGroupName="cpu">
                         <!-- Number of logical cores -->
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
