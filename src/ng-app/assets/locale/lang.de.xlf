@@ -2,126 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="de">
     <body>
-      <trans-unit id="cProfMgrInvalidNameTitle" datatype="html" approved="yes">
-        <source>Invalid input</source>
-        <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">218</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrInvalidNameMessage" datatype="html" approved="yes">
-        <source>A name for the profile is required</source>
-        <target phase-name="approval-1" state="signed-off">Ein Name für das Profil ist nötig</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">219</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
-        <source>Import</source>
-        <target state="translated">Importieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">249</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrNewProfileLabel" datatype="html" approved="yes">
-        <source>New profile</source>
-        <target phase-name="approval-1" state="signed-off">Neues Profil</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">356</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrNewButtonTooltip" datatype="html" approved="yes">
-        <source>Create a new profile with default settings</source>
-        <target phase-name="approval-1" state="signed-off">Ein neues Profil mit Standardeinstellungen erstellen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">363</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrCopyProfileLabel" datatype="html" approved="yes">
-        <source>Copy this profile</source>
-        <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
-          <context context-type="linenumber">372</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrTitle" datatype="html" approved="yes">
-        <source>Profiles</source>
-        <target phase-name="approval-1" state="signed-off">Profile</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrButtonImportTooltip" datatype="html">
-        <source>Import Profile Settings</source>
-        <target state="translated">Profile importieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrButtonExportTooltip" datatype="html">
-        <source>Export Profile Settings</source>
-        <target state="translated">Profile exportieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrFilterAll" datatype="html" approved="yes">
-        <source>All</source>
-        <target phase-name="approval-1" state="signed-off">Alle</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrFilterPreset" datatype="html" approved="yes">
-        <source>Preset</source>
-        <target phase-name="approval-1" state="signed-off">Voreinstellung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrFilterCustom" datatype="html" approved="yes">
-        <source>Custom</source>
-        <target phase-name="approval-1" state="signed-off">Individuell</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrFilterUsed" datatype="html" approved="yes">
-        <source>In use</source>
-        <target phase-name="approval-1" state="signed-off">In Verwendung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
-        <source>Save</source>
-        <target phase-name="approval-1" state="signed-off">Speichern</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
-        <source>Cancel</source>
-        <target phase-name="approval-1" state="signed-off">Abbrechen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
-          <context context-type="linenumber">71</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8708ca72ec9216a3a521940eeef0be356eebb8dd" datatype="html">
         <source>TUXEDO Support</source>
         <target phase-name="approval-1" state="signed-off">TUXEDO Support</target>
@@ -375,6 +255,126 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">158</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrInvalidNameTitle" datatype="html" approved="yes">
+        <source>Invalid input</source>
+        <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrInvalidNameMessage" datatype="html" approved="yes">
+        <source>A name for the profile is required</source>
+        <target phase-name="approval-1" state="signed-off">Ein Name für das Profil ist nötig</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
+        <source>Import</source>
+        <target state="translated">Importieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrNewProfileLabel" datatype="html" approved="yes">
+        <source>New profile</source>
+        <target phase-name="approval-1" state="signed-off">Neues Profil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">356</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrNewButtonTooltip" datatype="html" approved="yes">
+        <source>Create a new profile with default settings</source>
+        <target phase-name="approval-1" state="signed-off">Ein neues Profil mit Standardeinstellungen erstellen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">363</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrCopyProfileLabel" datatype="html" approved="yes">
+        <source>Copy this profile</source>
+        <target phase-name="approval-1" state="signed-off">Dieses Profil kopieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.ts</context>
+          <context context-type="linenumber">372</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrTitle" datatype="html" approved="yes">
+        <source>Profiles</source>
+        <target phase-name="approval-1" state="signed-off">Profile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonImportTooltip" datatype="html">
+        <source>Import Profile Settings</source>
+        <target state="translated">Profile importieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrButtonExportTooltip" datatype="html">
+        <source>Export Profile Settings</source>
+        <target state="translated">Profile exportieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrFilterAll" datatype="html" approved="yes">
+        <source>All</source>
+        <target phase-name="approval-1" state="signed-off">Alle</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrFilterPreset" datatype="html" approved="yes">
+        <source>Preset</source>
+        <target phase-name="approval-1" state="signed-off">Voreinstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrFilterCustom" datatype="html" approved="yes">
+        <source>Custom</source>
+        <target phase-name="approval-1" state="signed-off">Individuell</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrFilterUsed" datatype="html" approved="yes">
+        <source>In use</source>
+        <target phase-name="approval-1" state="signed-off">In Verwendung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
+        <source>Save</source>
+        <target phase-name="approval-1" state="signed-off">Speichern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
+        <source>Cancel</source>
+        <target phase-name="approval-1" state="signed-off">Abbrechen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ProfOverviewTileMenuCopy" datatype="html">
@@ -3195,27 +3195,46 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU frequency control deactivated in Tools→Global Settings</source>
-        <target state="translated">CPU-Frequenzeinstellungen deaktiviert in Tools→Globale Einstellungen</target>
+        <source>CPU frequency control deactivated in Settings→Global profile settings</source>
+        <target state="translated">CPU-Frequenzeinstellungen deaktiviert in Einstellungen→Globale Profileinstellungen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFanControlOff" datatype="html">
-        <source>Fan control deactivated in Tools→Global Settings</source>
-        <target state="translated">Lüftersteuerung deaktiviert in Tools→Globale Einstellungen</target>
+        <source>Fan control deactivated in Settings→Global profile settings</source>
+        <target state="translated">Lüftersteuerung deaktiviert in Einstellungen→Globale Profileinstellungen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageKeyboardBacklightControlOff" datatype="html">
-        <source>Keyboard backlight control deactivated in Tools→Global Settings</source>
-        <target state="translated">Tastaturbeleuchtungssteuerung deaktiviert in Tools→Globale Einstellungen</target>
+        <source>Keyboard backlight control deactivated in Settings→Global profile settings</source>
+        <target state="translated">Tastaturbeleuchtungssteuerung deaktiviert in Einstellungen→Globale Profileinstellungen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
+        <source>This feature is not supported on your model.</source>
+        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
+        <source>This feature is not supported on your model.</source>
+        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
@@ -3248,22 +3267,6 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
-        <source>This feature is not supported on your model.</source>
-        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
-        <source>This feature is not supported on your model.</source>
-        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
     </body>
