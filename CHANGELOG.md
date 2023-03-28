@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2] - 2023-03-28
+### Fixed
+- Keyboard backlight detection for certain devices like Stellaris and Fusion
+- Keyboard backlight paint order
+- Various text and translation adjustments
+- Error on acpi-cpufreq boost parameter validation
+- Now correctly blurs cpu freq settings when globally disabled
+
 ## [2.0.0] - 2023-03-22
 ### Added
 - Keyboard backlight GUI (Tools => Keyboard backlight)
