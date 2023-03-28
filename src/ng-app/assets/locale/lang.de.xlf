@@ -2,6 +2,261 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="de">
     <body>
+      <trans-unit id="8708ca72ec9216a3a521940eeef0be356eebb8dd" datatype="html">
+        <source>TUXEDO Support</source>
+        <target phase-name="approval-1" state="signed-off">TUXEDO Support</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5bd52d71067c5fc25f6b44e4f061939c021b6401" datatype="html">
+        <source>You got a problem with your TUXEDO device?</source>
+        <target phase-name="approval-1" state="signed-off">Sie haben ein Problem mit Ihrem TUXEDO Gerät?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="402f4bfdc7f2d89d52d49474eb0a02c3fe7fd01f" datatype="html">
+        <source>Then please contact us by phone or use our online support.</source>
+        <target phase-name="approval-1" state="signed-off">Dann kontaktieren Sie uns bitte per Telefon oder nutzen Sie unseren Onlinesupport.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportButtonOnline" datatype="html" approved="yes">
+        <source>TUXEDO online support</source>
+        <target phase-name="approval-1" state="translated">TUXEDO Onlinesupport</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="462d1dc78e0991a2763d1e637fca6d1046eb7eb2" datatype="html">
+        <source>System diagnostics</source>
+        <target phase-name="approval-1" state="translated">Systemdiagnose</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target phase-name="approval-1" state="needs-adaptation">
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bei komplexeren Problemstellungen kann es nötig sein Diagnosedaten Ihres PCs auszuwerten.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Unser Diagnoseprogramm sammelt KEINERLEI persönliche Daten und KEINE Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">58,59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef02aa5c00de3a97c06c402cfbf6a764772e0947" datatype="html">
+        <source>For further information please click</source>
+        <target phase-name="approval-1" state="translated">Für weitere Informationen klicken Sie bitte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportPleaseEnterTicketnumber" datatype="html">
+        <source>Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </source>
+        <target phase-name="approval-1" state="translated">Bitte geben Sie die Ticketnummer Ihrer Supportanfrage ein. Sollten Sie noch keine Anfrage gestellt haben, besuchen Sie bitte das entsprechende </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f35774daf67e2f0a41f46b993cf1703729ce6eb" datatype="html">
+        <source>online form</source>
+        <target phase-name="approval-1" state="translated">Onlineformular.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportTicketNumberInputPlaceholder" datatype="html">
+        <source>Ticket number</source>
+        <target state="translated">Ticketnummer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportTicketStepperButtonNext" datatype="html">
+        <source>Next</source>
+        <target state="translated">Weiter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8e5f0d8f9411776d11be35b5ad8fde18aeace40" datatype="html">
+        <source>Step2: Download and run system info collection program</source>
+        <target phase-name="approval-1" state="translated">Schritt 2: Diagnoseprogramm herunterladen und ausführen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target phase-name="approval-1" state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm. Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportSysInfoButtonStart" datatype="html" approved="yes">
+        <source>Start</source>
+        <target phase-name="approval-1" state="signed-off">Start</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cce829a702e81f886537f80d26a35c42ca490493" datatype="html">
+        <source>Step 3: Done</source>
+        <target state="translated">Schritt 3: Erledigt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportSysInfoTextDone1" datatype="html">
+        <source>Your system diagnostics data has been successfully sent.</source>
+        <target state="translated">Ihre Diagnoseinformationen wurden erfolgreich übermittelt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportSysInfoTextDone2" datatype="html">
+        <source>We will come back to you as soon as this has been evaluated.</source>
+        <target state="translated">Wir melden uns, sobald diese geprüft wurden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05334eb54d90e0decd20459303745a36c8e2fb6e" datatype="html">
+        <source>Remote support</source>
+        <target phase-name="approval-1" state="translated">Fernwartungsupport</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt; "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target phase-name="approval-1" state="needs-adaptation">
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Lässt sich Ihr Problem mittels der Systemdiagnose nicht lösen, bieten wir Ihnen gerne eine kostenlose Live-Unterstützung per Fernwartungssoftware <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> an.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Auf diese Weise kann sich ein Supportmitarbeiter online auf Ihren TUXEDO Computer verbinden und mit Ihnen zusammen das Problem lösen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Der Support erhält ausschließlich temporär und in Ihrem Beisein Zugriff auf Ihr System. Es werden keinerlei persönliche Daten erfasst!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">120,122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2c9a2834e262fceffd58430cbfbbc0940f4414d" datatype="html">
+        <source>Restore system</source>
+        <target phase-name="approval-1" state="translated">Systemwiederherstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="59f767ae4a7773ab07970a8ea52a9407899541c0" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer "Fully Automated Installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur drei Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">147,148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6f4c3c56f07426469538deb72dab3e760f1b6cc4" datatype="html">
+        <source>Step1: Input ticket number</source>
+        <target phase-name="approval-1" state="translated">Schritt 1: Tragen Sie bitte Ihre Ticketnummer ein</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportTicketNumberInvalid" datatype="html">
+        <source>Ticket number may only contain numbers, starts with 990 and is 9 digits long.</source>
+        <target phase-name="approval-1" state="translated">Die Ticketnummer darf nur Zahlen enthalten, sie startet mit 990 und ist 9 Ziffern lang.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportAnydeskInstallButton" datatype="html" approved="yes">
+        <source>Install Anydesk</source>
+        <target phase-name="approval-1" state="translated">AnyDesk installieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportAnydeskRemoveButton" datatype="html" approved="yes">
+        <source>Remove Anydesk</source>
+        <target phase-name="approval-1" state="translated">AnyDesk entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportAnydeskProgressButton" datatype="html" approved="yes">
+        <source>Checking</source>
+        <target phase-name="approval-1" state="signed-off">Überprüfe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportAnydeskStartButton" datatype="html" approved="yes">
+        <source>Start Anydesk</source>
+        <target phase-name="approval-1" state="translated">AnyDesk starten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportWebFAICreatorInstallButton" datatype="html">
+        <source>Install WebFAI Creator</source>
+        <target phase-name="approval-1" state="translated">WebFAI Creator installieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">153</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportWebFAICreatorRemoveButton" datatype="html">
+        <source>Remove WebFAI Creator</source>
+        <target phase-name="approval-1" state="translated">WebFAI Creator entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportWebFAICreatorProgressButton" datatype="html">
+        <source>Checking</source>
+        <target phase-name="approval-1" state="signed-off">Überprüfe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cSupportWebFAICreatorStartButton" datatype="html">
+        <source>Start WebFAI Creator</source>
+        <target phase-name="approval-1" state="translated">WebFAI Creator starten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrInvalidNameTitle" datatype="html" approved="yes">
         <source>Invalid input</source>
         <target phase-name="approval-1" state="signed-off">Ungültige Eingabe</target>
@@ -120,265 +375,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-manager/profile-manager.component.html</context>
           <context context-type="linenumber">71</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8708ca72ec9216a3a521940eeef0be356eebb8dd" datatype="html">
-        <source>TUXEDO Support</source>
-        <target phase-name="approval-1" state="signed-off">TUXEDO Support</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5bd52d71067c5fc25f6b44e4f061939c021b6401" datatype="html">
-        <source>You got a problem with your TUXEDO device?</source>
-        <target phase-name="approval-1" state="signed-off">Sie haben ein Problem mit Ihrem TUXEDO Gerät?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="402f4bfdc7f2d89d52d49474eb0a02c3fe7fd01f" datatype="html">
-        <source>Then please contact us by phone or use our online support.</source>
-        <target phase-name="approval-1" state="signed-off">Dann kontaktieren Sie uns bitte per Telefon oder nutzen Sie unseren Onlinesupport.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportButtonOnline" datatype="html" approved="yes">
-        <source>TUXEDO online support</source>
-        <target phase-name="approval-1" state="translated">TUXEDO Onlinesupport</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="462d1dc78e0991a2763d1e637fca6d1046eb7eb2" datatype="html">
-        <source>System diagnostics</source>
-        <target phase-name="approval-1" state="translated">Systemdiagnose</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="51dfefab938c955d93ce9f22a0232660dc4be0d9" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>For more complex problems it may be necessary to evaluate diagnostic data from your PC.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bei komplexeren Problemstellungen kann es nötig sein Diagnosedaten Ihres PCs auszuwerten.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Unser Diagnoseprogramm sammelt KEINERLEI persönliche Daten und KEINE Zugangsdaten! Es werden lediglich Informationen über Ihre Hard- und Softwarekonfiguration erfasst.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">58,59</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ef02aa5c00de3a97c06c402cfbf6a764772e0947" datatype="html">
-        <source>For further information please click</source>
-        <target phase-name="approval-1" state="translated">Für weitere Informationen klicken Sie bitte</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportPleaseEnterTicketnumber" datatype="html">
-        <source>Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </source>
-        <target phase-name="approval-1" state="translated">Bitte geben Sie die Ticketnummer Ihrer Supportanfrage ein. Sollten Sie noch keine Anfrage gestellt haben, besuchen Sie bitte das entsprechende </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0f35774daf67e2f0a41f46b993cf1703729ce6eb" datatype="html">
-        <source>online form</source>
-        <target phase-name="approval-1" state="translated">Onlineformular.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportTicketNumberInputPlaceholder" datatype="html">
-        <source>Ticket number</source>
-        <target state="translated">Ticketnummer</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">79</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportTicketStepperButtonNext" datatype="html">
-        <source>Next</source>
-        <target state="translated">Weiter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">81</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c8e5f0d8f9411776d11be35b5ad8fde18aeace40" datatype="html">
-        <source>Step2: Download and run system info collection program</source>
-        <target phase-name="approval-1" state="translated">Schritt 2: Diagnoseprogramm herunterladen und ausführen.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">89</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1e8f9d90450641fb009264a225a15398fbc10a66" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="needs-adaptation"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Bitte starten Sie über die nachfolgende Schaltfläche unser Diagnoseprogramm.
-Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnummer an unseren Support übermittelt.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">91</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportSysInfoButtonStart" datatype="html" approved="yes">
-        <source>Start</source>
-        <target phase-name="approval-1" state="signed-off">Start</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">95</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cce829a702e81f886537f80d26a35c42ca490493" datatype="html">
-        <source>Step 3: Done</source>
-        <target state="translated">Schritt 3: Erledigt</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportSysInfoTextDone1" datatype="html">
-        <source>Your system diagnostics data has been successfully sent.</source>
-        <target state="translated">Ihre Diagnoseinformationen wurden erfolgreich übermittelt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">100</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportSysInfoTextDone2" datatype="html">
-        <source>We will come back to you as soon as this has been evaluated.</source>
-        <target state="translated">Wir melden uns, sobald diese geprüft wurden.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">101</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="05334eb54d90e0decd20459303745a36c8e2fb6e" datatype="html">
-        <source>Remote support</source>
-        <target phase-name="approval-1" state="translated">Fernwartungsupport</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">114</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d183843ddd6e6f1702c2dfa0f98d5a1164164105" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt; "/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Lässt sich Ihr Problem mittels der Systemdiagnose nicht lösen, bieten wir Ihnen gerne eine kostenlose Live-Unterstützung per Fernwartungssoftware <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> an.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Auf diese Weise kann sich ein Supportmitarbeiter online auf Ihren TUXEDO Computer verbinden und mit Ihnen zusammen das Problem lösen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Der Support erhält ausschließlich temporär und in Ihrem Beisein Zugriff auf Ihr System. Es werden keinerlei persönliche Daten erfasst!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">120,122</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c2c9a2834e262fceffd58430cbfbbc0940f4414d" datatype="html">
-        <source>Restore system</source>
-        <target phase-name="approval-1" state="translated">Systemwiederherstellung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">141</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="75543d3b8b0227114a087bb22475b1a29f30acf3" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="needs-adaptation">
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer "fully automated installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur 3 Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-            </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">147,148</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6f4c3c56f07426469538deb72dab3e760f1b6cc4" datatype="html">
-        <source>Step1: Input ticket number</source>
-        <target phase-name="approval-1" state="translated">Schritt 1: Tragen Sie bitte Ihre Ticketnummer ein</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportTicketNumberInvalid" datatype="html">
-        <source>Ticket number may only contain numbers, starts with 990 and is 9 digits long.</source>
-        <target phase-name="approval-1" state="translated">Die Ticketnummer darf nur Zahlen enthalten, sie startet mit 990 und ist 9 Ziffern lang.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">84</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskInstallButton" datatype="html" approved="yes">
-        <source>Install Anydesk</source>
-        <target phase-name="approval-1" state="translated">AnyDesk installieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">127</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskRemoveButton" datatype="html" approved="yes">
-        <source>Remove Anydesk</source>
-        <target phase-name="approval-1" state="translated">AnyDesk entfernen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">128</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskProgressButton" datatype="html" approved="yes">
-        <source>Checking</source>
-        <target phase-name="approval-1" state="signed-off">Überprüfe</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">129</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskStartButton" datatype="html" approved="yes">
-        <source>Start Anydesk</source>
-        <target phase-name="approval-1" state="translated">AnyDesk starten</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">132</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportWebFAICreatorInstallButton" datatype="html">
-        <source>Install WebFAI Creator</source>
-        <target phase-name="approval-1" state="translated">WebFAI Creator installieren</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">153</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportWebFAICreatorRemoveButton" datatype="html">
-        <source>Remove WebFAI Creator</source>
-        <target phase-name="approval-1" state="translated">WebFAI Creator entfernen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">154</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportWebFAICreatorProgressButton" datatype="html">
-        <source>Checking</source>
-        <target phase-name="approval-1" state="signed-off">Überprüfe</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">155</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportWebFAICreatorStartButton" datatype="html">
-        <source>Start WebFAI Creator</source>
-        <target phase-name="approval-1" state="translated">WebFAI Creator starten</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ProfOverviewTileMenuCopy" datatype="html">
@@ -718,7 +714,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Anzahl der logischen Kerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">489</context>
+          <context context-type="linenumber">492</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
@@ -726,7 +722,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">Maximale Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">509</context>
+          <context context-type="linenumber">512</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
@@ -734,7 +730,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">513</context>
+          <context context-type="linenumber">516</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
@@ -742,7 +738,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="signed-off">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">514</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html" approved="yes">
@@ -750,7 +746,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="translated">Minimale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">528</context>
+          <context context-type="linenumber">531</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html" approved="yes">
@@ -758,7 +754,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
         <target phase-name="approval-1" state="translated">Maximale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">580</context>
+          <context context-type="linenumber">583</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
@@ -803,7 +799,7 @@ Die Informationen werden anschließend automatisch zusammen mit Ihrer Ticketnumm
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
         <source>Info</source>
-        <target state="needs-translation"/>
+        <target state="translated">Info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
           <context context-type="linenumber">21</context>
@@ -860,7 +856,7 @@ Germany
 Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
 E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876 
+VAT No.: DE815420876
 WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
@@ -1014,8 +1010,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCPUSettingsLabel" datatype="html">
-        <source>CPU Settings</source>
-        <target phase-name="approval-1" state="translated">CPU-Einstellungen</target>
+        <source>CPU Frequency Control</source>
+        <target phase-name="approval-1" state="translated">CPU-Frequenzeinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1037,9 +1033,9 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="243c85168792d2dacd3e7a9868767d947b7df7ac" datatype="html">
-        <source>On deactivate, CPU settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
-        <target phase-name="approval-1" state="needs-adaptation">Beim Deaktivieren werden die CPU-Einstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
+      <trans-unit id="f214da8cdd03f1e7c109616e8d71c770db16356c" datatype="html">
+        <source>On deactivate, CPU frequency control is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</source>
+        <target phase-name="approval-1" state="translated">Beim Deaktivieren werden die CPU-Frequenzeinstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1175,7 +1171,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cGlobalSettingsYCbCr420WorkaroundExplanation1" datatype="html">
         <source>This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable.</source>
-        <target phase-name="approval-1" state="translated">Diese Einstellung kann Flackern bei bestimmten HDMI-Kabeln bei 4k@60Hz beheben. Dafür wird eine verlustbehaftete Kompremierung verwendet um die Datenrate über das Kabel zu senken.</target>
+        <target phase-name="approval-1" state="translated">Diese Einstellung kann Flackern bei bestimmten HDMI-Kabeln bei 4k@60Hz beheben. Dafür wird eine verlustbehaftete Kompression verwendet, um die Datenrate über das Kabel zu senken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">133</context>
@@ -1225,9 +1221,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cShutdownTimerInformations" datatype="html">
         <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting "Delete Time" below.</source>
-        <target phase-name="approval-1" state="needs-adaptation">Dies setzt einen Einmalzeitpunkt zum Herunterfahren.
-        Er wird beim nächsten Hochfahren automatisch oder wenn sie unten "Zeit löschen" auswählen gelöscht.
-        </target>
+        <target phase-name="approval-1" state="translated">Dies setzt einen Einmalzeitpunkt zum Herunterfahren. Er wird beim nächsten Hochfahren automatisch, oder wenn Sie unten "Zeit löschen" auswählen, gelöscht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -1309,7 +1303,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cKeyboardBacklightDescription" datatype="html">
         <source>Control the Keyboard Backlight</source>
-        <target phase-name="approval-1" state="translated">Steueren sie die Tastaturbeleuchtung</target>
+        <target phase-name="approval-1" state="translated">Steuern Sie die Tastaturbeleuchtung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">27</context>
@@ -1328,7 +1322,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Beleuchtungshelligkeit:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">475</context>
+          <context context-type="linenumber">477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
@@ -1336,7 +1330,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Beleuchtungsfarbe:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">510</context>
+          <context context-type="linenumber">512</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
@@ -1377,10 +1371,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
         <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="translated">
-        <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
-        <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur während der installation ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> neu installieren und bei der Betriebssystemauswahl eine Option wählen die mit "crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn Sie Ihren PC neu installieren werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-    </target>
+        <target phase-name="approval-1" state="translated"><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur während der Installation Ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO Book mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>neu installieren und bei der Betriebssystemauswahl eine Option wählen, die mit "Crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn Sie Ihr Notebook neu installieren, werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -1388,9 +1379,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cryptinstallinformation" datatype="html">
         <source>This will change the crypt password of all encrypted partitions at once. It only works if all encrypted partitions have the same password, which is the default on a WebFAI or Factory installation of your TUXEDO device. It will abort otherwise, leaving the current configuration untouched.</source>
-        <target phase-name="approval-1" state="needs-adaptation">Dies ändert gleichzeitig das Verschlüsselungspasswort aller verschlüsselten Partitionen. Es
-            funktioniert nur wenn alle Partitionen das gleiche Passwort haben, was der Standard bei WebFAI- oder Fabrikinstallation Ihres TUXEDO Gerätes
-            ist. Anderenfalls wird abgebrochen, sodas die aktuelle Konfiguration unberührt bleibt.</target>
+        <target phase-name="approval-1" state="translated">Dies ändert gleichzeitig das Verschlüsselungspasswort aller verschlüsselten Partitionen. Es funktioniert nur wenn alle Partitionen das gleiche Passwort haben, was der Standard bei WebFAI- oder Fabrikinstallation Ihres TUXEDO Gerätes ist. Anderenfalls wird abgebrochen, sodass die aktuelle Konfiguration unberührt bleibt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">29,31</context>
@@ -1430,7 +1419,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cryptPasswordInputCurrentCrypt" datatype="html">
         <source> Please enter your current crypt password </source>
-        <target phase-name="approval-1" state="needs-adaptation">Bitte geben Sie ihr aktuelles Verschlüsselungspasswort ein</target>
+        <target phase-name="approval-1" state="translated">Bitte geben Sie Ihr aktuelles Verschlüsselungspasswort ein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">44,45</context>
@@ -1438,7 +1427,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cryptPasswordInputNewCrypt" datatype="html">
         <source> Please enter your new crypt password </source>
-        <target phase-name="approval-1" state="needs-adaptation">Bitte geben Sie ihr neues Verschlüsselungspasswort ein</target>
+        <target phase-name="approval-1" state="translated">Bitte geben Sie Ihr neues Verschlüsselungspasswort ein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">53,54</context>
@@ -1478,7 +1467,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="msgboxMessageServiceUnavailable" datatype="html">
         <source>Communication with tccd service is unavailable, please restart service and try again.</source>
-        <target state="translated">Kommunikation mit dem tccd Service ist nicht möglich.</target>
+        <target state="translated">Kommunikation mit dem tccd Dienst ist nicht möglich.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -1983,7 +1972,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipBlock" datatype="html">
         <source>Block this module</source>
-        <target state="needs-translation"/>
+        <target state="translated">Modul blockieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -2111,7 +2100,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="cTomteGuiTomteHeader" datatype="html">
         <source>TUXEDO Tomte</source>
-        <target state="needs-translation"/>
+        <target state="translated">TUXEDO Tomte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3206,27 +3195,46 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="messageCPUSettingsOff" datatype="html">
-        <source>CPU settings deactivated in Tools→Global Settings</source>
-        <target state="translated">CPU-Einstellungen deaktiviert in Tools→Globale Einstellungen</target>
+        <source>CPU frequency control deactivated in Settings→Global profile settings</source>
+        <target state="translated">CPU-Frequenzeinstellungen deaktiviert in Einstellungen→Globale Profileinstellungen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFanControlOff" datatype="html">
-        <source>Fan control deactivated in Tools→Global Settings</source>
-        <target state="translated">Lüftersteuerung deaktiviert in Tools→Globale Einstellungen</target>
+        <source>Fan control deactivated in Settings→Global profile settings</source>
+        <target state="translated">Lüftersteuerung deaktiviert in Einstellungen→Globale Profileinstellungen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageKeyboardBacklightControlOff" datatype="html">
-        <source>Keyboard backlight control deactivated in Tools→Global Settings</source>
-        <target state="translated">Tastaturbeleuchtungssteuerung deaktiviert in Tools→Globale Einstellungen</target>
+        <source>Keyboard backlight control deactivated in Settings→Global profile settings</source>
+        <target state="translated">Tastaturbeleuchtungssteuerung deaktiviert in Einstellungen→Globale Profileinstellungen</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/config.service.ts</context>
           <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
+        <source>This feature is not supported on your model.</source>
+        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
+        <source>This feature is not supported on your model.</source>
+        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
@@ -3259,22 +3267,6 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
-        <source>This feature is not supported on your model.</source>
-        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
-        <source>This feature is not supported on your model.</source>
-        <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
     </body>

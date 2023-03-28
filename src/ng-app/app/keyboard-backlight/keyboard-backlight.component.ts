@@ -157,7 +157,7 @@ export class KeyboardBacklightComponent implements OnInit {
         clearTimeout(this.brightnessSliderInUsageReset);
         this.brightnessSliderInUsageReset = setTimeout(() => {
             this.brightnessSliderInUsage = false;
-        }, 2000);
+        }, 10000);
         let colorHex = (this.chosenColorHex === undefined) || (this.chosenColorHex.length == 0) ? undefined : this.chosenColorHex;
         this.chosenBrightness = event.value;
         this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(event.value, colorHex));
@@ -167,7 +167,7 @@ export class KeyboardBacklightComponent implements OnInit {
         clearTimeout(this.brightnessSliderInUsageReset);
         this.brightnessSliderInUsageReset = setTimeout(() => {
             this.brightnessSliderInUsage = false;
-        }, 2000);
+        }, 10000);
     }
 
     public onColorPickerInput(event: any, selectedZone: number) {
@@ -176,7 +176,7 @@ export class KeyboardBacklightComponent implements OnInit {
             clearTimeout(this.colorPickerInUsageReset[selectedZone]);
             this.colorPickerInUsageReset[selectedZone] = setTimeout(() => {
                 this.colorPickerInUsage[selectedZone] = false;
-            }, 2000);
+            }, 10000);
 
             let colorHex = this.chosenColorHex;
             if (this. keyboardBacklightCapabilities.zones <= 4) {
@@ -197,7 +197,7 @@ export class KeyboardBacklightComponent implements OnInit {
             clearTimeout(this.colorPickerInUsageReset[i]);
             this.colorPickerInUsageReset[i] = setTimeout(() => {
                 this.colorPickerInUsage[i] = false;
-            }, 2000);
+            }, 10000);
         }
     }
 
@@ -206,7 +206,7 @@ export class KeyboardBacklightComponent implements OnInit {
             clearTimeout(this.colorPickerInUsageReset[i]);
             this.colorPickerInUsageReset[i] = setTimeout(() => {
                 this.colorPickerInUsage[i] = false;
-            }, 2000);
+            }, 10000);
         }
     }
 

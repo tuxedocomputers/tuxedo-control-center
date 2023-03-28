@@ -299,6 +299,12 @@ export class CpuWorker extends DaemonWorker {
         if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
             const currentBoost = this.cpuCtrl.boost.readValue()
             const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
+            const availableFreqs = this.cpuCtrl.cores[0].scalingAvailableFrequencies.readValueNT();
+            let maxSelectableFreq;
+            if (availableFreqs !== undefined && availableFreqs.length > 0) {
+                maxSelectableFreq = Math.max(...availableFreqs);
+            }
+
             const maxFreqProfile = profile.cpu.scalingMaxFrequency;
             if (profile.cpu.useMaxPerfGov) {
                 if (!currentBoost) {
@@ -307,11 +313,11 @@ export class CpuWorker extends DaemonWorker {
                 }
             }
             else {
-                if ((maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq) && !currentBoost) {
+                if ((maxFreqProfile === undefined || (maxSelectableFreq !== undefined && maxFreqProfile > maxSelectableFreq)) && !currentBoost) {
                     cpuFreqValidConfig = false;
                     this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
                 }
-                else if ((maxFreqProfile === -1 || maxFreqProfile <= coreMaxFreq) && currentBoost) {
+                else if ((maxFreqProfile === -1 || (maxSelectableFreq !== undefined && maxFreqProfile <= maxSelectableFreq)) && currentBoost) {
                     cpuFreqValidConfig = false;
                     this.tccd.logLine('CpuWorker: Unexpected value boost => true instead of false');
                 }
