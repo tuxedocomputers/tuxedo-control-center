@@ -237,6 +237,8 @@ app.on('window-all-closed', () => {
     }
 });
 
+let tccWindowLoading = false;
+
 function activateTccGui(module?: string) {
     if (tccWindow) {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
@@ -246,9 +248,13 @@ function activateTccGui(module?: string) {
             tccWindow.loadURL(baseURL + '#' + module);
         }
     } else {
-        userConfig.get('langId').then(langId => {
-            createTccWindow(langId, module);
-        });
+        if (!tccWindowLoading) {
+            tccWindowLoading = true;
+            userConfig.get('langId').then(langId => {
+                createTccWindow(langId, module);
+                tccWindowLoading = false;
+            });
+        }
     }
 }
 
