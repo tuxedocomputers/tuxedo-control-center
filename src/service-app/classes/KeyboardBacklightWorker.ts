@@ -69,6 +69,20 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
 
         iteKeyboardDevices =
+            getSymbolicLinks("/sys/bus/hid/drivers/ite_829x")
+                .filter(name => fileOK("/sys/bus/hid/drivers/ite_829x/" + name + "/leds"));
+        for (const iteKeyboardDevice of iteKeyboardDevices) {
+            let path = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
+            if (fileOK(path)) {
+                ledsPerKey = ledsPerKey.concat(
+                    getDirectories(path)
+                        .filter(name => name.includes("rgb:kbd_backlight"))
+                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map(name => path + "/" + name));
+            }
+        }
+
+        iteKeyboardDevices =
             getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
                 .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
         for (const iteKeyboardDevice of iteKeyboardDevices) {
