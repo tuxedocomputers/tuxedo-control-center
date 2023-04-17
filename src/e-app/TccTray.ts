@@ -76,7 +76,8 @@ export class TccTray {
         if (isTuxedo) {
             if (deviceName !== undefined &&
                 (deviceName === 'STELLARIS1XI04' ||
-                 deviceName === 'STEPOL1XA04')) {
+                 deviceName === 'STEPOL1XA04' ||
+                 deviceName === 'STELLARIS1XI05')) {
                 showAquarisMenu = true;
             } else {
                 showAquarisMenu = false;
