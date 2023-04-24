@@ -109,12 +109,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
-    GetDisplaymodes() { return this.data.displayModes; }
-    // TODO should this be turned into promises?
-    // on the other hand, it probably doesn't matter as setting those variables will introduce some lag by default? idk
-    SetDisplayRefresh(refRate: number) { return this.interfaceOptions.displayWorker.setRefRate(refRate) }
-    SetDisplayResolution(xRes: number, yRes: number) { return this.interfaceOptions.displayWorker.setRes(xRes,yRes)}
-    SetDisplaymode(refRate: number, xRes: number, yRes: number) { return this.interfaceOptions.displayWorker.setMode(xRes,yRes,refRate)}
+    GetDisplayModesJSON() { return this.data.displayModes; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
@@ -171,7 +166,6 @@ export class TccDBusInterface extends dbus.interface.Interface {
     async SetChargingPriority(priorityDescriptor: string) {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
-    // TODO add functions for changing and getting current display refrate and resolution
 }
 
 TccDBusInterface.configureMembers({
@@ -179,9 +173,6 @@ TccDBusInterface.configureMembers({
     },
     methods: {
         GetDisplayModes: {outSignature: 's'},
-        SetDisplayRefresh: { inSignature: 's',  outSignature: 'b' },
-        SetDisplayResolution: { inSignature: 's',  outSignature: 'b' },
-        SetDisplaymode: { inSignature: 's',  outSignature: 'b' },
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },

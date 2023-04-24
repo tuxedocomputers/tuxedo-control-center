@@ -84,32 +84,13 @@ export class TccDBusController {
         }
     }
 
-    async getDisplayModes(): Promise<IDisplayFreqRes | string>
+    async getDisplayModesJSON(): Promise<string>
     {
         try {
-            let modes = await this.interface.getDisplayModes();
-            console.log(modes);
-            return modes;
+            return await this.interface.GetDisplayModesJSON();
         } catch (err) {
-            return err;
+            return ""; // TODO maybe return empty interface
         }
-    }
-
-    // TODO ok we should not need those, as everything should be handled by tccd directly? maybe?
-    // if we need them we need to add the variables to them.
-    SetDisplayRefresh()
-    {
-        this.interface.SetDisplayRefresh();
-    }
-
-    SetDisplayResolution()
-    {
-        this.interface.SetDisplayResolution();
-    }
-
-    SetDisplaymode()
-    {
-        this.interface.SetDisplaymode();
     }
 
     async getFanDataGPU2(): Promise<FanData> {

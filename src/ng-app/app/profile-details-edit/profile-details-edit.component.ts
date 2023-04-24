@@ -114,7 +114,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
-    // TODO do I need to add my displays res and refRate here?
     public stateInputArray: IStateInfo[];
 
     public selectableFrequencies;
@@ -123,6 +122,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public odmProfileToName: Map<string, string> = new Map();
 
     public odmPowerLimitInfos: TDPInfo[] = [];
+    public displayModes: IDisplayFreqRes;
 
     private tdpLabels: Map<string, string>;
 
@@ -201,12 +201,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             }
         ));
-            // TODO do we need it as a subscription too? 
-            // I mean I don't really expect it to change, unless we want to add the functionality to 
-            // use all monitors instead of just the laptop screen?
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
+                this.setActiveTab();
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.displayModes.subscribe(nextdisplayModes => {
+            if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
+                this.displayModes = nextdisplayModes;
                 this.setActiveTab();
             }
         }));
@@ -496,21 +500,21 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public getActiveDisplayMode(): IDisplayMode
     {
-        return this.tccDBus.displayModes.activeMode;
+       return this.displayModes.activeMode;
     }
 
-    public getDisplayModes(): IDisplayMode[]
+    public getDisplayModes(): IDisplayFreqRes
     {
-        return this.tccDBus.displayModes.displayModes;
+        return this.displayModes;
     }
 
     public getRefreshRates(): number[]
     {
         let displayModes = this.getDisplayModes();
-        let activeMode = this.tccDBus.displayModes.activeMode;
-        for (let i = 0; i < displayModes.length; i++)
+        let activeMode = this.getActiveDisplayMode();
+        for (let i = 0; i < displayModes.displayModes.length; i++)
         {
-            let mode = displayModes[i];
+            let mode = displayModes.displayModes[i];
             if (mode.xResolution === activeMode.xResolution && mode.yResolution === activeMode.yResolution)
             {
                 return mode.refreshRates;

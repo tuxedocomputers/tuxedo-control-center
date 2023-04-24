@@ -20,36 +20,72 @@ import { DaemonWorker } from './DaemonWorker';
 import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
 import { IDisplayFreqRes, IDisplayMode} from '../../common/models/DisplayFreqRes';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { ITccProfile } from 'src/common/models/TccProfile';
+import { runInThisContext } from 'vm';
+import { stringify } from 'querystring';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
 
     private controller: XDisplayRefreshRateController;
     // if we decide to put in wayland support we simply have to make a new controller?
-    private isX11: boolean;
+    //private isX11;//: boolean;
     private displayInfo: IDisplayFreqRes;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(9000, tccd); // TODO see if this worker ID thing is still free
+        super(9000, tccd); 
         this.controller = new XDisplayRefreshRateController();
     }
 
     public onStart(): void {
-        this.isX11 = this.controller.getIsX11();
+        this.tccd.logLine("Display Worker started");
+       // this.isX11 = this.controller.getIsX11();
+        
     }
 
     public onWork(): void {
-        if (!this.isX11)
+        this.tccd.logLine("wörk wörk wörk");
+        //this.tccd.logLine(this.isX11 + "");
+        // if (!this.isX11)
+        //     {
+        //         this.tccd.logLine("not x11, bye!");
+        //         // TODO switch this to output on the dbus I guess
+        //         //return "Wayland is not supported at this point!"
+        //         // TODO would it make sense to just turn the worker off if it's wayland, or should it poll this regularly for if someone switches to x11
+        //         // is this even possible without restarting tccd anyway?
+        //         return;
+        //     }
+        // get current display settings from controller and save them into data structure
+        this.getAllInfo();
+        // TODO now send those infos to the gui through tccd? something like this?
+        this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+        this.tccd.logLine(JSON.stringify(this.displayInfo))
+        let activeprofile: ITccProfile;
+        this.tccd.logLine("getting active profile");
+        try
         {
-            // TODO switch this to output on the dbus I guess
-            //return "Wayland is not supported at this point!"
-            // TODO would it make sense to just turn the worker off if it's wayland, or should it poll this regularly for if someone switches to x11
-            // is this even possible without restarting tccd anyway?
+            activeprofile = this.tccd.getCurrentProfile();
+            this.tccd.logLine("got active profile");
+        }
+        catch(err)
+        {
             return;
         }
-                // get current display settings from controller and save them into data structure
-                this.getAllInfo();
-                // TODO now send those infos to the gui through tccd? something like this?
-                this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+        if(activeprofile.display.useRefRate)
+        {
+            if(activeprofile.display.refreshRate !== this.displayInfo.activeMode.refreshRates[0])
+            {
+                this.setRefRate(activeprofile.display.refreshRate);
+                this.tccd.logLine("set new Refresh Rate");
+            }
+        }
+        if(activeprofile.display.useResolution)
+        {
+            if(activeprofile.display.resolutionX !== this.displayInfo.activeMode.xResolution || activeprofile.display.resolutionY !== this.displayInfo.activeMode.yResolution)
+            {
+                this.setRes(activeprofile.display.resolutionX, activeprofile.display.resolutionY);
+                this.tccd.logLine("set new Resolution Rate");
+            }
+        }
         /*
         ok all of this goes into the functions themselves I guess
         // TODO 

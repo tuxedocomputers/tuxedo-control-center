@@ -24,6 +24,7 @@ import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ConfigService } from './config.service';
+import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -67,7 +68,7 @@ export class TccDBusClientService implements OnDestroy {
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
 
-    public displayModes;
+    public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -106,7 +107,6 @@ export class TccDBusClientService implements OnDestroy {
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
     const nextODMPowerLimits = await this.tccDBusInterface.odmPowerLimits();
     this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
-    this.displayModes = await this.tccDBusInterface.getDisplayModes();
     // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
     if (activeProfileJSON !== undefined) {
@@ -143,7 +143,18 @@ export class TccDBusClientService implements OnDestroy {
             console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
         }
     }
-
+    const displayModesJSON: string = await this.tccDBusInterface.getDisplayModesJSON();
+    if(displayModesJSON !== undefined)
+    {
+        try
+        {
+            this.displayModes.next(JSON.parse(displayModesJSON));
+        } 
+        catch (err)
+        {
+            console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err)
+        }
+    }
     this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
     this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
   }
