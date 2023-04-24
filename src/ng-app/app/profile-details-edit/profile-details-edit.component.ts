@@ -211,7 +211,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.displayModes.subscribe(nextdisplayModes => {
             if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
                 this.displayModes = nextdisplayModes;
-                this.setActiveTab();
             }
         }));
 
@@ -498,24 +497,53 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
     }
 
-    public getActiveDisplayMode(): IDisplayMode
+    public getActiveDisplayModeRate(): number
     {
-       return this.displayModes.activeMode;
+        if(this.displayModes != undefined)   
+       {
+        return this.displayModes.activeMode.refreshRates[0];
+       } 
+       else
+       {
+        return 0;
+       }
     }
 
-    public getDisplayModes(): IDisplayFreqRes
+    public getActiveDisplayModeXRes(): number
     {
-        return this.displayModes;
+        if(this.displayModes != undefined)   
+       {
+        return this.displayModes.activeMode.xResolution;
+       } 
+       else
+       {
+        return 0;
+       }
+    }
+
+    public getActiveDisplayModeYRes(): number
+    {
+        if(this.displayModes != undefined)   
+       {
+        return this.displayModes.activeMode.yResolution;
+       } 
+       else
+       {
+        return 0;
+       }
+    }
+
+    public getDisplayModes(): IDisplayMode[]
+    {
+        return this.displayModes.displayModes;
     }
 
     public getRefreshRates(): number[]
     {
-        let displayModes = this.getDisplayModes();
-        let activeMode = this.getActiveDisplayMode();
-        for (let i = 0; i < displayModes.displayModes.length; i++)
+        for (let i = 0; i < this.displayModes.displayModes.length; i++)
         {
-            let mode = displayModes.displayModes[i];
-            if (mode.xResolution === activeMode.xResolution && mode.yResolution === activeMode.yResolution)
+            let mode = this.displayModes.displayModes[i];
+            if (mode.xResolution === this.displayModes.activeMode.xResolution && mode.yResolution === this.displayModes.activeMode.yResolution)
             {
                 return mode.refreshRates;
             }

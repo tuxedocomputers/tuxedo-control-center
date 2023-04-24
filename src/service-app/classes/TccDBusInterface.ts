@@ -172,7 +172,7 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
-        GetDisplayModes: {outSignature: 's'},
+        GetDisplayModesJSON: {outSignature: 's'},
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },

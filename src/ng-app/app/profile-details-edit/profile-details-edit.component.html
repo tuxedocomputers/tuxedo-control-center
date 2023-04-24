@@ -231,16 +231,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header [ngClass]="{'inactive': !inputUseRefRate.checked}" i18n="@@cProfMgrDetailsRefRateLabel">Refresh Rate</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!-- Add current refresh rate here -->
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayMode }}Hz</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayMode }}Hz</content>
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayModeRate() }}Hz</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayModeRate() }}Hz</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <!-- Add drop down menu here -->
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                 <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
                                     <mat-option *ngFor="let refreshRate of getRefreshRates()" [value]="refreshRate" color="primary">
-                                        {{refreshRate}}Hz
+                                        {{ refreshRate }}Hz
                                     </mat-option>
                                 </mat-select>
                             </content>
@@ -267,16 +265,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header [ngClass]="{'inactive': !inputUseRes.checked}" i18n="@@cProfMgrDetailsResLabel">Resolution</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <!-- Add current resolution here -->
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayMode.xResolution }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayMode.xResolution }}</content>
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayModeXRes() }}x{{ getActiveDisplayModeYRes() }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayModeXRes() }}x{{ getActiveDisplayModeYRes() }}</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <!-- Add drop down menu here -->
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                 <mat-select formControlName="resolution" [disableOptionCentering]="true">
                                     <mat-option *ngFor="let mode of getDisplayModes()" [value]="mode" color="primary">
-                                        {{ mode.xResolution + "*" + mode.yResolution }}
+                                        {{ mode.xResolution }}x{{ mode.yResolution }}
                                     </mat-option>
                                 </mat-select>
                             </content>
