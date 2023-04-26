@@ -242,13 +242,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header [ngClass]="{'inactive': !inputUseRefRate.checked}" i18n="@@cProfMgrDetailsRefRateLabel">Refresh Rate</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayModeRate() }}Hz</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayModeRate() }}Hz</content>
+                            <content class="value" [ngClass]="{'inactive': !inputUseRefRate.checked}">{{ getActiveDisplayModeRate() }}Hz</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">
                                 <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let refreshRate of getRefreshRates()" [value]="refreshRate" color="primary">
+                                    <mat-option *ngFor="let refreshRate of getRefreshRates()" [value]="getActiveDisplayModeRate()" color="primary">
                                         {{ refreshRate }}Hz
                                     </mat-option>
                                 </mat-select>
@@ -266,7 +265,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile">
                                 <mat-checkbox #inputUseRes
-                                    formControlName="UseRes"
+                                    formControlName="useResolution"
                                     color="primary">
                                 </mat-checkbox>
                             </content>
@@ -276,11 +275,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header [ngClass]="{'inactive': !inputUseRes.checked}" i18n="@@cProfMgrDetailsResLabel">Resolution</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayModeXRes() }}x{{ getActiveDisplayModeYRes() }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayModeXRes() }}x{{ getActiveDisplayModeYRes() }}</content>
+                            <content class="value" [ngClass]="{'inactive': !inputUseRes.checked}">{{ getActiveDisplayModeString() }}</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">
                                 <mat-select formControlName="resolution" [disableOptionCentering]="true">
                                     <mat-option *ngFor="let mode of getDisplayModes()" [value]="mode" color="primary">
                                         {{ mode.xResolution }}x{{ mode.yResolution }}

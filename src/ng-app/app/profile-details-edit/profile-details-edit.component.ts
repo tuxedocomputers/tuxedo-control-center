@@ -509,27 +509,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
        }
     }
 
-    public getActiveDisplayModeXRes(): number
+    public getActiveDisplayModeString(): string
     {
         if(this.displayModes != undefined)   
        {
-        return this.displayModes.activeMode.xResolution;
+        return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
        } 
        else
        {
-        return 0;
-       }
-    }
-
-    public getActiveDisplayModeYRes(): number
-    {
-        if(this.displayModes != undefined)   
-       {
-        return this.displayModes.activeMode.yResolution;
-       } 
-       else
-       {
-        return 0;
+        return "";
        }
     }
 
