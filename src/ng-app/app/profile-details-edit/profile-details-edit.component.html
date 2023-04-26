@@ -211,6 +211,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <!-- Refresh Rate and Resolution -->
 
+                        <!-- Form Control Names need to be the same as in the Profile
+                        ie
+
+                            refreshRate: number;
+                            useRefRate: boolean;
+                            resolutionX: number;
+                            resolutionY: number;
+                            useResolution: boolean;
+                            TODO remove once not needed anymore
+                        -->
+
                         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n>Set refresh rate on profile activation</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value">

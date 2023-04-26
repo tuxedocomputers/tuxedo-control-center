@@ -18,7 +18,6 @@
  */
 import * as dbus from 'dbus-next';
 import { ChargingWorker } from './ChargingWorker';
-import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
@@ -95,7 +94,6 @@ export class TccDBusData {
 export class TccDBusOptions {
     public triggerStateCheck?: () => Promise<void>;
     public chargingWorker?: ChargingWorker;
-    public displayWorker?: DisplayRefreshRateWorker;
 }
 
 export class TccDBusInterface extends dbus.interface.Interface {

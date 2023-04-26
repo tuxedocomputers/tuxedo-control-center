@@ -28,7 +28,6 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     private controller: XDisplayRefreshRateController;
     // if we decide to put in wayland support we simply have to make a new controller?
-    //private isX11;//: boolean;
     private displayInfo: IDisplayFreqRes;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
@@ -36,35 +35,17 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.controller = new XDisplayRefreshRateController();
     }
 
-    public onStart(): void {
-        this.tccd.logLine("Display Worker started");
-       // this.isX11 = this.controller.getIsX11();
-        
+    public onStart(): void {      
     }
 
     public onWork(): void {
-        this.tccd.logLine("wörk wörk wörk");
-        //this.tccd.logLine(this.isX11 + "");
-        // if (!this.isX11)
-        //     {
-        //         this.tccd.logLine("not x11, bye!");
-        //         // TODO switch this to output on the dbus I guess
-        //         //return "Wayland is not supported at this point!"
-        //         // TODO would it make sense to just turn the worker off if it's wayland, or should it poll this regularly for if someone switches to x11
-        //         // is this even possible without restarting tccd anyway?
-        //         return;
-        //     }
         // get current display settings from controller and save them into data structure
         this.getAllInfo();
-        // TODO now send those infos to the gui through tccd? something like this?
-        this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
-        this.tccd.logLine(JSON.stringify(this.displayInfo))
+        // get active profile and check if we need to do something
         let activeprofile: ITccProfile;
-        this.tccd.logLine("getting active profile");
         try
         {
             activeprofile = this.tccd.getCurrentProfile();
-            this.tccd.logLine("got active profile");
         }
         catch(err)
         {
@@ -75,7 +56,6 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             if(activeprofile.display.refreshRate !== this.displayInfo.activeMode.refreshRates[0])
             {
                 this.setRefRate(activeprofile.display.refreshRate);
-                this.tccd.logLine("set new Refresh Rate");
             }
         }
         if(activeprofile.display.useResolution)
@@ -83,68 +63,37 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             if(activeprofile.display.resolutionX !== this.displayInfo.activeMode.xResolution || activeprofile.display.resolutionY !== this.displayInfo.activeMode.yResolution)
             {
                 this.setRes(activeprofile.display.resolutionX, activeprofile.display.resolutionY);
-                this.tccd.logLine("set new Resolution Rate");
             }
         }
-        /*
-        ok all of this goes into the functions themselves I guess
-        // TODO 
-
-        // look into what the active profile says and if it's different from currently active settings,
-        // if yes then use private functions to activate the differing settings.
-        // uhm so we need to look into tccd. ??? activeprofile yadayadayada 
-        // most importantly we need to check the variable bool userefreshrate or whatever
-        // to see if refreshrate should even be set on profile activation
-        this.tccd.activeProfile.display.useRefRate
-        var newRefRate = this.tccd.activeProfile.display.refreshRate
-        // look at current resolution and see if ref rate is available for this resolution
-        this.displayInfo.activeMode // == .find() or whatever is newRefRate
-        this.tccd.activeProfile.display.useResolution
-        // look at current refresh rate and see if it's supported with this resolution
-        // TODO what to do if it fails?
-        */
     }
 
     public onExit(): void {
         
     }
 
+    // queries the controller to get all info 
     private getAllInfo()
     {
         this.displayInfo = this.controller.getDisplayModes();
+        this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
     }
 
-    public getActiveRefRate()
+    // set refresh rate
+    private setRefRate(rate: number)
     {
-        return this.controller.getDisplayModes().activeMode.refreshRates[0];
-    }
-
-    // private getAvailableRefRates()
-    // {
-
-    //     return this.controller.getDisplayModes().displayModes;
-    // }
-
-    public setRefRate(rate: number)
-    {
-        // TODO should this function in generel check if the refresh rate is available for the display mode?
         this.controller.setRefreshRate(rate);
-        return true;
-
     }
 
-    public setRes(xRes: number, yRes: number)
+    // set resolution
+    private setRes(xRes: number, yRes: number)
     {
-        // TODO should this function in generel check if the resolution is available for the display mode?
         this.controller.setResolution(xRes, yRes);
-        return true;
     }
 
-    public setMode(xRes: number, yRes: number, refRate: number)
+    // set both at the same time (currently unused - might have tiny performance benefit?)
+    private setMode(xRes: number, yRes: number, refRate: number)
     {
         this.controller.setRefreshResolution(refRate,xRes,yRes);
-        return true;
-
     }
 
    

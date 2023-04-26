@@ -73,7 +73,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private stateWorker: StateSwitcherWorker;
     private chargingWorker: ChargingWorker;
-    private displayWorker: DisplayRefreshRateWorker;
 
     constructor() {
         super(TccPaths.PID_FILE);
@@ -107,7 +106,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.tccdVersion = tccPackage.version;
         this.stateWorker = new StateSwitcherWorker(this);
         this.chargingWorker = new ChargingWorker(this);
-        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.workers.push(this.chargingWorker);
         this.workers.push(this.stateWorker);
         this.workers.push(new DisplayBacklightWorker(this));
@@ -118,7 +116,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
-        this.workers.push(this.displayWorker);
+        this.workers.push(new DisplayRefreshRateWorker(this));
 
         this.startWorkers();
 
@@ -163,10 +161,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public getChargingWorker() {
         return this.chargingWorker;
-    }
-
-    public getDisplayWorker() {
-        return this.displayWorker;
     }
 
     public catchError(err: Error) {
