@@ -69,6 +69,20 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
 
         iteKeyboardDevices =
+            getSymbolicLinks("/sys/bus/hid/drivers/ite_829x")
+                .filter(name => fileOK("/sys/bus/hid/drivers/ite_829x/" + name + "/leds"));
+        for (const iteKeyboardDevice of iteKeyboardDevices) {
+            let path = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
+            if (fileOK(path)) {
+                ledsPerKey = ledsPerKey.concat(
+                    getDirectories(path)
+                        .filter(name => name.includes("rgb:kbd_backlight"))
+                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map(name => path + "/" + name));
+            }
+        }
+
+        iteKeyboardDevices =
             getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
                 .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
         for (const iteKeyboardDevice of iteKeyboardDevices) {
@@ -150,6 +164,25 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
     private async updateSysFsFromSettings(): Promise<void> {
         let brightness: Number = this.tccd.settings.keyboardBacklightBrightness;
+        let color: Array<number> = this.tccd.settings.keyboardBacklightColor;
+
+        if (color !== undefined) {
+            if (color.length == this.keyboardBacklightCapabilities.zones) {
+                for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                        await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity", this.rgbaIntToRGBDecString(color[i]));
+                    }
+                }
+            }
+        }
+        else {
+            for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+                if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                    await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity", "255 255 255");
+                }
+            }
+        }
+
         if (brightness === undefined) {
             brightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
         }
@@ -161,23 +194,6 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
             if (await fileOKAsync(this.ledsRGBZones[i] + "/brightness")) {
                 await fs.promises.appendFile(this.ledsRGBZones[i] + "/brightness", brightness.toString());
-            }
-        }
-
-        if (this.tccd.settings.keyboardBacklightColor !== undefined) {
-            if (this.tccd.settings.keyboardBacklightColor.length == this.keyboardBacklightCapabilities.zones) {
-                for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
-                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                        await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity", this.rgbaIntToRGBDecString(this.tccd.settings.keyboardBacklightColor[i]));
-                    }
-                }
-            }
-        }
-        else {
-            for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
-                if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                    await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity", "255 255 255");
-                }
             }
         }
     }
@@ -246,11 +262,12 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
         if (this.tccd.settings.keyboardBacklightControlEnabled) {
             this.updateSysFsFromSettings().then(() => {
-                setTimeout(() => { this.onWork() }, 500); // There is a small delay between writing SysFS and getting the correct value back.
+                setTimeout(() => {
+                    this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(this.keyboardBacklightStatesNewJSONSubscriptionHandler.bind(this));
+                    this.onWork();
+                }, 500); // There is a small delay between writing SysFS and getting the correct value back.
             });
         }
-
-        this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(this.keyboardBacklightStatesNewJSONSubscriptionHandler.bind(this));
     }
 
     public onWork(): void {

@@ -175,6 +175,7 @@ export enum TUXEDODevice {
     STELLARIS1XI03,
     STELLARIS1XI04,
     STEPOL1XA04,
+    STELLARIS1XI05
 };
 
 /*
@@ -196,6 +197,7 @@ deviceProfiles.set(TUXEDODevice.POLARIS1XA03, [ maxEnergySave, silent, office, h
 
 deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.STELLARIS1XI04, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI05, [ maxEnergySave, silent, office, highPerformance ]);
 
 deviceProfiles.set(TUXEDODevice.STELLARIS1XA03, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.STEPOL1XA04, [ maxEnergySave, silent, office, highPerformance ]);

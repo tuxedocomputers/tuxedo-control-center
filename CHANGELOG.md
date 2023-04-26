@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.4] - 2023-04-25
+### Added
+- Support for Stellaris 16 Gen5
+
+### Fixed
+- Keyboard backlight color picker missing styles and dark mode
+
 ## [2.0.2] - 2023-03-28
 ### Fixed
 - Keyboard backlight detection for certain devices like Stellaris and Fusion
