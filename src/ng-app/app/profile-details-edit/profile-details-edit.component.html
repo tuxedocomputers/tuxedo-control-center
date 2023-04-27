@@ -247,7 +247,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">
                                 <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let refreshRate of getRefreshRates()" [value]="getActiveDisplayModeRate()" color="primary">
+                                    <mat-option *ngFor="let refreshRate of getRefreshRates()" [value]="refreshRate" color="primary">
                                         {{ refreshRate }}Hz
                                     </mat-option>
                                 </mat-select>
@@ -279,9 +279,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">
-                                <mat-select formControlName="resolution" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let mode of getDisplayModes()" [value]="mode" color="primary">
-                                        {{ mode.xResolution }}x{{ mode.yResolution }}
+                                <mat-select  formControlName="resolution" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let mode of getDisplayModesString()" [value]="mode" color="primary">
+                                        {{ mode }}
                                     </mat-option>
                                 </mat-select>
                             </content>

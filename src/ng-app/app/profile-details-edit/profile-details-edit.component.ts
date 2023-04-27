@@ -32,6 +32,7 @@ import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
+import { displayPartsToString } from 'typescript';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -507,6 +508,17 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
        {
         return 0;
        }
+    }
+
+    public getDisplayModesString(): string[]
+    {
+        let displayModesString = [];
+        let displayModes = this.getDisplayModes();
+        for (let i = 0; i < displayModes.length; i++)
+        {
+            displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
+        }
+        return displayModesString;
     }
 
     public getActiveDisplayModeString(): string
