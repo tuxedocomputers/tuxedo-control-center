@@ -9,10 +9,10 @@ export const defaultProfiles: ITccProfile[] = [
         display: {
             brightness: 100,
             useBrightness: false,
-            refreshRate: 60,
+            refreshRate: undefined,
             useRefRate: false,
-            resolutionX: 1920,
-            resolutionY: 1080,
+            resolutionX: undefined,
+            resolutionY: undefined,
             useResolution: false
         },
         cpu: {
@@ -44,10 +44,10 @@ export const defaultProfiles: ITccProfile[] = [
         display: {
             brightness: 50,
             useBrightness: false,
-            refreshRate: 60,
+            refreshRate: undefined,
             useRefRate: false,
-            resolutionX: 1920,
-            resolutionY: 1080,
+            resolutionX: undefined,
+            resolutionY: undefined,
             useResolution: false
         },
         cpu: {
@@ -79,10 +79,10 @@ export const defaultProfiles: ITccProfile[] = [
         display: {
             brightness: 60,
             useBrightness: true,
-            refreshRate: 60,
+            refreshRate: undefined,
             useRefRate: false,
-            resolutionX: 1920,
-            resolutionY: 1080,
+            resolutionX: undefined,
+            resolutionY: undefined,
             useResolution: false
         },
         cpu: {
@@ -116,10 +116,10 @@ export const defaultCustomProfile: ITccProfile = {
     display: {
         brightness: 100,
         useBrightness: false,
-        refreshRate: 60,
+        refreshRate: undefined,
         useRefRate: false,
-        resolutionX: 1920,
-        resolutionY: 1080,
+        resolutionX: undefined,
+        resolutionY: undefined,
         useResolution: false
     },
     cpu: {
@@ -152,10 +152,10 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     display: {
         brightness: 100,
         useBrightness: false,
-        refreshRate: 60,
+        refreshRate: undefined,
         useRefRate: false,
-        resolutionX: 1920,
-        resolutionY: 1080,
+        resolutionX: undefined,
+        resolutionY: undefined,
         useResolution: false
     },
     cpu: {

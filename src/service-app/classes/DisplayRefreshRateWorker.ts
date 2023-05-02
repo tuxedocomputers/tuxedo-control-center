@@ -78,6 +78,11 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
     }
 
+    public getActiveDisplayMode()
+     {
+        return this.displayInfo.activeMode;
+     }
+
     // set refresh rate
     private setRefRate(rate: number)
     {

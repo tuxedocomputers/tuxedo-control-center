@@ -73,7 +73,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private stateWorker: StateSwitcherWorker;
     private chargingWorker: ChargingWorker;
-
+    private displayWorker: DisplayRefreshRateWorker;
     constructor() {
         super(TccPaths.PID_FILE);
         this.config = new ConfigHandler(
@@ -106,6 +106,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.tccdVersion = tccPackage.version;
         this.stateWorker = new StateSwitcherWorker(this);
         this.chargingWorker = new ChargingWorker(this);
+        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.workers.push(this.chargingWorker);
         this.workers.push(this.stateWorker);
         this.workers.push(new DisplayBacklightWorker(this));
@@ -116,7 +117,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
-        this.workers.push(new DisplayRefreshRateWorker(this));
+        this.workers.push(this.displayWorker);
 
         this.startWorkers();
 
@@ -609,7 +610,30 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (profile.cpu.noTurbo === undefined) {
             profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
         }
-    
+
+        if(profile.display.useRefRate === undefined)
+        {
+            profile.display.useRefRate = false;
+        }
+        if(profile.display.useResolution === undefined)
+        {
+            profile.display.useResolution = false;
+        }
+        let activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+        if(profile.display.refreshRate === undefined)
+        {
+            profile.display.refreshRate = activeDisplayMode.refreshRates[0];
+        }
+        if(profile.display.resolutionX === undefined)
+        {
+            profile.display.resolutionX = activeDisplayMode.xResolution;
+        }
+        if(profile.display.resolutionY === undefined)
+        {
+            profile.display.resolutionY = activeDisplayMode.yResolution;
+        }
+         
+
         if (profile.webcam === undefined) {
             profile.webcam = {
                 useStatus: false,

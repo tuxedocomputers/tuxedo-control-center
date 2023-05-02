@@ -80,10 +80,10 @@ const silent: ITccProfile = {
     display: {
         brightness: 50,
         useBrightness: true,
-        refreshRate: 60,
+        refreshRate: undefined,
         useRefRate: false,
-        resolutionX: 1920,
-        resolutionY: 1080,
+        resolutionX: undefined,
+        resolutionY: undefined,
         useResolution: false
     },
     cpu: {
@@ -116,10 +116,10 @@ const office: ITccProfile = {
     display: {
         brightness: 60,
         useBrightness: true,
-        refreshRate: 60,
+        refreshRate: undefined,
         useRefRate: false,
-        resolutionX: 1920,
-        resolutionY: 1080,
+        resolutionX: undefined,
+        resolutionY: undefined,
         useResolution: false
     },
     cpu: {
@@ -152,11 +152,10 @@ const highPerformance: ITccProfile = {
     display: {
         brightness: 60,
         useBrightness: true,
-        // TODO which defaults would make most sense?
-        refreshRate: 60,
+        refreshRate: undefined,
         useRefRate: false,
-        resolutionX: 1920,
-        resolutionY: 1080,
+        resolutionX: undefined,
+        resolutionY: undefined,
         useResolution: false
     },
     cpu: {
