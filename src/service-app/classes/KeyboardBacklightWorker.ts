@@ -162,9 +162,24 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         this.tccd.dbusData.keyboardBacklightStatesJSON = JSON.stringify(this.keyboardBacklightStates);
     }
 
+    private async bufferInput(ledPath: string, bufferOn: boolean) {
+        const bufferedInputPath = ledPath + '/device/controls/buffer_input';
+        if (await fileOKAsync(bufferedInputPath)) {
+            if (bufferOn) {
+                await fs.promises.appendFile(bufferedInputPath, '1');
+            } else {
+                await fs.promises.appendFile(bufferedInputPath, '0');
+            }
+        }
+    }
+
     private async updateSysFsFromSettings(): Promise<void> {
         let brightness: Number = this.tccd.settings.keyboardBacklightBrightness;
         let color: Array<number> = this.tccd.settings.keyboardBacklightColor;
+
+        if (this.ledsRGBZones.length > 0) {
+            this.bufferInput(this.ledsRGBZones[0], true)
+        }
 
         if (color !== undefined) {
             if (color.length == this.keyboardBacklightCapabilities.zones) {
@@ -195,6 +210,10 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             if (await fileOKAsync(this.ledsRGBZones[i] + "/brightness")) {
                 await fs.promises.appendFile(this.ledsRGBZones[i] + "/brightness", brightness.toString());
             }
+        }
+
+        if (this.ledsRGBZones.length > 0) {
+            this.bufferInput(this.ledsRGBZones[0], false)
         }
     }
 
