@@ -80,6 +80,10 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     public getActiveDisplayMode()
      {
+        if(this.displayInfo === undefined)
+        {
+            this.getAllInfo();
+        }
         return this.displayInfo.activeMode;
      }
 

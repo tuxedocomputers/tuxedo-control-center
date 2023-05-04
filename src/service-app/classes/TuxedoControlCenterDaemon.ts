@@ -100,13 +100,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
 
         // If program is still running this is the start of the daemon
+
+        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
         this.setupSignalHandling();
 
         this.dbusData.tccdVersion = tccPackage.version;
         this.stateWorker = new StateSwitcherWorker(this);
         this.chargingWorker = new ChargingWorker(this);
-        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.workers.push(this.chargingWorker);
         this.workers.push(this.stateWorker);
         this.workers.push(new DisplayBacklightWorker(this));
@@ -162,6 +163,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public getChargingWorker() {
         return this.chargingWorker;
+    }
+
+    public getDisplayWorker() {
+        return this.displayWorker;
     }
 
     public catchError(err: Error) {
@@ -243,8 +248,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles();
 
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
-        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
+        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
 
@@ -619,7 +624,20 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         {
             profile.display.useResolution = false;
         }
-        let activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+        let activeDisplayMode;
+        try
+        {
+            // TODO not a good way, can crash tccd which is not good.
+            activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+        }
+        catch(err)
+        {
+
+        }
+        if (!activeDisplayMode)
+        {
+            activeDisplayMode = {refreshRates: [60], xResolution: 1920, yResolution: 1080};
+        }
         if(profile.display.refreshRate === undefined)
         {
             profile.display.refreshRate = activeDisplayMode.refreshRates[0];
