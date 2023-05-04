@@ -179,7 +179,7 @@ export class KeyboardBacklightComponent implements OnInit {
             }, 10000);
 
             let colorHex = this.chosenColorHex;
-            if (this. keyboardBacklightCapabilities.zones <= 4) {
+            if (this. keyboardBacklightCapabilities.zones <= 3) {
                 colorHex[selectedZone] = event.color;
             }
             else {
