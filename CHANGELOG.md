@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.5] - 2023-05-04
+### Fixed
+- Keyboard backlight for Stellaris Gen5 membrane version
+- Buffered write for keyboard backlight where available
+  (should greatly speed up keyboard painting for supported devices)
+
 ## [2.0.4] - 2023-04-25
 ### Added
 - Support for Stellaris 16 Gen5
