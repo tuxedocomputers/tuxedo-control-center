@@ -1,0 +1,15 @@
+.key-group {
+    stroke:darkslategrey;
+    &.key-background-unselected .key_outline {
+        stroke:darkslategrey;
+    }
+    &.key-background-selected .key_outline {
+        stroke:slategrey;
+    }
+    &:hover {
+        &.key-background-selected .key_outline,
+        &.key-background-selected .key_outline {
+            stroke:LightGrey;
+        }
+    }
+}

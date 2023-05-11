@@ -31,22 +31,11 @@ content.value {
     justify-content: flex-end;
 }
 
-.key-group {
-    stroke:darkslategrey;
-    &.key-background-unselected .key_outline {
-        stroke:darkslategrey;
-    }
-    &.key-background-selected .key_outline {
-        stroke:slategrey;
-    }
-    &:hover {
-        &.key-background-unselected .key_outline,
-        &.key-background-selected .key_outline {
-            stroke:LightGrey;
-        }
-    }
-}
-
 .wider-tooltip {
     max-width: 275px !important;
+}
+
+.keyboard-visual {
+    width: 100%;
+    height: 100%;
 }
