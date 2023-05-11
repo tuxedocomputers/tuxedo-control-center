@@ -166,6 +166,7 @@ export enum TUXEDODevice {
     IBP14G6_TRX,
     IBP14G6_TQF,
     IBP14G7_AQF_ARX,
+    IBPG8MK1,
     PULSE1502,
     POLARIS1XA02,
     POLARIS1XI02,
@@ -187,6 +188,7 @@ deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G7_AQF_ARX, [ maxEnergySave, silent, office ]);
+deviceProfiles.set(TUXEDODevice.IBPG8MK1, [ maxEnergySave, silent, office ]);
 
 deviceProfiles.set(TUXEDODevice.PULSE1502, [ maxEnergySave, silent, office ]);
 

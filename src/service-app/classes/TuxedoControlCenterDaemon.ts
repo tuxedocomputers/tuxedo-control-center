@@ -478,6 +478,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         TuxedoIOAPI.getModuleInfo(modInfo);
 
         const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
+        dmiSKUDeviceMap.set('IBP1XI08MK1', TUXEDODevice.IBPG8MK1);
         dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
         dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
         dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
