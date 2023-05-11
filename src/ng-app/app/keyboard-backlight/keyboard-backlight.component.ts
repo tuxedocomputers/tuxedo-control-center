@@ -111,8 +111,15 @@ export class KeyboardBacklightComponent implements OnInit {
 
         this.tccdbus.keyboardBacklightStates.subscribe(
             keyboardBacklightStates => {
-                if (keyboardBacklightStates !== undefined && keyboardBacklightStates.length > 0 &&
-                    (!this.brightnessSliderInUsage && !this.colorPickerInUsage[0] && !this.colorPickerInUsage[1] && !this.colorPickerInUsage[2])) {
+                if (
+                    keyboardBacklightStates !== undefined &&
+                    keyboardBacklightStates.length > 0 &&
+                    !this.brightnessSliderInUsage &&
+                    !this.colorPickerInUsage[0] &&
+                    !this.colorPickerInUsage[1] &&
+                    !this.colorPickerInUsage[2] &&
+                    !this.colorPickerInUsage[3]
+                ) {
                     this.chosenBrightness = keyboardBacklightStates[0].brightness;
                     this.chosenColorHex = []
                     for (let i = 0; i < keyboardBacklightStates.length; ++i) {
