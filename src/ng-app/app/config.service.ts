@@ -95,6 +95,11 @@ export class ConfigService implements OnDestroy {
         this.subscriptions.add(this.dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
             this.defaultValuesProfile = nextDefaultValuesProfile;
         }));
+
+        this.subscriptions.add(this.dbus.settings.subscribe(nextSettings => {
+            this.settings = nextSettings
+            this.settingsSubject.next(this.settings);
+        }));
     }
 
     ngOnDestroy(): void {
@@ -102,13 +107,8 @@ export class ConfigService implements OnDestroy {
     }
 
     public updateConfigData(): void {
-        // this.customProfiles = this.config.getCustomProfilesNoThrow();
         this.customProfiles = this.dbus.customProfiles.value;
-        /*for (const profile of this.customProfiles) {
-            this.utils.fillDefaultValuesProfile(profile);
-        }*/
-        this.settings = this.config.getSettingsNoThrow();
-        this.settingsSubject.next(this.settings);
+        this.settings = this.dbus.settings.value;
     }
 
     public getSettings(): ITccSettings {

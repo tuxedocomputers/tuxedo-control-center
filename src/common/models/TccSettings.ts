@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileTDP } from "./DefaultProfiles";
+
 export enum ProfileStates {
     AC = 'power_ac',
     BAT = 'power_bat'
@@ -90,3 +93,24 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
     keyboardBacklightColor: []
 };
+
+export const defaultSettingsMobileTDP: ITccSettings = {
+    stateMap: {
+        power_ac: defaultCustomProfile.id,
+        power_bat: defaultMobileCustomProfileTDP.id
+    },
+    shutdownTime: null,
+    cpuSettingsEnabled: true,
+    fanControlEnabled: true,
+    keyboardBacklightControlEnabled: true,
+    ycbcr420Workaround: [],
+    chargingProfile: null,
+    chargingPriority: null,
+    keyboardBacklightBrightness: undefined, // undefined is interpreted as "default brightness" aka 50% by tccd
+    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
+    keyboardBacklightColor: []
+};
+
+export const deviceCustomSettings: Map<TUXEDODevice, ITccSettings> = new Map();
+
+deviceCustomSettings.set(TUXEDODevice.IBPG8MK1, defaultSettingsMobileTDP);

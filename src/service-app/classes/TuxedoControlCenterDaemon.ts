@@ -26,7 +26,6 @@ import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { defaultSettings, ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
-import { defaultCustomProfile } from '../../common/models/profiles/LegacyProfiles';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { CpuWorker } from './CpuWorker';
@@ -44,7 +43,7 @@ import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
 import { KeyboardBacklightWorker } from './KeyboardBacklightWorker';
 import { DMIController } from '../../common/classes/DMIController';
-import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { ChargingWorker } from './ChargingWorker';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
@@ -244,7 +243,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
 
-        this.readOrCreateConfigurationFiles();
+        this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
@@ -294,6 +293,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.defaultProfilesJSON = JSON.stringify(defaultProfilesFilled);
         this.dbusData.customProfilesJSON = JSON.stringify(customProfilesFilled);
         this.dbusData.defaultValuesProfileJSON = JSON.stringify(defaultValuesProfileFilled);
+        this.dbusData.settingsJSON = JSON.stringify(this.settings);
 
         // Initialize or update active profile
         if (this.getCurrentProfile() === undefined) {
@@ -359,7 +359,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return missingSetting;
     }
 
-    private readOrCreateConfigurationFiles() {
+    private readOrCreateConfigurationFiles(device: TUXEDODevice) {
         try {
             this.settings = this.config.readSettings();
             var missingSetting: boolean = false;
@@ -367,31 +367,31 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (this.settings.stateMap === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing statemap');
-                this.settings.stateMap = this.config.getDefaultSettings().stateMap;
+                this.settings.stateMap = this.config.getDefaultSettings(device).stateMap;
                 missingSetting = true;
             }
             if (this.settings.cpuSettingsEnabled === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing cpuSettingsEnabled setting');
-                this.settings.cpuSettingsEnabled = this.config.getDefaultSettings().cpuSettingsEnabled;
+                this.settings.cpuSettingsEnabled = this.config.getDefaultSettings(device).cpuSettingsEnabled;
                 missingSetting = true;
             }
             if (this.settings.fanControlEnabled === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing fanControlEnabled setting');
-                this.settings.fanControlEnabled = this.config.getDefaultSettings().fanControlEnabled;
+                this.settings.fanControlEnabled = this.config.getDefaultSettings(device).fanControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightControlEnabled === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing keyboardBacklightControlEnabled setting');
-                this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings().keyboardBacklightControlEnabled;
+                this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.ycbcr420Workaround === undefined) {
                 // If settings are missing, attempt to recreate default
                 this.logLine('Missing ycbcr420Workaround setting');
-                this.settings.ycbcr420Workaround = this.config.getDefaultSettings().ycbcr420Workaround;
+                this.settings.ycbcr420Workaround = this.config.getDefaultSettings(device).ycbcr420Workaround;
                 missingSetting = true;
             }
             missingSetting = this.syncOutputPortsSetting();
@@ -402,7 +402,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         } catch (err) {
             try {
                 if (this.settings === undefined) {
-                    this.settings = this.config.getDefaultSettings();
+                    this.settings = this.config.getDefaultSettings(device);
                     this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
@@ -415,7 +415,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         try {
             this.customProfiles = this.config.readProfiles();
         } catch (err) {
-            this.customProfiles = this.config.getDefaultCustomProfiles();
+            this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
                 this.config.writeProfiles(this.customProfiles);
                 this.logLine('Wrote default profiles: ' + this.config.pathProfiles);
