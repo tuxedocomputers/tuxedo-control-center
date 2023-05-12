@@ -27,7 +27,7 @@
     }
     &:hover {
         &.key-background-selected .key_outline,
-        &.key-background-selected .key_outline {
+        &.key-background-unselected .key_outline {
             stroke:LightGrey;
         }
     }
