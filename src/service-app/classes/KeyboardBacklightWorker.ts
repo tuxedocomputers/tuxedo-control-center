@@ -18,6 +18,7 @@
  */
 
 import * as fs from 'fs';
+import * as dbus from 'dbus-next';
 
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
@@ -36,6 +37,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     private keyboardBacklightStatesUpdating: boolean = false;
     private keyboardBacklightStatesUpdatingReset: NodeJS.Timeout;
 
+    private sysDBus: dbus.MessageBus = dbus.systemBus();
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1500, tccd);
@@ -244,12 +246,15 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             }
         }
 
-        if (fileOK("/proc/acpi/button/lid/LID0/state")) {
-            let lid_state = await fs.promises.readFile("/proc/acpi/button/lid/LID0/state");
-            if (lid_state.includes("closed")) {
+        try {
+            let sysDBusUPowerObj = await this.sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower');
+            let sysDBusUPowerProps: dbus.ClientInterface = sysDBusUPowerObj.getInterface('org.freedesktop.DBus.Properties');
+            let lidIsClosedVariant: dbus.Variant = await sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed');
+            if (lidIsClosedVariant.value) {
                 return;
             }
         }
+        catch (error) { }
 
         this.updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew);
     }
