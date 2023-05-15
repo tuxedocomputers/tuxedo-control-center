@@ -42,3 +42,16 @@
         }
     }
 }
+
+.charging-profile-note {
+    padding-top: 10px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.info-icon-link {
+    height: 30px;
+}

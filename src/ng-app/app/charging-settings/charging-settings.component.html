@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,7 +16,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<label class="charging-group-label" i18n="@@chargingProfileLabel" *ngIf="chargingProfilesAvailable.length > 0">Charging profiles</label>
+<label class="charging-group-label" *ngIf="chargingProfilesAvailable.length > 0">
+    <ng-container i18n="@@chargingProfileLabel">Charging profiles</ng-container>
+    <a matTooltip="Open info page..."
+       i18n-matTooltip="@@chargingProfilesOpenInfoTooltip"
+       matTooltipPosition="right"
+       (click)="openExternalUrl(chargingProfilesUrlHref)">
+        <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+    </a>
+</label>
+<div class="charging-profile-note" i18n="@@chargingProfileNoteLabel">
+    Please note: The system will still show 100% capacity in "Reduced capacity"
+    and "Stationary use" modes. The limitation of the actual capacity takes place
+    in the background on firmware level and is not visible for the operating system.
+</div>
 <mat-radio-group
     class="charging-radio-group"
     [ngModel]="currentChargingProfile"
