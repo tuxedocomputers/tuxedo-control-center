@@ -21,25 +21,46 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSettings";
 
 @Component({
-    selector: 'app-keyboard-visual',
-    templateUrl: './keyboard-visual.component.html',
-    styleUrls: ['./keyboard-visual.component.scss'],
+    selector: "app-keyboard-visual",
+    templateUrl: "./keyboard-visual.component.html",
+    styleUrls: ["./keyboard-visual.component.scss"],
 })
 export class KeyboardVisualComponent implements OnInit {
     @Input()
     keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
     @Input() chosenColorHex: Array<string>;
-    @Output() selectedZoneChange = new EventEmitter<number>();
-    public selectedZone = 0;
+    @Output() selectedZonesChange = new EventEmitter<number[]>();
+    public selectedZones: Array<number> = [];
 
     constructor() {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.selectedZones = Array.from(
+            { length: this.keyboardBacklightCapabilities.zones },
+            (_, i) => i
+        );
+        this.selectedZonesChange.emit(this.selectedZones);
+    }
+
+    private addOrRemoveNumber(num: number): number[] {
+        const index = this.selectedZones.indexOf(num);
+        if (index !== -1) {
+            this.selectedZones.splice(index, 1);
+        } else {
+            this.selectedZones.push(num);
+        }
+        return this.selectedZones;
+    }
 
     public onKeyboardImageClick(zone: number) {
         if (this.keyboardBacklightCapabilities.zones > 1) {
-            this.selectedZone = zone;
-            this.selectedZoneChange.emit(zone);
+            this.selectedZonesChange.emit(this.addOrRemoveNumber(zone));
         }
+    }
+
+    getSvgHeight(): number {
+        return [3, 4].includes(this.keyboardBacklightCapabilities.zones)
+            ? 255
+            : 205;
     }
 }

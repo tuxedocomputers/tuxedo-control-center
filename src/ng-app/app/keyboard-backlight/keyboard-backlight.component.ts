@@ -36,7 +36,8 @@ export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightStates: Array<KeyboardBacklightStateInterface>;
     public chosenBrightness: number;
     public chosenColorHex: Array<string>;
-    public selectedZone = 0;
+    public selectedZones: Array<number>;
+
     public brightnessSliderInUsage: boolean = false;
     public brightnessSliderInUsageReset: NodeJS.Timeout = undefined;
     public colorPickerInUsage: Array<boolean> = [false, false, false];
@@ -177,25 +178,29 @@ export class KeyboardBacklightComponent implements OnInit {
         }, 10000);
     }
 
-    public onColorPickerInput(event: any, selectedZone: number) {
-        if (event.valid === undefined || event.valid === true) {
-            this.colorPickerInUsage[selectedZone] = true;
-            clearTimeout(this.colorPickerInUsageReset[selectedZone]);
-            this.colorPickerInUsageReset[selectedZone] = setTimeout(() => {
-                this.colorPickerInUsage[selectedZone] = false;
+    public onColorPickerInput(event: any, selectedZones: number[]) {
+        if (event.valid !== undefined && event.valid !== true) {
+            return;
+        }
+
+        const colorHex = this.chosenColorHex;
+        const numZones = this.keyboardBacklightCapabilities.zones;
+        selectedZones.forEach((zone) => {
+            this.colorPickerInUsage[zone] = true;
+            clearTimeout(this.colorPickerInUsageReset[zone]);
+            this.colorPickerInUsageReset[zone] = setTimeout(() => {
+                this.colorPickerInUsage[zone] = false;
             }, 10000);
 
-            let colorHex = this.chosenColorHex;
-            if (this.keyboardBacklightCapabilities.zones <= 4) {
-                colorHex[selectedZone] = event.color;
-            }
-            else {
-                for (let i = 0; i < colorHex.length; ++i) {
-                    colorHex[i] = event.color;
-                }
-            }
-            this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(this.chosenBrightness, colorHex));
-        }
+            colorHex[zone] =
+                numZones <= 4 ? event.color : (colorHex[0] = event.color);
+        });
+
+        const backlightStates = this.fillKeyboardBacklightStatesFromValues(
+            this.chosenBrightness,
+            colorHex
+        );
+        this.tccdbus.setKeyboardBacklightStates(backlightStates);
     }
 
     public onColorPickerDragStart(event: any, i: number) {
@@ -217,8 +222,8 @@ export class KeyboardBacklightComponent implements OnInit {
         }
     }
 
-    selectedZoneChange(selectedZone: number) {
-        this.selectedZone = selectedZone;
+    selectedZonesChange(selectedZones: number[]) {
+        this.selectedZones = selectedZones;
     }
     
     private buttonRepeatTimer: NodeJS.Timeout;

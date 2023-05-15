@@ -42,7 +42,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-tile [colspan]="1"></mat-grid-tile>
                     <mat-grid-tile [colspan]="7">
                         <app-keyboard-visual  class="keyboard-visual" [keyboardBacklightCapabilities]="keyboardBacklightCapabilities" [chosenColorHex]="chosenColorHex" 
-                            (selectedZoneChange)="selectedZoneChange($event)"></app-keyboard-visual>
+                            (selectedZonesChange)="selectedZonesChange($event)"></app-keyboard-visual>
                     </mat-grid-tile>
                     <mat-grid-tile [colspan]="1"></mat-grid-tile>
                 </mat-grid-list>
@@ -93,15 +93,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-grid-tile [colspan]="3" style="overflow: visible">
                 <div class="align-top-right-container">
                     <span class="tcc-color-picker color-visualizer"
-                    [style.background]="chosenColorHex[selectedZone]"
-                    [colorPicker]="chosenColorHex[selectedZone]"
+                    [style.background]="chosenColorHex[selectedZones]"
+                    [colorPicker]="chosenColorHex[selectedZones]"
                     cpToggle="true"
                     cpDialogDisplay="inline"
                     cpAlphaChannel="disabled"
-                    (cpSliderChange)="onColorPickerInput($event, selectedZone)"
-                    (cpInputChange)="onColorPickerInput($event, selectedZone)"
-                    (cpSliderDragStart)="onColorPickerDragStart($event, selectedZone)"
-                    (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZone)"></span>
+                    (cpSliderChange)="onColorPickerInput($event, selectedZones)"
+                    (cpInputChange)="onColorPickerInput($event, selectedZones)"
+                    (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
+                    (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZones)"></span>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="1"></mat-grid-tile>
