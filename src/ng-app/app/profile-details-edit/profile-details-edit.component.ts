@@ -498,6 +498,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
     }
 
+    // TODO make sure all of those functions don't fuck up everything when displayModes is undefined/ empty whatever
     public getActiveDisplayModeRate(): number
     {
         if(this.displayModes != undefined)   
@@ -513,6 +514,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public getDisplayModesString(): string[]
     {
         let displayModesString = [];
+        if(!this.displayModes)
+        {
+            return [undefined];
+        }
         let displayModes = this.getDisplayModes();
         for (let i = 0; i < displayModes.length; i++)
         {
@@ -533,13 +538,36 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
        }
     }
 
+    public setProfileResolutionByString(event)
+    {
+        if(event && event.value)
+        {
+            let res = event.value.split("x");
+            let xRes = parseInt(res[0]);
+            let yRes = parseInt(res[1]);
+            this.profileFormGroup.controls.display.markAsDirty();
+            let displayObject = {resolutionX: 0, resolutionY: 0};
+            displayObject.resolutionX = xRes;
+            displayObject.resolutionY = yRes;
+            this.profileFormGroup.controls.display.patchValue(displayObject);
+        }
+    }
+
     public getDisplayModes(): IDisplayMode[]
     {
+        if(!this.displayModes)
+        {
+            return undefined;
+        }
         return this.displayModes.displayModes;
     }
 
     public getRefreshRates(): number[]
     {
+        if(!this.displayModes)
+        {
+            return [undefined];
+        }
         for (let i = 0; i < this.displayModes.displayModes.length; i++)
         {
             let mode = this.displayModes.displayModes[i];

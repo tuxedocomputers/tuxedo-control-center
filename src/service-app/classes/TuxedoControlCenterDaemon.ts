@@ -628,16 +628,19 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         try
         {
             // TODO not a good way, can crash tccd which is not good.
+            // apparantly not enough to continue execution normally, an error stops program flow anyway - yay
             activeDisplayMode = this.displayWorker.getActiveDisplayMode();
         }
         catch(err)
         {
-
+            activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
         }
         if (!activeDisplayMode)
         {
-            activeDisplayMode = {refreshRates: [60], xResolution: 1920, yResolution: 1080};
+            activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
         }
+        // TODO remove after testing
+        //activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
         if(profile.display.refreshRate === undefined)
         {
             profile.display.refreshRate = activeDisplayMode.refreshRates[0];

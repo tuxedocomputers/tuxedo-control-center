@@ -31,7 +31,7 @@ export class XDisplayRefreshRateController
         this.displayName = "";
         this.setEnvVariables();
     }
-
+    // TODO error message / do nothing when environment variables not there yet / don't exist
     private setEnvVariables()
     {
         let result = child_process.execSync(`who`) + "";
@@ -52,11 +52,12 @@ export class XDisplayRefreshRateController
             this.displayEnvVariable="";
             this.xAuthorityFile="";
             return;
+            // TODO also doesnt happen when we are running before xserver starts...
         }
         var username = match[1];
         this.displayEnvVariable = match[3].replace("(","").replace(")","");
         this.xAuthorityFile="/home/"+username+"/.Xauthority"
-        
+        this.isX11 = true;
     }
 
     public getIsX11()//: boolean 
@@ -64,11 +65,15 @@ export class XDisplayRefreshRateController
         return this.isX11;
     }
 
-    public getDisplayModes(): IDisplayFreqRes
+    public getDisplayModes()//: IDisplayFreqRes
     {
-        if (this.displayEnvVariable === undefined)
+        if (!this.isX11 || !this.displayEnvVariable || !this.xAuthorityFile )
         {
             this.setEnvVariables();
+        }
+        if(!this.isX11 || !this.displayEnvVariable || !this.xAuthorityFile )
+        {
+            return;
         }
         let result = child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable}`) + "";
         var displayNameRegex = /((eDP\-[0-9]+)|(LVDS\-[0-9]+))/

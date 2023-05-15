@@ -18,11 +18,9 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
-import { IDisplayFreqRes, IDisplayMode} from '../../common/models/DisplayFreqRes';
+import { IDisplayFreqRes} from '../../common/models/DisplayFreqRes';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ITccProfile } from 'src/common/models/TccProfile';
-import { runInThisContext } from 'vm';
-import { stringify } from 'querystring';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
 
@@ -37,6 +35,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     public onStart(): void {      
     }
+
+    // TODO properly catch errors when querying controller
 
     public onWork(): void {
         // get current display settings from controller and save them into data structure
@@ -62,7 +62,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         {
             if(activeprofile.display.resolutionX !== this.displayInfo.activeMode.xResolution || activeprofile.display.resolutionY !== this.displayInfo.activeMode.yResolution)
             {
-                this.setRes(activeprofile.display.resolutionX, activeprofile.display.resolutionY);
+                this.setMode(activeprofile.display.resolutionX, activeprofile.display.resolutionY, activeprofile.display.refreshRate);
             }
         }
     }
@@ -80,7 +80,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     public getActiveDisplayMode()
      {
-        if(this.displayInfo === undefined)
+        if(!this.displayInfo)
         {
             this.getAllInfo();
         }

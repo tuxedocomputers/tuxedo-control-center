@@ -267,7 +267,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">
-                                <mat-select  formControlName="resolution" [disableOptionCentering]="true">
+                                <mat-select [disableOptionCentering]="true" (selectionChange)="setProfileResolutionByString($event)">
                                     <mat-option *ngFor="let mode of getDisplayModesString()" [value]="mode" color="primary">
                                         {{ mode }}
                                     </mat-option>
