@@ -244,6 +244,13 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             }
         }
 
+        if (fileOK("/proc/acpi/button/lid/LID0/state")) {
+            let lid_state = await fs.promises.readFile("/proc/acpi/button/lid/LID0/state");
+            if (lid_state.includes("closed")) {
+                return;
+            }
+        }
+
         this.updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew);
     }
 
