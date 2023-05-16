@@ -19,6 +19,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { LoaderResolver } from './loader.resolver';
+
 import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
 import { SupportComponent } from './support/support.component';
 import { InfoComponent } from './info/info.component';
@@ -36,7 +38,7 @@ import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
     {
-        path: 'main-gui', component: MainGuiComponent,
+        path: 'main-gui', component: MainGuiComponent, resolve: { loaded: LoaderResolver },
         children: [
             { path: 'profile-manager', component: ProfileManagerComponent },
             { path: 'profile-manager/:profileId', component: ProfileManagerComponent },

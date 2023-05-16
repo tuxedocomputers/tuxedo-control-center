@@ -44,6 +44,7 @@ export class TccDBusClientService implements OnDestroy {
 
   public available = new Subject<boolean>();
   public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
+  public dataLoaded = false;
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
   public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
@@ -91,6 +92,10 @@ export class TccDBusClientService implements OnDestroy {
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);
+
+    if (!wmiAvailability) {
+        return;
+    }
 
     const fanData: IDBusFanData = {
       cpu: await this.tccDBusInterface.getFanDataCPU(),
@@ -144,6 +149,8 @@ export class TccDBusClientService implements OnDestroy {
         } catch (err) {
             console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
         }
+
+        this.dataLoaded = true;
     }
 
     const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
