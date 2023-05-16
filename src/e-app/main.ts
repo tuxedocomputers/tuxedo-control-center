@@ -157,7 +157,7 @@ app.whenReady().then( async () => {
     }
 
     if (!trayOnlyOption) {
-        activateTccGui();
+        await activateTccGui();
     }
 
     tccDBus = new TccDBusController();
@@ -239,7 +239,7 @@ app.on('window-all-closed', () => {
 
 let tccWindowLoading = false;
 
-function activateTccGui(module?: string) {
+async function activateTccGui(module?: string) {
     if (tccWindow) {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
@@ -250,10 +250,9 @@ function activateTccGui(module?: string) {
     } else {
         if (!tccWindowLoading) {
             tccWindowLoading = true;
-            userConfig.get('langId').then(langId => {
-                createTccWindow(langId, module);
-                tccWindowLoading = false;
-            });
+            const langId = await userConfig.get('langId');
+            await createTccWindow(langId, module);
+            tccWindowLoading = false;
         }
     }
 }
@@ -439,7 +438,7 @@ async function getActiveProfile(): Promise<TccProfile> {
     return result;
 }
 
-function createTccWindow(langId: string, module?: string) {
+async function createTccWindow(langId: string, module?: string) {
     let windowWidth = 1250;
     let windowHeight = 770;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
@@ -462,7 +461,8 @@ function createTccWindow(langId: string, module?: string) {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true,
-        }
+        },
+        show: false
     });
 
     // Hide menu bar
@@ -476,10 +476,11 @@ function createTccWindow(langId: string, module?: string) {
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
     if (module !== undefined) {
-        tccWindow.loadFile(indexPath, { hash: '/' + module });
+        await tccWindow.loadFile(indexPath, { hash: '/' + module });
     } else {
-        tccWindow.loadFile(indexPath);
+        await tccWindow.loadFile(indexPath);
     }
+    tccWindow.show();
 }
 
 function quitCurrentTccSession() {
