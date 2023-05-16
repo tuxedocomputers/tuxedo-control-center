@@ -19,9 +19,9 @@
 
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConfigService } from '../config.service';
-import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightColorModes, KeyboardBacklightStateInterface } from '../../../common/models/TccSettings';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-keyboard-backlight',
@@ -44,8 +44,6 @@ export class KeyboardBacklightComponent implements OnInit {
     public colorPickerInUsageReset: Array<NodeJS.Timeout> = [undefined, undefined, undefined];
     public foo: string;
 
-    private keyboardBacklightCapabilitiesSubscription: Subscription = new Subscription();
-
     public gridParams = {
         cols: 9,
         headerSpan: 3,
@@ -65,10 +63,20 @@ export class KeyboardBacklightComponent implements OnInit {
         private tccdbus: TccDBusClientService
     ) { }
 
+    public ngOnInit() {
+        this.setChosenValues();
+        this.subscribeKeyboardBacklightCapabilities();
+        this.subscribeKeyboardBacklightStates();
+    }
 
     // Converts Int Value: 0xRRGGBBAA to string value "#RRGGBB"
     private rgbaIntToRGBSharpString (input: number): string {
         return "#" + input.toString(16).padStart(8, '0').substring(0, 6);
+    }
+
+    // Converts Int Value: 0xRRGGBB to string value "#RRGGBB"
+    private rgbIntToRGBSharpString (input: number): string {
+        return "#" + input.toString(16).padStart(6, "0");
     }
 
     // Converts string Value: "#RRGGBB" to int value 0xRRGGBB00
@@ -80,57 +88,68 @@ export class KeyboardBacklightComponent implements OnInit {
         return Math.min(Math.max(input, min), max);
     }
 
-    public ngOnInit() {
-        this.chosenColorHex = [];
-        for (let i = 0; i < this.config.getSettings().keyboardBacklightColor.length; i++) {
-            this.chosenColorHex[i] = this.rgbaIntToRGBSharpString(this.config.getSettings().keyboardBacklightColor[i]);
-        }
-        this.chosenBrightness = this.config.getSettings().keyboardBacklightBrightness;
+    private setChosenValues() {
+        const settings = this.config.getSettings();
+        const keyboardBacklightColor = settings.keyboardBacklightColor;
+        this.chosenColorHex = keyboardBacklightColor.map((color) =>
+            this.rgbaIntToRGBSharpString(color)
+        );
+        this.chosenBrightness = settings.keyboardBacklightBrightness;
+    }
 
-        this.keyboardBacklightCapabilitiesSubscription.add(this.tccdbus.keyboardBacklightCapabilities.subscribe(
-            keyboardBacklightCapabilities => {
-                if (keyboardBacklightCapabilities !== undefined) {
-                    this.keyboardBacklightCapabilitiesSubscription.unsubscribe();
-                    this.keyboardBacklightCapabilities = keyboardBacklightCapabilities;
-                    if (this.chosenBrightness === undefined) {
-                        this.chosenBrightness = Math.floor(this.keyboardBacklightCapabilities.maxBrightness * 0.5);
-                    }
-                    else {
-                        this.chosenBrightness = this.clamp(this.chosenBrightness, 0, this.keyboardBacklightCapabilities.maxBrightness);
-                    }
-                    if (this.chosenColorHex.length !== this.keyboardBacklightCapabilities.zones) {
-                        this.chosenColorHex = this.chosenColorHex.slice(0, this.keyboardBacklightCapabilities.zones);
-                        for (let i = 0; i < this.keyboardBacklightCapabilities.zones; i++) {
-                            if (this.chosenColorHex[i] == undefined) {
-                                this.chosenColorHex[i] = "#ffffff"
-                            }
-                        }
-                    }
-                }
-            }
-        ));
+    private subscribeKeyboardBacklightCapabilities() {
+        this.tccdbus.keyboardBacklightCapabilities
+            .pipe(filter(Boolean), take(1))
+            .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface) => 
+                this.applyBacklightCapabilities(capabilities)
+            );
+    }
 
+    private applyBacklightCapabilities(
+        keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface
+    ) {
+        const { maxBrightness, zones } = keyboardBacklightCapabilities;
+
+        this.keyboardBacklightCapabilities = keyboardBacklightCapabilities;
+        this.chosenBrightness = this.clamp(
+            this.chosenBrightness || Math.floor(maxBrightness * 0.5),
+            0,
+            maxBrightness
+        );
+
+        const validColors = this.chosenColorHex?.slice(0, zones) ?? [];
+        const defaultColors = Array.from(
+            { length: zones - validColors.length },
+            () => "#ffffff"
+        );
+        this.chosenColorHex = [...validColors, ...defaultColors].map(
+            (color) => color ?? "#ffffff"
+        );
+    }
+
+    private subscribeKeyboardBacklightStates() {
         this.tccdbus.keyboardBacklightStates.subscribe(
-            keyboardBacklightStates => {
-                if (
-                    keyboardBacklightStates !== undefined &&
-                    keyboardBacklightStates.length > 0 &&
-                    !this.brightnessSliderInUsage &&
-                    !this.colorPickerInUsage[0] &&
-                    !this.colorPickerInUsage[1] &&
-                    !this.colorPickerInUsage[2] &&
-                    !this.colorPickerInUsage[3]
-                ) {
-                    this.chosenBrightness = keyboardBacklightStates[0].brightness;
-                    this.chosenColorHex = []
-                    for (let i = 0; i < keyboardBacklightStates.length; ++i) {
-                        let rgbaInt = (keyboardBacklightStates[i].red << 24 >>> 0) +
-                                      (keyboardBacklightStates[i].green << 16 >>> 0) +
-                                      (keyboardBacklightStates[i].blue << 8 >>> 0);
-                        this.chosenColorHex.push(this.rgbaIntToRGBSharpString(rgbaInt));
-                    }
+            (keyboardBacklightStates) => {
+                const hasChosenColor = keyboardBacklightStates?.length > 0;
+                const hasNoPickerInUsage = !this.isPickerInUsage();
+
+                if (hasChosenColor && hasNoPickerInUsage) {
+                    const [first] = keyboardBacklightStates;
+                    this.chosenBrightness = first.brightness;
+                    this.chosenColorHex = keyboardBacklightStates.map(
+                        ({ red, green, blue }) => {
+                            return (red << 16) + (green << 8) + blue;
+                        }
+                    ).map(this.rgbIntToRGBSharpString)
                 }
             }
+        );
+    }
+
+    isPickerInUsage() {
+        return (
+            this.brightnessSliderInUsage ||
+            this.colorPickerInUsage.some((colorPicker) => colorPicker)
         );
     }
 
