@@ -143,24 +143,6 @@
                         font-size: 1.2em;
                         text-align: center;
                     }
-
-                    .color-picker {
-                        background-color: inherit;
-                    }
-
-                    .color-picker.open {
-                        margin: 0 auto;
-                        margin-top: 15px;
-                        border-style: none;
-
-                        .saturation-lightness {
-                            border-radius: 4px;
-                        }
-
-                        .hue {
-                            border-radius: 8px;
-                        }
-                    }
                 }
             }
         }

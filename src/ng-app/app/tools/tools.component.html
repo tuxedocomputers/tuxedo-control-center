@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -37,6 +37,28 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-panel-title>
         </mat-expansion-panel-header>
         <app-shutdown-timer></app-shutdown-timer>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (click)="gotoComponent('keyboard-backlight')" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_kb_backlight5.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n="@@menuKeyboardBacklight">Keyboard Backlight</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="content">
+        </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (click)="gotoComponent('camera-settings')" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_webcam.svg#Icon"></use></svg></mat-icon>
+                <ng-container i18n="@@menuWebcam">Webcam</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="content">
+        </div>
     </mat-expansion-panel>
 
 </mat-accordion>

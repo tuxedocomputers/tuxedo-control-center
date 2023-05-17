@@ -1,0 +1,31 @@
+<!--
+Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="mat-typography">
+    <h3 *ngIf="data.heading">{{ data.heading }}</h3>
+    <p>{{ data.description }}</p>
+    <p *ngIf="data.linkHref"><a (click)="openExternalUrl(data.linkHref)" class="link-style">{{ data.linkHref }}</a></p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{
+        data.checkboxNoBotherLabel }}</mat-checkbox>
+    <div class="bx--row" *ngFor="let label of data.labelData; let i = index;">
+        <button mat-button (click)="closeDialog(label.name)">{{ label.value }}</button>
+    </div>
+</mat-dialog-actions>

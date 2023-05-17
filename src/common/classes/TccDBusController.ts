@@ -197,6 +197,38 @@ export class TccDBusController {
         }
     }
 
+    async odmPowerLimits(): Promise<TDPInfo[]> {
+        try {
+            return JSON.parse(await this.interface.ODMPowerLimitsJSON());
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getKeyboardBacklightCapabilitiesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetKeyboardBacklightCapabilitiesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getKeyboardBacklightStatesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetKeyboardBacklightStatesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): Promise<boolean> {
+        try {
+            return await this.interface.SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON);
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async getFansMinSpeed(): Promise<number> {
         try {
             return await this.interface.GetFansMinSpeed();
@@ -208,14 +240,6 @@ export class TccDBusController {
     async getFansOffAvailable(): Promise<boolean> {
         try {
             return await this.interface.GetFansOffAvailable();
-        } catch (err) {
-            return undefined;
-        }
-    }
-
-    async odmPowerLimits(): Promise<TDPInfo[]> {
-        try {
-            return JSON.parse(await this.interface.ODMPowerLimitsJSON());
         } catch (err) {
             return undefined;
         }

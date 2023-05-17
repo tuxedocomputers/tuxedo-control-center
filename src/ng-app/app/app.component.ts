@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { fromEvent, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
@@ -32,7 +32,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    constructor(private utils: UtilsService, private electron: ElectronService) {}
+    constructor(
+        private utils: UtilsService,
+        private electron: ElectronService,
+        private cdref: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
@@ -43,6 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
+    }
+
+    ngAfterContentChecked() {
+        this.cdref.detectChanges();
     }
 
     ngOnDestroy(): void {

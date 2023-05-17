@@ -18,6 +18,7 @@
  */
 import * as dbus from 'dbus-next';
 import { ChargingWorker } from './ChargingWorker';
+import { BehaviorSubject } from 'rxjs';
 
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
@@ -85,6 +86,9 @@ export class TccDBusData {
     public defaultValuesProfileJSON: string;
     public odmProfilesAvailable: string[];
     public odmPowerLimitsJSON: string;
+    public keyboardBacklightCapabilitiesJSON: string;
+    public keyboardBacklightStatesJSON: string;
+    public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
     public fansMinSpeed: number;
     public fansOffAvailable: boolean;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
@@ -141,6 +145,12 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDefaultValuesProfileJSON() { return this.data.defaultValuesProfileJSON; }
     ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
     ODMPowerLimitsJSON() { return this.data.odmPowerLimitsJSON; }
+    GetKeyboardBacklightCapabilitiesJSON() { return this.data.keyboardBacklightCapabilitiesJSON; }
+    GetKeyboardBacklightStatesJSON() { return this.data.keyboardBacklightStatesJSON; }
+    SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string) {
+        this.data.keyboardBacklightStatesNewJSON.next(keyboardBacklightStatesJSON);
+        return true;
+    }
     ModeReapplyPendingChanged() {
         return this.data.modeReapplyPending;
     }
@@ -189,6 +199,9 @@ TccDBusInterface.configureMembers({
         GetDefaultValuesProfileJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
         ODMPowerLimitsJSON: { outSignature: 's' },
+        GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' },
+        GetKeyboardBacklightStatesJSON: { outSignature: 's' },
+        SetKeyboardBacklightStatesJSON: { inSignature: 's',  outSignature: 'b' },
         GetFansMinSpeed: { outSignature: 'i' },
         GetFansOffAvailable: { outSignature: 'b' },
         GetChargingProfilesAvailable: { outSignature: 's' },
@@ -196,7 +209,7 @@ TccDBusInterface.configureMembers({
         SetChargingProfile: { inSignature: 's', outSignature: 'b' },
         GetChargingPrioritiesAvailable: { outSignature: 's' },
         GetCurrentChargingPriority: { outSignature: 's' },
-        SetChargingPriority: { inSignature: 's', outSignature: 'b' },
+        SetChargingPriority: { inSignature: 's', outSignature: 'b' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

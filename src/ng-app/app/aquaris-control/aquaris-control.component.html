@@ -170,7 +170,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <mat-tab-group mat-stretch-tabs [dynamicHeight]="false" [(selectedIndex)]="selectedLedTab">
                     <mat-tab label="Pick color" i18n-label="@@aqTabLEDColorPickerLabel">
-                        <span class="color-visualizer"
+                        <span class="tcc-color-picker color-visualizer"
                         [style.background]="chosenColorHex"
                         [(colorPicker)]="chosenColorHex"
                         [cpDisableInput]="true"

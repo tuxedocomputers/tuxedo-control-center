@@ -28,6 +28,8 @@ import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
+import { resolve } from 'path';
+import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -50,6 +52,8 @@ if (startTCCAccelerator === '') {
 
 let tccWindow: Electron.BrowserWindow;
 let aquarisWindow: Electron.BrowserWindow;
+let webcamWindow: Electron.BrowserWindow;
+
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
@@ -233,6 +237,8 @@ app.on('window-all-closed', () => {
     }
 });
 
+let tccWindowLoading = false;
+
 function activateTccGui(module?: string) {
     if (tccWindow) {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
@@ -242,9 +248,13 @@ function activateTccGui(module?: string) {
             tccWindow.loadURL(baseURL + '#' + module);
         }
     } else {
-        userConfig.get('langId').then(langId => {
-            createTccWindow(langId, module);
-        });
+        if (!tccWindowLoading) {
+            tccWindowLoading = true;
+            userConfig.get('langId').then(langId => {
+                createTccWindow(langId, module);
+                tccWindowLoading = false;
+            });
+        }
     }
 }
 
@@ -291,6 +301,100 @@ function activateAquarisGui() {
     }
 }
 
+async function createWebcamPreview(langId: string, arg: any) {
+    let windowWidth = 640;
+    let windowHeight = 480;
+
+    webcamWindow = new BrowserWindow({
+        title: "Webcam",
+        width: windowWidth,
+        height: windowHeight,
+        frame: true,
+        resizable: false,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
+        icon: path.join(
+            __dirname,
+            "../../data/dist-data/tuxedo-control-center_256.png"
+        ),
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+        show: false
+    });
+
+    // Workaround to set window title
+    webcamWindow.on("page-title-updated", function (e) {
+        e.preventDefault();
+    });
+
+    // Hide menu bar
+    webcamWindow.setMenuBarVisibility(false);
+    // Workaround to menu bar appearing after full screen state
+    webcamWindow.on("leave-full-screen", () => {
+        webcamWindow.setMenuBarVisibility(false);
+    });
+
+    const indexPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "ng-app",
+        langId,
+        "index.html"
+    );
+    webcamWindow.loadFile(indexPath, { hash: "/webcam-preview" });
+
+    webcamWindow.webContents.once("dom-ready", () => {
+        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
+    });
+
+    webcamWindow.on("close", async function () {
+        tccWindow.webContents.send("external-webcam-preview-closed");
+        webcamWindow = null;
+    });
+
+    webcamWindow.once('ready-to-show', () => {
+        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
+        webcamWindow.show()
+    })
+}
+
+ipcMain.on("setting-webcam-with-loading", (event, arg) => {
+    if (webcamWindow != null) {
+        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
+    }
+});
+
+ipcMain.on("create-webcam-preview", function (evt, arg) {
+    if (webcamWindow) {
+        if (webcamWindow.isMinimized()) {
+            webcamWindow.restore();
+        }
+        webcamWindow.focus();
+    } else {
+        userConfig.get("langId").then((langId) => {
+            createWebcamPreview(langId, arg);
+        });
+    }
+});
+
+ipcMain.on("close-webcam-preview", (event, arg) => {
+    if (webcamWindow) {
+        webcamWindow.close();
+        webcamWindow = null;
+    }
+});
+
+ipcMain.on("apply-controls", (event) => {
+    tccWindow.webContents.send("apply-controls");
+});
+
+ipcMain.on("video-ended", (event) => {
+    tccWindow.webContents.send("video-ended");
+});
+
 async function getProfiles(): Promise<TccProfile[]> {
     const dbus = new TccDBusController();
     await dbus.init();
@@ -336,7 +440,7 @@ async function getActiveProfile(): Promise<TccProfile> {
 }
 
 function createTccWindow(langId: string, module?: string) {
-    let windowWidth = 1040;
+    let windowWidth = 1250;
     let windowHeight = 770;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
         windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
@@ -406,6 +510,31 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
     });
 });
 
+
+
+ipcMain.handle('show-save-dialog', async (event, arg) => {
+    return new Promise<SaveDialogReturnValue>((resolve, reject) => {
+        let results = dialog.showSaveDialog(arg);
+        resolve(results);
+    });
+});
+
+
+ipcMain.handle('show-open-dialog', async (event, arg) => {
+    return new Promise<OpenDialogReturnValue>((resolve, reject) => {
+        let results = dialog.showOpenDialog(arg);
+        resolve(results);
+    });
+});
+
+ipcMain.handle('get-path', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        let requestedPath = app.getPath(arg);
+        resolve(requestedPath);
+    });
+});
+
+
 ipcMain.handle('exec-file-async', async (event, arg) => {
     return new Promise((resolve, reject) => {
         let strArg: string = arg;
@@ -435,6 +564,9 @@ nativeTheme.on('updated', () => {
     }
     if (aquarisWindow) {
         aquarisWindow.webContents.send('update-brightness-mode');
+    }
+    if (webcamWindow) {
+        webcamWindow.webContents.send('update-brightness-mode');
     }
 });
 

@@ -74,7 +74,7 @@ export class StateService implements OnDestroy {
         value: ProfileStates.AC.toString()
       })
       .set(ProfileStates.BAT.toString(), {
-        label: $localize `:@@stateLabelBattery:Battery `,
+        label: $localize `:@@stateLabelBattery:Battery`,
         tooltip: $localize `:@@stateTooltipBattery:Battery powered`,
         icon: 'icon_batterymode.svg#Icon',
         value: ProfileStates.BAT.toString()

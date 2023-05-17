@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -30,9 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
-import { displayPartsToString } from 'typescript';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -83,8 +81,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         this.editProfile = (this.config.getCustomProfileById(profile.id) !== undefined);
-
-        this.setActiveTab();
     }
 
     @Input()
@@ -129,8 +125,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public showFanGraphs = false;
 
-    public showCPUTabsCircles;
-
     public infoTooltipShowDelay = 700;
 
     public fansMinSpeed = 0;
@@ -139,8 +133,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
     @ViewChild('inputName') inputName: MatInput;
-
-    public selectedCPUTabIndex: number = 0;
 
     constructor(
         private utils: UtilsService,
@@ -205,7 +197,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
-                this.setActiveTab();
             }
         }));
 
@@ -219,8 +210,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
-
-        this.showCPUTabsCircles = this.compat.hasODMPowerLimitControl;
     }
 
     ngOnDestroy() {
@@ -249,15 +238,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         const defaultProfile = this.config.getDefaultValuesProfile();
 
-        // Reset non chosen CPU tab to defaults on save
-        if (this.compat.hasODMPowerLimitControl) {
-            if (this.selectedCPUTabIndex === 0) {
-                this.setFormGroupValue('cpu', defaultProfile.cpu);
-            } else if (this.selectedCPUTabIndex === 1) {
-                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
-            }
-        }
-
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
@@ -279,7 +259,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
-        this.setActiveTab();
         this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         // Also restore brightness to active profile if applicable
         if (!this.dbus.displayBrightnessNotSupported) {
@@ -398,11 +377,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         // Find largest allowed min value
         let minValue = this.odmPowerLimitInfos[sliderIndex].min;
 
-        for (let i = 0; i < sliderIndex; ++i) {
+        /*for (let i = 0; i < sliderIndex; ++i) {
             if (minValue === undefined || tdpValues.controls[i].value > minValue) {
                 minValue = tdpValues.controls[i].value;
             }
-        }
+        }*/
 
         return minValue;
     }
@@ -414,11 +393,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         // Find smallest allowed max value
         let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
 
-        for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
+        /*for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
             if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
                 maxValue = tdpValues.controls[i].value;
             }
-        }
+        }*/
 
         return maxValue;
     }
@@ -437,9 +416,23 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             newValue = minValue;
         }
 
+        // Adjust lower sliders
+        for (let i = 0; i < movedSliderIndex; ++i) {
+            if (tdpValues.controls[i].value > newValue) {
+                tdpValues.controls[i].setValue(newValue);
+            }
+        }
+
         // Ensure new value is below chosen max value
         if (newValue > maxValue) {
             newValue = maxValue;
+        }
+
+        // Adjust higher sliders
+        for (let i = movedSliderIndex + 1; i < tdpValues.controls.length; ++i) {
+            if (tdpValues.controls[i].value < newValue) {
+                tdpValues.controls[i].setValue(newValue);
+            }
         }
 
         if (newValue !== undefined) {
@@ -609,9 +602,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifySliderInputFunc(slider, offset: number, min: number, max: number) {
+    public modifySliderInputFunc(slider, offset: number, min: number, max: number, hackTrigger?, hackArg?) {
         return () => {
             this.modifySliderInput(slider, offset, min, max);
+            /*
+             * Note: hackTrigger added as workaround for change event not triggering on
+             *       setValue, should be removed as soon as it works again.
+             */
+            if (hackTrigger !== undefined) { hackTrigger.call(this, hackArg); }
         }
     }
 
@@ -623,6 +621,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 newValue = max;
             }
             slider.setValue(newValue);
+            slider.markAsDirty();
     }
 
     @ViewChild('fancontrolHeader') fancontrolHeaderE;
@@ -666,40 +665,5 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.profileFormGroup.get(groupName).markAsDirty();
         }
         return valueChanged;
-    }
-
-    @ViewChild('cpuSettingsTabGroup', { static: false }) cpuTabGroup: MatTabGroup;
-    public setActiveTab(index?: number) {
-        const defaultProfile = this.config.getDefaultValuesProfile();
-        const powerNotDefault = JSON.stringify(this.viewProfile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
-        const cpufreqNotDefault = JSON.stringify(this.viewProfile.cpu) !== JSON.stringify(defaultProfile.cpu);
-
-        const INDEX_ODMCPUTDP = 0;
-        const INDEX_CPUFREQ = 1;
-
-        // Choose either index automatically or manually selectd
-        if (index !== undefined) {
-            this.selectedCPUTabIndex = index;
-        } else if (powerNotDefault) {
-            this.selectedCPUTabIndex = INDEX_ODMCPUTDP;
-        } else if (cpufreqNotDefault) {
-            this.selectedCPUTabIndex = INDEX_CPUFREQ;
-        } else {
-            this.selectedCPUTabIndex = 0;
-        }
-
-        // Reset not chosen tab to default
-        const resetNonChosenTabWhenNotSelected = false;
-        if (resetNonChosenTabWhenNotSelected) {
-            if (this.selectedCPUTabIndex === INDEX_ODMCPUTDP) {
-                this.setFormGroupValue('cpu', defaultProfile.cpu);
-            } else if (this.selectedCPUTabIndex === INDEX_CPUFREQ) {
-                this.setFormGroupValue('odmPowerLimits', defaultProfile.odmPowerLimits);
-            }
-        }
-    }
-
-    public tabChange(event: MatTabChangeEvent) {
-        this.setActiveTab(event.index);
     }
 }

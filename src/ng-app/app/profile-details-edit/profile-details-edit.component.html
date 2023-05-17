@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -476,71 +476,69 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                 </mat-grid-list>
-                <mat-tab-group class="active-always-focused" mat-stretch-tabs #cpuSettingsTabGroup animationDuration="0" (selectedTabChange)="tabChange($event)" [selectedIndex]="selectedCPUTabIndex">
-                    <mat-tab *ngIf="compat.hasODMPowerLimitControl" [disabled]="!editProfile">
-                        <ng-template mat-tab-label>
-                            <mat-radio-button color="primary" [ngClass]="{'hide-radio-circle': !showCPUTabsCircles}" [checked]="selectedCPUTabIndex === 0" [disabled]="!editProfile" i18n="@@cProfMgrDetailsODMTDPLabel">CPU power limit control</mat-radio-button>
-                        </ng-template>
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-                            <div formGroupName="odmPowerLimits">
-                                <div formArrayName="tdpValues">
-                                    <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
-                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                            <header (click)="findActiveTab()">{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
-                                        </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                                            <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>
-                                            <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
-                                            <button mat-icon-button color="primary"
-                                                [hidden]="!editProfile"
-                                                (mousedown)="
-                                                    buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
-                                                    sliderODMPowerLimitChange(i);
-                                                    getODMTDPControls[i].markAsDirty();"
-                                                (mouseup)="buttonRepeatUp()"
-                                                (mouseleave)="buttonRepeatUp()">
-                                                <mat-icon>remove</mat-icon>
-                                            </button>
-                                            <button mat-icon-button color="primary"
-                                                [hidden]="!editProfile"
-                                                (mousedown)="
-                                                    buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i)));
-                                                    sliderODMPowerLimitChange(i);
-                                                    getODMTDPControls[i].markAsDirty();"
-                                                (mouseup)="buttonRepeatUp()"
-                                                (mouseleave)="buttonRepeatUp()">
-                                                <mat-icon>add</mat-icon>
-                                            </button>
-                                        </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                                            <content class="input" [hidden]="!editProfile">
-                                                <mat-slider
-                                                    #inputODMPowerLimit
-                                                    [formControlName]="i"
-                                                    [min]="odmPowerLimitInfos[i].min"
-                                                    [max]="odmPowerLimitInfos[i].max"
-                                                    step="1"
-                                                    (change)="sliderODMPowerLimitChange(i)"
-                                                    color="primary">
-                                                </mat-slider>
-                                                <button mat-icon-button
-                                                    color="primary"
-                                                    (click)="buttonODMPowerLimitUndo(i)"
-                                                    [hidden]="!getODMTDPControls[i].dirty">
-                                                    <mat-icon>undo</mat-icon>
-                                                </button>
-                                            </content>
-                                        </mat-grid-tile>
-                                    </div>
-                                </div>
+
+                <h4 i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</h4>
+
+                <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
+                    <div formGroupName="odmPowerLimits">
+                        <div formArrayName="tdpValues">
+                            <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
+                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                    <header (click)="findActiveTab()">{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                    <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>
+                                    <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
+                                    <button mat-icon-button color="primary"
+                                        [hidden]="!editProfile"
+                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
+                                        (mouseup)="buttonRepeatUp()"
+                                        (mouseleave)="buttonRepeatUp()">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="primary"
+                                        [hidden]="!editProfile"
+                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
+                                        (mouseup)="buttonRepeatUp()"
+                                        (mouseleave)="buttonRepeatUp()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <content class="input" [hidden]="!editProfile">
+                                        <mat-slider
+                                            #inputODMPowerLimit
+                                            [formControlName]="i"
+                                            [min]="odmPowerLimitInfos[i].min"
+                                            [max]="odmPowerLimitInfos[i].max"
+                                            step="1"
+                                            (change)="sliderODMPowerLimitChange(i)"
+                                            color="primary">
+                                        </mat-slider>
+                                        <button mat-icon-button
+                                            color="primary"
+                                            (click)="buttonODMPowerLimitUndo(i)"
+                                            [hidden]="!getODMTDPControls[i].dirty">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </content>
+                                </mat-grid-tile>
                             </div>
-                        </mat-grid-list>
-                    </mat-tab>
-                    <mat-tab formGroupName="cpu" [disabled]="!editProfile">
-                        <ng-template mat-tab-label>
-                            <mat-radio-button color="primary" [ngClass]="{'hide-radio-circle': !showCPUTabsCircles}" [checked]="selectedCPUTabIndex === 1" [disabled]="!editProfile" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</mat-radio-button>
-                        </ng-template>
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        </div>
+                    </div>
+                </mat-grid-list>
+
+                <div
+                    [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
+                    [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage : ''"
+                >
+                    <h4 i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</h4>
+
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                        [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
+                        [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage : ''"
+                    >
+                        <div formGroupName="cpu">
                             <!-- Number of logical cores -->
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
                                 <header i18n="@@cProfMgrDetailsNrCoresLabel">Number of logical cores</header>
@@ -588,6 +586,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
                                 <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), +100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
@@ -599,6 +611,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         (change)="sliderMinFreqChange()"
                                         color="primary">
                                     </mat-slider>
+                                    <button mat-icon-button
+                                        color="primary"
+                                        (click)="profileFormGroup.get('cpu').get('scalingMinFrequency').reset(viewProfile.cpu.scalingMinFrequency)"
+                                        [hidden]="!profileFormGroup.get('cpu').get('scalingMinFrequency').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
                                 </content>
                                 <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                                     <mat-slider #inputScalingMinFrequencyDummy
@@ -606,6 +624,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                         [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                         step="100000"
+                                        (change)="sliderMinFreqChange()"
                                         color="primary">
                                     </mat-slider>
                                 </content>
@@ -628,6 +647,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     Boost</content>
                                 <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && hasMaxFreqWorkaround)" [ngClass]="{'inactive': true}">
                                     Boost</content>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), -100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), +100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
@@ -639,6 +672,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         (change)="sliderMaxFreqChange()"
                                         color="primary">
                                     </mat-slider>
+                                    <button mat-icon-button
+                                        color="primary"
+                                        (click)="profileFormGroup.get('cpu').get('scalingMaxFrequency').reset(viewProfile.cpu.scalingMaxFrequency)"
+                                        [hidden]="!profileFormGroup.get('cpu').get('scalingMaxFrequency').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
                                 </content>
                                 <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                                     <mat-slider #inputScalingMaxFrequencyDummy
@@ -646,14 +685,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         [max]="cpuInfo.maxFreq"
                                         [value]="cpuInfo.maxFreq"
                                         step="100000"
+                                        (change)="sliderMaxFreqChange()"
                                         color="primary">
                                     </mat-slider>
                                 </content>
                             </mat-grid-tile>
-                        </mat-grid-list>
-                    </mat-tab>
-                </mat-tab-group>
-            
+                        </div>
+                    </mat-grid-list>
+                </div>
             </mat-card-content>
         </div>
 

@@ -22,6 +22,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
+import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ConfigService } from './config.service';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
@@ -63,6 +64,9 @@ export class TccDBusClientService implements OnDestroy {
 
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
+
+  public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
+  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
 
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
@@ -155,8 +159,27 @@ export class TccDBusClientService implements OnDestroy {
             console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err)
         }
     }
+
+    const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
+    if (keyboardBacklightCapabilitiesJSON !== undefined) {
+        try {
+            this.keyboardBacklightCapabilities.next(JSON.parse(keyboardBacklightCapabilitiesJSON));
+        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight capabilities'); }
+    }
+
+    const keyboardBacklightStatesJSON: string = await this.tccDBusInterface.getKeyboardBacklightStatesJSON();
+    if (keyboardBacklightStatesJSON !== undefined) {
+        try {
+            this.keyboardBacklightStates.next(JSON.parse(keyboardBacklightStatesJSON));
+        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight states'); }
+    }
+
     this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
     this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
+  }
+
+  public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
+    this.tccDBusInterface.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
   }
 
   public async triggerUpdate() {
