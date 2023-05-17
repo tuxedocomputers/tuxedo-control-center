@@ -40,7 +40,7 @@ content.value {
         stroke:slategrey;
     }
     &:hover {
-        &.key-background-selected .key_outline,
+        &.key-background-unselected .key_outline,
         &.key-background-selected .key_outline {
             stroke:LightGrey;
         }
