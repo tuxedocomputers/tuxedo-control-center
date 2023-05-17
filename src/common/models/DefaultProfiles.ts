@@ -46,8 +46,8 @@ const maxEnergySave: ITccProfile = {
         useBrightness: true,
         refreshRate: 60,
         useRefRate: false,
-        resolutionX: 1920,
-        resolutionY: 1080,
+        xResolution: 1920,
+        yResolution: 1080,
         useResolution: false
     },
     cpu: {
@@ -82,8 +82,8 @@ const silent: ITccProfile = {
         useBrightness: true,
         refreshRate: undefined,
         useRefRate: false,
-        resolutionX: undefined,
-        resolutionY: undefined,
+        xResolution: undefined,
+        yResolution: undefined,
         useResolution: false
     },
     cpu: {
@@ -118,8 +118,8 @@ const office: ITccProfile = {
         useBrightness: true,
         refreshRate: undefined,
         useRefRate: false,
-        resolutionX: undefined,
-        resolutionY: undefined,
+        xResolution: undefined,
+        yResolution: undefined,
         useResolution: false
     },
     cpu: {
@@ -154,8 +154,8 @@ const highPerformance: ITccProfile = {
         useBrightness: true,
         refreshRate: undefined,
         useRefRate: false,
-        resolutionX: undefined,
-        resolutionY: undefined,
+        xResolution: undefined,
+        yResolution: undefined,
         useResolution: false
     },
     cpu: {

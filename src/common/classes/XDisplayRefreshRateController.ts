@@ -186,7 +186,7 @@ export class XDisplayRefreshRateController
     }
 
     // set both
-    public setRefreshResolution(rate: number, xRes: number, yRes: number)
+    public setRefreshResolution(xRes: number, yRes: number, rate: number)
     {
         child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`);
     }

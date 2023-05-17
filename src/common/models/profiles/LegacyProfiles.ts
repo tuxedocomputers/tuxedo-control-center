@@ -11,8 +11,8 @@ export const defaultProfiles: ITccProfile[] = [
             useBrightness: false,
             refreshRate: undefined,
             useRefRate: false,
-            resolutionX: undefined,
-            resolutionY: undefined,
+            xResolution: undefined,
+            yResolution: undefined,
             useResolution: false
         },
         cpu: {
@@ -46,8 +46,8 @@ export const defaultProfiles: ITccProfile[] = [
             useBrightness: false,
             refreshRate: undefined,
             useRefRate: false,
-            resolutionX: undefined,
-            resolutionY: undefined,
+            xResolution: undefined,
+            yResolution: undefined,
             useResolution: false
         },
         cpu: {
@@ -81,8 +81,8 @@ export const defaultProfiles: ITccProfile[] = [
             useBrightness: true,
             refreshRate: undefined,
             useRefRate: false,
-            resolutionX: undefined,
-            resolutionY: undefined,
+            xResolution: undefined,
+            yResolution: undefined,
             useResolution: false
         },
         cpu: {
@@ -118,8 +118,8 @@ export const defaultCustomProfile: ITccProfile = {
         useBrightness: false,
         refreshRate: undefined,
         useRefRate: false,
-        resolutionX: undefined,
-        resolutionY: undefined,
+        xResolution: undefined,
+        yResolution: undefined,
         useResolution: false
     },
     cpu: {
@@ -154,8 +154,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         useBrightness: false,
         refreshRate: undefined,
         useRefRate: false,
-        resolutionX: undefined,
-        resolutionY: undefined,
+        xResolution: undefined,
+        yResolution: undefined,
         useResolution: false
     },
     cpu: {

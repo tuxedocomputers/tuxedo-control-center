@@ -645,13 +645,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         {
             profile.display.refreshRate = activeDisplayMode.refreshRates[0];
         }
-        if(profile.display.resolutionX === undefined)
+        if(profile.display.xResolution === undefined)
         {
-            profile.display.resolutionX = activeDisplayMode.xResolution;
+            profile.display.xResolution = activeDisplayMode.xResolution;
         }
-        if(profile.display.resolutionY === undefined)
+        if(profile.display.yResolution === undefined)
         {
-            profile.display.resolutionY = activeDisplayMode.yResolution;
+            profile.display.yResolution = activeDisplayMode.yResolution;
         }
          
 

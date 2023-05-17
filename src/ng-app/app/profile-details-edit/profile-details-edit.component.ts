@@ -499,17 +499,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     // TODO make sure all of those functions don't fuck up everything when displayModes is undefined/ empty whatever
-    public getActiveDisplayModeRate(): number
-    {
-        if(this.displayModes != undefined)   
-       {
-        return this.displayModes.activeMode.refreshRates[0];
-       } 
-       else
-       {
-        return 0;
-       }
-    }
 
     public getDisplayModesString(): string[]
     {
@@ -546,9 +535,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             let xRes = parseInt(res[0]);
             let yRes = parseInt(res[1]);
             this.profileFormGroup.controls.display.markAsDirty();
-            let displayObject = {resolutionX: 0, resolutionY: 0};
-            displayObject.resolutionX = xRes;
-            displayObject.resolutionY = yRes;
+            let displayObject = {xResolution: 0, yResolution: 0};
+            displayObject.xResolution = xRes;
+            displayObject.yResolution = yRes;
             this.profileFormGroup.controls.display.patchValue(displayObject);
         }
     }
@@ -562,6 +551,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.displayModes.displayModes;
     }
 
+    // returns refresh rates of systems currently active resolution
     public getRefreshRates(): number[]
     {
         if(!this.displayModes)
@@ -576,6 +566,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 return mode.refreshRates;
             }
         }
+    }
+
+    // returns currently active refresh rate
+    public getActiveRefreshRate(): number
+    {
+        if(!this.displayModes)
+        {
+            return undefined;
+        }
+        return this.displayModes.activeMode.refreshRates[0];
     }
 
     public governorSelectionChange() {

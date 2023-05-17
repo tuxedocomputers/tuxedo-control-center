@@ -60,8 +60,8 @@ interface ITccProfileDisplay {
     useBrightness: boolean;
     refreshRate: number;
     useRefRate: boolean;
-    resolutionX: number;
-    resolutionY: number;
+    xResolution: number;
+    yResolution: number;
     useResolution: boolean;
 }
 

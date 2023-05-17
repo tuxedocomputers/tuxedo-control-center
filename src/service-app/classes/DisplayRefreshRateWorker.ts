@@ -58,13 +58,13 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                 this.setRefRate(activeprofile.display.refreshRate);
             }
         }
-        if(activeprofile.display.useResolution)
-        {
-            if(activeprofile.display.resolutionX !== this.displayInfo.activeMode.xResolution || activeprofile.display.resolutionY !== this.displayInfo.activeMode.yResolution)
-            {
-                this.setMode(activeprofile.display.resolutionX, activeprofile.display.resolutionY, activeprofile.display.refreshRate);
-            }
-        }
+        // if(activeprofile.display.useResolution)
+        // {
+        //     if(activeprofile.display.xResolution !== this.displayInfo.activeMode.xResolution || activeprofile.display.yResolution !== this.displayInfo.activeMode.yResolution)
+        //     {
+        //         this.setMode(activeprofile.display.xResolution, activeprofile.display.yResolution, activeprofile.display.refreshRate);
+        //     }
+        // }
     }
 
     public onExit(): void {
@@ -94,6 +94,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     }
 
     // set resolution
+    // ok sometimes there seems to be an issue for some resolutions when you don't also give it the refreshrate
     private setRes(xRes: number, yRes: number)
     {
         this.controller.setResolution(xRes, yRes);
@@ -102,7 +103,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     // set both at the same time (currently unused - might have tiny performance benefit?)
     private setMode(xRes: number, yRes: number, refRate: number)
     {
-        this.controller.setRefreshResolution(refRate,xRes,yRes);
+        this.controller.setRefreshResolution(xRes,yRes,refRate);
     }
 
    
