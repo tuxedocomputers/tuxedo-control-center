@@ -2525,7 +2525,7 @@ Handelsregisternummer HRB 27755
       <trans-unit id="chargingProfileNoteLabel" datatype="html">
         <source> Please note: The system will still show 100% capacity in "Reduced capacity" and "Stationary use" modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
 </source>
-        <target state="translated">Bitte beachten: Betriebssystem (Linux/Windows) wird in jedem dieser Modi angeben, dass der Akku auf bis zu 100% geladen wird. Die Begrenzung der tatsächlichen Kapazität findet im Hintergrund auf Firmware-Ebene statt und ist für das Betriebssystem unsichtbar.
+        <target state="translated">Bitte beachten: Im Betriebssystem (Linux/Windows) wird in jedem dieser Modi angeben, dass der Akku auf bis zu 100% geladen wird. Die Begrenzung der tatsächlichen Kapazität findet im Hintergrund auf Firmware-Ebene statt und ist für das Betriebssystem unsichtbar.
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
