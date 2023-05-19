@@ -747,8 +747,8 @@ function primeSelectSet(status: string): boolean {
 
 async function updateTrayProfiles(dbus: TccDBusController) {
     try {
-        const updatedActiveProfile = await getActiveProfile(tccDBus);
-        const updatedProfiles = await getProfiles(tccDBus);
+        const updatedActiveProfile = await getActiveProfile(dbus);
+        const updatedProfiles = await getProfiles(dbus);
 
         // Replace default profile names/descriptions with translations
         for (const profile of updatedProfiles) {
