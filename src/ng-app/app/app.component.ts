@@ -20,6 +20,7 @@ import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@a
 import { ElectronService } from 'ngx-electron';
 import { fromEvent, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-root',

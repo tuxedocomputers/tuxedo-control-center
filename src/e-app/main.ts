@@ -114,11 +114,14 @@ app.whenReady().then( async () => {
         if (!success) { console.log('Failed to register global shortcut'); }
     }
 
+    tccDBus = new TccDBusController();
+    await tccDBus.init();
+
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.primeQuery = primeSelectQuery();
     tray.state.isPrimeSupported = primeSupported();
-    await updateTrayProfiles();
+    await updateTrayProfiles(tccDBus);
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
     tray.events.exitClick = () => quitCurrentTccSession();
@@ -142,7 +145,7 @@ app.whenReady().then( async () => {
     tray.events.selectBuiltInClick = () => {
         if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
     };
-    tray.events.profileClick = (profileId: string) => { setTempProfileById(profileId); };
+    tray.events.profileClick = (profileId: string) => { setTempProfileById(tccDBus, profileId); };
     tray.create();
 
     tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
@@ -157,52 +160,49 @@ app.whenReady().then( async () => {
     }
 
     if (!trayOnlyOption) {
-        activateTccGui();
+        await activateTccGui();
     }
 
-    tccDBus = new TccDBusController();
-    tccDBus.init().then(() => {
-        if (!noTccdVersionCheck) {
-            // Regularly check if running tccd version is different to running gui version
-            const tccdVersionCheckInterval = 5000;
-            setInterval(async () => {
-                if (await tccDBus.tuxedoWmiAvailable()) {
-                    const tccdVersion = await tccDBus.tccdVersion();
-                    if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                        console.log('Other tccd version detected, restarting..');
-                        process.on('exit', function () {
-                            child_process.spawn(
-                                process.argv[0],
-                                process.argv.slice(1).concat(['--tray']),
-                                {
-                                    cwd: process.cwd(),
-                                    detached : true,
-                                    stdio: "inherit"
-                                }
-                            );
-                        });
-                        process.exit();
-                    }
+    if (!noTccdVersionCheck) {
+        // Regularly check if running tccd version is different to running gui version
+        const tccdVersionCheckInterval = 5000;
+        setInterval(async () => {
+            if (await tccDBus.tuxedoWmiAvailable()) {
+                const tccdVersion = await tccDBus.tccdVersion();
+                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                    console.log('Other tccd version detected, restarting..');
+                    process.on('exit', function () {
+                        child_process.spawn(
+                            process.argv[0],
+                            process.argv.slice(1).concat(['--tray']),
+                            {
+                                cwd: process.cwd(),
+                                detached : true,
+                                stdio: "inherit"
+                            }
+                        );
+                    });
+                    process.exit();
                 }
-            }, tccdVersionCheckInterval);
-        }
+            }
+        }, tccdVersionCheckInterval);
+    }
 
+    tccDBus.consumeModeReapplyPending().then((result) => {
+        if (result) {
+            child_process.exec("xset dpms force off && xset dpms force on");
+        }
+    });
+    tccDBus.onModeReapplyPendingChanged(() => {
         tccDBus.consumeModeReapplyPending().then((result) => {
             if (result) {
                 child_process.exec("xset dpms force off && xset dpms force on");
             }
         });
-        tccDBus.onModeReapplyPendingChanged(() => {
-            tccDBus.consumeModeReapplyPending().then((result) => {
-                if (result) {
-                    child_process.exec("xset dpms force off && xset dpms force on");
-                }
-            });
-        });
     });
 
     const profilesCheckInterval = 4000;
-    setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
+    setInterval(async () => { updateTrayProfiles(tccDBus); }, profilesCheckInterval);
 });
 
 app.on('will-quit', async (event) => {
@@ -239,7 +239,7 @@ app.on('window-all-closed', () => {
 
 let tccWindowLoading = false;
 
-function activateTccGui(module?: string) {
+async function activateTccGui(module?: string) {
     if (tccWindow) {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
@@ -250,10 +250,9 @@ function activateTccGui(module?: string) {
     } else {
         if (!tccWindowLoading) {
             tccWindowLoading = true;
-            userConfig.get('langId').then(langId => {
-                createTccWindow(langId, module);
-                tccWindowLoading = false;
-            });
+            const langId = await userConfig.get('langId');
+            await createTccWindow(langId, module);
+            tccWindowLoading = false;
         }
     }
 }
@@ -395,9 +394,7 @@ ipcMain.on("video-ended", (event) => {
     tccWindow.webContents.send("video-ended");
 });
 
-async function getProfiles(): Promise<TccProfile[]> {
-    const dbus = new TccDBusController();
-    await dbus.init();
+async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
     let result = [];
     if (!await dbus.dbusAvailable()) return [];
     try {
@@ -406,40 +403,30 @@ async function getProfiles(): Promise<TccProfile[]> {
     } catch (err) {
         console.log('Error: ' + err);
     }
-    dbus.disconnect();
     return result;
 }
 
-async function setTempProfile(profileName: string) {
-    const dbus = new TccDBusController();
-    await dbus.init();
+async function setTempProfile(dbus: TccDBusController, profileName: string) {
     const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
-    dbus.disconnect();
     return result;
 }
 
-async function setTempProfileById(profileId: string) {
-    const dbus = new TccDBusController();
-    await dbus.init();
+async function setTempProfileById(dbus: TccDBusController, profileId: string) {
     const result = await dbus.dbusAvailable() && await dbus.setTempProfileById(profileId);
-    dbus.disconnect();
     return result;
 }
 
-async function getActiveProfile(): Promise<TccProfile> {
-    const dbus = new TccDBusController();
-    await dbus.init();
+async function getActiveProfile(dbus: TccDBusController): Promise<TccProfile> {
     let result = undefined;
     if (!await dbus.dbusAvailable()) return undefined;
     try {
         result = JSON.parse(await dbus.getActiveProfileJSON());
     } catch {
     }
-    dbus.disconnect();
     return result;
 }
 
-function createTccWindow(langId: string, module?: string) {
+async function createTccWindow(langId: string, module?: string) {
     let windowWidth = 1250;
     let windowHeight = 770;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
@@ -462,7 +449,8 @@ function createTccWindow(langId: string, module?: string) {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true,
-        }
+        },
+        show: false
     });
 
     // Hide menu bar
@@ -476,10 +464,11 @@ function createTccWindow(langId: string, module?: string) {
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
     if (module !== undefined) {
-        tccWindow.loadFile(indexPath, { hash: '/' + module });
+        await tccWindow.loadFile(indexPath, { hash: '/' + module });
     } else {
-        tccWindow.loadFile(indexPath);
+        await tccWindow.loadFile(indexPath);
     }
+    tccWindow.show();
 }
 
 function quitCurrentTccSession() {
@@ -635,7 +624,7 @@ async function changeLanguage(newLangId: string) {
     if (newLangId !== await userConfig.get('langId')) {
         await userConfig.set('langId', newLangId);
         await loadTranslation(newLangId);
-        await updateTrayProfiles();
+        await updateTrayProfiles(tccDBus);
         if (tccWindow) {
             const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
             await tccWindow.loadFile(indexPath);
@@ -756,10 +745,10 @@ function primeSelectSet(status: string): boolean {
     return result;
 }
 
-async function updateTrayProfiles() {
+async function updateTrayProfiles(dbus: TccDBusController) {
     try {
-        const updatedActiveProfile = await getActiveProfile();
-        const updatedProfiles = await getProfiles();
+        const updatedActiveProfile = await getActiveProfile(dbus);
+        const updatedProfiles = await getProfiles(dbus);
 
         // Replace default profile names/descriptions with translations
         for (const profile of updatedProfiles) {

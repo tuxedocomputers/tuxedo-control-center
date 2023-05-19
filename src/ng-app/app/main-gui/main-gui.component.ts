@@ -25,6 +25,7 @@ import { CompatibilityService } from '../compatibility.service';
 import { ConfigService } from '../config.service';
 import { IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-gui',
@@ -40,12 +41,19 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public useTCCTitleBar = false;
 
+    public dataLoaded: boolean;
+
     constructor(
         private electron: ElectronService,
         private config: ConfigService,
         private state: StateService,
         private utils: UtilsService,
-        public compat: CompatibilityService) { }
+        public compat: CompatibilityService,
+        private route: ActivatedRoute,
+        ) {
+            const data = this.route.snapshot.data;
+            this.dataLoaded = data.loaded === true;
+        }
 
     public buttonLanguageLabel: string;
 
@@ -56,24 +64,18 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
         this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
 
-        // Wait for the first true/false availability announcement, undefined is ignored
-        const availabilitySubscription = this.compat.tccDbusAvailable.subscribe(available => {
-          if (available === true) {
-            availabilitySubscription.unsubscribe();
-          } else if (available === false) {
+        if (!this.dataLoaded) {
             this.electron.remote.dialog.showMessageBox(
-              this.electron.remote.getCurrentWindow(),
-              {
-                title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
-                message: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
-                type: 'error',
-                buttons: ['ok']
-              }
-            );
-            this.electron.remote.getCurrentWindow().close();
-          }
-        });
-        this.subscriptions.add(availabilitySubscription);
+                this.electron.remote.getCurrentWindow(),
+                {
+                  title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
+                  message: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
+                  type: 'error',
+                  buttons: ['ok']
+                }
+              );
+              this.electron.remote.getCurrentWindow().close();
+        }
     }
 
     public ngOnDestroy(): void {
