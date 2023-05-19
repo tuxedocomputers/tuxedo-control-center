@@ -58,9 +58,23 @@ export class KeyboardVisualComponent implements OnInit {
         }
     }
 
-    getSvgHeight(): number {
+    public getSvgHeight(): number {
         return [3, 4].includes(this.keyboardBacklightCapabilities.zones)
             ? 255
             : 205;
+    }
+
+    public getSvgWidth(): number {
+        return [3, 4].includes(this.keyboardBacklightCapabilities.zones)
+            ? 760
+            : 728;
+    }
+
+    public calculateTranslateValue(zone: number): string {
+        if (this.keyboardBacklightCapabilities.zones === 3) {
+            return `${832.61151 + zone * 16}, 535.06891`;
+        } else {
+            return "832.61151, 535.06891";
+        }
     }
 }

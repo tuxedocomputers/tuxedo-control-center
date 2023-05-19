@@ -18,7 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <ng-template [ngIf]="keyboardBacklightCapabilities.zones > 0 && keyboardBacklightCapabilities.zones <= 3">
-    <svg [attr.viewBox]="'0 0 728 ' + getSvgHeight()">
+    <svg [attr.viewBox]="'0 0 ' + getSvgWidth() + ' ' + getSvgHeight()">
         <g transform="translate(832.61151,535.06891)">
             <g id="3zone_zone0" class="key-group" (click)="onKeyboardImageClick(0)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones == 0, 
                     'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && selectedZones != 0 }">
@@ -227,6 +227,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [style.stroke]="chosenColorHex[0]" />
                 </g>
             </g>
+        </g>
+        <g [attr.transform]="'translate(' + calculateTranslateValue(1) + ')'">
             <g id="3zone_zone1" class="key-group" (click)="onKeyboardImageClick(1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones == 1, 
                 'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && selectedZones != 1 }">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
@@ -552,6 +554,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
                 </g>
             </g>
+        </g>
+        <g [attr.transform]="'translate(' + calculateTranslateValue(2) + ')'">
             <g id="3zone_zone2" class="key-group" (click)="onKeyboardImageClick(2)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones == 2, 
                     'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && selectedZones != 2 }">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
@@ -806,7 +810,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 </ng-template>
 
 <ng-template [ngIf]="keyboardBacklightCapabilities.zones == 4">
-    <svg [attr.viewBox]="'0 0 728 ' + getSvgHeight()">
+    <svg [attr.viewBox]="'0 0 776 ' + getSvgHeight()">
         <g transform="translate(832.61151,535.06891)">
             <g id="4zone_zone0" class="key-group" (click)="onKeyboardImageClick(0)"
                 [ngClass]="{ 'key-background-selected': selectedZones == 0, 'key-background-unselected': selectedZones != 0 }">
@@ -958,6 +962,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [style.stroke]="chosenColorHex[0]" />
                 </g>
             </g>
+        </g>
+        <g transform="translate(848.61151,535.06891)">
             <g id="4zone_zone1" class="key-group" (click)="onKeyboardImageClick(1)"
                 [ngClass]="{ 'key-background-selected': selectedZones == 1, 'key-background-unselected': selectedZones != 1 }">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
@@ -1202,6 +1208,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         [style.stroke]="chosenColorHex[1]" />
                 </g>
             </g>
+        </g>
+        <g transform="translate(864.61151,535.06891)">
             <g id="4zone_zone2" class="key-group" (click)="onKeyboardImageClick(2)"
                 [ngClass]="{ 'key-background-selected': selectedZones == 2, 'key-background-unselected': selectedZones != 2 }">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
@@ -1364,6 +1372,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         class="key_color" [style.stroke]="chosenColorHex[2]" />
                 </g>
             </g>
+        </g>
+        <g transform="translate(880.61151,535.06891)">
             <g id="4zone_zone3" class="key-group" (click)="onKeyboardImageClick(3)"
                 [ngClass]="{ 'key-background-selected': selectedZones == 3, 'key-background-unselected': selectedZones != 3 }">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
