@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.7] - 2023-05-23
+### Added
+- Clarifying info text + link added to battery charging profiles
+- Default profiles for IBP Gen8
+
+### Fixed
+- Wrong keyboard backlight restored after LID wakeup
+- Keyboard backlight GUI hover color
+- Tweaks to GUI loading
+
 ## [2.0.5] - 2023-05-04
 ### Fixed
 - Keyboard backlight for Stellaris Gen5 membrane version
