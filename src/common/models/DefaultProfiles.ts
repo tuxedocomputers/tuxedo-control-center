@@ -204,7 +204,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         onlineCores: undefined,
         useMaxPerfGov: false,
         scalingMinFrequency: undefined,
-        scalingMaxFrequency: undefined,
+        scalingMaxFrequency: 3500000,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
         noTurbo: false
@@ -220,7 +220,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [10, 15] }
+    odmPowerLimits: { tdpValues: [15, 25, 50] }
 };
 
 export enum TUXEDODevice {
