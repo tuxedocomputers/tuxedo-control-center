@@ -82,6 +82,7 @@ export class TccDBusData {
     public customProfilesJSON: string;
     public defaultProfilesJSON: string;
     public defaultValuesProfileJSON: string;
+    public settingsJSON: string;
     public odmProfilesAvailable: string[];
     public odmPowerLimitsJSON: string;
     public keyboardBacklightCapabilitiesJSON: string;
@@ -141,6 +142,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetCustomProfilesJSON() { return this.data.customProfilesJSON; }
     GetDefaultProfilesJSON() { return this.data.defaultProfilesJSON; }
     GetDefaultValuesProfileJSON() { return this.data.defaultValuesProfileJSON; }
+    GetSettingsJSON() { return this.data.settingsJSON; }
     ODMProfilesAvailable() { return this.data.odmProfilesAvailable; }
     ODMPowerLimitsJSON() { return this.data.odmPowerLimitsJSON; }
     GetKeyboardBacklightCapabilitiesJSON() { return this.data.keyboardBacklightCapabilitiesJSON; }
@@ -194,6 +196,7 @@ TccDBusInterface.configureMembers({
         GetCustomProfilesJSON: { outSignature: 's' },
         GetDefaultProfilesJSON: { outSignature: 's' },
         GetDefaultValuesProfileJSON: { outSignature: 's' },
+        GetSettingsJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
         ODMPowerLimitsJSON: { outSignature: 's' },
         GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' },
