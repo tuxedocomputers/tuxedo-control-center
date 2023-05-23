@@ -179,6 +179,14 @@ export class TccDBusController {
         }
     }
 
+    async getSettingsJSON(): Promise<string> {
+        try {
+            return await this.interface.GetSettingsJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async odmProfilesAvailable(): Promise<string[]> {
         try {
             return await this.interface.ODMProfilesAvailable();

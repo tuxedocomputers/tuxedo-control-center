@@ -18,12 +18,12 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
-import { ITccSettings, defaultSettings } from '../models/TccSettings';
+import { ITccSettings, defaultSettings, deviceCustomSettings } from '../models/TccSettings';
 import { generateProfileId, ITccProfile } from '../models/TccProfile';
-import { defaultProfiles, defaultCustomProfile } from '../models/profiles/LegacyProfiles';
+import { defaultProfiles } from '../models/profiles/LegacyProfiles';
 import { ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
-import { deviceProfiles, TUXEDODevice } from '../models/DefaultProfiles';
+import { defaultCustomProfile, deviceCustomProfiles, deviceProfiles, TUXEDODevice } from '../models/DefaultProfiles';
 import { WebcamPreset } from '../models/TccWebcamSettings';
 
 export class ConfigHandler {
@@ -193,37 +193,44 @@ export class ConfigHandler {
         return this.copyConfig<ITccProfile>(defaultCustomProfile);
     }
 
-    public getDefaultCustomProfiles(): ITccProfile[] {
-        return [
-            this.getDefaultCustomProfile()
-        ];
+    public getDefaultCustomProfiles(device: TUXEDODevice): ITccProfile[] {
+
+        let defaultCustomProfiles: ITccProfile[] = deviceCustomProfiles.get(device);
+        if (defaultCustomProfiles === undefined) {
+            defaultCustomProfiles = [ this.getDefaultCustomProfile() ];
+        }
+        return this.copyConfig<ITccProfile[]>(defaultCustomProfiles);
     }
 
-    public getDefaultSettings(): ITccSettings {
-        return this.copyConfig<ITccSettings>(defaultSettings);
+    public getDefaultSettings(device: TUXEDODevice): ITccSettings {
+        let findDefaultSettings = deviceCustomSettings.get(device);
+        if (findDefaultSettings === undefined) {
+            findDefaultSettings = defaultSettings;
+        }
+        return this.copyConfig<ITccSettings>(findDefaultSettings);
     }
 
     public getDefaultAutosave(): ITccAutosave {
         return this.copyConfig<ITccAutosave>(defaultAutosave);
     }
 
-    public getCustomProfilesNoThrow(): ITccProfile[] {
+    public getCustomProfilesNoThrow(device: TUXEDODevice): ITccProfile[] {
         try {
             return this.readProfiles();
         } catch (err) {
-            return this.getDefaultCustomProfiles();
+            return this.getDefaultCustomProfiles(device);
         }
     }
 
-    public getAllProfilesNoThrow(): ITccProfile[] {
-        return this.getDefaultProfiles().concat(this.getCustomProfilesNoThrow());
+    public getAllProfilesNoThrow(device: TUXEDODevice): ITccProfile[] {
+        return this.getDefaultProfiles().concat(this.getCustomProfilesNoThrow(device));
     }
 
-    public getSettingsNoThrow(): ITccSettings {
+    public getSettingsNoThrow(device: TUXEDODevice): ITccSettings {
         try {
             return this.readSettings();
         } catch (err) {
-            return this.getDefaultSettings();
+            return this.getDefaultSettings(device);
         }
     }
 

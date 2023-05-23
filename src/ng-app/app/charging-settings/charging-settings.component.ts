@@ -18,6 +18,7 @@
  */
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
+import { ElectronService } from "ngx-electron";
 
 @Component({
     selector: 'app-charging-settings',
@@ -45,8 +46,11 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingPriorityLabels: Map<string, string> = new Map();
     public chargingPriorityDescriptions: Map<string, string> = new Map();
 
+    public chargingProfilesUrlHref = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
+
     constructor(
-        private tccdbus: TccDBusClientService
+        private tccdbus: TccDBusClientService,
+        private electron: ElectronService
     ) {
         this.chargingProfileLabels.set('high_capacity', $localize `:@@chargingProfileHighCapacityLabel:Full capacity`);
         this.chargingProfileLabels.set('balanced', $localize `:@@chargingProfileBalancedLabel:Reduced capacity`);
@@ -121,5 +125,9 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.chargingPriorityProgress = false;
 
         return result;
+    }
+
+    public async openExternalUrl(url: string) {
+        await this.electron.shell.openExternal(url);
     }
 }

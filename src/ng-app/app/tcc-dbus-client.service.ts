@@ -22,7 +22,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
-import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
+import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ConfigService } from './config.service';
 
@@ -44,6 +44,7 @@ export class TccDBusClientService implements OnDestroy {
 
   public available = new Subject<boolean>();
   public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
+  public dataLoaded = false;
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
   public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
@@ -63,6 +64,9 @@ export class TccDBusClientService implements OnDestroy {
 
   public activeProfile = new BehaviorSubject<TccProfile>(undefined);
   private previousActiveProfileJSON = '';
+
+  public settings = new BehaviorSubject<ITccSettings>(undefined);
+  private previousSettingsJSON = '';
 
   public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
   public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
@@ -87,6 +91,10 @@ export class TccDBusClientService implements OnDestroy {
     }
     // Publish availability as necessary
     if (this.isAvailable !== previousValue) { this.available.next(this.isAvailable); }
+
+    if (!this.isAvailable) {
+        return;
+    }
 
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
@@ -144,6 +152,17 @@ export class TccDBusClientService implements OnDestroy {
         } catch (err) {
             console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
         }
+
+        this.dataLoaded = true;
+    }
+    const settingsJSON: string = await this.tccDBusInterface.getSettingsJSON();
+    if (settingsJSON !== undefined) {
+        try {
+            if (this.previousSettingsJSON !== settingsJSON) {
+                this.settings.next(JSON.parse(settingsJSON));
+                this.previousSettingsJSON = settingsJSON;
+            }
+        } catch (err) { console.log('tcc-dbus-client.service: unexpected error parsing settings => ' + err); }
     }
 
     const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();

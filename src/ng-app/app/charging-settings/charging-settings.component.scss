@@ -18,8 +18,10 @@
  */
 
 .charging-group-label {
+    display: block;
     font-size: 1.5em;
     font-weight: bolder;
+    padding-top: 20px;
 }
 
 .charging-radio-group {
@@ -41,4 +43,17 @@
             }
         }
     }
+}
+
+.charging-profile-note {
+    padding-top: 10px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.info-icon-link {
+    height: 30px;
 }
