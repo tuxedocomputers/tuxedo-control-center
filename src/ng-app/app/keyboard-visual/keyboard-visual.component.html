@@ -20,8 +20,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <ng-template [ngIf]="keyboardBacklightCapabilities.zones > 0 && keyboardBacklightCapabilities.zones <= 3">
     <svg [attr.viewBox]="'0 0 ' + getSvgWidth() + ' ' + getSvgHeight()">
         <g transform="translate(832.61151,535.06891)">
-            <g id="3zone_zone0" class="key-group" (click)="onKeyboardImageClick(0)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones == 0, 
-                    'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && selectedZones != 0 }">
+            <g id="3zone_zone0" class="key-group" (click)="updateZoneOpacity(0)"
+                [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(0), 
+                    'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(0) }" data-zone="0">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="M 0,0 V 205 h 181 v -34.6 h 36.6 v -36.6 h -17.3 v -36.6 h -19.3 v -97.2"
                     transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone0" />
@@ -229,8 +230,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </g>
         </g>
         <g [attr.transform]="'translate(' + calculateTranslateValue(1) + ')'">
-            <g id="3zone_zone1" class="key-group" (click)="onKeyboardImageClick(1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones == 1, 
-                'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && selectedZones != 1 }">
+            <g id="3zone_zone1" class="key-group" (click)="updateZoneOpacity(1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(1), 
+                'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(1) }"
+                data-zone="1">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="m 181,0 v 97.2 h 19.3 v 36.6 h 17.3 v 36.6 h -36.6 v 34.6 h 329.4 v -34.6 h -36.6 v -36.6 h 19.4 v -36.6 h -19.4 v -73.2 h 36.6 v -24"
                     id="SelectionDummyZone1" transform="translate(-832.61151,-535.06891)" />
@@ -556,8 +558,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </g>
         </g>
         <g [attr.transform]="'translate(' + calculateTranslateValue(2) + ')'">
-            <g id="3zone_zone2" class="key-group" (click)="onKeyboardImageClick(2)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones == 2, 
-                    'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && selectedZones != 2 }">
+            <g id="3zone_zone2" class="key-group" (click)="updateZoneOpacity(2)"
+                [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(2), 
+                    'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(2) }" data-zone="2">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="m 510.4,0 v 24 h -36.6 v 73.2 h 19.4 v 36.6 h -19.4 v 36.6 h 36.6 v 34.6 h 217.6 v -205"
                     transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone2" />
@@ -812,8 +815,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <ng-template [ngIf]="keyboardBacklightCapabilities.zones == 4">
     <svg [attr.viewBox]="'0 0 776 ' + getSvgHeight()">
         <g transform="translate(832.61151,535.06891)">
-            <g id="4zone_zone0" class="key-group" (click)="onKeyboardImageClick(0)"
-                [ngClass]="{ 'key-background-selected': selectedZones == 0, 'key-background-unselected': selectedZones != 0 }">
+            <g id="4zone_zone0" class="key-group" (click)="updateZoneOpacity(0)"
+                [ngClass]="{ 'key-background-selected': selectedZones.includes(0), 'key-background-unselected': !selectedZones.includes(0) }"
+                data-zone="0">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="m 0,0 v 205 h 144.4  v -71.2 h -17.4 v -36.6 h 17.4 V 0"
                     transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone0" />
@@ -964,8 +968,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </g>
         </g>
         <g transform="translate(848.61151,535.06891)">
-            <g id="4zone_zone1" class="key-group" (click)="onKeyboardImageClick(1)"
-                [ngClass]="{ 'key-background-selected': selectedZones == 1, 'key-background-unselected': selectedZones != 1 }">
+            <g id="4zone_zone1" class="key-group" (click)="updateZoneOpacity(1)"
+                [ngClass]="{ 'key-background-selected': selectedZones.includes(1), 'key-background-unselected': !selectedZones.includes(1) }"
+                data-zone="1">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="m 144.4,0 v 97.2 h -17.4 v 36.6 h 17.4 v 71.2 h 219.6 v -71.2 h 19.3 v -36.6 h -19.3 v -97.2"
                     transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone1" />
@@ -1210,8 +1215,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </g>
         </g>
         <g transform="translate(864.61151,535.06891)">
-            <g id="4zone_zone2" class="key-group" (click)="onKeyboardImageClick(2)"
-                [ngClass]="{ 'key-background-selected': selectedZones == 2, 'key-background-unselected': selectedZones != 2 }">
+            <g id="4zone_zone2" class="key-group" (click)="updateZoneOpacity(2)"
+                [ngClass]="{ 'key-background-selected': selectedZones.includes(2), 'key-background-unselected': !selectedZones.includes(2) }"
+                data-zone="2">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="m 364,0 v 97.2 h 19.3 v 36.6 h -19.3 v 71.2 h 146.4 v -34.6 h 36.6 v -36.6 h -17.3 v -36.6 h -19.3 v -36.6 h -36.6 v -60.6"
                     transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone2" />
@@ -1374,8 +1380,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </g>
         </g>
         <g transform="translate(880.61151,535.06891)">
-            <g id="4zone_zone3" class="key-group" (click)="onKeyboardImageClick(3)"
-                [ngClass]="{ 'key-background-selected': selectedZones == 3, 'key-background-unselected': selectedZones != 3 }">
+            <g id="4zone_zone3" class="key-group" (click)="updateZoneOpacity(3)"
+                [ngClass]="{ 'key-background-selected': selectedZones.includes(3), 'key-background-unselected': !selectedZones.includes(3) }"
+                data-zone="3">
                 <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                     d="m 473.8,0 v 60.6 h 36.6 v 36.6 h 19.3 v 36.6 h 17.3 v 36.6 h -36.6 v 34.6 h 217.6 v -205"
                     transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone3" />

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-.key-group {
+ .key-group {
     stroke:darkslategrey;
     &.key-background-unselected .key_outline {
         stroke:darkslategrey;
@@ -31,4 +31,12 @@
             stroke:LightGrey;
         }
     }
+}
+
+.unselected {
+    opacity: 0.2;
+  }
+
+.selected {
+    opacity: 1;
 }

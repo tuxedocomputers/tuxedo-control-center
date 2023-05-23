@@ -42,7 +42,7 @@ export class KeyboardVisualComponent implements OnInit {
         this.selectedZonesChange.emit(this.selectedZones);
     }
 
-    private addOrRemoveNumber(num: number): number[] {
+    private addOrRemoveSelectedZones(num: number): number[] {
         const index = this.selectedZones.indexOf(num);
         if (index !== -1) {
             this.selectedZones.splice(index, 1);
@@ -50,12 +50,6 @@ export class KeyboardVisualComponent implements OnInit {
             this.selectedZones.push(num);
         }
         return this.selectedZones;
-    }
-
-    public onKeyboardImageClick(zone: number) {
-        if (this.keyboardBacklightCapabilities.zones > 1) {
-            this.selectedZonesChange.emit(this.addOrRemoveNumber(zone));
-        }
     }
 
     public getSvgHeight(): number {
@@ -76,5 +70,26 @@ export class KeyboardVisualComponent implements OnInit {
         } else {
             return "832.61151, 535.06891";
         }
+    }
+
+    public updateZoneOpacity(zone: number): void {
+        if (this.keyboardBacklightCapabilities.zones == 1) {
+            return;
+        }
+
+        this.selectedZonesChange.emit(this.addOrRemoveSelectedZones(zone));
+        const gElements = document.querySelectorAll("g.key-group");
+        gElements.forEach((g: SVGGraphicsElement) => {
+            const isSelected = this.selectedZones.includes(
+                parseInt(g.dataset.zone)
+            );
+            if (isSelected) {
+                g.classList.remove("unselected");
+                g.classList.add("selected");
+            } else {
+                g.classList.add("unselected");
+                g.classList.remove("selected");
+            }
+        });
     }
 }
