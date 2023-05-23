@@ -80,7 +80,7 @@ export class XDisplayRefreshRateController
         var resolutionRegex = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?/ // matches 1920x1080 (and 1920x1080i because apparantly some resolutions have letters after them AAAAAAHHHHH)
         // couldn't find much in the documentation, but the i at the end of the line probably means "interlaced"
         // which is the only thing that makes proper sence in relationship to resolutions
-        var freqRegex = /[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?/ // matches 60.00*+  50.00    59.94    59.99 
+        var freqRegex = /[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?/g // matches 60.00*+  50.00    59.94    59.99 
         var fullLineRegex = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?(\s+[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?)+/ // matches 1920x1080     60.00*+  50.00    59.94    59.99 
 
         this.displayName = "";
@@ -151,7 +151,12 @@ export class XDisplayRefreshRateController
                     // only the currently active refresh rate will be added to the active mode
                     // all the other available refresh rates for that resolution will be added in the array with the
                     // other modes, hence why we have dublicates
+
+                    // Check if refresh rate is already in there, if yes do not push again:
+                    if(newMode.refreshRates.indexOf(parseFloat(refreshrates[i])) === -1)
+                    {
                         newMode.refreshRates.push(parseFloat(refreshrates[i]));
+                    }        
                         if (refreshrates[i].includes("*"))
                         {
                             newDisplayModes.activeMode.refreshRates= [parseFloat(refreshrates[i])];
