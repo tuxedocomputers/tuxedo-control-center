@@ -92,13 +92,13 @@ export class TccDBusClientService implements OnDestroy {
     // Publish availability as necessary
     if (this.isAvailable !== previousValue) { this.available.next(this.isAvailable); }
 
+    if (!this.isAvailable) {
+        return;
+    }
+
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);
-
-    if (!wmiAvailability) {
-        return;
-    }
 
     const fanData: IDBusFanData = {
       cpu: await this.tccDBusInterface.getFanDataCPU(),
