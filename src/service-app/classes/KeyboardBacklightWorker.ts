@@ -292,7 +292,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     public onStart(): void {
         this.updateLEDSPerKey();
         this.getKeyboardBacklightCapabilities();
-        if (this.keyboardBacklightCapabilities.zones === 0 && this.onStartRetryCount) {
+        if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
             console.log("Could not find keyboard backlight. Retrying...\n");
             --this.onStartRetryCount;
             setTimeout(() => { this.onStart() }, 1000);
