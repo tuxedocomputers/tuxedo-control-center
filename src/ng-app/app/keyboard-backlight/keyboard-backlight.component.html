@@ -23,8 +23,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-card-title>
     <hr />
     
-    <div class="content-container centered">
-        <p i18n="@@cKeyboardBacklightDescription">Control the Keyboard Backlight</p>
+    <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1"
+        class="content-container centered">
+        <p i18n="@@cKeyboardBacklightDescription">Click with the mouse on a button area that you want to change in
+            illumination color and/or brightness.</p>
     </div>
 
     <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined">
