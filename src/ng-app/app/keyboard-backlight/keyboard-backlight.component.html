@@ -28,7 +28,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 
     <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined">
-        <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight or is not (yet) supported by this control interface.</p>
+        <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</p>
     </div>
 
     <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined"
