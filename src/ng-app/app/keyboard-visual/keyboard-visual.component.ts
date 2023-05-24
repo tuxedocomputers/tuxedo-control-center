@@ -72,9 +72,13 @@ export class KeyboardVisualComponent implements OnInit {
         }
     }
 
-    public updateZoneOpacity(zone: number): void {
+    public updateZoneOpacity(event: MouseEvent, zone: number): void {
         if (this.keyboardBacklightCapabilities.zones == 1) {
             return;
+        }
+
+        if (!event.shiftKey) {
+            this.selectedZones = [];
         }
 
         this.selectedZonesChange.emit(this.addOrRemoveSelectedZones(zone));
