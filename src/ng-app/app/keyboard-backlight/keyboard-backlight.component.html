@@ -18,21 +18,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <mat-card class="tcc-card card-keyboard-backlight">
-    <div class="profile-details-edit">
-        <mat-card-content>
-            <div class="tcc-options-group">
-                <div class="title-row">
-                    <hr>
-                    <div class="title">
-                        <svg viewBox="0 0 512 512" class="tcc-icons">
-                            <use href="./assets/images/icon_kb_backlight5.svg#Icon"></use>
-                        </svg>
-                        <ng-container i18n="@@cKeyboardBacklightLabel">Keyboard Backlight</ng-container>
-                    </div>
-                    <hr>
-                </div>
+    <div class="tcc-options-group">
+        <div class="title-row">
+            <hr>
+            <div class="title">
+                <svg viewBox="0 0 512 512" class="tcc-icons">
+                    <use href="./assets/images/icon_kb_backlight5.svg#Icon"></use>
+                </svg>
+                <ng-container i18n="@@cKeyboardBacklightLabel">Keyboard Backlight</ng-container>
             </div>
-        </mat-card-content>
+            <hr>
+        </div>
     </div>
     
     <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1"
