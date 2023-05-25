@@ -76,7 +76,10 @@ export class XDisplayRefreshRateController
             return;
         }
         let result = child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable}`) + "";
-        var displayNameRegex = /((eDP\-[0-9]+)|(LVDS\-[0-9]+))/
+        // haha f me for thinking this would work. so apparantly it can be eDP plus anything
+        // or LVDS. I think I will try match eDP/LVDS following anything until the first whitespace
+        // character
+        var displayNameRegex = /((eDP\S*)|(LVDS\S*))/
         var resolutionRegex = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?/ // matches 1920x1080 (and 1920x1080i because apparantly some resolutions have letters after them AAAAAAHHHHH)
         // couldn't find much in the documentation, but the i at the end of the line probably means "interlaced"
         // which is the only thing that makes proper sence in relationship to resolutions

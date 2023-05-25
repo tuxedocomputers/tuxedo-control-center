@@ -55,7 +55,10 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         {
             if(activeprofile.display.refreshRate !== this.displayInfo.activeMode.refreshRates[0])
             {
-                this.setRefRate(activeprofile.display.refreshRate);
+                //this.setRefRate(activeprofile.display.refreshRate);
+                // so this seems to fail when you do not specify the full line
+                // so let's just do that instead and hope it fixes it? 
+                this.setMode(this.displayInfo.activeMode.xResolution,this.displayInfo.activeMode.yResolution,activeprofile.display.refreshRate);
             }
         }
         // if(activeprofile.display.useResolution)
