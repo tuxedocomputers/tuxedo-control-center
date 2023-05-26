@@ -62,59 +62,68 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-grid-list>
             </div>
 
-            <mat-grid-list [cols]="9" rowHeight="3em" class="keyboard-backlight-grid"
+            <!-- COLOR PICKER -->
+            <mat-grid-list [cols]="18" rowHeight="2.5rem" class="keyboard-backlight-grid"
+                *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
+                <mat-grid-tile [colspan]="2"></mat-grid-tile>
+                <mat-grid-tile [colspan]="4">
+                    <div class="align-top-container">
+                        <header i18n="@@cKeyboardBacklightColorLabel">Backlight Color:</header>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="4"></mat-grid-tile>
+                <mat-grid-tile [colspan]="6" style="overflow: visible">
+                    <div class="align-color-picker">
+                        <input style="width: 6.5rem; outline-width: 0" #colorPickerElement id="colorPickerElement"
+                            class="looks-like-a-button" [style.background]="chosenColorHex[selectedZones]" readonly>
+                        <button class="tcc-color-picker color-visualizer" mat-icon-button style="margin-left: 1rem;"
+                            color="primary" [cpPosition]="'left'" [cpPositionOffset]="'-25%'"
+                            [cpPositionRelativeToArrow]="false" [colorPicker]="chosenColorHex[selectedZones]"
+                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event, selectedZones)"
+                            (cpInputChange)="onColorPickerInput($event, selectedZones)"
+                            (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
+                            (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZones)">
+                            <mat-icon>colorize</mat-icon>
+                        </button>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="2">
+                </mat-grid-tile>
+            </mat-grid-list>
+
+            <mat-grid-list [cols]="18" rowHeight="2.5rem" class="keyboard-backlight-grid"
                 *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
-                <mat-grid-tile [colspan]="1"></mat-grid-tile>
-                <mat-grid-tile [colspan]="3">
-                    <header i18n="@@cKeyboardBacklightBrightnessLabel">Backlight Brightness:</header>
+                <!-- BRIGHTNESS SLIDER -->
+                <mat-grid-tile [colspan]="2"></mat-grid-tile>
+                <mat-grid-tile [colspan]="6">
+                    <header i18n="@@cKeyboardBacklightBrightnessLabel">Backlight Brightness</header>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="1">
+                <mat-grid-tile [colspan]="2">
                     <content class="value" style="text-align: center">{{ brightnessSlider.percent * 100 | number:
-                        '1.0-1' }}%</content>
+                        '1.0-1'
+                        }}%</content>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="3" style="overflow: visible">
-                    <div class="align-top-right-container">
+                <mat-grid-tile [colspan]="6" style="overflow: visible">
+                    <div class="align-slider-components">
                         <button mat-icon-button color="primary"
-                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max))"
+                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max));"
                             (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
                             <mat-icon>remove</mat-icon>
                         </button>
                         <button mat-icon-button color="primary"
-                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max))"
+                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max));"
                             (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <mat-slider #brightnessSlider [value]="chosenBrightness" min="0"
+                        <mat-slider #brightnessSlider min="0" style="width:11rem"
                             [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary"
                             (input)="onBrightnessSliderInput($event)" (onTouched)="onBrightnessSliderTouched($event)"
                             (change)="onBrightnessSliderChange($event)">
                         </mat-slider>
                     </div>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="1"></mat-grid-tile>
-            </mat-grid-list>
-
-            <mat-grid-list [cols]="9" rowHeight="20em" class="keyboard-backlight-grid"
-                *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
-                <mat-grid-tile [colspan]="1"></mat-grid-tile>
-                <mat-grid-tile [colspan]="3">
-                    <div class="align-top-container">
-                        <header i18n="@@cKeyboardBacklightColorLabel">Backlight Color:</header>
-                    </div>
+                <mat-grid-tile [colspan]="2">
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="1"></mat-grid-tile>
-                <mat-grid-tile [colspan]="3" style="overflow: visible">
-                    <div class="align-top-right-container">
-                        <span class="tcc-color-picker color-visualizer"
-                            [style.background]="chosenColorHex[selectedZones]"
-                            [colorPicker]="chosenColorHex[selectedZones]" cpToggle="true" cpDialogDisplay="inline"
-                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event, selectedZones)"
-                            (cpInputChange)="onColorPickerInput($event, selectedZones)"
-                            (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
-                            (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZones)"></span>
-                    </div>
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="1"></mat-grid-tile>
             </mat-grid-list>
         </div>
     </mat-card>
