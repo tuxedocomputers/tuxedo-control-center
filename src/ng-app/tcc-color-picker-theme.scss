@@ -26,7 +26,7 @@
     $background: map-get($theme, background);
 
     .tcc-color-picker+color-picker>.color-picker {
-        background-color: inherit;
+        background-color: mat-color($background, card);
 
         &.open {
             margin: 0 auto;
@@ -41,7 +41,15 @@
                 border-radius: 8px;
             }
 
-            .hex-text input {
+            .hex-text * {
+                color: mat-color($foreground, text);
+            }
+
+            .hsla-text * {
+                color: mat-color($foreground, text);
+            }
+
+            .rgba-text * {
                 color: mat-color($foreground, text);
             }
 
