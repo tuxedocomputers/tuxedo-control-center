@@ -116,7 +116,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <mat-slider #brightnessSlider min="0" style="width:11rem"
+                        <mat-slider #brightnessSlider min="0" style="width:11rem" [(ngModel)]="chosenBrightness"
                             [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary"
                             (input)="onBrightnessSliderInput($event)" (onTouched)="onBrightnessSliderTouched($event)"
                             (change)="onBrightnessSliderChange($event)">
