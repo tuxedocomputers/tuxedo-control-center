@@ -33,8 +33,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     
     <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1"
         class="content-container centered">
-        <p i18n="@@cKeyboardBacklightDescription">Click with the mouse on a button area that you want to change in
-            illumination color and/or brightness.</p>
+        <p i18n="@@cKeyboardBacklightDescription">Click on a key area to select it. Hold down shift to select multiple key areas.</p>
     </div>
 
     <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined">
