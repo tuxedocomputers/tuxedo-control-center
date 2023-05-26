@@ -74,8 +74,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-grid-tile [colspan]="4"></mat-grid-tile>
                 <mat-grid-tile [colspan]="6" style="overflow: visible">
                     <div class="align-color-picker">
-                        <input style="width: 6.5rem; outline-width: 0" #colorPickerElement id="colorPickerElement"
-                            class="looks-like-a-button" [style.background]="chosenColorHex[selectedZones]" readonly>
+                        <input style="width: 6.5rem; outline-width: 0; cursor: default !important;" #colorPickerElement
+                            id="colorPickerElement" class="looks-like-a-button"
+                            [style.background]="chosenColorHex[selectedZones]" readonly>
                         <button class="tcc-color-picker color-visualizer" mat-icon-button style="margin-left: 1rem;"
                             color="primary" [cpPosition]="'left'" [cpPositionOffset]="'-25%'"
                             [cpPositionRelativeToArrow]="false" [colorPicker]="chosenColorHex[selectedZones]"
