@@ -17,8 +17,24 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-.keyboard-backlight-content {
-    align-items: center;
+.backlight-settings-edit {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+
+    .inner-backlight-settings-edit {
+        margin: 0 10px 10px 10px;
+
+        .keyboard-backlight-content {
+            align-items: center;
+        }
+    }
 }
 
 header {
