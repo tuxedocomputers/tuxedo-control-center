@@ -82,6 +82,13 @@ content.value {
 	right: 0;
 }
 
+
+input {
+    width: 6.5rem; 
+    outline-width: 0; 
+    cursor: default !important;
+}
+
 .resize-text {
     margin-bottom: 20px !important;
     display: flex;
