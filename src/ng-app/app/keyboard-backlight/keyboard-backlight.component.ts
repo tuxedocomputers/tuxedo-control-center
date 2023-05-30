@@ -276,4 +276,8 @@ export class KeyboardBacklightComponent implements OnInit {
             }
             this.onBrightnessSliderInput({value: slider.value});
     }
+
+    getSelectedColor() {
+        return this.chosenColorHex[this.selectedZones[0]];
+    }
 }

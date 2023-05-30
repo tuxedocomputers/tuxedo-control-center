@@ -72,16 +72,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-grid-tile [colspan]="6" style="overflow: visible">
                     <div class="align-color-picker">
                         <input #colorPickerElement id="colorPickerElement" class="looks-like-a-button"
-                            [style.background]="chosenColorHex[selectedZones]" readonly class="tcc-color-picker color-visualizer"
+                            [style.background]="getSelectedColor()" readonly class="tcc-color-picker color-visualizer"
                             mat-icon-button color="primary" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'"
-                            [cpPositionRelativeToArrow]="false" [colorPicker]="chosenColorHex[selectedZones]"
+                            [cpPositionRelativeToArrow]="false" [colorPicker]="getSelectedColor()"
                             cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event, selectedZones)"
                             (cpInputChange)="onColorPickerInput($event, selectedZones)"
                             (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
                             (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZones)">
                         <button class="tcc-color-picker color-visualizer" mat-icon-button color="primary"
                             style="margin-left: 1rem;" [cpPosition]="'left'" [cpPositionOffset]="'50%'"
-                            [cpPositionRelativeToArrow]="true" [colorPicker]="chosenColorHex[selectedZones]"
+                            [cpPositionRelativeToArrow]="true" [colorPicker]="getSelectedColor()"
                             cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event, selectedZones)"
                             (cpInputChange)="onColorPickerInput($event, selectedZones)"
                             (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
