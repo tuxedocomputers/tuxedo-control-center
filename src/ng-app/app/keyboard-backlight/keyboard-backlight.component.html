@@ -49,7 +49,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
             <div *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && 
                 keyboardBacklightCapabilities.maxBlue > 0 && keyboardBacklightCapabilities.zones >= 1">
-                <mat-grid-list [cols]="9" rowHeight="1227:2709" class="keyboard-color-grid">
+                <mat-grid-list [cols]="9" rowHeight="1227:2500" class="keyboard-color-grid">
                     <mat-grid-tile [colspan]="1"></mat-grid-tile>
                     <mat-grid-tile [colspan]="7">
                         <app-keyboard-visual class="keyboard-visual"
