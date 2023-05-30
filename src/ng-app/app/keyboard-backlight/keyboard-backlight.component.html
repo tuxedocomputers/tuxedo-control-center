@@ -34,13 +34,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1"
-            class="content-container centered">
-            <p i18n="@@cKeyboardBacklightDescription">Click on a key area to select it. Hold down shift to select
-                multiple key areas.</p>
-        </div>
-
-        <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined">
-            <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</p>
+            class="resize-text">
+            <p i18n="@@cKeyboardBacklightDescription1" class="keyboardBacklightDescription1">Click on a key area to
+                select it.</p>
+            <p i18n="@@cKeyboardBacklightDescription2" class="keyboardBacklightDescription2">Hold down shift to select
+                multiple key areas.
+            </p>
         </div>
 
         <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined"

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-.backlight-settings-edit {
+ .backlight-settings-edit {
     display: block;
     position: absolute;
     top: 10px;
@@ -64,7 +64,6 @@ content.value {
 }
 
 .keyboard-visual {
-    margin-top: 20px;
     width: 100%;
     height: 100%;
 }
@@ -81,4 +80,33 @@ content.value {
 .align-color-picker {
 	position: absolute;
 	right: 0;
+}
+
+.resize-text {
+    margin-bottom: 20px !important;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(14/18 * 100%);
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+    
+.keyboardBacklightDescription1, 
+.keyboardBacklightDescription2 {
+    display: inline-block;
+    margin: 0 0.1rem;
+}
+
+@media screen and (max-width: calc(14/18 * 100%)) {
+    .resize-text {
+        flex-wrap: wrap;
+    }
+
+    .keyboardBacklightDescription1, 
+    .keyboardBacklightDescription2 {
+        flex-basis: 100%;
+        white-space: normal;
+    }
 }
