@@ -37,6 +37,10 @@
                 filter: invert(map-get($theme, --icon-invert));
             }
 
+            .cursor {
+                filter: invert(map-get($theme, --icon-invert));
+            }
+            
             .saturation-lightness {
                 border-radius: 4px;
             }
