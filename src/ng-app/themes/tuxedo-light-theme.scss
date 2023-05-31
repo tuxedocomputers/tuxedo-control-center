@@ -24,12 +24,13 @@ $tuxedo-light-theme-warn: mat-palette($mat-red);
 
 $tuxedo-control-center-light-theme: map-merge(mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn), (
     background: map-merge($mat-light-theme-background, (
-
     )),
 
     foreground: map-merge($mat-light-theme-foreground, (
         mat-toolbar-text: #F5F5F5
-    ))
+    )),
+
+    --icon-invert: 0%
 ));
 
 
