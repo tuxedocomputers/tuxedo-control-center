@@ -27,6 +27,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     // if we decide to put in wayland support we simply have to make a new controller?
     private displayInfo: IDisplayFreqRes;
+    private refreshRateSupported: boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(9000, tccd); 
@@ -48,6 +49,11 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             activeprofile = this.tccd.getCurrentProfile();
         }
         catch(err)
+        {
+            return;
+        }
+        // occured right after boot when user was not logged into graphical DE yet (but into tty)
+        if(!activeprofile)
         {
             return;
         }
@@ -78,7 +84,10 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private getAllInfo()
     {
         this.displayInfo = this.controller.getDisplayModes();
+        // once we implement wayland we need to change this check :)
+        this.refreshRateSupported = this.controller.getIsX11();
         this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+        this.tccd.dbusData.refreshRateSupported = this.refreshRateSupported;
     }
 
     public getActiveDisplayMode()

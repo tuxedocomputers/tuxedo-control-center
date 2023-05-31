@@ -120,6 +120,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
+    public refreshRateSupported: boolean;
 
     private tdpLabels: Map<string, string>;
 
@@ -205,6 +206,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 this.displayModes = nextdisplayModes;
             }
         }));
+
+        this.subscriptions.add(this.tccDBus.refreshRateSupported.subscribe(nextrefreshRateSupported => {
+            if (nextrefreshRateSupported !== this.refreshRateSupported) {
+                this.refreshRateSupported = nextrefreshRateSupported;
+            }
+        }));
+
+        
+
 
         this.tdpLabels = new Map();
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
@@ -542,6 +552,23 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             return undefined;
         }
         return this.displayModes.displayModes;
+    }
+
+    public isX11(): boolean
+    {
+        return this.refreshRateSupported;
+    }
+
+    getRefreshRateNotAvailableTooltipText(): string
+    {
+        if(this.isX11())
+        {
+            return "";
+        }
+        else
+        {
+            return $localize `:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`
+        }
     }
 
     // returns refresh rates of systems currently active resolution

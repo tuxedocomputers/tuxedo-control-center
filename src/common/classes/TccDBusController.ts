@@ -93,6 +93,15 @@ export class TccDBusController {
         }
     }
 
+    async getRefreshRateSupported():Promise<boolean>
+    {
+        try {
+            return await this.interface.GetRefreshRateSupported();
+        } catch (err) {
+            return false; 
+        }
+    }
+
     async getFanDataGPU2(): Promise<FanData> {
         try {
             return await this.interface.GetFanDataGPU2();

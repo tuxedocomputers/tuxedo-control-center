@@ -210,14 +210,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </button>
                             </content>
                         </mat-grid-tile>
+                    </mat-grid-list>
+                    
+                    <!-- Refresh Rate and Resolution -->
 
-                        <!-- Refresh Rate and Resolution -->
-
+                    <mat-grid-list 
+                    [cols]="gridParams.cols" 
+                    rowHeight="30px" 
+                    class="profile-details-edit-grid"
+                    [matTooltip]="getRefreshRateNotAvailableTooltipText()"
+                    [ngClass]="{'not-available': !isX11()}"
+                    >
                         <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n="@@cProfMgrDetailsRefRateOnProfileActivationHeader">Set refresh rate on profile activation</header></mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value">
-                                <span [hidden]="!inputUseRefRate.checked" i18n="@@cProfMgrDetailsUseRefRateYes">yes</span>
-                                <span [hidden]="inputUseRefRate.checked" i18n="@@cProfMgrDetailsUseRefRateNo">no</span>
+                                <span [hidden]="!inputUseRefRate.checked" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
+                                <span [hidden]="inputUseRefRate.checked" i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
@@ -232,10 +240,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div [hidden]="getRefreshRates().length > 1" 
                         i18n-matTooltip="@@cOnlyOneRefreshRateAvailableTooltip"
                         matTooltip="Only one Refreshrate available, maybe try setting a different resolution." 
+                        
                         [ngClass]="{'inactive': !inputUseRefRate.checked}"
                         >
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                <header i18n="@@cProfMgrDetailsRefRateLabel">Currently active Refresh Rate</header>
+                                <header i18n="@@cProfMgrDetailsRefRateLabelActive">Currently active refresh rate</header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value">{{ getRefreshRates()[0] }}Hz</content>
@@ -243,7 +252,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                         <div [hidden]="getRefreshRates().length < 2">
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                <header [ngClass]="{'inactive': !inputUseRefRate.checked}" i18n="@@cProfMgrDetailsRefRateLabel">currently selected profile refreshrate</header>
+                                <header [ngClass]="{'inactive': !inputUseRefRate.checked}" i18n="@@cProfMgrDetailsRefRateLabelProfile">Selected profile refresh rate</header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseRefRate.checked}">

@@ -3269,6 +3269,46 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ProfMgrRefreshRatesNotAvailableOnWaylandTooltip" datatype="html">
+        <source>This feature is currently not supported on Wayland</source>
+                <target state="translated">Dieses Feature wird derzeit auf Wayland nicht unterstützt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">570</context>
+        </context-group>
+      </trans-unit>
+                  <trans-unit id="cProfMgrDetailsRefRateOnProfileActivationHeader" datatype="html">
+        <source>Set refresh rate on profile activation</source>
+        <target state="translated">Bildwiederholrate bei Profilaktivierung anpassen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cOnlyOneRefreshRateAvailableTooltip" datatype="html">
+        <source>Only one Refreshrate available, maybe try setting a different resolution.</source>
+        <target state="translated">Nur eine Bildwiederholrate verfügbar. Sie könnten versuchen eine andere Auflösung einzustellen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">242</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateLabelActive" datatype="html">
+        <source>Currently active refresh rate</source>
+        <target state="translated">Derzeit aktive Bildwiederholrate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateLabelProfile" datatype="html">
+        <source>Selected profile refresh rate</source>
+        <target state="translated">Im Profil ausgewählte Bildwiederholrate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

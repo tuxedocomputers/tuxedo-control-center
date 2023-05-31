@@ -70,6 +70,7 @@ export class FanData {
  */
 export class TccDBusData {
     public displayModes: string;
+    public refreshRateSupported: boolean;
     public tuxedoWmiAvailable: boolean;
     public tccdVersion: string;
     public fans: FanData[];
@@ -112,6 +113,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }
     }
     GetDisplayModesJSON() { return this.data.displayModes; }
+    GetRefreshRateSupported() { return this.data.refreshRateSupported; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
@@ -181,6 +183,7 @@ TccDBusInterface.configureMembers({
     },
     methods: {
         GetDisplayModesJSON: {outSignature: 's'},
+        GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },

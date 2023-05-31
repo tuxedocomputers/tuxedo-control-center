@@ -73,6 +73,7 @@ export class TccDBusClientService implements OnDestroy {
 
 
     public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
+    public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -159,6 +160,8 @@ export class TccDBusClientService implements OnDestroy {
             console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err)
         }
     }
+    const refreshRateSupportedBool = await this.tccDBusInterface.getRefreshRateSupported();
+    this.refreshRateSupported.next(refreshRateSupportedBool);
 
     const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
     if (keyboardBacklightCapabilitiesJSON !== undefined) {
