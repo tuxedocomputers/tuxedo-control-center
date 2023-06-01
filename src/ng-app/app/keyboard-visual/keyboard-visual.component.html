@@ -22,7 +22,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <ng-template [ngIf]="keyboardBacklightCapabilities.zones > 0 && keyboardBacklightCapabilities.zones <= 3">
         <svg id="Svg1+3Zones" [attr.viewBox]="'0 0 ' + getSvgWidth() + ' ' + getSvgHeight()">
             <g transform="translate(832.61151,535.06891)">
-                <g #TEST0 id="3zone_zone0" class="key-group" (click)="updateZoneOpacity($event, 0)"
+                <g id="3zone_zone0" class="key-group" (click)="updateZoneOpacity($event, 0)"
                     [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(0), 
                     'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(0) }" data-zone="0">
                     <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
