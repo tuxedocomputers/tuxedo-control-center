@@ -17,7 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
  
- .key-group {
+.keyboard {
+    width: calc(14/18 * 100%); 
+    margin: 0 auto;
+}
+
+.key-group {
     stroke:darkslategrey;
     &.key-background-unselected .key_outline {
         stroke:darkslategrey;

@@ -21,7 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div class="backlight-settings-edit">
     <mat-card class="tcc-card card-keyboard-backlight inner-backlight-settings-edit">
         <div class="tcc-options-group">
-            <div class="title-row">
+            <div class="title-row title-row-margin">
                 <hr>
                 <div class="title">
                     <svg viewBox="0 0 512 512" class="tcc-icons">
@@ -47,22 +47,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             [matTooltip]="!this.config.getSettings().keyboardBacklightControlEnabled ? this.config.keyboardBacklightControlDisabledMessage : ''"
             matTooltipClass="wider-tooltip">
 
-            <div *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && 
-                keyboardBacklightCapabilities.maxBlue > 0 && keyboardBacklightCapabilities.zones >= 1">
-                <mat-grid-list [cols]="9" rowHeight="1227:2500" class="keyboard-color-grid">
-                    <mat-grid-tile [colspan]="1"></mat-grid-tile>
-                    <mat-grid-tile [colspan]="7">
-                        <app-keyboard-visual class="keyboard-visual"
-                            [keyboardBacklightCapabilities]="keyboardBacklightCapabilities"
-                            [chosenColorHex]="chosenColorHex"
-                            (selectedZonesChange)="selectedZonesChange($event)"></app-keyboard-visual>
-                    </mat-grid-tile>
-                    <mat-grid-tile [colspan]="1"></mat-grid-tile>
-                </mat-grid-list>
+            <div class="keyboard-visual">
+                <app-keyboard-visual [keyboardBacklightCapabilities]="keyboardBacklightCapabilities"
+                    [chosenColorHex]="chosenColorHex" (selectedZonesChange)="selectedZonesChange($event)">
+                </app-keyboard-visual>
             </div>
 
             <!-- COLOR PICKER -->
-            <mat-grid-list [cols]="18" rowHeight="2.5rem" class="keyboard-backlight-grid"
+            <mat-grid-list [cols]="18" rowHeight="2rem" class="keyboard-backlight-grid"
                 *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
                 <mat-grid-tile [colspan]="2"></mat-grid-tile>
                 <mat-grid-tile [colspan]="4">
@@ -94,7 +86,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-grid-tile>
             </mat-grid-list>
 
-            <mat-grid-list [cols]="18" rowHeight="2.5rem" class="keyboard-backlight-grid"
+            <mat-grid-list [cols]="18" rowHeight="2rem" class="keyboard-backlight-grid"
                 *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
                 <!-- BRIGHTNESS SLIDER -->
                 <mat-grid-tile [colspan]="2"></mat-grid-tile>

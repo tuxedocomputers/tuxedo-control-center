@@ -17,7 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+    Component,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnInit,
+    Output,
+} from "@angular/core";
 import { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSettings";
 
 @Component({
@@ -31,6 +38,8 @@ export class KeyboardVisualComponent implements OnInit {
     @Input() chosenColorHex: Array<string>;
     @Output() selectedZonesChange = new EventEmitter<number[]>();
     public selectedZones: Array<number> = [];
+    public divHeight: number;
+    private viewInitialized = false;
 
     constructor() {}
 
@@ -40,6 +49,30 @@ export class KeyboardVisualComponent implements OnInit {
             (_, i) => i
         );
         this.selectedZonesChange.emit(this.selectedZones);
+    }
+
+    ngAfterViewInit() {
+        this.viewInitialized = true;
+        this.updateHeight();
+    }
+
+    @HostListener("window:resize")
+    onResize() {
+        this.updateHeight();
+    }
+
+    updateHeight() {
+        if (this.viewInitialized) {
+            let el: HTMLElement;
+            if ([1, 3].includes(this.keyboardBacklightCapabilities.zones)) {
+                el = document.getElementById("Svg1+3Zones");
+            }
+            if (this.keyboardBacklightCapabilities.zones == 4) {
+                el = document.getElementById("Svg4Zones");
+            }
+            const rect = el.getBoundingClientRect();
+            this.divHeight = rect.height;
+        }
     }
 
     private addOrRemoveSelectedZones(num: number): number[] {
@@ -54,7 +87,7 @@ export class KeyboardVisualComponent implements OnInit {
 
     public getSvgHeight(): number {
         return [3, 4].includes(this.keyboardBacklightCapabilities.zones)
-            ? 255
+            ? 215
             : 205;
     }
 
