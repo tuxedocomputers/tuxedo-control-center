@@ -42,6 +42,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </p>
         </div>
 
+        <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined"
+            class="resize-text">
+            <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight or is not (yet) supported
+                by this control interface.</p>
+        </div>
+
         <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined"
             [ngClass]="{'not-available': !this.config.getSettings().keyboardBacklightControlEnabled }"
             [matTooltip]="!this.config.getSettings().keyboardBacklightControlEnabled ? this.config.keyboardBacklightControlDisabledMessage : ''"

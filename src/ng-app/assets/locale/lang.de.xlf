@@ -1306,7 +1306,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Beleuchtungshelligkeit:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
@@ -1314,7 +1314,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Beleuchtungsfarbe:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
@@ -3281,11 +3281,18 @@ Handelsregisternummer HRB 27755
         <target state="new">Klicken Sie einen Tastenbereich an, um ihn auszuwählen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit><trans-unit id="cKeyboardBacklightDescription2" datatype="html">
         <source>Hold down shift to select multiple key areas. </source>
         <target state="new">Halten Sie Shift gedrückt, um mehrere Tastenbereiche auszuwählen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit><trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
+        <source>Your device has no keyboard backlight or is not (yet) supported by this control interface.</source>
+        <target state="new">Dein Gerät hat keine Tastaturbeleuchtung oder ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">46,47</context>
