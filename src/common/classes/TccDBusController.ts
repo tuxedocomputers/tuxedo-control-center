@@ -89,7 +89,7 @@ export class TccDBusController {
         try {
             return await this.interface.GetDisplayModesJSON();
         } catch (err) {
-            return ""; 
+            return undefined; 
         }
     }
 

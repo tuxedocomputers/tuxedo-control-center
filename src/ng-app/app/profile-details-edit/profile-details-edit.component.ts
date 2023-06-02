@@ -501,49 +501,47 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
     }
 
-    // TODO make sure all of those functions don't fuck up everything when displayModes is undefined/ empty whatever
+    // public getDisplayModesString(): string[]
+    // {
+    //     let displayModesString = [];
+    //     if(!this.displayModes)
+    //     {
+    //         return [undefined];
+    //     }
+    //     let displayModes = this.getDisplayModes();
+    //     for (let i = 0; i < displayModes.length; i++)
+    //     {
+    //         displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
+    //     }
+    //     return displayModesString;
+    // }
 
-    public getDisplayModesString(): string[]
-    {
-        let displayModesString = [];
-        if(!this.displayModes)
-        {
-            return [undefined];
-        }
-        let displayModes = this.getDisplayModes();
-        for (let i = 0; i < displayModes.length; i++)
-        {
-            displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
-        }
-        return displayModesString;
-    }
+    // public getActiveDisplayModeString(): string
+    // {
+    //     if(this.displayModes != undefined)   
+    //    {
+    //     return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
+    //    } 
+    //    else
+    //    {
+    //     return "";
+    //    }
+    // }
 
-    public getActiveDisplayModeString(): string
-    {
-        if(this.displayModes != undefined)   
-       {
-        return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
-       } 
-       else
-       {
-        return "";
-       }
-    }
-
-    public setProfileResolutionByString(event)
-    {
-        if(event && event.value)
-        {
-            let res = event.value.split("x");
-            let xRes = parseInt(res[0]);
-            let yRes = parseInt(res[1]);
-            this.profileFormGroup.controls.display.markAsDirty();
-            let displayObject = {xResolution: 0, yResolution: 0};
-            displayObject.xResolution = xRes;
-            displayObject.yResolution = yRes;
-            this.profileFormGroup.controls.display.patchValue(displayObject);
-        }
-    }
+    // public setProfileResolutionByString(event)
+    // {
+    //     if(event && event.value)
+    //     {
+    //         let res = event.value.split("x");
+    //         let xRes = parseInt(res[0]);
+    //         let yRes = parseInt(res[1]);
+    //         this.profileFormGroup.controls.display.markAsDirty();
+    //         let displayObject = {xResolution: 0, yResolution: 0};
+    //         displayObject.xResolution = xRes;
+    //         displayObject.yResolution = yRes;
+    //         this.profileFormGroup.controls.display.patchValue(displayObject);
+    //     }
+    // }
 
     public getDisplayModes(): IDisplayMode[]
     {

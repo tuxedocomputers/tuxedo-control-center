@@ -157,8 +157,12 @@ export class TccDBusClientService implements OnDestroy {
         } 
         catch (err)
         {
-            console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err)
+            console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err);
         }
+    }
+    else
+    {
+        this.displayModes.next(undefined);
     }
     const refreshRateSupportedBool = await this.tccDBusInterface.getRefreshRateSupported();
     this.refreshRateSupported.next(refreshRateSupportedBool);

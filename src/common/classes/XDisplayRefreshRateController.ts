@@ -31,28 +31,21 @@ export class XDisplayRefreshRateController
         this.displayName = "";
         this.setEnvVariables();
     }
-    // TODO error message / do nothing when environment variables not there yet / don't exist
+
     private setEnvVariables()
     {
         let result = child_process.execSync(`who`) + "";
-        // output should be all users looking something like this:
-        // crissi   tty1         2023-04-05 17:01 (:0)
-        // crissi   pts/6        2023-04-11 18:08
-        // what we want is the display variable :0 in this case and the username
-        // because we need it to find the xauthority file
-        // so we iterate through all lines until we find the one with the (:*) at the end
-        // ok apparantly it's possible for the IP address to be in the output too
-        // should we just ignore this possiblity... well.
         var correctLineRegex = /(\w+)\s+(.+\s+)+(\(:.+\))/ // capturing groups: 1 is user name 2 can be ignored and 3 is the display variable
         var match = result.match(correctLineRegex);
         if(!match)
         {
-            // if no match we set this.isX11 to false and be done with it
+            // if there is no match the xserver is not running, either because it's too early
+            // or because we are on wayland
+            // this can change during the runtime so we need to repeat this check!
             this.isX11 = false;
             this.displayEnvVariable="";
             this.xAuthorityFile="";
             return;
-            // TODO also doesnt happen when we are running before xserver starts...
         }
         var username = match[1];
         this.displayEnvVariable = match[3].replace("(","").replace(")","");
@@ -62,18 +55,21 @@ export class XDisplayRefreshRateController
 
     public getIsX11()//: boolean 
     {
+        // always reset the env Variables, because states can change during runtime!
+        this.setEnvVariables();
         return this.isX11;
     }
 
-    public getDisplayModes()//: IDisplayFreqRes
+    public getDisplayModes(): IDisplayFreqRes
     {
-        if (!this.isX11 || !this.displayEnvVariable || !this.xAuthorityFile )
-        {
-            this.setEnvVariables();
-        }
+        this.setEnvVariables();
+        // if any of those fails return empty information, so no old information is sent to the GUI
         if(!this.isX11 || !this.displayEnvVariable || !this.xAuthorityFile )
         {
-            return;
+            this.isX11 = false;
+            this.displayEnvVariable="";
+            this.xAuthorityFile="";
+            return undefined;
         }
         let result = child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable}`) + "";
         // haha f me for thinking this would work. so apparantly it can be eDP plus anything
@@ -89,25 +85,6 @@ export class XDisplayRefreshRateController
         this.displayName = "";
         let lines = result.split("\n");
         let foundDisplayName = false;
-            /* 
-
-    just for reference:
-    export interface IDisplayFreqRes 
-    {
-        displayName: string;
-        activeMode: IDisplayMode;
-        // active Mode is also included in displayModes
-        displayModes: IDisplayMode[];
-    }
-
-    export interface IDisplayMode
-    {
-        refreshRates: number[];
-        xResolution: number;
-        yResolution: number;
-    }
-    
-    */
         let newDisplayModes: IDisplayFreqRes =
         {
             displayName: "",
@@ -184,18 +161,27 @@ export class XDisplayRefreshRateController
     // set refresh rate
     public setRefreshRate(rate: number): void
     {
-        child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} -r ${rate}`);
+        if(this.isX11 && this.displayEnvVariable && this.xAuthorityFile)
+        {
+            child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} -r ${rate}`);
+        }
     }
 
     //set resolution
     public setResolution(xRes: number, yRes: number): void
     {
-        child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} --mode ${xRes}x${yRes}`);
+        if(this.isX11 && this.displayEnvVariable && this.xAuthorityFile)
+        {
+            child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} --mode ${xRes}x${yRes}`);
+        }
     }
 
     // set both
     public setRefreshResolution(xRes: number, yRes: number, rate: number)
     {
+        if(this.isX11 && this.displayEnvVariable && this.xAuthorityFile)
+        {
         child_process.execSync(`export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`);
+        }
     }
 }

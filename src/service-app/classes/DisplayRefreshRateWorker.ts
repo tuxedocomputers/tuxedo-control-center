@@ -25,19 +25,16 @@ import { ITccProfile } from 'src/common/models/TccProfile';
 export class DisplayRefreshRateWorker extends DaemonWorker {
 
     private controller: XDisplayRefreshRateController;
-    // if we decide to put in wayland support we simply have to make a new controller?
     private displayInfo: IDisplayFreqRes;
     private refreshRateSupported: boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(9000, tccd); 
+        super(3000, tccd); 
         this.controller = new XDisplayRefreshRateController();
     }
 
     public onStart(): void {      
     }
-
-    // TODO properly catch errors when querying controller
 
     public onWork(): void {
         // get current display settings from controller and save them into data structure
@@ -61,9 +58,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         {
             if(activeprofile.display.refreshRate !== this.displayInfo.activeMode.refreshRates[0])
             {
-                //this.setRefRate(activeprofile.display.refreshRate);
-                // so this seems to fail when you do not specify the full line
-                // so let's just do that instead and hope it fixes it? 
+                // xrandr sometimes fails when you don't specifiy the full line
                 this.setMode(this.displayInfo.activeMode.xResolution,this.displayInfo.activeMode.yResolution,activeprofile.display.refreshRate);
             }
         }
@@ -86,33 +81,46 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.displayInfo = this.controller.getDisplayModes();
         // once we implement wayland we need to change this check :)
         this.refreshRateSupported = this.controller.getIsX11();
-        this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+        if(this.displayInfo === undefined)
+        {
+            this.tccd.dbusData.displayModes = undefined;
+        }
+        else
+        {
+            this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+        }
         this.tccd.dbusData.refreshRateSupported = this.refreshRateSupported;
     }
 
     public getActiveDisplayMode()
      {
-        if(!this.displayInfo)
+        if(this.displayInfo === undefined)
         {
             this.getAllInfo();
         }
-        return this.displayInfo.activeMode;
+        if(this.displayInfo === undefined)
+        {
+            return undefined;
+        }
+        else
+        {
+            return this.displayInfo.activeMode;
+        }
      }
 
-    // set refresh rate
+    // set refresh rate only
     private setRefRate(rate: number)
     {
         this.controller.setRefreshRate(rate);
     }
 
-    // set resolution
-    // ok sometimes there seems to be an issue for some resolutions when you don't also give it the refreshrate
+    // set resolution only
     private setRes(xRes: number, yRes: number)
     {
         this.controller.setResolution(xRes, yRes);
     }
 
-    // set both at the same time (currently unused - might have tiny performance benefit?)
+    // set both at the same time - have to use this using xrandr because it sometimes fails otherwise
     private setMode(xRes: number, yRes: number, refRate: number)
     {
         this.controller.setRefreshResolution(xRes,yRes,refRate);

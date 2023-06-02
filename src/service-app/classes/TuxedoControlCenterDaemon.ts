@@ -170,10 +170,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return this.chargingWorker;
     }
 
-    public getDisplayWorker() {
-        return this.displayWorker;
-    }
-
     public catchError(err: Error) {
         this.logLine('Tccd Exception');
         const errorLine = err.name + ': ' + err.message;
@@ -657,8 +653,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         let activeDisplayMode;
         try
         {
-            // TODO not a good way, can crash tccd which is not good.
-            // apparantly not enough to continue execution normally, an error stops program flow anyway - yay
             activeDisplayMode = this.displayWorker.getActiveDisplayMode();
         }
         catch(err)
@@ -668,9 +662,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (!activeDisplayMode)
         {
             activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
-        }
-        // TODO remove after testing
-        //activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
+        }       
         if(profile.display.refreshRate === undefined)
         {
             profile.display.refreshRate = activeDisplayMode.refreshRates[0];
