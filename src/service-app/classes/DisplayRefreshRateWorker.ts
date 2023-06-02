@@ -50,7 +50,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             return;
         }
         // occured right after boot when user was not logged into graphical DE yet (but into tty)
-        if(!activeprofile)
+        if(!activeprofile || !this.displayInfo)
         {
             return;
         }
