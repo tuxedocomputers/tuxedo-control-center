@@ -73,17 +73,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             [style.background]="getSelectedColor()" readonly class="tcc-color-picker color-visualizer"
                             mat-icon-button color="primary" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'"
                             [cpPositionRelativeToArrow]="false" [colorPicker]="getSelectedColor()"
-                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event, selectedZones)"
-                            (cpInputChange)="onColorPickerInput($event, selectedZones)"
-                            (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
-                            (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZones)">
+                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpInputChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpSliderDragStart)="onColorPickerDragStart(selectedZones)"
+                            (cpSliderDragEnd)="onColorPickerDragEnd(selectedZones)">
                         <button class="tcc-color-picker color-visualizer" mat-icon-button color="primary"
                             style="margin-left: 1rem;" [cpPosition]="'left'" [cpPositionOffset]="'50%'"
                             [cpPositionRelativeToArrow]="true" [colorPicker]="getSelectedColor()"
-                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event, selectedZones)"
-                            (cpInputChange)="onColorPickerInput($event, selectedZones)"
-                            (cpSliderDragStart)="onColorPickerDragStart($event, selectedZones)"
-                            (cpSliderDragEnd)="onColorPickerDragEnd($event, selectedZones)">
+                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpInputChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpSliderDragStart)="onColorPickerDragStart(selectedZones)"
+                            (cpSliderDragEnd)="onColorPickerDragEnd(selectedZones)">
                             <mat-icon>colorize</mat-icon>
                         </button>
                     </div>
@@ -101,25 +101,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="2">
                     <content class="value" style="text-align: center">{{ brightnessSlider.percent * 100 | number:
-                        '1.0-1'
-                        }}%</content>
+                        '1.0-0'}}%
+                    </content>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="6" style="overflow: visible">
                     <div class="align-slider-components">
                         <button mat-icon-button color="primary"
-                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max));"
-                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
+                            (mousedown)="startPress(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max)"
+                            (mouseup)="stopPress()" (mouseleave)="stopPress()">
                             <mat-icon>remove</mat-icon>
                         </button>
                         <button mat-icon-button color="primary"
-                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max));"
-                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
+                            (mousedown)="startPress(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max)"
+                            (mouseup)="stopPress()" (mouseleave)="stopPress()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <mat-slider #brightnessSlider min="0" style="width:11rem" [(ngModel)]="chosenBrightness"
+                        <mat-slider class="brightness-slider" #brightnessSlider min="0" [(ngModel)]="chosenBrightness"
                             [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary"
-                            (input)="onBrightnessSliderInput($event)" (onTouched)="onBrightnessSliderTouched($event)"
-                            (change)="onBrightnessSliderChange($event)">
+                            (input)="onBrightnessSliderInput($event.value)"
+                            (onTouched)="onBrightnessSliderTouched($event)" (change)="onBrightnessSliderChange()">
                         </mat-slider>
                     </div>
                 </mat-grid-tile>

@@ -17,74 +17,61 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ConfigService } from '../config.service';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { KeyboardBacklightCapabilitiesInterface, KeyboardBacklightColorModes, KeyboardBacklightStateInterface } from '../../../common/models/TccSettings';
-import { filter, take } from 'rxjs/operators';
+import { Component, OnInit } from "@angular/core";
+import { ConfigService } from "../config.service";
+import { TccDBusClientService } from "../tcc-dbus-client.service";
+import {
+    KeyboardBacklightCapabilitiesInterface,
+    KeyboardBacklightColorModes,
+    KeyboardBacklightStateInterface,
+} from "../../../common/models/TccSettings";
+import { filter, take } from "rxjs/operators";
+import { MatSlider } from "@angular/material/slider";
+import { interval, Subscription } from "rxjs";
 
 @Component({
-    selector: 'app-keyboard-backlight',
-    templateUrl: './keyboard-backlight.component.html',
-    styleUrls: ['./keyboard-backlight.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    selector: "app-keyboard-backlight",
+    templateUrl: "./keyboard-backlight.component.html",
+    styleUrls: ["./keyboard-backlight.component.scss"],
 })
 export class KeyboardBacklightComponent implements OnInit {
-    Object = Object;
-
     public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
-    public keyboardBacklightStates: Array<KeyboardBacklightStateInterface>;
     public chosenBrightness: number;
     public chosenColorHex: Array<string>;
     public selectedZones: Array<number>;
+    private pressTimer: NodeJS.Timeout;
+    private pressInterval: Subscription;
+    private resetTimeout: NodeJS.Timeout;
 
-    public brightnessSliderInUsage: boolean = false;
-    public brightnessSliderInUsageReset: NodeJS.Timeout = undefined;
-    public colorPickerInUsage: Array<boolean> = [false, false, false];
-    public colorPickerInUsageReset: Array<NodeJS.Timeout> = [undefined, undefined, undefined];
-    public foo: string;
-
-    public gridParams = {
-        cols: 9,
-        headerSpan: 3,
-        valueSpan: 3,
-        inputSpan: 3
-    };
-
-    public gridParamsSymmetrical = {
-        cols: 9,
-        firstSpan: 3,
-        secondSpan: 3,
-        thirdSpan: 3
-    };
+    private brightnessSliderInUsage: boolean = false;
+    private colorPickerInUsage: Array<boolean> = [];
+    private colorPickerInUsageReset: Array<NodeJS.Timeout> = [];
 
     constructor(
         private config: ConfigService,
         private tccdbus: TccDBusClientService
-    ) { }
+    ) {}
 
     public ngOnInit() {
         this.setChosenValues();
         this.subscribeKeyboardBacklightCapabilities();
         this.subscribeKeyboardBacklightStates();
+        this.setColorPickerInUsageDefault();
     }
 
-    // Converts Int Value: 0xRRGGBBAA to string value "#RRGGBB"
-    private rgbaIntToRGBSharpString (input: number): string {
-        return "#" + input.toString(16).padStart(8, '0').substring(0, 6);
+    // Converts integer value: 0xRRGGBBAA or 0xRRGGBB to a string value "#RRGGBB"
+    private intToRGBSharpString(input: number): string {
+        const hex = input.toString(16).padStart(input <= 0xffffff ? 6 : 8, "0");
+        return "#" + hex.substring(0, 6);
     }
 
-    // Converts Int Value: 0xRRGGBB to string value "#RRGGBB"
-    private rgbIntToRGBSharpString (input: number): string {
-        return "#" + input.toString(16).padStart(6, "0");
+    // Converts a string value: "#RRGGBB" to an integer value: 0xRRGGBBAA
+    private RGBSharpStringToInt(input: string, alpha = "00"): number {
+        const hex = input.replace("#", "") + alpha;
+        return parseInt(hex, 16);
     }
 
-    // Converts string Value: "#RRGGBB" to int value 0xRRGGBB00
-    private rgbSharpStringToRGBAInt (input: string): number {
-        return parseInt(input.substring(1, 7).padEnd(8, '0'), 16);
-    }
-
-    private clamp (input: number, min: number, max:number): number {
+    private clamp(input: number, min: number, max: number): number {
         return Math.min(Math.max(input, min), max);
     }
 
@@ -92,15 +79,23 @@ export class KeyboardBacklightComponent implements OnInit {
         const settings = this.config.getSettings();
         const keyboardBacklightColor = settings.keyboardBacklightColor;
         this.chosenColorHex = keyboardBacklightColor.map((color) =>
-            this.rgbaIntToRGBSharpString(color)
+            this.intToRGBSharpString(color)
         );
         this.chosenBrightness = settings.keyboardBacklightBrightness;
+    }
+
+    private setColorPickerInUsageDefault() {
+        const zones = this.keyboardBacklightCapabilities.zones;
+        for (let i = 0; i < zones; i++) {
+            this.colorPickerInUsage.push(false);
+            this.colorPickerInUsageReset.push(undefined);
+        }
     }
 
     private subscribeKeyboardBacklightCapabilities() {
         this.tccdbus.keyboardBacklightCapabilities
             .pipe(filter(Boolean), take(1))
-            .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface) => 
+            .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface) =>
                 this.applyBacklightCapabilities(capabilities)
             );
     }
@@ -134,85 +129,107 @@ export class KeyboardBacklightComponent implements OnInit {
                 const hasNoPickerInUsage = !this.isPickerInUsage();
 
                 if (hasChosenColor && hasNoPickerInUsage) {
-                    const [first] = keyboardBacklightStates;
-                    this.chosenBrightness = first.brightness;
-                    this.chosenColorHex = keyboardBacklightStates.map(
-                        ({ red, green, blue }) => {
-                            return (red << 16) + (green << 8) + blue;
-                        }
-                    ).map(this.rgbIntToRGBSharpString)
+                    const { brightness, red, green, blue } =
+                        keyboardBacklightStates[0];
+                    this.chosenBrightness = brightness;
+                    this.chosenColorHex = this.createColorHexArray(
+                        keyboardBacklightStates
+                    );
                 }
             }
         );
     }
 
-    isPickerInUsage() {
+    private createColorHexArray(
+        keyboardBacklightStates: KeyboardBacklightStateInterface[]
+    ) {
+        return keyboardBacklightStates
+            .map(({ red, green, blue }) => {
+                return (red << 16) + (green << 8) + blue;
+            })
+            .map(this.intToRGBSharpString);
+    }
+
+    private isPickerInUsage() {
         return (
             this.brightnessSliderInUsage ||
             this.colorPickerInUsage.some((colorPicker) => colorPicker)
         );
     }
 
-    private fillKeyboardBacklightStatesFromValues(brightness: number, colorHex: Array<string>): Array<KeyboardBacklightStateInterface> {
-        let keyboardBacklightStates: Array<KeyboardBacklightStateInterface> = [];
-        if (colorHex === undefined) {
-            keyboardBacklightStates.push({
-                mode: KeyboardBacklightColorModes.static,
-                brightness: brightness,
-                red: undefined,
-                green: undefined,
-                blue: undefined
-            });
-        }
-        else {
-            for (let i = 0; i < colorHex.length; ++i) {
-                let rgbaInt = this.rgbSharpStringToRGBAInt(colorHex[i]);
-                keyboardBacklightStates.push({
-                    mode: KeyboardBacklightColorModes.static,
-                    brightness: brightness,
-                    red: (rgbaInt >>> 24) & 0xff,
-                    green: (rgbaInt >>> 16) & 0xff,
-                    blue: (rgbaInt >>> 8) & 0xff
-                });
-            }
-        }
-        return keyboardBacklightStates;
+    private fillKeyboardBacklightStatesFromValues(
+        brightness: number,
+        colorHex: string[] = []
+    ): KeyboardBacklightStateInterface[] {
+        return colorHex
+            ? colorHex.map((hex) => {
+                  const rgbaInt = this.RGBSharpStringToInt(hex);
+                  return {
+                      mode: KeyboardBacklightColorModes.static,
+                      brightness,
+                      red: (rgbaInt >>> 24) & 0xff,
+                      green: (rgbaInt >>> 16) & 0xff,
+                      blue: (rgbaInt >>> 8) & 0xff,
+                  };
+              })
+            : [
+                  {
+                      mode: KeyboardBacklightColorModes.static,
+                      brightness,
+                      red: undefined,
+                      green: undefined,
+                      blue: undefined,
+                  },
+              ];
     }
 
-    public onBrightnessSliderInput(event: any) {
+    public onBrightnessSliderInput(brightness: number) {
         this.brightnessSliderInUsage = true;
-        clearTimeout(this.brightnessSliderInUsageReset);
-        this.brightnessSliderInUsageReset = setTimeout(() => {
-            this.brightnessSliderInUsage = false;
-        }, 10000);
-        let colorHex = (this.chosenColorHex === undefined) || (this.chosenColorHex.length == 0) ? undefined : this.chosenColorHex;
-        this.chosenBrightness = event.value;
-        this.tccdbus.setKeyboardBacklightStates(this.fillKeyboardBacklightStatesFromValues(event.value, colorHex));
+        this.applyBrightnessSliderInUsageReset();
+        const colorHex = this.chosenColorHex?.length
+            ? this.chosenColorHex
+            : undefined;
+
+        this.chosenBrightness = brightness;
+        this.tccdbus.setKeyboardBacklightStates(
+            this.fillKeyboardBacklightStatesFromValues(brightness, colorHex)
+        );
     }
 
-    public onBrightnessSliderChange(event: any) {
-        clearTimeout(this.brightnessSliderInUsageReset);
-        this.brightnessSliderInUsageReset = setTimeout(() => {
-            this.brightnessSliderInUsage = false;
-        }, 10000);
+    public onBrightnessSliderChange() {
+        this.applyBrightnessSliderInUsageReset();
     }
 
-    public onColorPickerInput(event: any, selectedZones: number[]) {
-        if (event.valid !== undefined && event.valid !== true) {
-            return;
+    private applyBrightnessSliderInUsageReset() {
+        clearTimeout(this.resetTimeout);
+
+        if (!this.brightnessSliderInUsage) {
+            this.brightnessSliderInUsage = true;
         }
 
-        const colorHex = this.chosenColorHex;
-        const numZones = this.keyboardBacklightCapabilities.zones;
-        selectedZones.forEach((zone) => {
-            this.colorPickerInUsage[zone] = true;
-            clearTimeout(this.colorPickerInUsageReset[zone]);
-            this.colorPickerInUsageReset[zone] = setTimeout(() => {
-                this.colorPickerInUsage[zone] = false;
-            }, 10000);
+        this.resetTimeout = setTimeout(() => {
+            this.brightnessSliderInUsage = false;
+        }, 10000);
+    }
 
-            colorHex[zone] =
-                numZones <= 4 ? event.color : (colorHex[0] = event.color);
+    private setResetTimeout(
+        resetFn: () => void,
+        resetVar: NodeJS.Timeout | boolean,
+        timeoutMS = 10000
+    ) {
+        clearTimeout(resetVar as NodeJS.Timeout);
+        resetVar = setTimeout(resetFn, timeoutMS);
+    }
+
+    public onColorPickerInput(color: string, selectedZones: number[]) {
+        let colorHex = this.chosenColorHex;
+        const numZones = this.keyboardBacklightCapabilities.zones;
+
+        selectedZones.forEach((zone) => {
+            const useFallbackColor = numZones > 4;
+            colorHex[zone] = useFallbackColor ? colorHex[0] : color;
+            this.setColorPickerUsage(zone, true);
+            this.setPickerUsageResetTimeout(zone);
         });
 
         const backlightStates = this.fillKeyboardBacklightStatesFromValues(
@@ -222,62 +239,76 @@ export class KeyboardBacklightComponent implements OnInit {
         this.tccdbus.setKeyboardBacklightStates(backlightStates);
     }
 
-    public onColorPickerDragStart(event: any, i: number) {
-        if (event.valid === undefined || event.valid === true) {
-            this.colorPickerInUsage[i] = true;
-            clearTimeout(this.colorPickerInUsageReset[i]);
-            this.colorPickerInUsageReset[i] = setTimeout(() => {
-                this.colorPickerInUsage[i] = false;
-            }, 10000);
+    private setColorPickerUsage(zones: number | number[], isUsed: boolean) {
+        if (!Array.isArray(zones)) {
+            this.colorPickerInUsage[zones] = isUsed;
+        } else {
+            zones.forEach((zone) => {
+                this.colorPickerInUsage[zone] = isUsed;
+            });
         }
     }
 
-    public onColorPickerDragEnd(event: any, i: number) {
-        if (event.valid === undefined || event.valid === true) {
-            clearTimeout(this.colorPickerInUsageReset[i]);
-            this.colorPickerInUsageReset[i] = setTimeout(() => {
-                this.colorPickerInUsage[i] = false;
-            }, 10000);
+    private setPickerUsageResetTimeout(zones: number | number[]) {
+        if (!Array.isArray(zones)) {
+            zones = [zones];
         }
+
+        zones.forEach((zone) => {
+            const resetVar = this.colorPickerInUsageReset[zone];
+            this.setResetTimeout(() => {
+                this.setColorPickerUsage(zone, false);
+            }, resetVar);
+            this.colorPickerInUsageReset[zone] = resetVar;
+        });
     }
 
-    selectedZonesChange(selectedZones: number[]) {
+    public onColorPickerDragStart(selectedZones: number[]) {
+        this.setColorPickerUsage(selectedZones, true);
+        this.setPickerUsageResetTimeout(selectedZones);
+    }
+
+    public onColorPickerDragEnd(selectedZones: number[]) {
+        this.setPickerUsageResetTimeout(selectedZones);
+    }
+
+    public selectedZonesChange(selectedZones: number[]) {
         this.selectedZones = selectedZones;
     }
-    
-    private buttonRepeatTimer: NodeJS.Timeout;
-    public buttonRepeatDown(action: () => void) {
-        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
-        const repeatDelayMS = 200;
 
-        action();
-        
-        this.buttonRepeatTimer = setInterval(() => {
-            action();
-        }, repeatDelayMS);
+    public startPress(
+        slider: MatSlider,
+        offset: number,
+        min: number,
+        max: number
+    ): void {
+        this.pressTimer = setTimeout(() => {
+            this.pressInterval = interval(200).subscribe(() => {
+                this.modifySliderInput(slider, offset, min, max);
+            });
+        }, 500);
+        this.modifySliderInput(slider, offset, min, max);
     }
 
-    public buttonRepeatUp() {
-        clearInterval(this.buttonRepeatTimer);
-    }
-
-    public modifySliderInputFunc(slider, offset: number, min: number, max: number) {
-        return () => {
-            this.modifySliderInput(slider, offset, min, max);
+    public stopPress(): void {
+        clearTimeout(this.pressTimer);
+        if (this.pressInterval) {
+            this.pressInterval.unsubscribe();
         }
     }
 
-    public modifySliderInput(slider, offset: number, min: number, max: number) {
-            slider.value += offset;
-            if (slider.value < min) {
-                slider.value = min;
-            } else if (slider.value > max) {
-                slider.value = max;
-            }
-            this.onBrightnessSliderInput({value: slider.value});
+    public modifySliderInput(
+        slider: MatSlider,
+        offset: number,
+        min: number,
+        max: number
+    ) {
+        this.onBrightnessSliderInput(
+            this.clamp(slider.value + offset, min, max)
+        );
     }
 
-    getSelectedColor() {
+    public getSelectedColor() {
         return this.chosenColorHex[this.selectedZones[0]];
     }
 }
