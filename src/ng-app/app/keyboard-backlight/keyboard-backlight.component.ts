@@ -223,11 +223,9 @@ export class KeyboardBacklightComponent implements OnInit {
 
     public onColorPickerInput(color: string, selectedZones: number[]) {
         let colorHex = this.chosenColorHex;
-        const numZones = this.keyboardBacklightCapabilities.zones;
 
         selectedZones.forEach((zone) => {
-            const useFallbackColor = numZones > 4;
-            colorHex[zone] = useFallbackColor ? colorHex[0] : color;
+            colorHex[zone] = color;
             this.setColorPickerUsage(zone, true);
             this.setPickerUsageResetTimeout(zone);
         });
