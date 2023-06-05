@@ -33,7 +33,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
 
-        <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1"
+        <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4"
             class="resize-text">
             <p i18n="@@cKeyboardBacklightDescription1" class="keyboardBacklightDescription1">Click on a key area to
                 select it.</p>

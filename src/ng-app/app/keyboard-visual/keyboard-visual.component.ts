@@ -106,7 +106,10 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public updateZoneOpacity(event: MouseEvent, zone: number): void {
-        if (this.keyboardBacklightCapabilities.zones == 1) {
+        if (
+            this.keyboardBacklightCapabilities.zones == 1 ||
+            this.keyboardBacklightCapabilities.zones > 4
+        ) {
             return;
         }
 

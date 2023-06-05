@@ -19,16 +19,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 
 <div [style.height.px]="divHeight" class="keyboard">
-    <ng-template [ngIf]="keyboardBacklightCapabilities.zones > 0 && keyboardBacklightCapabilities.zones <= 3">
+    <ng-template
+        [ngIf]="[1, 3].includes(this.keyboardBacklightCapabilities.zones) || keyboardBacklightCapabilities.zones > 4">
         <svg id="Svg1+3Zones" [attr.viewBox]="'0 0 ' + getSvgWidth() + ' ' + getSvgHeight()">
             <g transform="translate(832.61151,535.06891)">
                 <g id="3zone_zone0" class="key-group" (click)="updateZoneOpacity($event, 0)"
-                    [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(0), 
-                    'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(0) }" data-zone="0">
+                    [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(0), 
+                    'key-background-unselected': keyboardBacklightCapabilities.zones == 3 && !selectedZones.includes(0) }" data-zone="0">
                     <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                         d="M 0,0 V 205 h 181 v -34.6 h 36.6 v -36.6 h -17.3 v -36.6 h -19.3 v -97.2"
                         transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone0" />
-                    <g id="3zone_bar0" *ngIf="keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(0)"
+                    <g id="3zone_bar0" *ngIf="keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(0)"
                         transform="translate(-832.61151,-535.06891)">
                         <filter id="blur">
                             <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
@@ -255,13 +256,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </g>
             </g>
             <g [attr.transform]="'translate(' + calculateTranslateValue(1) + ')'">
-                <g id="3zone_zone1" class="key-group" (click)="updateZoneOpacity($event, 1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(1), 
-                'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(1) }"
+                <g id="3zone_zone1" class="key-group" (click)="updateZoneOpacity($event, 1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(1), 
+                'key-background-unselected': keyboardBacklightCapabilities.zones == 3 && !selectedZones.includes(1) }"
                     data-zone="1">
                     <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                         d="m 181,0 v 97.2 h 19.3 v 36.6 h 17.3 v 36.6 h -36.6 v 34.6 h 329.4 v -34.6 h -36.6 v -36.6 h 19.4 v -36.6 h -19.4 v -73.2 h 36.6 v -24"
                         id="SelectionDummyZone1" transform="translate(-832.61151,-535.06891)" />
-                    <g id="3zone_bar1" *ngIf="keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(1)"
+                    <g id="3zone_bar1" *ngIf="keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(1)"
                         transform="translate(-832.61151,-535.06891)">
                         <filter id="blur">
                             <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
@@ -654,12 +655,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </g>
             <g [attr.transform]="'translate(' + calculateTranslateValue(2) + ')'">
                 <g id="3zone_zone2" class="key-group" (click)="updateZoneOpacity($event, 2)"
-                    [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(2), 
-                    'key-background-unselected': keyboardBacklightCapabilities.zones != 1 && !selectedZones.includes(2) }" data-zone="2">
+                    [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(2), 
+                    'key-background-unselected': keyboardBacklightCapabilities.zones == 3 && !selectedZones.includes(2) }" data-zone="2">
                     <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
                         d="m 510.4,0 v 24 h -36.6 v 73.2 h 19.4 v 36.6 h -19.4 v 36.6 h 36.6 v 34.6 h 217.6 v -205"
                         transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone2" />
-                    <g id="3zone_bar2" *ngIf="keyboardBacklightCapabilities.zones != 1 && selectedZones.includes(2)"
+                    <g id="3zone_bar2" *ngIf="keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(2)"
                         transform="translate(-832.61151,-535.06891)">
                         <filter id="blur">
                             <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
