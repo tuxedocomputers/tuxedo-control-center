@@ -209,18 +209,12 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     break;
             }
         } else {
-            // TODO, this should probably be changed to not use remote module and instead using a function in
-            // utils.service that opens a message box like utils.service confirmDialog()
-            // for more uniform coding style and also remote module is deprecated.
-            const choice = this.electron.remote.dialog.showMessageBox(
-                this.electron.remote.getCurrentWindow(),
+            const choice = await this.utils.confirmDialog(
                 {
                     title: $localize `:@@cProfMgrInvalidNameTitle:Invalid input`,
-                    message: $localize `:@@cProfMgrInvalidNameMessage:A name for the profile is required`,
-                    type: 'info',
-                    buttons: ['ok']
-                }
-            );
+                    description: $localize `:@@cProfMgrInvalidNameMessage:A name for the profile is required`,
+                    buttonConfirmLabel: 'Ok'
+                  });
         }
     }
 

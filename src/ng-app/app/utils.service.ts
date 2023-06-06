@@ -25,11 +25,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
@@ -224,13 +224,45 @@ export class UtilsService {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
   }
 
-  public getAppVersion(): string {
-    return this.electron.remote.app.getVersion();
+  public async getAppVersion(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        this.electron.ipcRenderer.invoke('get-app-version').then((result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(result);
+          }
+        });
+      });
   }
 
-  public getProcessVersions(): NodeJS.ProcessVersions {
-    return this.electron.remote.process.versions;
+  public quit()
+  {
+    this.electron.ipcRenderer.send('close-app'); 
   }
+
+  public closeWindow()
+  {
+    this.electron.ipcRenderer.send('close-window'); 
+  }
+
+  public minimizeWindow()
+  {
+    this.electron.ipcRenderer.send('minimize-window'); 
+  }
+
+  public async getProcessVersions(): Promise<NodeJS.ProcessVersions> {
+    return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
+        this.electron.ipcRenderer.invoke('get-process-versions').then((result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(result);
+          }
+        });
+      });
+  }
+
 
   public changeLanguage(languageId: string) {
     this.electron.ipcRenderer.send('trigger-language-change', languageId);

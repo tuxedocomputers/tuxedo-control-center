@@ -63,18 +63,21 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
         this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
-
         if (!this.dataLoaded) {
-            this.electron.remote.dialog.showMessageBox(
-                this.electron.remote.getCurrentWindow(),
+            /*
+            this.utils.confirmDialog(
                 {
-                  title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
-                  message: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
-                  type: 'error',
-                  buttons: ['ok']
-                }
-              );
-              this.electron.remote.getCurrentWindow().close();
+                    title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
+                    description: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
+                    buttonConfirmLabel: 'Ok'
+                  }
+
+            ).then((result) => { this.electron.ipcRenderer.send('close-main-window');}, (error) => { this.electron.ipcRenderer.send('close-main-window');}); 
+                  */
+
+            // We need a blocking dialog box here or everything goes to hell.
+            var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`);
+            this.utils.quit();
         }
     }
 
@@ -83,11 +86,11 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public buttonExit(): void {
-        this.electron.remote.getCurrentWindow().close();
+        this.utils.closeWindow();
     }
 
     public buttonMinimize(): void {
-        this.electron.remote.getCurrentWindow().minimize();
+        this.utils.minimizeWindow();
     }
 
     public getSettings(): ITccSettings {

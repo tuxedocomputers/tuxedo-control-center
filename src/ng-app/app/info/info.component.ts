@@ -26,17 +26,25 @@ import { UtilsService } from '../utils.service';
 })
 export class InfoComponent implements OnInit {
 
-  public appVersion = this.utils.getAppVersion();
-  public nodeVersion = this.utils.getProcessVersions().node;
-  public electronVersion = this.utils.getProcessVersions().electron;
-  public chromeVersion = this.utils.getProcessVersions().chrome;
-  public angularVersion = VERSION.full;
+  public appVersion;
+  public nodeVersion;
+  public electronVersion;
+  public chromeVersion;
+  public angularVersion;
 
   constructor(
     private utils: UtilsService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+
+    this.appVersion = await this.utils.getAppVersion();
+    let processVersions = await this.utils.getProcessVersions();
+    this.nodeVersion = processVersions.node;
+    this.electronVersion = processVersions.electron;
+    this.chromeVersion = processVersions.chrome;
+    this.angularVersion = VERSION.full;
+
   }
 
   public changeLanguage(languageId: string) {

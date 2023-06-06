@@ -448,7 +448,6 @@ async function createTccWindow(langId: string, module?: string) {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            enableRemoteModule: true,
         },
         show: false
     });
@@ -479,6 +478,7 @@ function quitCurrentTccSession() {
     app.quit();
 }
 
+
 ipcMain.on('exec-cmd-sync', (event, arg) => {
     try {
         event.returnValue = { data: child_process.execSync(arg), error: undefined };
@@ -486,6 +486,42 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
         event.returnValue = { data: undefined, error: err };
     }
 });
+
+
+// TODO add all things that needed remote module here instead
+
+
+ipcMain.on('close-app', () => {
+    app.exit();
+})
+
+ipcMain.on('close-window', () => {
+    tccWindow.close();
+})
+
+ipcMain.on('minimize-window', () => {
+    tccWindow.minimize();
+})
+
+
+ipcMain.handle('get-app-version', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        let requestedInfo = app.getVersion();
+        resolve(requestedInfo);
+    });
+});
+
+ipcMain.handle('get-process-versions', async (event, arg) => {
+    return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
+        let requestedInfo = process.versions;
+        resolve(requestedInfo);
+    });
+});
+
+/* 
+ 
+*/
+
 
 ipcMain.handle('exec-cmd-async', async (event, arg) => {
     return new Promise((resolve, reject) => {
