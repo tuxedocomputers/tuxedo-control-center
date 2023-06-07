@@ -125,7 +125,6 @@ declare const require;
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxElectronModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
@@ -166,7 +165,8 @@ declare const require;
   providers: [
     DecimalPipe,
     ThemeService,
-    ProfileConflictDialogService
+    ProfileConflictDialogService,
+    ElectronService
   ],
   bootstrap: [AppComponent]
 })
