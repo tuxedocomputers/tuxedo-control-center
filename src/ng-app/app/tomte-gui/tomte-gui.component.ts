@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';

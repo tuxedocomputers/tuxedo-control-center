@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { ElectronService } from "ngx-electron";
+import { ElectronService } from "../electron-service-wrapper/electron-service";
 import { fromEvent, Subscription } from "rxjs";
 import {
     WebcamPreset,

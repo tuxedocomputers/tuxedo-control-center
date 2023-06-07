@@ -23,7 +23,7 @@ import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';

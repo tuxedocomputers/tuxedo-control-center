@@ -18,7 +18,7 @@
  */
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from './electron-service-wrapper/electron-service';
 import { DecimalPipe } from '@angular/common';
 import * as https from 'https';
 import * as fs from 'fs';

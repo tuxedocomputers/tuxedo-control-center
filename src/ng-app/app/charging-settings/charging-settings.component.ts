@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { ElectronService } from "ngx-electron";
+import { ElectronService } from "../electron-service-wrapper/electron-service";
 
 @Component({
     selector: 'app-charging-settings',

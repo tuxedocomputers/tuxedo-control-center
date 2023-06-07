@@ -23,7 +23,7 @@ import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';

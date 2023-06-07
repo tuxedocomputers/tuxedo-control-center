@@ -5,7 +5,7 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { ElectronService } from "ngx-electron";
+import { ElectronService } from "../electron-service-wrapper/electron-service";
 import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 
 @Component({

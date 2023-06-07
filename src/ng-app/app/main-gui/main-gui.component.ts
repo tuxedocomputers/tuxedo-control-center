@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { ITccSettings } from '../../../common/models/TccSettings';
