@@ -287,7 +287,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
     }
 
-    private onStartRetryCount = 3;
+    private onStartRetryCount = 5;
 
     public onStart(): void {
         this.updateLEDSPerKey();
