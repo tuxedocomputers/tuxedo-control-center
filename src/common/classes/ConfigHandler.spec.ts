@@ -32,6 +32,8 @@ describe('ConfigHandler file IO', () => {
     const config = new ConfigHandler(
         '/etc/test1/test2/settings.conf',
         '/etc/test1/test2/profiles.conf',
+        '/etc/test1/test2/webcam.conf',
+        '/etc/test1/test2/v4l2names.conf',
         '/etc/test1/test2/autosave.conf',
         '/etc/test1/test2/fantables.conf');
 
