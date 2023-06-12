@@ -1313,8 +1313,9 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
-        <source>Your device has no keyboard backlight or is not (yet) supported by this control interface.</source>
-        <target state="translated">Your device has no keyboard backlight or is not (yet) supported by this control interface.</target>
+        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
+        <target state="translated">Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1472,7 +1473,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Service unavailable</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="msgboxMessageServiceUnavailable" datatype="html">
@@ -1480,7 +1481,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Communication with tccd service is unavailable, please restart service and try again.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuDashboard" datatype="html">
