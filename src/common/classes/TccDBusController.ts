@@ -115,6 +115,14 @@ export class TccDBusController {
         }
     }
 
+    async getGpuPowerValuesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetGpuPowerValuesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async consumeModeReapplyPending(): Promise<boolean> {
         try {
             return await this.interface.ConsumeModeReapplyPending();

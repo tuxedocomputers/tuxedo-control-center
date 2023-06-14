@@ -886,7 +886,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">k.A.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanSpeedValue" datatype="html">
@@ -894,23 +894,15 @@ Handelsregisternummer HRB 27755
         <target state="translated">k.A.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gaugeTextOff" datatype="html">
-        <source>off</source>
-        <target state="translated">aus</target>
+      <trans-unit id="noGpuPowerValue" datatype="html">
+        <source>N/A</source>
+        <target state="new">aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">231</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gaugeTextOn" datatype="html">
-        <source>on</source>
-        <target state="translated">ein</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="36a9f3e32b06903ce9038e66286fe4c0e45f0559" datatype="html">
@@ -1298,7 +1290,23 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription" datatype="html">
+        <source>Control the Keyboard Backlight</source>
+        <target phase-name="approval-1" state="translated">Steuern Sie die Tastaturbeleuchtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
+        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
+        <target phase-name="approval-1" state="translated">Dein Gerät hat keine Tastaturbeleuchtung, ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel oder der Treiber ist zu alt. Mindestens tuxedo-keyboard 3.2.0 bzw. tuxedo-keyboard-ite 0.3.0 und Linux Kernel 5.9 werden benötigt (manche Geräte brauchen neuere Versionen). Wenn Sie Ubuntu 20.04 oder früher oder eine alte Version von TUXEDO OS verwenden die darauf basiert, werden diese Treiberversionen nicht automatisch installiert.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
@@ -3265,7 +3273,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
@@ -3273,7 +3281,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
     <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
@@ -3296,6 +3304,21 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">47,51</context>
+        </context-group>
+    </trans-unit>
+    <trans-unit id="5b58d748be8700a909f722193e3345182a817489" datatype="html">
+        <source>GPU - Power</source>
+        <target state="new">GPU - Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit><trans-unit id="compatibilityMessageNoGpuPower" datatype="html">
+        <source>This feature is not supported on your model.</source>
+        <target state="new">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit></body>
   </file>

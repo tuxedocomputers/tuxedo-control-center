@@ -60,6 +60,14 @@ export class CompatibilityService {
     return this.hasFanControl;
   }
 
+  get hasGpuPowerDraw(): boolean {
+    return this.tccDbus.gpuPower.value.power_draw > 0;
+  }
+
+  get hasGpuMaxPl(): boolean {
+    return this.tccDbus.gpuPower.value.max_pl > 0;
+  }
+
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
   get hasFanControl(): boolean {
     /*const dmi = new DMIController('/sys/class/dmi/id');
@@ -73,6 +81,10 @@ export class CompatibilityService {
 
   get fanControlCompatibilityMessage(): string {
     return $localize `:@@compatibilityMessageNoFanControl:This feature is not supported on your model.`;
+  }
+
+  get gpuPowerCompatibilityMessage(): string {
+    return $localize `:@@compatibilityMessageNoGpuPower:This feature is not supported on your model.`;
   }
 
   get hasWebcamControl(): boolean {

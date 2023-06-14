@@ -47,6 +47,7 @@ import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultP
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { ChargingWorker } from './ChargingWorker';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { GpuPowerWorker } from "./GpuPowerWorker";
 
 const tccPackage = require('../../package.json');
 
@@ -115,6 +116,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new YCbCr420WorkaroundWorker(this));
+        this.workers.push(new GpuPowerWorker(this));
         this.workers.push(new KeyboardBacklightWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));

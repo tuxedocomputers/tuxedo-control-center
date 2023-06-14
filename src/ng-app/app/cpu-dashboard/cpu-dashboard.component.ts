@@ -28,6 +28,7 @@ import { ConfigService } from '../config.service';
 
 import { NodeService } from '../node.service';
 import { CompatibilityService } from '../compatibility.service';
+import { GpuPowerValues } from 'src/common/models/TccPowerSettings';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -56,6 +57,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public gaugeGPUTemp: number;
   public gaugeGPUSpeed: number;
   public hasGPUTemp = false;
+
+  public gpuPower: GpuPowerValues;
 
   public activeProfile: ITccProfile;
   public isCustomProfile: boolean;
@@ -95,6 +98,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
+    this.subscriptions.add(this.tccdbus.gpuPower.subscribe(gpuPower => { this.gpuPower = gpuPower; }));
+
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => {
       this.fanData = fanData;
       let avgTemp: number;
@@ -226,12 +231,30 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  public gaugeOnOffFormat: (value: number) => string = (value) => {
-    if (value === 0) {
-      return $localize `:@@gaugeTextOff:off`;
+  public gpuPowerFormat: (value: number) => string = (value) => {
+    if (this.compat.hasFanInfo) {
+      return Math.round(value).toString()
     } else {
-      return $localize `:@@gaugeTextOn:on`;
+      return $localize `:@@noGpuPowerValue:N/A`;
     }
+  }
+
+  // setting min = 0 + max = 0 in gauge will result in an error, setting to placeholder value if no value available
+  // if no maximum value is available, current power usage will be set to zero to show empty gauge
+  public getGpuMaxPl() {
+    if (this.compat.hasGpuMaxPl) {
+      let value = this.gpuPower["max_pl"];
+      return value > 0 ? value : 100;
+    }
+    return 100;
+  }
+
+  public getGpuPowerDraw() {
+    if (this.compat.hasGpuPowerDraw && this.compat.hasGpuMaxPl) {
+      let value = this.gpuPower["power_draw"];
+        return value > 0 ? value : 0;
+    }
+    return 0;
   }
 
   public goToProfileEdit(profile: ITccProfile): void {

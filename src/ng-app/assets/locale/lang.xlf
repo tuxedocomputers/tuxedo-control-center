@@ -761,28 +761,21 @@ Commercial register number - Part B of the commercial register - 27755
         <source>N/A</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanSpeedValue" datatype="html">
         <source>N/A</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gaugeTextOff" datatype="html">
-        <source>off</source>
+      <trans-unit id="noGpuPowerValue" datatype="html">
+        <source>N/A</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">231</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gaugeTextOn" datatype="html">
-        <source>on</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="36a9f3e32b06903ce9038e66286fe4c0e45f0559" datatype="html">
@@ -846,6 +839,13 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
           <context context-type="linenumber">148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b58d748be8700a909f722193e3345182a817489" datatype="html">
+        <source>GPU - Power</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="globalSettingsHeaderLabel" datatype="html">
@@ -2868,14 +2868,21 @@ Commercial register number - Part B of the commercial register - 27755
         <source>This feature is not supported on your model.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="compatibilityMessageNoGpuPower" datatype="html">
+        <source>This feature is not supported on your model.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
         <source>This feature is not supported on your model.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
     </body>
