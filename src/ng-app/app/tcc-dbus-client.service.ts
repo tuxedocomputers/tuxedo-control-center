@@ -25,7 +25,7 @@ import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ConfigService } from './config.service';
-import { GpuPowerValues } from 'src/common/models/TccPowerSettings';
+import { CpuPowerValues, GpuPowerValues } from 'src/common/models/TccPowerSettings';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -76,6 +76,7 @@ export class TccDBusClientService implements OnDestroy {
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
   public gpuPower = new BehaviorSubject<GpuPowerValues>(undefined);
+  public cpuPower = new BehaviorSubject<CpuPowerValues>(undefined);
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -112,6 +113,9 @@ export class TccDBusClientService implements OnDestroy {
 
     let gpuPowerValues: GpuPowerValues = JSON.parse(await this.tccDBusInterface.getGpuPowerValuesJSON());
     this.gpuPower.next(gpuPowerValues);
+
+    let cpuPowerValues: CpuPowerValues = JSON.parse(await this.tccDBusInterface.getCpuPowerValuesJSON());
+    this.cpuPower.next(cpuPowerValues);
 
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());

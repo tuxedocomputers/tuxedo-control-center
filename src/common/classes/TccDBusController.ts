@@ -123,6 +123,14 @@ export class TccDBusController {
         }
     }
 
+    async getCpuPowerValuesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetCpuPowerValuesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async consumeModeReapplyPending(): Promise<boolean> {
         try {
             return await this.interface.ConsumeModeReapplyPending();

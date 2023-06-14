@@ -76,6 +76,7 @@ export class TccDBusData {
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
     public gpuPowerValuesJSON: string;
+    public cpuPowerValuesJSON: string;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
     public tempProfileId: string;
@@ -123,6 +124,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
     GetGpuPowerValuesJSON() { return this.data.gpuPowerValuesJSON; }
+    GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
         // However no harmful impact, it will just cause the screen to flicker twice instead of once.
@@ -203,6 +205,7 @@ TccDBusInterface.configureMembers({
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
         GetGpuPowerValuesJSON: { outSignature: 's' },
+        GetCpuPowerValuesJSON: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },

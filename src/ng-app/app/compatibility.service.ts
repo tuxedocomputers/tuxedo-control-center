@@ -60,6 +60,12 @@ export class CompatibilityService {
     return this.hasFanControl;
   }
 
+  get hasCpuPower(): boolean {
+    return (typeof this.tccDbus.cpuPower.value !== 'undefined') && 
+           (typeof this.tccDbus.cpuPower.value.power_draw !== 'undefined') && 
+           (typeof this.tccDbus.cpuPower.value.max_pl !== 'undefined');
+  }
+
   get hasGpuPowerDraw(): boolean {
     return this.tccDbus.gpuPower.value.power_draw > 0;
   }
@@ -81,6 +87,10 @@ export class CompatibilityService {
 
   get fanControlCompatibilityMessage(): string {
     return $localize `:@@compatibilityMessageNoFanControl:This feature is not supported on your model.`;
+  }
+
+  get cpuPowerCompatibilityMessage(): string {
+    return $localize `:@@compatibilityMessageNoCpuPower:This feature is not supported on your model.`;
   }
 
   get gpuPowerCompatibilityMessage(): string {

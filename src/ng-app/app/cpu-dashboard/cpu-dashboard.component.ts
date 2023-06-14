@@ -28,7 +28,7 @@ import { ConfigService } from '../config.service';
 
 import { NodeService } from '../node.service';
 import { CompatibilityService } from '../compatibility.service';
-import { GpuPowerValues } from 'src/common/models/TccPowerSettings';
+import { CpuPowerValues, GpuPowerValues } from 'src/common/models/TccPowerSettings';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -59,6 +59,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public hasGPUTemp = false;
 
   public gpuPower: GpuPowerValues;
+  public cpuPower: CpuPowerValues;
 
   public activeProfile: ITccProfile;
   public isCustomProfile: boolean;
@@ -99,6 +100,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
     this.subscriptions.add(this.tccdbus.gpuPower.subscribe(gpuPower => { this.gpuPower = gpuPower; }));
+    this.subscriptions.add(this.tccdbus.cpuPower.subscribe(cpuPower => { this.cpuPower = cpuPower; }));
 
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => {
       this.fanData = fanData;
@@ -228,6 +230,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       return Math.round(value).toString();
     } else {
       return $localize `:@@noFanSpeedValue:N/A`;
+    }
+  }
+
+  public cpuPowerFormat: (value: number) => string = (value) => {
+    if (this.compat.hasFanInfo) {
+      return Math.round(value).toString()
+    } else {
+      return $localize `:@@noCpuPowerValue:N/A`;
     }
   }
 
