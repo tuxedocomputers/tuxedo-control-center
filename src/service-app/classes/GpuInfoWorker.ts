@@ -22,7 +22,7 @@ import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import { GpuInfoValues } from 'src/common/models/TccGpuValues';
 import { exec } from "child_process";
 
-export class GpuPowerWorker extends DaemonWorker {
+export class GpuInfoWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(2000, tccd);
     }
