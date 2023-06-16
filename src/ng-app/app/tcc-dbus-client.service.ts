@@ -111,11 +111,15 @@ export class TccDBusClientService implements OnDestroy {
     };
     this.fanData.next(fanData);
 
-    let gpuInfoValues: GpuInfoValues = JSON.parse(await this.tccDBusInterface.getGpuInfoValuesJSON());
-    this.gpuInfo.next(gpuInfoValues);
+    const gpuInfoValuesJSON = await this.tccDBusInterface.getGpuInfoValuesJSON();
+    if (gpuInfoValuesJSON) {
+        this.gpuInfo.next(JSON.parse(gpuInfoValuesJSON));
+    }
 
-    let cpuPowerValues: CpuPowerValues = JSON.parse(await this.tccDBusInterface.getCpuPowerValuesJSON());
-    this.cpuPower.next(cpuPowerValues);
+    const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();
+    if (cpuPowerValuesJSON) {
+        this.cpuPower.next(JSON.parse(cpuPowerValuesJSON));
+    }
 
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
