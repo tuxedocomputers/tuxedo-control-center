@@ -477,8 +477,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public formatFrequency(frequency: number): string {
-        return this.utils.formatFrequency(frequency);
+    public formatCpuFrequency(frequency: number): string {
+        return this.utils.formatCpuFrequency(frequency);
     }
 
     public getFanProfileNames(): string[] {

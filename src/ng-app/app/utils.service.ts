@@ -220,8 +220,12 @@ export class UtilsService {
     });
   }
 
-  public formatFrequency(frequency: number): string {
+  public formatCpuFrequency(frequency: number): string {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
+  }
+
+  public formatGpuFrequency(frequency: number): string {
+    return this.decimalPipe.transform(frequency / 1000, '1.1-1');
   }
 
   public getAppVersion(): string {

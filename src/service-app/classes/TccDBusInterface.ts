@@ -75,7 +75,7 @@ export class TccDBusData {
     public webcamSwitchAvailable: boolean;
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
-    public gpuPowerValuesJSON: string;
+    public gpuInfoValuesJSON: string;
     public cpuPowerValuesJSON: string;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
@@ -123,7 +123,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
-    GetGpuPowerValuesJSON() { return this.data.gpuPowerValuesJSON; }
+    GetGpuInfoValuesJSON() { return this.data.gpuInfoValuesJSON; }
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
@@ -204,7 +204,7 @@ TccDBusInterface.configureMembers({
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
-        GetGpuPowerValuesJSON: { outSignature: 's' },
+        GetGpuInfoValuesJSON: { outSignature: 's' },
         GetCpuPowerValuesJSON: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },

@@ -67,11 +67,18 @@ export class CompatibilityService {
   }
 
   get hasGpuPowerDraw(): boolean {
-    return this.tccDbus.gpuPower.value.power_draw > 0;
+    return this.tccDbus.gpuInfo.value.power_draw > 0;
   }
 
   get hasGpuMaxPl(): boolean {
-    return this.tccDbus.gpuPower.value.max_pl > 0;
+    return this.tccDbus.gpuInfo.value.max_pl > 0;
+  }
+
+  get hasGpuFreq(): boolean {
+    return (
+      this.tccDbus.gpuInfo.value.core_freq > 0 &&
+      this.tccDbus.gpuInfo.value.core_freq_max > 0
+    );
   }
 
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
@@ -95,6 +102,10 @@ export class CompatibilityService {
 
   get gpuPowerCompatibilityMessage(): string {
     return $localize `:@@compatibilityMessageNoGpuPower:This feature is not supported on your model.`;
+  }
+
+  get gpuFreqCompatibilityMessage(): string {
+    return $localize `:@@compatibilityMessageNoGpuFreq:This feature is not supported on your model.`;
   }
 
   get hasWebcamControl(): boolean {

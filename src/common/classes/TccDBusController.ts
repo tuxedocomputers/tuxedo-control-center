@@ -115,9 +115,9 @@ export class TccDBusController {
         }
     }
 
-    async getGpuPowerValuesJSON(): Promise<string> {
+    async getGpuInfoValuesJSON(): Promise<string> {
         try {
-            return await this.interface.GetGpuPowerValuesJSON();
+            return await this.interface.GetGpuInfoValuesJSON();
         } catch (err) {
             return undefined;
         }

@@ -24,8 +24,8 @@ import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ConfigService } from './config.service';
-import { CpuPowerValues, GpuPowerValues } from 'src/common/models/TccPowerSettings';
+import { CpuPowerValues } from 'src/common/models/TccPowerSettings';
+import { GpuInfoValues } from 'src/common/models/TccGpuValues';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -75,7 +75,7 @@ export class TccDBusClientService implements OnDestroy {
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
-  public gpuPower = new BehaviorSubject<GpuPowerValues>(undefined);
+  public gpuInfo = new BehaviorSubject<GpuInfoValues>(undefined);
   public cpuPower = new BehaviorSubject<CpuPowerValues>(undefined);
 
   constructor(private utils: UtilsService) {
@@ -111,8 +111,8 @@ export class TccDBusClientService implements OnDestroy {
     };
     this.fanData.next(fanData);
 
-    let gpuPowerValues: GpuPowerValues = JSON.parse(await this.tccDBusInterface.getGpuPowerValuesJSON());
-    this.gpuPower.next(gpuPowerValues);
+    let gpuInfoValues: GpuInfoValues = JSON.parse(await this.tccDBusInterface.getGpuInfoValuesJSON());
+    this.gpuInfo.next(gpuInfoValues);
 
     let cpuPowerValues: CpuPowerValues = JSON.parse(await this.tccDBusInterface.getCpuPowerValuesJSON());
     this.cpuPower.next(cpuPowerValues);

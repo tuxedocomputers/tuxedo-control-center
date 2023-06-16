@@ -68,13 +68,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [min]="cpuInfo.minFreq"
                     [value]="avgCpuFreq"
                     [showValue]="false"
-                    [label]="gaugeFreqFormat"
+                    [label]="gaugeCpuFreqFormat"
                     [dialStartAngle]="130"
                     [dialEndAngle]="50"
                     [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ formatFrequency(avgCpuFreq) }}</div>
+                <div class="custom-value-text">{{ formatCpuFrequency(avgCpuFreq) }}</div>
                 <div class="unit-text">GHz</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
                 <div class="legend">
@@ -149,6 +149,24 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>GPU - Temp</div>
                 </div>
             </div>
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasGpuFreq }" [matTooltip]="!compat.hasGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
+                <mwl-gauge
+                    [max]="gpuInfo['core_freq_max']"
+                    [min]="0"
+                    [value]="gpuInfo['core_freq']"
+                    [showValue]="false"
+                    [dialStartAngle]="130"
+                    [dialEndAngle]="50"
+                    [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
+                </mwl-gauge>
+                <div class="custom-value-text">{{ formatGpuFrequency(gpuInfo['core_freq']) }}</div>
+                <div class="unit-text">GHz</div>
+                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
+                <div class="legend">
+                    <div class="text" i18n>GPU - Frequency</div>
+                </div>
+            </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
@@ -167,7 +185,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>GPU - Fan</div>
                 </div>
             </div>
-
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasGpuPowerDraw }" [matTooltip]="!compat.hasGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="getGpuMaxPl()"
@@ -179,7 +196,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gpuPowerFormat(gpuPower['power_draw']) }}</div>
+                <div class="custom-value-text">{{ gpuPowerFormat(gpuInfo['power_draw']) }}</div>
                 <div class="unit-text">W</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                 <div class="legend">

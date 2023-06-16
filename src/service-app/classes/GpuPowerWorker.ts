@@ -19,7 +19,7 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { GpuPowerValues } from "src/common/models/TccPowerSettings";
+import { GpuInfoValues } from 'src/common/models/TccGpuValues';
 import { exec } from "child_process";
 
 export class GpuPowerWorker extends DaemonWorker {
@@ -34,7 +34,7 @@ export class GpuPowerWorker extends DaemonWorker {
             this.isNvidiaSmiInstalled = isInstalled;
             if (isInstalled) {
                 getPowerValues().then((powerValues) => {
-                    this.tccd.dbusData.gpuPowerValuesJSON =
+                    this.tccd.dbusData.gpuInfoValuesJSON =
                         JSON.stringify(powerValues);
                 });
             }
@@ -44,7 +44,7 @@ export class GpuPowerWorker extends DaemonWorker {
     public onWork() {
         if (this.isNvidiaSmiInstalled) {
             getPowerValues().then((powerValues) => {
-                this.tccd.dbusData.gpuPowerValuesJSON =
+                this.tccd.dbusData.gpuInfoValuesJSON =
                     JSON.stringify(powerValues);
             });
         }
@@ -65,15 +65,16 @@ function isNvidiaSmiInstalled(): Promise<Boolean> {
     });
 }
 
-function getPowerValues(): Promise<GpuPowerValues> {
+function getPowerValues(): Promise<GpuInfoValues> {
     return new Promise((resolve, reject) => {
         const command =
-            'nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit \
-            --format=csv,noheader | awk -F"," \'{gsub(/ |(\\[N\\/A\\])/,""); \
-            print "{\\"power_draw\\": " ($1!=""?$1+0:-1) ", \\"max_pl\\": " \
-            ($2!=""?$2+0:-1) ", \\"enforced_pl\\": " ($3!=""?$3+0:-1) "}" }\'';
-        exec(command, (err, stdout, stderr) => {
-            if (err || stderr) {
+            'nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr \
+            --format=csv,noheader | awk -F"," \'{gsub(/ |(\\[N\\/A\\])/,"");print "{\\"power_draw\\": " \
+            ($1!=""?$1+0:-1) ", \\"max_pl\\": " ($2!=""?$2+0:-1) ", \\"enforced_pl\\": " ($3!=""?$3+0:-1) ", \
+            \\"core_freq\\": " ($4!=""?int($4):-1) ", \\"core_freq_max\\": "($5!=""?int($5):-1) "}" }\'';
+
+        exec(command, (err, stdout) => {
+            if (err) {
                 reject();
             } else {
                 const gpuInfo = JSON.parse(stdout.trim());

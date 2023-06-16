@@ -28,7 +28,8 @@ import { ConfigService } from '../config.service';
 
 import { NodeService } from '../node.service';
 import { CompatibilityService } from '../compatibility.service';
-import { CpuPowerValues, GpuPowerValues } from 'src/common/models/TccPowerSettings';
+import { CpuPowerValues } from 'src/common/models/TccPowerSettings';
+import { GpuInfoValues } from 'src/common/models/TccGpuValues';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -58,7 +59,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public gaugeGPUSpeed: number;
   public hasGPUTemp = false;
 
-  public gpuPower: GpuPowerValues;
+  public gpuInfo: GpuInfoValues;
   public cpuPower: CpuPowerValues;
 
   public activeProfile: ITccProfile;
@@ -99,7 +100,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
-    this.subscriptions.add(this.tccdbus.gpuPower.subscribe(gpuPower => { this.gpuPower = gpuPower; }));
+    this.subscriptions.add(this.tccdbus.gpuInfo.subscribe(gpuInfo => { this.gpuInfo = gpuInfo; }));
     this.subscriptions.add(this.tccdbus.cpuPower.subscribe(cpuPower => { this.cpuPower = cpuPower; }));
 
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => {
@@ -182,11 +183,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.activeScalingGovernors = [];
     this.activeEnergyPerformancePreference = [];
     for (const core of this.cpuCoreInfo) {
-      if (core.scalingMinFreq !== undefined && !this.activeScalingMinFreqs.includes(this.utils.formatFrequency(core.scalingMinFreq))) {
-        this.activeScalingMinFreqs.push(this.utils.formatFrequency(core.scalingMinFreq));
+      if (core.scalingMinFreq !== undefined && !this.activeScalingMinFreqs.includes(this.utils.formatCpuFrequency(core.scalingMinFreq))) {
+        this.activeScalingMinFreqs.push(this.utils.formatCpuFrequency(core.scalingMinFreq));
       }
-      if (core.scalingMaxFreq !== undefined && !this.activeScalingMaxFreqs.includes(this.utils.formatFrequency(core.scalingMaxFreq))) {
-        this.activeScalingMaxFreqs.push(this.utils.formatFrequency(core.scalingMaxFreq));
+      if (core.scalingMaxFreq !== undefined && !this.activeScalingMaxFreqs.includes(this.utils.formatCpuFrequency(core.scalingMaxFreq))) {
+        this.activeScalingMaxFreqs.push(this.utils.formatCpuFrequency(core.scalingMaxFreq));
       }
       if (core.scalingGovernor !== undefined && !this.activeScalingGovernors.includes(core.scalingGovernor)) {
         this.activeScalingGovernors.push(core.scalingGovernor);
@@ -209,12 +210,16 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.avgCpuFreqData = [{ name: 'CPU frequency', value: this.avgCpuFreq }];
   }
 
-  public formatFrequency = (frequency: number): string => {
-    return this.utils.formatFrequency(frequency);
+  public formatCpuFrequency = (frequency: number): string => {
+    return this.utils.formatCpuFrequency(frequency);
   }
 
-  public gaugeFreqFormat: (value: number) => string = (value) => {
-    return this.utils.formatFrequency(value);
+  public formatGpuFrequency = (frequency: number): string => {
+    return this.utils.formatGpuFrequency(frequency);
+  }
+
+  public gaugeCpuFreqFormat: (value: number) => string = (value) => {
+    return this.utils.formatCpuFrequency(value);
   }
 
   public gaugeFanTempFormat: (value: number) => string = (value) => {
@@ -253,7 +258,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   // if no maximum value is available, current power usage will be set to zero to show empty gauge
   public getGpuMaxPl() {
     if (this.compat.hasGpuMaxPl) {
-      let value = this.gpuPower["max_pl"];
+      let value = this.gpuInfo["max_pl"];
       return value > 0 ? value : 100;
     }
     return 100;
@@ -261,7 +266,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
   public getGpuPowerDraw() {
     if (this.compat.hasGpuPowerDraw && this.compat.hasGpuMaxPl) {
-      let value = this.gpuPower["power_draw"];
+      let value = this.gpuInfo["power_draw"];
         return value > 0 ? value : 0;
     }
     return 0;
