@@ -239,7 +239,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   }
 
   public cpuPowerFormat: (value: number) => string = (value) => {
-    if (this.compat.hasFanInfo) {
+    if (this.compat.hasCpuPower) {
       return Math.round(value).toString()
     } else {
       return $localize `:@@noCpuPowerValue:N/A`;

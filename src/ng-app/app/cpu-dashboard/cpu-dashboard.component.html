@@ -99,7 +99,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>CPU - Fan</div>
                 </div>
             </div>
-
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasCpuPower }" [matTooltip]="!compat.hasCpuPower ? compat.cpuPowerCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="cpuPower['max_pl']"

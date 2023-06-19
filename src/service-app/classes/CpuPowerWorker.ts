@@ -28,11 +28,11 @@ export class CpuPowerWorker extends DaemonWorker {
         super(2000, tccd);
     }
 
-    uj_current: number = 0;
-    uj_next: number = 0;
+    uj_current: number = -1;
+    uj_next: number = -1;
     delay: number = 2;
-    power_draw: number = 0;
-    max_pl: number = 0;
+    power_draw: number = -1;
+    max_pl: number = -1;
 
     path_uj: string =
         "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/energy_uj";
@@ -57,12 +57,12 @@ export class CpuPowerWorker extends DaemonWorker {
             this.max_pl = Number(fs.readFileSync(this.path_max_uw)) / 1000000;
         }
 
-        let placeholder: CpuPowerValues = {
+        let cpuPowerValues: CpuPowerValues = {
             power_draw: this.power_draw,
             max_pl: this.max_pl,
         };
 
-        this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(placeholder);
+        this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(cpuPowerValues);
     }
 
     public onExit() {}

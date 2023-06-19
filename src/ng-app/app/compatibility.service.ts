@@ -61,9 +61,16 @@ export class CompatibilityService {
   }
 
   get hasCpuPower(): boolean {
-    return (typeof this.tccDbus.cpuPower.value !== 'undefined') && 
-           (typeof this.tccDbus.cpuPower.value.power_draw !== 'undefined') && 
-           (typeof this.tccDbus.cpuPower.value.max_pl !== 'undefined');
+    const { cpuPower } = this.tccDbus;
+    const { value: cpuPowerValue } = cpuPower;
+    
+    const powerDrawDefined = typeof cpuPowerValue?.power_draw !== 'undefined';
+    const maxPlDefined = typeof cpuPowerValue?.max_pl !== 'undefined';
+    
+    return powerDrawDefined && 
+           maxPlDefined && 
+           cpuPowerValue.power_draw > 0 && 
+           cpuPowerValue.max_pl > 0;
   }
 
   get hasGpuPowerDraw(): boolean {
