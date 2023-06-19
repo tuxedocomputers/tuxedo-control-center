@@ -55,7 +55,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gaugeFanTempFormat(fanData.cpu.temp.data.value) }}</div>
+                <div class="custom-value-text">{{ gaugeTempFormat(fanData.cpu.temp.data.value) }}</div>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
                 <div class="legend">
@@ -142,7 +142,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gaugeFanTempFormat(gaugeGPUTemp) }}</div>
+                <div class="custom-value-text">{{ gaugeTempFormat(gaugeGPUTemp) }}</div>
                 <div class="unit-text">&deg;C</div>
                 <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
                 <div class="legend">
