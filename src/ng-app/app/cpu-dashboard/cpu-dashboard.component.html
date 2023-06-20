@@ -184,7 +184,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>GPU - Fan</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasGpuPowerDraw }" [matTooltip]="!compat.hasGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasGpuPowerDraw, 'not-available-max': !compat.hasGpuMaxPl && compat.hasGpuPowerDraw}" 
+                [matTooltip]="!compat.hasGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
                 <mwl-gauge
                     [max]="100"
                     [min]="0"

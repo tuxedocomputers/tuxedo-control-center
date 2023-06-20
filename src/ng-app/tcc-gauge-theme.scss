@@ -74,6 +74,10 @@
             opacity: 0.3;
         }
 
+        &.not-available-max mwl-gauge .dial {
+            stroke: gray;
+        }
+
         .custom-value-text {
             position: absolute;
             bottom: 57px;
