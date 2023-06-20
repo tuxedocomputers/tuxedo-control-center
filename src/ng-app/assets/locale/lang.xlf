@@ -402,69 +402,6 @@
           <context context-type="linenumber">143,144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
-        <source>Info</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
-        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">32,34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
-        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">36,38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
-        <source>Installed version</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
-        <source>Changelog</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintPanelTitle" datatype="html">
-        <source>Imprint</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">122</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cInfoImprintText" datatype="html">
-        <source>
-TUXEDO Computers GmbH
-
-Alter Postweg 101
-86159 Augsburg
-Germany
-
-Telephone: +49 (0) 821 / 8998 2992
-Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
-VAT No.: DE815420876
-WEEE reg. no.: DE 93420497
-listed in the commercial register of the local court Augsburg
-Commercial register number - Part B of the commercial register - 27755
-        </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
-          <context context-type="linenumber">127,140</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="odmLEDNone" datatype="html">
         <source>all LEDs off</source>
         <context-group purpose="location">
@@ -755,6 +692,69 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">432</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoInfoPanelTitle" datatype="html">
+        <source>Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP1" datatype="html">
+        <source> With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoTCCDescriptionTextP2" datatype="html">
+        <source> With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89f1f8c98e581f2a72a68620a75c13f132c34b48" datatype="html">
+        <source>Installed version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="994e6a27b92ba37201e3bb9f8ae312f2a46b5b39" datatype="html">
+        <source>Changelog</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintPanelTitle" datatype="html">
+        <source>Imprint</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cInfoImprintText" datatype="html">
+        <source>
+TUXEDO Computers GmbH
+
+Alter Postweg 101
+86159 Augsburg
+Germany
+
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux@tuxedocomputers.com
+VAT No.: DE815420876
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/info/info.component.html</context>
+          <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="noFanTempValue" datatype="html">
@@ -1136,24 +1136,24 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
-        <source>Your device has no keyboard backlight or is not (yet) supported by this control interface.</source>
+        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">46,47</context>
+          <context context-type="linenumber">47,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
         <source>Backlight Color:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
         <source>Backlight Brightness</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
