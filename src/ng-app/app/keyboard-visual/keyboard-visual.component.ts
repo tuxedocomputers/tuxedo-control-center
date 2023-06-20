@@ -64,11 +64,10 @@ export class KeyboardVisualComponent implements OnInit {
     updateHeight() {
         if (this.viewInitialized) {
             let el: HTMLElement;
-            if ([1, 3].includes(this.keyboardBacklightCapabilities.zones)) {
-                el = document.getElementById("Svg1+3Zones");
-            }
-            if (this.keyboardBacklightCapabilities.zones == 4) {
+            if (this.keyboardBacklightCapabilities.zones === 4) {
                 el = document.getElementById("Svg4Zones");
+            } else {
+                el = document.getElementById("Svg1+3Zones");
             }
             const rect = el.getBoundingClientRect();
             this.divHeight = rect.height;
@@ -86,15 +85,17 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public getSvgHeight(): number {
-        return [3, 4].includes(this.keyboardBacklightCapabilities.zones)
-            ? 215
-            : 205;
+        if (this.keyboardBacklightCapabilities.zones === 1) {
+            return 205;
+        }
+        return 215;
     }
 
     public getSvgWidth(): number {
-        return [3, 4].includes(this.keyboardBacklightCapabilities.zones)
-            ? 760
-            : 728;
+        if (this.keyboardBacklightCapabilities.zones === 1) {
+            return 728;
+        }
+        return 760;
     }
 
     public calculateTranslateValue(zone: number): string {
@@ -107,7 +108,7 @@ export class KeyboardVisualComponent implements OnInit {
 
     public updateZoneOpacity(event: MouseEvent, zone: number): void {
         if (
-            this.keyboardBacklightCapabilities.zones == 1 ||
+            this.keyboardBacklightCapabilities.zones === 1 ||
             this.keyboardBacklightCapabilities.zones > 4
         ) {
             return;
