@@ -19,7 +19,7 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { GpuInfoValues } from 'src/common/models/TccGpuValues';
+import { GpuInfoValues } from "src/common/models/TccGpuValues";
 import { exec } from "child_process";
 
 export class GpuInfoWorker extends DaemonWorker {
@@ -29,24 +29,23 @@ export class GpuInfoWorker extends DaemonWorker {
 
     isNvidiaSmiInstalled: Boolean = false;
 
-    public onStart() {
-        isNvidiaSmiInstalled().then((isInstalled) => {
-            this.isNvidiaSmiInstalled = isInstalled;
-            if (isInstalled) {
-                getPowerValues().then((powerValues) => {
-                    this.tccd.dbusData.gpuInfoValuesJSON =
-                        JSON.stringify(powerValues);
-                });
-            }
-        });
+    public async onStart() {
+        const isInstalled = await isNvidiaSmiInstalled();
+        this.isNvidiaSmiInstalled = isInstalled;
+        if (isInstalled) {
+            const powerValues = await getPowerValues();
+            this.tccd.dbusData.gpuInfoValuesJSON = JSON.stringify(powerValues);
+        }
     }
 
-    public onWork() {
+    public async onWork() {
+        if (!this.isNvidiaSmiInstalled) {
+            this.isNvidiaSmiInstalled = await isNvidiaSmiInstalled();
+        }
+
         if (this.isNvidiaSmiInstalled) {
-            getPowerValues().then((powerValues) => {
-                this.tccd.dbusData.gpuInfoValuesJSON =
-                    JSON.stringify(powerValues);
-            });
+            const powerValues = await getPowerValues();
+            this.tccd.dbusData.gpuInfoValuesJSON = JSON.stringify(powerValues);
         }
     }
 
@@ -65,21 +64,57 @@ function isNvidiaSmiInstalled(): Promise<Boolean> {
     });
 }
 
-function getPowerValues(): Promise<GpuInfoValues> {
-    return new Promise((resolve, reject) => {
-        const command =
-            'nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr \
-            --format=csv,noheader | awk -F"," \'{gsub(/ |(\\[N\\/A\\])/,"");print "{\\"power_draw\\": " \
-            ($1!=""?$1+0:-1) ", \\"max_pl\\": " ($2!=""?$2+0:-1) ", \\"enforced_pl\\": " ($3!=""?$3+0:-1) ", \
-            \\"core_freq\\": " ($4!=""?int($4):-1) ", \\"core_freq_max\\": "($5!=""?int($5):-1) "}" }\'';
+async function getPowerValues(): Promise<GpuInfoValues> {
+    const command =
+        "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
 
-        exec(command, (err, stdout) => {
-            if (err) {
-                reject();
+    try {
+        const stdout = await execCommand(command);
+        const gpuInfo = parseOutput(stdout);
+        return gpuInfo;
+    } catch (error) {
+        return getDefaultValues();
+    }
+}
+
+async function execCommand(command: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
             } else {
-                const gpuInfo = JSON.parse(stdout.trim());
-                resolve(gpuInfo);
+                resolve(stdout.trim());
             }
         });
     });
+}
+
+function parseOutput(output: string): GpuInfoValues {
+    const values = output.split(",").map((s) => s.trim());
+    return {
+        power_draw: parseNumberWithMetric(values[0]),
+        max_pl: parseNumberWithMetric(values[1]),
+        enforced_pl: parseNumberWithMetric(values[2]),
+        core_freq: parseNumberWithMetric(values[3]),
+        core_freq_max: parseNumberWithMetric(values[4]),
+    };
+}
+
+function parseNumberWithMetric(value: string): number {
+    const numberRegex = /(\d+(\.\d+)?)/;
+    const match = numberRegex.exec(value);
+    if (match !== null) {
+        return Number(match[0]);
+    }
+    return -1;
+}
+
+function getDefaultValues(): GpuInfoValues {
+    return {
+        power_draw: -1,
+        max_pl: -1,
+        enforced_pl: -1,
+        core_freq: -1,
+        core_freq_max: -1,
+    };
 }

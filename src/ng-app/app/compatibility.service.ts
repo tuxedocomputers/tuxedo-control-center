@@ -66,28 +66,68 @@ export class CompatibilityService {
     
     const powerDrawDefined = typeof cpuPowerValue?.power_draw !== 'undefined';
     const maxPlDefined = typeof cpuPowerValue?.max_pl !== 'undefined';
+    const wmiAvailable = this.tccDbus.tuxedoWmiAvailable.value
     
     return powerDrawDefined && 
            maxPlDefined && 
            cpuPowerValue.power_draw > 0 && 
-           cpuPowerValue.max_pl > 0;
+           cpuPowerValue.max_pl > 0 &&
+           wmiAvailable;
   }
 
   get hasGpuPowerDraw(): boolean {
-    return this.tccDbus.gpuInfo.value.power_draw > 0;
+    const gpuPowerDraw = this.tccDbus.gpuInfo?.value?.power_draw;
+  
+    if (gpuPowerDraw !== undefined) {
+      return gpuPowerDraw > 0;
+    }
+  
+    return false;
   }
-
+  
   get hasGpuMaxPl(): boolean {
-    return this.tccDbus.gpuInfo.value.max_pl > 0;
+    const gpuMaxPl = this.tccDbus.gpuInfo?.value?.max_pl;
+  
+    if (gpuMaxPl !== undefined) {
+      return gpuMaxPl > 0;
+    }
+  
+    return false;
+  }
+  
+  get hasCpuMaxPl(): boolean {
+    const cpuMaxPl = this.tccDbus.cpuPower?.value?.max_pl;
+    const wmiAvailable = this.tccDbus.tuxedoWmiAvailable.value
+  
+    if (cpuMaxPl !== undefined) {
+      return cpuMaxPl > 0 && wmiAvailable;
+    }
+  
+    return false;
+  }
+  
+  get hasGpuMaxFreq(): boolean {
+    const coreFreqMax = this.tccDbus.gpuInfo?.value?.core_freq_max;
+  
+    if (coreFreqMax !== undefined) {
+      return coreFreqMax > 0;
+    }
+  
+    return false;
   }
 
   get hasGpuFreq(): boolean {
-    return (
-      this.tccDbus.gpuInfo.value.core_freq > 0 &&
-      this.tccDbus.gpuInfo.value.core_freq_max > 0
-    );
+    const gpuInfo = this.tccDbus.gpuInfo?.value;
+    const coreFreq = gpuInfo?.core_freq;
+    const coreFreqMax = gpuInfo?.core_freq_max;
+  
+    if (coreFreq !== undefined && coreFreqMax !== undefined) {
+      return coreFreq > 0 && coreFreqMax > 0;
+    }
+  
+    return false;
   }
-
+  
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
   get hasFanControl(): boolean {
     /*const dmi = new DMIController('/sys/class/dmi/id');

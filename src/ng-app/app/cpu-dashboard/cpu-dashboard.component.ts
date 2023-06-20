@@ -59,8 +59,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   public gaugeGPUSpeed: number;
   public hasGPUTemp = false;
 
-  public gpuInfo: GpuInfoValues;
-  public cpuPower: CpuPowerValues;
+  public gaugeGPUPower: number;
+  public gaugeGPUFreq: number;
+  public gaugeCPUPower: number;
+  public gpuPower: number;
+  public gpuFreq: number;
+  public cpuPower: number;
 
   public activeProfile: ITccProfile;
   public isCustomProfile: boolean;
@@ -100,8 +104,60 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
-    this.subscriptions.add(this.tccdbus.gpuInfo.subscribe(gpuInfo => { this.gpuInfo = gpuInfo; }));
-    this.subscriptions.add(this.tccdbus.cpuPower.subscribe(cpuPower => { this.cpuPower = cpuPower; }));
+    this.subscriptions.add(
+        this.tccdbus.gpuInfo.subscribe((gpuInfo: GpuInfoValues) => {
+            const gpuDefaultValues = {
+                gaugeGPUPower: 0,
+                gaugeGPUFreq: 0,
+            };
+
+            if (!gpuInfo) {
+                Object.assign(this, gpuDefaultValues);
+                return;
+            }
+
+            if (gpuInfo.power_draw > 0 && gpuInfo.max_pl > 0) {
+                this.gaugeGPUPower =
+                    (gpuInfo.power_draw / gpuInfo.max_pl) * 100;
+                this.gpuPower = gpuInfo.power_draw;
+            } else if (gpuInfo.power_draw > 0 && gpuInfo.max_pl < 0) {
+                this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
+                this.gpuPower = gpuInfo.power_draw;
+            } else {
+                this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
+                this.gpuPower = gpuDefaultValues.gaugeGPUPower;
+            }
+
+            if (gpuInfo.core_freq > 0 && gpuInfo.core_freq_max > 0) {
+                this.gaugeGPUFreq =
+                    (gpuInfo.core_freq / gpuInfo.core_freq_max) * 100;
+                this.gpuFreq = gpuInfo.core_freq;
+            } else {
+                this.gaugeGPUFreq = gpuDefaultValues.gaugeGPUFreq;
+                this.gpuFreq = gpuDefaultValues.gaugeGPUFreq;
+            }
+        })
+    );
+
+    this.subscriptions.add(
+        this.tccdbus.cpuPower.subscribe((cpuPower: CpuPowerValues) => {
+            const cpuDefaultValues = { gaugeCPUPower: 0 };
+
+            if (!cpuPower || !this.compat.hasCpuPower) {
+                Object.assign(this, cpuDefaultValues);
+                return;
+            }
+
+            if (cpuPower.power_draw > 0 && cpuPower.max_pl > 0) {
+                this.gaugeCPUPower =
+                    (cpuPower.power_draw / cpuPower.max_pl) * 100;
+                this.cpuPower = cpuPower.power_draw;
+            } else {
+                this.gaugeCPUPower = cpuDefaultValues.gaugeCPUPower;
+                this.cpuPower = cpuDefaultValues.gaugeCPUPower;
+            }
+        })
+    );
 
     this.subscriptions.add(this.tccdbus.fanData.subscribe(fanData => {
       this.fanData = fanData;
@@ -215,7 +271,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   }
 
   public formatGpuFrequency = (frequency: number): string => {
-    return this.utils.formatGpuFrequency(frequency);
+    if (frequency > 0) {
+        return this.utils.formatGpuFrequency(frequency);
+    } else {
+        return $localize `:@@noGpuFreqValue:N/A`;
+    }
   }
 
   public gaugeCpuFreqFormat: (value: number) => string = (value) => {
@@ -247,29 +307,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
   }
 
   public gpuPowerFormat: (value: number) => string = (value) => {
-    if (this.compat.hasFanInfo) {
+    if (this.compat.hasGpuPowerDraw) {
       return Math.round(value).toString()
     } else {
       return $localize `:@@noGpuPowerValue:N/A`;
     }
-  }
-
-  // setting min = 0 + max = 0 in gauge will result in an error, setting to placeholder value if no value available
-  // if no maximum value is available, current power usage will be set to zero to show empty gauge
-  public getGpuMaxPl() {
-    if (this.compat.hasGpuMaxPl) {
-      let value = this.gpuInfo["max_pl"];
-      return value > 0 ? value : 100;
-    }
-    return 100;
-  }
-
-  public getGpuPowerDraw() {
-    if (this.compat.hasGpuPowerDraw && this.compat.hasGpuMaxPl) {
-      let value = this.gpuInfo["power_draw"];
-        return value > 0 ? value : 0;
-    }
-    return 0;
   }
 
   public goToProfileEdit(profile: ITccProfile): void {
