@@ -76,6 +76,7 @@ export class KeyboardVisualComponent implements OnInit {
 
     private addOrRemoveSelectedZones(num: number): number[] {
         const index = this.selectedZones.indexOf(num);
+
         if (index !== -1) {
             this.selectedZones.splice(index, 1);
         } else {
@@ -85,21 +86,27 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public getSvgHeight(): number {
-        if (this.keyboardBacklightCapabilities.zones === 1) {
+        const zones = this.keyboardBacklightCapabilities.zones;
+
+        if (zones === 1 || zones > 4) {
             return 205;
         }
         return 215;
     }
 
     public getSvgWidth(): number {
-        if (this.keyboardBacklightCapabilities.zones === 1) {
+        const zones = this.keyboardBacklightCapabilities.zones;
+
+        if (zones === 1 || zones > 4) {
             return 728;
         }
         return 760;
     }
 
     public calculateTranslateValue(zone: number): string {
-        if (this.keyboardBacklightCapabilities.zones === 3) {
+        const zones = this.keyboardBacklightCapabilities.zones;
+
+        if (zones === 3) {
             return `${832.61151 + zone * 16}, 535.06891`;
         } else {
             return "832.61151, 535.06891";
@@ -107,10 +114,9 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public updateZoneOpacity(event: MouseEvent, zone: number): void {
-        if (
-            this.keyboardBacklightCapabilities.zones === 1 ||
-            this.keyboardBacklightCapabilities.zones > 4
-        ) {
+        const zones = this.keyboardBacklightCapabilities.zones;
+
+        if (zones === 1 || zones > 4) {
             return;
         }
 
