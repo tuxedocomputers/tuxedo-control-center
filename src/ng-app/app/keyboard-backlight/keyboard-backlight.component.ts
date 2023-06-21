@@ -42,10 +42,10 @@ export class KeyboardBacklightComponent implements OnInit {
     private pressTimer: NodeJS.Timeout;
     private pressInterval: Subscription;
     private colorPickerInUsage: Array<boolean> = [];
-    private colorPickerInUsageReset: Array<NodeJS.Timeout> = [];
-    private timeoutId: NodeJS.Timeout;
+    private colorPickerTimeout: NodeJS.Timeout;
     private brightnessSliderInUsage: boolean;
     private brightnessSliderTimeout: number | null = null;
+    private timeoutDuration: number = 10000;
 
     constructor(
         private config: ConfigService,
@@ -88,7 +88,6 @@ export class KeyboardBacklightComponent implements OnInit {
         const zones = this.keyboardBacklightCapabilities.zones;
         for (let i = 0; i < zones; i++) {
             this.colorPickerInUsage.push(false);
-            this.colorPickerInUsageReset.push(undefined);
         }
     }
 
@@ -231,22 +230,22 @@ export class KeyboardBacklightComponent implements OnInit {
         this.brightnessSliderInUsage = true;
         this.brightnessSliderTimeout = window.setTimeout(() => {
             this.brightnessSliderInUsage = false;
-        }, 10000);
+        }, this.timeoutDuration);
     }
 
     triggerColorPickerTimeout(selectedZones: number[]): void {
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
+        if (this.colorPickerTimeout) {
+            clearTimeout(this.colorPickerTimeout);
         }
         selectedZones.forEach((zone) => {
             this.colorPickerInUsage[zone] = true;
         });
 
-        this.timeoutId = setTimeout(() => {
+        this.colorPickerTimeout = setTimeout(() => {
             selectedZones.forEach((zone) => {
                 this.colorPickerInUsage[zone] = false;
             });
-        }, 10000);
+        }, this.timeoutDuration);
     }
 
     public startPress(
