@@ -223,7 +223,7 @@ export class KeyboardBacklightComponent implements OnInit {
         this.selectedZones = selectedZones;
     }
 
-    triggerBrightnessSliderTimeout(): void {
+    private triggerBrightnessSliderTimeout(): void {
         if (this.brightnessSliderTimeout !== null) {
             clearTimeout(this.brightnessSliderTimeout);
         }
@@ -233,7 +233,7 @@ export class KeyboardBacklightComponent implements OnInit {
         }, this.timeoutDuration);
     }
 
-    triggerColorPickerTimeout(selectedZones: number[]): void {
+    private triggerColorPickerTimeout(selectedZones: number[]): void {
         if (this.colorPickerTimeout) {
             clearTimeout(this.colorPickerTimeout);
         }
