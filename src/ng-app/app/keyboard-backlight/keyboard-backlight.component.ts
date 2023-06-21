@@ -41,11 +41,11 @@ export class KeyboardBacklightComponent implements OnInit {
     public selectedZones: Array<number>;
     private pressTimer: NodeJS.Timeout;
     private pressInterval: Subscription;
-    private resetTimeout: NodeJS.Timeout;
-
-    private brightnessSliderInUsage: boolean = false;
     private colorPickerInUsage: Array<boolean> = [];
     private colorPickerInUsageReset: Array<NodeJS.Timeout> = [];
+    private timeoutId: NodeJS.Timeout;
+    private brightnessSliderInUsage: boolean;
+    private brightnessSliderTimeout: number | null = null;
 
     constructor(
         private config: ConfigService,
@@ -75,7 +75,7 @@ export class KeyboardBacklightComponent implements OnInit {
         return Math.min(Math.max(input, min), max);
     }
 
-    private setChosenValues() {
+    private setChosenValues(): void {
         const settings = this.config.getSettings();
         const keyboardBacklightColor = settings.keyboardBacklightColor;
         this.chosenColorHex = keyboardBacklightColor.map((color) =>
@@ -84,7 +84,7 @@ export class KeyboardBacklightComponent implements OnInit {
         this.chosenBrightness = settings.keyboardBacklightBrightness;
     }
 
-    private setColorPickerInUsageDefault() {
+    private setColorPickerInUsageDefault(): void {
         const zones = this.keyboardBacklightCapabilities.zones;
         for (let i = 0; i < zones; i++) {
             this.colorPickerInUsage.push(false);
@@ -92,7 +92,7 @@ export class KeyboardBacklightComponent implements OnInit {
         }
     }
 
-    private subscribeKeyboardBacklightCapabilities() {
+    private subscribeKeyboardBacklightCapabilities(): void {
         this.tccdbus.keyboardBacklightCapabilities
             .pipe(filter(Boolean), take(1))
             .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface) =>
@@ -122,7 +122,7 @@ export class KeyboardBacklightComponent implements OnInit {
         );
     }
 
-    private subscribeKeyboardBacklightStates() {
+    private subscribeKeyboardBacklightStates(): void {
         this.tccdbus.keyboardBacklightStates.subscribe(
             (keyboardBacklightStates) => {
                 const hasChosenColor = keyboardBacklightStates?.length > 0;
@@ -150,10 +150,10 @@ export class KeyboardBacklightComponent implements OnInit {
             .map(this.intToRGBSharpString);
     }
 
-    private isPickerInUsage() {
+    public isPickerInUsage(): boolean {
         return (
-            this.brightnessSliderInUsage ||
-            this.colorPickerInUsage.some((colorPicker) => colorPicker)
+            this.colorPickerInUsage.some((inUse) => inUse) ||
+            this.brightnessSliderInUsage
         );
     }
 
@@ -183,9 +183,8 @@ export class KeyboardBacklightComponent implements OnInit {
               ];
     }
 
-    public onBrightnessSliderInput(brightness: number) {
-        this.brightnessSliderInUsage = true;
-        this.applyBrightnessSliderInUsageReset();
+    public onBrightnessSliderInput(brightness: number): void {
+        this.triggerBrightnessSliderTimeout();
         const colorHex = this.chosenColorHex?.length
             ? this.chosenColorHex
             : undefined;
@@ -196,39 +195,15 @@ export class KeyboardBacklightComponent implements OnInit {
         );
     }
 
-    public onBrightnessSliderChange() {
-        this.applyBrightnessSliderInUsageReset();
-    }
+    public onBrightnessSliderChange(): void {}
 
-    private applyBrightnessSliderInUsageReset() {
-        clearTimeout(this.resetTimeout);
+    public onColorPickerInput(color: string, selectedZones: number[]): void {
+        this.triggerColorPickerTimeout(selectedZones);
 
-        if (!this.brightnessSliderInUsage) {
-            this.brightnessSliderInUsage = true;
-        }
-
-        this.resetTimeout = setTimeout(() => {
-            this.brightnessSliderInUsage = false;
-        }, 10000);
-    }
-
-    private setResetTimeout(
-        resetFn: () => void,
-        resetVar: NodeJS.Timeout | boolean,
-        timeoutMS = 10000
-    ) {
-        clearTimeout(resetVar as NodeJS.Timeout);
-        resetVar = setTimeout(resetFn, timeoutMS);
-    }
-
-    public onColorPickerInput(color: string, selectedZones: number[]) {
         let colorHex = this.chosenColorHex;
-
-        selectedZones.forEach((zone) => {
+        for (let zone of selectedZones) {
             colorHex[zone] = color;
-            this.setColorPickerUsage(zone, true);
-            this.setPickerUsageResetTimeout(zone);
-        });
+        }
 
         const backlightStates = this.fillKeyboardBacklightStatesFromValues(
             this.chosenBrightness,
@@ -237,41 +212,41 @@ export class KeyboardBacklightComponent implements OnInit {
         this.tccdbus.setKeyboardBacklightStates(backlightStates);
     }
 
-    private setColorPickerUsage(zones: number | number[], isUsed: boolean) {
-        if (!Array.isArray(zones)) {
-            this.colorPickerInUsage[zones] = isUsed;
-        } else {
-            zones.forEach((zone) => {
-                this.colorPickerInUsage[zone] = isUsed;
-            });
-        }
+    public onColorPickerDragStart(selectedZones: number[]): void {
+        this.triggerColorPickerTimeout(selectedZones);
     }
 
-    private setPickerUsageResetTimeout(zones: number | number[]) {
-        if (!Array.isArray(zones)) {
-            zones = [zones];
-        }
-
-        zones.forEach((zone) => {
-            const resetVar = this.colorPickerInUsageReset[zone];
-            this.setResetTimeout(() => {
-                this.setColorPickerUsage(zone, false);
-            }, resetVar);
-            this.colorPickerInUsageReset[zone] = resetVar;
-        });
+    public onColorPickerDragEnd(selectedZones: number[]): void {
+        this.triggerColorPickerTimeout(selectedZones);
     }
 
-    public onColorPickerDragStart(selectedZones: number[]) {
-        this.setColorPickerUsage(selectedZones, true);
-        this.setPickerUsageResetTimeout(selectedZones);
-    }
-
-    public onColorPickerDragEnd(selectedZones: number[]) {
-        this.setPickerUsageResetTimeout(selectedZones);
-    }
-
-    public selectedZonesChange(selectedZones: number[]) {
+    public selectedZonesChange(selectedZones: number[]): void {
         this.selectedZones = selectedZones;
+    }
+
+    triggerBrightnessSliderTimeout(): void {
+        if (this.brightnessSliderTimeout !== null) {
+            clearTimeout(this.brightnessSliderTimeout);
+        }
+        this.brightnessSliderInUsage = true;
+        this.brightnessSliderTimeout = window.setTimeout(() => {
+            this.brightnessSliderInUsage = false;
+        }, 10000);
+    }
+
+    triggerColorPickerTimeout(selectedZones: number[]): void {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
+        selectedZones.forEach((zone) => {
+            this.colorPickerInUsage[zone] = true;
+        });
+
+        this.timeoutId = setTimeout(() => {
+            selectedZones.forEach((zone) => {
+                this.colorPickerInUsage[zone] = false;
+            });
+        }, 10000);
     }
 
     public startPress(
@@ -300,13 +275,13 @@ export class KeyboardBacklightComponent implements OnInit {
         offset: number,
         min: number,
         max: number
-    ) {
+    ): void {
         this.onBrightnessSliderInput(
             this.clamp(slider.value + offset, min, max)
         );
     }
 
-    public getSelectedColor() {
+    public getSelectedColor(): string {
         return this.chosenColorHex[this.selectedZones[0]];
     }
 }
