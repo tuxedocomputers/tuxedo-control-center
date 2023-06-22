@@ -27,6 +27,7 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
+    user-select: none;
 
     .inner-backlight-settings-edit {
         margin: 0 10px 10px 10px;
