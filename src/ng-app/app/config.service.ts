@@ -23,7 +23,7 @@ import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
-import { ElectronService } from '../electron-service-wrapper/electron-service';
+import { ElectronService } from './electron-service-wrapper/electron-service';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
@@ -54,6 +54,7 @@ export class ConfigService implements OnDestroy {
     public editingProfile: BehaviorSubject<ITccProfile>;
 
     private subscriptions: Subscription = new Subscription();
+    private cwd;
 
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;
@@ -69,7 +70,7 @@ export class ConfigService implements OnDestroy {
         this.editingProfileSubject = new Subject<ITccProfile>();
         this.observeEditingProfile = this.editingProfileSubject.asObservable();
         this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
-
+        this.cwd = this.utils.getCWDSync();
         this.config = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
@@ -155,7 +156,7 @@ export class ConfigService implements OnDestroy {
         if (environment.production) {
             tccdExec = TccPaths.TCCD_EXEC_FILE;
         } else {
-            tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
 
         const result = this.electron.ipcRenderer.sendSync(
@@ -254,7 +255,7 @@ export class ConfigService implements OnDestroy {
         if (environment.production) {
             tccdExec = TccPaths.TCCD_EXEC_FILE;
         } else {
-            tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
         const result = this.electron.ipcRenderer.sendSync(
             'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
@@ -283,7 +284,7 @@ export class ConfigService implements OnDestroy {
         if (environment.production) {
             tccdExec = TccPaths.TCCD_EXEC_FILE;
         } else {
-            tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
         try {
             await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
@@ -348,7 +349,7 @@ export class ConfigService implements OnDestroy {
             if (environment.production) {
                 tccdExec = TccPaths.TCCD_EXEC_FILE;
             } else {
-                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+                tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
             }
 
             this.utils.execFile(
@@ -372,7 +373,7 @@ export class ConfigService implements OnDestroy {
             if (environment.production) {
                 tccdExec = TccPaths.TCCD_EXEC_FILE;
             } else {
-                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+                tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
             }
             this.utils.execFile(
                 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath

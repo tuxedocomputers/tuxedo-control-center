@@ -487,6 +487,10 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
     }
 });
 
+ipcMain.on('get-cwd-sync', (event) => {
+    event.returnValue = { data: process.cwd() }
+});
+
 
 // TODO add all things that needed remote module here instead
 
@@ -511,16 +515,19 @@ ipcMain.handle('get-app-version', async (event, arg) => {
     });
 });
 
+ipcMain.handle('get-cwd', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        let requestedInfo = process.cwd();
+        resolve(requestedInfo);
+    });
+});
+
 ipcMain.handle('get-process-versions', async (event, arg) => {
     return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
         let requestedInfo = process.versions;
         resolve(requestedInfo);
     });
 });
-
-/* 
- 
-*/
 
 
 ipcMain.handle('exec-cmd-async', async (event, arg) => {

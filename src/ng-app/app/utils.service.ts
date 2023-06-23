@@ -251,6 +251,24 @@ export class UtilsService {
     this.electron.ipcRenderer.send('minimize-window'); 
   }
 
+  public getCWD()
+   {
+    return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
+        this.electron.ipcRenderer.invoke('get-cwd').then((result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(result);
+          }
+        });
+      });
+   }
+
+   public getCWDSync()
+   {
+        return this.electron.ipcRenderer.sendSync('get-cwd-sync');
+   }
+
   public async getProcessVersions(): Promise<NodeJS.ProcessVersions> {
     return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
         this.electron.ipcRenderer.invoke('get-process-versions').then((result) => {

@@ -262,7 +262,7 @@ export class WebcamSettingsComponent implements OnInit {
             webcamCtrolsPath = TccPaths.TCCD_PYTHON_CAMERACTRL_FILE;
         } else {
             webcamCtrolsPath =
-                this.electron.process.cwd() + "/src/cameractrls/cameractrls.py";
+                this.utils.getCWDSync() + "/src/cameractrls/cameractrls.py";
         }
         return webcamCtrolsPath;
     }
@@ -765,7 +765,7 @@ export class WebcamSettingsComponent implements OnInit {
                 this.v4l2Renames = this.configHandler.readV4l2Names();
             } else {
                 this.v4l2Renames = this.configHandler.readV4l2Names(
-                    this.electron.process.cwd() +
+                    this.utils.getCWDSync() +
                         "/src/cameractrls/v4l2_kernel_names.json"
                 );
             }
