@@ -25,10 +25,7 @@ import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 export class CpuPowerWorker extends DaemonWorker {
     private RAPLStatus: boolean = false;
     private currentEnergy: number = -1;
-    private nextEnergy: number = -1;
     private delay: number = 2;
-    private powerDraw: number = -1;
-    private maxPowerLimit: number = -1;
 
     private intelRAPL = new IntelRAPLController(
         "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/"
@@ -43,25 +40,26 @@ export class CpuPowerWorker extends DaemonWorker {
     }
 
     onWork() {
-        if (!this.RAPLStatus) return;
+        if (!this.RAPLStatus) {
+            return;
+        }
 
-        this.nextEnergy = this.intelRAPL.getEnergy();
+        const nextEnergy = this.intelRAPL.getEnergy();
+        const powerDraw =
+            (nextEnergy - this.currentEnergy) / this.delay / 1000000;
+        const maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
 
-        this.powerDraw =
-            (this.nextEnergy - this.currentEnergy) / this.delay / 1000000;
-
-        this.maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
-
-        let cpuPowerValues: CpuPower = {
-            powerDraw: this.powerDraw,
-            maxPowerLimit: this.maxPowerLimit,
+        const cpuPowerValues: CpuPower = {
+            powerDraw: powerDraw,
+            maxPowerLimit: maxPowerLimit,
         };
 
-        if (this.currentEnergy > 0)
+        if (this.currentEnergy > 0) {
             this.tccd.dbusData.cpuPowerValuesJSON =
                 JSON.stringify(cpuPowerValues);
+        }
 
-        this.currentEnergy = this.nextEnergy;
+        this.currentEnergy = nextEnergy;
     }
 
     public onExit() {}
