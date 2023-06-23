@@ -19,49 +19,43 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import * as fs from "fs";
-import { fileOK } from "../../common/classes/Utils";
-import { CpuPowerValues } from "src/common/models/TccPowerSettings";
+import { CpuPowerValues } from "../../common/models/TccPowerSettings";
+import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 
 export class CpuPowerWorker extends DaemonWorker {
+    private RAPLStatus: boolean = false;
+    private currentEnergy: number = -1;
+    private nextEnergy: number = -1;
+    private delay: number = 2;
+    private powerDraw: number = -1;
+    private maxPowerLimit: number = -1;
+
+    private intelRAPL = new IntelRAPLController(
+        "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/"
+    );
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(2000, tccd);
     }
 
-    uj_current: number = -1;
-    uj_next: number = -1;
-    delay: number = 2;
-    power_draw: number = -1;
-    max_pl: number = -1;
-
-    path_uj: string =
-        "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/energy_uj";
-    path_max_uw: string =
-        "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/constraint_0_max_power_uw";
-
-    public onStart() {
-        if (fileOK(this.path_uj)) {
-            this.uj_current = Number(fs.readFileSync(this.path_uj));
-        }
+    onStart() {
+        this.RAPLStatus = this.intelRAPL.getIntelRAPLAvailable();
     }
 
-    public onWork() {
-        if (fileOK(this.path_uj)) {
-            this.uj_next = Number(fs.readFileSync(this.path_uj));
-            this.power_draw =
-                (this.uj_next - this.uj_current) / this.delay / 1000000;
-            this.uj_current = this.uj_next;
-        }
+    onWork() {
+        if (!this.RAPLStatus) return;
 
-        if (fileOK(this.path_max_uw)) {
-            this.max_pl = Number(fs.readFileSync(this.path_max_uw)) / 1000000;
-        }
+        this.nextEnergy = this.intelRAPL.getEnergy();
+        this.powerDraw =
+            (this.nextEnergy - this.currentEnergy) / this.delay / 1000000;
+        this.currentEnergy = this.nextEnergy;
+
+        this.maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
 
         let cpuPowerValues: CpuPowerValues = {
-            power_draw: this.power_draw,
-            max_pl: this.max_pl,
+            power_draw: this.powerDraw,
+            max_pl: this.maxPowerLimit,
         };
-
         this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(cpuPowerValues);
     }
 
