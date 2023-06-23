@@ -64,19 +64,19 @@ export class CompatibilityService {
     const { cpuPower } = this.tccDbus;
     const { value: cpuPowerValue } = cpuPower;
     
-    const powerDrawDefined = typeof cpuPowerValue?.power_draw !== 'undefined';
-    const maxPlDefined = typeof cpuPowerValue?.max_pl !== 'undefined';
+    const powerDrawDefined = typeof cpuPowerValue?.powerDraw !== 'undefined';
+    const maxPlDefined = typeof cpuPowerValue?.maxPowerLimit !== 'undefined';
     const wmiAvailable = this.tccDbus.tuxedoWmiAvailable.value
     
     return powerDrawDefined && 
            maxPlDefined && 
-           cpuPowerValue.power_draw > 0 && 
-           cpuPowerValue.max_pl > 0 &&
+           cpuPowerValue.powerDraw > 0 && 
+           cpuPowerValue.maxPowerLimit > 0 &&
            wmiAvailable;
   }
 
   get hasGpuPowerDraw(): boolean {
-    const gpuPowerDraw = this.tccDbus.gpuInfo?.value?.power_draw;
+    const gpuPowerDraw = this.tccDbus.gpuInfo?.value?.powerDraw;
   
     if (gpuPowerDraw !== undefined) {
       return gpuPowerDraw > 0;
@@ -86,7 +86,7 @@ export class CompatibilityService {
   }
   
   get hasGpuMaxPl(): boolean {
-    const gpuMaxPl = this.tccDbus.gpuInfo?.value?.max_pl;
+    const gpuMaxPl = this.tccDbus.gpuInfo?.value?.maxPowerLimit;
   
     if (gpuMaxPl !== undefined) {
       return gpuMaxPl > 0;
@@ -96,7 +96,7 @@ export class CompatibilityService {
   }
   
   get hasCpuMaxPl(): boolean {
-    const cpuMaxPl = this.tccDbus.cpuPower?.value?.max_pl;
+    const cpuMaxPl = this.tccDbus.cpuPower?.value?.maxPowerLimit;
     const wmiAvailable = this.tccDbus.tuxedoWmiAvailable.value
   
     if (cpuMaxPl !== undefined) {
@@ -107,7 +107,7 @@ export class CompatibilityService {
   }
   
   get hasGpuMaxFreq(): boolean {
-    const coreFreqMax = this.tccDbus.gpuInfo?.value?.core_freq_max;
+    const coreFreqMax = this.tccDbus.gpuInfo?.value?.maxCoreFrequency;
   
     if (coreFreqMax !== undefined) {
       return coreFreqMax > 0;
@@ -118,8 +118,8 @@ export class CompatibilityService {
 
   get hasGpuFreq(): boolean {
     const gpuInfo = this.tccDbus.gpuInfo?.value;
-    const coreFreq = gpuInfo?.core_freq;
-    const coreFreqMax = gpuInfo?.core_freq_max;
+    const coreFreq = gpuInfo?.coreFrequency;
+    const coreFreqMax = gpuInfo?.maxCoreFrequency;
   
     if (coreFreq !== undefined && coreFreqMax !== undefined) {
       return coreFreq > 0 && coreFreqMax > 0;

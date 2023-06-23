@@ -19,7 +19,7 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { CpuPowerValues } from "../../common/models/TccPowerSettings";
+import { CpuPower } from "../../common/models/TccPowerSettings";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 
 export class CpuPowerWorker extends DaemonWorker {
@@ -52,9 +52,9 @@ export class CpuPowerWorker extends DaemonWorker {
 
         this.maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
 
-        let cpuPowerValues: CpuPowerValues = {
-            power_draw: this.powerDraw,
-            max_pl: this.maxPowerLimit,
+        let cpuPowerValues: CpuPower = {
+            powerDraw: this.powerDraw,
+            maxPowerLimit: this.maxPowerLimit,
         };
         this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(cpuPowerValues);
     }

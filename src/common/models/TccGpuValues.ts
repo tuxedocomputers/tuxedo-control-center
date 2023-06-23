@@ -1,7 +1,7 @@
-export interface GpuInfoValues {
-    power_draw: number;
-    max_pl: number;
-    enforced_pl: number;
-    core_freq: number;
-    core_freq_max: number;
+export interface GpuInfo {
+    powerDraw: number;
+    maxPowerLimit: number;
+    enforcedPowerLimit: number;
+    coreFrequency: number;
+    maxCoreFrequency: number;
 }

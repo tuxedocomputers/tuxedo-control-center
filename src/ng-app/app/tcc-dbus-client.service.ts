@@ -24,8 +24,8 @@ import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { CpuPowerValues } from 'src/common/models/TccPowerSettings';
-import { GpuInfoValues } from 'src/common/models/TccGpuValues';
+import { CpuPower } from 'src/common/models/TccPowerSettings';
+import { GpuInfo } from 'src/common/models/TccGpuValues';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -75,8 +75,8 @@ export class TccDBusClientService implements OnDestroy {
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
-  public gpuInfo = new BehaviorSubject<GpuInfoValues>(undefined);
-  public cpuPower = new BehaviorSubject<CpuPowerValues>(undefined);
+  public gpuInfo = new BehaviorSubject<GpuInfo>(undefined);
+  public cpuPower = new BehaviorSubject<CpuPower>(undefined);
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();

@@ -28,8 +28,8 @@ import { ConfigService } from '../config.service';
 
 import { NodeService } from '../node.service';
 import { CompatibilityService } from '../compatibility.service';
-import { CpuPowerValues } from 'src/common/models/TccPowerSettings';
-import { GpuInfoValues } from 'src/common/models/TccGpuValues';
+import { CpuPower } from 'src/common/models/TccPowerSettings';
+import { GpuInfo } from 'src/common/models/TccGpuValues';
 
 @Component({
   selector: 'app-cpu-dashboard',
@@ -105,7 +105,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.sysfs.logicalCoreInfo.subscribe(coreInfo => { this.cpuCoreInfo = coreInfo; this.updateFrequencyData(); }));
     this.subscriptions.add(this.sysfs.pstateInfo.subscribe(pstateInfo => { this.pstateInfo = pstateInfo; }));
     this.subscriptions.add(
-        this.tccdbus.gpuInfo.subscribe((gpuInfo: GpuInfoValues) => {
+        this.tccdbus.gpuInfo.subscribe((gpuInfo: GpuInfo) => {
             const gpuDefaultValues = {
                 gaugeGPUPower: 0,
                 gaugeGPUFreq: 0,
@@ -116,22 +116,22 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            if (gpuInfo.power_draw > 0 && gpuInfo.max_pl > 0) {
+            if (gpuInfo.powerDraw > 0 && gpuInfo.maxPowerLimit > 0) {
                 this.gaugeGPUPower =
-                    (gpuInfo.power_draw / gpuInfo.max_pl) * 100;
-                this.gpuPower = gpuInfo.power_draw;
-            } else if (gpuInfo.power_draw > 0 && gpuInfo.max_pl < 0) {
+                    (gpuInfo.powerDraw / gpuInfo.maxPowerLimit) * 100;
+                this.gpuPower = gpuInfo.powerDraw;
+            } else if (gpuInfo.powerDraw > 0 && gpuInfo.maxPowerLimit < 0) {
                 this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
-                this.gpuPower = gpuInfo.power_draw;
+                this.gpuPower = gpuInfo.powerDraw;
             } else {
                 this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
                 this.gpuPower = gpuDefaultValues.gaugeGPUPower;
             }
 
-            if (gpuInfo.core_freq > 0 && gpuInfo.core_freq_max > 0) {
+            if (gpuInfo.coreFrequency > 0 && gpuInfo.maxCoreFrequency > 0) {
                 this.gaugeGPUFreq =
-                    (gpuInfo.core_freq / gpuInfo.core_freq_max) * 100;
-                this.gpuFreq = gpuInfo.core_freq;
+                    (gpuInfo.coreFrequency / gpuInfo.maxCoreFrequency) * 100;
+                this.gpuFreq = gpuInfo.coreFrequency;
             } else {
                 this.gaugeGPUFreq = gpuDefaultValues.gaugeGPUFreq;
                 this.gpuFreq = gpuDefaultValues.gaugeGPUFreq;
@@ -140,7 +140,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.add(
-        this.tccdbus.cpuPower.subscribe((cpuPower: CpuPowerValues) => {
+        this.tccdbus.cpuPower.subscribe((cpuPower: CpuPower) => {
             const cpuDefaultValues = { gaugeCPUPower: 0 };
 
             if (!cpuPower || !this.compat.hasCpuPower) {
@@ -148,10 +148,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            if (cpuPower.power_draw > 0 && cpuPower.max_pl > 0) {
+            if (cpuPower.powerDraw > 0 && cpuPower.maxPowerLimit > 0) {
                 this.gaugeCPUPower =
-                    (cpuPower.power_draw / cpuPower.max_pl) * 100;
-                this.cpuPower = cpuPower.power_draw;
+                    (cpuPower.powerDraw / cpuPower.maxPowerLimit) * 100;
+                this.cpuPower = cpuPower.powerDraw;
             } else {
                 this.gaugeCPUPower = cpuDefaultValues.gaugeCPUPower;
                 this.cpuPower = cpuDefaultValues.gaugeCPUPower;

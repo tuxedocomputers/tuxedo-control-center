@@ -19,7 +19,7 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { GpuInfoValues } from "src/common/models/TccGpuValues";
+import { GpuInfo } from "src/common/models/TccGpuValues";
 import { exec } from "child_process";
 
 export class GpuInfoWorker extends DaemonWorker {
@@ -64,7 +64,7 @@ function isNvidiaSmiInstalled(): Promise<Boolean> {
     });
 }
 
-async function getPowerValues(): Promise<GpuInfoValues> {
+async function getPowerValues(): Promise<GpuInfo> {
     const command =
         "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
 
@@ -89,14 +89,14 @@ async function execCommand(command: string): Promise<string> {
     });
 }
 
-function parseOutput(output: string): GpuInfoValues {
+function parseOutput(output: string): GpuInfo {
     const values = output.split(",").map((s) => s.trim());
     return {
-        power_draw: parseNumberWithMetric(values[0]),
-        max_pl: parseNumberWithMetric(values[1]),
-        enforced_pl: parseNumberWithMetric(values[2]),
-        core_freq: parseNumberWithMetric(values[3]),
-        core_freq_max: parseNumberWithMetric(values[4]),
+        powerDraw: parseNumberWithMetric(values[0]),
+        maxPowerLimit: parseNumberWithMetric(values[1]),
+        enforcedPowerLimit: parseNumberWithMetric(values[2]),
+        coreFrequency: parseNumberWithMetric(values[3]),
+        maxCoreFrequency: parseNumberWithMetric(values[4]),
     };
 }
 
@@ -109,12 +109,12 @@ function parseNumberWithMetric(value: string): number {
     return -1;
 }
 
-function getDefaultValues(): GpuInfoValues {
+function getDefaultValues(): GpuInfo {
     return {
-        power_draw: -1,
-        max_pl: -1,
-        enforced_pl: -1,
-        core_freq: -1,
-        core_freq_max: -1,
+        powerDraw: -1,
+        maxPowerLimit: -1,
+        enforcedPowerLimit: -1,
+        coreFrequency: -1,
+        maxCoreFrequency: -1,
     };
 }
