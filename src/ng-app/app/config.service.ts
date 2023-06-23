@@ -54,7 +54,7 @@ export class ConfigService implements OnDestroy {
     public editingProfile: BehaviorSubject<ITccProfile>;
 
     private subscriptions: Subscription = new Subscription();
-    private cwd;
+    private cwd: string;
 
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;

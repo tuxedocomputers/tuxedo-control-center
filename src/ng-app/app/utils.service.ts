@@ -264,9 +264,9 @@ export class UtilsService {
       });
    }
 
-   public getCWDSync()
+   public getCWDSync(): string
    {
-        return this.electron.ipcRenderer.sendSync('get-cwd-sync');
+        return this.electron.ipcRenderer.sendSync('get-cwd-sync').data;
    }
 
   public async getProcessVersions(): Promise<NodeJS.ProcessVersions> {
