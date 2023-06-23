@@ -46,9 +46,9 @@ export class CpuPowerWorker extends DaemonWorker {
         if (!this.RAPLStatus) return;
 
         this.nextEnergy = this.intelRAPL.getEnergy();
+
         this.powerDraw =
             (this.nextEnergy - this.currentEnergy) / this.delay / 1000000;
-        this.currentEnergy = this.nextEnergy;
 
         this.maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
 
@@ -56,7 +56,12 @@ export class CpuPowerWorker extends DaemonWorker {
             powerDraw: this.powerDraw,
             maxPowerLimit: this.maxPowerLimit,
         };
-        this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(cpuPowerValues);
+
+        if (this.currentEnergy > 0)
+            this.tccd.dbusData.cpuPowerValuesJSON =
+                JSON.stringify(cpuPowerValues);
+
+        this.currentEnergy = this.nextEnergy;
     }
 
     public onExit() {}
