@@ -109,6 +109,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             const gpuDefaultValues = {
                 gaugeGPUPower: 0,
                 gaugeGPUFreq: 0,
+                gpuPower: 0,
+                gpuFreq: 0,
             };
 
             if (!gpuInfo) {
@@ -130,7 +132,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
             if (gpuInfo.coreFrequency > 0 && gpuInfo.maxCoreFrequency > 0) {
                 this.gaugeGPUFreq =
-                    (gpuInfo.coreFrequency / gpuInfo.maxCoreFrequency) * 100;
+                    (gpuInfo.coreFrequency / gpuInfo.maxCoreFrequency) *
+                    100;
                 this.gpuFreq = gpuInfo.coreFrequency;
             } else {
                 this.gaugeGPUFreq = gpuDefaultValues.gaugeGPUFreq;
@@ -141,7 +144,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
         this.tccdbus.cpuPower.subscribe((cpuPower: CpuPower) => {
-            const cpuDefaultValues = { gaugeCPUPower: 0 };
+            const cpuDefaultValues = { gaugeCPUPower: 0, cpuPower: 0 };
 
             if (!cpuPower || !this.compat.hasCpuPower) {
                 Object.assign(this, cpuDefaultValues);
