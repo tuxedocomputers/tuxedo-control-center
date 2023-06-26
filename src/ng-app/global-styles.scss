@@ -17,6 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+* {
+    user-select: none;
+}
+
 .content-container {
     max-width: 900px;
     margin:auto;
