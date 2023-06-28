@@ -108,15 +108,14 @@ export class PrimeSelectComponent implements OnInit {
             description: $localize`:@@primeSelectDialogRebootDescription:Your graphics profile has been updated successfully. 
                 Restarting your system is necessary to activate the changes. Would you like to restart now?`,
 
-            // todo: swap name and value in dialog component
             labelData: [
                 {
-                    name: "REBOOT",
-                    value: $localize`:@@primeSelectDialogRebootNow:Reboot now`,
+                    label: $localize`:@@primeSelectDialogRebootNow:Reboot now`,
+                    value: "REBOOT",
                 },
                 {
-                    name: "NO_REBOOT",
-                    value: $localize`:@@primeSelectDialogRebootLater:Reboot later`,
+                    label: $localize`:@@primeSelectDialogRebootLater:Reboot later`,
+                    value: "NO_REBOOT",
                 },
             ],
         };

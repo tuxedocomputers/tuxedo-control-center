@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import { Component, Inject } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -38,7 +39,7 @@ export interface WaitingDialogData {
 }
 
 interface SingleLabelData {
-    name: string;
+    label: string;
     value: string;
 }
 
