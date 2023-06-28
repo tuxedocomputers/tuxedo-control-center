@@ -50,15 +50,17 @@ export class PrimeSelectComponent implements OnInit {
         }
     }
 
-    public async applyGpuProfile() {
+    public async applyGpuProfile(): Promise<void> {
         const config = {
             title: $localize`:@@primeSelectDialogApplyProfileTitle:Applying Graphics Profile`,
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
-        const pkexecSetPrimeSelectAsync = this.config.pkexecSetPrimeSelectAsync(
-            this.transformPrimeStatus(this.selectedState)
+        const selectedPrimeStatus = this.transformPrimeStatus(
+            this.selectedState
         );
+        const pkexecSetPrimeSelectAsync =
+            this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
         const isSuccessful = await this.utils.waitingDialog(
             config,
             pkexecSetPrimeSelectAsync
@@ -102,12 +104,11 @@ export class PrimeSelectComponent implements OnInit {
         });
     }
 
-    private async showRebootDialog(): Promise<boolean | string> {
+    private async showRebootDialog(): Promise<string> {
         const rebootConfig = {
             title: $localize`:@@primeSelectDialogRebootTitle:Completed`,
             description: $localize`:@@primeSelectDialogRebootDescription:Your graphics profile has been updated successfully. 
                 Restarting your system is necessary to activate the changes. Would you like to restart now?`,
-
             labelData: [
                 {
                     label: $localize`:@@primeSelectDialogRebootNow:Reboot now`,
@@ -119,9 +120,8 @@ export class PrimeSelectComponent implements OnInit {
                 },
             ],
         };
-        return await this.utils
-            .choiceDialog(rebootConfig)
-            .then((returnValue) => returnValue.value);
+        const returnValue = await this.utils.choiceDialog(rebootConfig);
+        return returnValue.value as string;
     }
 
     private transformPrimeStatus(status: string): string {
