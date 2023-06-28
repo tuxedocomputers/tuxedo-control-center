@@ -91,6 +91,7 @@ import { ChargingSettingsComponent } from './charging-settings/charging-settings
 import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
 import { DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
+import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -121,6 +122,7 @@ declare const require;
     WebcamPreviewComponent,
     TomteGuiComponent,
     ProfileConflictComponent,
+    KeyboardVisualComponent,
   ],
   imports: [
     BrowserModule,
