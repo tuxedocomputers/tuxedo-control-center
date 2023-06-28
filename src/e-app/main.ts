@@ -517,8 +517,6 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
     });
 });
 
-
-
 ipcMain.handle('show-save-dialog', async (event, arg) => {
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
         let results = dialog.showSaveDialog(arg);
@@ -541,7 +539,6 @@ ipcMain.handle('get-path', async (event, arg) => {
     });
 });
 
-
 ipcMain.handle('exec-file-async', async (event, arg) => {
     return new Promise((resolve, reject) => {
         let strArg: string = arg;
@@ -562,6 +559,17 @@ ipcMain.on('spawn-external-async', (event, arg) => {
         console.log("\"" + arg + "\" could not be executed.")
         dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
     });
+});
+
+
+ipcMain.handle('checkPrimeSupport', (event) => {
+    const isPrimeSupported = primeSupported();
+    return isPrimeSupported;
+});
+
+ipcMain.handle('checkPrimeSelectQuery', (event) => {
+    const primeQuery = primeSelectQuery();
+    return primeQuery;
 });
 
 // Handle nativeTheme updated event, whether system triggered or from tcc

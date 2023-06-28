@@ -82,35 +82,6 @@ export class UtilsService {
     });
   }
 
-  public async isPrimeSelectInstalled(): Promise<Boolean> {
-    return new Promise<Boolean>((resolve, reject) => {
-      this.electron.ipcRenderer
-        .invoke("exec-cmd-async", "which prime-select")
-        .then((result) => {
-          if (result.error === null) {
-            resolve(result.data.trim().length > 0);
-          } else {
-            resolve(false);
-          }
-        });
-    });
-  }
-
-  public async isPrimeSupported(): Promise<Boolean> {
-    return new Promise<Boolean>((resolve, reject) => {
-      this.electron.ipcRenderer
-        .invoke("exec-cmd-async", "prime-supported /dev/null")
-        .then((result) => {
-            console.log("result: ", result)
-          if (result.error === null) {
-            resolve(result.data.trim() === "yes");
-          } else {
-            resolve(false);
-          }
-        });
-    });
-  }
-
   // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
   public async getPath(path: string): Promise<string>
   {
@@ -125,10 +96,9 @@ export class UtilsService {
       });
   }
 
-
-   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
-   // for selecting existing files
-   // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
+  // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
+  // for selecting existing files
+  // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
   public async openFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
