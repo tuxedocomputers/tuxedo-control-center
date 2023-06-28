@@ -27,12 +27,13 @@ import * as path from 'path';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
-import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
+import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent, WaitingDialogData } from './dialog-choice/dialog-choice.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
+import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
 
 @Injectable({
   providedIn: 'root'
@@ -78,6 +79,35 @@ export class UtilsService {
           reject(result.error);
         }
       });
+    });
+  }
+
+  public async isPrimeSelectInstalled(): Promise<Boolean> {
+    return new Promise<Boolean>((resolve, reject) => {
+      this.electron.ipcRenderer
+        .invoke("exec-cmd-async", "which prime-select")
+        .then((result) => {
+          if (result.error === null) {
+            resolve(result.data.trim().length > 0);
+          } else {
+            resolve(false);
+          }
+        });
+    });
+  }
+
+  public async isPrimeSupported(): Promise<Boolean> {
+    return new Promise<Boolean>((resolve, reject) => {
+      this.electron.ipcRenderer
+        .invoke("exec-cmd-async", "prime-supported /dev/null")
+        .then((result) => {
+            console.log("result: ", result)
+          if (result.error === null) {
+            resolve(result.data.trim() === "yes");
+          } else {
+            resolve(false);
+          }
+        });
     });
   }
 
@@ -329,6 +359,22 @@ export class UtilsService {
       };
     }
     return result;
+  }
+
+  public async waitingDialog(
+    config: WaitingDialogData,
+    pkexecSetPrimeSelectAsync: Promise<Boolean>
+  ): Promise<Boolean> {
+    const dialogRef = this.dialog.open(DialogWaitingComponent, {
+      minWidth: 350,
+      maxWidth: 550,
+      data: config,
+      autoFocus: false,
+      disableClose: true,
+    });
+    const status = await pkexecSetPrimeSelectAsync;
+    dialogRef.close();
+    return status;
   }
 
   public async inputTextDialog(config: any) {

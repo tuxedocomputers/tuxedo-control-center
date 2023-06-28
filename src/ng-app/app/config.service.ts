@@ -384,6 +384,21 @@ export class ConfigService implements OnDestroy {
         });
     }
 
+    public async pkexecSetPrimeSelectAsync(
+        selectedState: string
+    ): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            this.utils
+                .execFile(`pkexec prime-select ${selectedState}`)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        });
+    }
+
     /**
      * Retrieves the currently chosen profile for edit
      *

@@ -32,6 +32,11 @@ export interface ChoiceDialogData {
     checkboxNoBotherLabel?: string;
 }
 
+export interface WaitingDialogData {
+    title: string;
+    description: string;
+}
+
 interface SingleLabelData {
     name: string;
     value: string;
