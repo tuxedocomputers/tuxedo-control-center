@@ -65,14 +65,9 @@ export class CompatibilityService {
     const { value: cpuPowerValue } = cpuPower;
     
     const powerDrawDefined = typeof cpuPowerValue?.powerDraw !== 'undefined';
-    const maxPlDefined = typeof cpuPowerValue?.maxPowerLimit !== 'undefined';
-    const wmiAvailable = this.tccDbus.tuxedoWmiAvailable.value
-    
+
     return powerDrawDefined && 
-           maxPlDefined && 
-           cpuPowerValue.powerDraw > 0 && 
-           cpuPowerValue.maxPowerLimit > 0 &&
-           wmiAvailable;
+           cpuPowerValue.powerDraw > 0
   }
 
   get hasGpuPowerDraw(): boolean {

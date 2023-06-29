@@ -57,16 +57,27 @@ export class IntelRAPLController {
      *
      * @returns Boolean indicating wether or not this Intel RAPL controller can be used
      */
-    public getIntelRAPLAvailable(): boolean {
+    public getIntelRAPLPowerAvailable(): boolean {
         const props = this.properties;
         return (
             props.name.isAvailable() &&
+            props.enabled.isAvailable() &&
+            props.energyUJ.isAvailable() &&
+            props.name.readValueNT() === "package-0"
+        );
+    }
+
+    /**
+     * Check if CPU supports power constraints
+     *
+     * @returns Boolean indicating if constraints are available
+     */
+    public getIntelRAPLConstraintsAvailable(): boolean {
+        const props = this.properties;
+        return (
             props.constraint0Name.isAvailable() &&
             props.constraint0MaxPower.isAvailable() &&
             props.constraint0PowerLimit.isAvailable() &&
-            props.enabled.isAvailable() &&
-            props.energyUJ.isAvailable() &&
-            props.name.readValueNT() === "package-0" &&
             props.constraint0Name.readValueNT() === "long_term"
         );
     }

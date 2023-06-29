@@ -118,22 +118,27 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            if (gpuInfo.powerDraw > 0 && gpuInfo.maxPowerLimit > 0) {
-                this.gaugeGPUPower =
-                    (gpuInfo.powerDraw / gpuInfo.maxPowerLimit) * 100;
-                this.gpuPower = gpuInfo.powerDraw;
-            } else if (gpuInfo.powerDraw > 0 && gpuInfo.maxPowerLimit < 0) {
-                this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
+            if (gpuInfo.powerDraw > 0) {
+                if (gpuInfo.maxPowerLimit > 0) {
+                    this.gaugeGPUPower =
+                        (gpuInfo.powerDraw / gpuInfo.maxPowerLimit) * 100;
+                } else {
+                    this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
+                }
                 this.gpuPower = gpuInfo.powerDraw;
             } else {
                 this.gaugeGPUPower = gpuDefaultValues.gaugeGPUPower;
                 this.gpuPower = gpuDefaultValues.gaugeGPUPower;
             }
 
-            if (gpuInfo.coreFrequency > 0 && gpuInfo.maxCoreFrequency > 0) {
-                this.gaugeGPUFreq =
-                    (gpuInfo.coreFrequency / gpuInfo.maxCoreFrequency) *
-                    100;
+            if (gpuInfo.coreFrequency > 0) {
+                if (gpuInfo.maxCoreFrequency > 0) {
+                    this.gaugeGPUFreq =
+                        (gpuInfo.coreFrequency / gpuInfo.maxCoreFrequency) *
+                        100;
+                } else {
+                    this.gaugeGPUFreq = gpuDefaultValues.gaugeGPUFreq;
+                }
                 this.gpuFreq = gpuInfo.coreFrequency;
             } else {
                 this.gaugeGPUFreq = gpuDefaultValues.gaugeGPUFreq;
@@ -151,9 +156,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            if (cpuPower.powerDraw > 0 && cpuPower.maxPowerLimit > 0) {
-                this.gaugeCPUPower =
-                    (cpuPower.powerDraw / cpuPower.maxPowerLimit) * 100;
+            if (cpuPower.powerDraw > 0) {
+                if (cpuPower.maxPowerLimit > 0) {
+                    this.gaugeCPUPower =
+                        (cpuPower.powerDraw / cpuPower.maxPowerLimit) * 100;
+                } else {
+                    this.gaugeCPUPower = cpuDefaultValues.gaugeCPUPower;
+                }
                 this.cpuPower = cpuPower.powerDraw;
             } else {
                 this.gaugeCPUPower = cpuDefaultValues.gaugeCPUPower;

@@ -23,7 +23,9 @@ import { CpuPower } from "../../common/models/TccPowerSettings";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 
 export class CpuPowerWorker extends DaemonWorker {
-    private RAPLStatus: boolean = false;
+    private RAPLPowerStatus: boolean = false;
+    private RAPLConstraintStatus: boolean = false;
+
     private currentEnergy: number = -1;
     private delay: number = 2;
 
@@ -36,24 +38,31 @@ export class CpuPowerWorker extends DaemonWorker {
     }
 
     onStart() {
-        this.RAPLStatus = this.intelRAPL.getIntelRAPLAvailable();
+        this.RAPLPowerStatus = this.intelRAPL.getIntelRAPLPowerAvailable();
+        this.RAPLConstraintStatus =
+            this.intelRAPL.getIntelRAPLConstraintsAvailable();
     }
 
     onWork() {
-        if (!this.RAPLStatus) {
+        if (!this.RAPLPowerStatus) {
             return;
         }
 
         const nextEnergy = this.intelRAPL.getEnergy();
         const powerDraw =
             (nextEnergy - this.currentEnergy) / this.delay / 1000000;
-        const maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
 
-        const cpuPowerValues: CpuPower = {
+        let cpuPowerValues: CpuPower = {
             powerDraw: powerDraw,
-            maxPowerLimit: maxPowerLimit,
         };
 
+        if (this.RAPLConstraintStatus) {
+            const maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
+            cpuPowerValues.maxPowerLimit = maxPowerLimit;
+        } else {
+            cpuPowerValues.maxPowerLimit = -1;
+        }
+        
         if (this.currentEnergy > 0) {
             this.tccd.dbusData.cpuPowerValuesJSON =
                 JSON.stringify(cpuPowerValues);
