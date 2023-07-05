@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.8] - 2023-07-14
+### Added
+- Four-zone keyboard backlight GUI support
+- Profile definitions for InfinityBook Pro 16 Gen8
+
+### Changed
+- Zoned keyboard backlight GUI design + usability improvements
+- Extended GUI info text in case keyboard backlight control is not found
+
+### Fixed
+- Occasionally not recognized keyboard backlight
+
 ## [2.0.7] - 2023-05-23
 ### Added
 - Clarifying info text + link added to battery charging profiles
