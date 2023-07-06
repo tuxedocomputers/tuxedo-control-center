@@ -271,8 +271,9 @@ function createAquarisControl(langId: string) {
         minHeight: windowHeight,
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         }
     });
 
@@ -317,8 +318,9 @@ async function createWebcamPreview(langId: string, arg: any) {
             "../../data/dist-data/tuxedo-control-center_256.png"
         ),
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         },
         show: false
     });
@@ -446,8 +448,9 @@ async function createTccWindow(langId: string, module?: string) {
         minHeight: windowHeight,
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         },
         show: false
     });
