@@ -86,11 +86,7 @@ if (!userConfigDirExists()) {
     createUserConfigDir();
 }
 
-app.on('second-instance', (event, cmdLine, workingDir) => {
-    // If triggered by a second instance, find/show/start GUI
-    activateTccGui();
-});
-
+// ############### Initilization ##################
 app.whenReady().then( async () => {
     try {
         const systemLanguageId = app.getLocale().substring(0, 2);
@@ -205,6 +201,17 @@ app.whenReady().then( async () => {
     setInterval(async () => { updateTrayProfiles(tccDBus); }, profilesCheckInterval);
 });
 
+/* 
+#############################################################
+############## Window and Session Management ################
+#############################################################
+*/
+
+app.on('second-instance', (event, cmdLine, workingDir) => {
+    // If triggered by a second instance, find/show/start GUI
+    activateTccGui();
+});
+
 app.on('will-quit', async (event) => {
     // Prevent default quit action
     event.preventDefault();
@@ -237,6 +244,8 @@ app.on('window-all-closed', () => {
     }
 });
 
+
+
 let tccWindowLoading = false;
 
 async function activateTccGui(module?: string) {
@@ -255,6 +264,114 @@ async function activateTccGui(module?: string) {
             tccWindowLoading = false;
         }
     }
+}
+
+function activateAquarisGui() {
+    if (aquarisWindow) {
+        if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
+        aquarisWindow.focus();
+    } else {
+        userConfig.get('langId').then(langId => {
+            createAquarisControl(langId);
+        });
+    }
+}
+
+function quitCurrentTccSession() {
+    if (tray.isActive()) {
+        tray.destroy();
+    }
+
+    app.quit();
+}
+
+/* 
+########################################################
+################ Profile Functions #####################
+########################################################
+*/
+
+async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
+    let result = [];
+    if (!await dbus.dbusAvailable()) return [];
+    try {
+        const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
+        result = profiles;
+    } catch (err) {
+        console.log('Error: ' + err);
+    }
+    return result;
+}
+
+async function setTempProfile(dbus: TccDBusController, profileName: string) {
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
+    return result;
+}
+
+async function setTempProfileById(dbus: TccDBusController, profileId: string) {
+    const result = await dbus.dbusAvailable() && await dbus.setTempProfileById(profileId);
+    return result;
+}
+
+async function getActiveProfile(dbus: TccDBusController): Promise<TccProfile> {
+    let result = undefined;
+    if (!await dbus.dbusAvailable()) return undefined;
+    try {
+        result = JSON.parse(await dbus.getActiveProfileJSON());
+    } catch {
+    }
+    return result;
+}
+
+/* 
+########################################################
+################ Browser Windows #######################
+########################################################
+*/
+
+async function createTccWindow(langId: string, module?: string) {
+    let windowWidth = 1250;
+    let windowHeight = 770;
+    if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
+        windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
+    }
+    if (windowHeight > screen.getPrimaryDisplay().workAreaSize.height) {
+        windowHeight = screen.getPrimaryDisplay().workAreaSize.height;
+    }
+
+    tccWindow = new BrowserWindow({
+        title: 'TUXEDO Control Center',
+        width: windowWidth,
+        height: windowHeight,
+        frame: true,
+        resizable: true,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
+        icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
+        },
+        show: false
+    });
+
+    // Hide menu bar
+    tccWindow.setMenuBarVisibility(false);
+    // Workaround to menu bar appearing after full screen state
+    tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
+
+    tccWindow.on('closed', () => {
+        tccWindow = null;
+    });
+
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
+    if (module !== undefined) {
+        await tccWindow.loadFile(indexPath, { hash: '/' + module });
+    } else {
+        await tccWindow.loadFile(indexPath);
+    }
+    tccWindow.show();
 }
 
 function createAquarisControl(langId: string) {
@@ -288,17 +405,6 @@ function createAquarisControl(langId: string) {
 
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
     aquarisWindow.loadFile(indexPath, { hash: '/main-gui/aquaris-control' });
-}
-
-function activateAquarisGui() {
-    if (aquarisWindow) {
-        if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
-        aquarisWindow.focus();
-    } else {
-        userConfig.get('langId').then(langId => {
-            createAquarisControl(langId);
-        });
-    }
 }
 
 async function createWebcamPreview(langId: string, arg: any) {
@@ -362,6 +468,18 @@ async function createWebcamPreview(langId: string, arg: any) {
     })
 }
 
+
+/*
+##################################################################
+################# IPC Backend for TCC API ########################
+##################################################################
+*/
+
+/*
+###############   Webcam Settings API ####################
+*/
+
+
 ipcMain.on("setting-webcam-with-loading", (event, arg) => {
     if (webcamWindow != null) {
         webcamWindow.webContents.send("setting-webcam-with-loading", arg);
@@ -396,92 +514,11 @@ ipcMain.on("video-ended", (event) => {
     tccWindow.webContents.send("video-ended");
 });
 
-async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
-    let result = [];
-    if (!await dbus.dbusAvailable()) return [];
-    try {
-        const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
-        result = profiles;
-    } catch (err) {
-        console.log('Error: ' + err);
-    }
-    return result;
-}
+/* 
+################ Utils API #######################
+*/
 
-async function setTempProfile(dbus: TccDBusController, profileName: string) {
-    const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
-    return result;
-}
-
-async function setTempProfileById(dbus: TccDBusController, profileId: string) {
-    const result = await dbus.dbusAvailable() && await dbus.setTempProfileById(profileId);
-    return result;
-}
-
-async function getActiveProfile(dbus: TccDBusController): Promise<TccProfile> {
-    let result = undefined;
-    if (!await dbus.dbusAvailable()) return undefined;
-    try {
-        result = JSON.parse(await dbus.getActiveProfileJSON());
-    } catch {
-    }
-    return result;
-}
-
-async function createTccWindow(langId: string, module?: string) {
-    let windowWidth = 1250;
-    let windowHeight = 770;
-    if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
-        windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
-    }
-    if (windowHeight > screen.getPrimaryDisplay().workAreaSize.height) {
-        windowHeight = screen.getPrimaryDisplay().workAreaSize.height;
-    }
-
-    tccWindow = new BrowserWindow({
-        title: 'TUXEDO Control Center',
-        width: windowWidth,
-        height: windowHeight,
-        frame: true,
-        resizable: true,
-        minWidth: windowWidth,
-        minHeight: windowHeight,
-        icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
-        },
-        show: false
-    });
-
-    // Hide menu bar
-    tccWindow.setMenuBarVisibility(false);
-    // Workaround to menu bar appearing after full screen state
-    tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
-
-    tccWindow.on('closed', () => {
-        tccWindow = null;
-    });
-
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
-    if (module !== undefined) {
-        await tccWindow.loadFile(indexPath, { hash: '/' + module });
-    } else {
-        await tccWindow.loadFile(indexPath);
-    }
-    tccWindow.show();
-}
-
-function quitCurrentTccSession() {
-    if (tray.isActive()) {
-        tray.destroy();
-    }
-
-    app.quit();
-}
-
-
+// TODO exec cmd has to be replaced completely by specific commands.###########
 ipcMain.on('exec-cmd-sync', (event, arg) => {
     try {
         event.returnValue = { data: child_process.execSync(arg), error: undefined };
@@ -490,12 +527,45 @@ ipcMain.on('exec-cmd-sync', (event, arg) => {
     }
 });
 
+ipcMain.handle('exec-cmd-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        child_process.exec(arg, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
+    });
+});
+
+ipcMain.handle('exec-file-async', async (event, arg) => {
+    return new Promise((resolve, reject) => {
+        let strArg: string = arg;
+        let cmdList = strArg.split(' ');
+        let cmd = cmdList.shift();
+        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
+            if (err) {
+                resolve({ data: stderr, error: err });
+            } else {
+                resolve({ data: stdout, error: err });
+            }
+        });
+    });
+});
+
+ipcMain.on('spawn-external-async', (event, arg) => {
+    child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
+        console.log("\"" + arg + "\" could not be executed.")
+        dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
+    });
+});
+
+// ######################################################################
+
 ipcMain.on('get-cwd-sync', (event) => {
     event.returnValue = { data: process.cwd() }
 });
-
-
-// TODO add all things that needed remote module here instead
 
 
 ipcMain.on('close-app', () => {
@@ -532,21 +602,6 @@ ipcMain.handle('get-process-versions', async (event, arg) => {
     });
 });
 
-
-ipcMain.handle('exec-cmd-async', async (event, arg) => {
-    return new Promise((resolve, reject) => {
-        child_process.exec(arg, (err, stdout, stderr) => {
-            if (err) {
-                resolve({ data: stderr, error: err });
-            } else {
-                resolve({ data: stdout, error: err });
-            }
-        });
-    });
-});
-
-
-
 ipcMain.handle('show-save-dialog', async (event, arg) => {
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
         let results = dialog.showSaveDialog(arg);
@@ -569,28 +624,32 @@ ipcMain.handle('get-path', async (event, arg) => {
     });
 });
 
+// Renderer to main nativeTheme API
+ipcMain.handle('set-brightness-mode', (event, mode) => setBrightnessMode(mode));
+ipcMain.handle('get-brightness-mode', () => getBrightnessMode());
+ipcMain.handle('get-should-use-dark-colors', () => { return nativeTheme.shouldUseDarkColors; });
 
-ipcMain.handle('exec-file-async', async (event, arg) => {
-    return new Promise((resolve, reject) => {
-        let strArg: string = arg;
-        let cmdList = strArg.split(' ');
-        let cmd = cmdList.shift();
-        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
-            if (err) {
-                resolve({ data: stderr, error: err });
-            } else {
-                resolve({ data: stdout, error: err });
-            }
-        });
-    });
+/**
+ * Change user language IPC interface
+ */
+ipcMain.on('trigger-language-change', (event, arg) => {
+    const langId = arg;
+    changeLanguage(langId);
 });
 
-ipcMain.on('spawn-external-async', (event, arg) => {
-    child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
-        console.log("\"" + arg + "\" could not be executed.")
-        dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
-    });
-});
+// ############## Other random functions ###################
+
+async function changeLanguage(newLangId: string) {
+    if (newLangId !== await userConfig.get('langId')) {
+        await userConfig.set('langId', newLangId);
+        await loadTranslation(newLangId);
+        await updateTrayProfiles(tccDBus);
+        if (tccWindow) {
+            const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
+            await tccWindow.loadFile(indexPath);
+        }
+    }
+}
 
 // Handle nativeTheme updated event, whether system triggered or from tcc
 nativeTheme.on('updated', () => {
@@ -624,11 +683,6 @@ async function getBrightnessMode(): Promise<BrightnessModeString> {
     }
     return mode;
 }
-
-// Renderer to main nativeTheme API
-ipcMain.handle('set-brightness-mode', (event, mode) => setBrightnessMode(mode));
-ipcMain.handle('get-brightness-mode', () => getBrightnessMode());
-ipcMain.handle('get-should-use-dark-colors', () => { return nativeTheme.shouldUseDarkColors; });
 
 // Initialize brightness mode from user config
 getBrightnessMode().then(async (mode) => {
@@ -665,26 +719,6 @@ async function loadTranslation(langId) {
         }
     }
 }
-
-async function changeLanguage(newLangId: string) {
-    if (newLangId !== await userConfig.get('langId')) {
-        await userConfig.set('langId', newLangId);
-        await loadTranslation(newLangId);
-        await updateTrayProfiles(tccDBus);
-        if (tccWindow) {
-            const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
-            await tccWindow.loadFile(indexPath);
-        }
-    }
-}
-
-/**
- * Change user language IPC interface
- */
-ipcMain.on('trigger-language-change', (event, arg) => {
-    const langId = arg;
-    changeLanguage(langId);
-});
 
 function installAutostartTray(): boolean {
     try {
@@ -816,6 +850,12 @@ async function updateTrayProfiles(dbus: TccDBusController) {
         console.log('updateTrayProfiles() exception => ' + err);
     }
 }
+
+/* 
+########################################################
+############## Aquaris Backend #########################
+########################################################
+*/
 
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false) {
     if (!aquarisIoProgress) {
