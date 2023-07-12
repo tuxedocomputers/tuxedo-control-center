@@ -213,11 +213,9 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             await fs.promises.appendFile(this.ledsWhiteOnly + "/brightness", brightness.toString());
         }
 
-        for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
-            if (await fileOKAsync(this.ledsRGBZones[i] + "/brightness")) {
-                await fs.promises.appendFile(this.ledsRGBZones[i] + "/brightness", brightness.toString());
-            }
-        }
+        let sysDBusUPowerKbdBacklightObject = await this.sysDBusUPowerKbdBacklightObjectPromise;
+        let sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
+        await sysDBusUPowerKbdBacklightInterface.SetBrightness(brightness);
 
         if (this.ledsRGBZones.length > 0) {
             this.bufferInput(this.ledsRGBZones[0], false)
