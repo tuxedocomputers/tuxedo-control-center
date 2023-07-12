@@ -227,26 +227,19 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     private async updateKeyboardBacklightStatesFromSysFS(): Promise<void> {
         let keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = [];
 
-        if (await fileOKAsync(this.ledsWhiteOnly + "/brightness")) {
-            keyboardBacklightStatesNew.push({} as KeyboardBacklightStateInterface);
-            keyboardBacklightStatesNew[0].mode = KeyboardBacklightColorModes.static;
-            keyboardBacklightStatesNew[0].brightness = Number(await fs.promises.readFile(this.ledsWhiteOnly + "/brightness"));
-        }
-        else {
+        if (!await fileOKAsync(this.ledsWhiteOnly + "/brightness")) {
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
-                if (await fileOKAsync(this.ledsRGBZones[i] + "/brightness")) {
+                if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     keyboardBacklightStatesNew.push({} as KeyboardBacklightStateInterface);
 
                     keyboardBacklightStatesNew[i].mode = KeyboardBacklightColorModes.static;
 
-                    keyboardBacklightStatesNew[i].brightness = Number(await fs.promises.readFile(this.ledsRGBZones[i] + "/brightness"));
+                    keyboardBacklightStatesNew[i].brightness = this.keyboardBacklightStates[i].brightness; // brightness is updated by UPower dbus handler
 
-                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                        let colors = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
-                        keyboardBacklightStatesNew[i].red = colors[0];
-                        keyboardBacklightStatesNew[i].green = colors[1];
-                        keyboardBacklightStatesNew[i].blue = colors[2];
-                    }
+                    let colors = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                    keyboardBacklightStatesNew[i].red = colors[0];
+                    keyboardBacklightStatesNew[i].green = colors[1];
+                    keyboardBacklightStatesNew[i].blue = colors[2];
                 }
             }
         }
