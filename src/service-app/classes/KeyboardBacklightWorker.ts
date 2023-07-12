@@ -38,6 +38,8 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     private keyboardBacklightStatesUpdatingReset: NodeJS.Timeout;
 
     private sysDBus: dbus.MessageBus = dbus.systemBus();
+    private sysDBusUPowerObjectPromise: Promise<dbus.ProxyObject> = this.sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower');
+    private sysDBusUPowerKbdBacklightObjectPromise: Promise<dbus.ProxyObject> = this.sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower/KbdBacklight');
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1500, tccd);
@@ -250,8 +252,8 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
 
         try {
-            let sysDBusUPowerObj = await this.sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower');
-            let sysDBusUPowerProps: dbus.ClientInterface = sysDBusUPowerObj.getInterface('org.freedesktop.DBus.Properties');
+            let sysDBusUPowerObject = await this.sysDBusUPowerObjectPromise;
+            let sysDBusUPowerProps: dbus.ClientInterface = sysDBusUPowerObject.getInterface('org.freedesktop.DBus.Properties');
             let lidIsClosedVariant: dbus.Variant = await sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed');
             if (lidIsClosedVariant.value) {
                 return;
@@ -291,6 +293,19 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
     }
 
+    private async initUPower() {
+        let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await this.sysDBusUPowerKbdBacklightObjectPromise;
+        let sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
+        sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (brightness) => {
+            let keyboardBacklightStatesNew = this.keyboardBacklightStates;
+            for (let i in keyboardBacklightStatesNew) {
+                keyboardBacklightStatesNew[i].brightness = brightness;
+            }
+            this.updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew);
+            this.updateSettingsFromKeyboardBacklightStates();
+        });
+    }
+
     private onStartRetryCount = 5;
 
     public onStart(): void {
@@ -301,6 +316,8 @@ export class KeyboardBacklightWorker extends DaemonWorker {
             setTimeout(() => { this.onStart() }, 1000);
             return;
         }
+
+        this.initUPower();
 
         if (this.tccd.settings.keyboardBacklightControlEnabled) {
             this.updateSysFsFromSettings().then(() => {
