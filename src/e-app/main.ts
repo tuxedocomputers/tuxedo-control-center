@@ -351,7 +351,7 @@ async function createTccWindow(langId: string, module?: string) {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.ts')
         },
         show: false
     });
@@ -390,7 +390,7 @@ function createAquarisControl(langId: string) {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.ts')
         }
     });
 
@@ -426,7 +426,7 @@ async function createWebcamPreview(langId: string, arg: any) {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.ts')
         },
         show: false
     });

@@ -19,7 +19,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { ElectronService } from "../electron-service-wrapper/electron-service";
+import { UtilsService } from "../utils.service";
 
 export interface ChoiceDialogData {
     title: string;
@@ -51,7 +51,7 @@ export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
-        private electron: ElectronService,
+        private utils: UtilsService,
         public dialogRef: MatDialogRef<DialogChoiceComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ChoiceDialogData
     ) {
@@ -82,6 +82,6 @@ export class DialogChoiceComponent {
     }
 
     public async openExternalUrl(url: string) {
-        await this.electron.shell.openExternal(url);
+        await this.utils.openExternal(url);
     }
 }

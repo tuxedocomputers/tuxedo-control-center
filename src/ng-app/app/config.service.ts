@@ -159,9 +159,7 @@ export class ConfigService implements OnDestroy {
             tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
 
-        const result = this.electron.ipcRenderer.sendSync(
-            'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
-        );
+        const result = this.electron.ipcRenderer.tccdNewSettings(tccdExec,tmpSettingsPath);
 
         this.updateConfigData();
     }
@@ -257,9 +255,7 @@ export class ConfigService implements OnDestroy {
         } else {
             tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        const result = this.electron.ipcRenderer.sendSync(
-            'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
-        );
+        const result = this.electron.ipcRenderer.tccdNewProfiles(tccdExec,tmpProfilesPath);
         return result.error === undefined;
     }
 

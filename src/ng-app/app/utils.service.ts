@@ -87,9 +87,9 @@ export class UtilsService {
     return new Promise<string>((resolve, reject) => {
         this.electron.ipcRenderer.invoke('get-path', path).then((result) => {
           if (result) {
-            resolve(result);
+            resolve(result.data);
           } else {
-            reject(result);
+            reject(result.error);
           }
         });
       });
@@ -102,10 +102,10 @@ export class UtilsService {
   public async openFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
-        if (result.canceled) {
-            reject(result.canceled);
+        if (result.data.canceled) {
+            reject(result.data.canceled);
           } else {
-            resolve(result.filePaths);
+            resolve(result.data.filePaths);
           }
       });
     });
@@ -118,10 +118,10 @@ export class UtilsService {
   public async saveFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('show-save-dialog', properties).then((result) => {
-        if (result.canceled) {
-          reject(result.canceled);
+        if (result.data.canceled) {
+          reject(result.data.canceled);
         } else {
-          resolve(result.filePath);
+          resolve(result.data.filePath);
         }
       });
     });
@@ -138,6 +138,10 @@ export class UtilsService {
       });
     });
   }
+
+  openExternal(url: string) {
+    throw new Error('Method not implemented.');
+}
 
   public spawnExternal(command: string): void {
     this.electron.ipcRenderer.send('spawn-external-async', command);
@@ -226,11 +230,11 @@ export class UtilsService {
 
   public async getAppVersion(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-        this.electron.ipcRenderer.invoke('get-app-version').then((result) => {
+        this.electron.ipcRenderer.getAppVersion().then((result) => {
           if (result) {
-            resolve(result);
+            resolve(result.data);
           } else {
-            reject(result);
+            reject(result.data);
           }
         });
       });
@@ -238,27 +242,27 @@ export class UtilsService {
 
   public quit()
   {
-    this.electron.ipcRenderer.send('close-app'); 
+    this.electron.ipcRenderer.closeApp(); 
   }
 
   public closeWindow()
   {
-    this.electron.ipcRenderer.send('close-window'); 
+    this.electron.ipcRenderer.closeWindow(); 
   }
 
   public minimizeWindow()
   {
-    this.electron.ipcRenderer.send('minimize-window'); 
+    this.electron.ipcRenderer.minimizeWindow(); 
   }
 
   public getCWD()
    {
     return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        this.electron.ipcRenderer.invoke('get-cwd').then((result) => {
+        this.electron.ipcRenderer.getCWD().then((result) => {
           if (result) {
-            resolve(result);
+            resolve(result.data);
           } else {
-            reject(result);
+            reject(result.data);
           }
         });
       });
@@ -266,16 +270,16 @@ export class UtilsService {
 
    public getCWDSync(): string
    {
-        return this.electron.ipcRenderer.sendSync('get-cwd-sync').data;
+        return this.electron.ipcRenderer.getCWDSync();
    }
 
   public async getProcessVersions(): Promise<NodeJS.ProcessVersions> {
     return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        this.electron.ipcRenderer.invoke('get-process-versions').then((result) => {
+        this.electron.ipcRenderer.getProcessVersions().then((result) => {
           if (result) {
-            resolve(result);
+            resolve(result.data);
           } else {
-            reject(result);
+            reject(result.data);
           }
         });
       });
@@ -307,11 +311,11 @@ export class UtilsService {
   }
 
   public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {
-    return await this.electron.ipcRenderer.invoke('get-brightness-mode');
+    return await this.electron.ipcRenderer.getBrightnessMode();
   }
 
   public async getShouldUseDarkColors(): Promise<boolean> {
-    return this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
+    return this.electron.ipcRenderer.getShouldUseDarkColors();
   }
 
   /**

@@ -38,7 +38,7 @@ export const aquarisAPIHandle = 'aquarisAPIHandle';
 
 export class ClientAPI {
 
-    constructor(private ipc: Electron.IpcRenderer, private apiHandle: string) {}
+    constructor(private ipc, private apiHandle: string) {}
 
     public connect(deviceUUID: string) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.connect.name, deviceUUID]); }
     public disconnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.disconnect.name]); }
@@ -77,6 +77,6 @@ export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mains
     });
 }
 
-export function unregisterAPI(ipcMain: Electron.IpcMain, apiHandle: string) {
+export function unregisterAPI(ipcMain, apiHandle: string) {
     ipcMain.removeHandler(apiHandle);
 }

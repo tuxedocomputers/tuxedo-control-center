@@ -1,5 +1,4 @@
 
-
 /*!
  * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
@@ -20,7 +19,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { IpcRenderer, Shell } from 'electron';
+import { IPC } from '../renderer';
 
 
 /* 
@@ -29,12 +28,13 @@ import { IpcRenderer, Shell } from 'electron';
 
 @Injectable( {providedIn: 'root'})
 export class ElectronService {  
-    ipcRenderer: IpcRenderer;
-    shell: Shell;
+    // TODO add type... contextbridgeapi or something
+    ipcRenderer: IPC;
     constructor() 
     {
-        this.ipcRenderer = window.require('electron').ipcRenderer;
-        this.shell = window.require('electron').shell;
+        // contextisolation = true, nodeintegration = false;
+        // z.B: https://www.debugandrelease.com/the-ultimate-electron-guide/
+        this.ipcRenderer = window.ipc;
     }  
   
 }

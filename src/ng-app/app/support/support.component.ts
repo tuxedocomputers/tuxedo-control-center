@@ -68,7 +68,7 @@ export class SupportComponent implements OnInit {
   }
 
   public openExternalUrl(url: string): void {
-    this.electron.shell.openExternal(url);
+    this.utils.openExternal(url);
   }
 
   public updateAnydeskInstallStatus(): void {

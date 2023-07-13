@@ -587,6 +587,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public async openExternalUrl(url: string) {
-        await this.electron.shell.openExternal(url);
+        await this.utils.openExternal(url);
     }
 }

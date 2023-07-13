@@ -80,7 +80,7 @@ export class TomteGuiComponent implements OnInit {
     }
 
     public openExternalUrl(url: string): void {
-        this.electron.shell.openExternal(url);
+        this.utils.openExternal(url);
     }
 
 

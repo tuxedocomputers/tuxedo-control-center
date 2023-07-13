@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { ElectronService } from "../electron-service-wrapper/electron-service";
+import { UtilsService } from "../utils.service";
 
 @Component({
     selector: 'app-charging-settings',
@@ -50,7 +50,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
     constructor(
         private tccdbus: TccDBusClientService,
-        private electron: ElectronService
+        private utils: UtilsService
     ) {
         this.chargingProfileLabels.set('high_capacity', $localize `:@@chargingProfileHighCapacityLabel:Full capacity`);
         this.chargingProfileLabels.set('balanced', $localize `:@@chargingProfileBalancedLabel:Reduced capacity`);
@@ -128,6 +128,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public async openExternalUrl(url: string) {
-        await this.electron.shell.openExternal(url);
+        await this.utils.openExternal(url);
     }
 }
