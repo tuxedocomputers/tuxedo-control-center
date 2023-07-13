@@ -14,6 +14,7 @@ export interface IPC {
     getShouldUseDarkColors: () => Promise<boolean>,
     tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
+    closeWebcamPreview: () => void,
   }
   
   declare global {
