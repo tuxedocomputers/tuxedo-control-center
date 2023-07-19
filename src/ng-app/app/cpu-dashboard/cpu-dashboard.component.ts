@@ -40,6 +40,7 @@ import {
     IDefaultIGPUValues,
 } from "src/common/models/TccGpuValues";
 import { filter, tap } from "rxjs/operators";
+import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -67,6 +68,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     // CPU
     public gaugeCPUPower: number;
     public cpuPower: number;
+    public cpuPowerLimit: number;
 
     // dGPU
     public gaugeDGPUPower: number;
@@ -115,19 +117,30 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscribeToCpuInfo();
         this.subscribeToFanData();
         this.subscribeToProfileData();
-        this.checkDGpuLoggingStatus();
+        this.subscribeODMInfo();
+        this.subscribeDGpuLoggingStatus();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    private checkDGpuLoggingStatus(): void {
+    private subscribeDGpuLoggingStatus(): void {
         this.subscriptions.add(
             this.tccdbus.iGpuLogging.subscribe((status: boolean) => {
                 if (status) {
                     this.iGpuLogging = status;
                 }
+            })
+        );
+    }
+
+    private subscribeODMInfo() {
+        this.subscriptions.add(
+            this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]) => {
+                this.cpuPowerLimit = tdpInfoArray.find(
+                    (info) => info.descriptor === "pl4"
+                )?.max;
             })
         );
     }
@@ -199,7 +212,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         const powerDraw =
             cpuPower?.powerDraw ?? cpuDefaultValues?.powerDraw ?? 0;
         const maxPowerLimit =
-            cpuPower?.maxPowerLimit ?? cpuDefaultValues?.powerDraw ?? 0;
+            cpuPower?.maxPowerLimit && cpuPower.maxPowerLimit > 0
+                ? cpuPower.maxPowerLimit
+                : this.cpuPowerLimit
+                ? this.cpuPowerLimit
+                : cpuDefaultValues?.powerDraw
+                ? cpuDefaultValues.powerDraw
+                : 0;
         this.gaugeCPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
         this.cpuPower = powerDraw;
@@ -463,6 +482,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     public enableDGpuLogging(): void {
-        this.tccdbus.setDGpuLoggingStatus(true)
+        this.tccdbus.setDGpuLoggingStatus(true);
     }
 }
