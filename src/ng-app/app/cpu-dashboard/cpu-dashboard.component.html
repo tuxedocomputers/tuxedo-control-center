@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -21,7 +21,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div class="title-row top">
             <hr />
             <div class="title">
-                <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="tcc-icons">
+                    <use href="./assets/images/icon_dashboard.svg#Icon"></use>
+                </svg>
                 <ng-container i18n>System monitor</ng-container>
             </div>
             <hr />
@@ -37,82 +39,69 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div class="content-container profile-overview">
             <div class="column">
                 <div class="title">
-                    <svg viewBox="0 0 512 512" class="tcc-icons row"><use href="./assets/images/icon_cpu.svg#Icon"></use></svg>
+                    <svg viewBox="0 0 512 512" class="tcc-icons row">
+                        <use href="./assets/images/icon_cpu.svg#Icon"></use>
+                    </svg>
                     <span class="text" i18n>Main processor monitor</span>
                 </div>
             </div>
         </div>
 
         <div class="content-container system-monitor-gauges">
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="fanData.cpu.temp.data.value"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
+                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="fanData.cpu.temp.data.value" [showValue]="false"
+                    [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gaugeTempFormat(fanData.cpu.temp.data.value) }}</div>
+                <div class="custom-value-text">{{ gaugeCpuTempFormat(fanData.cpu.temp.data.value) }}</div>
                 <div class="unit-text">&deg;C</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_temperature.svg#Icon"></use>
+                </svg>
                 <div class="legend">
                     <div class="text" i18n>CPU - Temp</div>
                 </div>
             </div>
             <div class="tcc-gauge">
-                <mwl-gauge
-                    [max]="cpuInfo.maxFreq"
-                    [min]="cpuInfo.minFreq"
-                    [value]="avgCpuFreq"
-                    [showValue]="false"
-                    [label]="gaugeCpuFreqFormat"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
+                <mwl-gauge [max]="cpuInfo.maxFreq" [min]="0" [value]="avgCpuFreq" [showValue]="false"
+                    [label]="gaugeCpuFreqFormat" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="custom-value-text">{{ formatCpuFrequency(avgCpuFreq) }}</div>
                 <div class="unit-text">GHz</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_speedometer.svg#Icon"></use>
+                </svg>
                 <div class="legend">
                     <div class="text" i18n>CPU - Frequency</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="fanData.cpu.speed.data.value"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
+                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="fanData.cpu.speed.data.value" [showValue]="false"
+                    [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="custom-value-text">{{ gaugeFanSpeedFormat(fanData.cpu.speed.data.value) }}</div>
                 <div class="unit-text">%</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_fan.svg#Icon"></use>
+                </svg>
                 <div class="legend">
                     <div class="text" i18n>CPU - Fan</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasCpuPower }" [matTooltip]="!compat.hasCpuPower ? compat.cpuPowerCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="gaugeCPUPower"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
-                    [animationDuration]="animatedGaugesDuration">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasCpuPower }"
+                [matTooltip]="!compat.hasCpuPower ? compat.cpuPowerCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="gaugeCPUPower" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="custom-value-text">{{ cpuPowerFormat(cpuPower) }}</div>
                 <div class="unit-text">W</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_fan.svg#Icon"></use>
+                </svg>
                 <div class="legend">
                     <div class="text" i18n>CPU - Power</div>
                 </div>
@@ -120,88 +109,150 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <!-- GPU -->
-        <div class="content-container profile-overview" *ngIf="hasGPUTemp">
+        <div class="content-container profile-overview">
             <div class="column">
-                <div class="title" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                    <svg viewBox="0 0 490 512" class="tcc-icons row"><use href="./assets/images/icon_gpu.svg#Icon"></use></svg>
+                <div class="title" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                    <svg viewBox="0 0 490 512" class="tcc-icons row">
+                        <use href="./assets/images/icon_gpu.svg#Icon"></use>
+                    </svg>
                     <span class="text" i18n>Graphics card monitor</span>
                 </div>
             </div>
         </div>
 
-        <div class="content-container system-monitor-gauges bottom" *ngIf="hasGPUTemp">
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="gaugeGPUTemp"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
-                    [animationDuration]="animatedGaugesDuration">
+        <div *ngIf="hasGPUTemp && activeProfile" class="content-container active-profile">
+            <span>Active Graphics Mode:</span>
+            <a mat-button class="link" (click)="gotoSettings()"> {{ primeSelectState }} </a>
+        </div>
+
+        <!-- iGPU -->
+        <div class="content-container system-monitor-gauges"
+            *ngIf="primeSelectState === 'iGPU' || primeSelectState == 'on-demand'">
+            <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'" [ngClass]="{'not-available': !compat.hasIGpuTemp }"
+                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gaugeTempFormat(gaugeGPUTemp) }}</div>
+                <div class="custom-value-text">{{ gaugeIGpuTempFormat(iGpuTemp) }}</div>
                 <div class="unit-text">&deg;C</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_temperature.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_temperature.svg#Icon"></use>
+                </svg>
                 <div class="legend">
-                    <div class="text" i18n>GPU - Temp</div>
+                    <div class="text" i18n>iGPU - Temp</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasGpuFreq }" [matTooltip]="!compat.hasGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="gaugeGPUFreq"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
-                    [animationDuration]="animatedGaugesDuration">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasIGpuFreq }"
+                [matTooltip]="!compat.hasIGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="gaugeIGpuFreq" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ formatGpuFrequency(gpuFreq) }}</div>
+                <div class="custom-value-text">{{ formatGpuFrequency(iGpuFreq) }}</div>
                 <div class="unit-text">GHz</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_speedometer.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_speedometer.svg#Icon"></use>
+                </svg>
                 <div class="legend">
-                    <div class="text" i18n>GPU - Frequency</div>
+                    <div class="text" i18n>iGPU - Frequency</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }" [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="gaugeGPUSpeed"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
+                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="fanData.cpu.speed.data.value" [showValue]="false"
+                    [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                     [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gaugeFanSpeedFormat(gaugeGPUSpeed) }}</div>
+                <div class="custom-value-text">{{ gaugeFanSpeedFormat(fanData.cpu.speed.data.value) }}</div>
                 <div class="unit-text">%</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_fan.svg#Icon"></use>
+                </svg>
                 <div class="legend">
-                    <div class="text" i18n>GPU - Fan</div>
+                    <div class="text" i18n>iGPU - Fan</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasGpuPowerDraw}" [matTooltip]="!compat.hasGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
-                <mwl-gauge
-                    [max]="100"
-                    [min]="0"
-                    [value]="gaugeGPUPower"
-                    [showValue]="false"
-                    [dialStartAngle]="130"
-                    [dialEndAngle]="50"
-                    [animated]="animatedGauges"
-                    [animationDuration]="animatedGaugesDuration">
+            <div *ngIf="iGpuVendor == 'intel'" class="tcc-gauge" [ngClass]="{'not-available': !compat.hasIGpuPowerDraw}"
+                [matTooltip]="!compat.hasIGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
-                <div class="custom-value-text">{{ gpuPowerFormat(gpuPower) }}</div>
+                <div class="custom-value-text">{{ iGpuPowerFormat(iGpuPower) }}</div>
                 <div class="unit-text">W</div>
-                <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_fan.svg#Icon"></use>
+                </svg>
                 <div class="legend">
-                    <div class="text" i18n>GPU - Power</div>
+                    <div class="text" i18n>iGPU - Power</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- dGPU -->
+        <div class="content-container system-monitor-gauges"
+            *ngIf="(primeSelectState === 'dGPU' || primeSelectState == 'on-demand') && hasGPUTemp">
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
+                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUTemp" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                </mwl-gauge>
+                <div class="custom-value-text">{{ gaugeDGpuTempFormat(gaugeDGPUTemp) }}</div>
+                <div class="unit-text">&deg;C</div>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_temperature.svg#Icon"></use>
+                </svg>
+                <div class="legend">
+                    <div class="text" i18n>dGPU - Temp</div>
+                </div>
+            </div>
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasDGpuFreq }"
+                [matTooltip]="!compat.hasDGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUFreq" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                </mwl-gauge>
+                <div class="custom-value-text">{{ formatGpuFrequency(dGpuFreq) }}</div>
+                <div class="unit-text">GHz</div>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_speedometer.svg#Icon"></use>
+                </svg>
+                <div class="legend">
+                    <div class="text" i18n>dGPU - Frequency</div>
+                </div>
+            </div>
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
+                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUFanSpeed" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                </mwl-gauge>
+                <div class="custom-value-text">{{ gaugeFanSpeedFormat(gaugeDGPUFanSpeed) }}</div>
+                <div class="unit-text">%</div>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_fan.svg#Icon"></use>
+                </svg>
+                <div class="legend">
+                    <div class="text" i18n>dGPU - Fan</div>
+                </div>
+            </div>
+            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
+                [matTooltip]="!compat.hasDGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
+                <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUPower" [showValue]="false" [dialStartAngle]="130"
+                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                </mwl-gauge>
+                <div class="custom-value-text">{{ dGpuPowerFormat(dGpuPower) }}</div>
+                <div class="unit-text">W</div>
+                <svg viewBox="0 0 512 512" class="icon">
+                    <use href="./assets/images/icon_fan.svg#Icon"></use>
+                </svg>
+                <div class="legend">
+                    <div class="text" i18n>dGPU - Power</div>
                 </div>
             </div>
         </div>
     </div>
 </mat-card>
+
+<!-- todo: remove debug test code -->
+<mat-select name="primeSelectState" [(value)]="primeSelectState">
+    <mat-option *ngFor="let primeSelectState of primeSelectValues" [value]="primeSelectState">
+        {{ primeSelectState }}
+    </mat-option>
+</mat-select>

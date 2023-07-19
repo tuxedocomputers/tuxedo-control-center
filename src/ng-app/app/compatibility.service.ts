@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2020-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,6 +21,7 @@ import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { DMIController } from '../../common/classes/DMIController';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
+import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 
 @Injectable({
   providedIn: 'root'
@@ -63,66 +64,67 @@ export class CompatibilityService {
   get hasCpuPower(): boolean {
     const { cpuPower } = this.tccDbus;
     const { value: cpuPowerValue } = cpuPower;
-    
-    const powerDrawDefined = typeof cpuPowerValue?.powerDraw !== 'undefined';
 
-    return powerDrawDefined && 
-           cpuPowerValue.powerDraw > 0
+    const powerDrawDefined =
+        typeof cpuPowerValue?.powerDraw !== "undefined";
+
+    return powerDrawDefined && cpuPowerValue.powerDraw > 0;
   }
 
-  get hasGpuPowerDraw(): boolean {
-    const gpuPowerDraw = this.tccDbus.gpuInfo?.value?.powerDraw;
-  
-    if (gpuPowerDraw !== undefined) {
-      return gpuPowerDraw > 0;
+  get hasDGpuPowerDraw(): boolean {
+    const dGpuPowerDraw = this.tccDbus.dGpuInfo?.value?.powerDraw;
+
+    if (dGpuPowerDraw !== undefined) {
+        return dGpuPowerDraw > 0;
     }
-  
-    return false;
-  }
-  
-  get hasGpuMaxPl(): boolean {
-    const gpuMaxPl = this.tccDbus.gpuInfo?.value?.maxPowerLimit;
-  
-    if (gpuMaxPl !== undefined) {
-      return gpuMaxPl > 0;
-    }
-  
-    return false;
-  }
-  
-  get hasCpuMaxPl(): boolean {
-    const cpuMaxPl = this.tccDbus.cpuPower?.value?.maxPowerLimit;
-    const wmiAvailable = this.tccDbus.tuxedoWmiAvailable.value
-  
-    if (cpuMaxPl !== undefined) {
-      return cpuMaxPl > 0 && wmiAvailable;
-    }
-  
-    return false;
-  }
-  
-  get hasGpuMaxFreq(): boolean {
-    const coreFreqMax = this.tccDbus.gpuInfo?.value?.maxCoreFrequency;
-  
-    if (coreFreqMax !== undefined) {
-      return coreFreqMax > 0;
-    }
-  
+
     return false;
   }
 
-  get hasGpuFreq(): boolean {
-    const gpuInfo = this.tccDbus.gpuInfo?.value;
-    const coreFreq = gpuInfo?.coreFrequency;
-    const coreFreqMax = gpuInfo?.maxCoreFrequency;
-  
-    if (coreFreq !== undefined && coreFreqMax !== undefined) {
-      return coreFreq > 0 && coreFreqMax > 0;
+  get hasIGpuPowerDraw(): boolean {
+    const iGpuPowerDraw = this.tccDbus.iGpuInfo?.value?.powerDraw;
+
+    if (iGpuPowerDraw !== undefined) {
+        return iGpuPowerDraw > 0;
     }
-  
+
     return false;
   }
-  
+
+  get hasDGpuFreq(): boolean {
+    const dGpuInfo: IdGpuInfo | undefined = this.tccDbus.dGpuInfo?.value;
+    if (!dGpuInfo) {
+      return false;
+    }
+    const { coreFrequency, maxCoreFrequency } = dGpuInfo;
+    return (
+      coreFrequency !== undefined &&
+      coreFrequency > 0 &&
+      maxCoreFrequency !== undefined &&
+      maxCoreFrequency > 0
+    );
+  }
+
+  get hasIGpuFreq(): boolean {
+    const iGpuInfo: IiGpuInfo | undefined = this.tccDbus.iGpuInfo?.value;
+    if (!iGpuInfo) {
+      return false;
+    }
+    const { coreFrequency, maxCoreFrequency } = iGpuInfo;
+    return (
+      coreFrequency !== undefined &&
+      coreFrequency > 0 &&
+      maxCoreFrequency !== undefined &&
+      maxCoreFrequency > 0
+    );
+  }
+
+  get hasIGpuTemp(): boolean {
+    const iGpuInfo = this.tccDbus.iGpuInfo?.value;
+    const temp = iGpuInfo?.temp ?? -1;
+    return temp > 0;
+  }
+
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
   get hasFanControl(): boolean {
     /*const dmi = new DMIController('/sys/class/dmi/id');

@@ -52,6 +52,11 @@ export class GlobalSettingsComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
+    // todo: automatically detect in system
+    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
+    public primeSelectState: string = "iGPU";
+    public expandPrimeSelect: Boolean = false;    
+
     constructor(
         private config: ConfigService,
         private utils: UtilsService,
@@ -61,6 +66,11 @@ export class GlobalSettingsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const routingFromDashboard = this.route.snapshot.paramMap.get("routingFromDashboard");
+        if (routingFromDashboard) {
+            this.expandPrimeSelect = true;
+        }
+
         this.subscriptions.add(this.tccdbus.forceYUV420OutputSwitchAvailable.subscribe(
             forceYUV420OutputSwitchAvailable => { this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable; }
         ));

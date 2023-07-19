@@ -176,4 +176,35 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </mat-expansion-panel>
 
+    <mat-expansion-panel [expanded]="expandPrimeSelect">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon><svg viewBox="0 0 512 512">
+                        <use href="./assets/images/icon_gear.svg#Icon"></use>
+                    </svg></mat-icon>
+                <ng-container>Grafikeinstellungen</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="content">
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                    <header>Prime Select</header>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                    <content class="value">
+                    </content>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                    <content class="input">
+                        <mat-select name="primeSelectState" [(value)]="primeSelectState" placeholder="Off">
+                            <mat-option *ngFor="let primeSelectState of primeSelectValues" [value]="primeSelectState">
+                                {{ primeSelectState }}
+                            </mat-option>
+                        </mat-select>
+                    </content>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <div i18n>Placeholder.</div>
+        </div>
+    </mat-expansion-panel>
 </mat-accordion>

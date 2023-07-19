@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -49,6 +49,10 @@ const routes: Routes = [
             { path: 'keyboard-backlight', component: KeyboardBacklightComponent },
             { path: 'camera-settings', component: WebcamSettingsComponent, canDeactivate: [WebcamSettingsGuard] },
             { path: 'global-settings', component: GlobalSettingsComponent },
+            {
+                path: 'global-settings/:routingFromDashboard',
+                component: GlobalSettingsComponent,
+            },
             { path: 'aquaris-control', component: AquarisControlComponent },
             { path: 'tomte-gui', component: TomteGuiComponent }
         ]

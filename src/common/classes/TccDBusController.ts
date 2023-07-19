@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -115,9 +115,17 @@ export class TccDBusController {
         }
     }
 
-    async getGpuInfoValuesJSON(): Promise<string> {
+    async getDGpuInfoValuesJSON(): Promise<string> {
         try {
-            return await this.interface.GetGpuInfoValuesJSON();
+            return await this.interface.GetDGpuInfoValuesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getIGpuInfoValuesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetIGpuInfoValuesJSON();
         } catch (err) {
             return undefined;
         }

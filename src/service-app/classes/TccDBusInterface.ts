@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -75,7 +75,8 @@ export class TccDBusData {
     public webcamSwitchAvailable: boolean;
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
-    public gpuInfoValuesJSON: string;
+    public dGpuInfoValuesJSON: string;
+    public iGpuInfoValuesJSON: string;
     public cpuPowerValuesJSON: string;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
@@ -123,7 +124,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
-    GetGpuInfoValuesJSON() { return this.data.gpuInfoValuesJSON; }
+    GetDGpuInfoValuesJSON() { return this.data.dGpuInfoValuesJSON; }
+    GetIGpuInfoValuesJSON() { return this.data.iGpuInfoValuesJSON; }
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
@@ -204,7 +206,8 @@ TccDBusInterface.configureMembers({
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
-        GetGpuInfoValuesJSON: { outSignature: 's' },
+        GetDGpuInfoValuesJSON: { outSignature: "s" },
+        GetIGpuInfoValuesJSON: { outSignature: "s" },
         GetCpuPowerValuesJSON: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -26,9 +26,9 @@ import {
 export class IntelRAPLController {
     private properties: {
         name: SysFsPropertyString;
-        constraint0Name: SysFsPropertyString;
-        constraint0MaxPower: SysFsPropertyInteger;
-        constraint0PowerLimit: SysFsPropertyInteger;
+        constraint2Name: SysFsPropertyString;
+        constraint2MaxPower: SysFsPropertyInteger;
+        constraint2PowerLimit: SysFsPropertyInteger;
         enabled: SysFsPropertyBoolean;
         energyUJ: SysFsPropertyInteger;
     };
@@ -36,14 +36,14 @@ export class IntelRAPLController {
     constructor(private readonly basePath: string) {
         this.properties = {
             name: new SysFsPropertyString(path.join(basePath, "name")),
-            constraint0Name: new SysFsPropertyString(
-                path.join(basePath, "constraint_0_name")
+            constraint2Name: new SysFsPropertyString(
+                path.join(basePath, "constraint_2_name")
             ),
-            constraint0MaxPower: new SysFsPropertyInteger(
-                path.join(basePath, "constraint_0_max_power_uw")
+            constraint2MaxPower: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_2_max_power_uw")
             ),
-            constraint0PowerLimit: new SysFsPropertyInteger(
-                path.join(basePath, "constraint_0_power_limit_uw")
+            constraint2PowerLimit: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_2_power_limit_uw")
             ),
             enabled: new SysFsPropertyBoolean(path.join(basePath, "enabled")),
             energyUJ: new SysFsPropertyInteger(
@@ -75,11 +75,21 @@ export class IntelRAPLController {
     public getIntelRAPLConstraintsAvailable(): boolean {
         const props = this.properties;
         return (
-            props.constraint0Name.isAvailable() &&
-            props.constraint0MaxPower.isAvailable() &&
-            props.constraint0PowerLimit.isAvailable() &&
-            props.constraint0Name.readValueNT() === "long_term"
+            props.constraint2Name.isAvailable() &&
+            props.constraint2MaxPower.isAvailable() &&
+            props.constraint2PowerLimit.isAvailable() &&
+            props.constraint2Name.readValueNT() === "long_term"
         );
+    }
+
+    /**
+     * Check if energyUJ is available
+     *
+     * @returns Boolean indicating if it is available
+     */
+    public getIntelRAPLEnergyAvailable(): boolean {
+        const props = this.properties;
+        return props.energyUJ.isAvailable();
     }
 
     /**
@@ -88,7 +98,7 @@ export class IntelRAPLController {
      * @returns Integer that is the maximum input value for long term power limit in micro watts or undefined on error
      */
     public getMaxPower(): number {
-        return this.properties.constraint0MaxPower.readValueNT();
+        return this.properties.constraint2MaxPower.readValueNT();
     }
 
     /**
@@ -116,7 +126,7 @@ export class IntelRAPLController {
                     ? maxPower
                     : Math.max(maxPower / 2, Math.min(setPowerLimit, maxPower));
 
-            props.constraint0PowerLimit.writeValue(powerLimit);
+            props.constraint2PowerLimit.writeValue(powerLimit);
             props.enabled.writeValue(true);
         } catch (err) {
             console.log("IntelRAPLController: Failed to set power limit.");

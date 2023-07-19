@@ -1,4 +1,4 @@
-export interface CpuPower {
+export interface ICpuPower {
     powerDraw: number;
     maxPowerLimit?: number;
 }

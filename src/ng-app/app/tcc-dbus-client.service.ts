@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -24,8 +24,8 @@ import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { CpuPower } from 'src/common/models/TccPowerSettings';
-import { GpuInfo } from 'src/common/models/TccGpuValues';
+import { ICpuPower } from 'src/common/models/TccPowerSettings';
+import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -75,8 +75,9 @@ export class TccDBusClientService implements OnDestroy {
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
-  public gpuInfo = new BehaviorSubject<GpuInfo>(undefined);
-  public cpuPower = new BehaviorSubject<CpuPower>(undefined);
+  public dGpuInfo = new BehaviorSubject<IdGpuInfo>(undefined);
+  public iGpuInfo = new BehaviorSubject<IiGpuInfo>(undefined);
+  public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -111,9 +112,15 @@ export class TccDBusClientService implements OnDestroy {
     };
     this.fanData.next(fanData);
 
-    const gpuInfoValuesJSON = await this.tccDBusInterface.getGpuInfoValuesJSON();
-    if (gpuInfoValuesJSON) {
-        this.gpuInfo.next(JSON.parse(gpuInfoValuesJSON));
+    const dGpuInfoValuesJSON = await this.tccDBusInterface.getDGpuInfoValuesJSON();
+    const iGpuInfoValuesJSON = await this.tccDBusInterface.getIGpuInfoValuesJSON();
+
+    if (dGpuInfoValuesJSON) {
+        this.dGpuInfo.next(JSON.parse(dGpuInfoValuesJSON));
+    }
+
+    if (iGpuInfoValuesJSON) {
+        this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
     }
 
     const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();

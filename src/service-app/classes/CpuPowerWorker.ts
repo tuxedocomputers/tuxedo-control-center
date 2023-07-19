@@ -19,7 +19,7 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { CpuPower } from "../../common/models/TccPowerSettings";
+import { ICpuPower } from "../../common/models/TccPowerSettings";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 
 export class CpuPowerWorker extends DaemonWorker {
@@ -52,7 +52,7 @@ export class CpuPowerWorker extends DaemonWorker {
         const powerDraw =
             (nextEnergy - this.currentEnergy) / this.delay / 1000000;
 
-        let cpuPowerValues: CpuPower = {
+        let cpuPowerValues: ICpuPower = {
             powerDraw: powerDraw,
         };
 
