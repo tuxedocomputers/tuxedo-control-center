@@ -58,17 +58,19 @@ export class GpuInfoWorker extends DaemonWorker {
         const isInstalled = await isNvidiaSmiInstalled();
         this.isNvidiaSmiInstalled = isInstalled;
 
-        if (isInstalled) {
-            const powerValues = await getPowerValues();
-            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(powerValues);
+        if (isInstalled && this.tccd.dbusData.dGpuLogging) {
+            const dGpuPowerValues = await getDGpuPowerValues();
+            this.tccd.dbusData.dGpuInfoValuesJSON =
+                JSON.stringify(dGpuPowerValues);
         }
     }
 
     public async onWork() {
         // todo: only make it run when user is in dashboard
         this.getIGPUValues();
-        // todo: nvidia-smi wakes up GPU and puts it into d0 state
-        this.getDGPUValues();
+        if (this.tccd.dbusData.dGpuLogging) {
+            this.getDGPUValues();
+        }
     }
 
     public onExit() {}
@@ -212,8 +214,9 @@ export class GpuInfoWorker extends DaemonWorker {
         }
 
         if (this.isNvidiaSmiInstalled) {
-            const powerValues = await getPowerValues();
-            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(powerValues);
+            const dGpuPowerValues = await getDGpuPowerValues();
+            this.tccd.dbusData.dGpuInfoValuesJSON =
+                JSON.stringify(dGpuPowerValues);
         }
     }
 }
@@ -252,7 +255,7 @@ function isNvidiaSmiInstalled(): Promise<Boolean> {
     });
 }
 
-async function getPowerValues(): Promise<IdGpuInfo> {
+async function getDGpuPowerValues(): Promise<IdGpuInfo> {
     const command =
         "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
 

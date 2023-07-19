@@ -83,6 +83,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public iGpuFreq: Number;
     public iGpuVendor: String;
     public iGpuPower: Number;
+    public iGpuLogging: boolean;
 
     public activeProfile: ITccProfile;
     public isCustomProfile: boolean;
@@ -114,13 +115,24 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscribeToCpuInfo();
         this.subscribeToFanData();
         this.subscribeToProfileData();
+        this.checkDGpuLoggingStatus();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
-    private subscribeToPstate() {
+    private checkDGpuLoggingStatus(): void {
+        this.subscriptions.add(
+            this.tccdbus.iGpuLogging.subscribe((status: boolean) => {
+                if (status) {
+                    this.iGpuLogging = status;
+                }
+            })
+        );
+    }
+
+    private subscribeToPstate(): void {
         this.subscriptions.add(
             this.sysfs.pstateInfo.subscribe((pstateInfo) => {
                 this.pstateInfo = pstateInfo;
@@ -448,5 +460,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public getFanControlDisabledTooltip(): string {
         return this.config.fanControlDisabledMessage;
+    }
+
+    public enableDGpuLogging(): void {
+        this.tccdbus.setDGpuLoggingStatus(true)
     }
 }

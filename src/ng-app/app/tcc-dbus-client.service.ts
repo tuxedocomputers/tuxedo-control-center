@@ -79,12 +79,22 @@ export class TccDBusClientService implements OnDestroy {
   public iGpuInfo = new BehaviorSubject<IiGpuInfo>(undefined);
   public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
 
+  public iGpuLogging = new BehaviorSubject<Boolean>(undefined);
+
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
 
+  ngOnDestroy() {
+    // Cleanup
+    if (this.timeout !== undefined) {
+      clearInterval(this.timeout);
+    }
+    this.tccDBusInterface.disconnect();
+  }
+  
   private async periodicUpdate() {
     const previousValue = this.isAvailable;
     // Check if still available
@@ -122,6 +132,8 @@ export class TccDBusClientService implements OnDestroy {
     if (iGpuInfoValuesJSON) {
         this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
     }
+
+    this.iGpuLogging.next(await this.tccDBusInterface.getDGpuLoggingStatus())
 
     const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();
     if (cpuPowerValuesJSON) {
@@ -212,14 +224,6 @@ export class TccDBusClientService implements OnDestroy {
     await this.periodicUpdate();
   }
 
-  ngOnDestroy() {
-    // Cleanup
-    if (this.timeout !== undefined) {
-      clearInterval(this.timeout);
-    }
-    this.tccDBusInterface.disconnect();
-  }
-
   public async setTempProfile(profileName: string) {
     const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileName(profileName);
     return result;
@@ -228,6 +232,10 @@ export class TccDBusClientService implements OnDestroy {
   public async setTempProfileById(profileId: string) {
     const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
     return result;
+  }
+
+  public async setDGpuLoggingStatus(status: boolean): Promise<void> {
+    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuLoggingStatus(status)
   }
 
   public getInterface(): TccDBusController | undefined {

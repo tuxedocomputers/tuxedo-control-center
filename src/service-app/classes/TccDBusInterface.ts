@@ -78,6 +78,7 @@ export class TccDBusData {
     public dGpuInfoValuesJSON: string;
     public iGpuInfoValuesJSON: string;
     public cpuPowerValuesJSON: string;
+    public dGpuLogging: boolean;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
     public tempProfileId: string;
@@ -127,6 +128,9 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDGpuInfoValuesJSON() { return this.data.dGpuInfoValuesJSON; }
     GetIGpuInfoValuesJSON() { return this.data.iGpuInfoValuesJSON; }
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
+    GetDGpuLoggingStatus() { return this.data.dGpuLogging; }
+    SetDGpuLoggingStatus(status: boolean) { this.data.dGpuLogging = status; }
+
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
         // However no harmful impact, it will just cause the screen to flicker twice instead of once.
@@ -209,6 +213,8 @@ TccDBusInterface.configureMembers({
         GetDGpuInfoValuesJSON: { outSignature: "s" },
         GetIGpuInfoValuesJSON: { outSignature: "s" },
         GetCpuPowerValuesJSON: { outSignature: 's' },
+        GetDGpuLoggingStatus: { outSignature: 'b' },
+        SetDGpuLoggingStatus: { inSignature: 'b', outSignature: 'b' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },

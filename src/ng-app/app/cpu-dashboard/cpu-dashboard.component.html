@@ -204,7 +204,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>dGPU - Temp</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasDGpuFreq }"
+            <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuFreq }"
                 [matTooltip]="!compat.hasDGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
                 <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUFreq" [showValue]="false" [dialStartAngle]="130"
                     [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
@@ -232,7 +232,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n>dGPU - Fan</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
+            <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
                 [matTooltip]="!compat.hasDGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
                 <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUPower" [showValue]="false" [dialStartAngle]="130"
                     [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
@@ -256,3 +256,5 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         {{ primeSelectState }}
     </mat-option>
 </mat-select>
+
+<button mat-button *ngIf="!iGpuLogging" (click)="enableDGpuLogging()">Enable dGPU logging</button>

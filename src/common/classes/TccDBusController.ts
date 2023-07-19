@@ -139,6 +139,22 @@ export class TccDBusController {
         }
     }
 
+    async getDGpuLoggingStatus(): Promise<Boolean> {
+        try {
+            return await this.interface.GetDGpuLoggingStatus();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setDGpuLoggingStatus(status: boolean): Promise<void> {
+        try {
+            return await this.interface.SetDGpuLoggingStatus(status);
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async consumeModeReapplyPending(): Promise<boolean> {
         try {
             return await this.interface.ConsumeModeReapplyPending();
