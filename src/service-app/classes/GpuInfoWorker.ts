@@ -29,30 +29,39 @@ import * as path from "path";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 
 export class GpuInfoWorker extends DaemonWorker {
-    isNvidiaSmiInstalled: Boolean = false;
-    cpuVendor: string;
-    gfxAvailable: Boolean = false;
-    delay: number = 2;
-    currentEnergy: number = -1;
-
-    private intelRAPLGPU = new IntelRAPLController(
-        "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
-    );
+    private isNvidiaSmiInstalled: Boolean = false;
+    private cpuVendor: string;
+    private gfxAvailable: Boolean = false;
+    private delay: number = 2;
+    private currentEnergy: number = -1;
+    private hwmonPath: string;
+    private intelRAPLGPU: IntelRAPLController;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(2000, tccd);
     }
 
     public async onStart() {
-        this.cpuVendor = await checkCpuVendor();
+        const cpuVendor = await checkCpuVendor();
+        this.cpuVendor = cpuVendor;
+
+        if (cpuVendor === "amd") {
+            this.hwmonPath = await this.getHwmonPath();
+        }
+        if (cpuVendor === "intel") {
+            this.intelRAPLGPU = new IntelRAPLController(
+                "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
+            );
+            this.gfxAvailable = this.intelRAPLGPU.getIntelRAPLEnergyAvailable();
+        }
+
         const isInstalled = await isNvidiaSmiInstalled();
         this.isNvidiaSmiInstalled = isInstalled;
+
         if (isInstalled) {
             const powerValues = await getPowerValues();
             this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(powerValues);
         }
-
-        this.gfxAvailable = this.intelRAPLGPU.getIntelRAPLEnergyAvailable();
     }
 
     public async onWork() {
@@ -146,7 +155,7 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
-        const hwmonPath = await this.getHwmonPath();
+        const hwmonPath = this.hwmonPath;
         const devicePath = "/sys/class/drm/card0/device/";
 
         if (!hwmonPath) {
