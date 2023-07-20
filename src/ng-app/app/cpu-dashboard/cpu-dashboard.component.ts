@@ -379,77 +379,77 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         ];
     }
 
+    public formatValue = (
+        value: number,
+        compatible: boolean,
+        formatter: (val: number) => string
+    ): string => {
+        return compatible
+            ? formatter(value)
+            : $localize`:@@noDashboardValue:N/A`;
+    };
+
+    private createFormatter(
+        compatibleFlag: (val: number) => boolean,
+        formatterFunc: (val: number) => string
+    ): (value: number) => string {
+        return (value) => {
+            return this.formatValue(
+                value,
+                compatibleFlag(value),
+                formatterFunc
+            );
+        };
+    }
+
     public formatCpuFrequency = (frequency: number): string => {
         return this.utils.formatCpuFrequency(frequency);
     };
 
-    public formatGpuFrequency = (frequency: number): string => {
-        if (frequency > 0) {
-            return this.utils.formatGpuFrequency(frequency);
-        } else {
-            return $localize`:@@noGpuFreqValue:N/A`;
-        }
-    };
+    public formatGpuFrequency = this.createFormatter(
+        (val) => val > 0,
+        (val) => this.utils.formatGpuFrequency(val)
+    );
 
-    public gaugeCpuFreqFormat: (value: number) => string = (value) => {
-        return this.utils.formatCpuFrequency(value);
-    };
+    public gaugeCpuFreqFormat = this.createFormatter(
+        () => true,
+        (val) => this.utils.formatCpuFrequency(val)
+    );
 
-    public gaugeCpuTempFormat: (value: number) => string = (value) => {
-        if (this.compat.hasFanInfo) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noFanTempValue:N/A`;
-        }
-    };
+    public gaugeCpuTempFormat = this.createFormatter(
+        () => this.compat.hasFanInfo,
+        (val) => Math.round(val).toString()
+    );
 
-    public gaugeIGpuTempFormat: (value: number) => string = (value) => {
-        if (this.compat.hasIGpuTemp) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noFanTempValue:N/A`;
-        }
-    };
+    public gaugeIGpuTempFormat = this.createFormatter(
+        () => this.compat.hasIGpuTemp,
+        (val) => Math.round(val).toString()
+    );
 
-    public gaugeDGpuTempFormat: (value: number) => string = (value) => {
-        if (this.compat.hasFanInfo) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noFanTempValue:N/A`;
-        }
-    };
+    public gaugeDGpuTempFormat = this.createFormatter(
+        () => this.compat.hasFanInfo,
+        (val) => Math.round(val).toString()
+    );
 
-    public gaugeFanSpeedFormat: (value: number) => string = (value) => {
-        if (this.compat.hasFanInfo) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noFanSpeedValue:N/A`;
-        }
-    };
+    public gaugeFanSpeedFormat = this.createFormatter(
+        () => this.compat.hasFanInfo,
+        (val) => Math.round(val).toString()
+    );
 
-    public cpuPowerFormat: (value: number) => string = (value) => {
-        if (this.compat.hasCpuPower) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noCpuPowerValue:N/A`;
-        }
-    };
+    public cpuPowerFormat = this.createFormatter(
+        () => this.compat.hasCpuPower,
+        (val) => Math.round(val).toString()
+    );
 
-    public dGpuPowerFormat: (value: number) => string = (value) => {
-        if (this.compat.hasDGpuPowerDraw) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noGpuPowerValue:N/A`;
-        }
-    };
+    public dGpuPowerFormat = this.createFormatter(
+        () => this.compat.hasDGpuPowerDraw,
+        (val) => Math.round(val).toString()
+    );
 
-    public iGpuPowerFormat: (value: number) => string = (value) => {
-        if (this.compat.hasIGpuPowerDraw) {
-            return Math.round(value).toString();
-        } else {
-            return $localize`:@@noGpuPowerValue:N/A`;
-        }
-    };
+    public iGpuPowerFormat = this.createFormatter(
+        () => this.compat.hasIGpuPowerDraw,
+        (val) => Math.round(val).toString()
+    );
 
     public goToProfileEdit(profile: ITccProfile): void {
         if (profile !== undefined) {

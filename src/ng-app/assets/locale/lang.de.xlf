@@ -881,36 +881,12 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="noFanTempValue" datatype="html">
-        <source>N/A</source>
-        <target state="translated">k.A.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">289</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="noFanSpeedValue" datatype="html">
-        <source>N/A</source>
-        <target state="translated">k.A.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">297</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="noGpuPowerValue" datatype="html">
-        <source>N/A</source>
-        <target state="new">k.A.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">313</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="36a9f3e32b06903ce9038e66286fe4c0e45f0559" datatype="html">
         <source>System monitor</source>
         <target phase-name="approval-1" state="translated">Systemmonitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0551549b43ce74879408c2bf92a8035bfa6ea54b" datatype="html">
@@ -918,7 +894,7 @@ Handelsregisternummer HRB 27755
         <target state="needs-translation">CPU-Überwachung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f67ab12753f4365b36a78ac5b6d169538ec2af34" datatype="html">
@@ -926,7 +902,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">CPU - Temperatur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fe0cde0fbcfb34e7fc116339897490407049572" datatype="html">
@@ -934,7 +910,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">CPU - Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bafe991112655207277a9f94bf263ef2903795b1" datatype="html">
@@ -942,7 +918,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">CPU - Lüfter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ece6b23765edb029ab79a01fb5f5fa0dd651839a" datatype="html">
@@ -950,7 +926,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Aktives Profil:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2479d9cadf8ed5a60faad87f7e6ae16faff942c2" datatype="html">
@@ -958,23 +934,23 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Grafikkarte (GPU)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a1f691cff975c3788fa37e26665dd774e31f6b51" datatype="html">
-        <source>GPU - Temp</source>
-        <target phase-name="approval-1" state="translated">GPU - Temperatur</target>
+      <trans-unit id="bfaed53dd501b7ff2bd6b885b23aa754943f3b3d" datatype="html">
+        <source>iGPU - Temp</source>
+        <target phase-name="approval-1" state="new">GPU - Temperatur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f765858f6ef9694c937069a90435bb627bc2e5b6" datatype="html">
-        <source>GPU - Fan</source>
-        <target phase-name="approval-1" state="translated">GPU - Lüfter</target>
+      <trans-unit id="a0ad2dabee06a880d12ee218c0b6a30769bc2ada" datatype="html">
+        <source>iGPU - Fan</source>
+        <target phase-name="approval-1" state="new">GPU - Lüfter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="globalSettingsHeaderLabel" datatype="html">
@@ -1290,15 +1266,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cKeyboardBacklightDescription" datatype="html">
-        <source>Control the Keyboard Backlight</source>
-        <target phase-name="approval-1" state="translated">Steuern Sie die Tastaturbeleuchtung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
@@ -3273,7 +3241,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
@@ -3281,7 +3249,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
     <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
@@ -3306,60 +3274,88 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">47,51</context>
         </context-group>
     </trans-unit>
-    <trans-unit id="5b58d748be8700a909f722193e3345182a817489" datatype="html">
-        <source>GPU - Power</source>
+    <trans-unit id="7b02b7abd0e231b7f07c90821f6f18201e00ed67" datatype="html">
+        <source>iGPU - Power</source>
         <target state="new">GPU - Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit><trans-unit id="compatibilityMessageNoGpuPower" datatype="html">
         <source>This feature is not supported on your model.</source>
         <target state="new">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
       <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">151</context>
-        </context-group></trans-unit><trans-unit id="noCpuPowerValue" datatype="html">
-        <source>N/A</source>
-        <target state="new">k.A.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">305</context>
-        </context-group>
-      </trans-unit><trans-unit id="6db89a1102652a981b787245bc9088e48ae4f4dd" datatype="html">
+          <context context-type="linenumber">148</context>
+        </context-group></trans-unit><trans-unit id="6db89a1102652a981b787245bc9088e48ae4f4dd" datatype="html">
         <source>CPU - Power</source>
         <target state="new">CPU - Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit><trans-unit id="compatibilityMessageNoCpuPower" datatype="html">
         <source>This feature is not supported on your model.</source>
         <target state="new">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">144</context>
         </context-group>
-      </trans-unit><trans-unit id="683d4379af6f4842a623ff5116c2ed048995fe14" datatype="html">
-        <source>GPU - Frequency</source>
+      </trans-unit><trans-unit id="1aca80790d939882c3798c08d019f5ba59dfbff0" datatype="html">
+        <source>iGPU - Frequency</source>
         <target state="new">GPU - Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit><trans-unit id="compatibilityMessageNoGpuFreq" datatype="html">
         <source>This feature is not supported on your model.</source>
         <target state="new">Diese Funktion wird von ihrem Gerät nicht unterstützt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">152</context>
         </context-group>
-      </trans-unit><trans-unit id="noGpuFreqValue" datatype="html">
+      </trans-unit><trans-unit id="ec79cfa066ef10be51a244cecdb5d062a2ff9f1e" datatype="html">
+        <source>dGPU - Temp</source>
+        <target state="new">dGPU - Temp</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">204</context>
+        </context-group>
+      </trans-unit><trans-unit id="0bc2c32b8c97cd0b1b59f0f5d64bfe40bc940783" datatype="html">
+        <source>dGPU - Fan</source>
+        <target state="new">dGPU - Fan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+      </trans-unit><trans-unit id="8df10c244198c8042dde147fa136e65f0026a9ea" datatype="html">
+        <source>dGPU - Frequency</source>
+        <target state="new">dGPU - Frequency</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit><trans-unit id="cb1177c789b228a3189ccda06162164c18590f00" datatype="html">
+        <source>dGPU - Power</source>
+        <target state="new">dGPU - Power</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit><trans-unit id="25a5c8b7715892f44a435feb1716ebec32803247" datatype="html">
+        <source>Placeholder.</source>
+        <target state="new">Placeholder.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">207</context>
+        </context-group>
+      </trans-unit><trans-unit id="noDashboardValue" datatype="html">
         <source>N/A</source>
         <target state="new">k.A.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit></body>
   </file>
