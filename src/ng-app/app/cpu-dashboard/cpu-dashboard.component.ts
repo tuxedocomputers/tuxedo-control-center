@@ -60,7 +60,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public activeEnergyPerformancePreference: string[];
 
     public avgCpuFreq: number;
-    public avgCpuFreqData: { name: string; value: number }[] = [];
 
     public cpuModelName = "";
     public fanData: IDBusFanData;
@@ -374,9 +373,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             .map((core) => core.scalingCurFreq ?? 0)
             .reduce((sum, freq) => sum + freq, 0);
         this.avgCpuFreq = freqSum / this.cpuCoreInfo.length;
-        this.avgCpuFreqData = [
-            { name: "CPU frequency", value: this.avgCpuFreq },
-        ];
     }
 
     public formatValue = (
