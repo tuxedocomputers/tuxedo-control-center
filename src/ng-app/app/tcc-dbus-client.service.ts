@@ -52,6 +52,7 @@ export class TccDBusClientService implements OnDestroy {
   public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
 
   public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
+  public chargingProfilesAvailable = new BehaviorSubject<string[]>([]);
 
   public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
   public odmPowerLimits = new BehaviorSubject<TDPInfo[]>([]);
@@ -133,6 +134,10 @@ export class TccDBusClientService implements OnDestroy {
         this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
     }
 
+    this.chargingProfilesAvailable.next(
+        await this.tccDBusInterface.getChargingProfilesAvailable()
+    );
+    
     this.iGpuLogging.next(await this.tccDBusInterface.getDGpuLoggingStatus())
 
     const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();

@@ -447,13 +447,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         (val) => Math.round(val).toString()
     );
 
-    public goToProfileEdit(profile: ITccProfile): void {
-        if (profile !== undefined) {
+    public goToProfileEdit = (profile: ITccProfile): void => {
+        if (profile) {
             this.router.navigate(["profile-manager", profile.id], {
                 relativeTo: this.route.parent,
             });
         }
-    }
+    };
 
     public gotoSettings(): void {
         this.router.navigate(["global-settings", true], {
