@@ -20,7 +20,9 @@
 import { Component, OnInit } from "@angular/core";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
-import { ElectronService } from "ngx-electron";
+import { TccDBusClientService } from "../tcc-dbus-client.service";
+import { Subscription } from "rxjs";
+import { first } from "rxjs/operators";
 
 @Component({
     selector: "app-prime-select",
@@ -28,26 +30,31 @@ import { ElectronService } from "ngx-electron";
     styleUrls: ["./prime-select.component.scss"],
 })
 export class PrimeSelectComponent implements OnInit {
-    primeSelectStates: string[] = ["off", "on", "on-demand"];
-    selectedState: string = "off";
-    activeState: string = "off";
-    primeSupported: Boolean;
+    public primeState: string;
+    public activeState: string;
+    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
-        private electron: ElectronService
+        private tccdbus: TccDBusClientService
     ) {}
 
-    async ngOnInit() {
-        this.primeSupported = await this.isPrimeSupported();
+    public async ngOnInit() {
+        this.subscribePrimeState();
+    }
 
-        if (this.primeSupported) {
-            const selectedState = await this.getPrimeSelectQuery();
-            this.selectedState = this.activeState = selectedState
-                .toString()
-                .trim();
-        }
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    private subscribePrimeState() {
+        this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
+            if (state) {
+                this.primeState = this.activeState = state;
+            }
+        });
     }
 
     public async applyGpuProfile(): Promise<void> {
@@ -56,11 +63,9 @@ export class PrimeSelectComponent implements OnInit {
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
-        const selectedPrimeStatus = this.transformPrimeStatus(
-            this.selectedState
+        const pkexecSetPrimeSelectAsync = this.config.pkexecSetPrimeSelectAsync(
+            this.transformPrimeStatus(this.primeState)
         );
-        const pkexecSetPrimeSelectAsync =
-            this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
         const isSuccessful = await this.utils.waitingDialog(
             config,
             pkexecSetPrimeSelectAsync
@@ -72,36 +77,23 @@ export class PrimeSelectComponent implements OnInit {
             if (rebootStatus === "REBOOT") {
                 this.utils.execCmd("reboot");
             }
-            this.activeState = this.selectedState;
+            this.activeState = this.primeState;
         } else {
-            this.selectedState = this.activeState;
+            this.primeState = this.activeState;
         }
     }
 
-    private isPrimeSupported(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.electron.ipcRenderer
-                .invoke("checkPrimeSupport")
-                .then((isPrimeSupported) => {
-                    resolve(isPrimeSupported);
-                })
-                .catch((error) => {
-                    resolve(false);
-                });
-        });
-    }
-
-    private getPrimeSelectQuery(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.electron.ipcRenderer
-                .invoke("checkPrimeSelectQuery")
-                .then((primeSelectQuery) => {
-                    resolve(primeSelectQuery);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
+    private transformPrimeStatus(status: string): string {
+        switch (status) {
+            case "dGPU":
+                return "nvidia";
+            case "iGPU":
+                return "intel";
+            case "on-demand":
+                return "on-demand";
+            default:
+                return "off";
+        }
     }
 
     private async showRebootDialog(): Promise<string> {
@@ -122,18 +114,5 @@ export class PrimeSelectComponent implements OnInit {
         };
         const returnValue = await this.utils.choiceDialog(rebootConfig);
         return returnValue.value as string;
-    }
-
-    private transformPrimeStatus(status: string): string {
-        switch (status) {
-            case "on":
-                return "nvidia";
-            case "off":
-                return "intel";
-            case "on-demand":
-                return "on-demand";
-            default:
-                return "off";
-        }
     }
 }

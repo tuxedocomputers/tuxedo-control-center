@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<mat-select [(value)]="selectedState" (selectionChange)="applyGpuProfile()" [disabled]="!primeSupported">
-    <mat-option *ngFor="let selectedState of primeSelectStates" [value]="selectedState">
-        {{ selectedState }}
+<mat-select [(value)]="activeState" (selectionChange)="applyGpuProfile()">
+    <mat-option *ngFor="let activeState of primeSelectValues" [value]="activeState">
+        {{ activeState }}
     </mat-option>
 </mat-select>

@@ -79,6 +79,7 @@ export class TccDBusData {
     public iGpuInfoValuesJSON: string;
     public cpuPowerValuesJSON: string;
     public dGpuLogging: boolean;
+    public primeState: string;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
     public tempProfileId: string;
@@ -130,6 +131,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     GetDGpuLoggingStatus() { return this.data.dGpuLogging; }
     SetDGpuLoggingStatus(status: boolean) { this.data.dGpuLogging = status; }
+    GetPrimeState() { return this.data.primeState; }
 
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
@@ -215,6 +217,7 @@ TccDBusInterface.configureMembers({
         GetCpuPowerValuesJSON: { outSignature: 's' },
         GetDGpuLoggingStatus: { outSignature: 'b' },
         SetDGpuLoggingStatus: { inSignature: 'b', outSignature: 'b' },
+        GetPrimeState: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },

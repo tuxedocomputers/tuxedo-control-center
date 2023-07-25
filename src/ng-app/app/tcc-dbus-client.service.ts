@@ -82,6 +82,8 @@ export class TccDBusClientService implements OnDestroy {
 
   public iGpuLogging = new BehaviorSubject<Boolean>(undefined);
 
+  public primeState = new BehaviorSubject<string>(undefined);
+
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -139,6 +141,9 @@ export class TccDBusClientService implements OnDestroy {
     );
     
     this.iGpuLogging.next(await this.tccDBusInterface.getDGpuLoggingStatus())
+
+    this.primeState.next(await this.tccDBusInterface.getPrimeState())
+
 
     const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();
     if (cpuPowerValuesJSON) {

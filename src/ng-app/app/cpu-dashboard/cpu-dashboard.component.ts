@@ -39,7 +39,7 @@ import {
     IDefaultDGPUValues,
     IDefaultIGPUValues,
 } from "src/common/models/TccGpuValues";
-import { filter, tap } from "rxjs/operators";
+import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 
 @Component({
@@ -94,8 +94,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-    // todo: automatically detect in system
-    public primeSelectState: string = "on-demand";
+    public primeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
 
     constructor(
@@ -118,10 +117,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscribeToProfileData();
         this.subscribeODMInfo();
         this.subscribeDGpuLoggingStatus();
+        this.subscribePrimeState();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    private subscribePrimeState() {
+        this.subscriptions.add(
+            this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
+                if (state) {
+                    this.primeState = state;
+                }
+            })
+        );
     }
 
     private subscribeDGpuLoggingStatus(): void {

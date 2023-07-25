@@ -155,6 +155,14 @@ export class TccDBusController {
         }
     }
 
+    async getPrimeState(): Promise<string> {
+        try {
+            return await this.interface.GetPrimeState();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async consumeModeReapplyPending(): Promise<boolean> {
         try {
             return await this.interface.ConsumeModeReapplyPending();

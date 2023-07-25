@@ -49,6 +49,7 @@ import { ChargingWorker } from './ChargingWorker';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 import { GpuInfoWorker } from "./GpuInfoWorker";
 import { CpuPowerWorker } from './CpuPowerWorker';
+import { PrimeWorker } from './PrimeWorker';
 
 const tccPackage = require('../../package.json');
 
@@ -119,6 +120,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new GpuInfoWorker(this));
         this.workers.push(new CpuPowerWorker(this));
+        this.workers.push(new PrimeWorker(this));
         this.workers.push(new KeyboardBacklightWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));

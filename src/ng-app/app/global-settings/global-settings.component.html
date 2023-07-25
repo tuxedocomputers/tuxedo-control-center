@@ -195,13 +195,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </content>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.inputSpan">
-                    <content class="input">
-                        <mat-select name="primeSelectState" [(value)]="primeSelectState" placeholder="Off">
-                            <mat-option *ngFor="let primeSelectState of primeSelectValues" [value]="primeSelectState">
-                                {{ primeSelectState }}
-                            </mat-option>
-                        </mat-select>
-                    </content>
+                    <app-prime-select></app-prime-select>
                 </mat-grid-tile>
             </mat-grid-list>
             <div i18n>Placeholder.</div>
