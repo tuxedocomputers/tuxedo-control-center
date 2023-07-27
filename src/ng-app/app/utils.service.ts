@@ -314,12 +314,13 @@ export class UtilsService {
     return result;
   }
 
-  public async choiceDialog(config: ChoiceDialogData): Promise<ConfirmChoiceResult> {
+  public async choiceDialog(config: ChoiceDialogData, disableClose: boolean = false): Promise<ConfirmChoiceResult> {
     const dialogRef = this.dialog.open(DialogChoiceComponent, {
       minWidth: 350,
       maxWidth: 550,
       data: config,
-      autoFocus: false
+      autoFocus: false,
+      disableClose: disableClose
     });
     let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
     if (result === undefined) {

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
@@ -30,6 +30,8 @@ import { first } from "rxjs/operators";
     styleUrls: ["./prime-select.component.scss"],
 })
 export class PrimeSelectComponent implements OnInit {
+    @Output() primeStateChanged = new EventEmitter<string>();
+
     public primeState: string;
     public activeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
@@ -53,33 +55,41 @@ export class PrimeSelectComponent implements OnInit {
         this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
             if (state) {
                 this.primeState = this.activeState = state;
+                this.primeStateChanged.emit(this.primeState);
             }
         });
     }
 
     public async applyGpuProfile(): Promise<void> {
+        const status = await this.askProceedDialog();
+        if (status !== "APPLY") {
+            this.activeState = this.primeState;
+            this.primeStateChanged.emit(this.primeState);
+            return;
+        }
+
         const config = {
             title: $localize`:@@primeSelectDialogApplyProfileTitle:Applying Graphics Profile`,
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
         const pkexecSetPrimeSelectAsync = this.config.pkexecSetPrimeSelectAsync(
-            this.transformPrimeStatus(this.primeState)
+            this.transformPrimeStatus(this.activeState)
         );
+
         const isSuccessful = await this.utils.waitingDialog(
             config,
             pkexecSetPrimeSelectAsync
         );
-
         if (isSuccessful) {
-            const rebootStatus = await this.showRebootDialog();
-
-            if (rebootStatus === "REBOOT") {
-                this.utils.execCmd("reboot");
-            }
-            this.activeState = this.primeState;
-        } else {
             this.primeState = this.activeState;
+            this.primeStateChanged.emit(this.activeState);
+
+            await this.showRebootDialog();
+            this.utils.execCmd("reboot");
+        } else {
+            this.activeState = this.primeState;
+            this.primeStateChanged.emit(this.primeState);
         }
     }
 
@@ -96,23 +106,37 @@ export class PrimeSelectComponent implements OnInit {
         }
     }
 
-    private async showRebootDialog(): Promise<string> {
+    private async askProceedDialog(): Promise<string> {
         const rebootConfig = {
-            title: $localize`:@@primeSelectDialogRebootTitle:Completed`,
-            description: $localize`:@@primeSelectDialogRebootDescription:Your graphics profile has been updated successfully. 
-                Restarting your system is necessary to activate the changes. Would you like to restart now?`,
+            title: $localize`Warning`,
+            description: `You will be required to reboot after performing this action. Are you sure you want to apply the selected setting?`,
             labelData: [
                 {
-                    label: $localize`:@@primeSelectDialogRebootNow:Reboot now`,
-                    value: "REBOOT",
+                    label: `Cancel`,
+                    value: "CANCEL",
                 },
                 {
-                    label: $localize`:@@primeSelectDialogRebootLater:Reboot later`,
-                    value: "NO_REBOOT",
+                    label: `Apply`,
+                    value: "APPLY",
                 },
             ],
         };
         const returnValue = await this.utils.choiceDialog(rebootConfig);
+        return returnValue.value as string;
+    }
+
+    private async showRebootDialog(): Promise<string> {
+        const rebootConfig = {
+            title: $localize`:@@primeSelectDialogRebootTitle:Completed`,
+            description: `Please note that proceeding with this action will result in a system reboot, which may cause any unsaved work to be lost.`,
+            labelData: [
+                {
+                    label: `Reboot`,
+                    value: "REBOOT",
+                },
+            ],
+        };
+        const returnValue = await this.utils.choiceDialog(rebootConfig, true);
         return returnValue.value as string;
     }
 }

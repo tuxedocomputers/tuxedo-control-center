@@ -13,13 +13,7 @@ content.value {
 }
 
 content.input {
-    mat-slider {
-        width: 200px;
-    }
-
-    mat-select {
-        width: 200px;
-    }
+    flex: 1;
 }
 
 .margin-top {

@@ -25,7 +25,7 @@ export class PrimeWorker extends DaemonWorker {
     primeSupported: Boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(2000, tccd);
+        super(10000, tccd);
     }
 
     public async onStart() {
@@ -35,7 +35,11 @@ export class PrimeWorker extends DaemonWorker {
         }
     }
 
-    public onWork() {}
+    public async onWork() {
+        if (this.primeSupported) {
+            this.checkPrimeStatus();
+        }
+    }
 
     public onExit() {}
 

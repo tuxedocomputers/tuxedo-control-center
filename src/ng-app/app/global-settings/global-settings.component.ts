@@ -52,10 +52,8 @@ export class GlobalSettingsComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
-    // todo: automatically detect in system
-    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
-    public primeSelectState: string = "iGPU";
-    public expandPrimeSelect: Boolean = false;    
+    public primeState: string = "iGPU";
+    public expandPrimeSelect: Boolean = false;
 
     constructor(
         private config: ConfigService,
@@ -178,5 +176,9 @@ export class GlobalSettingsComponent implements OnInit {
 
     public gotoComponent(component: string) {
         this.router.navigate([component], { relativeTo: this.route.parent });
+    }
+
+    public onPrimeStateChanged(newPrimeState: string) {
+        this.primeState = newPrimeState;
     }
 }
