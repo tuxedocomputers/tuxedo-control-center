@@ -122,7 +122,7 @@ export class TccTray {
                         label: 'Select dedicated GPU only',
                         type: 'normal',
                         click: () => this.events.selectNvidiaClick(),
-                        visible: this.state.primeQuery !== 'on'
+                        visible: this.state.primeQuery !== 'dGPU'
                     },
                     {
                         label: 'Select GPU on-demand mode',
@@ -134,7 +134,7 @@ export class TccTray {
                         label: 'Select integrated GPU only',
                         type: 'normal',
                         click: () => this.events.selectBuiltInClick(),
-                        visible: this.state.primeQuery !== 'off'
+                        visible: this.state.primeQuery !== 'iGPU'
                     }
                 ]
             },

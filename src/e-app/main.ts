@@ -119,12 +119,8 @@ app.whenReady().then( async () => {
 
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
-    tray.state.primeQuery = primeSelectQuery();
-    tray.state.isPrimeSupported = primeSupported();
-    tray.state.fnLockSupported = await fnLockSupported(tccDBus);
-    if (tray.state.fnLockSupported) {
-        tray.state.fnLockStatus = await fnLockStatus(tccDBus);
-    }
+    [tray.state.isPrimeSupported, tray.state.primeQuery] = await getPrimeData();
+
     await updateTrayProfiles(tccDBus);
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
@@ -561,17 +557,6 @@ ipcMain.on('spawn-external-async', (event, arg) => {
     });
 });
 
-
-ipcMain.handle('checkPrimeSupport', (event) => {
-    const isPrimeSupported = primeSupported();
-    return isPrimeSupported;
-});
-
-ipcMain.handle('checkPrimeSelectQuery', (event) => {
-    const primeQuery = primeSelectQuery();
-    return primeQuery;
-});
-
 // Handle nativeTheme updated event, whether system triggered or from tcc
 nativeTheme.on('updated', () => {
     if (tccWindow) {
@@ -722,47 +707,15 @@ function createUserConfigDir(): boolean {
     }
 }
 
-function primeSupported(): boolean {
-    let query: string;
-    let result: boolean;
-    try {
-        query = child_process.execSync('prime-supported /dev/null').toString();
-        result = query.trim() === 'yes';
-    } catch (err) {
-        result = false;
+async function getPrimeData(): Promise<[boolean, string]> {
+    const primeStatus = await tccDBus.getPrimeState()
+    let primeAvailable = true;
+    if (primeStatus !== undefined && primeStatus !== "off") {
+        primeAvailable = true;
+    } else {
+        primeAvailable = false;
     }
-    return result;
-}
-
-async function fnLockSupported(tccDBus: TccDBusController) {
-    return await tccDBus.getFnLockSupported();
-}
-
-async function fnLockStatus(tccDBus: TccDBusController) {
-    return await tccDBus.getFnLockStatus();
-}
-
-function primeSelectQuery(): string {
-    let query: string;
-    let result: string;
-    try {
-        query = child_process.execSync('prime-select query').toString();
-        if (query.includes('nvidia')) {
-            result = 'on';
-        } else if (query.includes('on-demand')) {
-            result = 'on-demand';
-        } else if (query.includes('intel')) {
-            result = 'off';
-        } else {
-            // Not supported, result undefined
-            result = undefined;
-        }
-    } catch (err) {
-        // Doesn't exist, result undefined
-        result = undefined;
-    }
-
-    return result;
+    return [primeAvailable, primeStatus]
 }
 
 function primeSelectSet(status: string): boolean {
