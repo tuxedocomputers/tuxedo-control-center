@@ -85,7 +85,7 @@ export class CompatibilityService {
     const iGpuPowerDraw = this.tccDbus.iGpuInfo?.value?.powerDraw;
 
     if (iGpuPowerDraw !== undefined) {
-        return iGpuPowerDraw > 0;
+        return iGpuPowerDraw >= 0;
     }
 
     return false;
@@ -99,9 +99,9 @@ export class CompatibilityService {
     const { coreFrequency, maxCoreFrequency } = dGpuInfo;
     return (
       coreFrequency !== undefined &&
-      coreFrequency > 0 &&
+      coreFrequency >= 0 &&
       maxCoreFrequency !== undefined &&
-      maxCoreFrequency > 0
+      maxCoreFrequency >= 0
     );
   }
 
@@ -113,9 +113,9 @@ export class CompatibilityService {
     const { coreFrequency, maxCoreFrequency } = iGpuInfo;
     return (
       coreFrequency !== undefined &&
-      coreFrequency > 0 &&
+      coreFrequency >= 0 &&
       maxCoreFrequency !== undefined &&
-      maxCoreFrequency > 0
+      maxCoreFrequency >= 0
     );
   }
 

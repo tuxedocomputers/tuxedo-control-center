@@ -413,7 +413,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     };
 
     public formatGpuFrequency = this.createFormatter(
-        (val) => val > 0,
+        (val) => val >= 0,
         (val) => this.utils.formatGpuFrequency(val)
     );
 
