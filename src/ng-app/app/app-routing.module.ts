@@ -38,6 +38,7 @@ import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.compo
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
 import { WebcamSettingsGuard } from "./webcam.service";
 import { TomteGuiComponent } from "./tomte-gui/tomte-gui.component";
+import { PrimeDialogComponent } from "./prime-dialog/prime-dialog.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "/main-gui/cpu-dashboard", pathMatch: "full" },
@@ -86,10 +87,15 @@ const routes: Routes = [
             },
             { path: "aquaris-control", component: AquarisControlComponent },
             { path: "tomte-gui", component: TomteGuiComponent },
+
         ],
     },
     { path: "webcam-preview", component: WebcamPreviewComponent },
     { path: "aquaris-control", component: AquarisControlComponent },
+    {
+        path: "prime-dialog",
+        component: PrimeDialogComponent,
+    },
 ];
 
 @NgModule({

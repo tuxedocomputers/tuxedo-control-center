@@ -53,6 +53,7 @@ if (startTCCAccelerator === '') {
 let tccWindow: Electron.BrowserWindow;
 let aquarisWindow: Electron.BrowserWindow;
 let webcamWindow: Electron.BrowserWindow;
+let primeWindow: Electron.BrowserWindow;
 
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
@@ -150,14 +151,17 @@ app.whenReady().then( async () => {
         buttons: [ 'yes', 'cancel' ],
         message: 'To learn how to use the on-demand mode please follow this guide:\nhttps://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and reboot?'
     };
-    tray.events.selectNvidiaClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxPrimeSelectAccept) === 0) { primeSelectSet('on'); }
+    tray.events.selectNvidiaClick = async () => {
+        const langId = await userConfig.get("langId");
+        createPrimeWindow(langId, "dGPU");
     };
-    tray.events.selectOnDemandClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxPrimeSelectAcceptOnDemand) === 0) { primeSelectSet('on-demand'); }
+    tray.events.selectOnDemandClick = async () => {
+        const langId = await userConfig.get("langId");
+        createPrimeWindow(langId, "on-demand");
     };
-    tray.events.selectBuiltInClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxPrimeSelectAccept) === 0) { primeSelectSet('off'); }
+    tray.events.selectBuiltInClick = async () => {
+        const langId = await userConfig.get("langId");
+        createPrimeWindow(langId, "iGPU");
     };
     tray.events.profileClick = (profileId: string) => { setTempProfileById(tccDBus, profileId); };
     tray.create();
@@ -406,6 +410,77 @@ ipcMain.on("apply-controls", (event) => {
 
 ipcMain.on("video-ended", (event) => {
     tccWindow.webContents.send("video-ended");
+});
+
+async function createPrimeWindow(langId: string, primeSelectMode: string) {
+    if (primeWindow && !primeWindow.isDestroyed()) {
+        primeWindow.focus();
+        return;
+    }
+
+    let windowWidth = 640;
+    let windowHeight = 200;
+
+    primeWindow = new BrowserWindow({
+        title: "Prime Select Configuration",
+        width: windowWidth,
+        height: windowHeight,
+        frame: true,
+        resizable: false,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
+        icon: path.join(
+            __dirname,
+            "../../data/dist-data/tuxedo-control-center_256.png"
+        ),
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+        show: false,
+    });
+
+    // Workaround to set window title
+    primeWindow.on("page-title-updated", function (e) {
+        e.preventDefault();
+    });
+
+    primeWindow.setMenuBarVisibility(false);
+
+    // Workaround to menu bar appearing after full screen state
+    primeWindow.on("leave-full-screen", () => {
+        primeWindow.setMenuBarVisibility(false);
+    });
+
+    const indexPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "ng-app",
+        langId,
+        "index.html"
+    );
+    primeWindow.loadFile(indexPath, { hash: "/prime-dialog" });
+
+    primeWindow.webContents.once("dom-ready", () => {
+        primeWindow.webContents.send("set-prime-select-mode", primeSelectMode);
+    });
+
+    primeWindow.on("close", async function () {
+        primeWindow = null;
+    });
+}
+
+ipcMain.on("prime-window-close", () => {
+    if (primeWindow) {
+        primeWindow.close();
+    }
+});
+
+ipcMain.on("show-prime-window", () => {
+    if (primeWindow) {
+        primeWindow.show();
+    }
 });
 
 async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
@@ -716,24 +791,6 @@ async function getPrimeData(): Promise<[boolean, string]> {
         primeAvailable = false;
     }
     return [primeAvailable, primeStatus]
-}
-
-function primeSelectSet(status: string): boolean {
-    let result: boolean;
-    try {
-        if (status === 'on') {
-            child_process.execSync('pkexec bash -c "prime-select nvidia; shutdown -r now"');
-        } else if (status === 'on-demand') {
-            child_process.execSync('pkexec bash -c "prime-select on-demand; shutdown -r now"');
-        } else if (status === 'off') {
-            child_process.execSync('pkexec bash -c "prime-select intel; shutdown -r now"');
-        }
-        result = true;
-    } catch (err) {
-        // Can't set, return undefined
-    }
-
-    return result;
 }
 
 async function updateTrayProfiles(dbus: TccDBusController) {
