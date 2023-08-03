@@ -384,12 +384,29 @@ export class ConfigService implements OnDestroy {
         });
     }
 
+    private transformPrimeStatus(status: string): string {
+        switch (status) {
+            case "dGPU":
+                return "nvidia";
+            case "iGPU":
+                return "intel";
+            case "on-demand":
+                return "on-demand";
+            default:
+                return "off";
+        }
+    }
+
     public async pkexecSetPrimeSelectAsync(
         selectedState: string
     ): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
             this.utils
-                .execFile(`pkexec prime-select ${selectedState}`)
+                .execFile(
+                    `pkexec prime-select ${this.transformPrimeStatus(
+                        selectedState
+                    )}`
+                )
                 .then(() => {
                     resolve(true);
                 })

@@ -35,23 +35,10 @@ export class PrimeDialogComponent implements OnInit {
         this.langId = this.utils.getCurrentLanguageId();
     }
 
-    private transformPrimeStatus(status: string): string {
-        switch (status) {
-            case "dGPU":
-                return "nvidia";
-            case "iGPU":
-                return "intel";
-            case "on-demand":
-                return "on-demand";
-            default:
-                return "off";
-        }
-    }
-
     public async applyPrimeConfig() {
         this.loadingBar = true;
         const status = await this.config.pkexecSetPrimeSelectAsync(
-            this.transformPrimeStatus(this.primeSelectMode)
+            this.primeSelectMode
         );
         if (status) {
             this.utils.execCmd("reboot");

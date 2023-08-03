@@ -74,7 +74,7 @@ export class PrimeSelectComponent implements OnInit {
         };
 
         const pkexecSetPrimeSelectAsync = this.config.pkexecSetPrimeSelectAsync(
-            this.transformPrimeStatus(this.activeState)
+            this.activeState
         );
 
         const isSuccessful = await this.utils.waitingDialog(
@@ -92,20 +92,7 @@ export class PrimeSelectComponent implements OnInit {
             this.primeStateChanged.emit(this.primeState);
         }
     }
-
-    private transformPrimeStatus(status: string): string {
-        switch (status) {
-            case "dGPU":
-                return "nvidia";
-            case "iGPU":
-                return "intel";
-            case "on-demand":
-                return "on-demand";
-            default:
-                return "off";
-        }
-    }
-
+    
     private async askProceedDialog(): Promise<string> {
         const rebootConfig = {
             title: $localize`Warning`,
