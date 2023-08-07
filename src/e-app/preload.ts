@@ -1,3 +1,5 @@
+import { aquarisAPIHandle, ClientAPI } from "./AquarisAPI"
+
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld(
@@ -23,13 +25,23 @@ contextBridge.exposeInMainWorld(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
     ),
     closeWebcamPreview: () => ipcRenderer.send("close-webcam-preview"),
-
+    // https://github.com/electron/electron/issues/21437
+    onApplyControls: (callback) => {
+        ipcRenderer.on('apply-controls', callback);
+    },
+    onExternalWebcamPreviewClosed: (callback) => {
+        ipcRenderer.on('external-webcam-preview-closed', callback);
+    },
+    onVideoEnded: (callback) => {
+        ipcRenderer.on('video-ended', callback);
+    },
+    videoEnded: () => ipcRenderer.send('video-ended'),
+    applyControls: () => ipcRenderer.send('apply-controls'),
 
 /*
 
-
 */
 
-
   }
-)
+);
+contextBridge.exposeInMainWorld('aquarisAPI', new ClientAPI(ipcRenderer, aquarisAPIHandle));

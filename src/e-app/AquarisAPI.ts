@@ -36,6 +36,8 @@ export interface AquarisState {
 
 export const aquarisAPIHandle = 'aquarisAPIHandle';
 
+
+// TODO to prevent confusion rename ClientAPI into AquarisClientAPI
 export class ClientAPI {
 
     constructor(private ipc, private apiHandle: string) {}
@@ -58,7 +60,10 @@ export class ClientAPI {
     public saveState() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.saveState.name]); }
 }
 
-export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {
+// TODO darf nur im Main Prozess benutzt werden, ggf woanders hinlegen
+// ggf neuen Type für ipcMain (kann man nur das Interface irgendwie durch die Context
+// isolation durchhreichen? )
+export function registerAPI (ipcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {
 
     ipcMain.handle(apiHandle, async (event, args: any[]) => {
         const mainsideFunction = mainsideHandlers.get(args[0]);

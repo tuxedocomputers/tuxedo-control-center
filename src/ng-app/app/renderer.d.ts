@@ -1,5 +1,7 @@
+import { ClientAPI } from "src/e-app/AquarisAPI";
+import { EventEmitter } from 'node:events';
 
-export interface IPC {
+export interface IPC extends EventEmitter {
     // TODO probably have to modify this somehow
     send: (channel: string, args) => Promise<IPCReturnValue>,
     invoke: (channel: string, args) => Promise<IPCReturnValue>,
@@ -15,11 +17,17 @@ export interface IPC {
     tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
     closeWebcamPreview: () => void,
+    videoEnded: () => void,
+    applyControls: () => void,
+    onVideoEnded: (callback) => void,
+    onExternalWebcamPreviewClosed: (callback) => void,
+    onApplyControls: (callback) => void,
   }
   
   declare global {
     interface Window {
-      ipc: IPC
+      ipc: IPC,
+      aquarisApi: ClientAPI
     }
   }
 

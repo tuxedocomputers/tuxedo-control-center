@@ -103,9 +103,15 @@ export class WebcamSettingsComponent implements OnInit {
             TccPaths.FANTABLES_FILE
         );
 
-        const webcamApplyObservable = fromEvent(
+        // register callback for IPC signal from main
+        this.electron.ipcRenderer.onApplyControls(async () => {
+            await this.executeWebcamCtrlsList(
+                this.webcamFormGroup.getRawValue()
+            );
+          });
+          /*   const webcamApplyObservable = fromEvent(
             this.electron.ipcRenderer,
-            "apply-controls"
+            "onApplyControls"
         );
         this.subscriptions.add(
             webcamApplyObservable.subscribe(async () => {
@@ -113,11 +119,17 @@ export class WebcamSettingsComponent implements OnInit {
                     this.webcamFormGroup.getRawValue()
                 );
             })
-        );
+        ); */
 
-        const webcamWindowObservable = fromEvent(
+        this.electron.ipcRenderer.onExternalWebcamPreviewClosed(() => {
+            this.detachedWebcamWindowActive = false;
+            document.getElementById("hidden").style.display = "flex";
+            this.applyPreset(this.webcamFormGroup.getRawValue());
+        });
+
+       /*  const webcamWindowObservable = fromEvent(
             this.electron.ipcRenderer,
-            "external-webcam-preview-closed"
+            "onExternalWebcamPreviewClosed"
         );
         this.subscriptions.add(
             webcamWindowObservable.subscribe(() => {
@@ -125,18 +137,22 @@ export class WebcamSettingsComponent implements OnInit {
                 document.getElementById("hidden").style.display = "flex";
                 this.applyPreset(this.webcamFormGroup.getRawValue());
             })
-        );
+        ); */
 
+        this.electron.ipcRenderer.onVideoEnded(() => {
+            this.handleVideoEnded();
+        });
+/* 
         const videoEndedObservable = fromEvent(
             this.electron.ipcRenderer,
-            "video-ended"
+            "onVideoEnded"
         );
         this.subscriptions.add(
             videoEndedObservable.subscribe(() => {
                 this.handleVideoEnded();
             })
         );
-
+ */
         await this.reloadWebcamList();
     }
 
@@ -1372,7 +1388,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.subscriptions.unsubscribe();
 
         if (this.detachedWebcamWindowActive) {
-            this.electron.ipcRenderer.send("close-webcam-preview");
+            this.electron.ipcRenderer.closeWebcamPreview()
         }
     }
 }

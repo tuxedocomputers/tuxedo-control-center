@@ -93,7 +93,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             name: $localize `:@@aqFanPresetFastLabel:Fast`,
             value: 80
         });
-        this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
+        this.aquaris = window.aquarisApi;
     }
 
     ngOnInit() {

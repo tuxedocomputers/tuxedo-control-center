@@ -25,11 +25,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
 
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
@@ -139,6 +139,8 @@ export class UtilsService {
     });
   }
 
+  // TODO finish this function and implement some sanitization function
+  // in theory it's enought to check if it starts with http:// or https://
   openExternal(url: string) {
     throw new Error('Method not implemented.');
 }
