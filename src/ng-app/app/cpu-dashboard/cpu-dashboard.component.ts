@@ -33,12 +33,7 @@ import { ConfigService } from "../config.service";
 
 import { CompatibilityService } from "../compatibility.service";
 import { ICpuPower } from "src/common/models/TccPowerSettings";
-import {
-    IdGpuInfo,
-    IiGpuInfo,
-    IDefaultDGPUValues,
-    IDefaultIGPUValues,
-} from "src/common/models/TccGpuValues";
+import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 
@@ -162,72 +157,37 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private setDGpuValues(
-        dGpuInfo?: IdGpuInfo,
-        dGpuDefaultValues?: IDefaultDGPUValues
-    ): void {
-        const powerDraw =
-            dGpuInfo?.powerDraw >= 0
-                ? dGpuInfo.powerDraw
-                : dGpuDefaultValues?.powerDraw >= 0
-                ? dGpuDefaultValues.powerDraw
-                : 0;
+    private setDGpuValues(dGpuInfo?: IdGpuInfo): void {
+        console.log("dGpuInfo: ", dGpuInfo);
+        const {
+            powerDraw = -1,
+            maxPowerLimit = -1,
+            coreFrequency = -1,
+            maxCoreFrequency = -1,
+        } = dGpuInfo ?? {};
         this.dGpuPower = powerDraw;
-
-        const maxPowerLimit =
-            dGpuInfo?.maxPowerLimit >= 0
-                ? dGpuInfo.maxPowerLimit
-                : dGpuDefaultValues?.powerDraw >= 0
-                ? dGpuDefaultValues.powerDraw
-                : 0;
-
         this.gaugeDGPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
-
-        const coreFrequency =
-            dGpuInfo?.coreFrequency >= 0
-                ? dGpuInfo.coreFrequency
-                : dGpuDefaultValues?.gaugeCoreFrequency >= 0
-                ? dGpuDefaultValues.gaugeCoreFrequency
-                : 0;
-
-        const maxCoreFrequency =
-            dGpuInfo?.maxCoreFrequency >= 0 ? dGpuInfo.maxCoreFrequency : 0;
-
-        this.gaugeDGPUFreq =
-            maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.dGpuFreq = coreFrequency;
+        this.gaugeDGPUFreq = this.tccdbus.tuxedoWmiAvailable?.value
+            ? maxCoreFrequency > 0
+                ? (coreFrequency / maxCoreFrequency) * 100
+                : 0
+            : 0;
     }
 
     private subscribeToDGpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.dGpuInfo.subscribe((dGpuInfo?: IdGpuInfo) => {
-                const dGpuDefaultValues: IDefaultDGPUValues = {
-                    coreFrequency: 0,
-                    gaugeCoreFrequency: 0,
-                    powerDraw: 0,
-                    gaugePower: 0,
-                };
-
-                this.setDGpuValues(dGpuInfo, dGpuDefaultValues);
+                this.setDGpuValues(dGpuInfo);
             })
         );
     }
 
-    private setCpuValues(
-        cpuPower?: ICpuPower,
-        cpuDefaultValues?: ICpuPower
-    ): void {
-        const powerDraw =
-            cpuPower?.powerDraw ?? cpuDefaultValues?.powerDraw ?? 0;
+    private setCpuValues(cpuPower?: ICpuPower): void {
+        const powerDraw = cpuPower?.powerDraw ?? -1;
         const maxPowerLimit =
-            cpuPower?.maxPowerLimit && cpuPower.maxPowerLimit > 0
-                ? cpuPower.maxPowerLimit
-                : this.cpuPowerLimit
-                ? this.cpuPowerLimit
-                : cpuDefaultValues?.powerDraw
-                ? cpuDefaultValues.powerDraw
-                : 0;
+            cpuPower?.maxPowerLimit ?? this.cpuPowerLimit ?? -1;
         this.gaugeCPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
         this.cpuPower = powerDraw;
@@ -236,9 +196,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToCpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.cpuPower.subscribe((cpuPower?: ICpuPower) => {
-                const cpuDefaultValues: ICpuPower = { powerDraw: 0 };
-
-                this.setCpuValues(cpuPower, cpuDefaultValues);
+                this.setCpuValues(cpuPower);
             })
         );
         this.subscriptions.add(
@@ -256,35 +214,20 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private setIGpuValues(
-        iGpuInfo?: IiGpuInfo,
-        iGpuDefaultValues?: IDefaultIGPUValues
-    ): void {
-        this.iGpuTemp = iGpuInfo?.temp ?? iGpuDefaultValues?.temp ?? 0;
+    private setIGpuValues(iGpuInfo?: IiGpuInfo): void {
+        this.iGpuTemp = iGpuInfo?.temp ?? -1;
+        const { coreFrequency = -1, maxCoreFrequency = 0 } = iGpuInfo ?? {};
         this.gaugeIGpuFreq =
-            iGpuInfo?.coreFrequency >= 0 && iGpuInfo?.maxCoreFrequency > 0
-                ? (iGpuInfo.coreFrequency / iGpuInfo.maxCoreFrequency) * 100
-                : 0;
-        this.iGpuFreq =
-            iGpuInfo?.coreFrequency ?? iGpuDefaultValues?.coreFrequency ?? 0;
-        this.iGpuVendor =
-            iGpuInfo?.vendor ?? iGpuDefaultValues?.vendor ?? "unknown";
-        this.iGpuPower =
-            iGpuInfo?.powerDraw ?? iGpuDefaultValues?.powerDraw ?? 0;
+            maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
+        this.iGpuFreq = coreFrequency;
+        this.iGpuVendor = iGpuInfo?.vendor ?? "unknown";
+        this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
     }
 
     private subscribeToIGpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.iGpuInfo.subscribe((iGpuInfo?: IiGpuInfo) => {
-                const iGpuDefaultValues: IDefaultIGPUValues = {
-                    temp: 0,
-                    coreFrequency: 0,
-                    gaugeCoreFrequency: 0,
-                    powerDraw: 0,
-                    vendor: "unknown",
-                };
-
-                this.setIGpuValues(iGpuInfo, iGpuDefaultValues);
+                this.setIGpuValues(iGpuInfo);
             })
         );
     }
@@ -347,38 +290,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private updateFrequencyData(): void {
-        this.activeCores = 0;
-        this.activeScalingMinFreqs = this.cpuCoreInfo
-            .filter((core) => core.scalingMinFreq !== undefined)
-            .map((core) => this.utils.formatCpuFrequency(core.scalingMinFreq))
-            .filter((freq, idx, freqs) => freqs.indexOf(freq) === idx);
-
-        this.activeScalingMaxFreqs = this.cpuCoreInfo
-            .filter((core) => core.scalingMaxFreq !== undefined)
-            .map((core) => this.utils.formatCpuFrequency(core.scalingMaxFreq))
-            .filter((freq, idx, freqs) => freqs.indexOf(freq) === idx);
-
-        this.activeScalingDrivers = this.cpuCoreInfo
-            .filter((core) => core.scalingDriver !== undefined)
-            .map((core) => core.scalingDriver)
-            .filter((driver, idx, drivers) => drivers.indexOf(driver) === idx);
-
-        this.activeScalingGovernors = this.cpuCoreInfo
-            .filter((core) => core.scalingGovernor !== undefined)
-            .map((core) => core.scalingGovernor)
-            .filter(
-                (governor, idx, governors) =>
-                    governors.indexOf(governor) === idx
-            );
-
-        this.activeEnergyPerformancePreference = this.cpuCoreInfo
-            .filter((core) => core.energyPerformancePreference !== undefined)
-            .map((core) => core.energyPerformancePreference)
-            .filter(
-                (preference, idx, preferences) =>
-                    preferences.indexOf(preference) === idx
-            );
-
         const freqSum = this.cpuCoreInfo
             .map((core) => core.scalingCurFreq ?? 0)
             .reduce((sum, freq) => sum + freq, 0);

@@ -13,18 +13,3 @@ export interface IdGpuInfo {
     maxPowerLimit: number;
     enforcedPowerLimit: number;
 }
-
-export interface IDefaultDGPUValues {
-    coreFrequency: number;
-    gaugeCoreFrequency: number;
-    powerDraw: number;
-    gaugePower: number;
-}
-
-export interface IDefaultIGPUValues {
-    temp: number;
-    coreFrequency: number;
-    gaugeCoreFrequency: number;
-    powerDraw: number;
-    vendor: string;
-}
