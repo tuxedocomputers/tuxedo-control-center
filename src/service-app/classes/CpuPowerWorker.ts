@@ -24,10 +24,12 @@ import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 
 export class CpuPowerWorker extends DaemonWorker {
     private RAPLPowerStatus: boolean = false;
-    private RAPLConstraintStatus: boolean = false;
+    private RAPLConstraint0Status: boolean = false;
+    private RAPLConstraint1Status: boolean = false;
+    private RAPLConstraint2Status: boolean = false;
 
-    private currentEnergy: number = -1;
-    private delay: number = 2;
+    private currentEnergy: number = 0;
+    private lastUpdateTime: number = -1;
 
     private intelRAPL = new IntelRAPLController(
         "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/"
@@ -37,39 +39,91 @@ export class CpuPowerWorker extends DaemonWorker {
         super(2000, tccd);
     }
 
-    onStart() {
+    public onStart(): void {
         this.RAPLPowerStatus = this.intelRAPL.getIntelRAPLPowerAvailable();
-        this.RAPLConstraintStatus =
-            this.intelRAPL.getIntelRAPLConstraintsAvailable();
+
+        this.RAPLConstraint0Status =
+            this.intelRAPL.getIntelRAPLConstraint0Available()
+                ? this.intelRAPL.getIntelRAPLConstraint0Available()
+                : false;
+
+        this.RAPLConstraint1Status =
+            this.intelRAPL.getIntelRAPLConstraint1Available()
+                ? this.intelRAPL.getIntelRAPLConstraint1Available()
+                : false;
+
+        this.RAPLConstraint2Status =
+            this.intelRAPL.getIntelRAPLConstraint2Available()
+                ? this.intelRAPL.getIntelRAPLConstraint2Available()
+                : false;
+
+        this.onWork();
     }
 
-    onWork() {
-        if (!this.RAPLPowerStatus) {
-            return;
-        }
-
-        const nextEnergy = this.intelRAPL.getEnergy();
-        const powerDraw =
-            (nextEnergy - this.currentEnergy) / this.delay / 1000000;
-
-        let cpuPowerValues: ICpuPower = {
-            powerDraw: powerDraw,
+    public onWork(): void {
+        const cpuPowerValues: ICpuPower = {
+            powerDraw: this.getCurrentPower(),
+            maxPowerLimit: this.getMaxPowerLimix(),
         };
 
-        if (this.RAPLConstraintStatus) {
-            const maxPowerLimit = this.intelRAPL.getMaxPower() / 1000000;
-            cpuPowerValues.maxPowerLimit = maxPowerLimit;
-        } else {
-            cpuPowerValues.maxPowerLimit = -1;
-        }
-        
-        if (this.currentEnergy > 0) {
-            this.tccd.dbusData.cpuPowerValuesJSON =
-                JSON.stringify(cpuPowerValues);
-        }
-
-        this.currentEnergy = nextEnergy;
+        this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(cpuPowerValues);
     }
 
-    public onExit() {}
+    private getCurrentPower(): number {
+        if (!this.RAPLPowerStatus) return -1;
+
+        const energyIncrement = this.intelRAPL.getEnergy() - this.currentEnergy;
+        const delay = this.getDelay();
+        const powerDraw =
+            delay && this.currentEnergy > 0
+                ? energyIncrement / delay / 1000000
+                : -1;
+        this.currentEnergy += energyIncrement;
+
+        return powerDraw;
+    }
+
+    private getDelay(): number {
+        const currentTime = Date.now();
+        const timeDifference =
+            this.lastUpdateTime > 0
+                ? (currentTime - this.lastUpdateTime) / 1000
+                : -1;
+        this.lastUpdateTime = currentTime;
+        return timeDifference;
+    }
+
+    private getMaxPowerLimix(): number {
+        let maxPowerLimit: number = -1;
+
+        if (this.RAPLConstraint0Status) {
+            const constraint0MaxPower = this.intelRAPL.getConstraint0MaxPower();
+            if (constraint0MaxPower > 0) {
+                maxPowerLimit = constraint0MaxPower;
+            }
+        }
+
+        if (this.RAPLConstraint1Status) {
+            const constraint1MaxPower = this.intelRAPL.getConstraint1MaxPower();
+            if (
+                constraint1MaxPower > 0 &&
+                constraint1MaxPower > maxPowerLimit
+            ) {
+                maxPowerLimit = constraint1MaxPower;
+            }
+        }
+
+        if (this.RAPLConstraint2Status) {
+            const constraint2MaxPower = this.intelRAPL.getConstraint2MaxPower();
+            if (
+                constraint2MaxPower > 0 &&
+                constraint2MaxPower > maxPowerLimit
+            ) {
+                maxPowerLimit = constraint2MaxPower;
+            }
+        }
+        return maxPowerLimit / 1000000;
+    }
+
+    public onExit(): void {}
 }

@@ -26,9 +26,19 @@ import {
 export class IntelRAPLController {
     private properties: {
         name: SysFsPropertyString;
+
+        constraint0Name: SysFsPropertyString;
+        constraint0MaxPower: SysFsPropertyInteger;
+        constraint0PowerLimit: SysFsPropertyInteger;
+
+        constraint1Name: SysFsPropertyString;
+        constraint1MaxPower: SysFsPropertyInteger;
+        constraint1PowerLimit: SysFsPropertyInteger;
+
         constraint2Name: SysFsPropertyString;
         constraint2MaxPower: SysFsPropertyInteger;
         constraint2PowerLimit: SysFsPropertyInteger;
+
         enabled: SysFsPropertyBoolean;
         energyUJ: SysFsPropertyInteger;
     };
@@ -36,6 +46,27 @@ export class IntelRAPLController {
     constructor(private readonly basePath: string) {
         this.properties = {
             name: new SysFsPropertyString(path.join(basePath, "name")),
+
+            constraint0Name: new SysFsPropertyString(
+                path.join(basePath, "constraint_0_name")
+            ),
+            constraint0MaxPower: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_0_max_power_uw")
+            ),
+            constraint0PowerLimit: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_0_power_limit_uw")
+            ),
+
+            constraint1Name: new SysFsPropertyString(
+                path.join(basePath, "constraint_1_name")
+            ),
+            constraint1MaxPower: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_1_max_power_uw")
+            ),
+            constraint1PowerLimit: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_1_power_limit_uw")
+            ),
+
             constraint2Name: new SysFsPropertyString(
                 path.join(basePath, "constraint_2_name")
             ),
@@ -45,6 +76,7 @@ export class IntelRAPLController {
             constraint2PowerLimit: new SysFsPropertyInteger(
                 path.join(basePath, "constraint_2_power_limit_uw")
             ),
+
             enabled: new SysFsPropertyBoolean(path.join(basePath, "enabled")),
             energyUJ: new SysFsPropertyInteger(
                 path.join(basePath, "energy_uj")
@@ -72,13 +104,36 @@ export class IntelRAPLController {
      *
      * @returns Boolean indicating if constraints are available
      */
-    public getIntelRAPLConstraintsAvailable(): boolean {
+    public getIntelRAPLConstraint0Available(): boolean {
         const props = this.properties;
+
+        return (
+            props.constraint0Name.isAvailable() &&
+            props.constraint0MaxPower.isAvailable() &&
+            props.constraint0PowerLimit.isAvailable() &&
+            props.constraint0Name.readValueNT() === "long_term"
+        );
+    }
+
+    public getIntelRAPLConstraint1Available(): boolean {
+        const props = this.properties;
+
+        return (
+            props.constraint1Name.isAvailable() &&
+            props.constraint1MaxPower.isAvailable() &&
+            props.constraint1PowerLimit.isAvailable() &&
+            props.constraint1Name.readValueNT() === "short_term"
+        );
+    }
+
+    public getIntelRAPLConstraint2Available(): boolean {
+        const props = this.properties;
+
         return (
             props.constraint2Name.isAvailable() &&
             props.constraint2MaxPower.isAvailable() &&
             props.constraint2PowerLimit.isAvailable() &&
-            props.constraint2Name.readValueNT() === "long_term"
+            props.constraint2Name.readValueNT() === "peak_power"
         );
     }
 
@@ -97,8 +152,16 @@ export class IntelRAPLController {
      *
      * @returns Integer that is the maximum input value for long term power limit in micro watts or undefined on error
      */
-    public getMaxPower(): number {
-        return this.properties.constraint2MaxPower.readValueNT();
+    public getConstraint0MaxPower(): number {
+        return this.properties.constraint0PowerLimit.readValueNT();
+    }
+
+    public getConstraint1MaxPower(): number {
+        return this.properties.constraint1PowerLimit.readValueNT();
+    }
+
+    public getConstraint2MaxPower(): number {
+        return this.properties.constraint2PowerLimit.readValueNT();
     }
 
     /**
@@ -116,9 +179,9 @@ export class IntelRAPLController {
      * @param setPowerLimit Long term power limit to set in micro watts. Defaults to maximum value possible.
      * Automatically clamped to range [maxPower/2, maxPower].
      */
-    public setPowerLimit(setPowerLimit?: number): void {
+    public setPowerPL1Limit(setPowerLimit?: number): void {
         const props = this.properties;
-        const maxPower = this.getMaxPower();
+        const maxPower = this.getConstraint0MaxPower();
 
         try {
             let powerLimit =
@@ -126,7 +189,7 @@ export class IntelRAPLController {
                     ? maxPower
                     : Math.max(maxPower / 2, Math.min(setPowerLimit, maxPower));
 
-            props.constraint2PowerLimit.writeValue(powerLimit);
+            props.constraint0PowerLimit.writeValue(powerLimit);
             props.enabled.writeValue(true);
         } catch (err) {
             console.log("IntelRAPLController: Failed to set power limit.");

@@ -31,9 +31,9 @@ import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: Boolean = false;
     private cpuVendor: string;
-    private gfxAvailable: Boolean = false;
-    private delay: number = 2;
-    private currentEnergy: number = -1;
+    private RAPLPowerStatus: Boolean = false;
+    private lastUpdateTime: number = -1;
+    private currentEnergy: number = 0;
     private hwmonPath: string;
     private intelRAPLGPU: IntelRAPLController;
 
@@ -41,7 +41,7 @@ export class GpuInfoWorker extends DaemonWorker {
         super(2000, tccd);
     }
 
-    public async onStart() {
+    public async onStart(): Promise<void> {
         const cpuVendor = await checkCpuVendor();
         this.cpuVendor = cpuVendor;
 
@@ -52,29 +52,26 @@ export class GpuInfoWorker extends DaemonWorker {
             this.intelRAPLGPU = new IntelRAPLController(
                 "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
             );
-            this.gfxAvailable = this.intelRAPLGPU.getIntelRAPLEnergyAvailable();
+            this.RAPLPowerStatus =
+                this.intelRAPLGPU.getIntelRAPLEnergyAvailable();
         }
 
         const isInstalled = await isNvidiaSmiInstalled();
         this.isNvidiaSmiInstalled = isInstalled;
 
-        if (isInstalled) {
-            const dGpuPowerValues = await getDGpuPowerValues();
-            this.tccd.dbusData.dGpuInfoValuesJSON =
-                JSON.stringify(dGpuPowerValues);
-        }
+        this.onWork();
     }
 
-    public async onWork() {
+    public async onWork(): Promise<void> {
         // todo: only make it run when user is in dashboard
         this.getIGPUValues();
         // todo: tccd restart results in this.tccd.dbusData.dGpuLogging status reset and halts value updates
         this.getDGPUValues();
     }
 
-    public onExit() {}
+    public onExit(): void {}
 
-    getIntelIGpuValues(iGpuValues: IiGpuInfo) {
+    getIntelIGpuValues(iGpuValues: IiGpuInfo): IiGpuInfo {
         const intelProperties = {
             cur_freq: new SysFsPropertyInteger(
                 "/sys/class/drm/card0/gt_act_freq_mhz"
@@ -93,17 +90,34 @@ export class GpuInfoWorker extends DaemonWorker {
                 intelProperties.max_freq.readValueNT();
         }
 
-        if (this.gfxAvailable) {
-            const nextEnergy = this.intelRAPLGPU.getEnergy();
-            const powerDraw =
-                this.currentEnergy > 0
-                    ? (nextEnergy - this.currentEnergy) / this.delay / 1000000
-                    : -1;
-            iGpuValues.powerDraw = powerDraw;
-            this.currentEnergy = nextEnergy;
-        }
+        iGpuValues.powerDraw = this.getCurrentPower();
 
         return iGpuValues;
+    }
+
+    private getCurrentPower(): number {
+        if (!this.RAPLPowerStatus) return -1;
+
+        const energyIncrement =
+            this.intelRAPLGPU.getEnergy() - this.currentEnergy;
+        const delay = this.getDelay();
+        const powerDraw =
+            delay && this.currentEnergy > 0
+                ? energyIncrement / delay / 1000000
+                : -1;
+        this.currentEnergy += energyIncrement;
+
+        return powerDraw;
+    }
+
+    private getDelay(): number {
+        const currentTime = Date.now();
+        const timeDifference =
+            this.lastUpdateTime > 0
+                ? (currentTime - this.lastUpdateTime) / 1000
+                : -1;
+        this.lastUpdateTime = currentTime;
+        return timeDifference;
     }
 
     private async getHwmonPath(): Promise<string | undefined> {
@@ -209,7 +223,7 @@ export class GpuInfoWorker extends DaemonWorker {
         this.tccd.dbusData.iGpuInfoValuesJSON = iGpuValuesJSON;
     }
 
-    private async getDGPUValues() {
+    private async getDGPUValues(): Promise<void> {
         if (!this.isNvidiaSmiInstalled) {
             this.isNvidiaSmiInstalled = await isNvidiaSmiInstalled();
         }
@@ -222,7 +236,7 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 }
 
-function parseMaxAmdFreq(s: string) {
+function parseMaxAmdFreq(s: string): number {
     const mhzNumbers = s.match(/\d+Mhz/g).map((str) => parseInt(str));
     return Math.max(...mhzNumbers);
 }

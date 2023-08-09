@@ -158,7 +158,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private setDGpuValues(dGpuInfo?: IdGpuInfo): void {
-        console.log("dGpuInfo: ", dGpuInfo);
         const {
             powerDraw = -1,
             maxPowerLimit = -1,
