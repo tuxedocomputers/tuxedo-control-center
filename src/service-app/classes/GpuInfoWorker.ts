@@ -58,7 +58,7 @@ export class GpuInfoWorker extends DaemonWorker {
         const isInstalled = await isNvidiaSmiInstalled();
         this.isNvidiaSmiInstalled = isInstalled;
 
-        if (isInstalled && this.tccd.dbusData.dGpuLogging) {
+        if (isInstalled) {
             const dGpuPowerValues = await getDGpuPowerValues();
             this.tccd.dbusData.dGpuInfoValuesJSON =
                 JSON.stringify(dGpuPowerValues);
@@ -68,9 +68,8 @@ export class GpuInfoWorker extends DaemonWorker {
     public async onWork() {
         // todo: only make it run when user is in dashboard
         this.getIGPUValues();
-        if (this.tccd.dbusData.dGpuLogging) {
-            this.getDGPUValues();
-        }
+        // todo: tccd restart results in this.tccd.dbusData.dGpuLogging status reset and halts value updates
+        this.getDGPUValues();
     }
 
     public onExit() {}
@@ -97,7 +96,9 @@ export class GpuInfoWorker extends DaemonWorker {
         if (this.gfxAvailable) {
             const nextEnergy = this.intelRAPLGPU.getEnergy();
             const powerDraw =
-                (nextEnergy - this.currentEnergy) / this.delay / 1000000;
+                this.currentEnergy > 0
+                    ? (nextEnergy - this.currentEnergy) / this.delay / 1000000
+                    : -1;
             iGpuValues.powerDraw = powerDraw;
             this.currentEnergy = nextEnergy;
         }

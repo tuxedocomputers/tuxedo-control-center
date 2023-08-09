@@ -120,13 +120,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </div>
 
-        <div *ngIf="hasGPUTemp && activeProfile" class="content-container active-profile">
+        <div *ngIf="primeState != undefined" class="content-container active-profile">
             <span>Active Graphics Mode:</span>
             <a mat-button class="link" (click)="gotoSettings()"> {{ primeState }} </a>
         </div>
 
         <!-- iGPU -->
-        <div class="content-container system-monitor-gauges" *ngIf="primeState === 'iGPU' || primeState === 'on-demand' || primeState === undefined">
+        <div class="content-container system-monitor-gauges"
+            *ngIf="primeState === 'iGPU' || primeState === 'on-demand' || primeState === undefined">
             <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'" [ngClass]="{'not-available': !compat.hasIGpuTemp }"
                 [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false" [dialStartAngle]="130"
@@ -143,8 +144,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasIGpuFreq }"
                 [matTooltip]="!compat.hasIGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
-                <mwl-gauge [max]="100" [min]="0" [value]="gaugeIGpuFreq" [showValue]="false" [dialStartAngle]="130"
-                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                <mwl-gauge [max]="100" [min]="0" [value]="tccdbus.tuxedoWmiAvailable?.value ? gaugeIGpuFreq : 0"
+                    [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="custom-value-text">{{ formatGpuFrequency(iGpuFreq) }}</div>
                 <div class="unit-text">GHz</div>
@@ -188,7 +190,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <!-- dGPU -->
         <div class="content-container system-monitor-gauges"
-            *ngIf="(primeState === 'dGPU' || primeState == 'on-demand') && hasGPUTemp">
+            *ngIf="(primeState === 'dGPU' || primeState == 'on-demand')">
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
                 [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
                 <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUTemp" [showValue]="false" [dialStartAngle]="130"
@@ -205,8 +207,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuFreq }"
                 [matTooltip]="!compat.hasDGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
-                <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUFreq" [showValue]="false" [dialStartAngle]="130"
-                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                <mwl-gauge [max]="100" [min]="0"
+                    [value]="tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
+                    [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="custom-value-text">{{ formatGpuFrequency(dGpuFreq) }}</div>
                 <div class="unit-text">GHz</div>
@@ -233,8 +237,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
                 [matTooltip]="!compat.hasDGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
-                <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUPower" [showValue]="false" [dialStartAngle]="130"
-                    [dialEndAngle]="50" [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
+                <mwl-gauge [max]="100" [min]="0"
+                    [value]="tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuPowerDraw ? gaugeDGPUPower : 0"
+                    [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
+                    [animationDuration]="animatedGaugesDuration">
                 </mwl-gauge>
                 <div class="custom-value-text">{{ dGpuPowerFormat(dGpuPower) }}</div>
                 <div class="unit-text">W</div>

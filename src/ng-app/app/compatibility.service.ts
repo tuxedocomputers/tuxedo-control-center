@@ -68,14 +68,18 @@ export class CompatibilityService {
     const powerDrawDefined =
         typeof cpuPowerValue?.powerDraw !== "undefined";
 
-    return powerDrawDefined && cpuPowerValue.powerDraw > 0;
+    return (
+        powerDrawDefined &&
+        cpuPowerValue.powerDraw > 0 &&
+        this.tccDbus.tuxedoWmiAvailable.value
+    );
   }
 
   get hasDGpuPowerDraw(): boolean {
     const dGpuPowerDraw = this.tccDbus.dGpuInfo?.value?.powerDraw;
 
     if (dGpuPowerDraw !== undefined) {
-        return dGpuPowerDraw > 0;
+        return dGpuPowerDraw > 0 && this.tccDbus.tuxedoWmiAvailable.value;
     }
 
     return false;
@@ -85,7 +89,7 @@ export class CompatibilityService {
     const iGpuPowerDraw = this.tccDbus.iGpuInfo?.value?.powerDraw;
 
     if (iGpuPowerDraw !== undefined) {
-        return iGpuPowerDraw >= 0;
+        return iGpuPowerDraw >= 0 && this.tccDbus.tuxedoWmiAvailable.value;
     }
 
     return false;
@@ -94,35 +98,37 @@ export class CompatibilityService {
   get hasDGpuFreq(): boolean {
     const dGpuInfo: IdGpuInfo | undefined = this.tccDbus.dGpuInfo?.value;
     if (!dGpuInfo) {
-      return false;
+        return false;
     }
     const { coreFrequency, maxCoreFrequency } = dGpuInfo;
     return (
-      coreFrequency !== undefined &&
-      coreFrequency >= 0 &&
-      maxCoreFrequency !== undefined &&
-      maxCoreFrequency >= 0
+        coreFrequency !== undefined &&
+        coreFrequency >= 0 &&
+        maxCoreFrequency !== undefined &&
+        maxCoreFrequency >= 0 &&
+        this.tccDbus.tuxedoWmiAvailable.value
     );
   }
 
   get hasIGpuFreq(): boolean {
     const iGpuInfo: IiGpuInfo | undefined = this.tccDbus.iGpuInfo?.value;
     if (!iGpuInfo) {
-      return false;
+        return false;
     }
     const { coreFrequency, maxCoreFrequency } = iGpuInfo;
     return (
-      coreFrequency !== undefined &&
-      coreFrequency >= 0 &&
-      maxCoreFrequency !== undefined &&
-      maxCoreFrequency >= 0
+        coreFrequency !== undefined &&
+        coreFrequency >= 0 &&
+        maxCoreFrequency !== undefined &&
+        maxCoreFrequency >= 0 &&
+        this.tccDbus.tuxedoWmiAvailable.value
     );
   }
 
   get hasIGpuTemp(): boolean {
     const iGpuInfo = this.tccDbus.iGpuInfo?.value;
     const temp = iGpuInfo?.temp ?? -1;
-    return temp > 0;
+    return temp > 0 && this.tccDbus.tuxedoWmiAvailable.value;
   }
 
   // hasFanControl==true implies hasFanInfo==true, but not the other way around
