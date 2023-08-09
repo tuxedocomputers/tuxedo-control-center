@@ -77,7 +77,7 @@ export class GpuInfoWorker extends DaemonWorker {
     getIntelIGpuValues(iGpuValues: IiGpuInfo) {
         const intelProperties = {
             cur_freq: new SysFsPropertyInteger(
-                "/sys/class/drm/card0/gt_cur_freq_mhz"
+                "/sys/class/drm/card0/gt_act_freq_mhz"
             ),
             max_freq: new SysFsPropertyInteger(
                 "/sys/class/drm/card0/gt_RP0_freq_mhz"
