@@ -80,6 +80,18 @@ export class TccDBusClientService implements OnDestroy {
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
 
+  // Display Brightness Gnome Workarounds
+
+  displayBrightnessNotSupportedGnome()
+  {
+    return this.tccDBusInterface.displayBrightnessNotSupportedGnome()
+  }
+
+  async setDisplayBrightnessGnome(valuePercent: number): Promise<void>
+  {
+     return this.tccDBusInterface.setDisplayBrightnessGnome(valuePercent)
+  }
+
   private async periodicUpdate() {
     const previousValue = this.isAvailable;
     // Check if still available

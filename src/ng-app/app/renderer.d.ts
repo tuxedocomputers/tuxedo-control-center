@@ -61,6 +61,9 @@ export interface IPC extends EventEmitter {
     GetChargingPrioritiesAvailable: () => Promise<string>,
     GetCurrentChargingPriority: () => Promise<string>,
     SetChargingPriority: (priorityDescriptor: string) => Promise<boolean>,
+    displayBrightnessNotSupportedGnome: () => boolean,
+    setDisplayBrightnessGnome: (valuePercent: number) => Promise<void>,
+    
   }
 
   declare global {

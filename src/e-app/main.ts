@@ -32,6 +32,9 @@ import { resolve } from 'path';
 import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
 import { FanData } from 'src/service-app/classes/TccDBusInterface';
 import { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { DBusDisplayBrightnessGnome } from '../common/classes/DBusDisplayBrightnessGnome';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -232,6 +235,7 @@ app.on('will-quit', async (event) => {
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
+        displayBrightnessGnome.cleanUp();
         await aquarisCleanUp();
         if (tccDBus !== undefined) {
             tccDBus.disconnect();
@@ -844,8 +848,88 @@ ipcMain.handle('set-charging-priority-dbus', async (event, priorityDescriptor) =
 });
 
 
-// ######## Gnome Brightness Functions ########
+// ######## Gnome Brightness Workaround Functions ########
 
+let sessionBus: any;
+const dbus = require('dbus-next');
+
+  let observeDisplayBrightness: Observable<number>;
+  let displayBrightnessSubject: Subject<number>;
+  let currentDisplayBrightness: number;
+  let displayBrightnessNotSupported = false;
+
+  let displayBrightnessGnome: DBusDisplayBrightnessGnome;
+
+  let dbusDriverNames: string[] = [];
+
+    displayBrightnessSubject = new Subject<number>();
+    observeDisplayBrightness = displayBrightnessSubject.asObservable();
+
+    try {
+      sessionBus = dbus.sessionBus();
+
+    } catch (err) {
+      console.log('dbus.sessionBus() error: ', err);
+      sessionBus = undefined;
+    }
+
+    initDusDisplayBrightness().then(() => {
+      const driversList: string[] = [];
+      if (displayBrightnessNotSupported === false) {
+        driversList.push(displayBrightnessGnome.getDescriptiveString());
+      }
+      dbusDriverNames = driversList;
+    });
+
+  async function initDusDisplayBrightness(): Promise<void> {
+    return new Promise<void>(async resolve => {
+
+      if (this.sessionBus === undefined) {
+        displayBrightnessNotSupported = true;
+      } else {
+        this.displayBrightnessGnome = new DBusDisplayBrightnessGnome(sessionBus);
+        if (!await this.displayBrightnessGnome.isAvailable()) {
+          displayBrightnessNotSupported = true;
+          return;
+        }
+
+        try {
+          const result = await this.displayBrightnessGnome.getBrightness();
+          this.currentDisplayBrightness = result;
+          this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+        } catch (err) {
+          this.displayBrightnessNotSupported = true;
+          return;
+        }
+
+        this.displayBrightnessGnome.setOnPropertiesChanged(
+          (value) => {
+            this.currentDisplayBrightness = value;
+            this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+          }
+        );
+      }
+      resolve();
+    });
+  }
+
+  function getDBusDriverNames(): string[] {
+    return this.dbusDriverNames;
+  }
+
+  async function setDisplayBrightness(valuePercent: number): Promise<void> {
+    return this.displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
+  }
+
+  ipcMain.handle('set-display-brightness-gnome', async (event, valuePercent) => {
+    return new Promise<void>((resolve, reject) => {
+        resolve(setDisplayBrightness(valuePercent));
+    });
+});
+
+ipcMain.on('get-display-brightness-not-supported-sync', (event) => {
+    event.returnValue = { data: currentDisplayBrightness }
+});
 
 
 // ############## Other random functions ###################

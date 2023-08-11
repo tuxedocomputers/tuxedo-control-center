@@ -80,6 +80,11 @@ contextBridge.exposeInMainWorld(
         GetChargingPrioritiesAvailable: () => {ipcRenderer.invoke('get-charging-priorities-available-dbus');},
         GetCurrentChargingPriority: () => {ipcRenderer.invoke('get-current-charging-priority-dbus');},
         SetChargingPriority: (priorityDescriptor) => {ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor);},
+    
+        displayBrightnessNotSupportedGnome: () => {ipcRenderer.sendSync('get-display-brightness-not-supported-sync').data},
+        setDisplayBrightnessGnome: (valuePercent: number) => {ipcRenderer.invoke('set-display-brightness-gnome',valuePercent)},
+        
+    
     }
 );
 

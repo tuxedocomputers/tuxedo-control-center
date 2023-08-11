@@ -38,6 +38,21 @@ export class TccDBusControllerPreload {
         this.interface.disconnect();
     }
 
+    // Gnome Workaround
+
+    private displayBrightnessNotSupportedGnomeVariable = false;
+
+    displayBrightnessNotSupportedGnome()
+    {
+        this.displayBrightnessNotSupportedGnomeVariable = this.interface.displayBrightnessNotSupportedGnome()
+        return this.displayBrightnessNotSupportedGnomeVariable;
+    }
+
+    async setDisplayBrightnessGnome(valuePercent: number): Promise<void>
+    {
+        return this.interface.setDisplayBrightnessGnome(valuePercent);
+    }
+
     async dbusAvailable(): Promise<boolean> {
         try {
             // Try one method to check connection

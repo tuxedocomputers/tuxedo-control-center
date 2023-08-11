@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
+import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
@@ -25,7 +25,6 @@ import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
-import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
@@ -139,7 +138,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private state: StateService,
         private sysfs: SysFsService,
         private fb: FormBuilder,
-        private dbus: DBusService,
         private tccDBus: TccDBusClientService,
         public compat: CompatibilityService
     ) { }
@@ -255,10 +253,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormGroup.reset(this.viewProfile);
         this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         // Also restore brightness to active profile if applicable
-        if (!this.dbus.displayBrightnessNotSupported) {
+        if (!this.tccDBus.displayBrightnessNotSupportedGnome()) {
             const activeProfile = this.state.getActiveProfile();
             if (activeProfile.display.useBrightness) {
-                this.dbus.setDisplayBrightness(activeProfile.display.brightness);
+                this.tccDBus.setDisplayBrightnessGnome(activeProfile.display.brightness);
             }
         }
     }
@@ -459,8 +457,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public inputDisplayBrightnessChange(newValue: number) {
-        if (!this.dbus.displayBrightnessNotSupported) {
-            this.dbus.setDisplayBrightness(newValue);
+        if (!this.tccDBus.displayBrightnessNotSupportedGnome()) {
+            this.tccDBus.setDisplayBrightnessGnome(newValue);
         }
     }
 
