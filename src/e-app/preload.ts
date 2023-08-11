@@ -37,7 +37,6 @@ contextBridge.exposeInMainWorld(
     },
     videoEnded: () => ipcRenderer.send('video-ended'),
     applyControls: () => ipcRenderer.send('apply-controls'),
-    nodeRequire: (requiree: string) => ipcRenderer.sendSync('node-require',requiree).data,
 
 /*
 
@@ -45,4 +44,47 @@ contextBridge.exposeInMainWorld(
 
   }
 );
+
+contextBridge.exposeInMainWorld(
+    'dbus',
+    {
+        init: () => {ipcRenderer.invoke('init-dbus');},
+        disconnect: () => {ipcRenderer.invoke('disconnect-dbus');},
+        TuxedoWmiAvailable: () => {ipcRenderer.invoke('tuxedo-wmi-available-dbus');},
+        TccdVersion: () => {ipcRenderer.invoke('tccd-version-dbus');},
+        GetFanDataCPU: () => {ipcRenderer.invoke('get-fan-data-cpu-dbus');},
+        GetFanDataGPU1: () => {ipcRenderer.invoke('get-fan-data-gpu1-dbus');},
+        GetFanDataGPU2: () => {ipcRenderer.invoke('get-fan-data-gpu2-dbus');},
+        WebcamSWAvailable: () => {ipcRenderer.invoke('webcam-sw-available-dbus');},
+        GetWebcamSWStatus: () => {ipcRenderer.invoke('get-webcam-sw-status-dbus');},
+        GetForceYUV420OutputSwitchAvailable: () => {ipcRenderer.invoke('get-force-yub420-output-switch-available-dbus');},
+        ConsumeModeReapplyPending: () => {ipcRenderer.invoke('consume-mode-reapply-pending-dbus');},
+        GetActiveProfileJSON: () => {ipcRenderer.invoke('get-active-profile-json-dbus');},
+        SetTempProfile: (profileName) => {ipcRenderer.invoke('set-temp-profile-dbus',profileName);},
+        SetTempProfileById: (profileId) => {ipcRenderer.invoke('set-temp-profile-by-id-dbus',profileId);},
+        GetProfilesJSON: () => {ipcRenderer.invoke('get-profiles-json-dbus');},
+        GetCustomProfilesJSON: () => {ipcRenderer.invoke('get-custom-profiles-json-dbus');},
+        GetDefaultProfilesJSON: () => {ipcRenderer.invoke('get-default-profiles-json-dbus');},
+        GetDefaultValuesProfileJSON: () => {ipcRenderer.invoke('get-default-values-profile-json-dbus');},
+        GetSettingsJSON: () => {ipcRenderer.invoke('get-json-settings-dbus');},
+        ODMProfilesAvailable: () => {ipcRenderer.invoke('odm-profiles-available-dbus');},
+        ODMPowerLimitsJSON: () => {ipcRenderer.invoke('odm-power-limits-available-dbus');},
+        GetKeyboardBacklightCapabilitiesJSON: () => {ipcRenderer.invoke('get-keyboard-backlight-capabilities-json-dbus');},
+        GetKeyboardBacklightStatesJSON: () => {ipcRenderer.invoke('get-keyboard-backlight-states-json-dbus');},
+        SetKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON) => {ipcRenderer.invoke('set-keyboard-backlight-states-json-dbus', keyboardBacklightStatesJSON);},
+        GetFansMinSpeed: () => {ipcRenderer.invoke('get-fans-min-speed-dbus');},
+        GetFansOffAvailable: () => {ipcRenderer.invoke('get-fans-off-available-dbus');},
+        GetChargingProfilesAvailable: () => {ipcRenderer.invoke('get-charging-profiles-available-dbus');},
+        GetCurrentChargingProfile: () => {ipcRenderer.invoke('get-current-charging-profile-dbus');},
+        SetChargingProfile: (profileDescriptor) => {ipcRenderer.invoke('set-charging-profile-dbus', profileDescriptor);},
+        GetChargingPrioritiesAvailable: () => {ipcRenderer.invoke('get-charging-priorities-available-dbus');},
+        GetCurrentChargingPriority: () => {ipcRenderer.invoke('get-current-charging-priority-dbus');},
+        SetChargingPriority: (priorityDescriptor) => {ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor);},
+
+        onModeReapplyPendingChanged(callback_function) {
+            this.interface.on('ModeReapplyPendingChanged', callback_function);
+        }
+    }
+);
+
 contextBridge.exposeInMainWorld('aquarisAPI', new ClientAPI(ipcRenderer, aquarisAPIHandle));

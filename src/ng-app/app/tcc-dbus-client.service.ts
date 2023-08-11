@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, OnDestroy } from '@angular/core';
-import { TccDBusController } from '../../common/classes/TccDBusController';
+import { TccDBusControllerPreload } from '../../common/classes/TccDBusControllerPreload';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
@@ -37,7 +37,7 @@ export interface IDBusFanData {
 })
 export class TccDBusClientService implements OnDestroy {
 
-  private tccDBusInterface: TccDBusController;
+  private tccDBusInterface: TccDBusControllerPreload;
   private isAvailable: boolean;
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
@@ -75,7 +75,7 @@ export class TccDBusClientService implements OnDestroy {
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
 
   constructor(private utils: UtilsService) {
-    this.tccDBusInterface = new TccDBusController();
+    this.tccDBusInterface = new TccDBusControllerPreload();
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
@@ -209,7 +209,7 @@ export class TccDBusClientService implements OnDestroy {
     return result;
   }
 
-  public getInterface(): TccDBusController | undefined {
+  public getInterface(): TccDBusControllerPreload | undefined {
     if (this.isAvailable) {
         return this.tccDBusInterface;
     } else {

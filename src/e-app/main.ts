@@ -30,6 +30,8 @@ import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { resolve } from 'path';
 import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
+import { FanData } from 'src/service-app/classes/TccDBusInterface';
+import { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -444,15 +446,7 @@ async function createWebcamPreview(langId: string, arg: any) {
     webcamWindow.on("leave-full-screen", () => {
         webcamWindow.setMenuBarVisibility(false);
     });
-
-    const indexPath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "ng-app",
-        langId,
-        "index.html"
-    );
+    this
     webcamWindow.loadFile(indexPath, { hash: "/webcam-preview" });
 
     webcamWindow.webContents.once("dom-ready", () => {
@@ -645,6 +639,209 @@ ipcMain.on('trigger-language-change', (event, arg) => {
     const langId = arg;
     changeLanguage(langId);
 });
+
+/*
+###############   Dbus Communication API ####################
+*/
+
+ipcMain.handle('init-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.init());
+    });
+});
+
+ipcMain.handle('disconnect-dbus', async (event, arg) => {
+    return new Promise<void>((resolve, reject) => {
+        resolve(tccDBus.disconnect());
+    });
+});
+
+ipcMain.handle('tuxedo-wmi-available-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.tuxedoWmiAvailable());
+    });
+});
+
+ipcMain.handle('tccd-version-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.tccdVersion());
+    });
+});
+
+ipcMain.handle('get-fan-data-cpu-dbus', async (event, arg) => {
+    return new Promise<FanData>((resolve, reject) => {
+        resolve(tccDBus.getFanDataCPU());
+    });
+});
+
+ipcMain.handle('get-fan-data-gpu1-dbus', async (event, arg) => {
+    return new Promise<FanData>((resolve, reject) => {
+        resolve(tccDBus.getFanDataGPU1());
+    });
+});
+
+ipcMain.handle('get-fan-data-gpu2-dbus', async (event, arg) => {
+    return new Promise<FanData>((resolve, reject) => {
+        resolve(tccDBus.getFanDataGPU2());
+    });
+});
+
+ipcMain.handle('webcam-sw-available-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.webcamSWAvailable());
+    });
+});
+
+ipcMain.handle('get-webcam-sw-status-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.getWebcamSWStatus());
+    });
+});
+
+ipcMain.handle('get-force-yub420-output-switch-available-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.getForceYUV420OutputSwitchAvailable());
+    });
+});
+
+ipcMain.handle('consume-mode-reapply-pending-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.consumeModeReapplyPending());
+    });
+});
+
+ipcMain.handle('get-active-profile-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getActiveProfileJSON());
+    });
+});
+
+ipcMain.handle('set-temp-profile-dbus', async (event, profileName) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setTempProfileName(profileName));
+    });
+});
+
+ipcMain.handle('set-temp-profile-by-id-dbus', async (event, profileId) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setTempProfileById(profileId));
+    });
+});
+
+ipcMain.handle('get-profiles-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getProfilesJSON());
+    });
+});
+
+ipcMain.handle('get-custom-profiles-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getCustomProfilesJSON());
+    });
+});
+
+ipcMain.handle('get-default-profiles-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getDefaultProfilesJSON());
+    });
+});
+
+ipcMain.handle('get-default-values-profile-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getDefaultValuesProfileJSON());
+    });
+});
+
+ipcMain.handle('get-json-settings-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getSettingsJSON());
+    });
+});
+
+ipcMain.handle('odm-profiles-available-dbus', async (event, arg) => {
+    return new Promise<string[]>((resolve, reject) => {
+        resolve(tccDBus.odmProfilesAvailable());
+    });
+});
+
+ipcMain.handle('odm-power-limits-available-dbus', async (event, arg) => {
+    return new Promise<TDPInfo[]>((resolve, reject) => {
+        resolve(tccDBus.odmPowerLimits());
+    });
+});
+
+ipcMain.handle('get-keyboard-backlight-capabilities-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
+    });
+});
+
+ipcMain.handle('get-keyboard-backlight-states-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getKeyboardBacklightStatesJSON());
+    });
+});
+
+ipcMain.handle('set-keyboard-backlight-states-json-dbus', async (event, keyboardBacklightStatesJSON) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
+    });
+});
+
+ipcMain.handle('get-fans-min-speed-dbus', async (event, arg) => {
+    return new Promise<number>((resolve, reject) => {
+        resolve(tccDBus.getFansMinSpeed());
+    });
+});
+
+ipcMain.handle('get-fans-off-available-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.getFansOffAvailable());
+    });
+});
+
+ipcMain.handle('get-charging-profiles-available-dbus', async (event, arg) => {
+    return new Promise<string[]>((resolve, reject) => {
+        resolve(tccDBus.getChargingProfilesAvailable());
+    });
+});
+
+ipcMain.handle('get-current-charging-profile-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getCurrentChargingProfile());
+    });
+});
+
+ipcMain.handle('set-charging-profile-dbus', async (event, profileDescriptor) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setChargingProfile(profileDescriptor));
+    });
+});
+
+ipcMain.handle('get-charging-priorities-available-dbus', async (event, arg) => {
+    return new Promise<string[]>((resolve, reject) => {
+        resolve(tccDBus.getChargingPrioritiesAvailable());
+    });
+});
+
+ipcMain.handle('get-current-charging-priority-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getCurrentChargingPriority());
+    });
+});
+
+ipcMain.handle('set-charging-priority-dbus', async (event, priorityDescriptor) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setChargingPriority(priorityDescriptor));
+    });
+});
+onModeReapplyPendingChanged(callback_function) {
+    this.interface.on('ModeReapplyPendingChanged', callback_function);
+}
+
+// ######## Gnome Brightness Functions ########
+
+
 
 // ############## Other random functions ###################
 
