@@ -288,9 +288,4 @@ export class TccDBusControllerPreload {
         }
     }
 
-    //  TODO 
-    onModeReapplyPendingChanged(callback_function) {
-        this.interface.on('ModeReapplyPendingChanged', callback_function);
-    }
-
 }

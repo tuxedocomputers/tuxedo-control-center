@@ -80,10 +80,6 @@ contextBridge.exposeInMainWorld(
         GetChargingPrioritiesAvailable: () => {ipcRenderer.invoke('get-charging-priorities-available-dbus');},
         GetCurrentChargingPriority: () => {ipcRenderer.invoke('get-current-charging-priority-dbus');},
         SetChargingPriority: (priorityDescriptor) => {ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor);},
-
-        onModeReapplyPendingChanged(callback_function) {
-            this.interface.on('ModeReapplyPendingChanged', callback_function);
-        }
     }
 );
 

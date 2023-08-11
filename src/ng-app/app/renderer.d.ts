@@ -61,10 +61,6 @@ export interface IPC extends EventEmitter {
     GetChargingPrioritiesAvailable: () => Promise<string>,
     GetCurrentChargingPriority: () => Promise<string>,
     SetChargingPriority: (priorityDescriptor: string) => Promise<boolean>,
-
-    onModeReapplyPendingChanged(callback_function) {
-        this.interface.on('ModeReapplyPendingChanged', callback_function);
-    }
   }
 
   declare global {

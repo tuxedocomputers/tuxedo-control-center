@@ -446,7 +446,14 @@ async function createWebcamPreview(langId: string, arg: any) {
     webcamWindow.on("leave-full-screen", () => {
         webcamWindow.setMenuBarVisibility(false);
     });
-    this
+    const indexPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "ng-app",
+        langId,
+        "index.html"
+    );
     webcamWindow.loadFile(indexPath, { hash: "/webcam-preview" });
 
     webcamWindow.webContents.once("dom-ready", () => {
@@ -835,9 +842,7 @@ ipcMain.handle('set-charging-priority-dbus', async (event, priorityDescriptor) =
         resolve(tccDBus.setChargingPriority(priorityDescriptor));
     });
 });
-onModeReapplyPendingChanged(callback_function) {
-    this.interface.on('ModeReapplyPendingChanged', callback_function);
-}
+
 
 // ######## Gnome Brightness Functions ########
 
