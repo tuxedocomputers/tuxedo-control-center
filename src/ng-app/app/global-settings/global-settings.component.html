@@ -18,11 +18,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <mat-card class="tcc-card card-global-settings">
     <mat-card-title class="theme-page-title">
-        <ng-container i18n="@@globalSettingsHeaderLabel">Settings</ng-container>
+        <ng-container i18n="@@cGlobalSettingsTitle">Settings</ng-container>
     </mat-card-title>
     <hr />
     <div class="content-container centered">
-        <p i18n="@@globalSettingsHeaderDescription">
+        <p i18n="@@cGlobalSettingsDescription">
             The settings area contains GUI settings and settings that affects all profiles.
         </p>
     </div>
@@ -37,21 +37,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use href="./assets/images/icon_settings.svg#Icon"></use>
                     </svg>
                 </mat-icon>
-                <ng-container i18n>Global profile settings</ng-container>
+                <ng-container i18n="@@cGlobalSettingsGlobalProfileSettingsTitle">Global profile settings</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="content">
             <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
                 <mat-grid-tile [colspan]="gridParams.headerSpan">
-                    <header i18n="@@cGlobalSettingsCPUSettingsLabel">CPU Frequency Control</header>
+                    <header i18n="@@cGlobalSettingsCpuFrequencyHeader">CPU Frequency Control</header>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                     <content class="value">
                         <span [hidden]="!inputCPUSettings.checked"
-                            i18n="@@cGlobalSettingsCPUSettingsActivated">activated</span>
+                            i18n="@@cGlobalSettingsCpuFrequencyActivated">activated</span>
                         <span [hidden]="inputCPUSettings.checked"
-                            i18n="@@cGlobalSettingsCPUSettingsDeactivated">deactivated</span>
+                            i18n="@@cGlobalSettingsCpuFrequencyDeactivated">deactivated</span>
                     </content>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.inputSpan">
@@ -62,12 +62,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </content>
                 </mat-grid-tile>
             </mat-grid-list>
-            <div class=margin-bottom i18n>On deactivate, CPU frequency control is <strong>not</strong> reset to default.
-                Default settings need to be restored by hand or a system reboot.</div>
+            <div class=margin-bottom i18n="@@cGlobalSettingsCpuFrequencyDescription">On deactivate, CPU frequency
+                control is <strong>not</strong> reset to default. Default settings need to be restored by hand or a
+                system reboot.
+            </div>
 
             <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
                 <mat-grid-tile [colspan]="gridParams.headerSpan">
-                    <header i18n="@@cGlobalSettingsFanControlLabel">Fan Control</header>
+                    <header i18n="@@cGlobalSettingsFanControlHeader">Fan Control</header>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                     <content class="value">
@@ -85,18 +87,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </content>
                 </mat-grid-tile>
             </mat-grid-list>
-            <div class=margin-bottom i18n>On deactivate, the default automatic fan control is restored directly.</div>
+            <div class=margin-bottom i18n="@@cGlobalSettingsFanControlDescription">On deactivate, the default automatic
+                fan control is restored
+                directly.</div>
 
             <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
                 <mat-grid-tile [colspan]="gridParams.headerSpan">
-                    <header i18n="@@cGlobalSettingsKeyboardBacklightControlLabel">Keyboard Backlight Control</header>
+                    <header i18n="@@cGlobalSettingsKeyboardBacklightHeader">Keyboard Backlight Control</header>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                     <content class="value">
                         <span [hidden]="!inputKeyboardBacklightControl.checked"
-                            i18n="@@cGlobalSettingsKeyboardBacklightControlActivated">activated</span>
+                            i18n="@@cGlobalSettingsKeyboardBacklightActivated">activated</span>
                         <span [hidden]="inputKeyboardBacklightControl.checked"
-                            i18n="@@cGlobalSettingsKeyboardBacklightControlDeactivated">deactivated</span>
+                            i18n="@@cGlobalSettingsKeyboardBacklightDeactivated">deactivated</span>
                     </content>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.inputSpan">
@@ -108,7 +112,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </content>
                 </mat-grid-tile>
             </mat-grid-list>
-            <div i18n>On deactivate, keyboard backlight settings are <strong>not</strong> reset to default. Default
+            <div i18n="@@cGlobalSettingsKeyboardBacklightDescription">On deactivate, keyboard backlight settings
+                are <strong>not</strong> reset to default.
+                Default
                 settings need to be restored by hand or a system reboot.
             </div>
         </div>
@@ -122,26 +128,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use href="./assets/images/icon_gear.svg#Icon"></use>
                     </svg>
                 </mat-icon>
-                <ng-container i18n>Chroma subsampling</ng-container>
+                <ng-container i18n="@@cGlobalSettingsChromaSubsamplingHeader">Chroma subsampling</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="content">
             <div [hidden]=!forceYUV420OutputSwitchAvailable>
-                <header class=margin-top i18n="@@cGlobalSettingsYCbCr420WorkaroundHeader">Force Chroma Subsampling
+                <header class=margin-top i18n="@@cGlobalSettingsChromaSubsamplingDescriptionHeader">Force Chroma
+                    Subsampling
                     (Y'CbCr 4:2:0) if available:</header>
                 <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
                 <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index">
                     <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="3em"
                         class="global-settings-grid">
                         <mat-grid-tile class=margin-left [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cGlobalSettingsYCbCr420WorkaroundLabel">Port {{port}} of Card {{i}}</header>
+                            <header i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel">Port {{port}} of
+                                Card {{i}}
+                            </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value">
                                 <span [hidden]="!inputYCbCr420Workaround.checked"
-                                    i18n="@@cGlobalSettingsYCbCr420WorkaroundActivated">activated</span>
+                                    i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundActivated">activated</span>
                                 <span [hidden]="inputYCbCr420Workaround.checked"
-                                    i18n="@@cGlobalSettingsYCbCr420WorkaroundDeactivated">deactivated</span>
+                                    i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
@@ -154,13 +163,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                     </mat-grid-list>
                 </ng-template>
-                <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation1">This setting might fix flickering on 4k@60Hz
+                <div i18n="@@cGlobalSettingsChromaSubsamplingDescription">This setting might fix flickering on 4k@60Hz
                     with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the
-                    cable.</div>
-                <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation2">To ensure that the setting gets applied you
-                    need to unplug and replug the monitor or restart your computer.</div>
-                <div i18n="@@cGlobalSettingsYCbCr420WorkaroundExplanation3">On some devices the HDMI ports are also
-                    named DisplayPort or DP internally and are therefore listed as such here.</div>
+                    cable To ensure that the setting gets applied you need to unplug and replug the monitor or restart
+                    your computer. On some devices the HDMI ports are also named DisplayPort or DP internally and are
+                    therefore listed as such here.</div>
             </div>
         </div>
     </mat-expansion-panel>
@@ -173,7 +180,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use href="./assets/images/icon_batterycharger.svg#Icon"></use>
                     </svg>
                 </mat-icon>
-                <ng-container i18n="@@chargingOptionsHeadingLabel">Battery charging options</ng-container>
+                <ng-container i18n="@@cGlobalSettingsBatteryChargingTitle">Battery charging
+                    options</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="content">
@@ -189,14 +197,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use href="./assets/images/icon_theme.svg#Icon"></use>
                     </svg>
                 </mat-icon>
-                <ng-container i18n>Theme</ng-container>
+                <ng-container i18n="@@cGlobalSettingsThemeTitle">Theme</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="theme-settings-content">
             <mat-button-toggle-group [formControl]="ctrlBrightnessMode" (change)="onBrightnessModeCtrlChange()">
-                <mat-button-toggle value="light" i18n="@@cGlobalSettingsBrightnessLabelLight">Light</mat-button-toggle>
-                <mat-button-toggle value="dark" i18n="@@cGlobalSettingsBrightnessLabelDark">Dark</mat-button-toggle>
-                <mat-button-toggle value="system" i18n="@@cGlobalSettingsBrightnessLabelSystemSetting">System
+                <mat-button-toggle value="light" i18n="@@cGlobalSettingsThemeLightLabel">Light</mat-button-toggle>
+                <mat-button-toggle value="dark" i18n="@@cGlobalSettingsThemeDarkLabel">Dark</mat-button-toggle>
+                <mat-button-toggle value="system" i18n="@@cGlobalSettingsThemeSystemSettingLabel">System
                     setting</mat-button-toggle>
             </mat-button-toggle-group>
         </div>
@@ -210,7 +218,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use href="./assets/images/icon_tomte.svg#Icon"></use>
                     </svg>
                 </mat-icon>
-                <ng-container i18n="@@menuTomteGui">Tomte</ng-container>
+                <ng-container i18n="@@cGlobalSettingsTomteTitle">Tomte</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="content">
@@ -225,13 +233,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use href="./assets/images/icon_gear.svg#Icon"></use>
                     </svg>
                 </mat-icon>
-                <ng-container>Grafikeinstellungen</ng-container>
+                <ng-container i18n="cGlobalSettingsPrimeSelectTitle">Grafikeinstellungen</ng-container>
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="content">
             <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
                 <mat-grid-tile [colspan]="gridParams.headerSpan">
-                    <header>Prime Select</header>
+                    <header i18n="@@cGlobalSettingsPrimeSelectHeader">Prime Select</header>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.valueSpan">
                     <content class="value">
@@ -244,7 +252,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </content>
                 </mat-grid-tile>
             </mat-grid-list>
-            <div i18n>Placeholder.</div>
+            <div i18n="@@cGlobalSettingsPrimeSelectDescription">Placeholder.</div>
         </div>
     </mat-expansion-panel>
 </mat-accordion>

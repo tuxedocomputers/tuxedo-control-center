@@ -24,14 +24,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <svg viewBox="0 0 512 512" class="tcc-icons">
                     <use href="./assets/images/icon_dashboard.svg#Icon"></use>
                 </svg>
-                <ng-container i18n>System monitor</ng-container>
+                <ng-container i18n="@@cDashboardSystemMonitor">System monitor</ng-container>
             </div>
             <hr />
         </div>
 
         <!-- Active profile -->
         <div class="content-container active-profile" *ngIf="activeProfile">
-            <span class="text" i18n>Active profile:</span>
+            <span class="text" i18n="@@cDashboardActiveProfile">Active profile:</span>
             <a mat-button class="link" (click)="goToProfileEdit(activeProfile)">{{ activeProfile.name }}</a>
         </div>
 
@@ -42,7 +42,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons row">
                         <use href="./assets/images/icon_cpu.svg#Icon"></use>
                     </svg>
-                    <span class="text" i18n>Main processor monitor</span>
+                    <span class="text" i18n="@@cDashboardMainProcessorMonitor">Main processor monitor</span>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_temperature.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>CPU - Temp</div>
+                    <div class="text" i18n="@@cDashboardCpuTemperatureLabel">CPU - Temp</div>
                 </div>
             </div>
             <div class="tcc-gauge">
@@ -74,7 +74,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>CPU - Frequency</div>
+                    <div class="text" i18n="@@cDashboardCpuFrequencyLabel">CPU - Frequency</div>
                 </div>
             </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
@@ -89,7 +89,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_fan.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>CPU - Fan</div>
+                    <div class="text" i18n="@@cDashboardCpuFanLabel">CPU - Fan</div>
                 </div>
             </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasCpuPower }"
@@ -103,7 +103,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_fan.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>CPU - Power</div>
+                    <div class="text" i18n="@@cDashboardCpuPowerLabel">CPU - Power</div>
                 </div>
             </div>
         </div>
@@ -115,7 +115,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 490 512" class="tcc-icons row">
                         <use href="./assets/images/icon_gpu.svg#Icon"></use>
                     </svg>
-                    <span class="text" i18n>Graphics card monitor</span>
+                    <span class="text" i18n="@@cDashboardGraphicsCardMonitor">Graphics card monitor</span>
                 </div>
             </div>
         </div>
@@ -139,7 +139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_temperature.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>iGPU - Temp</div>
+                    <div class="text" i18n="@@cDashboardIGpuTemperatureLabel">iGPU - Temperature</div>
                 </div>
             </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasIGpuFreq }"
@@ -154,7 +154,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>iGPU - Frequency</div>
+                    <div class="text" i18n="@@cDashboardIGpuFrequencyLabel">iGPU - Frequency</div>
                 </div>
             </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
@@ -169,7 +169,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_fan.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>iGPU - Fan</div>
+                    <div class="text" i18n="@@cDashboardIGpuFanLabel">iGPU - Fan</div>
                 </div>
             </div>
             <div *ngIf="iGpuVendor == 'intel'" class="tcc-gauge" [ngClass]="{'not-available': !compat.hasIGpuPowerDraw}"
@@ -183,7 +183,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_fan.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>iGPU - Power</div>
+                    <div class="text" i18n="@@cDashboardIGpuPowerLabel">iGPU - Power</div>
                 </div>
             </div>
         </div>
@@ -202,7 +202,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_temperature.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>dGPU - Temp</div>
+                    <div class="text" i18n="@@cDashboardDGpuTemperatureLabel">dGPU - Temperature</div>
                 </div>
             </div>
             <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuFreq }"
@@ -218,7 +218,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>dGPU - Frequency</div>
+                    <div class="text" i18n="@@cDashboardDGpuFrequencyLabel">dGPU - Frequency</div>
                 </div>
             </div>
             <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
@@ -232,7 +232,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_fan.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>dGPU - Fan</div>
+                    <div class="text" i18n="@@cDashboardDGpuFanLabel">dGPU - Fan</div>
                 </div>
             </div>
             <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
@@ -248,7 +248,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <use href="./assets/images/icon_fan.svg#Icon"></use>
                 </svg>
                 <div class="legend">
-                    <div class="text" i18n>dGPU - Power</div>
+                    <div class="text" i18n="@@cDashboardDGpuPowerLabel">dGPU - Power</div>
                 </div>
             </div>
         </div>
