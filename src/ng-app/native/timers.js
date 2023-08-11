@@ -1,1 +1,1 @@
-module.exports = window.require('timers');
+module.exports = window.ipc.nodeRequire('timers');

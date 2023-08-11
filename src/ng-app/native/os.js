@@ -1,1 +1,1 @@
-module.exports = window.require('os');
+module.exports = window.ipc.nodeRequire('os');

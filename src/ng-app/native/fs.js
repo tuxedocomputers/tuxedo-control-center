@@ -1,1 +1,1 @@
-module.exports = window.require('fs');
+module.exports = window.ipc.nodeRequire('fs');

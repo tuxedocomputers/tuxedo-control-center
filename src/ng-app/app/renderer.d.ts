@@ -22,6 +22,7 @@ export interface IPC extends EventEmitter {
     onVideoEnded: (callback) => void,
     onExternalWebcamPreviewClosed: (callback) => void,
     onApplyControls: (callback) => void,
+    nodeRequire: (string) => any,
   }
   
   declare global {

@@ -64,7 +64,7 @@ export class SupportComponent implements OnInit {
   }
 
   public focusControl(control): void {
-    setImmediate(() => { control.focus(); });
+    setTimeout(() => { control.focus(); }, 0);
   }
 
   public openExternalUrl(url: string): void {

@@ -159,19 +159,19 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     }
 
     public selectProfile(profileId?: string): void {
-        setImmediate(() => {
+        setTimeout(() => {
             if (profileId === undefined) {
                 this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
             } else {
                 this.router.navigate(['profile-manager', profileId], { relativeTo: this.route.parent });
             }
-        });
+        }, 0);
     }
 
     public setActiveProfile(profileId: string, stateId: string): void {
-        setImmediate(() => {
+        setTimeout(() => {
             this.config.setActiveProfile(profileId, stateId);
-        });
+        }, 0);
     }
 
     public async onInputSubmit() {
@@ -349,7 +349,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 this.inputProfileName.setValue('');
                 this.inputProfileNameLabel = $localize `:@@cProfMgrNewProfileLabel:New profile`;
                 this.inputActive = true;
-                setImmediate(() => { this.inputFocus.focus(); });
+                setTimeout(() => { this.inputFocus.focus(); },0);
             },
             // Label
             () => '',
@@ -365,7 +365,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.inputProfileName.setValue('');
         this.inputProfileNameLabel = $localize `:@@cProfMgrCopyProfileLabel:Copy this profile`;
         this.inputActive = true;
-        setImmediate(() => { this.inputFocus.focus(); });
+        setTimeout(() => { this.inputFocus.focus(); }, 0);
     }
 
     public cancelInput() {

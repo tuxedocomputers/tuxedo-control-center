@@ -145,9 +145,9 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
 
     public selectProfile(): void {
-        setImmediate(() => {
+        setTimeout(() => {
             this.router.navigate(['profile-manager', this.profile.id], { relativeTo: this.route.parent });
-        });
+        }, 0);
     }
 
     public deleteProfile(): void {

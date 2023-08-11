@@ -1,1 +1,1 @@
-module.exports = window.require('child_process');
+module.exports = window.ipc.nodeRequire('child_process');

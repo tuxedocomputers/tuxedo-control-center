@@ -87,6 +87,8 @@ if (!userConfigDirExists()) {
 }
 
 // ############### Initilization ##################
+globalThis.setImmediate = ((fn, ...args) => global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
+
 app.whenReady().then( async () => {
     try {
         const systemLanguageId = app.getLocale().substring(0, 2);
@@ -580,6 +582,13 @@ ipcMain.on('minimize-window', () => {
     tccWindow.minimize();
 })
 
+ipcMain.on('node-require', (event, requiree) => {
+    try {
+        event.returnValue = { data: require(requiree), error: undefined };
+    } catch (err) {
+        event.returnValue = { data: undefined, error: err };
+    }
+});
 
 ipcMain.handle('get-app-version', async (event, arg) => {
     return new Promise<string>((resolve, reject) => {

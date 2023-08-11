@@ -1,1 +1,1 @@
-module.exports = window.require('crypto');
+module.exports = window.ipc.nodeRequire('crypto');

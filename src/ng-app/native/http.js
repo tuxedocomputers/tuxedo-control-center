@@ -1,1 +1,1 @@
-module.exports = window.require('http');
+module.exports = window.ipc.nodeRequire('http');

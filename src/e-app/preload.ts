@@ -37,6 +37,7 @@ contextBridge.exposeInMainWorld(
     },
     videoEnded: () => ipcRenderer.send('video-ended'),
     applyControls: () => ipcRenderer.send('apply-controls'),
+    nodeRequire: (requiree: string) => ipcRenderer.sendSync('node-require',requiree).data,
 
 /*
 

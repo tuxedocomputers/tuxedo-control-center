@@ -1,1 +1,1 @@
-module.exports = window.require('stream');
+module.exports = window.ipc.nodeRequire('stream');

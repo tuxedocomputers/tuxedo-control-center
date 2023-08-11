@@ -1,1 +1,1 @@
-module.exports = window.require('path');
+module.exports = window.ipc.nodeRequire('path');
