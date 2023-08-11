@@ -27,15 +27,17 @@ import {
 } from "../../common/classes/SysFsProperties";
 import * as path from "path";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
+import { PowerController } from "../../common/classes/PowerController";
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: Boolean = false;
     private cpuVendor: string;
-    private RAPLPowerStatus: Boolean = false;
-    private lastUpdateTime: number = -1;
-    private currentEnergy: number = 0;
+
     private hwmonPath: string;
-    private intelRAPLGPU: IntelRAPLController;
+    private intelRAPLGPU: IntelRAPLController = new IntelRAPLController(
+        "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
+    );
+    private powerWorker: PowerController;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(2000, tccd);
@@ -49,11 +51,7 @@ export class GpuInfoWorker extends DaemonWorker {
             this.hwmonPath = await this.getHwmonPath();
         }
         if (cpuVendor === "intel") {
-            this.intelRAPLGPU = new IntelRAPLController(
-                "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
-            );
-            this.RAPLPowerStatus =
-                this.intelRAPLGPU.getIntelRAPLEnergyAvailable();
+            this.powerWorker = new PowerController(this.intelRAPLGPU);
         }
 
         const isInstalled = await isNvidiaSmiInstalled();
@@ -96,28 +94,7 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private getCurrentPower(): number {
-        if (!this.RAPLPowerStatus) return -1;
-
-        const energyIncrement =
-            this.intelRAPLGPU.getEnergy() - this.currentEnergy;
-        const delay = this.getDelay();
-        const powerDraw =
-            delay && this.currentEnergy > 0
-                ? energyIncrement / delay / 1000000
-                : -1;
-        this.currentEnergy += energyIncrement;
-
-        return powerDraw;
-    }
-
-    private getDelay(): number {
-        const currentTime = Date.now();
-        const timeDifference =
-            this.lastUpdateTime > 0
-                ? (currentTime - this.lastUpdateTime) / 1000
-                : -1;
-        this.lastUpdateTime = currentTime;
-        return timeDifference;
+        return this.powerWorker.getCurrentPower();
     }
 
     private async getHwmonPath(): Promise<string | undefined> {
