@@ -122,7 +122,9 @@ app.whenReady().then( async () => {
     tray.state.primeQuery = primeSelectQuery();
     tray.state.isPrimeSupported = primeSupported();
     tray.state.fnLockSupported = await fnLockSupported(tccDBus);
-    tray.state.fnLockStatus = await fnLockStatus(tccDBus);
+    if (tray.state.fnLockSupported) {
+        tray.state.fnLockStatus = await fnLockStatus(tccDBus);
+    }
     await updateTrayProfiles(tccDBus);
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
@@ -144,7 +146,7 @@ app.whenReady().then( async () => {
 
     tray.events.fnLockClick = (status: boolean) => {
         tray.state.fnLockStatus = !status
-        tccDBus.writeFnValue(tray.state.fnLockStatus);
+        tccDBus.setFnValue(tray.state.fnLockStatus);
     };
 
     tray.events.selectNvidiaClick = () => {
