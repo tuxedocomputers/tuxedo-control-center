@@ -19,6 +19,7 @@
 import * as dbus from 'dbus-next';
 import { ChargingWorker } from './ChargingWorker';
 import { BehaviorSubject } from 'rxjs';
+import { FnLock } from './FnUtils';
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
@@ -101,6 +102,7 @@ export class TccDBusOptions {
 
 export class TccDBusInterface extends dbus.interface.Interface {
     private interfaceOptions: TccDBusOptions;
+    private fnLock: FnLock = new FnLock();
 
     constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
         super('com.tuxedocomputers.tccd');
@@ -174,6 +176,16 @@ export class TccDBusInterface extends dbus.interface.Interface {
     async SetChargingPriority(priorityDescriptor: string) {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
+
+    GetFnLockSupported() {
+        return this.fnLock.getFnLockSupported();
+    }
+    GetFnLockStatus() {
+        return this.fnLock.getFnLockStatus();
+    }
+    WriteFnValue(status: boolean) {
+        this.fnLock.writeFnValue(status);
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -209,7 +221,10 @@ TccDBusInterface.configureMembers({
         SetChargingProfile: { inSignature: 's', outSignature: 'b' },
         GetChargingPrioritiesAvailable: { outSignature: 's' },
         GetCurrentChargingPriority: { outSignature: 's' },
-        SetChargingPriority: { inSignature: 's', outSignature: 'b' }
+        SetChargingPriority: { inSignature: 's', outSignature: 'b' },
+        GetFnLockSupported: { outSignature: "b" },
+        GetFnLockStatus: { outSignature: "b" },
+        WriteFnValue: { inSignature: "b" },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }
