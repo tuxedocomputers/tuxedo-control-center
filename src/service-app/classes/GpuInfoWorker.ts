@@ -64,7 +64,7 @@ export class GpuInfoWorker extends DaemonWorker {
         // todo: only make it run when user is in dashboard
         this.getIGPUValues();
         // todo: tccd restart results in this.tccd.dbusData.dGpuLogging status reset and halts value updates
-        //this.getDGPUValues();
+        this.getDGPUValues();
     }
 
     public onExit(): void {}
@@ -162,9 +162,32 @@ export class GpuInfoWorker extends DaemonWorker {
 
         if (this.isNvidiaSmiInstalled) {
             const dGpuPowerValues = await getDGpuPowerValues();
-            this.tccd.dbusData.dGpuInfoValuesJSON =
-                JSON.stringify(dGpuPowerValues);
+            const powerState = await this.checkNvidiaPowerState();
+
+            const dGpuInfo: IdGpuInfo = {
+                coreFrequency: dGpuPowerValues.coreFrequency,
+                maxCoreFrequency: dGpuPowerValues.maxCoreFrequency,
+                powerDraw: dGpuPowerValues.powerDraw,
+                maxPowerLimit: dGpuPowerValues.maxPowerLimit,
+                enforcedPowerLimit: dGpuPowerValues.enforcedPowerLimit,
+                powerState: powerState,
+            };
+
+            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(dGpuInfo);
         }
+    }
+
+    async checkNvidiaPowerState() {
+        const nvidiaBusPath = await execCommand(
+            "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
+        );
+
+        if (nvidiaBusPath) {
+            return await execCommand(
+                `cat ${path.join(nvidiaBusPath, "power_state")}`
+            );
+        }
+        return "-1";
     }
 }
 
