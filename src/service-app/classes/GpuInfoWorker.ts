@@ -64,7 +64,7 @@ export class GpuInfoWorker extends DaemonWorker {
         // todo: only make it run when user is in dashboard
         this.getIGPUValues();
         // todo: tccd restart results in this.tccd.dbusData.dGpuLogging status reset and halts value updates
-        this.getDGPUValues();
+        //this.getDGPUValues();
     }
 
     public onExit(): void {}
@@ -98,54 +98,9 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private async getHwmonPath(): Promise<string | undefined> {
-        const lspciOutput = await execCommand("lspci");
-        const deviceId = this.extractDeviceId(lspciOutput);
-
-        if (!deviceId) {
-            return undefined;
-        }
-
-        const lsLOutput = await execCommand("ls -l /sys/class/hwmon");
-        return this.extractHwmonPath(lsLOutput, deviceId);
-    }
-
-    private extractDeviceId(output: string): string | undefined {
-        const keywords = [
-            "Renoir",
-            "Lucienne",
-            "Rembrandt",
-            "Picasso",
-            "Raven",
-        ];
-        const line = output
-            .split("\n")
-            .find(
-                (line) =>
-                    line.includes("VGA compatible controller") &&
-                    keywords.some((keyword) => line.includes(keyword))
-            );
-
-        if (!line) {
-            return undefined;
-        }
-
-        const parts = line.split(" ");
-        return parts[0];
-    }
-
-    private extractHwmonPath(
-        output: string,
-        deviceId: string
-    ): string | undefined {
-        const line = output.split("\n").find((line) => line.includes(deviceId));
-
-        if (!line) {
-            return undefined;
-        }
-
-        const parts = line.split(" ");
-        const filePath = parts[parts.length - 1];
-        return "/sys" + filePath.replace(/^\.\.\/\.\.\//, "/");
+        return await execCommand(
+            "grep -rl '^amdgpu$' /sys/class/hwmon/*/name | sed 's|/name$||'"
+        );
     }
 
     async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
@@ -263,8 +218,8 @@ async function getDGpuPowerValues(): Promise<IdGpuInfo> {
 async function execCommand(command: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(command, (error, stdout, stderr) => {
-            if (error) {
-                reject(error);
+            if (error || stderr) {
+                resolve(undefined);
             } else {
                 resolve(stdout.trim());
             }
