@@ -237,22 +237,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="content">
-            <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-                <mat-grid-tile [colspan]="gridParams.headerSpan">
-                    <header i18n="@@cGlobalSettingsPrimeSelectHeader">Prime Select</header>
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="gridParams.valueSpan">
-                    <content class="value">
-                        {{ primeState }}
-                    </content>
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="gridParams.inputSpan">
-                    <content class="input">
-                        <app-prime-select (primeStateChanged)="onPrimeStateChanged($event)"></app-prime-select>
-                    </content>
-                </mat-grid-tile>
-            </mat-grid-list>
-            <div i18n="@@cGlobalSettingsPrimeSelectDescription">Placeholder.</div>
+            <app-prime-select></app-prime-select>
         </div>
     </mat-expansion-panel>
 </mat-accordion>

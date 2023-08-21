@@ -30,8 +30,6 @@ import { first } from "rxjs/operators";
     styleUrls: ["./prime-select.component.scss"],
 })
 export class PrimeSelectComponent implements OnInit {
-    @Output() primeStateChanged = new EventEmitter<string>();
-
     public primeState: string;
     public activeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
@@ -55,16 +53,15 @@ export class PrimeSelectComponent implements OnInit {
         this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
             if (state) {
                 this.primeState = this.activeState = state;
-                this.primeStateChanged.emit(this.primeState);
             }
         });
     }
 
-    public async applyGpuProfile(): Promise<void> {
+    public async applyGpuProfile(selectedPrimeStatus: string): Promise<void> {
         const status = await this.askProceedDialog();
+
         if (status !== "APPLY") {
             this.activeState = this.primeState;
-            this.primeStateChanged.emit(this.primeState);
             return;
         }
 
@@ -73,26 +70,23 @@ export class PrimeSelectComponent implements OnInit {
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
-        const pkexecSetPrimeSelectAsync = this.config.pkexecSetPrimeSelectAsync(
-            this.activeState
-        );
+        const pkexecSetPrimeSelectAsync =
+            this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
 
         const isSuccessful = await this.utils.waitingDialog(
             config,
             pkexecSetPrimeSelectAsync
         );
-        if (isSuccessful) {
-            this.primeState = this.activeState;
-            this.primeStateChanged.emit(this.activeState);
 
+        if (isSuccessful) {
+            this.activeState = this.primeState = selectedPrimeStatus;
             await this.showRebootDialog();
             this.utils.execCmd("reboot");
         } else {
             this.activeState = this.primeState;
-            this.primeStateChanged.emit(this.primeState);
         }
     }
-    
+
     private async askProceedDialog(): Promise<string> {
         const rebootConfig = {
             title: $localize`Warning`,
