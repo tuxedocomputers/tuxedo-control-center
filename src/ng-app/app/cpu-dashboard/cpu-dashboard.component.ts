@@ -25,8 +25,6 @@ import { ITccProfile } from 'src/common/models/TccProfile';
 import { StateService } from '../state.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../config.service';
-
-import { NodeService } from '../node.service';
 import { CompatibilityService } from '../compatibility.service';
 
 @Component({
@@ -79,7 +77,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private config: ConfigService,
-    private node: NodeService,
     public compat: CompatibilityService
   ) { }
 

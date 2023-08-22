@@ -46,7 +46,6 @@ export class SupportComponent implements OnInit {
   public systeminfoRunOutput = '';
   public systeminfoRunProgress = false;
   public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
-  public systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
   public systeminfosCompleted = false;
 
   constructor(
@@ -146,8 +145,8 @@ export class SupportComponent implements OnInit {
       let fileData: string;
       // Download file
       try {
-        this.systeminfoOutput('Fetching: ' + this.systeminfosURL);
-        const data = await this.utils.httpsGet(this.systeminfosURL);
+        this.systeminfoOutput('Fetching: ' + this.utils.getSystemInfosUrl());
+        const data = await this.utils.getSystemInfos();
         fileData = data.toString();
       } catch (err) {
         reject('Download failed'); return;

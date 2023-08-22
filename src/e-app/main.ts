@@ -21,6 +21,7 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
+import * as https from 'https';
 import { TccDBusController } from '../common/classes/TccDBusController';
 import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
@@ -524,6 +525,86 @@ ipcMain.on("video-ended", (event) => {
 /* 
 ################ Utils API #######################
 */
+
+
+// TODO sepparate all APIs into their own files like explained here:
+// https://stackoverflow.com/questions/56523293/how-do-i-seperate-ipcmain-on-functions-in-different-file-from-main-js
+
+let systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+
+ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
+    return systeminfosURL;
+});
+
+ipcMain.handle('utils-get-systeminfos', async (event, arg) => {
+    return new Promise<Buffer>((resolve, reject) => {
+        try {
+          const dataArray: Buffer[] = [];
+          const req = https.get(systeminfosURL, response => {
+  
+            response.on('data', (data) => {
+              dataArray.push(data);
+            });
+  
+            response.once('end', () => {
+              resolve(Buffer.concat(dataArray));
+            });
+  
+            response.once('error', (err) => {
+              reject(err);
+            });
+  
+          });
+  
+          req.once('error', (err) => {
+       reject(err);
+          });
+        } catch (err) {
+          reject(err);
+        }
+      });
+});
+
+ipcMain.handle('fs-write-text-file', async (event, filePath: string, fileData: string | Buffer, writeFileOptions?) => {   
+return new Promise<void>((resolve, reject) => {
+    try {
+      if (!fs.existsSync(path.dirname(filePath))) {
+          fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
+      }
+      fs.writeFile(filePath, fileData, writeFileOptions, err => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+});
+
+ipcMain.handle('fs-read-text-file', async (event, filePath) => {
+    return new Promise<string>((resolve, reject) => {
+      try {
+        fs.readFile(filePath,(err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data + "");
+          }
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+});
+
+
+
+ipcMain.on('utils-get-systeminfos-url-sync', async (event, arg) => {
+    return systeminfosURL;
+});
 
 // TODO exec cmd has to be replaced completely by specific commands.###########
 ipcMain.on('exec-cmd-sync', (event, arg) => {

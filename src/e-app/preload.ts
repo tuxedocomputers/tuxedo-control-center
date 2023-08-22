@@ -88,4 +88,34 @@ contextBridge.exposeInMainWorld(
     }
 );
 
+contextBridge.exposeInMainWorld(
+    'fs',
+    {
+        writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => ipcRenderer.invoke('fs-write-text-file',filePath,fileData,writeFileOptions),
+        readTextFile: (filePath: string) => ipcRenderer.invoke('fs-read-text-file',filePath),
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'path',
+    {
+
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'https',
+    {
+        getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
+        getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync')
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'os',
+    {
+
+    }
+);
+
 contextBridge.exposeInMainWorld('aquarisAPI', new ClientAPI(ipcRenderer, aquarisAPIHandle));

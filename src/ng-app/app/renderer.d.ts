@@ -66,11 +66,25 @@ export interface IPC extends EventEmitter {
     
   }
 
+  export interface HTTPS 
+  {
+    getSystemInfos: () => Promise<Buffer>,
+    getSystemInfosURL: () => string
+  }
+
+  export interface FS 
+  {
+     writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => Promise<void>,
+     readTextFile: (filePath: string) => Promise<string>
+  }
+
   declare global {
     interface Window {
       ipc: IPC,
       aquarisApi: ClientAPI,
-      dbus: DBUS
+      dbus: DBUS,
+      https: HTTPS,
+      fs: FS
     }
   }
 

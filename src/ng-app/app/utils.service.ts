@@ -17,13 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-import { SysFsService } from './sys-fs.service';
 import { ElectronService } from './electron-service-wrapper/electron-service';
 import { DecimalPipe } from '@angular/common';
-import * as https from 'https';
-import * as fs from 'fs';
-import * as path from 'path';
-
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
@@ -54,7 +49,6 @@ export class UtilsService {
   private localeId: string;
 
   constructor(
-    private sysfs: SysFsService,
     private electron: ElectronService,
     private decimalPipe: DecimalPipe,
     public overlayContainer: OverlayContainer,
@@ -145,85 +139,25 @@ export class UtilsService {
     throw new Error('Method not implemented.');
 }
 
+public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?): Promise<void> {
+    return window.fs.writeTextFile(filePath,fileData,writeFileOptions);
+}
+
+  public async readTextFile(filePath: string): Promise<string> {
+    return window.fs.readTextFile(filePath);
+  }
+
   public spawnExternal(command: string): void {
     this.electron.ipcRenderer.send('spawn-external-async', command);
   }
 
-  public async httpsGet(url: string): Promise<Buffer> {
-    return new Promise<Buffer>((resolve, reject) => {
-      try {
-        const dataArray: Buffer[] = [];
-        const req = https.get(url, response => {
-
-          response.on('data', (data) => {
-            dataArray.push(data);
-          });
-
-          response.once('end', () => {
-            resolve(Buffer.concat(dataArray));
-          });
-
-          response.once('error', (err) => {
-            reject(err);
-          });
-
-        });
-
-        req.once('error', (err) => {
-          reject(err);
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
+  public getSystemInfosUrl()
+  {
+        return window.https.getSystemInfosURL();
   }
-
-  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      try {
-        if (!fs.existsSync(path.dirname(filePath))) {
-            fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
-        }
-        fs.writeFile(filePath, fileData, writeFileOptions, err => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-
-  public async readTextFile(filePath: string, ): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      try {
-        fs.readFile(filePath,(err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data + "");
-          }
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  public async modFile(filePath: string, mode: number): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      fs.chmod(filePath, mode, err => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
+  public async getSystemInfos(): Promise<Buffer>
+  {
+        return window.https.getSystemInfos();
   }
 
   public formatFrequency(frequency: number): string {
