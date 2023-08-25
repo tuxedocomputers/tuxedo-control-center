@@ -156,21 +156,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="text" i18n="@@cDashboardIGpuFrequencyLabel">iGPU - Frequency</div>
                 </div>
             </div>
-            <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
-                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                <mwl-gauge [max]="100" [min]="0" [value]="fanData.cpu.speed.data.value" [showValue]="false"
-                    [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
-                    [animationDuration]="animatedGaugesDuration">
-                </mwl-gauge>
-                <div class="custom-value-text">{{ gaugeFanSpeedFormat(fanData.cpu.speed.data.value) }}</div>
-                <div class="unit-text">%</div>
-                <svg viewBox="0 0 512 512" class="icon">
-                    <use href="./assets/images/icon_fan.svg#Icon"></use>
-                </svg>
-                <div class="legend">
-                    <div class="text" i18n="@@cDashboardIGpuFanLabel">iGPU - Fan</div>
-                </div>
-            </div>
             <div *ngIf="iGpuVendor == 'intel'" class="tcc-gauge" [ngClass]="{'not-available': !compat.hasIGpuPowerDraw}"
                 [matTooltip]="!compat.hasIGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
                 <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false" [dialStartAngle]="130"
@@ -285,21 +270,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </svg>
                         <div class="legend">
                             <div class="text" i18n="@@cDashboardIGpuFrequencyLabel">iGPU - Frequency</div>
-                        </div>
-                    </div>
-                    <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasFanInfo }"
-                        [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                        <mwl-gauge [max]="100" [min]="0" [value]="fanData.cpu.speed.data.value" [showValue]="false"
-                            [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
-                            [animationDuration]="animatedGaugesDuration">
-                        </mwl-gauge>
-                        <div class="custom-value-text">{{ gaugeFanSpeedFormat(fanData.cpu.speed.data.value) }}</div>
-                        <div class="unit-text">%</div>
-                        <svg viewBox="0 0 512 512" class="icon">
-                            <use href="./assets/images/icon_fan.svg#Icon"></use>
-                        </svg>
-                        <div class="legend">
-                            <div class="text" i18n="@@cDashboardIGpuFanLabel">iGPU - Fan</div>
                         </div>
                     </div>
                     <div *ngIf="iGpuVendor == 'intel'" class="tcc-gauge"
