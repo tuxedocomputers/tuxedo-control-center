@@ -61,10 +61,10 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     public async onWork(): Promise<void> {
-        // todo: only make it run when user is in dashboard
-        this.getIGPUValues();
-        // todo: tccd restart results in this.tccd.dbusData.dGpuLogging status reset and halts value updates
-        this.getDGPUValues();
+        if (this.tccd.dbusData.sensorDataCollectionStatus) {
+            this.getIGPUValues();
+            this.getDGPUValues();
+        }
     }
 
     public onExit(): void {}
@@ -161,19 +161,10 @@ export class GpuInfoWorker extends DaemonWorker {
         }
 
         if (this.isNvidiaSmiInstalled) {
-            const dGpuPowerValues = await getDGpuPowerValues();
-            const powerState = await this.checkNvidiaPowerState();
+            const dGpuPowerValues: IdGpuInfo = await getDGpuPowerValues();
 
-            const dGpuInfo: IdGpuInfo = {
-                coreFrequency: dGpuPowerValues.coreFrequency,
-                maxCoreFrequency: dGpuPowerValues.maxCoreFrequency,
-                powerDraw: dGpuPowerValues.powerDraw,
-                maxPowerLimit: dGpuPowerValues.maxPowerLimit,
-                enforcedPowerLimit: dGpuPowerValues.enforcedPowerLimit,
-                powerState: powerState,
-            };
-
-            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(dGpuInfo);
+            this.tccd.dbusData.dGpuInfoValuesJSON =
+                JSON.stringify(dGpuPowerValues);
         }
     }
 

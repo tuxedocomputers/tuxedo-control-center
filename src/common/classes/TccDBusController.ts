@@ -139,22 +139,6 @@ export class TccDBusController {
         }
     }
 
-    async getDGpuLoggingStatus(): Promise<Boolean> {
-        try {
-            return await this.interface.GetDGpuLoggingStatus();
-        } catch (err) {
-            return undefined;
-        }
-    }
-
-    async setDGpuLoggingStatus(status: boolean): Promise<void> {
-        try {
-            return await this.interface.SetDGpuLoggingStatus(status);
-        } catch (err) {
-            return undefined;
-        }
-    }
-
     async getPrimeState(): Promise<string> {
         try {
             return await this.interface.GetPrimeState();
@@ -358,6 +342,22 @@ export class TccDBusController {
     async setFnLockStatus(status: boolean): Promise<boolean> {
         try {
             return await this.interface.SetFnLockStatus(status);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async setSensorDataCollectionStatus(status: boolean): Promise<boolean> {
+        try {
+            return await this.interface.SetSensorDataCollectionStatus(status);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getSensorDataCollectionStatus(): Promise<boolean> {
+        try {
+            return await this.interface.GetSensorDataCollectionStatus();
         } catch (err) {
             return false;
         }

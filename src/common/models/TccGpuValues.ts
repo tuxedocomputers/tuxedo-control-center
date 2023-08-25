@@ -12,5 +12,4 @@ export interface IdGpuInfo {
     powerDraw: number;
     maxPowerLimit: number;
     enforcedPowerLimit: number;
-    powerState?: string;
 }

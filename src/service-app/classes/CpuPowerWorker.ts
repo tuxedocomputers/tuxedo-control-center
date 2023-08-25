@@ -59,12 +59,15 @@ export class CpuPowerWorker extends DaemonWorker {
     }
 
     public onWork(): void {
-        const cpuPowerValues: ICpuPower = {
-            powerDraw: this.getCurrentPower(),
-            maxPowerLimit: this.getMaxPowerLimix(),
-        };
+        if (this.tccd.dbusData.sensorDataCollectionStatus) {
+            const cpuPowerValues: ICpuPower = {
+                powerDraw: this.getCurrentPower(),
+                maxPowerLimit: this.getMaxPowerLimix(),
+            };
 
-        this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify(cpuPowerValues);
+            this.tccd.dbusData.cpuPowerValuesJSON =
+                JSON.stringify(cpuPowerValues);
+        }
     }
 
     private getCurrentPower(): number {

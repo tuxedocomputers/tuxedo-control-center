@@ -80,8 +80,6 @@ export class TccDBusClientService implements OnDestroy {
   public iGpuInfo = new BehaviorSubject<IiGpuInfo>(undefined);
   public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
 
-  public iGpuLogging = new BehaviorSubject<Boolean>(undefined);
-
   public primeState = new BehaviorSubject<string>(undefined);
 
   constructor(private utils: UtilsService) {
@@ -140,8 +138,6 @@ export class TccDBusClientService implements OnDestroy {
         await this.tccDBusInterface.getChargingProfilesAvailable()
     );
     
-    this.iGpuLogging.next(await this.tccDBusInterface.getDGpuLoggingStatus())
-
     this.primeState.next(await this.tccDBusInterface.getPrimeState())
 
 
@@ -244,8 +240,8 @@ export class TccDBusClientService implements OnDestroy {
     return result;
   }
 
-  public async setDGpuLoggingStatus(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuLoggingStatus(status)
+  public async setSensorDataCollectionStatus(status: boolean): Promise<void> {
+    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setSensorDataCollectionStatus(status)
   }
 
   public getInterface(): TccDBusController | undefined {

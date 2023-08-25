@@ -198,7 +198,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <div class="text" i18n="@@cDashboardDGpuTemperatureLabel">dGPU - Temperature</div>
                         </div>
                     </div>
-                    <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuFreq }"
+                    <div class="tcc-gauge"  [ngClass]="{'not-available': !compat.hasDGpuFreq }"
                         [matTooltip]="!compat.hasDGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0"
                             [value]="tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
@@ -229,7 +229,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <div class="text" i18n="@@cDashboardDGpuFanLabel">dGPU - Fan</div>
                         </div>
                     </div>
-                    <div class="tcc-gauge" *ngIf="iGpuLogging" [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
+                    <div class="tcc-gauge"  [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
                         [matTooltip]="!compat.hasDGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0"
                             [value]="tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuPowerDraw ? gaugeDGPUPower : 0"
@@ -321,7 +321,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tcc-gauge" *ngIf="iGpuLogging"
+                                <div class="tcc-gauge" 
                                     [ngClass]="{'not-available': !compat.hasDGpuFreq }"
                                     [matTooltip]="!compat.hasDGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
@@ -354,7 +354,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </div>
                                 </div>
 
-                                <div class="tcc-gauge" *ngIf="iGpuLogging"
+                                <div class="tcc-gauge" 
                                     [ngClass]="{'not-available': !compat.hasDGpuPowerDraw}"
                                     [matTooltip]="!compat.hasDGpuPowerDraw ? compat.gpuPowerCompatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
@@ -377,8 +377,5 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </div>
         </mat-card>
-
-        <!-- todo: remove debug test code -->
-        <button mat-button *ngIf="!iGpuLogging" (click)="enableDGpuLogging()">Enable dGPU logging</button>
     </div>
 </div>

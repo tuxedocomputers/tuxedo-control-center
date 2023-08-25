@@ -36,6 +36,7 @@ import { ICpuPower } from "src/common/models/TccPowerSettings";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
+import * as path from "path";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -72,14 +73,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public dGpuPower: number;
     public dGpuFreq: number;
     public hasGPUTemp = false;
+    public powerState: string;
 
     // iGPU
-    public gaugeIGpuFreq: Number;
-    public iGpuTemp: Number;
-    public iGpuFreq: Number;
-    public iGpuVendor: String;
-    public iGpuPower: Number;
-    public iGpuLogging: boolean;
+    public gaugeIGpuFreq: number;
+    public iGpuTemp: number;
+    public iGpuFreq: number;
+    public iGpuVendor: string;
+    public iGpuPower: number;
 
     public activeProfile: ITccProfile;
     public isCustomProfile: boolean;
@@ -103,7 +104,29 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         public compat: CompatibilityService
     ) {}
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
+        this.tccdbus.setSensorDataCollectionStatus(true);
+        this.initializeEventListeners();
+        this.initializeSubscriptions();
+    }
+
+    private initializeEventListeners(): void {
+        document.addEventListener(
+            "visibilitychange",
+            this.visibilityChangeListener
+        );
+    }
+
+    private visibilityChangeListener = () => {
+        if (document.visibilityState == "hidden") {
+            this.tccdbus.setSensorDataCollectionStatus(false);
+        }
+        if (document.visibilityState == "visible") {
+            this.tccdbus.setSensorDataCollectionStatus(true);
+        }
+    };
+
+    private initializeSubscriptions(): void {
         this.subscribeToPstate();
         this.subscribeToDGpuInfo();
         this.subscribeToIGpuInfo();
@@ -111,29 +134,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscribeToFanData();
         this.subscribeToProfileData();
         this.subscribeODMInfo();
-        this.subscribeDGpuLoggingStatus();
         this.subscribePrimeState();
     }
 
-    ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
-    }
-
-    private subscribePrimeState() {
+    private subscribePrimeState(): void {
         this.subscriptions.add(
             this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
                 if (state) {
                     this.primeState = state;
-                }
-            })
-        );
-    }
-
-    private subscribeDGpuLoggingStatus(): void {
-        this.subscriptions.add(
-            this.tccdbus.iGpuLogging.subscribe((status: boolean) => {
-                if (status) {
-                    this.iGpuLogging = status;
                 }
             })
         );
@@ -416,7 +424,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         return this.config.fanControlDisabledMessage;
     }
 
-    public enableDGpuLogging(): void {
-        this.tccdbus.setDGpuLoggingStatus(true);
+    private removeEventListeners(): void {
+        document.removeEventListener(
+            "visibilitychange",
+            this.visibilityChangeListener
+        );
+    }
+
+    public ngOnDestroy(): void {
+        this.tccdbus.setSensorDataCollectionStatus(false);
+
+        this.removeEventListeners();
+        this.subscriptions.unsubscribe();
     }
 }

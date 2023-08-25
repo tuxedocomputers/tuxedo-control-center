@@ -78,7 +78,6 @@ export class TccDBusData {
     public dGpuInfoValuesJSON: string;
     public iGpuInfoValuesJSON: string;
     public cpuPowerValuesJSON: string;
-    public dGpuLogging: boolean;
     public primeState: string;
     public modeReapplyPending: boolean;
     public tempProfileName: string;
@@ -96,6 +95,7 @@ export class TccDBusData {
     public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
     public fansMinSpeed: number;
     public fansOffAvailable: boolean;
+    public sensorDataCollectionStatus: boolean = false;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -129,9 +129,9 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDGpuInfoValuesJSON() { return this.data.dGpuInfoValuesJSON; }
     GetIGpuInfoValuesJSON() { return this.data.iGpuInfoValuesJSON; }
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
-    GetDGpuLoggingStatus() { return this.data.dGpuLogging; }
-    SetDGpuLoggingStatus(status: boolean) { this.data.dGpuLogging = status; }
     GetPrimeState() { return this.data.primeState; }
+    SetSensorDataCollectionStatus(status: boolean) {this.data.sensorDataCollectionStatus = status}
+    GetSensorDataCollectionStatus() {this.data.sensorDataCollectionStatus = true; return this.data.sensorDataCollectionStatus;}
 
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
@@ -215,8 +215,6 @@ TccDBusInterface.configureMembers({
         GetDGpuInfoValuesJSON: { outSignature: "s" },
         GetIGpuInfoValuesJSON: { outSignature: "s" },
         GetCpuPowerValuesJSON: { outSignature: 's' },
-        GetDGpuLoggingStatus: { outSignature: 'b' },
-        SetDGpuLoggingStatus: { inSignature: 'b', outSignature: 'b' },
         GetPrimeState: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
@@ -243,6 +241,8 @@ TccDBusInterface.configureMembers({
         GetFnLockSupported: { outSignature: "b" },
         GetFnLockStatus: { outSignature: "b" },
         SetFnLockStatus: { inSignature: "b" },
+        SetSensorDataCollectionStatus: { inSignature: 'b' },
+        GetSensorDataCollectionStatus: { outSignature: 'b' },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }
