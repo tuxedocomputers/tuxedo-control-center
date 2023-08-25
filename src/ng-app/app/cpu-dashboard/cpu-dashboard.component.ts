@@ -139,12 +139,31 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private subscribeODMInfo() {
+    private subscribeODMInfo(): void {
         this.subscriptions.add(
             this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]) => {
-                this.cpuPowerLimit = tdpInfoArray.find(
+                const pl1Info = tdpInfoArray.find(
+                    (info) => info.descriptor === "pl1"
+                );
+                const pl2Info = tdpInfoArray.find(
+                    (info) => info.descriptor === "pl2"
+                );
+                const pl4Info = tdpInfoArray.find(
                     (info) => info.descriptor === "pl4"
-                )?.max;
+                );
+
+                let maxPowerLimit = -1;
+                if (pl1Info) {
+                    maxPowerLimit = Math.max(maxPowerLimit, pl1Info.max);
+                }
+                if (pl2Info) {
+                    maxPowerLimit = Math.max(maxPowerLimit, pl2Info.max);
+                }
+                if (pl4Info) {
+                    maxPowerLimit = Math.max(maxPowerLimit, pl4Info.max);
+                }
+
+                this.cpuPowerLimit = maxPowerLimit;
             })
         );
     }
