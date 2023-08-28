@@ -251,7 +251,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <!-- TABS -->
                 <div class="gauge-tabs" *ngIf="primeState === 'on-demand'">
-                    <mat-tab-group mat-align-tabs="center">
+                    <mat-tab-group mat-align-tabs="center" disablePagination="true">
                         <mat-tab label="Stromsparender CPU-Grafikprozessor">
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'"
@@ -323,8 +323,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tcc-gauge" [ngClass]="{'not-available': powerState == 'D3cold' ? 
-                        false : (powerState == 'D0' && !compat.hasDGpuFreq) ? true : !compat.hasDGpuFreq }"
+                                <div class="tcc-gauge"
+                                    [ngClass]="{'not-available': powerState == 'D3cold' ?  false : (powerState == 'D0' && !compat.hasDGpuFreq) ? true : !compat.hasDGpuFreq }"
                                     [matTooltip]="powerState == 'D3cold' ? '' : !compat.hasDGpuFreq ? compat.gpuFreqCompatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
                                         [value]="powerState === 'D3cold' ? 0 : tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
