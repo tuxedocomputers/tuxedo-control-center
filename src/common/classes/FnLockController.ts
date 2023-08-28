@@ -1,6 +1,6 @@
-import { SysFsPropertyBoolean } from "../../common/classes/SysFsProperties";
+import { SysFsPropertyBoolean } from "./SysFsProperties";
 
-export class FnLock {
+export class FnLockController {
     fnLock = new SysFsPropertyBoolean("/sys/devices/platform/tuxedo_keyboard/fn_lock");
 
     getFnLockSupported = () => this.fnLock.isAvailable();

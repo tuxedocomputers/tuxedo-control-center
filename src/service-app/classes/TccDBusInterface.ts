@@ -19,7 +19,7 @@
 import * as dbus from 'dbus-next';
 import { ChargingWorker } from './ChargingWorker';
 import { BehaviorSubject } from 'rxjs';
-import { FnLock } from './FnUtils';
+import { FnLockController } from '../../common/classes/FnLockController';
 
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
@@ -102,7 +102,7 @@ export class TccDBusOptions {
 
 export class TccDBusInterface extends dbus.interface.Interface {
     private interfaceOptions: TccDBusOptions;
-    private fnLock: FnLock = new FnLock();
+    private fnLock: FnLockController = new FnLockController();
 
     constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
         super('com.tuxedocomputers.tccd');
