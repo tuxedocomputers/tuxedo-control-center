@@ -244,6 +244,10 @@ export class TccDBusClientService implements OnDestroy {
     await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setSensorDataCollectionStatus(status)
   }
 
+  public async setDGpuD0Metrics(status: boolean): Promise<void> {
+    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuD0Metrics(status)
+  }
+
   public getInterface(): TccDBusController | undefined {
     if (this.isAvailable) {
         return this.tccDBusInterface;

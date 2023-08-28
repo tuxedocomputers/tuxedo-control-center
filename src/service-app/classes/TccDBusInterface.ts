@@ -96,6 +96,7 @@ export class TccDBusData {
     public fansMinSpeed: number;
     public fansOffAvailable: boolean;
     public sensorDataCollectionStatus: boolean = false;
+    public d0MetricsUsage: boolean = false;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -131,7 +132,12 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     GetPrimeState() { return this.data.primeState; }
     SetSensorDataCollectionStatus(status: boolean) {this.data.sensorDataCollectionStatus = status}
-    GetSensorDataCollectionStatus() {this.data.sensorDataCollectionStatus = true; return this.data.sensorDataCollectionStatus;}
+    GetSensorDataCollectionStatus() {
+        this.data.sensorDataCollectionStatus = true; 
+        return this.data.sensorDataCollectionStatus;
+    }
+    
+    SetDGpuD0Metrics(status: boolean) { this.data.d0MetricsUsage = status; }
 
     ConsumeModeReapplyPending() {
         // Unlikely, but possible race condition.
@@ -243,6 +249,7 @@ TccDBusInterface.configureMembers({
         SetFnLockStatus: { inSignature: "b" },
         SetSensorDataCollectionStatus: { inSignature: 'b' },
         GetSensorDataCollectionStatus: { outSignature: 'b' },
+        SetDGpuD0Metrics: { inSignature: 'b' },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

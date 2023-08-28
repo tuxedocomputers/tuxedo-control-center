@@ -123,8 +123,41 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         }
         if (document.visibilityState == "visible") {
             this.tccdbus.setSensorDataCollectionStatus(true);
+            this.handleVisibilityChange();
         }
     };
+
+    private handleVisibilityChange(): void {
+        this.updateDgpuPowerState();
+    }
+
+    private async checkNvidiaPowerState(): Promise<string> {
+        const nvidiaBusPath = (
+            await this.utils.execCmd(
+                "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
+            )
+        ).toString();
+
+        if (nvidiaBusPath) {
+            return (
+                await this.utils.execCmd(
+                    `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
+                )
+            ).toString();
+        }
+        return "-1";
+    }
+
+    private async updateDgpuPowerState(): Promise<void> {
+        this.powerState = (await this.checkNvidiaPowerState()).trim();
+
+        if (this.powerState == "D0") {
+            this.tccdbus.setDGpuD0Metrics(true);
+        }
+        if (this.powerState != "D0") {
+            this.tccdbus.setDGpuD0Metrics(false);
+        }
+    }
 
     private initializeSubscriptions(): void {
         this.subscribeToPstate();
@@ -204,7 +237,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToDGpuInfo(): void {
         this.subscriptions.add(
-            this.tccdbus.dGpuInfo.subscribe((dGpuInfo?: IdGpuInfo) => {
+            this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
+                const powerState = (await this.checkNvidiaPowerState()).trim();
+
+                if (powerState == "D0") {
+                    this.tccdbus.setDGpuD0Metrics(true);
+                }
+
+                if (dGpuInfo?.d0MetricsUsage) {
+                    this.powerState = powerState;
+                }
+
                 this.setDGpuValues(dGpuInfo);
             })
         );
@@ -350,7 +393,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     };
 
     public formatGpuFrequency = this.createFormatter(
-        (val) => val >= 0 && this.tccdbus.tuxedoWmiAvailable?.value,
+        (val) =>
+            this.powerState == "D3cold" ||
+            (val >= 0 && this.tccdbus.tuxedoWmiAvailable?.value),
         (val) => this.utils.formatGpuFrequency(val)
     );
 
@@ -385,8 +430,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public dGpuPowerFormat = this.createFormatter(
-        () => this.compat.hasDGpuPowerDraw,
-        (val) => Math.round(val).toString()
+        () => this.powerState == "D3cold" || this.compat.hasDGpuPowerDraw,
+        (val) =>
+            this.powerState == "D3cold" ? "0" : Math.round(val).toString()
     );
 
     public iGpuPowerFormat = this.createFormatter(

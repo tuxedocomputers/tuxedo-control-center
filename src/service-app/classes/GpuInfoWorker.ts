@@ -161,24 +161,25 @@ export class GpuInfoWorker extends DaemonWorker {
         }
 
         if (this.isNvidiaSmiInstalled) {
-            const dGpuPowerValues: IdGpuInfo = await getDGpuPowerValues();
+            let dGpuPowerValues: IdGpuInfo;
 
-            this.tccd.dbusData.dGpuInfoValuesJSON =
-                JSON.stringify(dGpuPowerValues);
+            if (this.tccd.dbusData.d0MetricsUsage) {
+                dGpuPowerValues = await getDGpuPowerValues();
+            } else {
+                dGpuPowerValues = getDefaultValuesDGpu();
+            }
+
+            const dGpuInfo: IdGpuInfo = {
+                coreFrequency: dGpuPowerValues.coreFrequency,
+                maxCoreFrequency: dGpuPowerValues.maxCoreFrequency,
+                powerDraw: dGpuPowerValues.powerDraw,
+                maxPowerLimit: dGpuPowerValues.maxPowerLimit,
+                enforcedPowerLimit: dGpuPowerValues.enforcedPowerLimit,
+                d0MetricsUsage: this.tccd.dbusData.d0MetricsUsage,
+            };
+
+            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(dGpuInfo);
         }
-    }
-
-    async checkNvidiaPowerState() {
-        const nvidiaBusPath = await execCommand(
-            "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
-        );
-
-        if (nvidiaBusPath) {
-            return await execCommand(
-                `cat ${path.join(nvidiaBusPath, "power_state")}`
-            );
-        }
-        return "-1";
     }
 }
 

@@ -363,6 +363,14 @@ export class TccDBusController {
         }
     }
 
+    async setDGpuD0Metrics(status: boolean): Promise<boolean> {
+        try {
+            return await this.interface.SetDGpuD0Metrics(status);
+        } catch (err) {
+            return false;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
     }
