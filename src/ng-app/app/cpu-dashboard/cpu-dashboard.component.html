@@ -250,8 +250,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- TABS -->
-                <div class="gauge-tabs">
-                    <mat-tab-group *ngIf="primeState === 'on-demand'" mat-align-tabs="center">
+                <div class="gauge-tabs" *ngIf="primeState === 'on-demand'">
+                    <mat-tab-group mat-align-tabs="center">
                         <mat-tab label="Stromsparender CPU-Grafikprozessor">
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'"
