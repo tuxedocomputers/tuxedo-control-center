@@ -183,8 +183,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetFnLockStatus() {
         return this.fnLock.getFnLockStatus();
     }
-    SetFnValue(status: boolean) {
-        this.fnLock.setFnValue(status);
+    SetFnLockStatus(status: boolean) {
+        this.fnLock.setFnLockStatus(status);
     }
 }
 
@@ -224,7 +224,7 @@ TccDBusInterface.configureMembers({
         SetChargingPriority: { inSignature: 's', outSignature: 'b' },
         GetFnLockSupported: { outSignature: "b" },
         GetFnLockStatus: { outSignature: "b" },
-        SetFnValue: { inSignature: "b" },
+        SetFnLockStatus: { inSignature: "b" },
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

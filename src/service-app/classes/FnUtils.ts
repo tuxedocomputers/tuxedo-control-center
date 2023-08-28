@@ -7,5 +7,5 @@ export class FnLock {
 
     getFnLockStatus = () => this.fnLock.readValueNT();
 
-    setFnValue = (status: boolean) => this.fnLock.writeValue(status);
+    setFnLockStatus = (status: boolean) => this.fnLock.writeValue(status);
 }

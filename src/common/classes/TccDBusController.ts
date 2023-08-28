@@ -307,9 +307,9 @@ export class TccDBusController {
         }
     }
 
-    async setFnValue(status: boolean): Promise<boolean> {
+    async setFnLockStatus(status: boolean): Promise<boolean> {
         try {
-            return await this.interface.SetFnValue(status);
+            return await this.interface.SetFnLockStatus(status);
         } catch (err) {
             return false;
         }

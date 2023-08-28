@@ -146,7 +146,7 @@ app.whenReady().then( async () => {
 
     tray.events.fnLockClick = (status: boolean) => {
         tray.state.fnLockStatus = !status
-        tccDBus.setFnValue(tray.state.fnLockStatus);
+        tccDBus.setFnLockStatus(tray.state.fnLockStatus);
     };
 
     tray.events.selectNvidiaClick = () => {
