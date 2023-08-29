@@ -37,6 +37,7 @@ import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import * as path from "path";
+import { VendorService } from "../../../common/classes/Vendor.service";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -101,7 +102,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private config: ConfigService,
-        public compat: CompatibilityService
+        public compat: CompatibilityService,
+        private vendor: VendorService
     ) {}
 
     public ngOnInit(): void {
@@ -283,13 +285,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private setIGpuValues(iGpuInfo?: IiGpuInfo): void {
+    private async setIGpuValues(iGpuInfo?: IiGpuInfo): Promise<void> {
         this.iGpuTemp = iGpuInfo?.temp ?? -1;
         const { coreFrequency = -1, maxCoreFrequency = 0 } = iGpuInfo ?? {};
         this.gaugeIGpuFreq =
             maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.iGpuFreq = coreFrequency;
-        this.iGpuVendor = iGpuInfo?.vendor ?? "unknown";
+        this.iGpuVendor = await this.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
     }
 

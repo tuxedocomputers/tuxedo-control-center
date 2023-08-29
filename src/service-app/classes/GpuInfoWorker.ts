@@ -28,6 +28,7 @@ import {
 import * as path from "path";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 import { PowerController } from "../../common/classes/PowerController";
+import { VendorService } from "../../common/classes/Vendor.service";
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: Boolean = false;
@@ -39,12 +40,15 @@ export class GpuInfoWorker extends DaemonWorker {
     );
     private powerWorker: PowerController;
 
-    constructor(tccd: TuxedoControlCenterDaemon) {
+    constructor(
+        public tccd: TuxedoControlCenterDaemon,
+        private vendor: VendorService
+    ) {
         super(2000, tccd);
     }
 
     public async onStart(): Promise<void> {
-        const cpuVendor = await checkCpuVendor();
+        const cpuVendor = await this.vendor.getCpuVendor();
         this.cpuVendor = cpuVendor;
 
         if (cpuVendor === "amd") {
@@ -186,23 +190,6 @@ export class GpuInfoWorker extends DaemonWorker {
 function parseMaxAmdFreq(s: string): number {
     const mhzNumbers = s.match(/\d+Mhz/g).map((str) => parseInt(str));
     return Math.max(...mhzNumbers);
-}
-
-async function checkCpuVendor(): Promise<string> {
-    const stdout = await execCommand("cat /proc/cpuinfo | grep vendor_id");
-
-    const outputLines = stdout.split("\n");
-    const vendorLine = outputLines.find((line) => line.includes("vendor_id"));
-
-    if (vendorLine) {
-        const vendor = vendorLine.split(":")[1].trim();
-
-        if (vendor === "GenuineIntel") {
-            return "intel";
-        } else if (vendor === "AuthenticAMD") {
-            return "amd";
-        }
-    }
 }
 
 function isNvidiaSmiInstalled(): Promise<Boolean> {
