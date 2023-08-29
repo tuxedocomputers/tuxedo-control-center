@@ -30,18 +30,23 @@ export class PrimeWorker extends DaemonWorker {
 
     public async onStart() {
         await this.checkPrimeSupported();
-        if (this.primeSupported) {
-            this.checkPrimeStatus();
-        }
+        this.setPrimeStatus();
     }
 
     public async onWork() {
-        if (this.primeSupported) {
-            this.checkPrimeStatus();
-        }
+        this.setPrimeStatus();
     }
 
     public onExit() {}
+
+    private setPrimeStatus() {
+        if (this.primeSupported) {
+            this.checkPrimeStatus();
+        }
+        if (!this.primeSupported) {
+            this.tccd.dbusData.primeState = "-1";
+        }
+    }
 
     private async checkPrimeSupported() {
         this.primeSupported =

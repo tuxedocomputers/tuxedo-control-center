@@ -225,7 +225,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="expandPrimeSelect">
+    <mat-expansion-panel [expanded]="expandPrimeSelect" *ngIf="primeState != 'off' && primeState != '-1'">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-icon>

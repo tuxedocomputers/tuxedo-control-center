@@ -112,26 +112,28 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- GPU -->
-                <div class="content-container profile-overview">
-                    <div class="column">
-                        <div class="title"
-                            [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
-                            <svg viewBox="0 0 490 512" class="tcc-icons row">
-                                <use href="./assets/images/icon_gpu.svg#Icon"></use>
-                            </svg>
-                            <span class="text" i18n="@@cDashboardGraphicsCardMonitor">Graphics card monitor</span>
+                <div *ngIf="primeState !== 'off'">
+                    <div class="content-container profile-overview">
+                        <div class="column">
+                            <div class="title"
+                                [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">
+                                <svg viewBox="0 0 490 512" class="tcc-icons row">
+                                    <use href="./assets/images/icon_gpu.svg#Icon"></use>
+                                </svg>
+                                <span class="text" i18n="@@cDashboardGraphicsCardMonitor">Graphics card monitor</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div *ngIf="primeState != undefined" class="content-container active-profile">
-                    <span>Active Graphics Mode:</span>
-                    <a mat-button class="link" (click)="gotoSettings()"> {{ primeState }} </a>
+                    <div *ngIf="primeState != undefined && primeState != '-1'" class="content-container active-profile">
+                        <span>Active Graphics Mode:</span>
+                        <a mat-button class="link" (click)="gotoSettings()"> {{ primeState }} </a>
+                    </div>
                 </div>
 
                 <!-- iGPU -->
                 <div class="content-container system-monitor-gauges"
-                    *ngIf="primeState === 'iGPU' || primeState === undefined">
+                    *ngIf="powerState == '-1' || primeState === 'iGPU'">
                     <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'"
                         [ngClass]="{'not-available': !compat.hasIGpuTemp }"
                         [matTooltip]="!compat.hasFanInfo ? compat.fanControlCompatibilityMessage: ''">

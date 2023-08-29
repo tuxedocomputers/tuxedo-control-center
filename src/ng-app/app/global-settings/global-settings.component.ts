@@ -101,6 +101,8 @@ export class GlobalSettingsComponent implements OnInit {
         this.hasChargingSettings =
             Array.isArray(data.chargingProfilesAvailable) &&
             data.chargingProfilesAvailable.length > 0;
+
+        this.primeState = data.primeSelectAvailable;
     }
     
     onCPUSettingsEnabledChanged(event: any) {

@@ -92,7 +92,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     public primeState: string;
-    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
+    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand", "off"];
 
     constructor(
         private sysfs: SysFsService,
@@ -241,6 +241,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
                 const powerState = (await this.checkNvidiaPowerState()).trim();
+
+                if (powerState == "-1") {
+                    this.powerState = "-1";
+                }
 
                 if (powerState == "D0") {
                     this.tccdbus.setDGpuD0Metrics(true);

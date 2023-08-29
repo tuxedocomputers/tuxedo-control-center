@@ -23,6 +23,7 @@ import { LoaderResolver } from "./loader.resolver";
 import {
     ChargingProfilesAvailableResolver,
     ForceYUV420OutputSwitchResolver,
+    PrimeSelectAvailableResolver,
 } from "./settings.resolver";
 
 import { ProfileManagerComponent } from "./profile-manager/profile-manager.component";
@@ -72,6 +73,7 @@ const routes: Routes = [
                         ForceYUV420OutputSwitchResolver,
                     chargingProfilesAvailable:
                         ChargingProfilesAvailableResolver,
+                    primeSelectAvailable: PrimeSelectAvailableResolver,
                 },
                 component: GlobalSettingsComponent,
             },
@@ -82,12 +84,12 @@ const routes: Routes = [
                         ForceYUV420OutputSwitchResolver,
                     chargingProfilesAvailable:
                         ChargingProfilesAvailableResolver,
+                    primeSelectAvailable: PrimeSelectAvailableResolver,
                 },
                 component: GlobalSettingsComponent,
             },
             { path: "aquaris-control", component: AquarisControlComponent },
             { path: "tomte-gui", component: TomteGuiComponent },
-
         ],
     },
     { path: "webcam-preview", component: WebcamPreviewComponent },
