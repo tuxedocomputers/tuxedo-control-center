@@ -48,19 +48,14 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     public async onStart(): Promise<void> {
-        const cpuVendor = await this.vendor.getCpuVendor();
-        this.cpuVendor = cpuVendor;
-
-        if (cpuVendor === "amd") {
+        this.cpuVendor = await this.vendor.getCpuVendor();
+        if (this.cpuVendor === "amd") {
             this.hwmonPath = await this.getHwmonPath();
-        }
-        if (cpuVendor === "intel") {
+        } else if (this.cpuVendor === "intel") {
             this.powerWorker = new PowerController(this.intelRAPLGPU);
         }
 
-        const isInstalled = await isNvidiaSmiInstalled();
-        this.isNvidiaSmiInstalled = isInstalled;
-
+        this.isNvidiaSmiInstalled = await isNvidiaSmiInstalled();
         this.onWork();
     }
 
@@ -162,28 +157,23 @@ export class GpuInfoWorker extends DaemonWorker {
     private async getDGPUValues(): Promise<void> {
         if (!this.isNvidiaSmiInstalled) {
             this.isNvidiaSmiInstalled = await isNvidiaSmiInstalled();
+            return;
         }
 
-        if (this.isNvidiaSmiInstalled) {
-            let dGpuPowerValues: IdGpuInfo;
+        const dGpuPowerValues = this.tccd.dbusData.d0MetricsUsage
+            ? await getDGpuPowerValues()
+            : getDefaultValuesDGpu();
 
-            if (this.tccd.dbusData.d0MetricsUsage) {
-                dGpuPowerValues = await getDGpuPowerValues();
-            } else {
-                dGpuPowerValues = getDefaultValuesDGpu();
-            }
+        const dGpuInfo: IdGpuInfo = {
+            coreFrequency: dGpuPowerValues.coreFrequency,
+            maxCoreFrequency: dGpuPowerValues.maxCoreFrequency,
+            powerDraw: dGpuPowerValues.powerDraw,
+            maxPowerLimit: dGpuPowerValues.maxPowerLimit,
+            enforcedPowerLimit: dGpuPowerValues.enforcedPowerLimit,
+            d0MetricsUsage: this.tccd.dbusData.d0MetricsUsage,
+        };
 
-            const dGpuInfo: IdGpuInfo = {
-                coreFrequency: dGpuPowerValues.coreFrequency,
-                maxCoreFrequency: dGpuPowerValues.maxCoreFrequency,
-                powerDraw: dGpuPowerValues.powerDraw,
-                maxPowerLimit: dGpuPowerValues.maxPowerLimit,
-                enforcedPowerLimit: dGpuPowerValues.enforcedPowerLimit,
-                d0MetricsUsage: this.tccd.dbusData.d0MetricsUsage,
-            };
-
-            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(dGpuInfo);
-        }
+        this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(dGpuInfo);
     }
 }
 
