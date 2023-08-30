@@ -291,6 +291,30 @@ export class TccDBusController {
         }
     }
 
+    async getFnLockSupported(): Promise<boolean> {
+        try {
+            return await this.interface.GetFnLockSupported();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getFnLockStatus(): Promise<boolean> {
+        try {
+            return await this.interface.GetFnLockStatus();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async setFnLockStatus(status: boolean): Promise<boolean> {
+        try {
+            return await this.interface.SetFnLockStatus(status);
+        } catch (err) {
+            return false;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
     }

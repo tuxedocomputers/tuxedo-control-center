@@ -121,6 +121,10 @@ app.whenReady().then( async () => {
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.primeQuery = primeSelectQuery();
     tray.state.isPrimeSupported = primeSupported();
+    tray.state.fnLockSupported = await fnLockSupported(tccDBus);
+    if (tray.state.fnLockSupported) {
+        tray.state.fnLockStatus = await fnLockStatus(tccDBus);
+    }
     await updateTrayProfiles(tccDBus);
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
@@ -139,6 +143,12 @@ app.whenReady().then( async () => {
         buttons: [ 'yes', 'cancel' ],
         message: 'Change graphics configuration and shutdown?'
     };
+
+    tray.events.fnLockClick = (status: boolean) => {
+        tray.state.fnLockStatus = !status
+        tccDBus.setFnLockStatus(tray.state.fnLockStatus);
+    };
+
     tray.events.selectNvidiaClick = () => {
         if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
     };
@@ -706,6 +716,14 @@ function primeSupported(): boolean {
         result = false;
     }
     return result;
+}
+
+async function fnLockSupported(tccDBus: TccDBusController) {
+    return await tccDBus.getFnLockSupported();
+}
+
+async function fnLockStatus(tccDBus: TccDBusController) {
+    return await tccDBus.getFnLockStatus();
 }
 
 function primeSelectQuery(): string {

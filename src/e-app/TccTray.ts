@@ -104,6 +104,15 @@ export class TccTray {
                 click: () => { this.events.powersaveBlockerClick(); },
                 checked: this.state.powersaveBlockerActive
             },
+            {
+                label: "Fn-Lock",
+                type: "checkbox",
+                click: () => {
+                    this.events.fnLockClick(this.state.fnLockStatus);
+                },
+                checked: this.state.fnLockStatus,
+                visible: this.state.fnLockSupported,
+            },
             { type: 'separator', visible: this.state.isPrimeSupported },
             {
                 label: 'Graphics',
@@ -140,6 +149,8 @@ export class TrayState {
     activeProfile: TccProfile;
     profiles: TccProfile[];
     powersaveBlockerActive: boolean
+    fnLockSupported: boolean;
+    fnLockStatus: boolean;
 };
 
 export class TrayEvents {
@@ -151,4 +162,5 @@ export class TrayEvents {
     selectBuiltInClick: () => void;
     profileClick: (profileId: string) => void;
     powersaveBlockerClick: () => void;
+    fnLockClick: (value: boolean) => void;
 }
