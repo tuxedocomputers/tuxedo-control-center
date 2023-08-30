@@ -886,7 +886,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">System monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardMainProcessorMonitor" datatype="html">
@@ -894,7 +894,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Main processor monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuTemperatureLabel" datatype="html">
@@ -902,7 +902,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU - Temp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuFrequencyLabel" datatype="html">
@@ -910,7 +910,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU - Frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuFanLabel" datatype="html">
@@ -918,7 +918,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU - Fan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardActiveProfile" datatype="html">
@@ -926,7 +926,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Active profile:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardGraphicsCardMonitor" datatype="html">
@@ -934,15 +934,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Graphics card monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">118</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cDashboardIGpuFanLabel" datatype="html">
-        <source>iGPU - Fan</source>
-        <target state="new">iGPU - Fan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsTitle" datatype="html">
@@ -3222,22 +3214,6 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="compatibilityMessageNoFanControl" datatype="html">
-        <source>This feature is not supported on your model.</source>
-        <target state="translated">This feature is not supported on your model.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">146</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="compatibilityMessageNoWebcamSwitch" datatype="html">
-        <source>This feature is not supported on your model.</source>
-        <target state="translated">This feature is not supported on your model.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">166</context>
-        </context-group>
-      </trans-unit>
     <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
         <source>Click on a key area to select it.</source>
         <target state="new">Click on a key area to select it.</target>
@@ -3263,117 +3239,114 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Applying Graphics Profile</source><target state="new">Applying Graphics Profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit><trans-unit id="primeSelectDialogApplyProfileDescription" datatype="html">
         <source>Do not power off your device until the process is complete.</source><target state="new">Do not power off your device until the process is complete.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit><trans-unit id="primeSelectDialogRebootTitle" datatype="html">
         <source>Completed</source><target state="new">Completed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit><trans-unit id="noDashboardValue" datatype="html">
         <source>N/A</source><target state="new">N/A</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">372</context>
         </context-group>
       </trans-unit><trans-unit id="cDashboardCpuPowerLabel" datatype="html">
         <source>CPU - Power</source><target state="new">CPU - Power</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit><trans-unit id="cDashboardIGpuFrequencyLabel" datatype="html">
         <source>iGPU - Frequency</source><target state="new">iGPU - Frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">164</context>
         </context-group>
-      </trans-unit><trans-unit id="cDashboardIGpuPowerLabel" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">288</context>
+        </context-group></trans-unit><trans-unit id="cDashboardIGpuPowerLabel" datatype="html">
         <source>iGPU - Power</source><target state="new">iGPU - Power</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">180</context>
         </context-group>
-      </trans-unit><trans-unit id="cDashboardDGpuTemperatureLabel" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">304</context>
+        </context-group></trans-unit><trans-unit id="cDashboardDGpuTemperatureLabel" datatype="html">
         <source>dGPU - Temperature</source><target state="new">dGPU - Temp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">199</context>
         </context-group>
-      </trans-unit><trans-unit id="cDashboardDGpuFanLabel" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">323,324</context>
+        </context-group></trans-unit><trans-unit id="cDashboardDGpuFanLabel" datatype="html">
         <source>dGPU - Fan</source><target state="new">dGPU - Fan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">231</context>
         </context-group>
-      </trans-unit><trans-unit id="cDashboardDGpuFrequencyLabel" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">356</context>
+        </context-group></trans-unit><trans-unit id="cDashboardDGpuFrequencyLabel" datatype="html">
         <source>dGPU - Frequency</source><target state="new">dGPU - Frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">216</context>
         </context-group>
-      </trans-unit><trans-unit id="cDashboardDGpuPowerLabel" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">341</context>
+        </context-group></trans-unit><trans-unit id="cDashboardDGpuPowerLabel" datatype="html">
         <source>dGPU - Power</source><target state="new">dGPU - Power</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">248</context>
         </context-group>
-      </trans-unit><trans-unit id="cGlobalSettingsPrimeSelectDescription" datatype="html">
-        <source>Placeholder.</source><target state="new">Placeholder.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">255</context>
-        </context-group>
-      </trans-unit><trans-unit id="compatibilityMessageNoCpuPower" datatype="html">
-        <source>This feature is not supported on your model.</source><target state="new">This feature is not supported on your model.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">150</context>
-        </context-group>
-      </trans-unit><trans-unit id="compatibilityMessageNoGpuPower" datatype="html">
-        <source>This feature is not supported on your model.</source><target state="new">This feature is not supported on your model.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">154</context>
-        </context-group>
-      </trans-unit><trans-unit id="compatibilityMessageNoGpuFreq" datatype="html">
-        <source>This feature is not supported on your model.</source><target state="new">This feature is not supported on your model.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">158</context>
-        </context-group>
-      </trans-unit><trans-unit id="6759205696902713848" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">374</context>
+        </context-group></trans-unit><trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source><target state="new">Warning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit><trans-unit id="cDashboardIGpuTemperatureLabel" datatype="html">
         <source>iGPU - Temperature</source><target state="new">iGPU - Temperature</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">149</context>
         </context-group>
-      </trans-unit><trans-unit id="cGlobalSettingsPrimeSelectHeader" datatype="html">
-        <source>Prime Select</source><target state="new">Prime Select</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">242</context>
-        </context-group>
-      </trans-unit><trans-unit id="cfea506bf41e6f38b445fb90c1c31abe9b747ed1" datatype="html">
+      <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">271,272</context>
+        </context-group></trans-unit><trans-unit id="cfea506bf41e6f38b445fb90c1c31abe9b747ed1" datatype="html">
         <source>Grafikeinstellungen</source><target state="new">Grafikeinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">236</context>
         </context-group>
         <note priority="1" from="description">cGlobalSettingsPrimeSelectTitle</note>
+      </trans-unit><trans-unit id="compatibilityNotAvailable" datatype="html">
+        <source>This feature is currently not available.</source><target state="new">This feature is currently not available.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
       </trans-unit></body>
   </file>
 </xliff>
