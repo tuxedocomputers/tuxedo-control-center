@@ -23,7 +23,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as https from 'https';
 import { TccDBusController } from '../common/classes/TccDBusController';
-import { TccProfile } from '../common/models/TccProfile';
+import { ITccProfile, TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
@@ -34,8 +34,10 @@ import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 
 import { FanData } from 'src/service-app/classes/TccDBusInterface';
 import { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../common/classes/DBusDisplayBrightnessGnome';
+import { DriveController } from '../common/classes/DriveController';
+import { IDrive } from 'src/common/models/IDrive';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -600,9 +602,417 @@ ipcMain.handle('fs-read-text-file', async (event, filePath) => {
     });
 });
 
+ipcMain.on('fs-file-exists-sync', (event, filePath) => {
+    return fs.existsSync(filePath);
+});
 
 
-ipcMain.on('utils-get-systeminfos-url-sync', async (event, arg) => {
+ipcMain.handle('drive-controller-get-drives', (event) => {
+    return new Promise<IDrive[]>((resolve, reject) => {
+        try {
+            resolve( DriveController.getDrives());
+        } catch (err) {
+          reject(err);
+        }
+      });
+  });
+
+
+  // ####### CPU Backend for sys-fs service ####
+
+  import { CpuController } from '../common/classes/CpuController';
+  import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
+import { ScalingDriver } from 'src/common/classes/LogicalCpuController';
+
+
+
+
+  let cpu = new CpuController('/sys/devices/system/cpu');
+
+ipcMain.on('get-general-cpu-info-sync', (event) => {
+    let cpuInfo: IGeneralCPUInfo;
+    const scalingDriver = cpu.cores[0].scalingDriver.readValueNT();
+    try {
+      cpuInfo = {
+        availableCores: cpu.cores.length,
+        minFreq: cpu.cores[0].cpuinfoMinFreq.readValueNT(),
+        maxFreq: cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
+        scalingAvailableFrequencies: cpu.cores[0].scalingAvailableFrequencies.readValueNT(),
+        scalingAvailableGovernors: cpu.cores[0].scalingAvailableGovernors.readValueNT(),
+        energyPerformanceAvailablePreferences: cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
+        reducedAvailableFreq: cpu.cores[0].getReducedAvailableFreqNT(),
+        boost: cpu.boost.readValueNT()
+      };
+      if (cpuInfo.scalingAvailableFrequencies !== undefined) {
+        cpuInfo.maxFreq = cpuInfo.scalingAvailableFrequencies[0];
+      }
+      if (cpuInfo.boost !== undefined && scalingDriver === ScalingDriver.acpi_cpufreq) {
+        // FIXME: Use actual max boost frequency
+        cpuInfo.maxFreq += 1000000;
+        cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    return cpuInfo;
+  });
+
+
+  ipcMain.on('get-logical-core-info-sync', (event) => {
+    const coreInfoList: ILogicalCoreInfo[] = [];
+    for (const core of cpu.cores) {
+      try {
+        let onlineStatus = true;
+        if (core.coreIndex !== 0) { onlineStatus = core.online.readValue(); }
+        // Skip core if offline
+        if (!onlineStatus) { continue; }
+        const coreInfo: ILogicalCoreInfo = {
+          index: core.coreIndex,
+          online: onlineStatus,
+          scalingCurFreq: core.scalingCurFreq.readValueNT(),
+          scalingMinFreq: core.scalingMinFreq.readValueNT(),
+          scalingMaxFreq: core.scalingMaxFreq.readValueNT(),
+          scalingDriver: core.scalingDriver.readValueNT(),
+          energyPerformanceAvailablePreferences: core.energyPerformanceAvailablePreferences.readValueNT(),
+          energyPerformancePreference: core.energyPerformancePreference.readValueNT(),
+          scalingAvailableGovernors: core.scalingAvailableGovernors.readValueNT(),
+          scalingGovernor: core.scalingGovernor.readValueNT(),
+          cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValueNT(),
+          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT(),
+          coreId: core.coreId.readValueNT(),
+          coreSiblingsList: core.coreSiblingsList.readValueNT(),
+          physicalPackageId: core.physicalPackageId.readValueNT(),
+          threadSiblingsList: core.threadSiblingsList.readValueNT()
+        };
+        coreInfoList.push(coreInfo);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return coreInfoList;
+  });
+
+  ipcMain.on('get-intel-pstate-turbo-value-sync', (event) => {
+    return cpu.intelPstate.noTurbo.readValueNT()
+  });
+
+  // #####   Backend for sys-fs service backlight stuff ########
+  import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
+  let displayBacklightControllers: DisplayBacklightController[];
+  const displayBacklightControllerBasepath = '/sys/class/backlight';
+  const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
+  displayBacklightControllers = [];
+  for (const driverName of displayBacklightControllerNames) {
+    displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
+  }
+
+  
+  ipcMain.on('get-display-brightness-info-sync', (event) => {
+    const infoArray: IDisplayBrightnessInfo[] = [];
+    for (const controller of displayBacklightControllers) {
+      try {
+        const info: IDisplayBrightnessInfo = {
+          driver: controller.driver,
+          brightness: controller.brightness.readValue(),
+          maxBrightness: controller.maxBrightness.readValue()
+        };
+        infoArray.push(info);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return infoArray;
+  });
+
+//########################
+// #### Backend for config service ####
+
+import { ConfigHandler } from '../common/classes/ConfigHandler';
+import { TccPaths } from 'src/common/classes/TccPaths';
+import { ITccSettings } from 'src/common/models/TccSettings';
+
+let config = new ConfigHandler(
+    TccPaths.SETTINGS_FILE,
+    TccPaths.PROFILES_FILE,
+    TccPaths.WEBCAM_FILE,
+    TccPaths.V4L2_NAMES_FILE,
+    TccPaths.AUTOSAVE_FILE,
+    TccPaths.FANTABLES_FILE
+);
+
+import { environment } from '../ng-app/environments/environment';
+let cwd: string = process.cwd();
+
+ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: string, settings) => {
+    // Copy existing current settings and set id of new profile
+    const newSettings: ITccSettings = config.copyConfig<ITccSettings>(settings);
+
+    newSettings.stateMap[stateId] = profileId;
+    const tmpSettingsPath = '/tmp/tmptccsettings';
+    config.writeSettings(newSettings, tmpSettingsPath);
+    let tccdExec: string;
+
+    if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+        tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+    }
+
+    const result = this.electron.ipcRenderer.tccdNewSettings(tccdExec,tmpSettingsPath);
+
+});
+
+
+function getProfileById(searchedProfileId: string): ITccProfile
+{
+    const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.id === searchedProfileId);
+    if (foundProfile !== undefined) {
+        return config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+        return undefined;
+    }
+}
+
+ipcMain.on('config-copy-profile', (event, sourceProfileId: string, newProfileName: string) => {
+    let profileToCopy: ITccProfile;
+
+    if (sourceProfileId === undefined) {
+        profileToCopy = this.dbus.defaultValuesProfile.value;
+    } else {
+        profileToCopy = getProfileById(sourceProfileId);
+    }
+
+    if (profileToCopy === undefined) {
+        return undefined;
+    }
+
+    const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
+    newProfile.name = newProfileName;
+    newProfile.id = generateProfileId();
+    const newProfileList = this.getCustomProfiles().concat(newProfile);
+    const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+    if (success) {
+        this.updateConfigData();
+        await this.dbus.triggerUpdate();
+        return newProfile.id;
+    } else {
+        return undefined;
+    }
+});
+
+
+
+
+ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccProfile[]) => {
+    const tmpProfilesPath = '/tmp/tmptccprofiles';
+    this.config.writeProfiles(customProfiles, tmpProfilesPath);
+    let tccdExec: string;
+    if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+        tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
+    }
+    const result = this.electron.ipcRenderer.tccdNewProfiles(tccdExec,tmpProfilesPath);
+    return result.error === undefined;
+});
+
+
+
+ipcMain.on('config-write-current-editing-profile', (event) => {
+    if (this.editProfileChanges()) {
+        const changedCustomProfiles: ITccProfile[] = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+        changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
+
+        const result = this.pkexecWriteCustomProfiles(changedCustomProfiles);
+        if (result) { this.updateConfigData(); }
+
+        return result;
+    } else {
+        return false;
+    }
+});
+
+
+ipcMain.on('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
+    const tmpProfilesPath = '/tmp/tmptccprofiles';
+    this.config.writeProfiles(customProfiles, tmpProfilesPath);
+    let tccdExec: string;
+    if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+        tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
+    }
+    try {
+        await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+        return true;
+    } catch (err) {
+        return false;
+    }
+});
+
+ipcMain.on('config-write-profile', (event, currentProfileId: string, profile: ITccProfile, states?: string[]) => {
+    return new Promise<boolean>(resolve => {
+        const profileIndex = this.customProfiles.findIndex(p => p.id === currentProfileId);
+        profile.id = currentProfileId;
+
+        // Copy custom profiles and if provided profile is one of them, overwrite with
+        // provided profile
+        const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+        const willOverwriteProfile =
+            // Is custom profile
+            profileIndex !== -1;
+
+        if (willOverwriteProfile) {
+            customProfilesCopy[profileIndex] = profile;
+        }
+
+        // Copy config and if states are provided, assign the chosen profile to these states
+        const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
+        if (states !== undefined) {
+            for (const stateId of states) {
+                newSettings.stateMap[stateId] = profile.id;
+            }
+        }
+
+        this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+            if (success) {
+                this.updateConfigData();
+            }
+            resolve(success);
+        });
+    });
+});
+
+
+ipcMain.on('config-save-settings', (event) => {
+    return new Promise<boolean>(resolve => {
+        const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+        const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
+
+        this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+            if (success) {
+                this.updateConfigData();
+            }
+            resolve(success);
+        });
+    });
+});
+
+
+ipcMain.on('config-pkexec-write-webcam-config-async', (event, settings: WebcamPreset[]) => {
+    return new Promise<boolean>(resolve => {
+        const tmpWebcamPath = '/tmp/tmptccwebcam';
+        this.config.writeWebcamSettings(settings, tmpWebcamPath);
+        let tccdExec: string;
+        if (environment.production) {
+            tccdExec = TccPaths.TCCD_EXEC_FILE;
+        } else {
+            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
+        }
+
+        this.utils.execFile(
+            'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
+        ).then(data => {
+            resolve(true);
+        }).catch(error => {
+            resolve(false);
+        });
+    });
+});
+
+
+ipcMain.on('config-pkexec-write-config-async', (event, settings: ITccSettings, customProfiles: ITccProfile[]) => {
+    return new Promise<boolean>(resolve => {
+        const tmpProfilesPath = '/tmp/tmptccprofiles';
+        const tmpSettingsPath = '/tmp/tmptccsettings';
+        this.config.writeProfiles(customProfiles, tmpProfilesPath);
+        this.config.writeSettings(settings, tmpSettingsPath);
+        let tccdExec: string;
+        if (environment.production) {
+            tccdExec = TccPaths.TCCD_EXEC_FILE;
+        } else {
+            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
+        }
+        this.utils.execFile(
+            'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
+        ).then(data => {
+            resolve(true);
+        }).catch(error => {
+            resolve(false);
+        });
+    });
+});
+
+
+ipcMain.on('config-get-profile-by-name', (event, searchedProfileName: string) => {
+    const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
+    if (foundProfile !== undefined) {
+        return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+        return undefined;
+    }
+});
+
+
+ipcMain.on('config-get-profile-by-id', (event, searchedProfileId: string) => {
+    return getProfileById(searchedProfileId);
+}); 
+
+
+ipcMain.on('config-get-custom-profile-by-name', (event, searchedProfileName: string) => {
+    const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
+    if (foundProfile !== undefined) {
+        return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+        return undefined;
+    }
+});
+
+
+ipcMain.on('config-get-custom-profile-by-id', (event, searchedProfileId: string) => {
+    const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
+    if (foundProfile !== undefined) {
+        return this.config.copyConfig<ITccProfile>(foundProfile);
+    } else {
+        return undefined;
+    }
+});
+let currentProfileEdit: ITccProfile;
+let currentProfileEditIndex: number;
+let editingProfileSubject: Subject<ITccProfile>;
+let editingProfile: BehaviorSubject<ITccProfile>;
+
+let customProfiles: ITccProfile[];
+
+ipcMain.on('config-set-current-editing-profile', (event, customProfileId: string) => {
+    if (customProfileId === undefined) {
+        currentProfileEditIndex = -1;
+        currentProfileEdit = undefined;
+        editingProfileSubject.next(undefined);
+        editingProfile.next(undefined);
+    }
+    const index = currentProfileEditIndex = customProfiles.findIndex(e => e.id === customProfileId);
+    if (index === -1) {
+        return false;
+    } else {
+        currentProfileEditIndex = index;
+        currentProfileEdit = config.copyConfig<ITccProfile>(customProfiles[index]);
+        editingProfileSubject.next(currentProfileEdit);
+        editingProfile.next(currentProfileEdit);
+        return true;
+    }
+});
+
+
+ipcMain.on('config-get-default-fan-profiles', (event) => {
+return config.getDefaultFanProfiles();
+});
+
+// ########################################################
+
+
+ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
     return systeminfosURL;
 });
 
@@ -668,6 +1078,7 @@ ipcMain.on('minimize-window', () => {
     tccWindow.minimize();
 })
 
+// TODO might not be needed anymore, I think it was just a hacky fix for something that I resolved differently
 ipcMain.on('node-require', (event, requiree) => {
     try {
         event.returnValue = { data: require(requiree), error: undefined };

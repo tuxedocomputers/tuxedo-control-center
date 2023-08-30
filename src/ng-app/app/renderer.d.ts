@@ -1,6 +1,12 @@
 import { ClientAPI } from "src/e-app/AquarisAPI";
 import { EventEmitter } from 'node:events';
 import { FanData } from "src/service-app/classes/TccDBusInterface";
+import { IDrive } from "../../common/models/IDrive"; 
+import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
+import { ITccProfile } from "src/common/models/TccProfile";
+import { WebcamPreset } from "src/common/models/TccWebcamSettings";
+import { ITccSettings } from "src/common/models/TccSettings";
+import { ITccFanProfile } from "src/common/models/TccFanTable";
 
 export interface IPC extends EventEmitter {
     // TODO probably have to modify this somehow
@@ -17,12 +23,6 @@ export interface IPC extends EventEmitter {
     getShouldUseDarkColors: () => Promise<boolean>,
     tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
-    closeWebcamPreview: () => void,
-    videoEnded: () => void,
-    applyControls: () => void,
-    onVideoEnded: (callback) => void,
-    onExternalWebcamPreviewClosed: (callback) => void,
-    onApplyControls: (callback) => void,
     nodeRequire: (string) => any,
   }
   
@@ -75,8 +75,55 @@ export interface IPC extends EventEmitter {
   export interface FS 
   {
      writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => Promise<void>,
-     readTextFile: (filePath: string) => Promise<string>
+     readTextFile: (filePath: string) => Promise<string>,
+     existsSync: (filePath: string) => boolean,
   }
+
+  export interface DRIVECONTROLLER
+  {
+    getDrives: () => IDrive[]
+  }
+export interface WEBCAM 
+{
+    closeWebcamPreview: () => void,
+    videoEnded: () => void,
+    applyControls: () => void,
+    onVideoEnded: (callback) => void,
+    onExternalWebcamPreviewClosed: (callback) => void,
+    onApplyControls: (callback) => void,
+}
+
+export interface CPU 
+{
+    getGeneralCpuInfoSync: () => IGeneralCPUInfo,
+    getLogicalCoreInfoSync: () =>  ILogicalCoreInfo[],
+    getIntelPstateTurboValueSync: () => boolean,
+}
+
+export interface BACKLIGHT 
+{
+    getDisplayBrightnessInfo: () => IDisplayBrightnessInfo[]
+}
+
+export interface CONFIG 
+{
+    setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,
+    copyProfile: (sourceProfileId: string, newProfileName: string) => void,
+    pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => void,
+    writeCurrentEditingProfile: () => boolean,
+    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,
+    writeProfile: (currentProfileId: string, profile: ITccProfile, states?: string[]) => Promise<boolean>,
+    saveSettings: () => Promise<boolean>,
+    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
+    pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
+    getProfileByName: (searchedProfileName: string) => ITccProfile,
+    getProfileById: (searchedProfileId: string) => ITccProfile,
+    getCustomProfileByName: (searchedProfileName: string) => ITccProfile,
+    getCustomProfileById: (searchedProfileId: string) => ITccProfile,
+    setCurrentEditingProfile: (customProfileId: string) => boolean,  
+    getDefaultFanProfiles: () => ITccFanProfile[],                                                         
+}
+
 
   declare global {
     interface Window {
@@ -84,9 +131,15 @@ export interface IPC extends EventEmitter {
       aquarisApi: ClientAPI,
       dbus: DBUS,
       https: HTTPS,
-      fs: FS
+      fs: FS,
+      driveController: DRIVECONTROLLER,
+      webcam: WEBCAM,
+      cpu: CPU,
+      backlight: BACKLIGHT,
+      config: CONFIG
     }
   }
+  
 
   export interface IPCReturnValue
   {

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ElectronService } from "../electron-service-wrapper/electron-service";
-import { fromEvent, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import {
     WebcamPreset,
     WebcamDeviceInformation,
@@ -24,8 +24,8 @@ import { ConfigHandler } from "src/common/classes/ConfigHandler";
 import { TccPaths } from "src/common/classes/TccPaths";
 import { MatOptionSelectionChange } from "@angular/material/core";
 import { Mutex } from "async-mutex";
-import * as fs from "fs";
-import { ConfigService } from "../config.service";
+// import * as fs from "fs";
+// import { ConfigService } from "../config.service";
 import { environment } from "../../environments/environment";
 import { MatTab } from "@angular/material/tabs";
 
@@ -83,17 +83,15 @@ export class WebcamSettingsComponent implements OnInit {
     warnedOnceWebcamAccessError: boolean = false;
 
     constructor(
-        private electron: ElectronService,
         private utils: UtilsService,
         private cdref: ChangeDetectorRef,
         private webcamGuard: WebcamSettingsGuard,
-        private config: ConfigService
     ) {}
     private configHandler: ConfigHandler;
 
     async ngOnInit() {
         this.webcamGuard.setLoadingStatus(true);
-
+        // TODO instead of doing stuff inside confighandler, use new methods in config.service, that will talk to config handler over contextbridge
         this.configHandler = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
@@ -104,7 +102,7 @@ export class WebcamSettingsComponent implements OnInit {
         );
 
         // register callback for IPC signal from main
-        this.electron.ipcRenderer.onApplyControls(async () => {
+        window.webcam.onApplyControls(async () => {
             await this.executeWebcamCtrlsList(
                 this.webcamFormGroup.getRawValue()
             );
@@ -121,7 +119,7 @@ export class WebcamSettingsComponent implements OnInit {
             })
         ); */
 
-        this.electron.ipcRenderer.onExternalWebcamPreviewClosed(() => {
+        window.webcam.onExternalWebcamPreviewClosed(() => {
             this.detachedWebcamWindowActive = false;
             document.getElementById("hidden").style.display = "flex";
             this.applyPreset(this.webcamFormGroup.getRawValue());
@@ -139,7 +137,7 @@ export class WebcamSettingsComponent implements OnInit {
             })
         ); */
 
-        this.electron.ipcRenderer.onVideoEnded(() => {
+        window.webcam.onVideoEnded(() => {
             this.handleVideoEnded();
         });
 /* 
@@ -364,7 +362,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
         let webcamConfig = this.getCurrentWebcamConstraints();
-        this.electron.ipcRenderer.send("create-webcam-preview", webcamConfig);
+        window.ipc.send("create-webcam-preview", webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
 
@@ -841,7 +839,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             if (this.detachedWebcamWindowActive) {
-                this.electron.ipcRenderer.send(
+                window.ipc.send(
                     "setting-webcam-with-loading",
                     webcamConfig
                 );
@@ -1159,7 +1157,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async loadingPresetData(): Promise<void> {
         await this.reloadConfigValues();
-        if (fs.existsSync(TccPaths.WEBCAM_FILE)) {
+        if (window.fs.existsSync(TccPaths.WEBCAM_FILE)) {
             this.allPresetData = this.configHandler.readWebcamSettings();
             this.filterPresetsForCurrentDevice();
 
@@ -1388,7 +1386,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.subscriptions.unsubscribe();
 
         if (this.detachedWebcamWindowActive) {
-            this.electron.ipcRenderer.closeWebcamPreview()
+            window.webcam.closeWebcamPreview()
         }
     }
 }

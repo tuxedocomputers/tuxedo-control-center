@@ -17,9 +17,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { windowWhen } from 'rxjs/operators';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
-import { DriveController } from "../../../common/classes/DriveController";
+import { IDrive } from "../../../common/models/IDrive";
 
 @Component({
     selector: 'app-change-crypt-password',
@@ -32,7 +33,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     show_password_button_text = '';
     successtext_cryptsetup = '';
     errortext_cryptsetup = '';
-    crypt_drives = [];
+    crypt_drives: IDrive[] = [];
 
     passwordFormGroup: FormGroup = new FormGroup({
         cryptPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
@@ -45,7 +46,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.crypt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
+        this.crypt_drives = (await window.driveController.getDrives()).filter(x => x.crypt);
 
         this.buttonType = "password";
         this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;

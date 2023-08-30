@@ -17,18 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, OnDestroy } from '@angular/core';
-import { CpuController } from '../../common/classes/CpuController';
-import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
+import { IGeneralCPUInfo, ILogicalCoreInfo, IPstateInfo, IDisplayBrightnessInfo } from '../../common/models/ICpuInfos';
 import { BehaviorSubject } from 'rxjs';
-import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SysFsService implements OnDestroy {
+  // TODO do not use backlight controller directly, use specific methods over the contextbridge 
 
-  private cpu: CpuController;
-  private displayBacklightControllers: DisplayBacklightController[];
 
   private updateInterval: NodeJS.Timeout;
   private updatePeriodMs = 3000;
@@ -37,14 +36,8 @@ export class SysFsService implements OnDestroy {
   public pstateInfo: BehaviorSubject<IPstateInfo>;
 
   constructor() {
-    this.cpu = new CpuController('/sys/devices/system/cpu');
 
-    const displayBacklightControllerBasepath = '/sys/class/backlight';
-    const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
-    this.displayBacklightControllers = [];
-    for (const driverName of displayBacklightControllerNames) {
-      this.displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
-    }
+
 
     this.periodicUpdate();
     this.updateInterval = setInterval(() => { this.periodicUpdate(); }, this.updatePeriodMs);
@@ -77,129 +70,23 @@ export class SysFsService implements OnDestroy {
   }
 
   public getGeneralCpuInfo(): IGeneralCPUInfo {
-    let cpuInfo: IGeneralCPUInfo;
-    const scalingDriver = this.cpu.cores[0].scalingDriver.readValueNT();
-    try {
-      cpuInfo = {
-        availableCores: this.cpu.cores.length,
-        minFreq: this.cpu.cores[0].cpuinfoMinFreq.readValueNT(),
-        maxFreq: this.cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
-        scalingAvailableFrequencies: this.cpu.cores[0].scalingAvailableFrequencies.readValueNT(),
-        scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
-        energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
-        reducedAvailableFreq: this.cpu.cores[0].getReducedAvailableFreqNT(),
-        boost: this.cpu.boost.readValueNT()
-      };
-      if (cpuInfo.scalingAvailableFrequencies !== undefined) {
-        cpuInfo.maxFreq = cpuInfo.scalingAvailableFrequencies[0];
-      }
-      if (cpuInfo.boost !== undefined && scalingDriver === ScalingDriver.acpi_cpufreq) {
-        // FIXME: Use actual max boost frequency
-        cpuInfo.maxFreq += 1000000;
-        cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-
-    return cpuInfo;
+    return window.cpu.getGeneralCpuInfoSync();
   }
 
   public getLogicalCoreInfo(): ILogicalCoreInfo[] {
-    const coreInfoList: ILogicalCoreInfo[] = [];
-    for (const core of this.cpu.cores) {
-      try {
-        let onlineStatus = true;
-        if (core.coreIndex !== 0) { onlineStatus = core.online.readValue(); }
-        // Skip core if offline
-        if (!onlineStatus) { continue; }
-        const coreInfo: ILogicalCoreInfo = {
-          index: core.coreIndex,
-          online: onlineStatus,
-          scalingCurFreq: core.scalingCurFreq.readValueNT(),
-          scalingMinFreq: core.scalingMinFreq.readValueNT(),
-          scalingMaxFreq: core.scalingMaxFreq.readValueNT(),
-          scalingDriver: core.scalingDriver.readValueNT(),
-          energyPerformanceAvailablePreferences: core.energyPerformanceAvailablePreferences.readValueNT(),
-          energyPerformancePreference: core.energyPerformancePreference.readValueNT(),
-          scalingAvailableGovernors: core.scalingAvailableGovernors.readValueNT(),
-          scalingGovernor: core.scalingGovernor.readValueNT(),
-          cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValueNT(),
-          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT(),
-          coreId: core.coreId.readValueNT(),
-          coreSiblingsList: core.coreSiblingsList.readValueNT(),
-          physicalPackageId: core.physicalPackageId.readValueNT(),
-          threadSiblingsList: core.threadSiblingsList.readValueNT()
-        };
-        coreInfoList.push(coreInfo);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    return coreInfoList;
+    return window.cpu.getLogicalCoreInfoSync();
   }
 
   public getPstateInfo(): IPstateInfo {
     const pstateInfo: IPstateInfo = {
-      noTurbo: this.cpu.intelPstate.noTurbo.readValueNT()
+      noTurbo: window.cpu.getIntelPstateTurboValueSync()
     };
     return pstateInfo;
   }
 
   public getDisplayBrightnessInfo(): IDisplayBrightnessInfo[] {
-    const infoArray: IDisplayBrightnessInfo[] = [];
-    for (const controller of this.displayBacklightControllers) {
-      try {
-        const info: IDisplayBrightnessInfo = {
-          driver: controller.driver,
-          brightness: controller.brightness.readValue(),
-          maxBrightness: controller.maxBrightness.readValue()
-        };
-        infoArray.push(info);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    return infoArray;
+    return window.backlight.getDisplayBrightnessInfo();
   }
 }
 
-export interface IGeneralCPUInfo {
-  availableCores: number;
-  minFreq: number;
-  maxFreq: number;
-  scalingAvailableFrequencies: number[];
-  scalingAvailableGovernors: string[];
-  energyPerformanceAvailablePreferences: string[];
-  reducedAvailableFreq: number;
-  boost: boolean;
-}
 
-export interface ILogicalCoreInfo {
-  index: number;
-  online: boolean;
-  scalingCurFreq: number;
-  scalingMinFreq: number;
-  scalingMaxFreq: number;
-  scalingDriver: string;
-  energyPerformanceAvailablePreferences: string[];
-  energyPerformancePreference: string;
-  scalingAvailableGovernors: string[];
-  scalingGovernor: string;
-  cpuInfoMinFreq: number;
-  cpuInfoMaxFreq: number;
-  coreId: number;
-  coreSiblingsList: number[];
-  physicalPackageId: number;
-  threadSiblingsList: number[];
-}
-
-export interface IDisplayBrightnessInfo {
-  driver: string;
-  brightness: number;
-  maxBrightness: number;
-}
-
-export interface IPstateInfo {
-  noTurbo: boolean;
-}

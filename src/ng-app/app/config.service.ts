@@ -17,17 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, OnDestroy } from '@angular/core';
-
-import { TccPaths } from '../../common/classes/TccPaths';
 import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
-import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { environment } from '../environments/environment';
-import { ElectronService } from './electron-service-wrapper/electron-service';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
@@ -36,32 +30,25 @@ import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 })
 export class ConfigService implements OnDestroy {
 
-    private config: ConfigHandler;
-
     private defaultProfiles: ITccProfile[];
     private defaultValuesProfile: ITccProfile;
-    private customProfiles: ITccProfile[];
     private settings: ITccSettings;
 
-    private currentProfileEdit: ITccProfile;
-    private currentProfileEditIndex: number;
+
 
     public observeSettings: Observable<ITccSettings>;
     private settingsSubject: Subject<ITccSettings>;
 
     public observeEditingProfile: Observable<ITccProfile>;
-    private editingProfileSubject: Subject<ITccProfile>;
-    public editingProfile: BehaviorSubject<ITccProfile>;
+
 
     private subscriptions: Subscription = new Subscription();
-    private cwd: string;
 
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;
     // public writeSettings = ConfigHandler.prototype.writeSettings;
 
     constructor(
-        private electron: ElectronService,
         private utils: UtilsService,
         private dbus: TccDBusClientService) {
         this.settingsSubject = new Subject<ITccSettings>();
@@ -70,16 +57,6 @@ export class ConfigService implements OnDestroy {
         this.editingProfileSubject = new Subject<ITccProfile>();
         this.observeEditingProfile = this.editingProfileSubject.asObservable();
         this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
-        this.cwd = this.utils.getCWDSync();
-        this.config = new ConfigHandler(
-            TccPaths.SETTINGS_FILE,
-            TccPaths.PROFILES_FILE,
-            TccPaths.WEBCAM_FILE,
-            TccPaths.V4L2_NAMES_FILE,
-            TccPaths.AUTOSAVE_FILE,
-            TccPaths.FANTABLES_FILE
-        );
-
         this.defaultProfiles = this.dbus.defaultProfiles.value;
         this.updateConfigData();
         this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
@@ -145,22 +122,7 @@ export class ConfigService implements OnDestroy {
     }
 
     public setActiveProfile(profileId: string, stateId: string): void {
-        // Copy existing current settings and set id of new profile
-        const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
-
-        newSettings.stateMap[stateId] = profileId;
-        const tmpSettingsPath = '/tmp/tmptccsettings';
-        this.config.writeSettings(newSettings, tmpSettingsPath);
-        let tccdExec: string;
-
-        if (environment.production) {
-            tccdExec = TccPaths.TCCD_EXEC_FILE;
-        } else {
-            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-        }
-
-        const result = this.electron.ipcRenderer.tccdNewSettings(tccdExec,tmpSettingsPath);
-
+        window.config.setActiveProfile(profileId, stateId, this.getSettings());
         this.updateConfigData();
     }
 
@@ -172,30 +134,7 @@ export class ConfigService implements OnDestroy {
      * @returns The new profile ID or undefined on error
      */
     public async copyProfile(sourceProfileId: string, newProfileName: string) {
-        let profileToCopy: ITccProfile;
-
-        if (sourceProfileId === undefined) {
-            profileToCopy = this.dbus.defaultValuesProfile.value;
-        } else {
-            profileToCopy = this.getProfileById(sourceProfileId);
-        }
-
-        if (profileToCopy === undefined) {
-            return undefined;
-        }
-
-        const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
-        newProfile.name = newProfileName;
-        newProfile.id = generateProfileId();
-        const newProfileList = this.getCustomProfiles().concat(newProfile);
-        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
-        if (success) {
-            this.updateConfigData();
-            await this.dbus.triggerUpdate();
-            return newProfile.id;
-        } else {
-            return undefined;
-        }
+        return window.config.copyProfile(sourceProfileId, newProfileName);
     }
 
     // appends given profiles to custom profiles but replaces all of those where IDs conflict!
@@ -247,138 +186,27 @@ export class ConfigService implements OnDestroy {
     }
 
     public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {
-        const tmpProfilesPath = '/tmp/tmptccprofiles';
-        this.config.writeProfiles(customProfiles, tmpProfilesPath);
-        let tccdExec: string;
-        if (environment.production) {
-            tccdExec = TccPaths.TCCD_EXEC_FILE;
-        } else {
-            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-        }
-        const result = this.electron.ipcRenderer.tccdNewProfiles(tccdExec,tmpProfilesPath);
-        return result.error === undefined;
+        return window.config.pkexecWriteCustomProfiles(customProfiles);
     }
 
     public writeCurrentEditingProfile(): boolean {
-        if (this.editProfileChanges()) {
-            const changedCustomProfiles: ITccProfile[] = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
-            changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
-
-            const result = this.pkexecWriteCustomProfiles(changedCustomProfiles);
-            if (result) { this.updateConfigData(); }
-
-            return result;
-        } else {
-            return false;
-        }
+        return window.config.writeCurrentEditingProfile();
     }
 
     private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]) {
-        const tmpProfilesPath = '/tmp/tmptccprofiles';
-        this.config.writeProfiles(customProfiles, tmpProfilesPath);
-        let tccdExec: string;
-        if (environment.production) {
-            tccdExec = TccPaths.TCCD_EXEC_FILE;
-        } else {
-            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-        }
-        try {
-            await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
-            return true;
-        } catch (err) {
-            return false;
-        }
+        return window.config.pkexecWriteCustomProfilesAsync(customProfiles);
     }
 
     public async writeProfile(currentProfileId: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            const profileIndex = this.customProfiles.findIndex(p => p.id === currentProfileId);
-            profile.id = currentProfileId;
-
-            // Copy custom profiles and if provided profile is one of them, overwrite with
-            // provided profile
-            const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
-            const willOverwriteProfile =
-                // Is custom profile
-                profileIndex !== -1;
-
-            if (willOverwriteProfile) {
-                customProfilesCopy[profileIndex] = profile;
-            }
-
-            // Copy config and if states are provided, assign the chosen profile to these states
-            const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
-            if (states !== undefined) {
-                for (const stateId of states) {
-                    newSettings.stateMap[stateId] = profile.id;
-                }
-            }
-
-            this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
-                if (success) {
-                    this.updateConfigData();
-                }
-                resolve(success);
-            });
-        });
+        return window.config.writeProfile(currentProfileId, profile, states);
     }
 
     public async saveSettings(): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
-            const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
-
-            this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
-                if (success) {
-                    this.updateConfigData();
-                }
-                resolve(success);
-            });
-        });
+        return window.config.saveSettings();
     }
 
     public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[]): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            const tmpWebcamPath = '/tmp/tmptccwebcam';
-            this.config.writeWebcamSettings(settings, tmpWebcamPath);
-            let tccdExec: string;
-            if (environment.production) {
-                tccdExec = TccPaths.TCCD_EXEC_FILE;
-            } else {
-                tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-            }
-
-            this.utils.execFile(
-                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
-            ).then(data => {
-                resolve(true);
-            }).catch(error => {
-                resolve(false);
-            });
-        });
-    }
-
-    
-    private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            const tmpProfilesPath = '/tmp/tmptccprofiles';
-            const tmpSettingsPath = '/tmp/tmptccsettings';
-            this.config.writeProfiles(customProfiles, tmpProfilesPath);
-            this.config.writeSettings(settings, tmpSettingsPath);
-            let tccdExec: string;
-            if (environment.production) {
-                tccdExec = TccPaths.TCCD_EXEC_FILE;
-            } else {
-                tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-            }
-            this.utils.execFile(
-                'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
-            ).then(data => {
-                resolve(true);
-            }).catch(error => {
-                resolve(false);
-            });
-        });
+        return window.config.pkexecWriteWebcamConfigAsync(settings)
     }
 
     /**
@@ -391,39 +219,19 @@ export class ConfigService implements OnDestroy {
     }
 
     public getProfileByName(searchedProfileName: string): ITccProfile {
-        const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
-        if (foundProfile !== undefined) {
-            return this.config.copyConfig<ITccProfile>(foundProfile);
-        } else {
-            return undefined;
-        }
+        return window.config.getProfileByName(searchedProfileName);
     }
 
     public getProfileById(searchedProfileId: string): ITccProfile {
-        const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.id === searchedProfileId);
-        if (foundProfile !== undefined) {
-            return this.config.copyConfig<ITccProfile>(foundProfile);
-        } else {
-            return undefined;
-        }
+        return window.config.getProfileById(searchedProfileId);
     }
 
     public getCustomProfileByName(searchedProfileName: string): ITccProfile {
-        const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
-        if (foundProfile !== undefined) {
-            return this.config.copyConfig<ITccProfile>(foundProfile);
-        } else {
-            return undefined;
-        }
+        return window.config.getCustomProfileByName(searchedProfileName);
     }
 
     public getCustomProfileById(searchedProfileId: string): ITccProfile {
-        const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
-        if (foundProfile !== undefined) {
-            return this.config.copyConfig<ITccProfile>(foundProfile);
-        } else {
-            return undefined;
-        }
+        return window.config.getCustomProfileById(searchedProfileId);
     }
 
     /**
@@ -447,25 +255,10 @@ export class ConfigService implements OnDestroy {
      * @returns false if the ID doesn't exist among the custom profiles, true if successfully set
      */
     public setCurrentEditingProfile(customProfileId: string): boolean {
-        if (customProfileId === undefined) {
-            this.currentProfileEditIndex = -1;
-            this.currentProfileEdit = undefined;
-            this.editingProfileSubject.next(undefined);
-            this.editingProfile.next(undefined);
-        }
-        const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.id === customProfileId);
-        if (index === -1) {
-            return false;
-        } else {
-            this.currentProfileEditIndex = index;
-            this.currentProfileEdit = this.config.copyConfig<ITccProfile>(this.customProfiles[index]);
-            this.editingProfileSubject.next(this.currentProfileEdit);
-            this.editingProfile.next(this.currentProfileEdit);
-            return true;
-        }
+        return window.config.setCurrentEditingProfile(customProfileId);
     }
 
     public getFanProfiles(): ITccFanProfile[] {
-        return this.config.getDefaultFanProfiles();
+        return window.config.getDefaultFanProfiles();
     }
 }

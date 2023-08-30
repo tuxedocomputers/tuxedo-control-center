@@ -1,3 +1,6 @@
+import { ITccProfile } from "src/common/models/TccProfile";
+import { ITccSettings } from "src/common/models/TccSettings";
+import { WebcamPreset } from "src/common/models/TccWebcamSettings";
 import { aquarisAPIHandle, ClientAPI } from "./AquarisAPI"
 
 const { contextBridge, ipcRenderer } = require('electron')
@@ -24,23 +27,6 @@ contextBridge.exposeInMainWorld(
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => ipcRenderer.sendSync(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
     ),
-    closeWebcamPreview: () => ipcRenderer.send("close-webcam-preview"),
-    // https://github.com/electron/electron/issues/21437
-    onApplyControls: (callback) => {
-        ipcRenderer.on('apply-controls', callback);
-    },
-    onExternalWebcamPreviewClosed: (callback) => {
-        ipcRenderer.on('external-webcam-preview-closed', callback);
-    },
-    onVideoEnded: (callback) => {
-        ipcRenderer.on('video-ended', callback);
-    },
-    videoEnded: () => ipcRenderer.send('video-ended'),
-    applyControls: () => ipcRenderer.send('apply-controls'),
-
-/*
-
-*/
 
   }
 );
@@ -89,10 +75,29 @@ contextBridge.exposeInMainWorld(
 );
 
 contextBridge.exposeInMainWorld(
+    'webcam',
+    {     
+    closeWebcamPreview: () => ipcRenderer.send("close-webcam-preview"),
+    // https://github.com/electron/electron/issues/21437
+    onApplyControls: (callback) => {
+        ipcRenderer.on('apply-controls', callback);
+    },
+    onExternalWebcamPreviewClosed: (callback) => {
+        ipcRenderer.on('external-webcam-preview-closed', callback);
+    },
+    onVideoEnded: (callback) => {
+        ipcRenderer.on('video-ended', callback);
+    },
+    videoEnded: () => ipcRenderer.send('video-ended'),
+    applyControls: () => ipcRenderer.send('apply-controls'),
+    }
+);
+contextBridge.exposeInMainWorld(
     'fs',
     {
         writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => ipcRenderer.invoke('fs-write-text-file',filePath,fileData,writeFileOptions),
         readTextFile: (filePath: string) => ipcRenderer.invoke('fs-read-text-file',filePath),
+        existsSync: (filePath: string) => ipcRenderer.sendSync('fs-file-exists-sync', filePath),
     }
 );
 
@@ -117,5 +122,50 @@ contextBridge.exposeInMainWorld(
 
     }
 );
+
+contextBridge.exposeInMainWorld(
+    'config',
+    {
+        setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => ipcRenderer.send('config-set-active-profile',profileId,stateId,settings),
+        copyProfile: (sourceProfileId: string, newProfileName: string) => ipcRenderer.invoke('config-copy-profile',sourceProfileId,newProfileName),
+        pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => ipcRenderer.send('config-pkexec-write-custom-profiles',customProfiles),
+        writeCurrentEditingProfile: ()  => ipcRenderer.send('config-write-current-editing-profile'),
+        pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => ipcRenderer.invoke('config-pkexec-write-custom-profiles-async',customProfiles),
+        writeProfile: (currentProfileId: string, profile: ITccProfile, states?: string[])  => ipcRenderer.invoke('config-write-profile',currentProfileId,profile),
+        saveSettings: () => ipcRenderer.invoke('config-save-settings'),
+        pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke('config-pkexec-write-webcam-config-async', settings),
+        pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[])  => ipcRenderer.invoke('config-pkexec-write-config-async',settings,customProfiles),
+        getProfileByName: (searchedProfileName: string) => ipcRenderer.send('config-get-profile-by-name',searchedProfileName),
+        getProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-profile-by-id',searchedProfileId),
+        getCustomProfileByName: (searchedProfileName: string) => ipcRenderer.send('config-get-custom-profile-by-name', searchedProfileName),
+        getCustomProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-custom-profile-by-id',searchedProfileId),
+        setCurrentEditingProfile: (customProfileId: string) => ipcRenderer.send('config-set-current-editing-profile',customProfileId),
+        getDefaultFanProfiles: () => ipcRenderer.send('config-get-default-fan-profiles'),
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'driveController',
+    {
+        getDrives: () => ipcRenderer.invoke('drive-controller-get-drives')
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'cpu',
+    {
+        getGeneralCpuInfoSync: () => ipcRenderer.send('get-general-cpu-info-sync'),
+        getLogicalCoreInfoSync: () => ipcRenderer.send('get-logical-core-info-sync'),
+        getIntelPstateTurboValueSync: () => ipcRenderer.send('get-intel-pstate-turbo-value-sync'),
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'backlight',
+    {
+        getDisplayBrightnessInfo: () => ipcRenderer.send('get-display-brightness-info-sync'),
+    }
+);
+
 
 contextBridge.exposeInMainWorld('aquarisAPI', new ClientAPI(ipcRenderer, aquarisAPIHandle));

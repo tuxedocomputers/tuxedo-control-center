@@ -80,7 +80,7 @@ export class DialogChoiceComponent {
         }
         this.dialogRef.close(dialogResult);
     }
-
+// TODO this causes circular dependencies
     public async openExternalUrl(url: string) {
         await this.utils.openExternal(url);
     }
