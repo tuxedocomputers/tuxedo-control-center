@@ -23,7 +23,7 @@ import {
     SysFsService,
     IPstateInfo,
 } from "../sys-fs.service";
-import { Subscription } from "rxjs";
+import { Subscription, combineLatest, from } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService, IDBusFanData } from "../tcc-dbus-client.service";
 import { ITccProfile } from "src/common/models/TccProfile";
@@ -107,10 +107,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     ) {}
 
     public async ngOnInit(): Promise<void> {
+        this.initializeSubscriptions();
+        this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.powerState = (await this.checkNvidiaPowerState()).trim();
-        this.initializeEventListeners();
-        this.initializeSubscriptions();
     }
 
     private initializeEventListeners(): void {
@@ -186,27 +186,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeODMInfo(): void {
         this.subscriptions.add(
             this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]) => {
-                const pl1Info = tdpInfoArray.find(
-                    (info) => info.descriptor === "pl1"
-                );
-                const pl2Info = tdpInfoArray.find(
-                    (info) => info.descriptor === "pl2"
-                );
-                const pl4Info = tdpInfoArray.find(
-                    (info) => info.descriptor === "pl4"
-                );
-
-                let maxPowerLimit = -1;
-                if (pl1Info) {
-                    maxPowerLimit = Math.max(maxPowerLimit, pl1Info.max);
-                }
-                if (pl2Info) {
-                    maxPowerLimit = Math.max(maxPowerLimit, pl2Info.max);
-                }
-                if (pl4Info) {
-                    maxPowerLimit = Math.max(maxPowerLimit, pl4Info.max);
-                }
-
+                const maxPowerLimit = tdpInfoArray.reduce((max, info) => {
+                    if (["pl1", "pl2", "pl4"].includes(info.descriptor)) {
+                        return Math.max(max, info.max);
+                    }
+                    return max;
+                }, -1);
                 this.cpuPowerLimit = maxPowerLimit;
             })
         );
@@ -238,16 +223,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             : 0;
     }
 
-    private subscribeToDGpuInfo(): void {
+    private async subscribeToDGpuInfo(): Promise<void> {
         this.subscriptions.add(
-            this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
-                const powerState = (await this.checkNvidiaPowerState()).trim();
-
-                if (powerState == "-1") {
+            combineLatest([
+                this.tccdbus.dGpuInfo,
+                from(
+                    this.checkNvidiaPowerState().then((powerState) =>
+                        powerState.trim()
+                    )
+                ),
+            ]).subscribe(([dGpuInfo, powerState]) => {
+                if (powerState === "-1") {
                     this.powerState = "-1";
                 }
 
-                if (powerState == "D0") {
+                if (powerState === "D0") {
                     this.tccdbus.setDGpuD0Metrics(true);
                 }
 
@@ -310,11 +300,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToFanData(): void {
         this.subscriptions.add(
-            this.tccdbus.fanData.subscribe((data: IDBusFanData) => {
-                if (!data) return;
+            this.tccdbus.fanData.subscribe((fanData: IDBusFanData) => {
+                if (!fanData) return;
 
-                this.fanData = data;
-                const { cpu, gpu1, gpu2 } = data;
+                this.fanData = fanData;
+                const { cpu, gpu1, gpu2 } = fanData;
                 const gpu1Temp = gpu1?.temp?.data?.value;
                 const gpu2Temp = gpu2?.temp?.data?.value;
                 const gpu1Speed = gpu1?.speed?.data?.value;
