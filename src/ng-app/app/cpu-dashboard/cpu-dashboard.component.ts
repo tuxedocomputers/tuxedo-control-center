@@ -106,8 +106,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private vendor: VendorService
     ) {}
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         this.tccdbus.setSensorDataCollectionStatus(true);
+        this.powerState = (await this.checkNvidiaPowerState()).trim();
         this.initializeEventListeners();
         this.initializeSubscriptions();
     }
@@ -151,12 +152,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private async updateDgpuPowerState(): Promise<void> {
-        this.powerState = (await this.checkNvidiaPowerState()).trim();
+        const powerState = (await this.checkNvidiaPowerState()).trim();
 
-        if (this.powerState == "D0") {
+        if (powerState == "D0") {
             this.tccdbus.setDGpuD0Metrics(true);
         }
-        if (this.powerState != "D0") {
+        if (powerState != "D0") {
             this.tccdbus.setDGpuD0Metrics(false);
         }
     }
