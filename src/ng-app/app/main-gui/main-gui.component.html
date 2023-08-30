@@ -84,7 +84,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <ng-container i18n="@@menuUsedProfilesLabel">Used profiles</ng-container>
                     </content>
                 </mat-list-item>
-                <mat-list-item [routerLink]="'profile-manager/' + getSettings().stateMap[state.value]"
+                <mat-list-item [routerLink]="getProfileLink(state)"
                     routerLinkActive="true" *ngFor="let state of getStateInputs()">
                     <content>
                         <mat-icon>
