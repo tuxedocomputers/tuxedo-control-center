@@ -75,6 +75,14 @@ export class CpuPowerWorker extends DaemonWorker {
     }
 
     private getMaxPowerLimix(): number {
+        if (
+            !this.RAPLConstraint0Status &&
+            !this.RAPLConstraint1Status &&
+            !this.RAPLConstraint2Status
+        ) {
+            return -1;
+        }
+
         let maxPowerLimit: number = -1;
 
         if (this.RAPLConstraint0Status) {
