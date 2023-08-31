@@ -62,26 +62,26 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public fanData: IDBusFanData;
 
     // CPU
-    public gaugeCPUPower: number;
-    public cpuPower: number;
-    public cpuPowerLimit: number;
+    public gaugeCPUPower: number = 0;
+    public cpuPower: number = 0;
+    public cpuPowerLimit: number = undefined;
 
     // dGPU
-    public gaugeDGPUPower: number;
-    public gaugeDGPUFreq: number;
-    public gaugeDGPUTemp: number;
-    public gaugeDGPUFanSpeed: number;
-    public dGpuPower: number;
-    public dGpuFreq: number;
+    public gaugeDGPUPower: number = 0;
+    public gaugeDGPUFreq: number = 0;
+    public gaugeDGPUTemp: number = 0;
+    public gaugeDGPUFanSpeed: number = 0;
+    public dGpuPower: number = 0;
+    public dGpuFreq: number = 0;
     public hasGPUTemp = false;
     public powerState: string;
 
     // iGPU
-    public gaugeIGpuFreq: number;
-    public iGpuTemp: number;
-    public iGpuFreq: number;
-    public iGpuVendor: string;
-    public iGpuPower: number;
+    public gaugeIGpuFreq: number = 0;
+    public iGpuTemp: number = 0;
+    public iGpuFreq: number = 0;
+    public iGpuVendor: string = "unknown";
+    public iGpuPower: number = 0;
 
     public activeProfile: ITccProfile;
     public isCustomProfile: boolean;
