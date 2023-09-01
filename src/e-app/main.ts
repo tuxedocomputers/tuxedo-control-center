@@ -139,22 +139,12 @@ app.whenReady().then( async () => {
         tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
         tray.create();
     };
-    const messageBoxPrimeSelectAccept = {
-        type: 'question',
-        buttons: [ 'yes', 'cancel' ],
-        message: 'Change graphics configuration and reboot?'
-    };
-
+    
     tray.events.fnLockClick = (status: boolean) => {
         tray.state.fnLockStatus = !status
         tccDBus.setFnLockStatus(tray.state.fnLockStatus);
     };
 
-    const messageBoxPrimeSelectAcceptOnDemand = {
-        type: 'question',
-        buttons: [ 'yes', 'cancel' ],
-        message: 'To learn how to use the on-demand mode please follow this guide:\nhttps://www.tuxedocomputers.com/en/PRIME-GPU-Render-Offloading/GPU-on-demand-Mode-Guide.tuxedo\n\nChange graphics configuration and reboot?'
-    };
     tray.events.selectNvidiaClick = async () => {
         const langId = await userConfig.get("langId");
         createPrimeWindow(langId, "dGPU");
