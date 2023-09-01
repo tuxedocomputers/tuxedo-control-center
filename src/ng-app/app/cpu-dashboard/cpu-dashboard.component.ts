@@ -110,7 +110,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.initializeSubscriptions();
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
-        this.powerState = (await this.checkNvidiaPowerState()).trim();
+        this.powerState = await this.getDGpuPowerState();
     }
 
     private initializeEventListeners(): void {
@@ -134,7 +134,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.updateDgpuPowerState();
     }
 
-    private async checkNvidiaPowerState(): Promise<string> {
+    private async getDGpuPowerState(): Promise<string> {
         const nvidiaBusPath = (
             await this.utils.execCmd(
                 "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
@@ -146,13 +146,15 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 await this.utils.execCmd(
                     `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
                 )
-            ).toString();
+            )
+                .toString()
+                .trim();
         }
         return "-1";
     }
 
     private async updateDgpuPowerState(): Promise<void> {
-        const powerState = (await this.checkNvidiaPowerState()).trim();
+        const powerState = await this.getDGpuPowerState();
 
         if (powerState == "D0") {
             this.tccdbus.setDGpuD0Metrics(true);
@@ -223,16 +225,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             : 0;
     }
 
-    private async subscribeToDGpuInfo(): Promise<void> {
+    private subscribeToDGpuInfo(): void {
         this.subscriptions.add(
-            combineLatest([
-                this.tccdbus.dGpuInfo,
-                from(
-                    this.checkNvidiaPowerState().then((powerState) =>
-                        powerState.trim()
-                    )
-                ),
-            ]).subscribe(([dGpuInfo, powerState]) => {
+            this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
+                const powerState = await this.getDGpuPowerState();
+
                 if (powerState === "-1") {
                     this.powerState = "-1";
                 }
