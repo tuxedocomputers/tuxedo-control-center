@@ -18,11 +18,8 @@
  */
 import { Injectable, OnDestroy } from '@angular/core';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
-import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
-import { UtilsService } from './utils.service';
+import { ITccProfile } from '../../common/models/TccProfile';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { TccDBusClientService } from './tcc-dbus-client.service';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
 @Injectable({
@@ -30,67 +27,21 @@ import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 })
 export class ConfigService implements OnDestroy {
 
-    private defaultProfiles: ITccProfile[];
-    private defaultValuesProfile: ITccProfile;
-    private settings: ITccSettings;
-
-
-
-    public observeSettings: Observable<ITccSettings>;
-    private settingsSubject: Subject<ITccSettings>;
-
-    public observeEditingProfile: Observable<ITccProfile>;
-
-
-    private subscriptions: Subscription = new Subscription();
-
-    // Exporting of relevant functions from ConfigHandler
-    // public copyConfig = ConfigHandler.prototype.copyConfig;
-    // public writeSettings = ConfigHandler.prototype.writeSettings;
-
-    constructor(
-        private utils: UtilsService,
-        private dbus: TccDBusClientService) {
-        this.settingsSubject = new Subject<ITccSettings>();
-        this.observeSettings = this.settingsSubject.asObservable();
-
-        this.editingProfileSubject = new Subject<ITccProfile>();
-        this.observeEditingProfile = this.editingProfileSubject.asObservable();
-        this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
-        this.defaultProfiles = this.dbus.defaultProfiles.value;
+    constructor() {
         this.updateConfigData();
-        this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
-            this.customProfiles = nextCustomProfiles;
-        }));
-        this.subscriptions.add(this.dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
-            this.defaultProfiles = nextDefaultProfiles;
-            for (const profile of this.defaultProfiles) {
-                this.utils.fillDefaultProfileTexts(profile);
-            }
-        }));
-
-        this.defaultValuesProfile = this.dbus.defaultValuesProfile.value;
-        this.subscriptions.add(this.dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
-            this.defaultValuesProfile = nextDefaultValuesProfile;
-        }));
-
-        this.subscriptions.add(this.dbus.settings.subscribe(nextSettings => {
-            this.settings = nextSettings
-            this.settingsSubject.next(this.settings);
-        }));
+        
     }
 
     ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
+
     }
 
     public updateConfigData(): void {
-        this.customProfiles = this.dbus.customProfiles.value;
-        this.settings = this.dbus.settings.value;
+        window.config.updateConfigData();
     }
 
     public getSettings(): ITccSettings {
-        return this.settings;
+        return window.config.getSettings();
     }
 
     get cpuSettingsDisabledMessage(): string {
@@ -106,19 +57,19 @@ export class ConfigService implements OnDestroy {
     }
 
     public getCustomProfiles(): ITccProfile[] {
-        return this.customProfiles;
+        return window.config.getCustomProfiles();
     }
 
     public getDefaultProfiles(): ITccProfile[] {
-        return this.defaultProfiles;
+        return window.config.getDefaultProfiles();
     }
 
     public getDefaultValuesProfile(): ITccProfile {
-        return this.defaultValuesProfile;
+        return window.config.getDefaultValuesProfile();
     }
 
     public getAllProfiles(): ITccProfile[] {
-        return this.defaultProfiles.concat(this.getCustomProfiles());
+        return this.getDefaultProfiles().concat(this.getCustomProfiles());
     }
 
     public setActiveProfile(profileId: string, stateId: string): void {
@@ -141,48 +92,11 @@ export class ConfigService implements OnDestroy {
     // generates a new ID for new profiles
     public async importProfiles(newProfiles: ITccProfile[])
     {
-        let newProfileList = this.getCustomProfiles();
-        for (let i = 0; i < newProfiles.length; i++)
-        {
-            // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
-            let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
-            if(oldProfileIndex !== -1)
-            {
-                newProfileList[oldProfileIndex] = newProfiles[i];
-            }
-            else
-            {
-                // when we want to override the old profile or there is no conflict we want to keep the
-                // original ID
-                let newProfile = newProfiles[i];
-                if (newProfile.id === "generateNewID")
-                {
-                    newProfile.id = generateProfileId();
-                }
-                newProfileList = newProfileList.concat(newProfile);
-            }
-        }
-        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
-        if (success) {
-            this.updateConfigData();
-            await this.dbus.triggerUpdate();
-            return true;
-        } else {
-            return false;
-        }
+        return window.config.importProfiles(newProfiles);
     }
 
     public async deleteCustomProfile(profileIdToDelete: string) {
-        const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
-        if (newProfileList.length === this.getCustomProfiles().length) {
-            return false;
-        }
-        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
-        if (success) {
-            this.updateConfigData();
-            await this.dbus.triggerUpdate();
-        }
-        return success;
+        return window.config.deleteCustomProfile(profileIdToDelete);
     }
 
     public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {
@@ -215,7 +129,7 @@ export class ConfigService implements OnDestroy {
      * @returns undefined if no profile is set, the profile otherwise
      */
     public getCurrentEditingProfile(): ITccProfile {
-        return this.currentProfileEdit;
+        return window.config.getCurrentEditingProfile();
     }
 
     public getProfileByName(searchedProfileName: string): ITccProfile {
@@ -241,10 +155,7 @@ export class ConfigService implements OnDestroy {
      *          is chosen for edit
      */
     public editProfileChanges(): boolean {
-        if (this.currentProfileEdit === undefined) { return false; }
-        const currentSavedProfile: ITccProfile = this.customProfiles[this.currentProfileEditIndex];
-        // Compare the two profiles
-        return JSON.stringify(this.currentProfileEdit) !== JSON.stringify(currentSavedProfile);
+        return window.config.editProfileChanges();
     }
 
     /**

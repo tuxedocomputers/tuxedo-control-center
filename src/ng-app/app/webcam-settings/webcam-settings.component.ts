@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { ElectronService } from "../electron-service-wrapper/electron-service";
 import { Subscription } from "rxjs";
 import {
     WebcamPreset,
@@ -20,7 +19,6 @@ import {
     ValidatorFn,
 } from "@angular/forms";
 import { FormGroup } from "@angular/forms";
-import { ConfigHandler } from "src/common/classes/ConfigHandler";
 import { TccPaths } from "src/common/classes/TccPaths";
 import { MatOptionSelectionChange } from "@angular/material/core";
 import { Mutex } from "async-mutex";
@@ -87,20 +85,10 @@ export class WebcamSettingsComponent implements OnInit {
         private cdref: ChangeDetectorRef,
         private webcamGuard: WebcamSettingsGuard,
     ) {}
-    private configHandler: ConfigHandler;
+
 
     async ngOnInit() {
         this.webcamGuard.setLoadingStatus(true);
-        // TODO instead of doing stuff inside confighandler, use new methods in config.service, that will talk to config handler over contextbridge
-        this.configHandler = new ConfigHandler(
-            TccPaths.SETTINGS_FILE,
-            TccPaths.PROFILES_FILE,
-            TccPaths.WEBCAM_FILE,
-            TccPaths.V4L2_NAMES_FILE,
-            TccPaths.AUTOSAVE_FILE,
-            TccPaths.FANTABLES_FILE
-        );
-
         // register callback for IPC signal from main
         window.webcam.onApplyControls(async () => {
             await this.executeWebcamCtrlsList(
@@ -776,9 +764,9 @@ export class WebcamSettingsComponent implements OnInit {
             let unknown_all = [];
 
             if (environment.production) {
-                this.v4l2Renames = this.configHandler.readV4l2Names();
+                this.v4l2Renames = window.config.readV4l2Names();
             } else {
-                this.v4l2Renames = this.configHandler.readV4l2Names(
+                this.v4l2Renames = window.config.readV4l2Names(
                     this.utils.getCWDSync() +
                         "/src/cameractrls/v4l2_kernel_names.json"
                 );
@@ -946,7 +934,7 @@ export class WebcamSettingsComponent implements OnInit {
             );
         }
 
-        await this.config
+        await window.config
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
@@ -1158,7 +1146,7 @@ export class WebcamSettingsComponent implements OnInit {
     private async loadingPresetData(): Promise<void> {
         await this.reloadConfigValues();
         if (window.fs.existsSync(TccPaths.WEBCAM_FILE)) {
-            this.allPresetData = this.configHandler.readWebcamSettings();
+            this.allPresetData = window.config.readWebcamSettings();
             this.filterPresetsForCurrentDevice();
 
             await this.checkAllPresetsForCurrentDevice();
@@ -1233,7 +1221,7 @@ export class WebcamSettingsComponent implements OnInit {
                     this.webcamPresetsOtherDevices
                 );
 
-                await this.config
+                await window.config
                     .pkexecWriteWebcamConfigAsync(webcamConfigs)
                     .then((confirm) => {
                         if (confirm) {

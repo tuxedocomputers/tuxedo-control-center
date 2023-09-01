@@ -141,6 +141,17 @@ contextBridge.exposeInMainWorld(
         getCustomProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-custom-profile-by-id',searchedProfileId),
         setCurrentEditingProfile: (customProfileId: string) => ipcRenderer.send('config-set-current-editing-profile',customProfileId),
         getDefaultFanProfiles: () => ipcRenderer.send('config-get-default-fan-profiles'),
+        updateConfigData: () => ipcRenderer.send('config-update-config-data'),
+        getSettings: () => ipcRenderer.send('config-get-settings'),
+        getCustomProfiles: () => ipcRenderer.send('config-get-custom-profiles'),
+        getDefaultProfiles: () => ipcRenderer.send('config-get-default-profiles'),
+        getDefaultValuesProfile: () => ipcRenderer.send('config-get-default-values-profile'),
+        importProfiles: () => ipcRenderer.send('config-import-profiles'),
+        deleteCustomProfile: () => ipcRenderer.send('config-delete-custom-profile'),
+        getCurrentEditingProfile: () => ipcRenderer.send('config-get-current-editing-profile'),
+        editProfileChanges: () => ipcRenderer.send('config-edit-profile-changes'),
+        readWebcamSettings
+        readV4l2Names
     }
 );
 

@@ -121,7 +121,16 @@ export interface CONFIG
     getCustomProfileByName: (searchedProfileName: string) => ITccProfile,
     getCustomProfileById: (searchedProfileId: string) => ITccProfile,
     setCurrentEditingProfile: (customProfileId: string) => boolean,  
-    getDefaultFanProfiles: () => ITccFanProfile[],                                                         
+    getDefaultFanProfiles: () => ITccFanProfile[], 
+    updateConfigData: () => void,
+    getSettings: () => ITccSettings,
+    getCustomProfiles: () => ITccProfile[],
+    getDefaultProfiles: () => ITccProfile[],
+    getDefaultValuesProfile: () => ITccProfile,
+    importProfiles: (newProfiles: ITccProfile[]) => void,
+    deleteCustomProfile: (profileToDelete: string) => void,
+    getCurrentEditingProfile: () => ITccProfile,
+    editProfileChanges: () => boolean,                                    
 }
 
 

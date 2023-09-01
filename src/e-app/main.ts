@@ -34,7 +34,7 @@ import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 
 import { FanData } from 'src/service-app/classes/TccDBusInterface';
 import { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../common/classes/DBusDisplayBrightnessGnome';
 import { DriveController } from '../common/classes/DriveController';
 import { IDrive } from 'src/common/models/IDrive';
@@ -740,6 +740,71 @@ let config = new ConfigHandler(
     TccPaths.AUTOSAVE_FILE,
     TccPaths.FANTABLES_FILE
 );
+let currentProfileEdit: ITccProfile;
+let currentProfileEditIndex: number;
+let editingProfileSubject: Subject<ITccProfile>;
+let editingProfile: BehaviorSubject<ITccProfile>;
+let observeSettings: Observable<ITccSettings>;
+let customProfiles: ITccProfile[];
+let settingsSubject: Subject<ITccSettings>;
+let observeEditingProfile: Observable<ITccProfile>;
+let defaultProfiles: ITccProfile[];
+let defaultValuesProfile: ITccProfile;
+let settings: ITccSettings;
+let subscriptions: Subscription = new Subscription();
+
+observeSettings = settingsSubject.asObservable();
+defaultProfiles = dbus.defaultProfiles.value;
+editingProfileSubject = new Subject<ITccProfile>();
+observeEditingProfile = editingProfileSubject.asObservable();
+editingProfile = new BehaviorSubject<ITccProfile>(undefined);
+settingsSubject = new Subject<ITccSettings>();
+
+// TODO maybe put some of those observables into config service again and just regualarly poll them asynchroneously or something
+
+subscriptions.add(dbus.customProfiles.subscribe(nextCustomProfiles => {
+    customProfiles = nextCustomProfiles;
+}));
+subscriptions.add(dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
+    defaultProfiles = nextDefaultProfiles;
+    for (const profile of defaultProfiles) {
+        this.utils.fillDefaultProfileTexts(profile);
+    }
+}));
+
+defaultValuesProfile = dbus.defaultValuesProfile.value;
+subscriptions.add(dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
+    defaultValuesProfile = nextDefaultValuesProfile;
+}));
+
+subscriptions.add(dbus.settings.subscribe(nextSettings => {
+    settings = nextSettings
+    settingsSubject.next(settings);
+}));
+
+config-get-custom-profiles
+
+config-get-default-profiles
+
+config-get-default-values-profile
+
+config-import-profiles
+
+config-delete-custom-profile
+
+config-get-current-editing-profile
+
+config-edit-profile-changes
+
+config-get-settings
+
+config-update-config-data
+function updateConfig()
+{
+    this.customProfiles = this.dbus.customProfiles.value;
+    this.settings = this.dbus.settings.value;
+}
+
 
 import { environment } from '../ng-app/environments/environment';
 let cwd: string = process.cwd();
@@ -978,12 +1043,59 @@ ipcMain.on('config-get-custom-profile-by-id', (event, searchedProfileId: string)
         return undefined;
     }
 });
-let currentProfileEdit: ITccProfile;
-let currentProfileEditIndex: number;
-let editingProfileSubject: Subject<ITccProfile>;
-let editingProfile: BehaviorSubject<ITccProfile>;
 
-let customProfiles: ITccProfile[];
+public editProfileChanges(): boolean {
+    if (this.currentProfileEdit === undefined) { return false; }
+    const currentSavedProfile: ITccProfile = this.customProfiles[this.currentProfileEditIndex];
+    // Compare the two profiles
+    return JSON.stringify(this.currentProfileEdit) !== JSON.stringify(currentSavedProfile);
+}
+
+public async deleteCustomProfile(profileIdToDelete: string) {
+    const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
+    if (newProfileList.length === this.getCustomProfiles().length) {
+        return false;
+    }
+    const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+    if (success) {
+        this.updateConfigData();
+        await this.dbus.triggerUpdate();
+    }
+    return success;
+}
+
+public async importProfiles(newProfiles: ITccProfile[])
+{
+    let newProfileList = this.getCustomProfiles();
+    for (let i = 0; i < newProfiles.length; i++)
+    {
+        // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
+        let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+        if(oldProfileIndex !== -1)
+        {
+            newProfileList[oldProfileIndex] = newProfiles[i];
+        }
+        else
+        {
+            // when we want to override the old profile or there is no conflict we want to keep the
+            // original ID
+            let newProfile = newProfiles[i];
+            if (newProfile.id === "generateNewID")
+            {
+                newProfile.id = generateProfileId();
+            }
+            newProfileList = newProfileList.concat(newProfile);
+        }
+    }
+    const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+    if (success) {
+        this.updateConfigData();
+        await this.dbus.triggerUpdate();
+        return true;
+    } else {
+        return false;
+    }
+}
 
 ipcMain.on('config-set-current-editing-profile', (event, customProfileId: string) => {
     if (customProfileId === undefined) {
@@ -1008,6 +1120,24 @@ ipcMain.on('config-set-current-editing-profile', (event, customProfileId: string
 ipcMain.on('config-get-default-fan-profiles', (event) => {
 return config.getDefaultFanProfiles();
 });
+
+// TODO onDestroy() equivalent?
+//this.subscriptions.unsubscribe();
+
+// webcam config stuff
+
+   // private configHandler: ConfigHandler;
+           // TODO instead of doing stuff inside confighandler, use new methods in config.service, that will talk to config handler over contextbridge
+       /* this.configHandler = new ConfigHandler(
+            TccPaths.SETTINGS_FILE,
+            TccPaths.PROFILES_FILE,
+            TccPaths.WEBCAM_FILE,
+            TccPaths.V4L2_NAMES_FILE,
+            TccPaths.AUTOSAVE_FILE,
+            TccPaths.FANTABLES_FILE
+        );*/
+
+        window.config.readV4l2Names(path: string);
 
 // ########################################################
 
