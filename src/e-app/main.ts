@@ -120,6 +120,10 @@ app.whenReady().then( async () => {
 
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+    tray.state.fnLockSupported = await fnLockSupported(tccDBus);
+    if (tray.state.fnLockSupported) {
+        tray.state.fnLockStatus = await fnLockStatus(tccDBus);
+    }
     [tray.state.isPrimeSupported, tray.state.primeQuery] = await getPrimeData();
 
     await updateTrayProfiles(tccDBus);
@@ -791,6 +795,14 @@ async function getPrimeData(): Promise<[boolean, string]> {
         primeAvailable = false;
     }
     return [primeAvailable, primeStatus]
+}
+
+async function fnLockSupported(tccDBus: TccDBusController) {
+    return await tccDBus.getFnLockSupported();
+}
+
+async function fnLockStatus(tccDBus: TccDBusController) {
+    return await tccDBus.getFnLockStatus();
 }
 
 async function updateTrayProfiles(dbus: TccDBusController) {
