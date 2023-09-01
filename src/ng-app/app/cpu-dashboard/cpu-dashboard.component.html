@@ -132,7 +132,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <!-- iGPU -->
                 <div class="content-container system-monitor-gauges"
-                    *ngIf="powerState == '-1' || primeState === 'iGPU'">
+                    *ngIf="(powerState == '-1' && primeState == 'iGPU') || (powerState == '-1' && primeState == '-1') || primeState === 'iGPU'">
                     <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'"
                         [ngClass]="{'not-available': !compat.hasIGpuTemp }"
                         [matTooltip]="!compat.hasFanInfo ? compat.compatibilityMessage: ''">
