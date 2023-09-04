@@ -744,21 +744,17 @@ let currentProfileEdit: ITccProfile;
 let currentProfileEditIndex: number;
 let editingProfileSubject: Subject<ITccProfile>;
 let editingProfile: BehaviorSubject<ITccProfile>;
-let observeSettings: Observable<ITccSettings>;
 let customProfiles: ITccProfile[];
-let settingsSubject: Subject<ITccSettings>;
 let observeEditingProfile: Observable<ITccProfile>;
 let defaultProfiles: ITccProfile[];
 let defaultValuesProfile: ITccProfile;
 let settings: ITccSettings;
 let subscriptions: Subscription = new Subscription();
 
-observeSettings = settingsSubject.asObservable();
 defaultProfiles = dbus.defaultProfiles.value;
 editingProfileSubject = new Subject<ITccProfile>();
 observeEditingProfile = editingProfileSubject.asObservable();
 editingProfile = new BehaviorSubject<ITccProfile>(undefined);
-settingsSubject = new Subject<ITccSettings>();
 
 // TODO maybe put some of those observables into config service again and just regualarly poll them asynchroneously or something
 
@@ -1122,6 +1118,7 @@ return config.getDefaultFanProfiles();
 });
 
 // TODO onDestroy() equivalent?
+// on the other hand: do we really need them? Probably have to rewrite this and put all observables back into config service... uugh
 //this.subscriptions.unsubscribe();
 
 // webcam config stuff
@@ -1137,7 +1134,11 @@ return config.getDefaultFanProfiles();
             TccPaths.FANTABLES_FILE
         );*/
 
+        config-read-v4l2-names
+
         window.config.readV4l2Names(path: string);
+
+        config-read-webcam-settings
 
 // ########################################################
 

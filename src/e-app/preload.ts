@@ -126,6 +126,7 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'config',
     {
+        // TODO switch send for invoke where it sends promises around (everything called async), do that also in main.ts
         setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => ipcRenderer.send('config-set-active-profile',profileId,stateId,settings),
         copyProfile: (sourceProfileId: string, newProfileName: string) => ipcRenderer.invoke('config-copy-profile',sourceProfileId,newProfileName),
         pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => ipcRenderer.send('config-pkexec-write-custom-profiles',customProfiles),
@@ -150,8 +151,8 @@ contextBridge.exposeInMainWorld(
         deleteCustomProfile: () => ipcRenderer.send('config-delete-custom-profile'),
         getCurrentEditingProfile: () => ipcRenderer.send('config-get-current-editing-profile'),
         editProfileChanges: () => ipcRenderer.send('config-edit-profile-changes'),
-        readWebcamSettings
-        readV4l2Names
+        readWebcamSettings: () => ipcRenderer.send('config-read-webcam-settings'),
+        readV4l2Names: () => ipcRenderer.send('config-read-v4l2-names'),
     }
 );
 

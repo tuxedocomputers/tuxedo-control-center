@@ -21,14 +21,19 @@ import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConfigService implements OnDestroy {
-
+    public observeSettings: Observable<ITccSettings>;    
+    private settingsSubject: Subject<ITccSettings>;
+    
     constructor() {
         this.updateConfigData();
+        this.settingsSubject = new Subject<ITccSettings>();
+        this.observeSettings = this.settingsSubject.asObservable();
         
     }
 
