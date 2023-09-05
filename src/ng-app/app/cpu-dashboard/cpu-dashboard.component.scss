@@ -17,6 +17,22 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+.dashboard {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+}
+
+.inner-dashboard {
+    margin: 0 10px 10px 10px;
+}
+
 .system-monitor-gauges {
     display: flex;
     flex-flow: row;
@@ -114,4 +130,8 @@
             }
         }
     }
+}
+
+.gauge-tabs {
+    min-height: 270px
 }

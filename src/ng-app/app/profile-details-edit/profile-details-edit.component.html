@@ -535,9 +535,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
-                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
-                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
-                                <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
+                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatCpuFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
+                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatCpuFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
+                                <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatCpuFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
                                 <button mat-icon-button color="primary"
                                     [hidden]="!editProfile"
                                     (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
@@ -588,11 +588,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
-                                    {{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
+                                    {{ formatCpuFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
-                                    {{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
+                                    {{ formatCpuFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && !hasMaxFreqWorkaround)" [ngClass]="{'inactive': true}">
-                                    {{ formatFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
+                                    {{ formatCpuFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
                                     Boost</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && hasMaxFreqWorkaround && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">

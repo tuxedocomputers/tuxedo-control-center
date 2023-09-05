@@ -119,18 +119,24 @@ export class TccTray {
                 visible: this.state.isPrimeSupported,
                 submenu: [
                     {
-                        label: 'Select NVIDIA',
+                        label: 'Select dGPU',
                         type: 'normal',
                         click: () => this.events.selectNvidiaClick(),
-                        visible: this.state.primeQuery !== 'on'
+                        visible: this.state.primeQuery !== 'dGPU',
                     },
                     {
-                        label: 'Select built-in',
+                        label: 'Apply on-demand mode',
+                        type: 'normal',
+                        click: () => this.events.selectOnDemandClick(),
+                        visible: this.state.primeQuery !== 'on-demand'
+                    },
+                    {
+                        label: 'Select iGPU',
                         type: 'normal',
                         click: () => this.events.selectBuiltInClick(),
-                        visible: this.state.primeQuery !== 'off'
+                        visible: this.state.primeQuery !== 'iGPU'
                     }
-                ]
+                ],
             },
             { type: 'separator' },
             { label: this.state.tccGUIVersion, type: 'normal', enabled: false },
@@ -159,6 +165,7 @@ export class TrayEvents {
     exitClick: () => void;
     autostartTrayToggle: () => void;
     selectNvidiaClick: () => void;
+    selectOnDemandClick: () => void;
     selectBuiltInClick: () => void;
     profileClick: (profileId: string) => void;
     powersaveBlockerClick: () => void;

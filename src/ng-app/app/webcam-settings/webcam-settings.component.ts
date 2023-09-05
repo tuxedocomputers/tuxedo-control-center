@@ -994,12 +994,12 @@ export class WebcamSettingsComponent implements OnInit {
             description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current webcam preset or create a new one?`,
             labelData: [
                 {
-                    name: "overwrite",
-                    value: $localize`:@@dialogOverwrite:Overwrite`,
+                    label: $localize`:@@dialogOverwrite:Overwrite`,
+                    value: "overwrite",
                 },
                 {
-                    name: "new",
-                    value: $localize`:@@dialogNewPreset:New webcam preset`,
+                    label: $localize`:@@dialogNewPreset:New webcam preset`,
+                    value: "new",
                 },
             ],
         };

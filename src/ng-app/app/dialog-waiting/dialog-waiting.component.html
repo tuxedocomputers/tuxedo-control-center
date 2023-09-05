@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -19,14 +19,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="mat-typography">
-    <h3 *ngIf="data.heading">{{ data.heading }}</h3>
     <p>{{ data.description }}</p>
-    <p *ngIf="data.linkHref"><a (click)="openExternalUrl(data.linkHref)" class="link-style">{{ data.linkHref }}</a></p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{
-        data.checkboxNoBotherLabel }}</mat-checkbox>
-    <div class="bx--row" *ngFor="let label of data.labelData; let i = index;">
-        <button mat-button (click)="closeDialog(label.value)">{{ label.label }}</button>
-    </div>
+    <mat-progress-bar mode="query"></mat-progress-bar>
 </mat-dialog-actions>
