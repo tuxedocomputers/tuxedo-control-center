@@ -181,7 +181,7 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     }
 
     private async updateSysFsFromSettings(): Promise<void> {
-        let brightness: Number = this.tccd.settings.keyboardBacklightBrightness;
+        let brightness: number = this.tccd.settings.keyboardBacklightBrightness;
         let color: Array<number> = this.tccd.settings.keyboardBacklightColor;
 
         if (this.ledsRGBZones.length > 0) {
