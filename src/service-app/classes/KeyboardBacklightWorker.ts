@@ -287,14 +287,14 @@ export class KeyboardBacklightWorker extends DaemonWorker {
     private async initUPower() {
         let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await this.sysDBusUPowerKbdBacklightObjectPromise;
         let sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
-        sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (brightness) => {
-            let keyboardBacklightStatesNew = this.keyboardBacklightStates;
+        sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (function(brightness: number) {
+            let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.keyboardBacklightStates;
             for (let i in keyboardBacklightStatesNew) {
                 keyboardBacklightStatesNew[i].brightness = brightness;
             }
             this.updateKeyboardBacklightStatesFromValue(keyboardBacklightStatesNew);
             this.updateSettingsFromKeyboardBacklightStates();
-        });
+        }).bind(this));
     }
 
     private onStartRetryCount = 5;
