@@ -110,7 +110,7 @@ export class KeyboardBacklightListener {
                                 this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
                             }
                         }).bind(this));
-                    })(i);
+                    }).bind(this)(i);
                 }
             }
         }
