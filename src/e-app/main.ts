@@ -124,7 +124,7 @@ app.whenReady().then( async () => {
     if (tray.state.fnLockSupported) {
         tray.state.fnLockStatus = await fnLockStatus(tccDBus);
     }
-    [tray.state.isPrimeSupported, tray.state.primeQuery] = await getPrimeData();
+    [tray.state.isPrimeSupported, tray.state.primeQuery] = await checkPrimeAvailabilityStatus();
 
     await updateTrayProfiles(tccDBus);
     tray.events.startTCCClick = () => activateTccGui();
@@ -776,15 +776,11 @@ function createUserConfigDir(): boolean {
     }
 }
 
-async function getPrimeData(): Promise<[boolean, string]> {
-    const primeStatus = await tccDBus.getPrimeState()
-    let primeAvailable = true;
-    if (primeStatus !== undefined && primeStatus !== "off") {
-        primeAvailable = true;
-    } else {
-        primeAvailable = false;
-    }
-    return [primeAvailable, primeStatus]
+async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
+    const primeStatus = await tccDBus.getPrimeState();
+    const primeAvailable =
+        primeStatus !== undefined && ["off", "-1"].indexOf(primeStatus) === -1;
+    return [primeAvailable, primeStatus];
 }
 
 async function fnLockSupported(tccDBus: TccDBusController) {
