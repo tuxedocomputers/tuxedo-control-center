@@ -41,7 +41,7 @@ export class KeyboardBacklightListener {
     private async init() {
         this.updateKeyboardBacklightCapabilities();
         if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
-            console.log("Could not find keyboard backlight. Retrying...\n");
+            console.log("Could not find keyboard backlight. Retrying...");
             --this.onStartRetryCount;
             setTimeout(() => { this.init() }, 1000);
             return;
