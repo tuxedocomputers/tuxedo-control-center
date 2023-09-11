@@ -101,7 +101,6 @@ export class KeyboardBacklightListener {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     (function(i: number) {
                         fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(event: "rename" | "change", filename: string) {
-                            console.log(this.sysDBusUPowerProps);
                             if (!await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')) {
                                 let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
                                 let colors = (await fs.promises.readFile(filename)).toString().split(' ').map(Number);
