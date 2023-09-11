@@ -19,6 +19,7 @@
 import * as dbus from 'dbus-next';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 
 export class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
@@ -80,6 +81,24 @@ export class TccDBusController {
             return await this.interface.GetFanDataGPU1();
         } catch (err) {
             return new FanData();
+        }
+    }
+
+    async getDisplayModesJSON(): Promise<string>
+    {
+        try {
+            return await this.interface.GetDisplayModesJSON();
+        } catch (err) {
+            return undefined; 
+        }
+    }
+
+    async getRefreshRateSupported():Promise<boolean>
+    {
+        try {
+            return await this.interface.GetRefreshRateSupported();
+        } catch (err) {
+            return false; 
         }
     }
 

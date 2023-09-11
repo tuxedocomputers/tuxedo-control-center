@@ -30,6 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -110,7 +111,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
-
     public stateInputArray: IStateInfo[];
 
     public selectableFrequencies;
@@ -119,6 +119,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public odmProfileToName: Map<string, string> = new Map();
 
     public odmPowerLimitInfos: TDPInfo[] = [];
+    public displayModes: IDisplayFreqRes;
+    public refreshRateSupported: boolean;
 
     private tdpLabels: Map<string, string>;
 
@@ -193,12 +195,26 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             }
         ));
-
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
             }
         }));
+
+        this.subscriptions.add(this.tccDBus.displayModes.subscribe(nextdisplayModes => {
+            if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
+                this.displayModes = nextdisplayModes;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.refreshRateSupported.subscribe(nextrefreshRateSupported => {
+            if (nextrefreshRateSupported !== this.refreshRateSupported) {
+                this.refreshRateSupported = nextrefreshRateSupported;
+            }
+        }));
+
+        
+
 
         this.tdpLabels = new Map();
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
@@ -483,6 +499,101 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public getFanProfileNames(): string[] {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
+    }
+
+    // public getDisplayModesString(): string[]
+    // {
+    //     let displayModesString = [];
+    //     if(!this.displayModes)
+    //     {
+    //         return [undefined];
+    //     }
+    //     let displayModes = this.getDisplayModes();
+    //     for (let i = 0; i < displayModes.length; i++)
+    //     {
+    //         displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
+    //     }
+    //     return displayModesString;
+    // }
+
+    // public getActiveDisplayModeString(): string
+    // {
+    //     if(this.displayModes != undefined)   
+    //    {
+    //     return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
+    //    } 
+    //    else
+    //    {
+    //     return "";
+    //    }
+    // }
+
+    // public setProfileResolutionByString(event)
+    // {
+    //     if(event && event.value)
+    //     {
+    //         let res = event.value.split("x");
+    //         let xRes = parseInt(res[0]);
+    //         let yRes = parseInt(res[1]);
+    //         this.profileFormGroup.controls.display.markAsDirty();
+    //         let displayObject = {xResolution: 0, yResolution: 0};
+    //         displayObject.xResolution = xRes;
+    //         displayObject.yResolution = yRes;
+    //         this.profileFormGroup.controls.display.patchValue(displayObject);
+    //     }
+    // }
+
+    public getDisplayModes(): IDisplayMode[]
+    {
+        if(!this.displayModes)
+        {
+            return undefined;
+        }
+        return this.displayModes.displayModes;
+    }
+
+    public isX11(): boolean
+    {
+        return this.refreshRateSupported;
+    }
+
+    getRefreshRateNotAvailableTooltipText(): string
+    {
+        if(this.isX11())
+        {
+            return "";
+        }
+        else
+        {
+            return $localize `:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`
+        }
+    }
+
+    // returns refresh rates of systems currently active resolution
+    public getRefreshRates(): number[]
+    {
+        if(!this.displayModes)
+        {
+            return [undefined];
+        }
+        for (let i = 0; i < this.displayModes.displayModes.length; i++)
+        {
+            let mode = this.displayModes.displayModes[i];
+            if (mode.xResolution === this.displayModes.activeMode.xResolution && mode.yResolution === this.displayModes.activeMode.yResolution)
+            {
+                return mode.refreshRates;
+            }
+        }
+    }
+
+    // returns currently active refresh rate
+    public getActiveRefreshRate(): number
+    {
+        if(!this.displayModes)
+        {
+            return undefined;
+        }
+        return this.displayModes.activeMode.refreshRates[0];
     }
 
     public governorSelectionChange() {

@@ -28,6 +28,7 @@ import { defaultSettings, ITccSettings, ProfileStates } from '../../common/model
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
+import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
@@ -77,7 +78,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private stateWorker: StateSwitcherWorker;
     private chargingWorker: ChargingWorker;
-
+    private displayWorker: DisplayRefreshRateWorker;
     constructor() {
         super(TccPaths.PID_FILE);
         this.config = new ConfigHandler(
@@ -106,6 +107,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
 
         // If program is still running this is the start of the daemon
+
+        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
         this.setupSignalHandling();
 
@@ -126,6 +129,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
+        this.workers.push(this.displayWorker);
 
         this.startWorkers();
 
@@ -253,8 +257,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
-        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
+        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
 
@@ -646,6 +650,41 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (profile.cpu.noTurbo === undefined) {
             profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
         }
+
+        if(profile.display.useRefRate === undefined)
+        {
+            profile.display.useRefRate = false;
+        }
+        if(profile.display.useResolution === undefined)
+        {
+            profile.display.useResolution = false;
+        }
+        let activeDisplayMode;
+        try
+        {
+            activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+        }
+        catch(err)
+        {
+            activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
+        }
+        if (!activeDisplayMode)
+        {
+            activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
+        }       
+        if(profile.display.refreshRate === undefined)
+        {
+            profile.display.refreshRate = activeDisplayMode.refreshRates[0];
+        }
+        if(profile.display.xResolution === undefined)
+        {
+            profile.display.xResolution = activeDisplayMode.xResolution;
+        }
+        if(profile.display.yResolution === undefined)
+        {
+            profile.display.yResolution = activeDisplayMode.yResolution;
+        }
+         
 
         if (profile.webcam === undefined) {
             profile.webcam = {

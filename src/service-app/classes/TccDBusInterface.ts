@@ -21,6 +21,7 @@ import { ChargingWorker } from './ChargingWorker';
 import { BehaviorSubject } from 'rxjs';
 import { FnLockController } from '../../common/classes/FnLockController';
 
+
 function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
     const v = new dbus.Variant<T>();
     v.signature = signature;
@@ -69,6 +70,8 @@ export class FanData {
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public displayModes: string;
+    public refreshRateSupported: boolean;
     public tuxedoWmiAvailable: boolean;
     public tccdVersion: string;
     public fans: FanData[];
@@ -118,7 +121,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
-
+    GetDisplayModesJSON() { return this.data.displayModes; }
+    GetRefreshRateSupported() { return this.data.refreshRateSupported; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
@@ -210,6 +214,8 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        GetDisplayModesJSON: {outSignature: 's'},
+        GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },

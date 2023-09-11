@@ -26,6 +26,7 @@ import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklight
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ICpuPower } from 'src/common/models/TccPowerSettings';
 import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
+import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -81,6 +82,9 @@ export class TccDBusClientService implements OnDestroy {
   public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
 
   public primeState = new BehaviorSubject<string>(undefined);
+
+  public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
+  public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -155,7 +159,6 @@ export class TccDBusClientService implements OnDestroy {
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
     const nextODMPowerLimits = await this.tccDBusInterface.odmPowerLimits();
     this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
-
     // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
     if (activeProfileJSON !== undefined) {
@@ -203,6 +206,24 @@ export class TccDBusClientService implements OnDestroy {
             }
         } catch (err) { console.log('tcc-dbus-client.service: unexpected error parsing settings => ' + err); }
     }
+    const displayModesJSON: string = await this.tccDBusInterface.getDisplayModesJSON();
+    if(displayModesJSON !== undefined)
+    {
+        try
+        {
+            this.displayModes.next(JSON.parse(displayModesJSON));
+        } 
+        catch (err)
+        {
+            console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err);
+        }
+    }
+    else
+    {
+        this.displayModes.next(undefined);
+    }
+    const refreshRateSupportedBool = await this.tccDBusInterface.getRefreshRateSupported();
+    this.refreshRateSupported.next(refreshRateSupportedBool);
 
     const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
     if (keyboardBacklightCapabilitiesJSON !== undefined) {
