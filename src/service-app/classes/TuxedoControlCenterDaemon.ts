@@ -366,50 +366,44 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.settings = this.config.readSettings();
             var missingSetting: boolean = false;
 
+            // If settings are missing, attempt to recreate default
+            // TODO purge settings no longer in ITccSettings
             if (this.settings.stateMap === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing statemap');
                 this.settings.stateMap = this.config.getDefaultSettings(device).stateMap;
                 missingSetting = true;
             }
             if (this.settings.cpuSettingsEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing cpuSettingsEnabled setting');
                 this.settings.cpuSettingsEnabled = this.config.getDefaultSettings(device).cpuSettingsEnabled;
                 missingSetting = true;
             }
             if (this.settings.fanControlEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing fanControlEnabled setting');
                 this.settings.fanControlEnabled = this.config.getDefaultSettings(device).fanControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightControlEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing keyboardBacklightControlEnabled setting');
                 this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.ycbcr420Workaround === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing ycbcr420Workaround setting');
                 this.settings.ycbcr420Workaround = this.config.getDefaultSettings(device).ycbcr420Workaround;
                 missingSetting = true;
             }
             if (this.settings.chargingProfile === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing chargingProfile setting');
                 this.settings.chargingProfile = this.config.getDefaultSettings(device).chargingProfile;
                 missingSetting = true;
             }
             if (this.settings.chargingPriority === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing chargingPriority setting');
                 this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightStates === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing keyboardBacklightStates setting');
                 this.settings.keyboardBacklightStates = this.config.getDefaultSettings(device).keyboardBacklightStates;
                 missingSetting = true;
