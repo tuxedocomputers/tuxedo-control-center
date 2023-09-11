@@ -290,8 +290,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="59f767ae4a7773ab07970a8ea52a9407899541c0" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our &quot;Fully Automated Installation&quot;, you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our &quot;Fully Automated Installation&quot;, you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">147,148</context>
@@ -470,7 +470,7 @@
         <target state="translated">all LEDs off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDOne" datatype="html">
@@ -478,7 +478,7 @@
         <target state="translated">one LED on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDTwo" datatype="html">
@@ -486,7 +486,7 @@
         <target state="translated">two LEDs on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL1" datatype="html">
@@ -494,7 +494,7 @@
         <target state="translated">Sustained Power Limit (PL1)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL2" datatype="html">
@@ -502,7 +502,7 @@
         <target state="translated">Short-term (max. 28 sec) Power Limit (PL2)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL4" datatype="html">
@@ -510,7 +510,15 @@
         <target state="translated">Peak (max. 8 sec) Power Limit (PL4)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">222</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfMgrRefreshRatesNotAvailableOnWaylandTooltip" datatype="html">
+        <source>This feature is currently not supported on Wayland</source>
+        <target state="translated">This feature is currently not supported on Wayland</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">568</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsStateSelectButtonAlreadySet" datatype="html">
@@ -518,7 +526,7 @@
         <target state="translated"> (already set)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">499</context>
+          <context context-type="linenumber">610</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html">
@@ -600,6 +608,10 @@
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseBrightnessNo" datatype="html">
         <source>no</source>
@@ -607,6 +619,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">160</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsBrightnessLabel" datatype="html">
@@ -617,12 +633,44 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateOnProfileActivationHeader" datatype="html">
+        <source>Set refresh rate on profile activation</source>
+        <target state="translated">Set refresh rate on profile activation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cOnlyOneRefreshRateAvailableTooltip" datatype="html">
+        <source>Only one Refreshrate available, maybe try setting a different resolution.</source>
+        <target state="translated">Only one Refreshrate available, maybe try setting a different resolution.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">242</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateLabelActive" datatype="html">
+        <source>Currently active refresh rate</source>
+        <target state="translated">Currently active refresh rate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateLabelProfile" datatype="html">
+        <source>Selected profile refresh rate</source>
+        <target state="translated">Selected profile refresh rate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html">
         <source>Fan control</source>
         <target state="translated">Fan control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">227</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html">
@@ -630,7 +678,7 @@
         <target state="translated">Fan profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">236</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
@@ -638,7 +686,7 @@
         <target state="translated">Minimum fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">308</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
@@ -646,7 +694,7 @@
         <target state="translated">Offset fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">292</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsToggleFanChartsLabel" datatype="html">
@@ -654,7 +702,7 @@
         <target state="translated">Toggle fan table chart</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">335</context>
+          <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html">
@@ -662,7 +710,7 @@
         <target state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">411</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
@@ -674,7 +722,7 @@
         <target state="translated">Webcam status (on/off)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">364</context>
+          <context context-type="linenumber">419</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html">
@@ -682,7 +730,7 @@
         <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">368</context>
+          <context context-type="linenumber">423</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html">
@@ -690,7 +738,7 @@
         <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">424</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
@@ -698,7 +746,7 @@
         <target state="translated">System performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">392</context>
+          <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
@@ -706,7 +754,7 @@
         <target state="translated">CPU frequency control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">487</context>
+          <context context-type="linenumber">542</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
@@ -714,7 +762,7 @@
         <target state="translated">Number of logical cores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">496</context>
+          <context context-type="linenumber">551</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
@@ -722,7 +770,7 @@
         <target state="translated">Maximum performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">516</context>
+          <context context-type="linenumber">571</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
@@ -730,7 +778,7 @@
         <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">520</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
@@ -738,7 +786,7 @@
         <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">521</context>
+          <context context-type="linenumber">576</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
@@ -746,7 +794,7 @@
         <target state="translated">Minimum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">535</context>
+          <context context-type="linenumber">590</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
@@ -754,7 +802,7 @@
         <target state="translated">Maximum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">587</context>
+          <context context-type="linenumber">642</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
@@ -778,7 +826,7 @@
         <target state="translated">System profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">460</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemProfileiInfoTooltip" datatype="html">
@@ -786,7 +834,7 @@
         <target state="translated">The system profiles limit the maximal energy consumption of the processors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">464</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
@@ -794,7 +842,7 @@
         <target state="translated">CPU power limit control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">432</context>
+          <context context-type="linenumber">487</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
@@ -881,12 +929,20 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="noDashboardValue" datatype="html">
+        <source>N/A</source>
+        <target state="new">N/A</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
+          <context context-type="linenumber">369</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cDashboardSystemMonitor" datatype="html">
         <source>System monitor</source>
         <target state="new">System monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardMainProcessorMonitor" datatype="html">
@@ -894,7 +950,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Main processor monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuTemperatureLabel" datatype="html">
@@ -902,7 +958,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU - Temp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuFrequencyLabel" datatype="html">
@@ -910,7 +966,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU - Frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuFanLabel" datatype="html">
@@ -918,7 +974,15 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU - Fan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardCpuPowerLabel" datatype="html">
+        <source>CPU - Power</source>
+        <target state="new">CPU - Power</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardActiveProfile" datatype="html">
@@ -926,7 +990,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Active profile:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardGraphicsCardMonitor" datatype="html">
@@ -934,7 +998,91 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Graphics card monitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardIGpuFrequencyLabel" datatype="html">
+        <source>iGPU - Frequency</source>
+        <target state="new">iGPU - Frequency</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">165</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">289</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardIGpuTemperatureLabel" datatype="html">
+        <source>iGPU - Temperature</source>
+        <target state="new">iGPU - Temperature</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">150</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">272,273</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardIGpuPowerLabel" datatype="html">
+        <source>iGPU - Power</source>
+        <target state="new">iGPU - Power</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">181</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">305</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuTemperatureLabel" datatype="html">
+        <source>dGPU - Temperature</source>
+        <target state="new">dGPU - Temp</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">200</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">324,325</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuFrequencyLabel" datatype="html">
+        <source>dGPU - Frequency</source>
+        <target state="new">dGPU - Frequency</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">342</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuFanLabel" datatype="html">
+        <source>dGPU - Fan</source>
+        <target state="new">dGPU - Fan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">357</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuPowerLabel" datatype="html">
+        <source>dGPU - Power</source>
+        <target state="new">dGPU - Power</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsTitle" datatype="html">
@@ -942,7 +1090,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsDescription" datatype="html">
@@ -952,7 +1100,7 @@ Commercial register number - Part B of the commercial register - 27755
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">26,27</context>
+          <context context-type="linenumber">29,30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsGlobalProfileSettingsTitle" datatype="html">
@@ -960,7 +1108,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Global profile settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">43,44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyHeader" datatype="html">
@@ -968,7 +1116,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">CPU Frequency Control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyActivated" datatype="html">
@@ -976,7 +1124,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">activated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyDeactivated" datatype="html">
@@ -984,7 +1132,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyDescription" datatype="html">
@@ -992,7 +1140,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">On deactivate, CPU frequency control is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">65,68</context>
+          <context context-type="linenumber">69,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlHeader" datatype="html">
@@ -1000,7 +1148,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Fan Control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlActivated" datatype="html">
@@ -1008,7 +1156,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">activated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlDeactivated" datatype="html">
@@ -1016,7 +1164,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlDescription" datatype="html">
@@ -1024,7 +1172,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">On deactivate, the default automatic fan control is restored directly.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">90,92</context>
+          <context context-type="linenumber">96,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightHeader" datatype="html">
@@ -1032,7 +1180,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Keyboard Backlight Control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightActivated" datatype="html">
@@ -1040,7 +1188,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">activated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightDeactivated" datatype="html">
@@ -1048,7 +1196,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightDescription" datatype="html">
@@ -1056,7 +1204,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">On deactivate, keyboard backlight settings are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>not<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> reset to default. Default settings need to be restored by hand or a system reboot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">115,119</context>
+          <context context-type="linenumber">122,126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsBatteryChargingTitle" datatype="html">
@@ -1064,7 +1212,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Battery charging options</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">183,184</context>
+          <context context-type="linenumber">195,196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeTitle" datatype="html">
@@ -1072,7 +1220,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Theme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeLightLabel" datatype="html">
@@ -1080,7 +1228,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Light</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeDarkLabel" datatype="html">
@@ -1088,7 +1236,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Dark</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeSystemSettingLabel" datatype="html">
@@ -1096,7 +1244,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">System setting</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">207,208</context>
+          <context context-type="linenumber">220,221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsTomteTitle" datatype="html">
@@ -1104,7 +1252,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Tomte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">234</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingHeader" datatype="html">
@@ -1112,15 +1260,15 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Chroma subsampling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingDescriptionHeader" datatype="html">
-        <source>Force Chroma Subsampling (Y&apos;CbCr 4:2:0) if available:</source>
-        <target state="new">Force Chroma Subsampling (Y&apos;CbCr 4:2:0) if available:</target>
+        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</source>
+        <target state="new">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">136,138</context>
+          <context context-type="linenumber">143,145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingDescription" datatype="html">
@@ -1128,17 +1276,18 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">This setting might fix flickering on 4k@60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable. To ensure that the setting gets applied you need to unplug and replug the monitor or restart your computer. On some devices the HDMI ports are also named DisplayPort or DP internally and are therefore listed as such here.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">166,170</context>
+          <context context-type="linenumber">174,182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel" datatype="html">
-        <source>Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="     "/> </source>
-        <target state="new">
+        <source>Port <x id="INTERPOLATION" equiv-text="        "/> of Card <x id="INTERPOLATION_1" equiv-text="     "/> </source>
+        <target state="needs-adaptation">
             Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="{{i}}"/>
         </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">144,146</context>
+          <context context-type="linenumber">151,154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundActivated" datatype="html">
@@ -1146,7 +1295,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">activated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundDeactivated" datatype="html">
@@ -1154,13 +1303,22 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cfea506bf41e6f38b445fb90c1c31abe9b747ed1" datatype="html">
+        <source>Grafikeinstellungen</source>
+        <target state="new">Grafikeinstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+        <note priority="1" from="description">cGlobalSettingsPrimeSelectTitle</note>
+      </trans-unit>
       <trans-unit id="cShutdownTimerInformations" datatype="html">
-        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting &quot;Delete Time&quot; below.</source>
+        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting "Delete Time" below.</source>
         <target state="needs-adaptation">This sets a one time shutdown time. It will be automatically cleared on next
-        boot, or when selecting &quot;Delete Time&quot; below.</target>
+        boot, or when selecting "Delete Time" below.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -1240,20 +1398,28 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
+        <source>Click on a key area to select it.</source>
+        <target state="new">Click on a key area to select it.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription2" datatype="html">
+        <source>Hold down shift to select multiple key areas. </source>
+        <target state="new">Hold down shift to select multiple key areas. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
         <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
         <target state="translated">Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
-        <source>Backlight Brightness</source>
-        <target state="new">Backlight Brightness:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">47,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
@@ -1262,6 +1428,14 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
+        <source>Backlight Brightness</source>
+        <target state="new">Backlight Brightness:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
@@ -1301,12 +1475,12 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
-        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in &quot;crypt&quot;. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
         <target state="needs-adaptation">
           <x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/>
           <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to
             reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending
-            in &quot;crypt&quot;. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
+            in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
@@ -1524,8 +1698,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectDescription" datatype="html">
-        <source>Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</source>
-        <target state="translated">Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</target>
+        <source>Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!</source>
+        <target state="translated">Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">386</context>
@@ -1556,8 +1730,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don&apos;t ask again</source>
-        <target state="translated">Don&apos;t ask again</target>
+        <source>Don't ask again</source>
+        <target state="translated">Don't ask again</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">391</context>
@@ -1853,16 +2027,16 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
-        <source>Your Aquaris is connected to your TUXEDO notebook&apos;s power supply, which is connected to a power outlet.</source>
-        <target state="translated">Your Aquaris is connected to your TUXEDO notebook&apos;s power supply, which is connected to a power outlet.</target>
+        <source>Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</source>
+        <target state="translated">Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
-        <source>Your Aquaris&apos; power cable is plugged into your TUXEDO notebook.</source>
-        <target state="translated">Your Aquaris&apos; power cable is plugged into your TUXEDO notebook.</target>
+        <source>Your Aquaris' power cable is plugged into your TUXEDO notebook.</source>
+        <target state="translated">Your Aquaris' power cable is plugged into your TUXEDO notebook.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">228</context>
@@ -1885,8 +2059,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiTomteListErrorPopup" datatype="html">
-        <source>Information from command &apos;tomte list&apos; could not be obtained. Is tomte already running?</source>
-        <target state="translated">Information from command &apos;tomte list&apos; could not be obtained. Is tomte already running?</target>
+        <source>Information from command 'tomte list' could not be obtained. Is tomte already running?</source>
+        <target state="translated">Information from command 'tomte list' could not be obtained. Is tomte already running?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -1997,8 +2171,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don&apos;t ask again</source>
-        <target state="translated">Don&apos;t ask again</target>
+        <source>Don't ask again</source>
+        <target state="translated">Don't ask again</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
           <context context-type="linenumber">274</context>
@@ -2165,8 +2339,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyTooltip" datatype="html">
-        <source>Tomte will only update the existing modules, but won&apos;t install or remove modules without your approval. You will be notified once new modules are available.</source>
-        <target state="translated">Tomte will only update the existing modules, but won&apos;t install or remove modules without your approval. You will be notified once new modules are available.</target>
+        <source>Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available.</source>
+        <target state="translated">Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
           <context context-type="linenumber">140</context>
@@ -2461,9 +2635,9 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="chargingProfileNoteLabel" datatype="html">
-        <source> Please note: The system will still show 100% capacity in &quot;Reduced capacity&quot; and &quot;Stationary use&quot; modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
+        <source> Please note: The system will still show 100% capacity in "Reduced capacity" and "Stationary use" modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
 </source>
-        <target state="translated"> Please note: The system will still show 100% capacity in &quot;Reduced capacity&quot; and &quot;Stationary use&quot; modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
+        <target state="translated"> Please note: The system will still show 100% capacity in "Reduced capacity" and "Stationary use" modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
@@ -2571,8 +2745,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogNotValidPresetDialog" datatype="html">
-        <source>The webcam preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
-        <target state="translated">The webcam preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</target>
+        <source>The webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.</source>
+        <target state="translated">The webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
           <context context-type="linenumber">686</context>
@@ -2967,8 +3141,8 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="noWebcamFoundInfoContent" datatype="html">
-        <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
-        <target state="translated"> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </target>
+        <source> To configure your webcams, you'll need to plug in an external webcam or turn on the internal webcam. Once you've done that, press reload and you'll be presented with a configuration menu. If you've previously disabled the internal webcam in the profile settings, you'll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
+        <target state="translated"> To configure your webcams, you'll need to plug in an external webcam or turn on the internal webcam. Once you've done that, press reload and you'll be presented with a configuration menu. If you've previously disabled the internal webcam in the profile settings, you'll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">9,13</context>
@@ -3012,6 +3186,38 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="primeSelectDialogApplyProfileTitle" datatype="html">
+        <source>Applying Graphics Profile</source>
+        <target state="new">Applying Graphics Profile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="primeSelectDialogApplyProfileDescription" datatype="html">
+        <source>Do not power off your device until the process is complete.</source>
+        <target state="new">Do not power off your device until the process is complete.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6759205696902713848" datatype="html">
+        <source>Warning</source>
+        <target state="new">Warning</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="primeSelectDialogRebootTitle" datatype="html">
+        <source>Completed</source>
+        <target state="new">Completed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogUnsavedChangesTitle" datatype="html">
@@ -3182,6 +3388,14 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="compatibilityNotAvailable" datatype="html">
+        <source>This feature is currently not available.</source>
+        <target state="new">This feature is currently not available.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
         <source>Mains</source>
         <target state="translated">Mains</target>
@@ -3212,180 +3426,6 @@ Commercial register number - Part B of the commercial register - 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
-    <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
-        <source>Click on a key area to select it.</source>
-        <target state="new">Click on a key area to select it.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">38,39</context>
-        </context-group>
-      </trans-unit><trans-unit id="cKeyboardBacklightDescription2" datatype="html">
-        <source>Hold down shift to select multiple key areas. </source>
-        <target state="new">Hold down shift to select multiple key areas. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">40,42</context>
-        </context-group>
-      </trans-unit><trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
-        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
-        <target state="new">Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">47,51</context>
-        </context-group>
-      </trans-unit><trans-unit id="primeSelectDialogApplyProfileTitle" datatype="html">
-        <source>Applying Graphics Profile</source><target state="new">Applying Graphics Profile</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit><trans-unit id="primeSelectDialogApplyProfileDescription" datatype="html">
-        <source>Do not power off your device until the process is complete.</source><target state="new">Do not power off your device until the process is complete.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit><trans-unit id="primeSelectDialogRebootTitle" datatype="html">
-        <source>Completed</source><target state="new">Completed</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">111</context>
-        </context-group>
-      </trans-unit><trans-unit id="noDashboardValue" datatype="html">
-        <source>N/A</source><target state="new">N/A</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">372</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardCpuPowerLabel" datatype="html">
-        <source>CPU - Power</source><target state="new">CPU - Power</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">109</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardIGpuFrequencyLabel" datatype="html">
-        <source>iGPU - Frequency</source><target state="new">iGPU - Frequency</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">164</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">288</context>
-        </context-group></trans-unit><trans-unit id="cDashboardIGpuPowerLabel" datatype="html">
-        <source>iGPU - Power</source><target state="new">iGPU - Power</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">180</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">304</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuTemperatureLabel" datatype="html">
-        <source>dGPU - Temperature</source><target state="new">dGPU - Temp</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">199</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">323,324</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuFanLabel" datatype="html">
-        <source>dGPU - Fan</source><target state="new">dGPU - Fan</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">231</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">356</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuFrequencyLabel" datatype="html">
-        <source>dGPU - Frequency</source><target state="new">dGPU - Frequency</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">216</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">341</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuPowerLabel" datatype="html">
-        <source>dGPU - Power</source><target state="new">dGPU - Power</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">248</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">374</context>
-        </context-group></trans-unit><trans-unit id="6759205696902713848" datatype="html">
-        <source>Warning</source><target state="new">Warning</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">92</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardIGpuTemperatureLabel" datatype="html">
-        <source>iGPU - Temperature</source><target state="new">iGPU - Temperature</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">149</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">271,272</context>
-        </context-group></trans-unit><trans-unit id="cfea506bf41e6f38b445fb90c1c31abe9b747ed1" datatype="html">
-        <source>Grafikeinstellungen</source><target state="new">Grafikeinstellungen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">236</context>
-        </context-group>
-        <note priority="1" from="description">cGlobalSettingsPrimeSelectTitle</note>
-      </trans-unit><trans-unit id="compatibilityNotAvailable" datatype="html">
-        <source>This feature is currently not available.</source><target state="new">This feature is currently not available.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">157</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfMgrRefreshRatesNotAvailableOnWaylandTooltip" datatype="html">
-        <source>This feature is currently not supported on Wayland</source>
-                <target state="translated">This feature is currently not supported on Wayland</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">570</context>
-        </context-group>
-      </trans-unit>
-            <trans-unit id="cProfMgrDetailsRefRateOnProfileActivationHeader" datatype="html">
-        <source>Set refresh rate on profile activation</source>
-        <target state="translated">Set refresh rate on profile activation</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">224</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cOnlyOneRefreshRateAvailableTooltip" datatype="html">
-        <source>Only one Refreshrate available, maybe try setting a different resolution.</source>
-        <target state="translated">Only one Refreshrate available, maybe try setting a different resolution.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">242</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsRefRateLabelActive" datatype="html">
-        <source>Currently active refresh rate</source>
-        <target state="translated">Currently active refresh rate</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">247</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsRefRateLabelProfile" datatype="html">
-        <source>Selected profile refresh rate</source>
-        <target state="translated">Selected profile refresh rate</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
     </body>

@@ -290,8 +290,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="59f767ae4a7773ab07970a8ea52a9407899541c0" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our &quot;Fully Automated Installation&quot;, you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer &quot;Fully Automated Installation&quot; können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur drei Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target state="translated"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Mit unserer "Fully Automated Installation" können Sie Ihr Linux-System binnen weniger Minuten und mit wenigen Klicks ganz einfach auf den Auslieferungszustand wiederherstellen.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Durch die Cloud-basierten Daten erhalten Sie dabei immer den neusten Systemstand! Der TUXEDO WebFAI Creator hilft bei der Erstellung des benötigten USB-Sticks mit nur drei Klicks!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
           <context context-type="linenumber">147,148</context>
@@ -470,7 +470,7 @@
         <target state="translated">alle LEDs aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDOne" datatype="html">
@@ -478,7 +478,7 @@
         <target state="translated">1 LED an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLEDTwo" datatype="html">
@@ -486,7 +486,7 @@
         <target state="translated">beide LEDs an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL1" datatype="html">
@@ -494,7 +494,7 @@
         <target state="translated">Dauerhafte Maximalleistung (PL1)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL2" datatype="html">
@@ -502,7 +502,7 @@
         <target state="needs-adaptation">Kurzzeitige (max. 28 Sek.) Maximalleistung (PL2)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tdpLabelsPL4" datatype="html">
@@ -510,7 +510,15 @@
         <target state="needs-adaptation">Kurzzeitige (max. 8 Sek) Maximalleistung (PL4)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">222</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ProfMgrRefreshRatesNotAvailableOnWaylandTooltip" datatype="html">
+        <source>This feature is currently not supported on Wayland</source>
+        <target state="translated">Dieses Feature wird derzeit auf Wayland nicht unterstützt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
+          <context context-type="linenumber">568</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsStateSelectButtonAlreadySet" datatype="html" approved="yes">
@@ -518,7 +526,7 @@
         <target phase-name="approval-1" state="signed-off"> (bereits festgelegt)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">499</context>
+          <context context-type="linenumber">610</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrButtonDiscardTooltip" datatype="html" approved="yes">
@@ -600,6 +608,10 @@
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">159</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseBrightnessNo" datatype="html" approved="yes">
         <source>no</source>
@@ -607,6 +619,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
           <context context-type="linenumber">160</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsBrightnessLabel" datatype="html" approved="yes">
@@ -617,12 +633,44 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateOnProfileActivationHeader" datatype="html">
+        <source>Set refresh rate on profile activation</source>
+        <target state="translated">Bildwiederholrate bei Profilaktivierung anpassen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cOnlyOneRefreshRateAvailableTooltip" datatype="html">
+        <source>Only one Refreshrate available, maybe try setting a different resolution.</source>
+        <target state="translated">Nur eine Bildwiederholrate verfügbar. Sie könnten versuchen eine andere Auflösung einzustellen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">242</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateLabelActive" datatype="html">
+        <source>Currently active refresh rate</source>
+        <target state="translated">Derzeit aktive Bildwiederholrate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsRefRateLabelProfile" datatype="html">
+        <source>Selected profile refresh rate</source>
+        <target state="translated">Im Profil ausgewählte Bildwiederholrate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html" approved="yes">
         <source>Fan control</source>
         <target phase-name="approval-1" state="signed-off">Lüftersteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">227</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html" approved="yes">
@@ -630,7 +678,7 @@
         <target phase-name="approval-1" state="signed-off">Lüfterprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">236</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
@@ -638,7 +686,7 @@
         <target state="translated">Minimale Lüftergeschwindigkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">308</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
@@ -646,7 +694,7 @@
         <target state="translated">Offset-Lüftergeschwindigkeit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">292</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsToggleFanChartsLabel" datatype="html">
@@ -654,7 +702,7 @@
         <target state="translated">Lüftertabellendiagramm umschalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">335</context>
+          <context context-type="linenumber">390</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html" approved="yes">
@@ -662,7 +710,7 @@
         <target phase-name="approval-1" state="signed-off">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">411</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
@@ -674,7 +722,7 @@
         <target phase-name="approval-1" state="signed-off">Status der Webcam (an/aus)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">364</context>
+          <context context-type="linenumber">419</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html" approved="yes">
@@ -682,7 +730,7 @@
         <target phase-name="approval-1" state="signed-off">an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">368</context>
+          <context context-type="linenumber">423</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html" approved="yes">
@@ -690,7 +738,7 @@
         <target phase-name="approval-1" state="signed-off">aus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">424</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
@@ -698,7 +746,7 @@
         <target state="translated">Systemleistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">392</context>
+          <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
@@ -706,7 +754,7 @@
         <target state="translated">CPU-Taktfrequenz begrenzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">487</context>
+          <context context-type="linenumber">542</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html" approved="yes">
@@ -714,7 +762,7 @@
         <target phase-name="approval-1" state="signed-off">Anzahl der logischen Kerne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">496</context>
+          <context context-type="linenumber">551</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
@@ -722,7 +770,7 @@
         <target phase-name="approval-1" state="signed-off">Maximale Leistung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">516</context>
+          <context context-type="linenumber">571</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
@@ -730,7 +778,7 @@
         <target phase-name="approval-1" state="signed-off">ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">520</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
@@ -738,7 +786,7 @@
         <target phase-name="approval-1" state="signed-off">nein</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">521</context>
+          <context context-type="linenumber">576</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html" approved="yes">
@@ -746,7 +794,7 @@
         <target phase-name="approval-1" state="translated">Minimale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">535</context>
+          <context context-type="linenumber">590</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html" approved="yes">
@@ -754,7 +802,7 @@
         <target phase-name="approval-1" state="translated">Maximale Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">587</context>
+          <context context-type="linenumber">642</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
@@ -778,7 +826,7 @@
         <target state="translated">Systemprofil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">460</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemProfileiInfoTooltip" datatype="html">
@@ -786,7 +834,7 @@
         <target state="translated">Die Systemprofile begrenzen die maximale Energieaufnahme des Prozessors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">464</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
@@ -794,7 +842,7 @@
         <target state="translated">CPU-Energieaufnahme begrenzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">432</context>
+          <context context-type="linenumber">487</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
@@ -881,12 +929,20 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">127,140</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="noDashboardValue" datatype="html">
+        <source>N/A</source>
+        <target state="new">k.A.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
+          <context context-type="linenumber">369</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cDashboardSystemMonitor" datatype="html">
         <source>System monitor</source>
         <target phase-name="approval-1" state="new">Systemmonitor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardMainProcessorMonitor" datatype="html">
@@ -894,7 +950,7 @@ Handelsregisternummer HRB 27755
         <target state="new">CPU-Überwachung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuTemperatureLabel" datatype="html">
@@ -902,7 +958,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">CPU - Temperatur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuFrequencyLabel" datatype="html">
@@ -910,7 +966,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">CPU - Taktfrequenz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuFanLabel" datatype="html">
@@ -918,7 +974,15 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">CPU - Lüfter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardCpuPowerLabel" datatype="html">
+        <source>CPU - Power</source>
+        <target state="new">CPU - Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardActiveProfile" datatype="html">
@@ -926,7 +990,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Aktives Profil:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardGraphicsCardMonitor" datatype="html">
@@ -934,7 +998,91 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Grafikkarte (GPU)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardIGpuFrequencyLabel" datatype="html">
+        <source>iGPU - Frequency</source>
+        <target state="new">iGPU - Taktfrequenz</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">165</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">289</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardIGpuTemperatureLabel" datatype="html">
+        <source>iGPU - Temperature</source>
+        <target state="new">iGPU - Temperatur</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">150</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">272,273</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardIGpuPowerLabel" datatype="html">
+        <source>iGPU - Power</source>
+        <target state="new">iGPU - Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">181</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">305</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuTemperatureLabel" datatype="html">
+        <source>dGPU - Temperature</source>
+        <target state="new">dGPU - Temperatur</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">200</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">324,325</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuFrequencyLabel" datatype="html">
+        <source>dGPU - Frequency</source>
+        <target state="new">dGPU - Taktfrequenz</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">342</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuFanLabel" datatype="html">
+        <source>dGPU - Fan</source>
+        <target state="new">dGPU - Lüfter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">357</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cDashboardDGpuPowerLabel" datatype="html">
+        <source>dGPU - Power</source>
+        <target state="new">dGPU - Leistung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
+          <context context-type="linenumber">375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsTitle" datatype="html">
@@ -942,7 +1090,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsDescription" datatype="html">
@@ -950,7 +1098,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Der Einstellungsbereich enthält GUI-Einstellungen und Einstellungen, die sich auf alle Profile auswirken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">26,27</context>
+          <context context-type="linenumber">29,30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsGlobalProfileSettingsTitle" datatype="html">
@@ -958,7 +1106,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Globale Profileinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">43,44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyHeader" datatype="html">
@@ -966,7 +1114,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">CPU-Frequenzeinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyActivated" datatype="html">
@@ -974,7 +1122,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyDeactivated" datatype="html">
@@ -982,7 +1130,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsCpuFrequencyDescription" datatype="html">
@@ -990,7 +1138,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Beim Deaktivieren werden die CPU-Frequenzeinstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">65,68</context>
+          <context context-type="linenumber">69,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlHeader" datatype="html">
@@ -998,7 +1146,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Lüftersteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlActivated" datatype="html">
@@ -1006,7 +1154,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlDeactivated" datatype="html">
@@ -1014,7 +1162,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="translated">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsFanControlDescription" datatype="html">
@@ -1022,7 +1170,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Beim Deaktivieren wird unmittelbar die automatische Standard-Lüftersteuerung wiederhergestellt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">90,92</context>
+          <context context-type="linenumber">96,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightHeader" datatype="html">
@@ -1030,7 +1178,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Tastaturbeleuchtungssteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightActivated" datatype="html">
@@ -1038,7 +1186,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightDeactivated" datatype="html">
@@ -1046,7 +1194,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsKeyboardBacklightDescription" datatype="html">
@@ -1054,7 +1202,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Beim Deaktivieren werden die Tastaturbeleuchtungseinstellungen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nicht<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf Standard zurückgesetzt. Die Standardeinstellungen müssen von Hand oder durch einen Systemneustart wiederhergestellt werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">115,119</context>
+          <context context-type="linenumber">122,126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsBatteryChargingTitle" datatype="html">
@@ -1062,7 +1210,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Akku-Ladeoptionen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">183,184</context>
+          <context context-type="linenumber">195,196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeTitle" datatype="html">
@@ -1070,7 +1218,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Farbschema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeLightLabel" datatype="html">
@@ -1078,7 +1226,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Hell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeDarkLabel" datatype="html">
@@ -1086,7 +1234,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Dunkel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">206</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsThemeSystemSettingLabel" datatype="html">
@@ -1094,7 +1242,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Systemeinstellung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">207,208</context>
+          <context context-type="linenumber">220,221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsTomteTitle" datatype="html">
@@ -1102,7 +1250,7 @@ Handelsregisternummer HRB 27755
         <target state="new">Tomte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">234</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingHeader" datatype="html">
@@ -1110,15 +1258,15 @@ Handelsregisternummer HRB 27755
         <target state="new">Chroma-Subsampling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingDescriptionHeader" datatype="html">
-        <source>Force Chroma Subsampling (Y&apos;CbCr 4:2:0) if available:</source>
-        <target phase-name="approval-1" state="new">Erzwinge Chroma Subsampling (Y&apos;CbCr 4:2:0) wenn verfügbar:</target>
+        <source>Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</source>
+        <target phase-name="approval-1" state="new">Erzwinge Chroma Subsampling (Y'CbCr 4:2:0) wenn verfügbar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">136,138</context>
+          <context context-type="linenumber">143,145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingDescription" datatype="html">
@@ -1126,17 +1274,18 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">Diese Einstellung kann Flackern bei bestimmten HDMI-Kabeln bei 4k@60Hz beheben. Dafür wird eine verlustbehaftete Kompression verwendet, um die Datenrate über das Kabel zu senken. Um sicherzugehen, dass die Einstellung übernommen wird müssen Sie den Monitor ab- und wieder einstecken oder den Computer neu starten. Auf manchen Geräten werden die HDMI-Ports intern auch DisplayPort oder DP gennant und sind deswegen auch hier so gelistet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">166,170</context>
+          <context context-type="linenumber">174,182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel" datatype="html">
-        <source>Port <x id="INTERPOLATION" equiv-text="{{port}}"/> of Card <x id="INTERPOLATION_1" equiv-text="     "/> </source>
-        <target phase-name="approval-1" state="new">
+        <source>Port <x id="INTERPOLATION" equiv-text="        "/> of Card <x id="INTERPOLATION_1" equiv-text="     "/> </source>
+        <target phase-name="approval-1" state="needs-adaptation">
             Port <x id="INTERPOLATION" equiv-text="{{port}}"/> der Karte <x id="INTERPOLATION_1" equiv-text="{{i}}"/>
         </target>
+        <note from="XLIFF Sync" annotates="general" priority="1">Source text has changed. Please review the translation.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">144,146</context>
+          <context context-type="linenumber">151,154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundActivated" datatype="html">
@@ -1144,7 +1293,7 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">aktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundDeactivated" datatype="html">
@@ -1152,12 +1301,21 @@ Handelsregisternummer HRB 27755
         <target phase-name="approval-1" state="new">deaktiviert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cfea506bf41e6f38b445fb90c1c31abe9b747ed1" datatype="html">
+        <source>Grafikeinstellungen</source>
+        <target state="new">Grafikeinstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+        <note priority="1" from="description">cGlobalSettingsPrimeSelectTitle</note>
+      </trans-unit>
       <trans-unit id="cShutdownTimerInformations" datatype="html">
-        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting &quot;Delete Time&quot; below.</source>
-        <target phase-name="approval-1" state="translated">Dies setzt einen Einmalzeitpunkt zum Herunterfahren. Er wird beim nächsten Hochfahren automatisch, oder wenn Sie unten &quot;Zeit löschen&quot; auswählen, gelöscht.</target>
+        <source>This sets a one time shutdown time. It will be automatically cleared on next boot, or when selecting "Delete Time" below.</source>
+        <target phase-name="approval-1" state="translated">Dies setzt einen Einmalzeitpunkt zum Herunterfahren. Er wird beim nächsten Hochfahren automatisch, oder wenn Sie unten "Zeit löschen" auswählen, gelöscht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/shutdown-timer/shutdown-timer.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -1237,20 +1395,28 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
+        <source>Click on a key area to select it.</source>
+        <target state="new">Klicken Sie einen Tastenbereich an, um ihn auszuwählen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightDescription2" datatype="html">
+        <source>Hold down shift to select multiple key areas. </source>
+        <target state="new">Halten Sie Shift gedrückt, um mehrere Tastenbereiche auszuwählen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
         <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
         <target phase-name="approval-1" state="translated">Dein Gerät hat keine Tastaturbeleuchtung, ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel oder der Treiber ist zu alt. Mindestens tuxedo-keyboard 3.2.0 bzw. tuxedo-keyboard-ite 0.3.0 und Linux Kernel 5.9 werden benötigt (manche Geräte brauchen neuere Versionen). Wenn Sie Ubuntu 20.04 oder früher oder eine alte Version von TUXEDO OS verwenden die darauf basiert, werden diese Treiberversionen nicht automatisch installiert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
-        <source>Backlight Brightness</source>
-        <target phase-name="approval-1" state="new">Beleuchtungshelligkeit:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">47,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
@@ -1259,6 +1425,14 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
+        <source>Backlight Brightness</source>
+        <target phase-name="approval-1" state="new">Beleuchtungshelligkeit:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
@@ -1298,8 +1472,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="nocryptinstall" datatype="html">
-        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in &quot;crypt&quot;. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target phase-name="approval-1" state="translated"><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur während der Installation Ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO Book mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>neu installieren und bei der Betriebssystemauswahl eine Option wählen, die mit &quot;Crypt&quot; endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn Sie Ihr Notebook neu installieren, werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <source><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>It looks like you are not using disk encryption.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Disk encryption can only be enabled during installation of your system. If you want to use it, you have to reinstall your TUXEDO using <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. On the operating system selection screen choose an option ending in "crypt". <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Reinstalling your PC will wipe all data and programs stored on it!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <target phase-name="approval-1" state="translated"><x id="START_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;h3&gt;"/>Offenbar verwenden Sie keine Festplattenverschlüsselung.<x id="CLOSE_HEADING_LEVEL3" ctype="x-h3" equiv-text="&lt;/h3&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Die Festplattenverschlüsselung kann nur während der Installation Ihres Systems aktiviert werden. Wenn Sie die Festplattenverschlüsselung verwenden wollen, müssen Sie Ihr TUXEDO Book mit <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>WebFAI<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>neu installieren und bei der Betriebssystemauswahl eine Option wählen, die mit "Crypt" endet. <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Wenn Sie Ihr Notebook neu installieren, werden alle Daten und Programme darauf gelöscht!<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -1514,8 +1688,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogConnectDescription" datatype="html">
-        <source>Please ensure that your Aquaris&apos; watercooling tubes are plugged into your TUXEDO before pressing the &apos;Connect&apos; button!</source>
-        <target state="translated">Bitte stellen Sie sicher, dass beide Wasserkühlungsschläuche Ihrer Aquaris an Ihr TUXEDO Notebook angeschlossen sind, bevor Sie auf &quot;Verbinden&quot; klicken!</target>
+        <source>Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!</source>
+        <target state="translated">Bitte stellen Sie sicher, dass beide Wasserkühlungsschläuche Ihrer Aquaris an Ihr TUXEDO Notebook angeschlossen sind, bevor Sie auf "Verbinden" klicken!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
           <context context-type="linenumber">386</context>
@@ -1546,7 +1720,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don&apos;t ask again</source>
+        <source>Don't ask again</source>
         <target state="translated">Nicht erneut fragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.ts</context>
@@ -1764,7 +1938,7 @@ Handelsregisternummer HRB 27755
       </trans-unit>
       <trans-unit id="aqChooseAquarisText" datatype="html">
         <source>Please choose your TUXEDO Aquaris and click on the connect button</source>
-        <target state="translated">Bitte wählen Sie Ihre TUXEDO Aquaris und klicken Sie auf &quot;Verbinden&quot;</target>
+        <target state="translated">Bitte wählen Sie Ihre TUXEDO Aquaris und klicken Sie auf "Verbinden"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
           <context context-type="linenumber">195</context>
@@ -1843,7 +2017,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
-        <source>Your Aquaris is connected to your TUXEDO notebook&apos;s power supply, which is connected to a power outlet.</source>
+        <source>Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</source>
         <target state="translated">Ihre Aquaris mit dem Notebook-Netzteil am Stromnetz verbunden ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
@@ -1851,7 +2025,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
-        <source>Your Aquaris&apos; power cable is plugged into your TUXEDO notebook.</source>
+        <source>Your Aquaris' power cable is plugged into your TUXEDO notebook.</source>
         <target state="translated">Das Verlängerungs-Stromkabel Ihrer Aquaris mit Ihrem Notebook verbunden ist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
@@ -1875,8 +2049,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiTomteListErrorPopup" datatype="html">
-        <source>Information from command &apos;tomte list&apos; could not be obtained. Is tomte already running?</source>
-        <target state="translated">Es konnte &apos;tomte list&apos; nicht ausgeführt werden. Läuft tomte bereits?</target>
+        <source>Information from command 'tomte list' could not be obtained. Is tomte already running?</source>
+        <target state="translated">Es konnte 'tomte list' nicht ausgeführt werden. Läuft tomte bereits?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -1987,7 +2161,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
-        <source>Don&apos;t ask again</source>
+        <source>Don't ask again</source>
         <target state="translated">Nicht nochmal fragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
@@ -2155,7 +2329,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteOperationModeUpdatesOnlyTooltip" datatype="html">
-        <source>Tomte will only update the existing modules, but won&apos;t install or remove modules without your approval. You will be notified once new modules are available.</source>
+        <source>Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available.</source>
         <target state="translated"> Tomte hält die installierten Module aktuell, wird aber nicht ohne Zustimmung Module installieren oder entfernen. Sie werden informiert, sobald neue Module verfügbar sind. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
@@ -2451,7 +2625,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="chargingProfileNoteLabel" datatype="html">
-        <source> Please note: The system will still show 100% capacity in &quot;Reduced capacity&quot; and &quot;Stationary use&quot; modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
+        <source> Please note: The system will still show 100% capacity in "Reduced capacity" and "Stationary use" modes. The limitation of the actual capacity takes place in the background on firmware level and is not visible for the operating system.
 </source>
         <target state="translated">Bitte beachten: Im Betriebssystem (Linux/Windows) wird in jedem dieser Modi angeben, dass der Akku auf bis zu 100% geladen wird. Die Begrenzung der tatsächlichen Kapazität findet im Hintergrund auf Firmware-Ebene statt und ist für das Betriebssystem unsichtbar.
 </target>
@@ -2561,7 +2735,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogNotValidPresetDialog" datatype="html">
-        <source>The webcam preset contains invalid configurations and therefore won&apos;t be applied. Reverting to default preset.</source>
+        <source>The webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.</source>
         <target state="translated">Das Webcam-Profil enthält ungültige Konfigurationen und wird daher nicht angewendet. Es werden die Standardeinstellungen wiederhergestellt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.ts</context>
@@ -2957,8 +3131,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="noWebcamFoundInfoContent" datatype="html">
-        <source> To configure your webcams, you&apos;ll need to plug in an external webcam or turn on the internal webcam. Once you&apos;ve done that, press reload and you&apos;ll be presented with a configuration menu. If you&apos;ve previously disabled the internal webcam in the profile settings, you&apos;ll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
-        <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, klicken Sie bitte auf &quot;Neu laden&quot;, und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
+        <source> To configure your webcams, you'll need to plug in an external webcam or turn on the internal webcam. Once you've done that, press reload and you'll be presented with a configuration menu. If you've previously disabled the internal webcam in the profile settings, you'll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly with a keyboard shortcut. </source>
+        <target state="translated"> Um Ihre Webcams zu konfigurieren, müssen Sie eine externe Webcam anschließen oder die interne Webcam aktivieren. Sobald Sie das getan haben, klicken Sie bitte auf "Neu laden", und es öffnet sich ein Konfigurationsmenü. Wenn Sie die interne Webcam in den Profil-Einstellungen zuvor deaktiviert haben, müssen Sie sie erneut aktivieren, um sie zu konfigurieren. Einige Laptops ermöglichen es Ihnen auch, die Webcam schnell mit einer Tastenkombination umzuschalten. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">9,13</context>
@@ -3002,6 +3176,38 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
           <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="primeSelectDialogApplyProfileTitle" datatype="html">
+        <source>Applying Graphics Profile</source>
+        <target state="new">Auswahl des Grafikprofils</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="primeSelectDialogApplyProfileDescription" datatype="html">
+        <source>Do not power off your device until the process is complete.</source>
+        <target state="new">Schalten Sie Ihr Gerät nicht aus, bevor der Vorgang abgeschlossen ist.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6759205696902713848" datatype="html">
+        <source>Warning</source>
+        <target state="new">Warning</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="primeSelectDialogRebootTitle" datatype="html">
+        <source>Completed</source>
+        <target state="new">Abgeschlossen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="webcamDialogUnsavedChangesTitle" datatype="html">
@@ -3172,6 +3378,14 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="compatibilityNotAvailable" datatype="html">
+        <source>This feature is currently not available.</source>
+        <target state="new">Diese Funktion ist derzeit nicht verfügbar.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">
         <source>Mains</source>
         <target phase-name="approval-1" state="signed-off">Netz</target>
@@ -3202,183 +3416,6 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/state.service.ts</context>
           <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
-    <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
-        <source>Click on a key area to select it.</source>
-        <target state="new">Klicken Sie einen Tastenbereich an, um ihn auszuwählen.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">38,39</context>
-        </context-group>
-      </trans-unit><trans-unit id="cKeyboardBacklightDescription2" datatype="html">
-        <source>Hold down shift to select multiple key areas. </source>
-        <target state="new">Halten Sie Shift gedrückt, um mehrere Tastenbereiche auszuwählen.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">40,42</context>
-        </context-group>
-      </trans-unit><trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
-        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
-        <target state="new">Ihr Gerät hat keine Tastaturbeleuchtung, ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel oder der Treiber ist zu alt. Mindestens tuxedo-keyboard 3.2.0 bzw. tuxedo-keyboard-ite 0.3.0 und Linux Kernel 5.9 werden benötigt (manche Geräte brauchen neuere Versionen). Wenn Sie Ubuntu 20.04 oder früher oder eine alte Version von TUXEDO OS verwenden die darauf basiert, werden diese Treiberversionen nicht automatisch installiert.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">47,51</context>
-        </context-group>
-      </trans-unit><trans-unit id="primeSelectDialogApplyProfileTitle" datatype="html">
-        <source>Applying Graphics Profile</source>
-        <target state="new">Auswahl des Grafikprofils</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit><trans-unit id="primeSelectDialogApplyProfileDescription" datatype="html">
-        <source>Do not power off your device until the process is complete.</source>
-        <target state="new">Schalten Sie Ihr Gerät nicht aus, bevor der Vorgang abgeschlossen ist.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit><trans-unit id="primeSelectDialogRebootTitle" datatype="html">
-        <source>Completed</source>
-        <target state="new">Abgeschlossen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">111</context>
-        </context-group>
-      </trans-unit><trans-unit id="noDashboardValue" datatype="html">
-        <source>N/A</source><target state="new">k.A.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">372</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardCpuPowerLabel" datatype="html">
-        <source>CPU - Power</source><target state="new">CPU - Leistung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">109</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardIGpuFrequencyLabel" datatype="html">
-        <source>iGPU - Frequency</source><target state="new">iGPU - Taktfrequenz</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">164</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">288</context>
-        </context-group></trans-unit><trans-unit id="cDashboardIGpuPowerLabel" datatype="html">
-        <source>iGPU - Power</source><target state="new">iGPU - Leistung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">180</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">304</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuTemperatureLabel" datatype="html">
-        <source>dGPU - Temperature</source><target state="new">dGPU - Temperatur</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">199</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">323,324</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuFanLabel" datatype="html">
-        <source>dGPU - Fan</source><target state="new">dGPU - Lüfter</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">231</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">356</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuFrequencyLabel" datatype="html">
-        <source>dGPU - Frequency</source><target state="new">dGPU - Taktfrequenz</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">216</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">341</context>
-        </context-group></trans-unit><trans-unit id="cDashboardDGpuPowerLabel" datatype="html">
-        <source>dGPU - Power</source><target state="new">dGPU - Leistung</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">248</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">374</context>
-        </context-group></trans-unit><trans-unit id="6759205696902713848" datatype="html">
-        <source>Warning</source><target state="new">Warning</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.ts</context>
-          <context context-type="linenumber">92</context>
-        </context-group>
-      </trans-unit><trans-unit id="cDashboardIGpuTemperatureLabel" datatype="html">
-        <source>iGPU - Temperature</source><target state="new">iGPU - Temperatur</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">149</context>
-        </context-group>
-      <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
-          <context context-type="linenumber">271,272</context>
-        </context-group></trans-unit><trans-unit id="cfea506bf41e6f38b445fb90c1c31abe9b747ed1" datatype="html">
-        <source>Grafikeinstellungen</source><target state="new">Grafikeinstellungen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
-          <context context-type="linenumber">236</context>
-        </context-group>
-        <note priority="1" from="description">cGlobalSettingsPrimeSelectTitle</note>
-      </trans-unit><trans-unit id="compatibilityNotAvailable" datatype="html">
-        <source>This feature is currently not available.</source><target state="new">Diese Funktion ist derzeit nicht verfügbar.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">157</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ProfMgrRefreshRatesNotAvailableOnWaylandTooltip" datatype="html">
-        <source>This feature is currently not supported on Wayland</source>
-                <target state="translated">Dieses Feature wird derzeit auf Wayland nicht unterstützt</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
-          <context context-type="linenumber">570</context>
-        </context-group>
-      </trans-unit>
-                  <trans-unit id="cProfMgrDetailsRefRateOnProfileActivationHeader" datatype="html">
-        <source>Set refresh rate on profile activation</source>
-        <target state="translated">Bildwiederholrate bei Profilaktivierung anpassen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">224</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cOnlyOneRefreshRateAvailableTooltip" datatype="html">
-        <source>Only one Refreshrate available, maybe try setting a different resolution.</source>
-        <target state="translated">Nur eine Bildwiederholrate verfügbar. Sie könnten versuchen eine andere Auflösung einzustellen.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">242</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsRefRateLabelActive" datatype="html">
-        <source>Currently active refresh rate</source>
-        <target state="translated">Derzeit aktive Bildwiederholrate</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">247</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsRefRateLabelProfile" datatype="html">
-        <source>Selected profile refresh rate</source>
-        <target state="translated">Im Profil ausgewählte Bildwiederholrate</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
     </body>
