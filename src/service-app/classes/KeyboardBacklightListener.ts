@@ -96,7 +96,7 @@ export class KeyboardBacklightListener {
     }
 
     private async initSysFSListener() {
-        if (!await fileOKAsync(this.ledsWhiteOnly + "/brightness")) {
+        if (this.keyboardBacklightCapabilities.maxRed != undefined) {
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     (function(i: number) {
