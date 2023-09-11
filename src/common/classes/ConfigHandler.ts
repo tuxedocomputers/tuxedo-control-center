@@ -133,6 +133,7 @@ export class ConfigHandler {
         let config: T;
         try {
             const fileData = fs.readFileSync(filename);
+            // FIXME for some reason this actually doesn't enforce the type
             config = JSON.parse(fileData.toString());
         } catch (err) {
             throw err;
