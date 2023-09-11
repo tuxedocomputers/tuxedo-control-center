@@ -408,6 +408,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
                 missingSetting = true;
             }
+            if (this.settings.keyboardBacklightStates === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing keyboardBacklightStates setting');
+                this.settings.keyboardBacklightStates = this.config.getDefaultSettings(device).keyboardBacklightStates;
+                missingSetting = true;
+            }
             missingSetting = this.syncOutputPortsSetting();
 
             if (missingSetting) {
