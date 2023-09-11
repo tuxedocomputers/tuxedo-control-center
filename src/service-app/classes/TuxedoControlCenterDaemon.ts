@@ -396,6 +396,18 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.settings.ycbcr420Workaround = this.config.getDefaultSettings(device).ycbcr420Workaround;
                 missingSetting = true;
             }
+            if (this.settings.chargingProfile === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing chargingProfile setting');
+                this.settings.chargingProfile = this.config.getDefaultSettings(device).chargingProfile;
+                missingSetting = true;
+            }
+            if (this.settings.chargingPriority === undefined) {
+                // If settings are missing, attempt to recreate default
+                this.logLine('Missing chargingPriority setting');
+                this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
+                missingSetting = true;
+            }
             missingSetting = this.syncOutputPortsSetting();
 
             if (missingSetting) {
