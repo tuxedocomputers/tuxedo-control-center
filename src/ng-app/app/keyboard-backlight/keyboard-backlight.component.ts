@@ -53,7 +53,7 @@ export class KeyboardBacklightComponent implements OnInit {
     ) {}
 
     public ngOnInit() {
-        this.setChosenValues();
+        //this.setChosenValues();
         this.subscribeKeyboardBacklightCapabilities();
         this.subscribeKeyboardBacklightStates();
         this.setColorPickerInUsageDefault();
@@ -75,14 +75,14 @@ export class KeyboardBacklightComponent implements OnInit {
         return Math.min(Math.max(input, min), max);
     }
 
-    private setChosenValues(): void {
-        const settings = this.config.getSettings();
-        const keyboardBacklightColor = settings.keyboardBacklightColor;
-        this.chosenColorHex = keyboardBacklightColor.map((color) =>
-            this.intToRGBSharpString(color)
-        );
-        this.chosenBrightness = settings.keyboardBacklightBrightness;
-    }
+    // private setChosenValues(): void {
+    //     const settings = this.config.getSettings();
+    //     const keyboardBacklightColor = settings.keyboardBacklightColor;
+    //     this.chosenColorHex = keyboardBacklightColor.map((color) =>
+    //         this.intToRGBSharpString(color)
+    //     );
+    //     this.chosenBrightness = settings.keyboardBacklightBrightness;
+    // }
 
     private setColorPickerInUsageDefault(): void {
         const zones = this.keyboardBacklightCapabilities.zones;
