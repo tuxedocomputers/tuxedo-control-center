@@ -136,4 +136,4 @@ export class ObjWrapper<T> {
     value: T;
 }
 
-export const TuxedoIOAPI: ITuxedoIOAPI = require('TuxedoIOAPI');
+export const TuxedoIOAPI: ITuxedoIOAPI = require('./TuxedoIOAPI.node');
