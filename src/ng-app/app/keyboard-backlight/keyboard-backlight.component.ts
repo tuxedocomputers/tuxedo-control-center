@@ -19,6 +19,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
+import { ConfigService } from '../config.service';
 import {
     KeyboardBacklightCapabilitiesInterface,
     KeyboardBacklightColorModes,
@@ -49,6 +50,7 @@ export class KeyboardBacklightComponent implements OnInit {
     private timeoutDuration: number = 200;
 
     constructor(
+        private config: ConfigService,
         private tccdbus: TccDBusClientService
     ) {}
 
