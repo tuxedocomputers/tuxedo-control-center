@@ -33,8 +33,6 @@ export class KeyboardBacklightListener {
     protected sysDBusUPowerProps: dbus.ClientInterface = {} as dbus.ClientInterface;
     protected sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = {} as dbus.ClientInterface;
     protected onStartRetryCount: number = 5;
-    protected skipNextBrightnessChanged: boolean = false;
-    protected skipNextColorChanged: Array<boolean> = [false, false, false];
 
     constructor(private tccd: TuxedoControlCenterDaemon) {
         this.init();
@@ -246,10 +244,6 @@ export class KeyboardBacklightListener {
 
         if (ledsPerKey.length > 0) {
             this.ledsRGBZones = ledsPerKey;
-            this.skipNextColorChanged = [];
-            for (let i: number = 0; i < ledsPerKey.length ; ++i) {
-                this.skipNextColorChanged.concat(false);
-            }
         }
     }
 
@@ -258,12 +252,10 @@ export class KeyboardBacklightListener {
                                              updateSettings: boolean = true,
                                              updateTCC: boolean = true): Promise<void> {
         if (updateSysFS) {
-            this.skipNextBrightnessChanged = true;
             await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
 
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                    this.skipNextColorChanged[i] = true;
                     await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
                                                     keyboardBacklightStatesNew[i].red.toString() + " " + 
                                                     keyboardBacklightStatesNew[i].green.toString() + " " + 
