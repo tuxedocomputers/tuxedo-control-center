@@ -43,10 +43,6 @@
 @import './themes/tuxedo-light-theme.scss';
 @import './themes/tuxedo-dark-theme.scss';
 
-// Default theme
-@include angular-material-theme($tuxedo-control-center-light-theme);
-@include component-themes($tuxedo-control-center-light-theme);
-
 [hidden] {
     visibility: hidden !important;
 }
