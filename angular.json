@@ -39,6 +39,10 @@
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "dbus-next",
+              "node-ble"
             ]
           },
           "configurations": {
