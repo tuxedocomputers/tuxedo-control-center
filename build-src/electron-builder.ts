@@ -63,7 +63,7 @@ async function buildDeb(): Promise<void> {
                 'deb'
             ],
             category: 'System',
-            icon: 'dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.png'
+            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         deb: {
             depends: ['tuxedo-drivers (>= 3.2.11)', 'libayatana-appindicator3-1'],
@@ -124,7 +124,7 @@ async function buildSuseRpm(): Promise<void> {
                 'rpm'
             ],
             category: 'System',
-            icon: 'dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.png'
+            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         rpm: {
             depends: ['(tuxedo-drivers >= 3.2.11)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
@@ -186,7 +186,7 @@ async function buildAppImage(): Promise<void> {
                 'AppImage'
             ],
             category: 'System',
-            icon: 'dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.png'
+            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         }
     };
 
