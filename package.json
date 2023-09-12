@@ -39,7 +39,7 @@
     "test-ng": "ng test --watch=false",
     "test-ng-e2e": "ng e2e",
     "install-build-dep": "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - && sudo apt install nodejs autoconf automake build-essential gcc g++ make rpm",
-    "start-watch": "run-s clean build-electron build-service build-native copy-files && npm run watch-ng-and-electron",
+    "start-watch": "run-s clean build-electron build-native build-service copy-files && npm run watch-ng-and-electron",
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
     "start-electron-watch": "electron ./dist/tuxedo-control-center --watch",
