@@ -239,6 +239,17 @@ export class KeyboardBacklightListener {
         }
     }
 
+    private async setBufferInput(ledPath: string, bufferOn: boolean) {
+        const bufferedInputPath = ledPath + '/device/controls/buffer_input';
+        if (await fileOKAsync(bufferedInputPath)) {
+            if (bufferOn) {
+                await fs.promises.appendFile(bufferedInputPath, '1');
+            } else {
+                await fs.promises.appendFile(bufferedInputPath, '0');
+            }
+        }
+    }
+
     protected async setKeyboardBacklightStates(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>,
                                              updateSysFS: boolean = true,
                                              updateSettings: boolean = true,
@@ -246,6 +257,9 @@ export class KeyboardBacklightListener {
         if (updateSysFS) {
             await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
 
+            if (this.ledsRGBZones.length > 0) {
+                this.setBufferInput(this.ledsRGBZones[0], true)
+            }
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
@@ -253,6 +267,9 @@ export class KeyboardBacklightListener {
                                                     keyboardBacklightStatesNew[i].green.toString() + " " + 
                                                     keyboardBacklightStatesNew[i].blue.toString());
                 }
+            }
+            if (this.ledsRGBZones.length > 0) {
+                this.setBufferInput(this.ledsRGBZones[0], false)
             }
         }
 
