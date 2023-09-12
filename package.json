@@ -1,5 +1,6 @@
 {
   "name": "tuxedo-control-center",
+  "description": "TUXEDO Control Center Application",
   "version": "2.0.9",
   "main": "./dist/tuxedo-control-center/e-app/e-app/main.js",
   "author": {
