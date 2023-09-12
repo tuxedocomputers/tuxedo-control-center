@@ -18,7 +18,6 @@
  */
 
 import { Component, OnInit } from "@angular/core";
-import { ConfigService } from "../config.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import {
     KeyboardBacklightCapabilitiesInterface,
@@ -48,12 +47,10 @@ export class KeyboardBacklightComponent implements OnInit {
     private timeoutDuration: number = 10000;
 
     constructor(
-        private config: ConfigService,
         private tccdbus: TccDBusClientService
     ) {}
 
     public ngOnInit() {
-        //this.setChosenValues();
         this.subscribeKeyboardBacklightCapabilities();
         this.subscribeKeyboardBacklightStates();
         this.setColorPickerInUsageDefault();
@@ -74,15 +71,6 @@ export class KeyboardBacklightComponent implements OnInit {
     private clamp(input: number, min: number, max: number): number {
         return Math.min(Math.max(input, min), max);
     }
-
-    // private setChosenValues(): void {
-    //     const settings = this.config.getSettings();
-    //     const keyboardBacklightColor = settings.keyboardBacklightColor;
-    //     this.chosenColorHex = keyboardBacklightColor.map((color) =>
-    //         this.intToRGBSharpString(color)
-    //     );
-    //     this.chosenBrightness = settings.keyboardBacklightBrightness;
-    // }
 
     private setColorPickerInUsageDefault(): void {
         const zones = this.keyboardBacklightCapabilities.zones;
