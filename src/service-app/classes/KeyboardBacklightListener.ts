@@ -33,6 +33,8 @@ export class KeyboardBacklightListener {
     public sysDBusUPowerProps: dbus.ClientInterface = {} as dbus.ClientInterface;
     private sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = {} as dbus.ClientInterface;
     private onStartRetryCount: number = 5;
+    private skipNextBrightnessChanged: boolean = false;
+    private skipNextColorChanged: Array<boolean> = [false, false, false];
 
     constructor(private tccd: TuxedoControlCenterDaemon) {
         this.init();
@@ -86,7 +88,11 @@ export class KeyboardBacklightListener {
         // BrightnessChanged handler
         let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower/KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
-        this.sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (function(brightness: number) {
+        this.sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (async function(brightness: number): Promise<void> {
+            if (this.skipNextBrightnessChanged) {
+                this.skipNextBrightnessChanged = false;
+                return;
+            }
             let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
             for (let i in keyboardBacklightStatesNew) {
                 keyboardBacklightStatesNew[i].brightness = brightness;
@@ -99,11 +105,15 @@ export class KeyboardBacklightListener {
         if (this.keyboardBacklightCapabilities.maxRed != undefined) {
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                    (function(i: number) {
-                        fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(event: "rename" | "change", filename: string) {
-                            if (!await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')) {
+                    (function(i: number): void {
+                        fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
+                            if (this.skipNextColorChanged[i]) {
+                                this.skipNextColorChanged[i] = false;
+                                return;
+                            }
+                            if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
                                 let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-                                let colors = (await fs.promises.readFile(filename)).toString().split(' ').map(Number);
+                                let colors = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
                                 keyboardBacklightStatesNew[i].red = colors[0];
                                 keyboardBacklightStatesNew[i].green = colors[1];
                                 keyboardBacklightStatesNew[i].blue = colors[2];
@@ -236,6 +246,10 @@ export class KeyboardBacklightListener {
 
         if (ledsPerKey.length > 0) {
             this.ledsRGBZones = ledsPerKey;
+            this.skipNextColorChanged = [];
+            for (let i: number = 0; i < ledsPerKey.length ; ++i) {
+                this.skipNextColorChanged.concat(false);
+            }
         }
     }
 
@@ -244,10 +258,12 @@ export class KeyboardBacklightListener {
                                              updateSettings: boolean = true,
                                              updateTCC: boolean = true): Promise<void> {
         if (updateSysFS) {
+            this.skipNextBrightnessChanged = true;
             await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
 
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                    this.skipNextColorChanged[i] = true;
                     await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
                                                     keyboardBacklightStatesNew[i].red.toString() + " " + 
                                                     keyboardBacklightStatesNew[i].green.toString() + " " + 
