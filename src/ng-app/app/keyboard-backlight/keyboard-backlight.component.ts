@@ -46,7 +46,7 @@ export class KeyboardBacklightComponent implements OnInit {
     private colorPickerTimeout: NodeJS.Timeout;
     private brightnessSliderInUsage: boolean;
     private brightnessSliderTimeout: number | null = null;
-    private timeoutDuration: number = 10000;
+    private timeoutDuration: number = 200;
 
     constructor(
         private tccdbus: TccDBusClientService
