@@ -36,7 +36,9 @@ import { interval, Subscription } from "rxjs";
 export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
     public chosenBrightness: number;
+    public chosenBrightnessPending: number = undefined;
     public chosenColorHex: Array<string>;
+    public chosenColorHexPending: Array<string> = undefined;
     public selectedZones: Array<number>;
     private pressTimer: NodeJS.Timeout;
     private pressInterval: Subscription;
@@ -114,12 +116,18 @@ export class KeyboardBacklightComponent implements OnInit {
             (keyboardBacklightStates) => {
                 const hasChosenColor = keyboardBacklightStates?.length > 0;
                 const hasNoPickerInUsage = !this.isPickerInUsage();
+                const { brightness, red, green, blue } =
+                    keyboardBacklightStates[0];
 
                 if (hasChosenColor && hasNoPickerInUsage) {
-                    const { brightness, red, green, blue } =
-                        keyboardBacklightStates[0];
                     this.chosenBrightness = brightness;
                     this.chosenColorHex = this.createColorHexArray(
+                        keyboardBacklightStates
+                    );
+                }
+                else {
+                    this.chosenBrightnessPending = brightness;
+                    this.chosenColorHexPending = this.createColorHexArray(
                         keyboardBacklightStates
                     );
                 }
@@ -218,6 +226,7 @@ export class KeyboardBacklightComponent implements OnInit {
         this.brightnessSliderInUsage = true;
         this.brightnessSliderTimeout = window.setTimeout(() => {
             this.brightnessSliderInUsage = false;
+            this.applyPendingChanges();
         }, this.timeoutDuration);
     }
 
@@ -233,7 +242,21 @@ export class KeyboardBacklightComponent implements OnInit {
             selectedZones.forEach((zone) => {
                 this.colorPickerInUsage[zone] = false;
             });
+            this.applyPendingChanges();
         }, this.timeoutDuration);
+    }
+
+    private applyPendingChanges(): void {
+        if (!this.isPickerInUsage()) {
+            if (this.chosenBrightnessPending != undefined) {
+                this.chosenBrightness = this.chosenBrightnessPending;
+                this.chosenBrightnessPending = undefined;
+            }
+            if (this.chosenColorHexPending != undefined) {
+                this.chosenColorHex = this.chosenColorHexPending;
+                this.chosenColorHexPending = undefined;
+            }
+        }
     }
 
     public startPress(
