@@ -87,10 +87,6 @@ export class KeyboardBacklightListener {
         let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower/KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (async function(brightness: number): Promise<void> {
-            if (this.skipNextBrightnessChanged) {
-                this.skipNextBrightnessChanged = false;
-                return;
-            }
             let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
             for (let i in keyboardBacklightStatesNew) {
                 keyboardBacklightStatesNew[i].brightness = brightness;
@@ -105,10 +101,6 @@ export class KeyboardBacklightListener {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     (function(i: number): void {
                         fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
-                            if (this.skipNextColorChanged[i]) {
-                                this.skipNextColorChanged[i] = false;
-                                return;
-                            }
                             if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
                                 let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
                                 let colors = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
