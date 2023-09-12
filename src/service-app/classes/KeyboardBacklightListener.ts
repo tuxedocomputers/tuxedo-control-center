@@ -25,16 +25,16 @@ import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface, Ke
 import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../common/classes/Utils';
 
 export class KeyboardBacklightListener {
-    private ledsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
-    private ledsRGBZones: Array<string> = ["/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight",
-                                           "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_1",
-                                           "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2"];
-    private keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {} as KeyboardBacklightCapabilitiesInterface;
-    public sysDBusUPowerProps: dbus.ClientInterface = {} as dbus.ClientInterface;
-    private sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = {} as dbus.ClientInterface;
-    private onStartRetryCount: number = 5;
-    private skipNextBrightnessChanged: boolean = false;
-    private skipNextColorChanged: Array<boolean> = [false, false, false];
+    protected ledsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
+    protected ledsRGBZones: Array<string> = ["/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight",
+                                             "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_1",
+                                             "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2"];
+    protected keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface = {} as KeyboardBacklightCapabilitiesInterface;
+    protected sysDBusUPowerProps: dbus.ClientInterface = {} as dbus.ClientInterface;
+    protected sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = {} as dbus.ClientInterface;
+    protected onStartRetryCount: number = 5;
+    protected skipNextBrightnessChanged: boolean = false;
+    protected skipNextColorChanged: Array<boolean> = [false, false, false];
 
     constructor(private tccd: TuxedoControlCenterDaemon) {
         this.init();
@@ -253,7 +253,7 @@ export class KeyboardBacklightListener {
         }
     }
 
-    private async setKeyboardBacklightStates(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>,
+    protected async setKeyboardBacklightStates(keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface>,
                                              updateSysFS: boolean = true,
                                              updateSettings: boolean = true,
                                              updateTCC: boolean = true): Promise<void> {
