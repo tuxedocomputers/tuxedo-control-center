@@ -20,8 +20,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -29,12 +28,44 @@ import { Observable, Subject } from 'rxjs';
 export class ConfigService implements OnDestroy {
     public observeSettings: Observable<ITccSettings>;    
     private settingsSubject: Subject<ITccSettings>;
+    private currentProfileEdit: ITccProfile;
+    private currentProfileEditIndex: number;
+    private editingProfileSubject: Subject<ITccProfile>;
+    private editingProfile: BehaviorSubject<ITccProfile>;
+    private customProfiles: ITccProfile[];
+    private observeEditingProfile: Observable<ITccProfile>;
+    private defaultProfiles: ITccProfile[];
+    private defaultValuesProfile: ITccProfile;
+    private settings: ITccSettings;
+    private subscriptions: Subscription = new Subscription();
     
     constructor() {
         this.updateConfigData();
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
+        this.defaultProfiles = dbus.defaultProfiles.value;
+        this.editingProfileSubject = new Subject<ITccProfile>();
+        this.observeEditingProfile = editingProfileSubject.asObservable();
+        this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
+        this.subscriptions.add(dbus.customProfiles.subscribe(nextCustomProfiles => {
+            this.customProfiles = nextCustomProfiles;
+        }));
+        this.subscriptions.add(dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
+            this.defaultProfiles = nextDefaultProfiles;
+            for (const profile of this.defaultProfiles) {
+                this.utils.fillDefaultProfileTexts(profile);
+            }
+        }));
         
+        this.defaultValuesProfile = dbus.defaultValuesProfile.value;
+        this.subscriptions.add(dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
+            this.defaultValuesProfile = nextDefaultValuesProfile;
+        }));
+        
+        this.subscriptions.add(dbus.settings.subscribe(nextSettings => {
+            this.settings = nextSettings
+            this.settingsSubject.next(this.settings);
+        }));
     }
 
     ngOnDestroy(): void {
@@ -90,7 +121,7 @@ export class ConfigService implements OnDestroy {
      * @returns The new profile ID or undefined on error
      */
     public async copyProfile(sourceProfileId: string, newProfileName: string) {
-        return window.config.copyProfile(sourceProfileId, newProfileName);
+        return window.config.copyProfileAsync(sourceProfileId, newProfileName);
     }
 
     // appends given profiles to custom profiles but replaces all of those where IDs conflict!
@@ -122,10 +153,6 @@ export class ConfigService implements OnDestroy {
 
     public async saveSettings(): Promise<boolean> {
         return window.config.saveSettings();
-    }
-
-    public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[]): Promise<boolean> {
-        return window.config.pkexecWriteWebcamConfigAsync(settings)
     }
 
     /**
@@ -171,7 +198,22 @@ export class ConfigService implements OnDestroy {
      * @returns false if the ID doesn't exist among the custom profiles, true if successfully set
      */
     public setCurrentEditingProfile(customProfileId: string): boolean {
-        return window.config.setCurrentEditingProfile(customProfileId);
+        if (customProfileId === undefined) {
+            this.currentProfileEditIndex = -1;
+            this.currentProfileEdit = undefined;
+            this.editingProfileSubject.next(undefined);
+            this.editingProfile.next(undefined);
+        }
+        const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.id === customProfileId);
+        if (index === -1) {
+            return false;
+        } else {
+            this.currentProfileEditIndex = index;
+            this.currentProfileEdit = window.config.copyConfigProfile(this.customProfiles[index]);
+            this.editingProfileSubject.next(this.currentProfileEdit);
+            this.editingProfile.next(this.currentProfileEdit);
+            return true;
+        }
     }
 
     public getFanProfiles(): ITccFanProfile[] {

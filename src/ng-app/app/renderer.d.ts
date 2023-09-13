@@ -91,6 +91,9 @@ export interface WEBCAM
     onVideoEnded: (callback) => void,
     onExternalWebcamPreviewClosed: (callback) => void,
     onApplyControls: (callback) => void,
+    readWebcamSettings: () => WebcamPreset[],
+    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
+    readV4l2Names: (path: string) => string[][],  
 }
 
 export interface CPU 
@@ -108,19 +111,18 @@ export interface BACKLIGHT
 export interface CONFIG 
 {
     setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,
-    copyProfile: (sourceProfileId: string, newProfileName: string) => void,
+    copyProfileAsync: (sourceProfileId: string, newProfileName: string) => void,
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => void,
     writeCurrentEditingProfile: () => boolean,
     pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,
     writeProfile: (currentProfileId: string, profile: ITccProfile, states?: string[]) => Promise<boolean>,
     saveSettings: () => Promise<boolean>,
-    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
     pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
     getProfileByName: (searchedProfileName: string) => ITccProfile,
     getProfileById: (searchedProfileId: string) => ITccProfile,
     getCustomProfileByName: (searchedProfileName: string) => ITccProfile,
     getCustomProfileById: (searchedProfileId: string) => ITccProfile,
-    setCurrentEditingProfile: (customProfileId: string) => boolean,  
+    copyConfigProfile: (profile: ITccProfile) => ITccProfile,  
     getDefaultFanProfiles: () => ITccFanProfile[], 
     updateConfigData: () => void,
     getSettings: () => ITccSettings,
@@ -130,7 +132,7 @@ export interface CONFIG
     importProfiles: (newProfiles: ITccProfile[]) => void,
     deleteCustomProfile: (profileToDelete: string) => void,
     getCurrentEditingProfile: () => ITccProfile,
-    editProfileChanges: () => boolean,                                    
+    editProfileChanges: () => boolean,                 
 }
 
 

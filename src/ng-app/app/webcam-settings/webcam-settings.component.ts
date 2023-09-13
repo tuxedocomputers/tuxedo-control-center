@@ -22,8 +22,6 @@ import { FormGroup } from "@angular/forms";
 import { TccPaths } from "src/common/classes/TccPaths";
 import { MatOptionSelectionChange } from "@angular/material/core";
 import { Mutex } from "async-mutex";
-// import * as fs from "fs";
-// import { ConfigService } from "../config.service";
 import { environment } from "../../environments/environment";
 import { MatTab } from "@angular/material/tabs";
 
@@ -764,9 +762,9 @@ export class WebcamSettingsComponent implements OnInit {
             let unknown_all = [];
 
             if (environment.production) {
-                this.v4l2Renames = window.config.readV4l2Names();
+                this.v4l2Renames = window.webcam.readV4l2Names('');
             } else {
-                this.v4l2Renames = window.config.readV4l2Names(
+                this.v4l2Renames = window.webcam.readV4l2Names(
                     this.utils.getCWDSync() +
                         "/src/cameractrls/v4l2_kernel_names.json"
                 );
@@ -934,7 +932,7 @@ export class WebcamSettingsComponent implements OnInit {
             );
         }
 
-        await window.config
+        await window.webcam
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
@@ -1146,7 +1144,7 @@ export class WebcamSettingsComponent implements OnInit {
     private async loadingPresetData(): Promise<void> {
         await this.reloadConfigValues();
         if (window.fs.existsSync(TccPaths.WEBCAM_FILE)) {
-            this.allPresetData = window.config.readWebcamSettings();
+            this.allPresetData = window.webcam.readWebcamSettings();
             this.filterPresetsForCurrentDevice();
 
             await this.checkAllPresetsForCurrentDevice();
@@ -1221,7 +1219,7 @@ export class WebcamSettingsComponent implements OnInit {
                     this.webcamPresetsOtherDevices
                 );
 
-                await window.config
+                await window.webcam
                     .pkexecWriteWebcamConfigAsync(webcamConfigs)
                     .then((confirm) => {
                         if (confirm) {

@@ -90,6 +90,9 @@ contextBridge.exposeInMainWorld(
     },
     videoEnded: () => ipcRenderer.send('video-ended'),
     applyControls: () => ipcRenderer.send('apply-controls'),
+    readWebcamSettings: () => ipcRenderer.send('webcam-read-settings'),
+    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke('webcam-pkexec-write-config-async', settings),
+    readV4l2Names: (path: string) => ipcRenderer.send('config-read-v4l2-names',path),
     }
 );
 contextBridge.exposeInMainWorld(
@@ -128,19 +131,18 @@ contextBridge.exposeInMainWorld(
     {
         // TODO switch send for invoke where it sends promises around (everything called async), do that also in main.ts
         setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => ipcRenderer.send('config-set-active-profile',profileId,stateId,settings),
-        copyProfile: (sourceProfileId: string, newProfileName: string) => ipcRenderer.invoke('config-copy-profile',sourceProfileId,newProfileName),
+        copyProfileAsync: (sourceProfileId: string, newProfileName: string) => ipcRenderer.invoke('config-copy-profile-async',sourceProfileId,newProfileName),
         pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => ipcRenderer.send('config-pkexec-write-custom-profiles',customProfiles),
         writeCurrentEditingProfile: ()  => ipcRenderer.send('config-write-current-editing-profile'),
         pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => ipcRenderer.invoke('config-pkexec-write-custom-profiles-async',customProfiles),
         writeProfile: (currentProfileId: string, profile: ITccProfile, states?: string[])  => ipcRenderer.invoke('config-write-profile',currentProfileId,profile),
         saveSettings: () => ipcRenderer.invoke('config-save-settings'),
-        pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke('config-pkexec-write-webcam-config-async', settings),
         pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[])  => ipcRenderer.invoke('config-pkexec-write-config-async',settings,customProfiles),
         getProfileByName: (searchedProfileName: string) => ipcRenderer.send('config-get-profile-by-name',searchedProfileName),
         getProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-profile-by-id',searchedProfileId),
         getCustomProfileByName: (searchedProfileName: string) => ipcRenderer.send('config-get-custom-profile-by-name', searchedProfileName),
         getCustomProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-custom-profile-by-id',searchedProfileId),
-        setCurrentEditingProfile: (customProfileId: string) => ipcRenderer.send('config-set-current-editing-profile',customProfileId),
+        copyConfigProfile: (profile: ITccProfile) => ipcRenderer.send('config-copy-config-profiles', profile),
         getDefaultFanProfiles: () => ipcRenderer.send('config-get-default-fan-profiles'),
         updateConfigData: () => ipcRenderer.send('config-update-config-data'),
         getSettings: () => ipcRenderer.send('config-get-settings'),
@@ -148,11 +150,9 @@ contextBridge.exposeInMainWorld(
         getDefaultProfiles: () => ipcRenderer.send('config-get-default-profiles'),
         getDefaultValuesProfile: () => ipcRenderer.send('config-get-default-values-profile'),
         importProfiles: () => ipcRenderer.send('config-import-profiles'),
-        deleteCustomProfile: () => ipcRenderer.send('config-delete-custom-profile'),
+        deleteCustomProfile: () => ipcRenderer.invoke('config-delete-custom-profile'),
         getCurrentEditingProfile: () => ipcRenderer.send('config-get-current-editing-profile'),
         editProfileChanges: () => ipcRenderer.send('config-edit-profile-changes'),
-        readWebcamSettings: () => ipcRenderer.send('config-read-webcam-settings'),
-        readV4l2Names: () => ipcRenderer.send('config-read-v4l2-names'),
     }
 );
 

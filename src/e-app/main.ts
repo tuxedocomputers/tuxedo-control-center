@@ -23,7 +23,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as https from 'https';
 import { TccDBusController } from '../common/classes/TccDBusController';
-import { ITccProfile, TccProfile } from '../common/models/TccProfile';
+import { ITccProfile, TccProfile, generateProfileId } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
@@ -38,6 +38,16 @@ import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../common/classes/DBusDisplayBrightnessGnome';
 import { DriveController } from '../common/classes/DriveController';
 import { IDrive } from 'src/common/models/IDrive';
+import { ConfigHandler } from 'src/common/classes/ConfigHandler';
+import { TccPaths } from 'src/common/classes/TccPaths';
+import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { environment } from '../ng-app/environments/environment';
+import { CpuController } from '../common/classes/CpuController';
+import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
+import { ScalingDriver } from 'src/common/classes/LogicalCpuController';
+import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
+import { ITccSettings } from 'src/common/models/TccSettings';
+
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -51,6 +61,7 @@ const availableLanguages = [
     'de'
 ];
 const translation = new NgTranslations();
+const cwd: string = process.cwd();
 let startTCCAccelerator;
 
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
@@ -524,6 +535,57 @@ ipcMain.on("video-ended", (event) => {
     tccWindow.webContents.send("video-ended");
 });
 
+
+let webcamConfigHandler: ConfigHandler = new ConfigHandler(
+            TccPaths.SETTINGS_FILE,
+            TccPaths.PROFILES_FILE,
+            TccPaths.WEBCAM_FILE,
+            TccPaths.V4L2_NAMES_FILE,
+            TccPaths.AUTOSAVE_FILE,
+            TccPaths.FANTABLES_FILE
+        );
+
+        
+        ipcMain.on('webcam-read-v4l2-names', (event, path: string) => {
+            if (path)
+            {
+                return webcamConfigHandler.readV4l2Names(path);
+            }
+            else
+            {
+                return webcamConfigHandler.readV4l2Names();
+            }
+        });
+
+        
+        ipcMain.on('webcam-read-settings', (event ) => {
+            return webcamConfigHandler.readWebcamSettings()
+        });
+
+
+        ipcMain.on('webcam-pkexec-write-config-async', (event, webcamSettings: WebcamPreset[]) => {
+            return new Promise<boolean>(resolve => {
+                const tmpWebcamPath = '/tmp/tmptccwebcam';
+                webcamConfigHandler.writeWebcamSettings(webcamSettings, tmpWebcamPath);
+                let tccdExec: string;
+                if (environment.production) {
+                    tccdExec = TccPaths.TCCD_EXEC_FILE;
+                } else {
+                    tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+                }
+        
+                child_process.execFile(
+                    'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath,
+                (err, stdout, stderr) => {
+                    if (err) {
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+        });
+
 /* 
 ################ Utils API #######################
 */
@@ -620,11 +682,6 @@ ipcMain.handle('drive-controller-get-drives', (event) => {
 
   // ####### CPU Backend for sys-fs service ####
 
-  import { CpuController } from '../common/classes/CpuController';
-  import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
-import { ScalingDriver } from 'src/common/classes/LogicalCpuController';
-
-
 
 
   let cpu = new CpuController('/sys/devices/system/cpu');
@@ -698,7 +755,7 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
   });
 
   // #####   Backend for sys-fs service backlight stuff ########
-  import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
+
   let displayBacklightControllers: DisplayBacklightController[];
   const displayBacklightControllerBasepath = '/sys/class/backlight';
   const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
@@ -728,9 +785,12 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
 //########################
 // #### Backend for config service ####
 
-import { ConfigHandler } from '../common/classes/ConfigHandler';
-import { TccPaths } from 'src/common/classes/TccPaths';
-import { ITccSettings } from 'src/common/models/TccSettings';
+// TODO I want to change the observables in the config service to something else
+// I want to buffer some of the nessesary variables in here, also so that they can be used by the functions
+// do all the dbus stuff here too
+// then inform the renderer process config service, that the variables have changed
+// then fill them again
+// just gotta find out how to do that... uggh
 
 let config = new ConfigHandler(
     TccPaths.SETTINGS_FILE,
@@ -740,70 +800,112 @@ let config = new ConfigHandler(
     TccPaths.AUTOSAVE_FILE,
     TccPaths.FANTABLES_FILE
 );
-let currentProfileEdit: ITccProfile;
-let currentProfileEditIndex: number;
-let editingProfileSubject: Subject<ITccProfile>;
-let editingProfile: BehaviorSubject<ITccProfile>;
-let customProfiles: ITccProfile[];
-let observeEditingProfile: Observable<ITccProfile>;
-let defaultProfiles: ITccProfile[];
-let defaultValuesProfile: ITccProfile;
-let settings: ITccSettings;
-let subscriptions: Subscription = new Subscription();
 
-defaultProfiles = dbus.defaultProfiles.value;
-editingProfileSubject = new Subject<ITccProfile>();
-observeEditingProfile = editingProfileSubject.asObservable();
-editingProfile = new BehaviorSubject<ITccProfile>(undefined);
-
-// TODO maybe put some of those observables into config service again and just regualarly poll them asynchroneously or something
-
-subscriptions.add(dbus.customProfiles.subscribe(nextCustomProfiles => {
-    customProfiles = nextCustomProfiles;
-}));
-subscriptions.add(dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
-    defaultProfiles = nextDefaultProfiles;
-    for (const profile of defaultProfiles) {
-        this.utils.fillDefaultProfileTexts(profile);
-    }
-}));
-
-defaultValuesProfile = dbus.defaultValuesProfile.value;
-subscriptions.add(dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
-    defaultValuesProfile = nextDefaultValuesProfile;
-}));
-
-subscriptions.add(dbus.settings.subscribe(nextSettings => {
-    settings = nextSettings
-    settingsSubject.next(settings);
-}));
-
-config-get-custom-profiles
-
-config-get-default-profiles
-
-config-get-default-values-profile
-
-config-import-profiles
-
-config-delete-custom-profile
-
-config-get-current-editing-profile
-
-config-edit-profile-changes
-
-config-get-settings
-
-config-update-config-data
+ipcMain.on('config-update-config-data', (event) => {
+    updateConfig();
+});
 function updateConfig()
 {
     this.customProfiles = this.dbus.customProfiles.value;
     this.settings = this.dbus.settings.value;
 }
 
+// TODO maybe instead of buffering variables just build getter functions that fetch them directly from the dbus
+// the other side (config service) should then buffer them by using the getter functions
+// gotta google how to do that with observables, hmm
+// worst case I make observables into main functions and when they change I send a signal from main to renderer process?
+// notify it of the change and have a callback there that then pulls the current progress?
 
-import { environment } from '../ng-app/environments/environment';
-let cwd: string = process.cwd();
+function getCustomProfiles()
+{
+    // TODO returns private variable which get's filled via dbus 
+    return customProfiles;
+}
+async function pkexecWriteCustomProfilesAsync(newProfileList)
+{
+    return new Promise<boolean>(resolve => {
+        const tmpProfilesPath = '/tmp/tmptccprofiles';
+        config.writeProfiles(customProfiles, tmpProfilesPath);
+        let tccdExec: string;
+        if (environment.production) {
+            tccdExec = TccPaths.TCCD_EXEC_FILE;
+        } else {
+            tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+        }
+        child_process.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath, (err, stdout, stderr) => {
+                if (err) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        });
+}
+function updateConfigData()
+{
+    // TODO
+}
+
+function pkexecWriteCustomProfiles(profiles: ITccProfile[])
+{
+    const tmpProfilesPath = '/tmp/tmptccprofiles';
+    config.writeProfiles(customProfiles, tmpProfilesPath);
+    let tccdExec: string;
+    if (environment.production) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+        tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+    }
+    // https://stackoverflow.com/questions/57484453/how-to-get-err-stderr-from-execsync
+    try
+    {
+        child_process.execSync('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+        return true;
+    }
+    catch(err)
+    {
+        return false;
+    }
+}
+
+function getSettings()
+{
+    // TODO
+}
+
+async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProfile[])
+{
+    return new Promise<boolean>(resolve => {
+        const tmpProfilesPath = '/tmp/tmptccprofiles';
+        const tmpSettingsPath = '/tmp/tmptccsettings';
+        config.writeProfiles(customProfiles, tmpProfilesPath);
+        config.writeSettings(settings, tmpSettingsPath);
+        let tccdExec: string;
+        if (environment.production) {
+            tccdExec = TccPaths.TCCD_EXEC_FILE;
+        } else {
+            tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+        }
+        child_process.execFile(
+            'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath, (err, stdout, stderr) => {
+            if (err) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+}
+
+function getAllProfiles()
+{
+    // TODO
+}
+
+function getCurrentEditingProfile()
+{
+    // TODO
+}
 
 ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: string, settings) => {
     // Copy existing current settings and set id of new profile
@@ -819,8 +921,7 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
     } else {
         tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
     }
-
-    const result = this.electron.ipcRenderer.tccdNewSettings(tccdExec,tmpSettingsPath);
+    child_process.exec('pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath);
 
 });
 
@@ -835,7 +936,12 @@ function getProfileById(searchedProfileId: string): ITccProfile
     }
 }
 
-ipcMain.on('config-copy-profile', (event, sourceProfileId: string, newProfileName: string) => {
+ipcMain.handle('config-copy-profile-async', (event, sourceProfileId: string, newProfileName: string) => {
+   return configCopyProfile(sourceProfileId,newProfileName);
+});
+
+async function configCopyProfile(sourceProfileId: string, newProfileName: string)
+{
     let profileToCopy: ITccProfile;
 
     if (sourceProfileId === undefined) {
@@ -848,45 +954,37 @@ ipcMain.on('config-copy-profile', (event, sourceProfileId: string, newProfileNam
         return undefined;
     }
 
-    const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
+    const newProfile: ITccProfile = config.copyConfig<ITccProfile>(profileToCopy);
     newProfile.name = newProfileName;
     newProfile.id = generateProfileId();
-    const newProfileList = this.getCustomProfiles().concat(newProfile);
-    const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+    const newProfileList = getCustomProfiles().concat(newProfile);
+    const success = await pkexecWriteCustomProfilesAsync(newProfileList);
     if (success) {
-        this.updateConfigData();
+        updateConfigData();
         await this.dbus.triggerUpdate();
         return newProfile.id;
     } else {
         return undefined;
     }
-});
+}
 
 
 
 
 ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccProfile[]) => {
-    const tmpProfilesPath = '/tmp/tmptccprofiles';
-    this.config.writeProfiles(customProfiles, tmpProfilesPath);
-    let tccdExec: string;
-    if (environment.production) {
-        tccdExec = TccPaths.TCCD_EXEC_FILE;
-    } else {
-        tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-    }
-    const result = this.electron.ipcRenderer.tccdNewProfiles(tccdExec,tmpProfilesPath);
-    return result.error === undefined;
+    return pkexecWriteCustomProfiles(customProfiles);
+    
 });
 
 
 
 ipcMain.on('config-write-current-editing-profile', (event) => {
-    if (this.editProfileChanges()) {
-        const changedCustomProfiles: ITccProfile[] = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
-        changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
+    if (editProfileChanges) {
+        const changedCustomProfiles: ITccProfile[] = config.copyConfig<ITccProfile[]>(customProfiles);
+        changedCustomProfiles[currentProfileEditIndex] = getCurrentEditingProfile();
 
-        const result = this.pkexecWriteCustomProfiles(changedCustomProfiles);
-        if (result) { this.updateConfigData(); }
+        const result = pkexecWriteCustomProfiles(changedCustomProfiles);
+        if (result) { updateConfigData(); }
 
         return result;
     } else {
@@ -895,31 +993,23 @@ ipcMain.on('config-write-current-editing-profile', (event) => {
 });
 
 
-ipcMain.on('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
-    const tmpProfilesPath = '/tmp/tmptccprofiles';
-    this.config.writeProfiles(customProfiles, tmpProfilesPath);
-    let tccdExec: string;
-    if (environment.production) {
-        tccdExec = TccPaths.TCCD_EXEC_FILE;
-    } else {
-        tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-    }
-    try {
-        await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
-        return true;
-    } catch (err) {
-        return false;
-    }
+ipcMain.handle('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
+   return pkexecWriteCustomProfilesAsync(customProfiles);
 });
 
-ipcMain.on('config-write-profile', (event, currentProfileId: string, profile: ITccProfile, states?: string[]) => {
+ipcMain.handle('config-write-profile', (event, currentProfileId: string, profile: ITccProfile, states?: string[]) => {
+    return configWriteProfile(currentProfileId,profile,states);
+});
+
+async function configWriteProfile(currentProfileId: string, profile: ITccProfile, states?: string[])
+{
     return new Promise<boolean>(resolve => {
-        const profileIndex = this.customProfiles.findIndex(p => p.id === currentProfileId);
+        const profileIndex = customProfiles.findIndex(p => p.id === currentProfileId);
         profile.id = currentProfileId;
 
         // Copy custom profiles and if provided profile is one of them, overwrite with
         // provided profile
-        const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
+        const customProfilesCopy = config.copyConfig<ITccProfile[]>(customProfiles);
         const willOverwriteProfile =
             // Is custom profile
             profileIndex !== -1;
@@ -929,87 +1019,53 @@ ipcMain.on('config-write-profile', (event, currentProfileId: string, profile: IT
         }
 
         // Copy config and if states are provided, assign the chosen profile to these states
-        const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
+        const newSettings: ITccSettings = config.copyConfig<ITccSettings>(getSettings());
         if (states !== undefined) {
             for (const stateId of states) {
                 newSettings.stateMap[stateId] = profile.id;
             }
         }
 
-        this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+        pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
             if (success) {
-                this.updateConfigData();
+                updateConfigData();
             }
             resolve(success);
         });
     });
-});
+}
 
 
 ipcMain.on('config-save-settings', (event) => {
-    return new Promise<boolean>(resolve => {
-        const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
-        const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
+    return configSaveSettings();
+});
 
-        this.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+async function configSaveSettings()
+{
+    return new Promise<boolean>(resolve => {
+        const customProfilesCopy = config.copyConfig<ITccProfile[]>(this.customProfiles);
+        const newSettings: ITccSettings = config.copyConfig<ITccSettings>(this.getSettings());
+
+        pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
             if (success) {
-                this.updateConfigData();
+                updateConfigData();
             }
             resolve(success);
         });
     });
-});
+}
 
-
-ipcMain.on('config-pkexec-write-webcam-config-async', (event, settings: WebcamPreset[]) => {
-    return new Promise<boolean>(resolve => {
-        const tmpWebcamPath = '/tmp/tmptccwebcam';
-        this.config.writeWebcamSettings(settings, tmpWebcamPath);
-        let tccdExec: string;
-        if (environment.production) {
-            tccdExec = TccPaths.TCCD_EXEC_FILE;
-        } else {
-            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-        }
-
-        this.utils.execFile(
-            'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
-        ).then(data => {
-            resolve(true);
-        }).catch(error => {
-            resolve(false);
-        });
-    });
-});
 
 
 ipcMain.on('config-pkexec-write-config-async', (event, settings: ITccSettings, customProfiles: ITccProfile[]) => {
-    return new Promise<boolean>(resolve => {
-        const tmpProfilesPath = '/tmp/tmptccprofiles';
-        const tmpSettingsPath = '/tmp/tmptccsettings';
-        this.config.writeProfiles(customProfiles, tmpProfilesPath);
-        this.config.writeSettings(settings, tmpSettingsPath);
-        let tccdExec: string;
-        if (environment.production) {
-            tccdExec = TccPaths.TCCD_EXEC_FILE;
-        } else {
-            tccdExec = this.cwd + '/dist/tuxedo-control-center/data/service/tccd';
-        }
-        this.utils.execFile(
-            'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
-        ).then(data => {
-            resolve(true);
-        }).catch(error => {
-            resolve(false);
-        });
-    });
+    return pkexecWriteConfigAsync(settings,customProfiles);
 });
 
 
 ipcMain.on('config-get-profile-by-name', (event, searchedProfileName: string) => {
-    const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
+    const foundProfile: ITccProfile = getAllProfiles().find(profile => profile.name === searchedProfileName);
     if (foundProfile !== undefined) {
-        return this.config.copyConfig<ITccProfile>(foundProfile);
+        return config.copyConfig<ITccProfile>(foundProfile);
     } else {
         return undefined;
     }
@@ -1022,9 +1078,9 @@ ipcMain.on('config-get-profile-by-id', (event, searchedProfileId: string) => {
 
 
 ipcMain.on('config-get-custom-profile-by-name', (event, searchedProfileName: string) => {
-    const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
+    const foundProfile: ITccProfile = getCustomProfiles().find(profile => profile.name === searchedProfileName);
     if (foundProfile !== undefined) {
-        return this.config.copyConfig<ITccProfile>(foundProfile);
+        return config.copyConfig<ITccProfile>(foundProfile);
     } else {
         return undefined;
     }
@@ -1032,37 +1088,48 @@ ipcMain.on('config-get-custom-profile-by-name', (event, searchedProfileName: str
 
 
 ipcMain.on('config-get-custom-profile-by-id', (event, searchedProfileId: string) => {
-    const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
+    const foundProfile: ITccProfile = getCustomProfiles().find(profile => profile.id === searchedProfileId);
     if (foundProfile !== undefined) {
-        return this.config.copyConfig<ITccProfile>(foundProfile);
+        return config.copyConfig<ITccProfile>(foundProfile);
     } else {
         return undefined;
     }
 });
 
-public editProfileChanges(): boolean {
-    if (this.currentProfileEdit === undefined) { return false; }
-    const currentSavedProfile: ITccProfile = this.customProfiles[this.currentProfileEditIndex];
-    // Compare the two profiles
-    return JSON.stringify(this.currentProfileEdit) !== JSON.stringify(currentSavedProfile);
-}
 
-public async deleteCustomProfile(profileIdToDelete: string) {
-    const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
-    if (newProfileList.length === this.getCustomProfiles().length) {
+ipcMain.on('config-edit-profile-changes', (event) => {
+    if (currentProfileEdit === undefined) { return false; }
+    const currentSavedProfile: ITccProfile = customProfiles[currentProfileEditIndex];
+    // Compare the two profiles
+    return JSON.stringify(currentProfileEdit) !== JSON.stringify(currentSavedProfile);
+});
+
+
+ipcMain.handle('config-delete-custom-profile', (event, profileIdToDelete) => {
+    return configDeleteCustomProfile(profileIdToDelete);
+});
+
+async function configDeleteCustomProfile(profileIdToDelete)
+{
+    const newProfileList: ITccProfile[] = getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
+    if (newProfileList.length === getCustomProfiles().length) {
         return false;
     }
-    const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+    const success = await pkexecWriteCustomProfilesAsync(newProfileList);
     if (success) {
-        this.updateConfigData();
-        await this.dbus.triggerUpdate();
+        updateConfigData();
+        await dbus.triggerUpdate();
     }
     return success;
 }
 
-public async importProfiles(newProfiles: ITccProfile[])
+ipcMain.on('config-import-profiles', (event, newProfiles) => {
+    configImportProfiles(newProfiles);
+});
+
+async function configImportProfiles(newProfiles)
 {
-    let newProfileList = this.getCustomProfiles();
+    let newProfileList = getCustomProfiles();
     for (let i = 0; i < newProfiles.length; i++)
     {
         // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
@@ -1083,33 +1150,18 @@ public async importProfiles(newProfiles: ITccProfile[])
             newProfileList = newProfileList.concat(newProfile);
         }
     }
-    const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+    const success = await pkexecWriteCustomProfilesAsync(newProfileList);
     if (success) {
-        this.updateConfigData();
-        await this.dbus.triggerUpdate();
+        updateConfigData();
+        await dbus.triggerUpdate();
         return true;
     } else {
         return false;
     }
 }
 
-ipcMain.on('config-set-current-editing-profile', (event, customProfileId: string) => {
-    if (customProfileId === undefined) {
-        currentProfileEditIndex = -1;
-        currentProfileEdit = undefined;
-        editingProfileSubject.next(undefined);
-        editingProfile.next(undefined);
-    }
-    const index = currentProfileEditIndex = customProfiles.findIndex(e => e.id === customProfileId);
-    if (index === -1) {
-        return false;
-    } else {
-        currentProfileEditIndex = index;
-        currentProfileEdit = config.copyConfig<ITccProfile>(customProfiles[index]);
-        editingProfileSubject.next(currentProfileEdit);
-        editingProfile.next(currentProfileEdit);
-        return true;
-    }
+ipcMain.on('config-copy-config-profiles', (event, profileToCopy: ITccProfile) => {
+    return config.copyConfig<ITccProfile>(profileToCopy);
 });
 
 
@@ -1117,28 +1169,33 @@ ipcMain.on('config-get-default-fan-profiles', (event) => {
 return config.getDefaultFanProfiles();
 });
 
-// TODO onDestroy() equivalent?
-// on the other hand: do we really need them? Probably have to rewrite this and put all observables back into config service... uugh
-//this.subscriptions.unsubscribe();
 
-// webcam config stuff
+// TODO do we even need them, since we moved the variables?
+ipcMain.on('config-get-custom-profiles', (event) => {
+    return customProfiles;
+    });
 
-   // private configHandler: ConfigHandler;
-           // TODO instead of doing stuff inside confighandler, use new methods in config.service, that will talk to config handler over contextbridge
-       /* this.configHandler = new ConfigHandler(
-            TccPaths.SETTINGS_FILE,
-            TccPaths.PROFILES_FILE,
-            TccPaths.WEBCAM_FILE,
-            TccPaths.V4L2_NAMES_FILE,
-            TccPaths.AUTOSAVE_FILE,
-            TccPaths.FANTABLES_FILE
-        );*/
 
-        config-read-v4l2-names
+ipcMain.on('config-get-default-profiles', (event) => {
+    return defaultProfiles;
+    });
 
-        window.config.readV4l2Names(path: string);
 
-        config-read-webcam-settings
+ipcMain.on('config-get-default-values-profile', (event) => {
+    return defaultValuesProfile;
+    });
+
+
+ipcMain.on('config-get-current-editing-profile', (event) => {
+    return currentProfileEdit;
+    });
+
+
+ipcMain.on('config-get-settings', (event) => {
+    return settings;
+    });
+
+
 
 // ########################################################
 
