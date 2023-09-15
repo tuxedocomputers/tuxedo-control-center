@@ -23,7 +23,7 @@ import {
     SysFsService,
     IPstateInfo,
 } from "../sys-fs.service";
-import { Subscription, combineLatest, from } from "rxjs";
+import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService, IDBusFanData } from "../tcc-dbus-client.service";
 import { ITccProfile } from "src/common/models/TccProfile";
@@ -301,7 +301,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 if (!fanData) return;
 
                 this.fanData = fanData;
-                const { cpu, gpu1, gpu2 } = fanData;
+                const { gpu1, gpu2 } = fanData;
                 const gpu1Temp = gpu1?.temp?.data?.value;
                 const gpu2Temp = gpu2?.temp?.data?.value;
                 const gpu1Speed = gpu1?.speed?.data?.value;
@@ -399,7 +399,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public gaugeCpuTempFormat = this.createFormatter(
-        () => this.compat.hasFanInfo,
+        () => this.compat.hasCpuTemp,
         (val) => Math.round(val).toString()
     );
 
@@ -409,12 +409,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public gaugeDGpuTempFormat = this.createFormatter(
-        () => this.compat.hasFanInfo,
+        () => this.compat.hasDGpuTemp,
         (val) => Math.round(val).toString()
     );
 
-    public gaugeFanSpeedFormat = this.createFormatter(
-        () => this.compat.hasFanInfo,
+    public gaugeCpuFanSpeedFormat = this.createFormatter(
+        () => this.compat.hasCpuFan,
+        (val) => Math.round(val).toString()
+    );
+
+    public gaugeDGpuFanSpeedFormat = this.createFormatter(
+        () => this.compat.hasDGpuFan,
         (val) => Math.round(val).toString()
     );
 
