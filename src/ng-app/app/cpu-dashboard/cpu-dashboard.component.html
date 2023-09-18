@@ -33,7 +33,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- Active profile -->
-                <div class="content-container active-profile" *ngIf="activeProfile">
+                <div class="content-container active-profile active-tcc-profile" *ngIf="activeProfile">
                     <span class="text" i18n="@@cDashboardActiveProfile">Active profile:</span>
                     <a mat-button class="link" (click)="goToProfileEdit(activeProfile)">{{ activeProfile.name }}</a>
                 </div>
