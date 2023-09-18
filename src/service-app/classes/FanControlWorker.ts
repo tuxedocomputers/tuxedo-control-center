@@ -144,7 +144,7 @@ export class FanControlWorker extends DaemonWorker {
             if (tempSensorAvailable[fanIndex]) {
                 fanTemps.push(currentTemperatureCelcius.value);
             } else {
-                fanTemps.push(0);
+                fanTemps.push(-1);
             }
 
             // If there is temp sensor value report temperature to logic
@@ -179,11 +179,15 @@ export class FanControlWorker extends DaemonWorker {
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
             let currentSpeed: number;
-            if (useFanControl) {
+
+            if (fanTemps[i] === -1) {
+                currentSpeed = -1
+            } else if (useFanControl) {
                 currentSpeed = fanSpeedsSet[i];
             } else {
                 currentSpeed = fanSpeedsRead[i];
             }
+            
             this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
             this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], currentSpeed);
         }
