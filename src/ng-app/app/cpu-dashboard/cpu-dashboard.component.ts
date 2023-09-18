@@ -228,6 +228,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToDGpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
+                this.ensureSensorDataCollectionEnabled();
+
                 const powerState = await this.getDGpuPowerState();
 
                 if (powerState === "-1") {
@@ -247,7 +249,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private setCpuValues(cpuPower?: ICpuPower): void {
+    private setCpuPowerValues(cpuPower?: ICpuPower): void {
+        this.ensureSensorDataCollectionEnabled();
+
         const powerDraw = cpuPower?.powerDraw ?? -1;
         const maxPowerLimit =
             cpuPower?.maxPowerLimit ?? this.cpuPowerLimit ?? -1;
@@ -259,7 +263,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToCpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.cpuPower.subscribe((cpuPower?: ICpuPower) => {
-                this.setCpuValues(cpuPower);
+                this.setCpuPowerValues(cpuPower);
             })
         );
         this.subscriptions.add(
@@ -278,6 +282,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private async setIGpuValues(iGpuInfo?: IiGpuInfo): Promise<void> {
+        this.ensureSensorDataCollectionEnabled();
+
         this.iGpuTemp = iGpuInfo?.temp ?? -1;
         const { coreFrequency = -1, maxCoreFrequency = 0 } = iGpuInfo ?? {};
         this.gaugeIGpuFreq =
@@ -285,6 +291,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.iGpuFreq = coreFrequency;
         this.iGpuVendor = await this.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
+    }
+
+    // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values
+    private ensureSensorDataCollectionEnabled() {
+        if (!this.tccdbus.sensorDataCollectionStatus?.value) {
+            this.tccdbus.setSensorDataCollectionStatus(true);
+        }
     }
 
     private subscribeToIGpuInfo(): void {
@@ -477,9 +490,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.tccdbus.setSensorDataCollectionStatus(false);
-
         this.removeEventListeners();
         this.subscriptions.unsubscribe();
+
+        this.tccdbus.setSensorDataCollectionStatus(false);
     }
 }
