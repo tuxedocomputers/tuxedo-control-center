@@ -87,7 +87,12 @@ export class CompatibilityService {
     }
 
     private hasDataWithValue(data: TimeData<number>): boolean {
-        return data?.data?.value !== undefined && data.data.value > -1;
+        return (
+            data?.data?.value !== undefined &&
+            data.timestamp.value > 0 &&
+            data.data.value > -1 &&
+            data?.timestamp?.value !== undefined
+        );
     }
 
     get hasCpuTemp(): boolean {
