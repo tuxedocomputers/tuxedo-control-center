@@ -47,3 +47,4 @@ testem.log
 Thumbs.db
 
 src/ng-app/assets/CHANGELOG.md
+.vscode/tasks.json
