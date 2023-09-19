@@ -109,30 +109,15 @@ export interface BACKLIGHT
 }
 
 export interface CONFIG 
-{
-    setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,
-    copyProfileAsync: (sourceProfileId: string, newProfileName: string) => void,
-    pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => void,
-    writeCurrentEditingProfile: () => boolean,
-    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,
-    writeProfile: (currentProfileId: string, profile: ITccProfile, states?: string[]) => Promise<boolean>,
-    saveSettings: () => Promise<boolean>,
+{ 
     pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
-    getProfileByName: (searchedProfileName: string) => ITccProfile,
-    getProfileById: (searchedProfileId: string) => ITccProfile,
-    getCustomProfileByName: (searchedProfileName: string) => ITccProfile,
-    getCustomProfileById: (searchedProfileId: string) => ITccProfile,
-    copyConfigProfile: (profile: ITccProfile) => ITccProfile,  
-    getDefaultFanProfiles: () => ITccFanProfile[], 
-    updateConfigData: () => void,
-    getSettings: () => ITccSettings,
-    getCustomProfiles: () => ITccProfile[],
-    getDefaultProfiles: () => ITccProfile[],
-    getDefaultValuesProfile: () => ITccProfile,
-    importProfiles: (newProfiles: ITccProfile[]) => void,
-    deleteCustomProfile: (profileToDelete: string) => void,
-    getCurrentEditingProfile: () => ITccProfile,
-    editProfileChanges: () => boolean,                 
+    copyProfilesSync: (profiles: ITccProfile[]) => ITccProfile[],
+    copyProfileSync: (profile: ITccProfile) => ITccProfile,
+    copySettingsSync: (settings: ITccSettings) => ITccSettings,  
+    getDefaultFanProfiles: () => ITccFanProfile[],     
+    setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,    
+    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,
+    pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
 

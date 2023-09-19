@@ -18,66 +18,76 @@
  */
 import { Injectable, OnDestroy } from '@angular/core';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { UtilsService } from './utils.service';
+import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConfigService implements OnDestroy {
-    public observeSettings: Observable<ITccSettings>;    
-    private settingsSubject: Subject<ITccSettings>;
-    private currentProfileEdit: ITccProfile;
-    private currentProfileEditIndex: number;
-    private editingProfileSubject: Subject<ITccProfile>;
-    private editingProfile: BehaviorSubject<ITccProfile>;
-    private customProfiles: ITccProfile[];
-    private observeEditingProfile: Observable<ITccProfile>;
+
     private defaultProfiles: ITccProfile[];
     private defaultValuesProfile: ITccProfile;
+    private customProfiles: ITccProfile[];
     private settings: ITccSettings;
+
+    private currentProfileEdit: ITccProfile;
+    private currentProfileEditIndex: number;
+
+    public observeSettings: Observable<ITccSettings>;
+    private settingsSubject: Subject<ITccSettings>;
+
+    public observeEditingProfile: Observable<ITccProfile>;
+    private editingProfileSubject: Subject<ITccProfile>;
+    public editingProfile: BehaviorSubject<ITccProfile>;
+
     private subscriptions: Subscription = new Subscription();
     
-    constructor() {
+    constructor(private utils: UtilsService, private dbus: TccDBusClientService) {
         this.updateConfigData();
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
-        this.defaultProfiles = dbus.defaultProfiles.value;
+
         this.editingProfileSubject = new Subject<ITccProfile>();
-        this.observeEditingProfile = editingProfileSubject.asObservable();
+        this.observeEditingProfile = this.editingProfileSubject.asObservable();
         this.editingProfile = new BehaviorSubject<ITccProfile>(undefined);
-        this.subscriptions.add(dbus.customProfiles.subscribe(nextCustomProfiles => {
+        this.defaultProfiles = this.dbus.defaultProfiles.value;
+        this.updateConfigData();
+        this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
             this.customProfiles = nextCustomProfiles;
         }));
-        this.subscriptions.add(dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
+        this.subscriptions.add(this.dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
             this.defaultProfiles = nextDefaultProfiles;
             for (const profile of this.defaultProfiles) {
                 this.utils.fillDefaultProfileTexts(profile);
             }
         }));
-        
-        this.defaultValuesProfile = dbus.defaultValuesProfile.value;
-        this.subscriptions.add(dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
+
+        this.defaultValuesProfile = this.dbus.defaultValuesProfile.value;
+        this.subscriptions.add(this.dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
             this.defaultValuesProfile = nextDefaultValuesProfile;
         }));
-        
-        this.subscriptions.add(dbus.settings.subscribe(nextSettings => {
+
+        this.subscriptions.add(this.dbus.settings.subscribe(nextSettings => {
             this.settings = nextSettings
             this.settingsSubject.next(this.settings);
         }));
     }
 
     ngOnDestroy(): void {
-
+        this.subscriptions.unsubscribe();
     }
 
     public updateConfigData(): void {
-        window.config.updateConfigData();
+        this.customProfiles = this.dbus.customProfiles.value;
+        this.settings = this.dbus.settings.value;
     }
 
     public getSettings(): ITccSettings {
-        return window.config.getSettings();
+        return this.settings;
     }
 
     get cpuSettingsDisabledMessage(): string {
@@ -93,19 +103,19 @@ export class ConfigService implements OnDestroy {
     }
 
     public getCustomProfiles(): ITccProfile[] {
-        return window.config.getCustomProfiles();
+        return this.customProfiles;
     }
 
     public getDefaultProfiles(): ITccProfile[] {
-        return window.config.getDefaultProfiles();
+        return this.defaultProfiles;
     }
 
     public getDefaultValuesProfile(): ITccProfile {
-        return window.config.getDefaultValuesProfile();
+        return this.defaultValuesProfile;
     }
 
     public getAllProfiles(): ITccProfile[] {
-        return this.getDefaultProfiles().concat(this.getCustomProfiles());
+        return this.defaultProfiles.concat(this.getCustomProfiles());
     }
 
     public setActiveProfile(profileId: string, stateId: string): void {
@@ -121,38 +131,138 @@ export class ConfigService implements OnDestroy {
      * @returns The new profile ID or undefined on error
      */
     public async copyProfile(sourceProfileId: string, newProfileName: string) {
-        return window.config.copyProfileAsync(sourceProfileId, newProfileName);
+        let profileToCopy: ITccProfile;
+
+        if (sourceProfileId === undefined) {
+            profileToCopy = this.dbus.defaultValuesProfile.value;
+        } else {
+            profileToCopy = this.getProfileById(sourceProfileId);
+        }
+
+        if (profileToCopy === undefined) {
+            return undefined;
+        }
+
+        const newProfile: ITccProfile = window.config.copyProfileSync(profileToCopy);
+        newProfile.name = newProfileName;
+        newProfile.id = generateProfileId();
+        const newProfileList = this.getCustomProfiles().concat(newProfile);
+        const success = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+            return newProfile.id;
+        } else {
+            return undefined;
+        }
     }
 
     // appends given profiles to custom profiles but replaces all of those where IDs conflict!
     // generates a new ID for new profiles
     public async importProfiles(newProfiles: ITccProfile[])
     {
-        return window.config.importProfiles(newProfiles);
+        let newProfileList = this.getCustomProfiles();
+        for (let i = 0; i < newProfiles.length; i++)
+        {
+            // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
+            let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+            if(oldProfileIndex !== -1)
+            {
+                newProfileList[oldProfileIndex] = newProfiles[i];
+            }
+            else
+            {
+                // when we want to override the old profile or there is no conflict we want to keep the
+                // original ID
+                let newProfile = newProfiles[i];
+                if (newProfile.id === "generateNewID")
+                {
+                    newProfile.id = generateProfileId();
+                }
+                newProfileList = newProfileList.concat(newProfile);
+            }
+        }
+        const success = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public async deleteCustomProfile(profileIdToDelete: string) {
-        return window.config.deleteCustomProfile(profileIdToDelete);
-    }
-
-    public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {
-        return window.config.pkexecWriteCustomProfiles(customProfiles);
+        const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
+        if (newProfileList.length === this.getCustomProfiles().length) {
+            return false;
+        }
+        const success = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+        }
+        return success;
     }
 
     public writeCurrentEditingProfile(): boolean {
-        return window.config.writeCurrentEditingProfile();
-    }
+        if (this.editProfileChanges()) {
+            const changedCustomProfiles: ITccProfile[] = window.config.copyProfilesSync(this.customProfiles);
+            changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
 
-    private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]) {
-        return window.config.pkexecWriteCustomProfilesAsync(customProfiles);
+            const result = window.config.pkexecWriteCustomProfiles(changedCustomProfiles);
+            if (result) { this.updateConfigData(); }
+
+            return result;
+        } else {
+            return false;
+        }
     }
 
     public async writeProfile(currentProfileId: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
-        return window.config.writeProfile(currentProfileId, profile, states);
+        return new Promise<boolean>(resolve => {
+            const profileIndex = this.customProfiles.findIndex(p => p.id === currentProfileId);
+            profile.id = currentProfileId;
+
+            // Copy custom profiles and if provided profile is one of them, overwrite with
+            // provided profile
+            const customProfilesCopy = window.config.copyProfilesSync(this.customProfiles);
+            const willOverwriteProfile =
+                // Is custom profile
+                profileIndex !== -1;
+
+            if (willOverwriteProfile) {
+                customProfilesCopy[profileIndex] = profile;
+            }
+
+            // Copy config and if states are provided, assign the chosen profile to these states
+            const newSettings: ITccSettings = window.config.copySettingsSync(this.getSettings());
+            if (states !== undefined) {
+                for (const stateId of states) {
+                    newSettings.stateMap[stateId] = profile.id;
+                }
+            }
+
+            window.config.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+                if (success) {
+                    this.updateConfigData();
+                }
+                resolve(success);
+            });
+        });
     }
 
     public async saveSettings(): Promise<boolean> {
-        return window.config.saveSettings();
+                return new Promise<boolean>(resolve => {
+            const customProfilesCopy = window.config.copyProfilesSync(this.customProfiles);
+            const newSettings: ITccSettings = window.config.copySettingsSync(this.getSettings());
+            window.config.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
+                if (success) {
+                    this.updateConfigData();
+                }
+                resolve(success);
+            });
+        });
     }
 
     /**
@@ -161,23 +271,43 @@ export class ConfigService implements OnDestroy {
      * @returns undefined if no profile is set, the profile otherwise
      */
     public getCurrentEditingProfile(): ITccProfile {
-        return window.config.getCurrentEditingProfile();
+        return this.currentProfileEdit;
     }
 
     public getProfileByName(searchedProfileName: string): ITccProfile {
-        return window.config.getProfileByName(searchedProfileName);
+        const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
+        if (foundProfile !== undefined) {
+            return window.config.copyProfileSync(foundProfile);
+        } else {
+            return undefined;
+        }
     }
 
     public getProfileById(searchedProfileId: string): ITccProfile {
-        return window.config.getProfileById(searchedProfileId);
+        const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.id === searchedProfileId);
+        if (foundProfile !== undefined) {
+            return window.config.copyProfileSync(foundProfile);
+        } else {
+            return undefined;
+        }
     }
 
     public getCustomProfileByName(searchedProfileName: string): ITccProfile {
-        return window.config.getCustomProfileByName(searchedProfileName);
+        const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
+        if (foundProfile !== undefined) {
+            return window.config.copyProfileSync(foundProfile);
+        } else {
+            return undefined;
+        }
     }
 
     public getCustomProfileById(searchedProfileId: string): ITccProfile {
-        return window.config.getCustomProfileById(searchedProfileId);
+        const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
+        if (foundProfile !== undefined) {
+            return window.config.copyProfileSync(foundProfile);
+        } else {
+            return undefined;
+        }
     }
 
     /**
@@ -187,7 +317,10 @@ export class ConfigService implements OnDestroy {
      *          is chosen for edit
      */
     public editProfileChanges(): boolean {
-        return window.config.editProfileChanges();
+        if (this.currentProfileEdit === undefined) { return false; }
+        const currentSavedProfile: ITccProfile = this.customProfiles[this.currentProfileEditIndex];
+        // Compare the two profiles
+        return JSON.stringify(this.currentProfileEdit) !== JSON.stringify(currentSavedProfile);
     }
 
     /**
@@ -209,7 +342,7 @@ export class ConfigService implements OnDestroy {
             return false;
         } else {
             this.currentProfileEditIndex = index;
-            this.currentProfileEdit = window.config.copyConfigProfile(this.customProfiles[index]);
+            this.currentProfileEdit = window.config.copyProfileSync(this.customProfiles[index]);
             this.editingProfileSubject.next(this.currentProfileEdit);
             this.editingProfile.next(this.currentProfileEdit);
             return true;

@@ -105,13 +105,6 @@ contextBridge.exposeInMainWorld(
 );
 
 contextBridge.exposeInMainWorld(
-    'path',
-    {
-
-    }
-);
-
-contextBridge.exposeInMainWorld(
     'https',
     {
         getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
@@ -120,39 +113,16 @@ contextBridge.exposeInMainWorld(
 );
 
 contextBridge.exposeInMainWorld(
-    'os',
-    {
-
-    }
-);
-
-contextBridge.exposeInMainWorld(
     'config',
     {
-        // TODO switch send for invoke where it sends promises around (everything called async), do that also in main.ts
         setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => ipcRenderer.send('config-set-active-profile',profileId,stateId,settings),
-        copyProfileAsync: (sourceProfileId: string, newProfileName: string) => ipcRenderer.invoke('config-copy-profile-async',sourceProfileId,newProfileName),
         pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => ipcRenderer.send('config-pkexec-write-custom-profiles',customProfiles),
-        writeCurrentEditingProfile: ()  => ipcRenderer.send('config-write-current-editing-profile'),
         pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => ipcRenderer.invoke('config-pkexec-write-custom-profiles-async',customProfiles),
-        writeProfile: (currentProfileId: string, profile: ITccProfile, states?: string[])  => ipcRenderer.invoke('config-write-profile',currentProfileId,profile),
-        saveSettings: () => ipcRenderer.invoke('config-save-settings'),
         pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[])  => ipcRenderer.invoke('config-pkexec-write-config-async',settings,customProfiles),
-        getProfileByName: (searchedProfileName: string) => ipcRenderer.send('config-get-profile-by-name',searchedProfileName),
-        getProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-profile-by-id',searchedProfileId),
-        getCustomProfileByName: (searchedProfileName: string) => ipcRenderer.send('config-get-custom-profile-by-name', searchedProfileName),
-        getCustomProfileById: (searchedProfileId: string) => ipcRenderer.send('config-get-custom-profile-by-id',searchedProfileId),
-        copyConfigProfile: (profile: ITccProfile) => ipcRenderer.send('config-copy-config-profiles', profile),
         getDefaultFanProfiles: () => ipcRenderer.send('config-get-default-fan-profiles'),
-        updateConfigData: () => ipcRenderer.send('config-update-config-data'),
-        getSettings: () => ipcRenderer.send('config-get-settings'),
-        getCustomProfiles: () => ipcRenderer.send('config-get-custom-profiles'),
-        getDefaultProfiles: () => ipcRenderer.send('config-get-default-profiles'),
-        getDefaultValuesProfile: () => ipcRenderer.send('config-get-default-values-profile'),
-        importProfiles: () => ipcRenderer.send('config-import-profiles'),
-        deleteCustomProfile: () => ipcRenderer.invoke('config-delete-custom-profile'),
-        getCurrentEditingProfile: () => ipcRenderer.send('config-get-current-editing-profile'),
-        editProfileChanges: () => ipcRenderer.send('config-edit-profile-changes'),
+        copyProfilesSync: (profiles: ITccProfile[]) => ipcRenderer.send('config-copy-profiles-sync', profiles),
+        copyProfileSync: (profile: ITccProfile) => ipcRenderer.send('config-copy-profile-sync', profile),
+        copySettingsSync: (settings: ITccSettings) => ipcRenderer.send('config-copy-settings-sync', settings),
     }
 );
 
