@@ -33,7 +33,7 @@ export class WebcamPreviewComponent implements OnInit {
                 this.cdref.detectChanges();
                 this.stopWebcam();
                 await this.setWebcamWithConfig(config);
-                this.electron.ipcRenderer.applyControls();
+                window.webcam.applyControls();
                 setTimeout(async () => {
                     document.getElementById("video").style.visibility =
                         "visible";
@@ -56,7 +56,7 @@ export class WebcamPreviewComponent implements OnInit {
                 this.mediaDeviceStream = stream;
             });
         this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
-            this.electron.ipcRenderer.videoEnded();
+            window.webcam.videoEnded();
         };
     }
 
