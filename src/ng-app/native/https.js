@@ -1,1 +1,1 @@
-module.exports = window.require('https');
+module.exports = require('https');

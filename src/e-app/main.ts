@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme, IpcMain } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -26,7 +26,7 @@ import { TccDBusController } from '../common/classes/TccDBusController';
 import { ITccProfile, TccProfile, generateProfileId } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
-import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
+import { aquarisAPIHandle, AquarisState, AquarisClientAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { resolve } from 'path';
@@ -1545,6 +1545,33 @@ async function updateTrayProfiles(dbus: TccDBusController) {
 ########################################################
 */
 
+
+const debugAquarisAPICalls = false;
+function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {
+
+    ipcMain.handle(apiHandle, async (event, args: any[]) => {
+        const mainsideFunction = mainsideHandlers.get(args[0]);
+        if (mainsideFunction === undefined) {
+            throw Error(apiHandle + ': Undefined API function');
+        } else {
+            if (debugAquarisAPICalls && args[0] !== 'isConnected') {
+                console.log(`${apiHandle}: ${args[0]}(${args.slice(1)})`);
+            }
+            try {
+                return mainsideFunction.call(this, ...args.slice(1));
+            } catch (err) {
+                console.log(`Error in [${apiHandle}: ${args[0]}(${args.slice(1)})] => ${err}`);
+            }
+        }
+    });
+}
+
+function unregisterAPI(ipcMain: IpcMain, apiHandle: string) {
+    ipcMain.removeHandler(apiHandle);
+}
+
+
+
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false) {
     if (!aquarisIoProgress) {
         try {
@@ -1698,7 +1725,7 @@ async function aquarisConnectedDemo() {
 let devicesList: DeviceInfo[] = [];
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
-    .set(ClientAPI.prototype.connect.name, async (deviceUUID) => {
+    .set(AquarisClientAPI.prototype.connect.name, async (deviceUUID) => {
         aquarisConnectProgress = true;
         try {
             await stopSearch();
@@ -1737,7 +1764,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         }
     })
 
-    .set(ClientAPI.prototype.disconnect.name, async () => {
+    .set(AquarisClientAPI.prototype.disconnect.name, async () => {
         if (await aquarisConnectedDemo()) {
             await new Promise(resolve => setTimeout(resolve, 600));
         } else {
@@ -1747,7 +1774,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisStateCurrent.deviceUUID = undefined;
     })
 
-    .set(ClientAPI.prototype.isConnected.name, async () => {
+    .set(AquarisClientAPI.prototype.isConnected.name, async () => {
         if (await aquarisConnectedDemo()) return true;
 
         if (aquarisIoProgress) {
@@ -1761,32 +1788,32 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         }
     })
 
-    .set(ClientAPI.prototype.hasBluetooth.name, async () => {
+    .set(AquarisClientAPI.prototype.hasBluetooth.name, async () => {
         return aquarisHasBluetooth || await aquarisConnectedDemo();
     })
 
-    .set(ClientAPI.prototype.startDiscover.name, async () => {
+    .set(AquarisClientAPI.prototype.startDiscover.name, async () => {
 
     })
 
-    .set(ClientAPI.prototype.stopDiscover.name, async () => {
+    .set(AquarisClientAPI.prototype.stopDiscover.name, async () => {
 
     })
 
-    .set(ClientAPI.prototype.getDevices.name, async () => {
+    .set(AquarisClientAPI.prototype.getDevices.name, async () => {
         await startSearch();
         return devicesList;
     })
 
-    .set(ClientAPI.prototype.getState.name, async () => {
+    .set(AquarisClientAPI.prototype.getState.name, async () => {
         return aquarisStateExpected;
     })
 
-    .set(ClientAPI.prototype.readFwVersion.name, async () => {
+    .set(AquarisClientAPI.prototype.readFwVersion.name, async () => {
         return (await aquaris.readFwVersion()).toString();
     })
 
-    .set(ClientAPI.prototype.updateLED.name, async (red, green, blue, state) => {
+    .set(AquarisClientAPI.prototype.updateLED.name, async (red, green, blue, state) => {
         aquarisStateExpected.red = red;
         aquarisStateExpected.green = green;
         aquarisStateExpected.blue = blue;
@@ -1795,35 +1822,35 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(ClientAPI.prototype.writeRGBOff.name, async () => {
+    .set(AquarisClientAPI.prototype.writeRGBOff.name, async () => {
         aquarisStateExpected.ledOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(ClientAPI.prototype.writeFanMode.name, async (dutyCyclePercent) => {
+    .set(AquarisClientAPI.prototype.writeFanMode.name, async (dutyCyclePercent) => {
         aquarisStateExpected.fanDutyCycle = dutyCyclePercent;
         aquarisStateExpected.fanOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(ClientAPI.prototype.writeFanOff.name, async () => {
+    .set(AquarisClientAPI.prototype.writeFanOff.name, async () => {
         aquarisStateExpected.fanOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(ClientAPI.prototype.writePumpMode.name, async (dutyCyclePercent, voltage) => {
+    .set(AquarisClientAPI.prototype.writePumpMode.name, async (dutyCyclePercent, voltage) => {
         aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
         aquarisStateExpected.pumpVoltage = voltage;
         aquarisStateExpected.pumpOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(ClientAPI.prototype.writePumpOff.name, async () => {
+    .set(AquarisClientAPI.prototype.writePumpOff.name, async () => {
         aquarisStateExpected.pumpOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
     
-    .set(ClientAPI.prototype.saveState.name, async () => {
+    .set(AquarisClientAPI.prototype.saveState.name, async () => {
         if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });

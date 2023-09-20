@@ -1,1 +1,1 @@
-module.exports = window.require('http');
+module.exports = require('http');

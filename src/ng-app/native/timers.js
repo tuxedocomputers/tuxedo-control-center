@@ -1,1 +1,1 @@
-module.exports = window.require('timers');
+module.exports = require('timers');

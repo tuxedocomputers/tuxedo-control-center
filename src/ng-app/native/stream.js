@@ -1,1 +1,1 @@
-module.exports = window.require('stream');
+module.exports = require('stream');

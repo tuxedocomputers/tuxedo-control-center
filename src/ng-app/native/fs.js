@@ -1,1 +1,1 @@
-module.exports = window.require('fs');
+module.exports = require('fs');

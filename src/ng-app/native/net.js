@@ -1,1 +1,1 @@
-module.exports = window.require('net');
+module.exports = require('net');

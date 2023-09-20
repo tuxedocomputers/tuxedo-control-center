@@ -1,1 +1,1 @@
-module.exports = window.require('x11');
+module.exports = require('x11');
