@@ -25,7 +25,8 @@ import { ConfigService } from '../config.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
-import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
+import { SysFsService } from '../sys-fs.service';
+import { IGeneralCPUInfo } from 'src/common/models/ICpuInfos'
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';

@@ -17,7 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ILogicalCoreInfo, IGeneralCPUInfo, SysFsService, IPstateInfo } from '../sys-fs.service';
+import { ILogicalCoreInfo, IGeneralCPUInfo, IPstateInfo } from 'src/common/models/ICpuInfos';
+import { SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from '../utils.service';
 import { TccDBusClientService, IDBusFanData } from '../tcc-dbus-client.service';
