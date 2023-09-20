@@ -31,22 +31,22 @@ import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { resolve } from 'path';
 import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
-import { FanData } from 'src/service-app/classes/TccDBusInterface';
-import { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
+import { FanData } from '../service-app/classes/TccDBusInterface';
+import { TDPInfo } from '../native-lib/TuxedoIOAPI';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../common/classes/DBusDisplayBrightnessGnome';
 import { DriveController } from '../common/classes/DriveController';
-import { IDrive } from 'src/common/models/IDrive';
-import { ConfigHandler } from 'src/common/classes/ConfigHandler';
-import { TccPaths } from 'src/common/classes/TccPaths';
-import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { IDrive } from '../common/models/IDrive';
+import { ConfigHandler } from '../common/classes/ConfigHandler';
+import { TccPaths } from '../common/classes/TccPaths';
+import { WebcamPreset } from '../common/models/TccWebcamSettings';
 import { environment } from '../ng-app/environments/environment';
 import { CpuController } from '../common/classes/CpuController';
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
-import { ScalingDriver } from 'src/common/classes/LogicalCpuController';
+import { ScalingDriver } from '../common/classes/LogicalCpuController';
 import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
-import { ITccSettings } from 'src/common/models/TccSettings';
+import { ITccSettings } from '../common/models/TccSettings';
 
 
 // Tweak to get correct dirname for resource files outside app.asar
