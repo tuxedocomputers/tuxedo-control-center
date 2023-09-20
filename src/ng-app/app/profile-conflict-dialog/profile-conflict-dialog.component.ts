@@ -21,7 +21,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ITccProfile } from 'src/common/models/TccProfile';
 import { FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
-import { IGeneralCPUInfo , SysFsService } from '../sys-fs.service';
+import { SysFsService } from '../sys-fs.service';
+import { IGeneralCPUInfo } from 'src/common/models/ICpuInfos'
 import { Subscription } from 'rxjs';
 import { CompatibilityService } from '../compatibility.service';
 export interface IProfileConflictDialogResult {
