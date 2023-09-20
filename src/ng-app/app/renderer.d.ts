@@ -1,4 +1,4 @@
-import { ClientAPI } from "src/e-app/AquarisAPI";
+import { AquarisClientAPI } from "src/e-app/AquarisAPI";
 import { EventEmitter } from 'node:events';
 import { FanData } from "src/service-app/classes/TccDBusInterface";
 import { IDrive } from "../../common/models/IDrive"; 
@@ -124,7 +124,7 @@ export interface CONFIG
   declare global {
     interface Window {
       ipc: IPC,
-      aquarisApi: ClientAPI,
+      aquarisApi: AquarisClientAPI,
       dbus: DBUS,
       https: HTTPS,
       fs: FS,
