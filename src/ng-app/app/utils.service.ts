@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-import { ElectronService } from './electron-service-wrapper/electron-service';
 import { DecimalPipe } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
@@ -49,7 +48,6 @@ export class UtilsService {
   private localeId: string;
 
   constructor(
-    private electron: ElectronService,
     private decimalPipe: DecimalPipe,
     public overlayContainer: OverlayContainer,
     public dialog: MatDialog,
@@ -65,7 +63,7 @@ export class UtilsService {
 
   public async execCmd(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      this.electron.ipcRenderer.invoke('exec-cmd-async', command).then((result) => {
+      window.ipc.invoke('exec-cmd-async', command).then((result) => {
         if (result.error === null) {
           resolve(result.data);
         } else {
@@ -79,7 +77,7 @@ export class UtilsService {
   public async getPath(path: string): Promise<string>
   {
     return new Promise<string>((resolve, reject) => {
-        this.electron.ipcRenderer.invoke('get-path', path).then((result) => {
+        window.ipc.invoke('get-path', path).then((result) => {
           if (result) {
             resolve(result.data);
           } else {
@@ -95,7 +93,7 @@ export class UtilsService {
    // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
   public async openFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
+      window.ipc.invoke('show-open-dialog', properties).then((result) => {
         if (result.data.canceled) {
             reject(result.data.canceled);
           } else {
@@ -111,7 +109,7 @@ export class UtilsService {
   // does not save anything, just returns a path
   public async saveFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      this.electron.ipcRenderer.invoke('show-save-dialog', properties).then((result) => {
+      window.ipc.invoke('show-save-dialog', properties).then((result) => {
         if (result.data.canceled) {
           reject(result.data.canceled);
         } else {
@@ -123,7 +121,7 @@ export class UtilsService {
 
   public async execFile(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      this.electron.ipcRenderer.invoke('exec-file-async', command).then((result) => {
+      window.ipc.invoke('exec-file-async', command).then((result) => {
         if (result.error === null) {
           resolve(result.data);
         } else {
@@ -148,7 +146,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   public spawnExternal(command: string): void {
-    this.electron.ipcRenderer.send('spawn-external-async', command);
+    window.ipc.send('spawn-external-async', command);
   }
 
   public getSystemInfosUrl()
@@ -166,7 +164,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
 
   public async getAppVersion(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-        this.electron.ipcRenderer.getAppVersion().then((result) => {
+        window.ipc.getAppVersion().then((result) => {
           if (result) {
             resolve(result.data);
           } else {
@@ -178,23 +176,23 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
 
   public quit()
   {
-    this.electron.ipcRenderer.closeApp(); 
+    window.ipc.closeApp(); 
   }
 
   public closeWindow()
   {
-    this.electron.ipcRenderer.closeWindow(); 
+    window.ipc.closeWindow(); 
   }
 
   public minimizeWindow()
   {
-    this.electron.ipcRenderer.minimizeWindow(); 
+    window.ipc.minimizeWindow(); 
   }
 
   public getCWD()
    {
     return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        this.electron.ipcRenderer.getCWD().then((result) => {
+        window.ipc.getCWD().then((result) => {
           if (result) {
             resolve(result.data);
           } else {
@@ -206,12 +204,12 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
 
    public getCWDSync(): string
    {
-        return this.electron.ipcRenderer.getCWDSync();
+        return window.ipc.getCWDSync();
    }
 
   public async getProcessVersions(): Promise<NodeJS.ProcessVersions> {
     return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        this.electron.ipcRenderer.getProcessVersions().then((result) => {
+        window.ipc.getProcessVersions().then((result) => {
           if (result) {
             resolve(result.data);
           } else {
@@ -223,7 +221,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
 
 
   public changeLanguage(languageId: string) {
-    this.electron.ipcRenderer.send('trigger-language-change', languageId);
+    window.ipc.send('trigger-language-change', languageId);
   }
 
   public getCurrentLanguageId(): string {
@@ -243,15 +241,15 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
-    return await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
+    return await window.ipc.invoke('set-brightness-mode', mode);
   }
 
   public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {
-    return await this.electron.ipcRenderer.getBrightnessMode();
+    return await window.ipc.getBrightnessMode();
   }
 
   public async getShouldUseDarkColors(): Promise<boolean> {
-    return this.electron.ipcRenderer.getShouldUseDarkColors();
+    return window.ipc.getShouldUseDarkColors();
   }
 
   /**

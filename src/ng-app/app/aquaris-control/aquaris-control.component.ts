@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { aquarisAPIHandle, AquarisClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
@@ -80,7 +79,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public hasBluetooth = true;
     
     constructor(
-        private electron: ElectronService,
         public dialog: MatDialog,
         private utils: UtilsService) {
         this.fanPresets.set('slow', {

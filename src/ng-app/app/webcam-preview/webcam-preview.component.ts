@@ -5,7 +5,6 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { ElectronService } from "../electron-service-wrapper/electron-service";
 import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 
 @Component({
@@ -15,7 +14,6 @@ import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 })
 export class WebcamPreviewComponent implements OnInit {
     constructor(
-        private electron: ElectronService,
         private cdref: ChangeDetectorRef
     ) {}
 
@@ -25,7 +23,7 @@ export class WebcamPreviewComponent implements OnInit {
     spinnerActive: boolean = false;
 
     ngOnInit(): void {
-        this.electron.ipcRenderer.on(
+        window.ipc.on(
             "setting-webcam-with-loading",
             async (event, config) => {
                 document.getElementById("video").style.visibility = "hidden";

@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -44,7 +43,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public dataLoaded: boolean;
 
     constructor(
-        private electron: ElectronService,
         private config: ConfigService,
         private state: StateService,
         private utils: UtilsService,

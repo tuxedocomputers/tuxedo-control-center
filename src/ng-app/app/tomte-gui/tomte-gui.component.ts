@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -60,7 +59,6 @@ export class TomteGuiComponent implements OnInit {
     // set this variable to false to output the correct error message in the control center
     isTuxedoDevice = true;
     constructor(
-        private electron: ElectronService,
         private utils: UtilsService,
         private pmgs: ProgramManagementService
     ) { }

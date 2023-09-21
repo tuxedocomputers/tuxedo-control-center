@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { ElectronService } from './electron-service-wrapper/electron-service';
 import { fromEvent, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ActivatedRoute } from '@angular/router';
@@ -35,7 +34,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     constructor(
         private utils: UtilsService,
-        private electron: ElectronService,
         private cdref: ChangeDetectorRef
     ) {}
 
@@ -43,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Register light/dark update from main process
-        const observeBrightnessMode = fromEvent(this.electron.ipcRenderer, 'update-brightness-mode');
+        const observeBrightnessMode = fromEvent(window.ipc, 'update-brightness-mode');
         this.subscriptions.add(observeBrightnessMode.subscribe(() => this.utils.updateBrightnessMode()));
 
         // Trigger manual update for initial state

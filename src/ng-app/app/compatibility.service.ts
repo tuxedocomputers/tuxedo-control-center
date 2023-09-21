@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
-import { ScalingDriver } from '../../common/classes/LogicalCpuController';
-import { DMIController } from '../../common/classes/DMIController';
+//import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+//import { DMIController } from '../../common/classes/DMIController';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
@@ -31,7 +31,7 @@ export class CompatibilityService {
 
   constructor(private tccDbus: TccDBusClientService, private sysfs: SysFsService) {
     // TODO: Manual read until general device id get merged
-    const dmi = new DMIController('/sys/class/dmi/id');
+    const dmi = new DMIController('/sys/class/dmi/id'); // TODO
     const deviceName = dmi.productSKU.readValueNT();
     const boardVendor = dmi.boardVendor.readValueNT();
     const chassisVendor = dmi.chassisVendor.readValueNT();

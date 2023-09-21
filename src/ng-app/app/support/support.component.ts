@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from '../electron-service-wrapper/electron-service';
 import { ProgramManagementService } from '../program-management.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
@@ -49,7 +48,6 @@ export class SupportComponent implements OnInit {
   public systeminfosCompleted = false;
 
   constructor(
-    private electron: ElectronService,
     private program: ProgramManagementService,
     private utils: UtilsService
   ) { }
