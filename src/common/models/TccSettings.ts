@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileTDP } from "./DefaultProfiles";
+import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileCl, defaultMobileCustomProfileTDP, defaultMobileCustomProfileID } from "./DefaultProfiles";
 
 export enum ProfileStates {
     AC = 'power_ac',
@@ -94,10 +94,10 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     keyboardBacklightColor: []
 };
 
-export const defaultSettingsMobileTDP: ITccSettings = {
+export const defaultSettingsMobile: ITccSettings = {
     stateMap: {
         power_ac: defaultCustomProfile.id,
-        power_bat: defaultMobileCustomProfileTDP.id
+        power_bat: defaultMobileCustomProfileID
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
@@ -113,4 +113,6 @@ export const defaultSettingsMobileTDP: ITccSettings = {
 
 export const deviceCustomSettings: Map<TUXEDODevice, ITccSettings> = new Map();
 
-deviceCustomSettings.set(TUXEDODevice.IBPG8MK1, defaultSettingsMobileTDP);
+deviceCustomSettings.set(TUXEDODevice.IBPG8MK1, defaultSettingsMobile);
+deviceCustomSettings.set(TUXEDODevice.AURA14G3, defaultSettingsMobile);
+deviceCustomSettings.set(TUXEDODevice.AURA15G3, defaultSettingsMobile);
