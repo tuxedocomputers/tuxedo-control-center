@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.9] - 2023-09-22
+### Added
+- Support for Aura Gen3 (default mobile profile)
+
 ## [2.0.8] - 2023-07-14
 ### Added
 - Four-zone keyboard backlight GUI support
