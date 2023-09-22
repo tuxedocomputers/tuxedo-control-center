@@ -214,10 +214,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             coreFrequency = -1,
             maxCoreFrequency = -1,
         } = dGpuInfo ?? {};
-        this.dGpuPower = powerDraw;
+        this.dGpuPower = powerDraw > -1 ? powerDraw : 0;
         this.gaugeDGPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
-        this.dGpuFreq = coreFrequency;
+        this.dGpuFreq = coreFrequency > -1 ? coreFrequency : 0;
         this.gaugeDGPUFreq = this.tccdbus.tuxedoWmiAvailable?.value
             ? maxCoreFrequency > 0
                 ? (coreFrequency / maxCoreFrequency) * 100
