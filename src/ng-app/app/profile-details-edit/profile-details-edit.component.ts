@@ -121,6 +121,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
     public refreshRateSupported: boolean;
+    public refreshRate: number;
 
     private tdpLabels: Map<string, string>;
 
@@ -204,6 +205,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.displayModes.subscribe(nextdisplayModes => {
             if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
                 this.displayModes = nextdisplayModes;
+                this.overwriteDefaultRefreshRateValue();
             }
         }));
 
@@ -213,17 +215,25 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }));
 
-        
-
-
         this.tdpLabels = new Map();
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
     }
 
-    ngOnDestroy() {
-        this.subscriptions.unsubscribe();
+    private overwriteDefaultRefreshRateValue() {
+        let displayFormGroupValue = this.profileFormGroup.get("display").value;
+
+        if (displayFormGroupValue.refreshRate === -1) {
+            const refreshRate = this.displayModes.activeMode.refreshRates[0];
+
+            displayFormGroupValue.refreshRate = refreshRate;
+            this.profileFormGroup.patchValue({
+                display: displayFormGroupValue,
+            });
+
+            this.refreshRate = refreshRate;
+        }
     }
 
     private clampCurrentMinimumFanSpeedToHWCapabilities() {
@@ -569,23 +579,35 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    // returns refresh rates of systems currently active resolution
-    public getRefreshRates(): number[]
-    {
-        if(!this.displayModes)
-        {
-            return [undefined];
+    public getCurrentResolutionRefreshRates(): number[] {
+        const activeMode = this.displayModes?.activeMode;
+        if (
+            !activeMode ||
+            activeMode.xResolution <= 0 ||
+            activeMode.yResolution <= 0
+        ) {
+            return [-1];
         }
-        for (let i = 0; i < this.displayModes.displayModes.length; i++)
-        {
-            let mode = this.displayModes.displayModes[i];
-            if (mode.xResolution === this.displayModes.activeMode.xResolution && mode.yResolution === this.displayModes.activeMode.yResolution)
-            {
-                return mode.refreshRates;
-            }
+        const { xResolution, yResolution } = activeMode;
+        const matchingMode = this.getMatchingMode(xResolution, yResolution);
+        if (!matchingMode) {
+            return [-1];
         }
+        return matchingMode.refreshRates;
     }
 
+    private getMatchingMode(
+        xResolution: number,
+        yResolution: number
+    ): IDisplayMode | undefined {
+        return this.displayModes?.displayModes.find((mode) => {
+            return (
+                mode.xResolution === xResolution &&
+                mode.yResolution === yResolution
+            );
+        });
+    }
+    
     // returns currently active refresh rate
     public getActiveRefreshRate(): number
     {
@@ -691,4 +713,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
         return valueChanged;
     }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
 }

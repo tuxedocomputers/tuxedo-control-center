@@ -80,10 +80,10 @@ const silent: ITccProfile = {
     display: {
         brightness: 50,
         useBrightness: true,
-        refreshRate: undefined,
+        refreshRate: -1,
         useRefRate: false,
-        xResolution: undefined,
-        yResolution: undefined,
+        xResolution: -1,
+        yResolution: -1,
         useResolution: false
     },
     cpu: {
@@ -116,10 +116,10 @@ const office: ITccProfile = {
     display: {
         brightness: 60,
         useBrightness: true,
-        refreshRate: undefined,
+        refreshRate: -1,
         useRefRate: false,
-        xResolution: undefined,
-        yResolution: undefined,
+        xResolution: -1,
+        yResolution: -1,
         useResolution: false
     },
     cpu: {
@@ -152,10 +152,10 @@ const highPerformance: ITccProfile = {
     display: {
         brightness: 60,
         useBrightness: true,
-        refreshRate: undefined,
+        refreshRate: -1,
         useRefRate: false,
-        xResolution: undefined,
-        yResolution: undefined,
+        xResolution: -1,
+        yResolution: -1,
         useResolution: false
     },
     cpu: {
@@ -188,10 +188,10 @@ export const defaultCustomProfile: ITccProfile = {
     display: {
         brightness: 100,
         useBrightness: false,
-        refreshRate: undefined,
+        refreshRate: -1,
         useRefRate: false,
-        xResolution: undefined,
-        yResolution: undefined,
+        xResolution: -1,
+        yResolution: -1,
         useResolution: false
     },
     cpu: {
@@ -224,10 +224,10 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     display: {
         brightness: 100,
         useBrightness: false,
-        refreshRate: undefined,
+        refreshRate: -1,
         useRefRate: false,
-        xResolution: undefined,
-        yResolution: undefined,
+        xResolution: -1,
+        yResolution: -1,
         useResolution: false
     },
     cpu: {

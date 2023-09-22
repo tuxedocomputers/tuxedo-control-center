@@ -666,11 +666,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
         catch(err)
         {
-            activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
+            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
         }
         if (!activeDisplayMode)
         {
-            activeDisplayMode = {refreshRates: [undefined], xResolution: undefined, yResolution: undefined};
+            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
         }       
         if(profile.display.refreshRate === undefined)
         {
