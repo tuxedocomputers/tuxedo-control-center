@@ -120,6 +120,20 @@ export interface CONFIG
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
+export interface STATE 
+{
+    determineState: () => any,
+}
+
+export interface COMP 
+{
+    getProductSKU: () => any,
+    getBoardVendor: () => any,
+    getChassisVendor: () => any,
+    getSysVendor: () => any,
+    getScalingDriverAcpiCpuFreq: () => any,
+}
+
 
   declare global {
     interface Window {
@@ -132,7 +146,9 @@ export interface CONFIG
       webcam: WEBCAM,
       cpu: CPU,
       backlight: BACKLIGHT,
-      config: CONFIG
+      config: CONFIG,
+      state: STATE,
+      comp: COMP,
     }
   }
   

@@ -149,5 +149,23 @@ contextBridge.exposeInMainWorld(
     }
 );
 
+contextBridge.exposeInMainWorld(
+    'state',
+    {
+        determineState: () => ipcRenderer.send("state-determine-state"),
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'comp',
+    {
+        getProductSKU: () => ipcRenderer.send('comp-get-product-sku'),
+        getBoardVendor: () => ipcRenderer.send('comp-get-board-vendor'),
+        getChassisVendor: () => ipcRenderer.send('comp-get-chassis-vendor'),
+        getSysVendor: () => ipcRenderer.send('comp-get-sys-vendor'),
+        getScalingDriverAcpiCpuFreq: () => ipcRenderer.send('comp-get-scaling-driver-acpi-cpu-freq'),
+    }
+);
+
 
 contextBridge.exposeInMainWorld('aquarisAPI', new AquarisClientAPI(ipcRenderer, aquarisAPIHandle));

@@ -17,8 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable } from '@angular/core';
-//import { ScalingDriver } from '../../common/classes/LogicalCpuController';
-//import { DMIController } from '../../common/classes/DMIController';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
@@ -31,11 +29,10 @@ export class CompatibilityService {
 
   constructor(private tccDbus: TccDBusClientService, private sysfs: SysFsService) {
     // TODO: Manual read until general device id get merged
-    const dmi = new DMIController('/sys/class/dmi/id'); // TODO
-    const deviceName = dmi.productSKU.readValueNT();
-    const boardVendor = dmi.boardVendor.readValueNT();
-    const chassisVendor = dmi.chassisVendor.readValueNT();
-    const sysVendor = dmi.sysVendor.readValueNT();
+    const deviceName = window.comp.getProductSKU();
+    const boardVendor = window.comp.getBoardVendor();
+    const chassisVendor = window.comp.getChassisVendor();
+    const sysVendor = window.comp.getSysVendor();
     let showAquarisMenu;
     const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
                      (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
@@ -116,7 +113,7 @@ export class CompatibilityService {
     if (this.sysfs.generalCpuInfo.value !== undefined && this.sysfs.logicalCoreInfo.value !== undefined) {
         const boost = this.sysfs.generalCpuInfo.value.boost;
         const scalingDriver = this.sysfs.logicalCoreInfo.value[0].scalingDriver;
-        return boost !== undefined && scalingDriver === ScalingDriver.acpi_cpufreq;
+        return boost !== undefined && scalingDriver === window.comp.getScalingDriverAcpiCpuFreq();
     } else {
         return false;
     }

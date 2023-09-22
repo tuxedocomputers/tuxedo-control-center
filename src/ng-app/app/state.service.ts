@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, OnDestroy } from '@angular/core';
-//import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
@@ -105,7 +104,7 @@ export class StateService implements OnDestroy {
   }
 
   private pollActiveState(): void {
-    const newState = determineState(); // TODO 
+    const newState = window.state.determineState(); 
     if (newState !== this.activeState) {
       this.activeState = newState;
       this.stateSubject.next(newState);

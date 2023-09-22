@@ -495,6 +495,36 @@ async function createWebcamPreview(langId: string, arg: any) {
 ################# IPC Backend for TCC API ########################
 ##################################################################
 */
+import { determineState } from '../common/classes/StateUtils';
+ipcMain.on("state-determine-state",() =>
+{
+    return determineState();
+});
+
+import { DMIController } from '../common/classes/DMIController';
+const dmi = new DMIController('/sys/class/dmi/id');
+
+ipcMain.on("comp-get-product-sku",() =>
+{
+    return dmi.productSKU.readValueNT();
+});
+ipcMain.on("comp-get-board-vendor",() =>
+{
+    return dmi.boardVendor.readValueNT();
+});
+ipcMain.on("comp-get-chassis-vendor",() =>
+{
+    return dmi.chassisVendor.readValueNT();
+});
+ipcMain.on("comp-get-sys-vendor",() =>
+{
+    return dmi.sysVendor.readValueNT();
+});
+ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",() =>
+{
+    return ScalingDriver.acpi_cpufreq;
+});
+
 
 /*
 ###############   Webcam Settings API ####################
