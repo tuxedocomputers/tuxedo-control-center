@@ -94,6 +94,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public primeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand", "off"];
 
+    private dashboardVisibility: boolean;
+    public d0MetricsUsage: boolean;
+
     constructor(
         private sysfs: SysFsService,
         private utils: UtilsService,
@@ -111,6 +114,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.powerState = await this.getDGpuPowerState();
+        this.dashboardVisibility = document.visibilityState == "visible";
     }
 
     private initializeEventListeners(): void {
@@ -122,9 +126,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private visibilityChangeListener = () => {
         if (document.visibilityState == "hidden") {
+            this.dashboardVisibility = false;
             this.tccdbus.setSensorDataCollectionStatus(false);
         }
         if (document.visibilityState == "visible") {
+            this.dashboardVisibility = true;
             this.tccdbus.setSensorDataCollectionStatus(true);
             this.handleVisibilityChange();
         }
@@ -232,16 +238,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
                 const powerState = await this.getDGpuPowerState();
 
-                if (powerState === "-1") {
-                    this.powerState = "-1";
-                }
+                this.powerState = powerState;
+                this.d0MetricsUsage = dGpuInfo?.d0MetricsUsage;
 
                 if (powerState === "D0") {
                     this.tccdbus.setDGpuD0Metrics(true);
-                }
-
-                if (dGpuInfo?.d0MetricsUsage) {
-                    this.powerState = powerState;
                 }
 
                 this.setDGpuValues(dGpuInfo);
@@ -295,7 +296,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values
     private ensureSensorDataCollectionEnabled() {
-        if (!this.tccdbus.sensorDataCollectionStatus?.value) {
+        if (
+            !this.tccdbus.sensorDataCollectionStatus?.value &&
+            this.dashboardVisibility
+        ) {
             this.tccdbus.setSensorDataCollectionStatus(true);
         }
     }
@@ -399,10 +403,20 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         return this.utils.formatCpuFrequency(frequency);
     };
 
-    public formatGpuFrequency = this.createFormatter(
+    public formatIGpuFrequency = this.createFormatter(
         (val) =>
-            this.powerState == "D3cold" ||
-            (val >= 0 && this.tccdbus.tuxedoWmiAvailable?.value),
+            val >= 0 &&
+            (this.powerState == "D3cold" ||
+                this.tccdbus.tuxedoWmiAvailable?.value),
+        (val) => this.utils.formatGpuFrequency(val)
+    );
+
+    public formatDGpuFrequency = this.createFormatter(
+        (val) =>
+            val >= 0 &&
+            (this.powerState == "D3cold" ||
+                (this.tccdbus.tuxedoWmiAvailable?.value &&
+                    this.d0MetricsUsage)),
         (val) => this.utils.formatGpuFrequency(val)
     );
 
@@ -442,7 +456,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public dGpuPowerFormat = this.createFormatter(
-        () => this.powerState == "D3cold" || this.compat.hasDGpuPowerDraw,
+        () =>
+            this.powerState == "D3cold" ||
+            (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
         (val) =>
             this.powerState == "D3cold" ? "0" : Math.round(val).toString()
     );

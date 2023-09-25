@@ -156,7 +156,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
                         </mwl-gauge>
-                        <div class="custom-value-text">{{ formatGpuFrequency(iGpuFreq) }}</div>
+                        <div class="custom-value-text">{{ formatIGpuFrequency(iGpuFreq) }}</div>
                         <div class="unit-text">GHz</div>
                         <svg viewBox="0 0 512 512" class="icon">
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
@@ -201,14 +201,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="tcc-gauge"
-                        [ngClass]="{'not-available': powerState == 'D3cold' ? false : (powerState == 'D0' && !compat.hasDGpuFreq) ? true : !compat.hasDGpuFreq }"
+                        [ngClass]="{'not-available': (powerState !== 'D3cold') && !(powerState === 'D0' && compat.hasDGpuFreq && d0MetricsUsage) }"
                         [matTooltip]="powerState == 'D3cold' ? '' : !compat.hasDGpuFreq ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0"
                             [value]="powerState === 'D3cold' ? 0 : tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
                             [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
                         </mwl-gauge>
-                        <div class="custom-value-text">{{ formatGpuFrequency(dGpuFreq) }}</div>
+                        <div class="custom-value-text">{{ formatDGpuFrequency(dGpuFreq) }}</div>
                         <div class="unit-text">GHz</div>
                         <svg viewBox="0 0 512 512" class="icon">
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
@@ -233,7 +233,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="tcc-gauge"
-                        [ngClass]="{'not-available': powerState == 'D3cold' ? false : (powerState == 'D0' && !compat.hasDGpuPowerDraw) ? true : !compat.hasDGpuPowerDraw }"
+                        [ngClass]="{'not-available': !(powerState === 'D0' && compat.hasDGpuPowerDraw && d0MetricsUsage) && powerState !== 'D3cold' }"
                         [matTooltip]="powerState == 'D3cold' ? '' : !compat.hasDGpuPowerDraw ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0"
                             [value]="powerState === 'D3cold' ? 0 : tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuPowerDraw ? gaugeDGPUPower : 0"
@@ -280,7 +280,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50"
                                         [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                                     </mwl-gauge>
-                                    <div class="custom-value-text">{{ formatGpuFrequency(iGpuFreq) }}</div>
+                                    <div class="custom-value-text">{{ formatIGpuFrequency(iGpuFreq) }}</div>
                                     <div class="unit-text">GHz</div>
                                     <svg viewBox="0 0 512 512" class="icon">
                                         <use href="./assets/images/icon_speedometer.svg#Icon"></use>
@@ -326,14 +326,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </div>
                                 </div>
                                 <div class="tcc-gauge"
-                                    [ngClass]="{'not-available': powerState == 'D3cold' ?  false : (powerState == 'D0' && !compat.hasDGpuFreq) ? true : !compat.hasDGpuFreq }"
+                                    [ngClass]="{'not-available': (powerState !== 'D3cold') && !(powerState === 'D0' && compat.hasDGpuFreq && d0MetricsUsage) }"
                                     [matTooltip]="powerState == 'D3cold' ? '' : !compat.hasDGpuFreq ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
                                         [value]="powerState === 'D3cold' ? 0 : tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
                                         [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50"
                                         [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                                     </mwl-gauge>
-                                    <div class="custom-value-text">{{ formatGpuFrequency(dGpuFreq) }}</div>
+                                    <div class="custom-value-text">{{ formatDGpuFrequency(dGpuFreq) }}</div>
                                     <div class="unit-text">GHz</div>
                                     <svg viewBox="0 0 512 512" class="icon">
                                         <use href="./assets/images/icon_speedometer.svg#Icon"></use>
@@ -359,7 +359,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </div>
                                 </div>
                                 <div class="tcc-gauge"
-                                    [ngClass]="{'not-available': powerState == 'D3cold' ? false : (powerState == 'D0' && !compat.hasDGpuPowerDraw) ? true : !compat.hasDGpuPowerDraw }"
+                                    [ngClass]="{'not-available': !(powerState === 'D0' && compat.hasDGpuPowerDraw && d0MetricsUsage) && powerState !== 'D3cold' }"
                                     [matTooltip]="powerState == 'D3cold' ? '' : !compat.hasDGpuPowerDraw ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
                                         [value]="powerState === 'D3cold' ? 0 : tccdbus.tuxedoWmiAvailable?.value && compat.hasDGpuPowerDraw ? gaugeDGPUPower : 0"
