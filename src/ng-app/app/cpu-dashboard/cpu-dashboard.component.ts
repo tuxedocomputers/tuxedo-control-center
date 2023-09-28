@@ -36,8 +36,8 @@ import { ICpuPower } from "src/common/models/TccPowerSettings";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
-import * as path from "path";
 import { VendorService } from "../../../common/classes/Vendor.service";
+import { PowerStateService } from "../power-state.service";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -106,15 +106,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private config: ConfigService,
         public compat: CompatibilityService,
-        private vendor: VendorService
+        private vendor: VendorService,
+        private power: PowerStateService
     ) {}
 
     public async ngOnInit(): Promise<void> {
+        this.setValuesFromRoute();
         this.initializeSubscriptions();
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
-        this.powerState = await this.getDGpuPowerState();
         this.dashboardVisibility = document.visibilityState == "visible";
+    }
+
+    private setValuesFromRoute() {
+        const data = this.route.snapshot.data;
+        this.powerState = data.powerStateStatus;
     }
 
     private initializeEventListeners(): void {
@@ -140,27 +146,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.updateDgpuPowerState();
     }
 
-    private async getDGpuPowerState(): Promise<string> {
-        const nvidiaBusPath = (
-            await this.utils.execCmd(
-                "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
-            )
-        ).toString();
-
-        if (nvidiaBusPath) {
-            return (
-                await this.utils.execCmd(
-                    `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
-                )
-            )
-                .toString()
-                .trim();
-        }
-        return "-1";
-    }
-
     private async updateDgpuPowerState(): Promise<void> {
-        const powerState = await this.getDGpuPowerState();
+        const powerState = await this.power.getDGpuPowerState();
 
         if (powerState == "D0") {
             this.tccdbus.setDGpuD0Metrics(true);
@@ -236,8 +223,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
                 this.ensureSensorDataCollectionEnabled();
 
-                const powerState = await this.getDGpuPowerState();
-
+                const powerState = await this.power.getDGpuPowerState();
                 this.powerState = powerState;
                 this.d0MetricsUsage = dGpuInfo?.d0MetricsUsage;
 
