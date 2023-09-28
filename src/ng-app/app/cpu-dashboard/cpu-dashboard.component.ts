@@ -491,6 +491,18 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
+    public getPrimeStateLabel(primeState: string) {
+        if (primeState == "iGPU") {
+            return $localize`:@@primeSelectIGpu:Power-saving CPU graphics processor (iGPU)`;
+        }
+        if (primeState == "dGPU") {
+            return $localize`:@@primeSelectDGpu:High-performance graphics processor (dGPU)`;
+        }
+        if (primeState == "on-demand") {
+            return $localize`:@@primeSelectOnDemand:Hybrid graphics mode (on-demand)`;
+        }
+    }
+
     public ngOnDestroy(): void {
         this.removeEventListeners();
         this.subscriptions.unsubscribe();

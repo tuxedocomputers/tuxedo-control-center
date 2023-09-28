@@ -29,25 +29,31 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <mat-dialog-content class="mat-typography">
         <mat-dialog-content *ngIf="primeSelectMode == 'iGPU'" class="content" i18n="@@primeSelectIGpuDescription">
-            Placeholder1
+            Exclusively uses the graphics processor integrated in the main processor. Suitable for power saving and low
+            graphics performance requirements.
+            <br>
+            <b>Please note:</b> Monitors connected to the high-performance graphics processor do not work in this mode.
         </mat-dialog-content>
 
         <mat-dialog-content *ngIf="primeSelectMode == 'dGPU'" class="content" i18n="@@primeSelectDGpuDescription">
-            Placeholder2
+            Uses high-performance graphics processor for graphics-intensive tasks, but with higher energy consumption,
+            even at low load and idle.
         </mat-dialog-content>
 
         <mat-dialog-content *ngIf="primeSelectMode == 'on-demand'" class="content"
             i18n="@@primeSelectOnDemandDescription">
-            Placeholder3
+            The system prioritizes the energy-saving CPU graphics processor. The high-performance graphics processor can
+            be added by the user if required. Combination of high performance and power saving.
         </mat-dialog-content>
-
     </mat-dialog-content>
+
     <mat-dialog-actions align="end">
         <div class="action-row">
             <button mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
             <button mat-button (click)="setDialogStatus('warning')" i18n="@@dialogContinue">Continue</button>
         </div>
     </mat-dialog-actions>
+
 </div>
 
 <div *ngIf="dialogStatus === 'warning'" class="container">
@@ -56,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-dialog-content class="mat-typography">
         <mat-dialog-content class="content" i18n="@@primeSelectAskProceedDescription">
             For the change to take effect, your computer must be restarted. If the computer is shut down immediately,
-            unsaved files or changes will be lost. In this case, select 'Shut down later' and shut down your computer at
+            unsaved files or changes will be lost. In this case, select 'Reboot later' and shut down your computer at
             a later time.
         </mat-dialog-content>
     </mat-dialog-content>
@@ -71,11 +77,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 </div>
 
 <div *ngIf="dialogStatus === 'loading'" class="container">
-    <h2 mat-dialog-title> Applying Graphics Profile </h2>
+    <h2 mat-dialog-title i18n="@@primeSelectDialogApplyProfileTitle">Applying Graphics Profile</h2>
     <mat-dialog-content class="mat-typography">
-        <p class="content">Please do not power off your device while the Prime Select configuration
-            is being applied.</p>
+        <p class="content" i18n="@@primeSelectDialogApplyProfileDescription">Do not power off your device until the
+            process is complete.</p>
     </mat-dialog-content>
+
     <mat-dialog-actions align="end">
         <mat-progress-bar mode="query"></mat-progress-bar>
     </mat-dialog-actions>

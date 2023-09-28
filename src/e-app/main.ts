@@ -412,8 +412,8 @@ async function createPrimeWindow(langId: string, primeSelectMode: string) {
         return;
     }
 
-    let windowWidth = 640;
-    let windowHeight = 200;
+    let windowWidth = 740;
+    let windowHeight = 230;
 
     primeWindow = new BrowserWindow({
         title: "Prime Select Configuration",

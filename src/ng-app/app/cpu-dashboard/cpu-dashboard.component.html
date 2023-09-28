@@ -126,8 +126,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                     <div *ngIf="primeState != undefined && primeState != '-1'" class="content-container active-profile">
-                        <span>Active Graphics Mode:</span>
-                        <a mat-button class="link" (click)="gotoSettings()"> {{ primeState }} </a>
+                        <span i18n="@@cDashboardActiveGraphicsMode">Active Graphics Mode:</span>
+                        <a mat-button class="link" (click)="gotoSettings()">
+                            {{ getPrimeStateLabel(primeState) }}
+                        </a>
                     </div>
                 </div>
 
@@ -254,7 +256,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <!-- TABS -->
                 <div class="gauge-tabs" *ngIf="primeState === 'on-demand'">
                     <mat-tab-group mat-align-tabs="center" disablePagination="true">
-                        <mat-tab label="Stromsparender CPU-Grafikprozessor">
+                        <mat-tab label="Power-saving CPU graphics processor (iGPU)" i18n-label="@@primeSelectIGpu">
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'"
                                     [ngClass]="{'not-available': !compat.hasIGpuTemp }"
@@ -307,7 +309,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </div>
                             </div>
                         </mat-tab>
-                        <mat-tab label="Hochleistungsgrafikprozessor">
+                        <mat-tab label="High-performance graphics processor (dGPU)" i18n-label="@@primeSelectDGpu">
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasDGpuTemp }"
                                     [matTooltip]="!compat.hasDGpuTemp ? compat.compatibilityMessage: ''">

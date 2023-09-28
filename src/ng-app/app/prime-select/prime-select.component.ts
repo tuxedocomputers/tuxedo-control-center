@@ -91,7 +91,7 @@ export class PrimeSelectComponent implements OnInit {
     private async askProceedDialog(): Promise<string> {
         const rebootConfig = {
             title: $localize`:@@primeSelectAskProceedTitle:Warning`,
-            description: $localize`:@@primeSelectAskProceedDescription:For the change to take effect, your computer must be restarted. If the computer is shut down immediately, unsaved files or changes will be lost. In this case, select 'Shut down later' and shut down your computer at a later time.`,
+            description: $localize`:@@primeSelectAskProceedDescription:For the change to take effect, your computer must be restarted. If the computer is shut down immediately, unsaved files or changes will be lost. In this case, select 'Reboot later' and shut down your computer at a later time.`,
             labelData: [
                 {
                     label: $localize`:@@dialogAbort:Cancel`,
