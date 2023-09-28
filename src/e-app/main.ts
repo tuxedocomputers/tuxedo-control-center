@@ -26,12 +26,12 @@ import { TccDBusController } from '../common/classes/TccDBusController';
 import { ITccProfile, TccProfile, generateProfileId } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
-import { aquarisAPIHandle, AquarisState, AquarisClientAPI } from './AquarisAPI';
-import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
+//import { aquarisAPIHandle, AquarisState, AquarisClientAPI } from './AquarisAPI';
+//import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { resolve } from 'path';
 import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
-import { FanData } from '../service-app/classes/TccDBusInterface';
+import { FanData } from '../common/models/IFanData';
 import { TDPInfo } from '../native-lib/TuxedoIOAPI';
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
@@ -70,7 +70,7 @@ if (startTCCAccelerator === '') {
 }
 
 let tccWindow: Electron.BrowserWindow;
-let aquarisWindow: Electron.BrowserWindow;
+//let aquarisWindow: Electron.BrowserWindow;
 let webcamWindow: Electron.BrowserWindow;
 
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
@@ -241,16 +241,16 @@ app.on('will-quit', async (event) => {
     if (tccWindow) {
         tccWindow.close();
         tccWindow = null;
-    }
-    if (aquarisWindow) {
-        aquarisWindow.close();
-        aquarisWindow = null;
+    //}
+   // if (aquarisWindow) {
+    //    aquarisWindow.close();
+    //    aquarisWindow = null;
     }
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
         displayBrightnessGnome.cleanUp();
-        await aquarisCleanUp();
+        //await aquarisCleanUp();
         if (tccDBus !== undefined) {
             tccDBus.disconnect();
         }
@@ -288,16 +288,16 @@ async function activateTccGui(module?: string) {
     }
 }
 
-function activateAquarisGui() {
-    if (aquarisWindow) {
-        if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
-        aquarisWindow.focus();
-    } else {
-        userConfig.get('langId').then(langId => {
-            createAquarisControl(langId);
-        });
-    }
-}
+// function activateAquarisGui() {
+//     if (aquarisWindow) {
+//         if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
+//         aquarisWindow.focus();
+//     } else {
+//         userConfig.get('langId').then(langId => {
+//             createAquarisControl(langId);
+//         });
+//     }
+// }
 
 function quitCurrentTccSession() {
     if (tray.isActive()) {
@@ -396,38 +396,38 @@ async function createTccWindow(langId: string, module?: string) {
     tccWindow.show();
 }
 
-function createAquarisControl(langId: string) {
-    let windowWidth = 700;
-    let windowHeight = 400;
+// function createAquarisControl(langId: string) {
+//     let windowWidth = 700;
+//     let windowHeight = 400;
 
-    aquarisWindow = new BrowserWindow({
-        title: 'Aquaris control',
-        width: windowWidth,
-        height: windowHeight,
-        frame: true,
-        resizable: true,
-        minWidth: windowWidth,
-        minHeight: windowHeight,
-        icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
-        }
-    });
+//     aquarisWindow = new BrowserWindow({
+//         title: 'Aquaris control',
+//         width: windowWidth,
+//         height: windowHeight,
+//         frame: true,
+//         resizable: true,
+//         minWidth: windowWidth,
+//         minHeight: windowHeight,
+//         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
+//         webPreferences: {
+//             nodeIntegration: false,
+//             contextIsolation: true,
+//             preload: path.join(__dirname, 'preload.js')
+//         }
+//     });
 
-    // Hide menu bar
-    aquarisWindow.setMenuBarVisibility(false);
-    // Workaround to menu bar appearing after full screen state
-    aquarisWindow.on('leave-full-screen', () => { aquarisWindow.setMenuBarVisibility(false); });
+//     // Hide menu bar
+//     aquarisWindow.setMenuBarVisibility(false);
+//     // Workaround to menu bar appearing after full screen state
+//     aquarisWindow.on('leave-full-screen', () => { aquarisWindow.setMenuBarVisibility(false); });
 
-    aquarisWindow.on('closed', () => {
-        aquarisWindow = null;
-    });
+//     aquarisWindow.on('closed', () => {
+//         aquarisWindow = null;
+//     });
 
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
-    aquarisWindow.loadFile(indexPath, { hash: '/main-gui/aquaris-control' });
-}
+//     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
+//     aquarisWindow.loadFile(indexPath, { hash: '/main-gui/aquaris-control' });
+// }
 
 async function createWebcamPreview(langId: string, arg: any) {
     let windowWidth = 640;
@@ -1374,9 +1374,9 @@ nativeTheme.on('updated', () => {
     if (tccWindow) {
         tccWindow.webContents.send('update-brightness-mode');
     }
-    if (aquarisWindow) {
-        aquarisWindow.webContents.send('update-brightness-mode');
-    }
+    // if (aquarisWindow) {
+    //     aquarisWindow.webContents.send('update-brightness-mode');
+    // }
     if (webcamWindow) {
         webcamWindow.webContents.send('update-brightness-mode');
     }
@@ -1575,7 +1575,7 @@ async function updateTrayProfiles(dbus: TccDBusController) {
 ########################################################
 */
 
-
+/*
 const debugAquarisAPICalls = false;
 function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {
 
@@ -1886,3 +1886,4 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     });
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
+*/

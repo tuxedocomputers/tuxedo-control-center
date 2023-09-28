@@ -14,7 +14,7 @@
       "x11": [ "./src/ng-app/native/x11.js" ],
       "http": [ "./src/ng-app/native/http.js" ],
       "https": [ "./src/ng-app/native/https.js" ]
-    }
+    } 
   },
   "files": [
     "src/ng-app/main.ts",

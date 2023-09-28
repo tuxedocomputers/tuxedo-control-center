@@ -19,7 +19,7 @@
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { DMIController } from '../../common/classes/DMIController';
-
+import { FanData} from '../../common/models/IFanData';
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
 
@@ -29,7 +29,7 @@ export class FanControlWorker extends DaemonWorker {
     private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.CPU);
     private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
-
+    private fanData: FanData[];
     private controlAvailableMessage = false;
     private previousProfileName;
 
@@ -63,6 +63,11 @@ export class FanControlWorker extends DaemonWorker {
 
         if (nrFans === 0) {
             return;
+        }
+        this.fanData = new Array(nrFans);
+        for (let i = 0; i < nrFans; i++)
+        {
+            this.fanData[i] = new FanData();
         }
 
         // Update fan logic
@@ -184,8 +189,9 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 currentSpeed = fanSpeedsRead[i];
             }
-            this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
-            this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], currentSpeed);
+            this.fanData[i].temp.set(fanTimestamps[i], fanTemps[i]);
+            this.fanData[i].speed.set(fanTimestamps[i], currentSpeed);
+            this.tccd.dbusData.fans[i] = JSON.stringify(this.fanData[i]);
         }
     }
 

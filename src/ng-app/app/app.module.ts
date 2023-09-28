@@ -60,7 +60,7 @@ import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-ov
 import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
 import { InfoComponent } from './info/info.component';
 
-import { MarkdownModule } from 'ngx-markdown';
+//import { MarkdownModule } from 'ngx-markdown';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 import localeDe from '@angular/common/locales/de';
@@ -74,12 +74,12 @@ import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.componen
 import { ToolsComponent } from "./tools/tool.component";
 import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
-import { FanGraphComponent } from './fan-graph/fan-graph.component';
+//import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
-import { ChartsModule, ThemeService } from 'ng2-charts';
-import { ColorPickerModule } from 'ngx-color-picker';
+//import { ChartsModule, ThemeService } from 'ng2-charts';
+//import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
-import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+//import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
@@ -108,9 +108,9 @@ declare const require;
     ToolsComponent,
     KeyboardBacklightComponent,
     ChangeCryptPasswordComponent,
-    FanGraphComponent,
+    //FanGraphComponent,
     MainGuiComponent,
-    AquarisControlComponent,
+    //AquarisControlComponent,
     DialogInputTextComponent,
     DialogConfirmComponent,
     DialogChoiceComponent,
@@ -152,17 +152,17 @@ declare const require;
     MatSlideToggleModule,
     MatTabsModule,
     MatDialogModule,
-    MarkdownModule.forRoot(),
+    //MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),
-    ChartsModule,
-    ColorPickerModule,
+    //ChartsModule,
+    //ColorPickerModule,
     MatMenuModule,
     MatRadioModule
   ],
   providers: [
     DecimalPipe,
-    ThemeService,
+    //ThemeService,
     ProfileConflictDialogService
   ],
   bootstrap: [AppComponent]

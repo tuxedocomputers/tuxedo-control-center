@@ -29,7 +29,7 @@ import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backli
 import { ToolsComponent } from './tools/tool.component';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { MainGuiComponent } from './main-gui/main-gui.component';
-import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+//import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
 import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
 import { WebcamSettingsGuard } from './webcam.service';
@@ -49,12 +49,12 @@ const routes: Routes = [
             { path: 'keyboard-backlight', component: KeyboardBacklightComponent },
             { path: 'camera-settings', component: WebcamSettingsComponent, canDeactivate: [WebcamSettingsGuard] },
             { path: 'global-settings', component: GlobalSettingsComponent },
-            { path: 'aquaris-control', component: AquarisControlComponent },
+            //{ path: 'aquaris-control', component: AquarisControlComponent },
             { path: 'tomte-gui', component: TomteGuiComponent }
         ]
     },
     { path: 'webcam-preview', component: WebcamPreviewComponent },
-    { path: 'aquaris-control', component: AquarisControlComponent },
+    //{ path: 'aquaris-control', component: AquarisControlComponent },
 ];
 
 @NgModule({

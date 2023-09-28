@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+/*
 import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { aquarisAPIHandle, AquarisClientAPI } from '../../../e-app/AquarisAPI';
+import { AquarisClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
@@ -588,3 +590,4 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         await this.utils.openExternal(url);
     }
 }
+*/

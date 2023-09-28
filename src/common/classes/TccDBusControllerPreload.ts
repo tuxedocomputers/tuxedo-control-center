@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FanData } from '../../service-app/classes/TccDBusInterface';
+import { FanData } from '../../common/models/IFanData';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { DBUS } from 'src/ng-app/app/renderer';
 

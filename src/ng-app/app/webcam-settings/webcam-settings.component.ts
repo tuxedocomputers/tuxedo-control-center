@@ -11,7 +11,7 @@ import {
 import { UtilsService } from "../utils.service";
 import { ChangeDetectorRef } from "@angular/core";
 import { WebcamSettingsGuard } from "../webcam.service";
-import { setInterval, clearInterval } from "timers";
+//import { setInterval, clearInterval } from "timers";
 import {
     AbstractControl,
     FormControl,

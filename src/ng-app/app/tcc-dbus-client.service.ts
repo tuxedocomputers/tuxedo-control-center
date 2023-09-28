@@ -19,18 +19,17 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { TccDBusControllerPreload } from '../../common/classes/TccDBusControllerPreload';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FanData } from '../../service-app/classes/TccDBusInterface';
+import { FanData } from '../../common/models/IFanData';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ConfigService } from './config.service';
 
 export interface IDBusFanData {
-  cpu: FanData;
-  gpu1: FanData;
-  gpu2: FanData;
-}
+    cpu: FanData;
+    gpu1: FanData;
+    gpu2: FanData;
+  }
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +78,7 @@ export class TccDBusClientService implements OnDestroy {
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
+  
 
   // Display Brightness Gnome Workarounds
 

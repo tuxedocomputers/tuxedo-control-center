@@ -1,7 +1,7 @@
 import { ITccProfile } from "src/common/models/TccProfile";
 import { ITccSettings } from "src/common/models/TccSettings";
 import { WebcamPreset } from "src/common/models/TccWebcamSettings";
-import { aquarisAPIHandle, AquarisClientAPI } from "./AquarisAPI"
+//import { aquarisAPIHandle, AquarisClientAPI } from "./AquarisAPI"
 
 const { contextBridge, ipcRenderer } = require('electron')
 
@@ -168,4 +168,4 @@ contextBridge.exposeInMainWorld(
 );
 
 
-contextBridge.exposeInMainWorld('aquarisAPI', new AquarisClientAPI(ipcRenderer, aquarisAPIHandle));
+//contextBridge.exposeInMainWorld('aquarisAPI', new AquarisClientAPI(ipcRenderer, aquarisAPIHandle));

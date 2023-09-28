@@ -20,57 +20,13 @@ import * as dbus from 'dbus-next';
 import { ChargingWorker } from './ChargingWorker';
 import { BehaviorSubject } from 'rxjs';
 
-function dbusVariant<T>(signature: string, value: T): dbus.Variant<T> {
-    const v = new dbus.Variant<T>();
-    v.signature = signature;
-    v.value = value;
-    return v;
-}
-
-function exportOwnProperties(obj: object, keys: string[]) {
-    const o = {};
-    for (const key of keys) {
-        if (obj[key].export !== undefined) {
-            o[key] = obj[key].export();
-        } else {
-            o[key] = obj[key];
-        }
-    }
-    return o;
-}
-
-/**
- * Structure for timestamped data
- */
-export class TimeData<T> {
-    public timestamp: dbus.Variant<number>;
-    constructor(private timestampNumber: number, public data: dbus.Variant<T>) {
-        this.timestamp = dbusVariant('x', timestampNumber);
-    }
-    set(timestamp: number, data: T) { this.timestamp.value = timestamp; this.data.value = data; }
-    export() {
-        return exportOwnProperties(this, ['timestamp', 'data']);
-    }
-}
-
-/**
- * Structure for fan data
- */
-export class FanData {
-    public speed = new TimeData<number>(0, dbusVariant('i', 0));
-    public temp = new TimeData<number>(0, dbusVariant('i', 0));
-    export() {
-        return exportOwnProperties(this, ['speed', 'temp']);
-    }
-}
-
 /**
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
     public tuxedoWmiAvailable: boolean;
     public tccdVersion: string;
-    public fans: FanData[];
+    public fans: string[];
     public webcamSwitchAvailable: boolean;
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
@@ -90,7 +46,7 @@ export class TccDBusData {
     public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
     public fansMinSpeed: number;
     public fansOffAvailable: boolean;
-    constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
+    constructor(numberFans: number) { this.fans = new Array<string>(numberFans).fill("") }
     // export() { return this.fans.map(fan => fan.export()); }
 }
 
@@ -113,9 +69,9 @@ export class TccDBusInterface extends dbus.interface.Interface {
 
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
-    GetFanDataCPU() { return this.data.fans[0].export(); }
-    GetFanDataGPU1() { return this.data.fans[1].export(); }
-    GetFanDataGPU2() { return this.data.fans[2].export(); }
+    GetFanDataCPUJSON() { return this.data.fans[0]; }
+    GetFanDataGPU1JSON() { return this.data.fans[1]; }
+    GetFanDataGPU2JSON() { return this.data.fans[2]; }
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
@@ -182,9 +138,9 @@ TccDBusInterface.configureMembers({
     methods: {
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
-        GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
-        GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
-        GetFanDataGPU2: { outSignature: 'a{sa{sv}}' },
+        GetFanDataCPUJSON: { outSignature: 's' },
+        GetFanDataGPU1JSON: { outSignature: 's' },
+        GetFanDataGPU2JSON: { outSignature: 's' },
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
