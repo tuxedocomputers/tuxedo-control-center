@@ -69,7 +69,7 @@ export class XDisplayRefreshRateController {
 
         const result = child_process
             .execSync(
-                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable}`
+                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable} --current`
             )
             .toString();
 
