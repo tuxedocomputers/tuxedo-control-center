@@ -63,6 +63,13 @@ export class GpuInfoWorker extends DaemonWorker {
         if (this.tccd.dbusData.sensorDataCollectionStatus) {
             this.getIGPUValues();
             this.getDGPUValues();
+        } else {
+            this.tccd.dbusData.iGpuInfoValuesJSON = JSON.stringify(
+                getDefaultValuesIGpu()
+            );
+            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(
+                getDefaultValuesDGpu()
+            );
         }
     }
 

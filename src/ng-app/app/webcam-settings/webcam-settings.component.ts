@@ -702,7 +702,7 @@ export class WebcamSettingsComponent implements OnInit {
     private async configMismatchDialog() {
         let config = {
             title: $localize`:@@webcamDialogMismatchConfigValuesTitle:Mismatch of config values`,
-            description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Due to a recent linux kernel update or due to a misconfigured config file unknown values were found and it can not be guranteed that the preset is unchanged since the last time it was saved. Do you want to resave all presets with adjusted values? This will fix compatibility issues but may result in changed presets. If you decline, the adjusted presets will only be saved the next time you save a preset, because presets need to be adjusted to be fully usable again. If you did not modify the config file manually, make sure that you use the latest version of TCC. If the issue persists, please inform Tuxedo about this and mention the used linux kernel version and devices used.`,
+            description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Unknown values detected. Want to resave all presets with adjusted values for compatibility? This may alter presets. If you decline, they'll be adjusted next time you save. If not a config file issue, ensure latest TCC. Otherwise, contact Tuxedo with kernel and device details.`,
             buttonConfirmLabel: $localize`:@@dialogSaveAdjustedPresets:Save adjusted presets`,
             buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
         };
@@ -995,11 +995,11 @@ export class WebcamSettingsComponent implements OnInit {
             labelData: [
                 {
                     label: $localize`:@@dialogOverwrite:Overwrite`,
-                    value: "overwrite",
+                    value: "OVERWRITE",
                 },
                 {
                     label: $localize`:@@dialogNewPreset:New webcam preset`,
-                    value: "new",
+                    value: "NEW",
                 },
             ],
         };
@@ -1048,10 +1048,10 @@ export class WebcamSettingsComponent implements OnInit {
         if (selection == undefined) {
             return;
         }
-        if (selection == "overwrite") {
+        if (selection == "OVERWRITE") {
             this.savePreset(this.selectedPreset.presetName, true);
         }
-        if (selection == "new") {
+        if (selection == "NEW") {
             await this.handlePresetName();
         }
     }

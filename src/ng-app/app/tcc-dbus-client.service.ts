@@ -80,6 +80,7 @@ export class TccDBusClientService implements OnDestroy {
   public dGpuInfo = new BehaviorSubject<IdGpuInfo>(undefined);
   public iGpuInfo = new BehaviorSubject<IiGpuInfo>(undefined);
   public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
+  public sensorDataCollectionStatus = new BehaviorSubject<boolean>(undefined);
 
   public primeState = new BehaviorSubject<string>(undefined);
 
@@ -137,6 +138,8 @@ export class TccDBusClientService implements OnDestroy {
     if (iGpuInfoValuesJSON) {
         this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
     }
+
+    this.sensorDataCollectionStatus.next(await this.tccDBusInterface.getSensorDataCollectionStatus())
 
     this.chargingProfilesAvailable.next(
         await this.tccDBusInterface.getChargingProfilesAvailable()

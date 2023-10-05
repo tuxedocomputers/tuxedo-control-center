@@ -1,33 +1,88 @@
-<div *ngIf="!loadingBar" class="container">
-    <h2 mat-dialog-title> Change graphics configuration and reboot? </h2>
-    <mat-dialog-content class="mat-typography">
+<!--
+Copyright (c) 2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
-        <mat-dialog-content *ngIf="primeSelectMode != 'on-demand'" class="content">
-            Do you want to switch to <strong>{{ primeSelectMode }}</strong> mode, which uses the {{ primeSelectMode ===
-            'iGPU' ? 'integrated' : 'dedicated' }} graphics processor for your applications?
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="dialogStatus === 'info'" class="container">
+    <h2 mat-dialog-title *ngIf="primeSelectMode == 'iGPU'" i18n="@@primeSelectIGpu">Power-saving CPU graphics
+        processor (iGPU)
+    </h2>
+    <h2 mat-dialog-title *ngIf="primeSelectMode == 'dGPU'" i18n="@@primeSelectDGpu">High performance graphics
+        processor (dGPU)
+    </h2>
+    <h2 mat-dialog-title *ngIf="primeSelectMode == 'on-demand'" i18n="@@primeSelectOnDemand">Hybrid graphics mode
+        (on-demand)
+    </h2>
+
+    <mat-dialog-content class="mat-typography">
+        <mat-dialog-content *ngIf="primeSelectMode == 'iGPU'" class="content" i18n="@@primeSelectIGpuDescription">
+            Exclusively uses the graphics processor integrated in the main processor. Suitable for power saving and low
+            graphics performance requirements.
+            <br>
+            <b>Please note:</b> Monitors connected to the high-performance graphics processor do not work in this mode.
         </mat-dialog-content>
 
-        <mat-dialog-content *ngIf="primeSelectMode == 'on-demand'" class="content">
-            Do you want to switch to <strong>on-demand</strong> mode? To learn how to use the on-demand mode please
-            follow this guide:
-            <button (click)="openHelpPage()">Click
-                to open link</button>
+        <mat-dialog-content *ngIf="primeSelectMode == 'dGPU'" class="content" i18n="@@primeSelectDGpuDescription">
+            Uses high-performance graphics processor for graphics-intensive tasks, but with higher energy consumption,
+            even at low load and idle.
+        </mat-dialog-content>
+
+        <mat-dialog-content *ngIf="primeSelectMode == 'on-demand'" class="content"
+            i18n="@@primeSelectOnDemandDescription">
+            The system prioritizes the energy-saving CPU graphics processor. The high-performance graphics processor can
+            be added by the user if required. Combination of high performance and power saving.
         </mat-dialog-content>
     </mat-dialog-content>
+
     <mat-dialog-actions align="end">
         <div class="action-row">
-            <button mat-button (click)="closeWindow()">Cancel</button>
-            <button mat-button (click)="applyPrimeConfig()">Apply</button>
+            <button mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
+            <button mat-button (click)="setDialogStatus('warning')" i18n="@@dialogContinue">Continue</button>
+        </div>
+    </mat-dialog-actions>
+
+</div>
+
+<div *ngIf="dialogStatus === 'warning'" class="container">
+    <h2 mat-dialog-title i18n="@@primeSelectAskProceedTitle">Warning</h2>
+
+    <mat-dialog-content class="mat-typography">
+        <mat-dialog-content class="content" i18n="@@primeSelectAskProceedDescription">
+            For the change to take effect, your computer must be restarted. If the computer is shut down immediately,
+            unsaved files or changes will be lost. In this case, select 'Reboot later' and shut down your computer at
+            a later time.
+        </mat-dialog-content>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <div class="action-row">
+            <button mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
+            <button mat-button (click)="applyPrimeConfig('REBOOT')" i18n="@@dialogInstantReboot">Instant Reboot</button>
+            <button mat-button (click)="applyPrimeConfig('NO_REBOOT')" i18n="@@dialogRebootLater">Reboot later</button>
         </div>
     </mat-dialog-actions>
 </div>
 
-<div *ngIf="loadingBar" class="container">
-    <h2 mat-dialog-title> Applying Graphics Profile </h2>
+<div *ngIf="dialogStatus === 'loading'" class="container">
+    <h2 mat-dialog-title i18n="@@primeSelectDialogApplyProfileTitle">Applying Graphics Profile</h2>
     <mat-dialog-content class="mat-typography">
-        <p class="content">Please do not power off your device while the Prime Select configuration
-            is being applied.</p>
+        <p class="content" i18n="@@primeSelectDialogApplyProfileDescription">Do not power off your device until the
+            process is complete.</p>
     </mat-dialog-content>
+
     <mat-dialog-actions align="end">
         <mat-progress-bar mode="query"></mat-progress-bar>
     </mat-dialog-actions>

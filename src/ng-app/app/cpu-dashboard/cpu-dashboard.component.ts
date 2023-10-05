@@ -23,7 +23,7 @@ import {
     SysFsService,
     IPstateInfo,
 } from "../sys-fs.service";
-import { Subscription, combineLatest, from } from "rxjs";
+import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService, IDBusFanData } from "../tcc-dbus-client.service";
 import { ITccProfile } from "src/common/models/TccProfile";
@@ -36,8 +36,8 @@ import { ICpuPower } from "src/common/models/TccPowerSettings";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
-import * as path from "path";
 import { VendorService } from "../../../common/classes/Vendor.service";
+import { PowerStateService } from "../power-state.service";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -94,6 +94,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public primeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand", "off"];
 
+    private dashboardVisibility: boolean;
+    public d0MetricsUsage: boolean;
+
     constructor(
         private sysfs: SysFsService,
         private utils: UtilsService,
@@ -103,14 +106,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private config: ConfigService,
         public compat: CompatibilityService,
-        private vendor: VendorService
+        private vendor: VendorService,
+        private power: PowerStateService
     ) {}
 
     public async ngOnInit(): Promise<void> {
+        this.setValuesFromRoute();
         this.initializeSubscriptions();
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
-        this.powerState = await this.getDGpuPowerState();
+        this.dashboardVisibility = document.visibilityState == "visible";
+    }
+
+    private setValuesFromRoute() {
+        const data = this.route.snapshot.data;
+        this.powerState = data.powerStateStatus;
     }
 
     private initializeEventListeners(): void {
@@ -122,9 +132,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private visibilityChangeListener = () => {
         if (document.visibilityState == "hidden") {
+            this.dashboardVisibility = false;
             this.tccdbus.setSensorDataCollectionStatus(false);
         }
         if (document.visibilityState == "visible") {
+            this.dashboardVisibility = true;
             this.tccdbus.setSensorDataCollectionStatus(true);
             this.handleVisibilityChange();
         }
@@ -134,27 +146,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.updateDgpuPowerState();
     }
 
-    private async getDGpuPowerState(): Promise<string> {
-        const nvidiaBusPath = (
-            await this.utils.execCmd(
-                "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
-            )
-        ).toString();
-
-        if (nvidiaBusPath) {
-            return (
-                await this.utils.execCmd(
-                    `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
-                )
-            )
-                .toString()
-                .trim();
-        }
-        return "-1";
-    }
-
     private async updateDgpuPowerState(): Promise<void> {
-        const powerState = await this.getDGpuPowerState();
+        const powerState = await this.power.getDGpuPowerState();
 
         if (powerState == "D0") {
             this.tccdbus.setDGpuD0Metrics(true);
@@ -214,10 +207,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             coreFrequency = -1,
             maxCoreFrequency = -1,
         } = dGpuInfo ?? {};
-        this.dGpuPower = powerDraw;
+        this.dGpuPower = powerDraw > -1 ? powerDraw : 0;
         this.gaugeDGPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
-        this.dGpuFreq = coreFrequency;
+        this.dGpuFreq = coreFrequency > -1 ? coreFrequency : 0;
         this.gaugeDGPUFreq = this.tccdbus.tuxedoWmiAvailable?.value
             ? maxCoreFrequency > 0
                 ? (coreFrequency / maxCoreFrequency) * 100
@@ -228,18 +221,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToDGpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
-                const powerState = await this.getDGpuPowerState();
+                this.ensureSensorDataCollectionEnabled();
 
-                if (powerState === "-1") {
-                    this.powerState = "-1";
-                }
+                const powerState = await this.power.getDGpuPowerState();
+                this.powerState = powerState;
+                this.d0MetricsUsage = dGpuInfo?.d0MetricsUsage;
 
                 if (powerState === "D0") {
                     this.tccdbus.setDGpuD0Metrics(true);
-                }
-
-                if (dGpuInfo?.d0MetricsUsage) {
-                    this.powerState = powerState;
                 }
 
                 this.setDGpuValues(dGpuInfo);
@@ -247,7 +236,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private setCpuValues(cpuPower?: ICpuPower): void {
+    private setCpuPowerValues(cpuPower?: ICpuPower): void {
+        this.ensureSensorDataCollectionEnabled();
+
         const powerDraw = cpuPower?.powerDraw ?? -1;
         const maxPowerLimit =
             cpuPower?.maxPowerLimit ?? this.cpuPowerLimit ?? -1;
@@ -259,7 +250,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToCpuInfo(): void {
         this.subscriptions.add(
             this.tccdbus.cpuPower.subscribe((cpuPower?: ICpuPower) => {
-                this.setCpuValues(cpuPower);
+                this.setCpuPowerValues(cpuPower);
             })
         );
         this.subscriptions.add(
@@ -278,6 +269,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private async setIGpuValues(iGpuInfo?: IiGpuInfo): Promise<void> {
+        this.ensureSensorDataCollectionEnabled();
+
         this.iGpuTemp = iGpuInfo?.temp ?? -1;
         const { coreFrequency = -1, maxCoreFrequency = 0 } = iGpuInfo ?? {};
         this.gaugeIGpuFreq =
@@ -285,6 +278,16 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.iGpuFreq = coreFrequency;
         this.iGpuVendor = await this.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
+    }
+
+    // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values
+    private ensureSensorDataCollectionEnabled() {
+        if (
+            !this.tccdbus.sensorDataCollectionStatus?.value &&
+            this.dashboardVisibility
+        ) {
+            this.tccdbus.setSensorDataCollectionStatus(true);
+        }
     }
 
     private subscribeToIGpuInfo(): void {
@@ -301,7 +304,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 if (!fanData) return;
 
                 this.fanData = fanData;
-                const { cpu, gpu1, gpu2 } = fanData;
+                const { gpu1, gpu2 } = fanData;
                 const gpu1Temp = gpu1?.temp?.data?.value;
                 const gpu2Temp = gpu2?.temp?.data?.value;
                 const gpu1Speed = gpu1?.speed?.data?.value;
@@ -386,10 +389,20 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         return this.utils.formatCpuFrequency(frequency);
     };
 
-    public formatGpuFrequency = this.createFormatter(
+    public formatIGpuFrequency = this.createFormatter(
         (val) =>
-            this.powerState == "D3cold" ||
-            (val >= 0 && this.tccdbus.tuxedoWmiAvailable?.value),
+            val >= 0 &&
+            (this.powerState == "D3cold" ||
+                this.tccdbus.tuxedoWmiAvailable?.value),
+        (val) => this.utils.formatGpuFrequency(val)
+    );
+
+    public formatDGpuFrequency = this.createFormatter(
+        (val) =>
+            val >= 0 &&
+            (this.powerState == "D3cold" ||
+                (this.tccdbus.tuxedoWmiAvailable?.value &&
+                    this.d0MetricsUsage)),
         (val) => this.utils.formatGpuFrequency(val)
     );
 
@@ -399,7 +412,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public gaugeCpuTempFormat = this.createFormatter(
-        () => this.compat.hasFanInfo,
+        () => this.compat.hasCpuTemp,
         (val) => Math.round(val).toString()
     );
 
@@ -409,12 +422,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public gaugeDGpuTempFormat = this.createFormatter(
-        () => this.compat.hasFanInfo,
+        () => this.compat.hasDGpuTemp,
         (val) => Math.round(val).toString()
     );
 
-    public gaugeFanSpeedFormat = this.createFormatter(
-        () => this.compat.hasFanInfo,
+    public gaugeCpuFanSpeedFormat = this.createFormatter(
+        () => this.compat.hasCpuFan,
+        (val) => Math.round(val).toString()
+    );
+
+    public gaugeDGpuFanSpeedFormat = this.createFormatter(
+        () => this.compat.hasDGpuFan,
         (val) => Math.round(val).toString()
     );
 
@@ -424,7 +442,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     );
 
     public dGpuPowerFormat = this.createFormatter(
-        () => this.powerState == "D3cold" || this.compat.hasDGpuPowerDraw,
+        () =>
+            this.powerState == "D3cold" ||
+            (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
         (val) =>
             this.powerState == "D3cold" ? "0" : Math.round(val).toString()
     );
@@ -471,10 +491,22 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    public ngOnDestroy(): void {
-        this.tccdbus.setSensorDataCollectionStatus(false);
+    public getPrimeStateLabel(primeState: string) {
+        if (primeState == "iGPU") {
+            return $localize`:@@primeSelectIGpu:Power-saving CPU graphics processor (iGPU)`;
+        }
+        if (primeState == "dGPU") {
+            return $localize`:@@primeSelectDGpu:High-performance graphics processor (dGPU)`;
+        }
+        if (primeState == "on-demand") {
+            return $localize`:@@primeSelectOnDemand:Hybrid graphics mode (on-demand)`;
+        }
+    }
 
+    public ngOnDestroy(): void {
         this.removeEventListeners();
         this.subscriptions.unsubscribe();
+
+        this.tccdbus.setSensorDataCollectionStatus(false);
     }
 }

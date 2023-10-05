@@ -67,6 +67,10 @@ export class CpuPowerWorker extends DaemonWorker {
 
             this.tccd.dbusData.cpuPowerValuesJSON =
                 JSON.stringify(cpuPowerValues);
+        } else {
+            this.tccd.dbusData.cpuPowerValuesJSON = JSON.stringify({
+                powerDraw: -1,
+            });
         }
     }
 

@@ -39,6 +39,7 @@
     justify-content: space-evenly;
     
     margin: 10px auto 30px auto;
+    padding-bottom: 5px;
 
     &.bottom {
         margin-bottom: 30px;
@@ -46,6 +47,9 @@
 }
 
 .active-profile {
+    padding-top: 5px;
+    padding-bottom: 5px;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,6 +68,10 @@
         padding: 0px;
         --icon-detail: var(--icon-main);
     }
+}
+
+.active-tcc-profile{
+    padding-bottom: 15px;
 }
 
 .profile-overview {

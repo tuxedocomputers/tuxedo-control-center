@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,115 +16,97 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from './DaemonWorker';
-import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
-import { IDisplayFreqRes} from '../../common/models/DisplayFreqRes';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ITccProfile } from 'src/common/models/TccProfile';
+import { DaemonWorker } from "./DaemonWorker";
+import { XDisplayRefreshRateController } from "../../common/classes/XDisplayRefreshRateController";
+import {
+    IDisplayFreqRes,
+    IDisplayMode,
+} from "../../common/models/DisplayFreqRes";
+import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import { ITccProfile } from "src/common/models/TccProfile";
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
-
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
     private refreshRateSupported: boolean;
+    private retryCount: number = 0;
+    private displayInfoFound: boolean = false;
+
+    private activeprofile: ITccProfile;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd); 
+        super(3000, tccd);
         this.controller = new XDisplayRefreshRateController();
     }
 
-    public onStart(): void {      
-    }
+    public onStart(): void {}
 
     public onWork(): void {
-        // get current display settings from controller and save them into data structure
-        this.getAllInfo();
-        // get active profile and check if we need to do something
-        let activeprofile: ITccProfile;
-        try
-        {
-            activeprofile = this.tccd.getCurrentProfile();
+        this.retryCount += 1;
+        this.activeprofile = this.tccd.getCurrentProfile();
+
+        if (this.retryCount < 5 && !this.displayInfoFound) {
+            this.setDisplayInfo();
         }
-        catch(err)
-        {
+
+        this.setActiveDisplayMode();
+    }
+
+    public onExit(): void {}
+
+    private setDisplayInfo() {
+        this.updateDisplayData();
+        // happens right after boot when user was not logged into graphical DE yet (but into tty)
+        if (!this.activeprofile || !this.displayInfo) {
             return;
         }
-        // occured right after boot when user was not logged into graphical DE yet (but into tty)
-        if(!activeprofile || !this.displayInfo)
-        {
-            return;
-        }
-        if(activeprofile.display.useRefRate)
-        {
-            if(activeprofile.display.refreshRate !== this.displayInfo.activeMode.refreshRates[0])
-            {
-                // xrandr sometimes fails when you don't specifiy the full line
-                this.setMode(this.displayInfo.activeMode.xResolution,this.displayInfo.activeMode.yResolution,activeprofile.display.refreshRate);
+    }
+
+    private setActiveDisplayMode(): void {
+        const useRefRate = this.activeprofile?.display?.useRefRate;
+        const activeMode = this.displayInfo?.activeMode;
+
+        if (useRefRate && activeMode) {
+            const refreshRate = this.activeprofile.display.refreshRate;
+            const hasDifferentRefreshRate =
+                refreshRate !== activeMode.refreshRates[0];
+
+            if (hasDifferentRefreshRate) {
+                this.setDisplayMode(
+                    activeMode.xResolution,
+                    activeMode.yResolution,
+                    refreshRate
+                );
+                activeMode.refreshRates[0] = refreshRate;
             }
         }
-        // if(activeprofile.display.useResolution)
-        // {
-        //     if(activeprofile.display.xResolution !== this.displayInfo.activeMode.xResolution || activeprofile.display.yResolution !== this.displayInfo.activeMode.yResolution)
-        //     {
-        //         this.setMode(activeprofile.display.xResolution, activeprofile.display.yResolution, activeprofile.display.refreshRate);
-        //     }
-        // }
     }
 
-    public onExit(): void {
-        
-    }
-
-    // queries the controller to get all info 
-    private getAllInfo()
-    {
+    private updateDisplayData(): void {
         this.displayInfo = this.controller.getDisplayModes();
-        // once we implement wayland we need to change this check :)
+        // check if x11 because of future wayland support
         this.refreshRateSupported = this.controller.getIsX11();
-        if(this.displayInfo === undefined)
-        {
+        if (this.displayInfo === undefined) {
             this.tccd.dbusData.displayModes = undefined;
-        }
-        else
-        {
+        } else {
+            this.displayInfoFound = true;
             this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
         }
         this.tccd.dbusData.refreshRateSupported = this.refreshRateSupported;
     }
 
-    public getActiveDisplayMode()
-     {
-        if(this.displayInfo === undefined)
-        {
-            this.getAllInfo();
+    public getActiveDisplayMode(): IDisplayMode {
+        if (this.displayInfo === undefined) {
+            this.updateDisplayData();
         }
-        if(this.displayInfo === undefined)
-        {
+        if (this.displayInfo === undefined) {
             return undefined;
-        }
-        else
-        {
+        } else {
             return this.displayInfo.activeMode;
         }
-     }
-
-    // set refresh rate only
-    private setRefRate(rate: number)
-    {
-        this.controller.setRefreshRate(rate);
     }
 
-    // set resolution only
-    private setRes(xRes: number, yRes: number)
-    {
-        this.controller.setResolution(xRes, yRes);
+    private setDisplayMode(xRes: number, yRes: number, refRate: number) {
+        this.controller.setRefreshResolution(xRes, yRes, refRate);
     }
-
-    // set both at the same time - have to use this using xrandr because it sometimes fails otherwise
-    private setMode(xRes: number, yRes: number, refRate: number)
-    {
-        this.controller.setRefreshResolution(xRes,yRes,refRate);
-    }
-
-   
 }

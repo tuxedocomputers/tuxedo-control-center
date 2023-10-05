@@ -137,7 +137,6 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetPrimeState() { return this.data.primeState; }
     SetSensorDataCollectionStatus(status: boolean) {this.data.sensorDataCollectionStatus = status}
     GetSensorDataCollectionStatus() {
-        this.data.sensorDataCollectionStatus = true; 
         return this.data.sensorDataCollectionStatus;
     }
     

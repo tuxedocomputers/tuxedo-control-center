@@ -22,6 +22,7 @@ import { DMIController } from "../../common/classes/DMIController";
 import { SysFsService } from "./sys-fs.service";
 import { TccDBusClientService } from "./tcc-dbus-client.service";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
+import { TimeData } from "src/service-app/classes/TccDBusInterface";
 
 @Injectable({
     providedIn: "root",
@@ -69,16 +70,120 @@ export class CompatibilityService {
         return this.hasFanControl;
     }
 
+    private hasPowerDrawWithValue(powerData: any): boolean {
+        return (
+            typeof powerData?.powerDraw !== "undefined" &&
+            powerData.powerDraw > 0
+        );
+    }
+
+    private hasFrequencyWithValue(gpuInfo: IiGpuInfo | IdGpuInfo): boolean {
+        return (
+            gpuInfo.coreFrequency !== undefined &&
+            gpuInfo.coreFrequency >= 0 &&
+            gpuInfo.maxCoreFrequency !== undefined &&
+            gpuInfo.maxCoreFrequency >= 0
+        );
+    }
+
+    private hasDataWithValue(data: TimeData<number>): boolean {
+        return (
+            data?.data?.value !== undefined &&
+            data.timestamp.value > 0 &&
+            data.data.value > -1 &&
+            data?.timestamp?.value !== undefined
+        );
+    }
+
+    get hasCpuTemp(): boolean {
+        const fanData = this.tccDbus.fanData?.value;
+        const { cpu } = fanData;
+        const cpuTemp = cpu?.temp;
+
+        return (
+            this.tccDbus.tuxedoWmiAvailable.value &&
+            this.hasDataWithValue(cpuTemp)
+        );
+    }
+
+    get hasIGpuTemp(): boolean {
+        const temp = this.tccDbus.iGpuInfo?.value?.temp ?? -1;
+
+        return temp > 0 && this.tccDbus.tuxedoWmiAvailable.value;
+    }
+
+    get hasDGpuTemp(): boolean {
+        const fanData = this.tccDbus.fanData?.value;
+        const { gpu1, gpu2 } = fanData;
+        const gpu1Temp = gpu1?.temp;
+        const gpu2Temp = gpu2?.temp;
+
+        return (
+            this.tccDbus.tuxedoWmiAvailable.value &&
+            (this.hasDataWithValue(gpu1Temp) || this.hasDataWithValue(gpu2Temp))
+        );
+    }
+
+    get hasIGpuFreq(): boolean {
+        const iGpuInfo: IiGpuInfo | undefined = this.tccDbus.iGpuInfo?.value;
+
+        return (
+            iGpuInfo !== undefined &&
+            this.hasFrequencyWithValue(iGpuInfo) &&
+            this.tccDbus.tuxedoWmiAvailable.value
+        );
+    }
+
+    get hasDGpuFreq(): boolean {
+        const dGpuInfo: IdGpuInfo | undefined = this.tccDbus.dGpuInfo?.value;
+
+        return (
+            dGpuInfo !== undefined &&
+            this.hasFrequencyWithValue(dGpuInfo) &&
+            this.tccDbus.tuxedoWmiAvailable.value
+        );
+    }
+
+    get hasCpuFan(): boolean {
+        const fanData = this.tccDbus.fanData?.value;
+        const { cpu } = fanData;
+        const cpuSpeed = cpu?.speed;
+
+        return (
+            this.tccDbus.tuxedoWmiAvailable.value &&
+            this.hasDataWithValue(cpuSpeed)
+        );
+    }
+
+    get hasDGpuFan(): boolean {
+        const fanData = this.tccDbus.fanData?.value;
+        const { gpu1, gpu2 } = fanData;
+        const gpu1Speed = gpu1?.speed;
+        const gpu2Speed = gpu2?.speed;
+
+        return (
+            this.tccDbus.tuxedoWmiAvailable.value &&
+            (this.hasDataWithValue(gpu1Speed) ||
+                this.hasDataWithValue(gpu2Speed))
+        );
+    }
+
     get hasCpuPower(): boolean {
         const { cpuPower } = this.tccDbus;
         const { value: cpuPowerValue } = cpuPower;
 
-        const powerDrawDefined =
-            typeof cpuPowerValue?.powerDraw !== "undefined";
+        return (
+            this.hasPowerDrawWithValue(cpuPowerValue) &&
+            this.tccDbus.tuxedoWmiAvailable.value
+        );
+    }
+
+    get hasIGpuPowerDraw(): boolean {
+        const iGpuPowerDraw = this.tccDbus.iGpuInfo?.value?.powerDraw;
 
         return (
-            powerDrawDefined &&
-            cpuPowerValue.powerDraw > 0 &&
+            iGpuPowerDraw !== undefined &&
+            this.hasPowerDrawWithValue({ powerDraw: iGpuPowerDraw }) &&
             this.tccDbus.tuxedoWmiAvailable.value
         );
     }
@@ -86,57 +191,11 @@ export class CompatibilityService {
     get hasDGpuPowerDraw(): boolean {
         const dGpuPowerDraw = this.tccDbus.dGpuInfo?.value?.powerDraw;
 
-        if (dGpuPowerDraw !== undefined) {
-            return dGpuPowerDraw > 0 && this.tccDbus.tuxedoWmiAvailable.value;
-        }
-
-        return false;
-    }
-
-    get hasIGpuPowerDraw(): boolean {
-        const iGpuPowerDraw = this.tccDbus.iGpuInfo?.value?.powerDraw;
-
-        if (iGpuPowerDraw !== undefined) {
-            return iGpuPowerDraw >= 0 && this.tccDbus.tuxedoWmiAvailable.value;
-        }
-
-        return false;
-    }
-
-    get hasDGpuFreq(): boolean {
-        const dGpuInfo: IdGpuInfo | undefined = this.tccDbus.dGpuInfo?.value;
-        if (!dGpuInfo) {
-            return false;
-        }
-        const { coreFrequency, maxCoreFrequency } = dGpuInfo;
         return (
-            coreFrequency !== undefined &&
-            coreFrequency >= 0 &&
-            maxCoreFrequency !== undefined &&
-            maxCoreFrequency >= 0 &&
+            dGpuPowerDraw !== undefined &&
+            this.hasPowerDrawWithValue({ powerDraw: dGpuPowerDraw }) &&
             this.tccDbus.tuxedoWmiAvailable.value
         );
-    }
-
-    get hasIGpuFreq(): boolean {
-        const iGpuInfo: IiGpuInfo | undefined = this.tccDbus.iGpuInfo?.value;
-        if (!iGpuInfo) {
-            return false;
-        }
-        const { coreFrequency, maxCoreFrequency } = iGpuInfo;
-        return (
-            coreFrequency !== undefined &&
-            coreFrequency >= 0 &&
-            maxCoreFrequency !== undefined &&
-            maxCoreFrequency >= 0 &&
-            this.tccDbus.tuxedoWmiAvailable.value
-        );
-    }
-
-    get hasIGpuTemp(): boolean {
-        const iGpuInfo = this.tccDbus.iGpuInfo?.value;
-        const temp = iGpuInfo?.temp ?? -1;
-        return temp > 0 && this.tccDbus.tuxedoWmiAvailable.value;
     }
 
     // hasFanControl==true implies hasFanInfo==true, but not the other way around
