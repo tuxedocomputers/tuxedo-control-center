@@ -32,6 +32,7 @@ export const defaultProfiles: ITccProfile[] = [
             useControl: true,
             fanProfile: 'Balanced',
             minimumFanspeed: 0,
+            maximumFanspeed: 100,
             offsetFanspeed: 0
         },
         odmProfile: { name: undefined },
@@ -67,6 +68,7 @@ export const defaultProfiles: ITccProfile[] = [
             useControl: true,
             fanProfile: 'Quiet',
             minimumFanspeed: 0,
+            maximumFanspeed: 100,
             offsetFanspeed: 0
         },
         odmProfile: { name: undefined },
@@ -102,6 +104,7 @@ export const defaultProfiles: ITccProfile[] = [
             useControl: true,
             fanProfile: 'Silent',
             minimumFanspeed: 0,
+            maximumFanspeed: 100,
             offsetFanspeed: 0
         },
         odmProfile: { name: undefined },
@@ -139,6 +142,7 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },

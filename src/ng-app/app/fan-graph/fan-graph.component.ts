@@ -50,6 +50,13 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     get minFanspeed() { return this._minFanspeed; }
 
+    private _maxFanspeed:number = 0;
+    @Input() set maxFanspeed(value: number) {
+        this._maxFanspeed = value;
+        this.updateDatasets();
+    }
+    get maxFanspeed() { return this._maxFanspeed; }
+
     private _offsetFanspeed: number = 0;
     @Input() set offsetFanspeed(value: number) {
         this._offsetFanspeed = value;
@@ -187,34 +194,38 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Applies min and offset parameters and returns the resulting speed
+     * Ensure minimum fan speed if temperature is high
+     */
+    private manageCriticalTemperature(temp: number, speed: number): number {
+        const minimumCriticalFanSpeed: number = 40;
+        const criticalTemp: number = 75;
+
+        if (temp > criticalTemp && speed < minimumCriticalFanSpeed) {
+            speed = minimumCriticalFanSpeed;
+        }
+        return speed
+    }
+
+    /**
+     * Applies min, max and offset parameters and returns the resulting speed
      * Ref. FanControlLogic.ts: calculateSpeedPercent()
      * 
      * @param entry Fan table entry to be evaluated
      * @returns Resulting speed
      */
     private applyParameters(entry: ITccFanTableEntry): number {
-        // Apply offset
-        let newSpeed = entry.speed;
+        let { temp, speed } = entry;
+        
+        speed += this.offsetFanspeed;
 
-        const offsetDisableCondition = this.offsetFanspeed < 0 && entry.temp > 75;
-        if (!offsetDisableCondition) {
-            newSpeed += this.offsetFanspeed;
-            if (newSpeed > 100) {
-                newSpeed = 100;
-            } else if (newSpeed < 0) {
-                newSpeed = 0;
-            }
-        }
+        speed = Math.max(this.minFanspeed, Math.min(this.maxFanspeed, speed));
+        speed = Math.max(0, Math.min(100, speed));
 
-        // Adjust for minimum speed parameter
-        if (newSpeed < this.minFanspeed) {
-            newSpeed = this.minFanspeed;
-        }
+        speed = this.manageCriticalTemperature(temp, speed)
 
-        return newSpeed;
+        return speed;
     }
-
+    
     private formatTemp(value: number | string): string {
         return `${value} °C`;
     }

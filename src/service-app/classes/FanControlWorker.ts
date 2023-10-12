@@ -73,6 +73,8 @@ export class FanControlWorker extends DaemonWorker {
                 this.fans.get(fanNumber).setFanProfile(currentFanProfile);
             }
             this.fans.get(fanNumber).minimumFanspeed = this.activeProfile.fan.minimumFanspeed;
+            this.fans.get(fanNumber).maximumFanspeed = this.activeProfile.fan.maximumFanspeed;
+
             this.fans.get(fanNumber).offsetFanspeed = this.activeProfile.fan.offsetFanspeed;
         }
 

@@ -108,6 +108,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
+    private fansMaxSpeedSubscription: Subscription = new Subscription();
+
     private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
@@ -130,6 +132,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public infoTooltipShowDelay = 700;
 
     public fansMinSpeed = 0;
+    public fansMaxSpeed = 100;
+
     public fansOffAvailable = true;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
@@ -384,6 +388,28 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public sliderMinFanChange() {
+        const { minimumFanspeed, maximumFanspeed } =
+            this.profileFormGroup.controls.fan.value;
+
+        if (minimumFanspeed > maximumFanspeed) {
+            this.profileFormGroup.patchValue({
+                fan: { minimumFanspeed: maximumFanspeed },
+            });
+        }
+    }
+
+    public sliderMaxFanChange() {
+        const { minimumFanspeed, maximumFanspeed } =
+            this.profileFormGroup.controls.fan.value;
+
+        if (maximumFanspeed < minimumFanspeed) {
+            this.profileFormGroup.patchValue({
+                fan: { maximumFanspeed: minimumFanspeed },
+            });
+        }
+    }
+      
     get getODMTDPControls() {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
@@ -635,6 +661,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private buttonRepeatTimer: NodeJS.Timeout;
     public buttonRepeatDown(action: () => void) {
+        console.log("this: ", this.profileFormGroup.get('fan'))
+
         if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
         const repeatDelayMS = 200;
 

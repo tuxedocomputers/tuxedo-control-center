@@ -67,6 +67,7 @@ const maxEnergySave: ITccProfile = {
         useControl: true,
         fanProfile: 'Silent',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: 'power_save' },
@@ -103,6 +104,7 @@ const silent: ITccProfile = {
         useControl: true,
         fanProfile: 'Silent',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: 'power_save' },
@@ -139,6 +141,7 @@ const office: ITccProfile = {
         useControl: true,
         fanProfile: 'Quiet',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: 'enthusiast' },
@@ -175,6 +178,7 @@ const highPerformance: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: 'overboost' },
@@ -211,6 +215,7 @@ export const defaultCustomProfile: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },
@@ -247,6 +252,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
+        maximumFanspeed: 100,
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },

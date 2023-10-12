@@ -84,6 +84,7 @@ interface ITccProfileFanControl {
     useControl: boolean;
     fanProfile: string;
     minimumFanspeed: number;
+    maximumFanspeed: number;
     offsetFanspeed: number;
 }
 
