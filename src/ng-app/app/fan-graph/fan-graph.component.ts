@@ -116,6 +116,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
                 {
                     ticks: {
                         beginAtZero: true,
+                        suggestedMax: 100,
                         callback: (value: number) => {
                             if (value % 20 === 0) {
                                 return this.formatSpeed(value);
