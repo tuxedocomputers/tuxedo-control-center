@@ -134,8 +134,8 @@ export class ProfileOverviewTileComponent implements OnInit {
         return this.config.getSettings();
     }
 
-    public formatFrequency(frequency: number): string {
-        return this.utils.formatFrequency(frequency);
+    public formatCpuFrequency(frequency: number): string {
+        return this.utils.formatCpuFrequency(frequency);
     }
 
     public activateProfile(): void {
