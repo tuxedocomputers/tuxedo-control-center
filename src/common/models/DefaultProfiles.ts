@@ -261,7 +261,12 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,

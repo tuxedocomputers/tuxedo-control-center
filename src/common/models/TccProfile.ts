@@ -46,6 +46,7 @@ export class TccProfile implements ITccProfile {
     public constructor(init: ITccProfile) {
         this.id = init.id;
         this.name = init.name;
+        this.description = init.description;
         this.display = JSON.parse(JSON.stringify(init.display));
         this.cpu = JSON.parse(JSON.stringify(init.cpu));
         this.webcam = JSON.parse(JSON.stringify(init.webcam));
@@ -88,11 +89,11 @@ interface ITccProfileFanControl {
 }
 
 interface ITccODMProfile {
-    name: string
+    name: string;
 }
 
 interface ITccODMPowerLimits {
-    tdpValues: number[]
+    tdpValues: number[];
 }
 
 export function generateProfileId(): string {
