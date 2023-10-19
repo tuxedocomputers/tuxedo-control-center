@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld(
     closeWindow: () => ipcRenderer.send('close-window'),
     minimizeWindow: () => ipcRenderer.send('minimize-window'),
     getCWD: () => ipcRenderer.invoke('get-cwd'),
-    getCWDSync: () => ipcRenderer.sendSync('get-cwd-sync'),
+    getCWDSync: () => ipcRenderer.sendSync('get-cwd-sync').data,
     getProcessVersions: () => ipcRenderer.invoke('get-process-versions'),
     getBrightnessMode: () => ipcRenderer.invoke('get-brightness-mode'),
     getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
