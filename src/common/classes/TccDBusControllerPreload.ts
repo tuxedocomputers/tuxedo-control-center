@@ -80,27 +80,48 @@ export class TccDBusControllerPreload {
     }
 
     async getFanDataCPU(): Promise<FanData> {
+        let fandataString: string;
+        let fandata: FanData;
         try {
-            return await this.interface.GetFanDataCPU();
+            fandataString = await this.interface.GetFanDataCPU();
+            fandata = JSON.parse(fandataString);
         } catch (err) {
-            return new FanData();
+            console.log(fandataString);
+            fandata = new FanData();
         }
+        return new Promise<FanData>((resolve, reject) => {
+            resolve(fandata);
+        });
     }
 
     async getFanDataGPU1(): Promise<FanData> {
+        let fandataString: string;
+        let fandata: FanData;
         try {
-            return await this.interface.GetFanDataGPU1();
+            fandataString = await this.interface.GetFanDataGPU1();
+            fandata = JSON.parse(fandataString);
         } catch (err) {
-            return new FanData();
+            console.log(fandataString);
+            fandata = new FanData();
         }
+        return new Promise<FanData>((resolve, reject) => {
+            resolve(fandata);
+        });
     }
 
     async getFanDataGPU2(): Promise<FanData> {
+        let fandataString: string;
+        let fandata: FanData;
         try {
-            return await this.interface.GetFanDataGPU2();
+            fandataString = await this.interface.GetFanDataGPU2();
+            fandata = JSON.parse(fandataString);
         } catch (err) {
-            return new FanData();
+            console.log(fandataString);
+            fandata = new FanData();
         }
+        return new Promise<FanData>((resolve, reject) => {
+            resolve(fandata);
+        });
     }
 
     async webcamSWAvailable(): Promise<boolean> {

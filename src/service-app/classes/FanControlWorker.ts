@@ -189,8 +189,7 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 currentSpeed = fanSpeedsRead[i];
             }
-            this.fanData[i].temp.set(fanTimestamps[i], fanTemps[i]);
-            this.fanData[i].speed.set(fanTimestamps[i], currentSpeed);
+            this.fanData[i] = new FanData(fanTimestamps[i], currentSpeed, fanTemps[i]);
             this.tccd.dbusData.fans[i] = JSON.stringify(this.fanData[i]);
         }
     }

@@ -111,13 +111,19 @@ export class TccDBusClientService implements OnDestroy {
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);
-
-    const fanData: IDBusFanData = {
-      cpu: await this.tccDBusInterface.getFanDataCPU(),
-      gpu1: await this.tccDBusInterface.getFanDataGPU1(),
-      gpu2: await this.tccDBusInterface.getFanDataGPU2()
-    };
-    this.fanData.next(fanData);
+    try 
+    {
+        const fanData: IDBusFanData = {
+            cpu: await this.tccDBusInterface.getFanDataCPU(),
+            gpu1: await this.tccDBusInterface.getFanDataGPU1(),
+            gpu2: await this.tccDBusInterface.getFanDataGPU2()
+          };
+          this.fanData.next(fanData);
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 
     this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
     this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());

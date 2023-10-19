@@ -1,6 +1,5 @@
 //import { AquarisClientAPI } from "src/e-app/AquarisAPI";
 import { EventEmitter } from 'node:events';
-import { FanData } from "src/common/models/IFanData";
 import { IDrive } from "../../common/models/IDrive"; 
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
 import { ITccProfile } from "src/common/models/TccProfile";
@@ -23,7 +22,6 @@ export interface IPC extends EventEmitter {
     getShouldUseDarkColors: () => Promise<boolean>,
     tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
-    nodeRequire: (string) => any,
   }
   
 
@@ -33,9 +31,9 @@ export interface IPC extends EventEmitter {
     disconnect: () => Promise<boolean>,
     TuxedoWmiAvailable: () => Promise<boolean>,
     TccdVersion: () => Promise<string>,
-    GetFanDataCPU: () => Promise<FanData>,
-    GetFanDataGPU1: () => Promise<FanData>,
-    GetFanDataGPU2: () => Promise<FanData>,
+    GetFanDataCPU: () => Promise<string>,
+    GetFanDataGPU1: () => Promise<string>,
+    GetFanDataGPU2: () => Promise<string>,
     WebcamSWAvailable: () => Promise<boolean>,
     GetWebcamSWStatus: () => Promise<boolean>,
     GetForceYUV420OutputSwitchAvailable: () => Promise<boolean>,
@@ -95,6 +93,10 @@ export interface WEBCAM
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
     readV4l2Names: (path: string) => string[][],  
 }
+export interface STUFF
+{
+    logStuff: (stuff : string) => void,
+}
 
 export interface CPU 
 {
@@ -149,6 +151,7 @@ export interface COMP
       config: CONFIG,
       state: STATE,
       comp: COMP,
+      stuff: STUFF,
     }
   }
   

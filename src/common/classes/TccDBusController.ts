@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as dbus from 'dbus-next';
-import { FanData } from '../../common/models/IFanData';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 
 export class TccDBusController {
@@ -67,28 +66,16 @@ export class TccDBusController {
         }
     }
 
-    async getFanDataCPU(): Promise<FanData> {
-        try {
-            return await JSON.parse(this.interface.GetFanDataCPUJSON());
-        } catch (err) {
-            return new FanData();
-        }
+    async getFanDataCPU(): Promise<string> {
+        return this.interface.GetFanDataCPUJSON();
     }
 
-    async getFanDataGPU1(): Promise<FanData> {
-        try {
-            return await JSON.parse(this.interface.GetFanDataGPU1JSON());
-        } catch (err) {
-            return new FanData();
-        }
+    async getFanDataGPU1(): Promise<string> {
+        return this.interface.GetFanDataGPU1JSON();
     }
 
-    async getFanDataGPU2(): Promise<FanData> {
-        try {
-            return await JSON.parse(this.interface.GetFanDataGPU2JSON());
-        } catch (err) {
-            return new FanData();
-        }
+    async getFanDataGPU2(): Promise<string> {
+        return this.interface.GetFanDataGPU2JSON();
     }
 
     async webcamSWAvailable(): Promise<boolean> {

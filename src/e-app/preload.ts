@@ -3,7 +3,7 @@ import { ITccSettings } from "src/common/models/TccSettings";
 import { WebcamPreset } from "src/common/models/TccWebcamSettings";
 //import { aquarisAPIHandle, AquarisClientAPI } from "./AquarisAPI"
 
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld(
   'ipc',
@@ -34,43 +34,40 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'dbus',
     {
-        init: () => {ipcRenderer.invoke('init-dbus');},
-        disconnect: () => {ipcRenderer.invoke('disconnect-dbus');},
-        TuxedoWmiAvailable: () => {ipcRenderer.invoke('tuxedo-wmi-available-dbus');},
-        TccdVersion: () => {ipcRenderer.invoke('tccd-version-dbus');},
-        GetFanDataCPU: () => {ipcRenderer.invoke('get-fan-data-cpu-dbus');},
-        GetFanDataGPU1: () => {ipcRenderer.invoke('get-fan-data-gpu1-dbus');},
-        GetFanDataGPU2: () => {ipcRenderer.invoke('get-fan-data-gpu2-dbus');},
-        WebcamSWAvailable: () => {ipcRenderer.invoke('webcam-sw-available-dbus');},
-        GetWebcamSWStatus: () => {ipcRenderer.invoke('get-webcam-sw-status-dbus');},
-        GetForceYUV420OutputSwitchAvailable: () => {ipcRenderer.invoke('get-force-yub420-output-switch-available-dbus');},
-        ConsumeModeReapplyPending: () => {ipcRenderer.invoke('consume-mode-reapply-pending-dbus');},
-        GetActiveProfileJSON: () => {ipcRenderer.invoke('get-active-profile-json-dbus');},
-        SetTempProfile: (profileName) => {ipcRenderer.invoke('set-temp-profile-dbus',profileName);},
-        SetTempProfileById: (profileId) => {ipcRenderer.invoke('set-temp-profile-by-id-dbus',profileId);},
-        GetProfilesJSON: () => {ipcRenderer.invoke('get-profiles-json-dbus');},
-        GetCustomProfilesJSON: () => {ipcRenderer.invoke('get-custom-profiles-json-dbus');},
-        GetDefaultProfilesJSON: () => {ipcRenderer.invoke('get-default-profiles-json-dbus');},
-        GetDefaultValuesProfileJSON: () => {ipcRenderer.invoke('get-default-values-profile-json-dbus');},
-        GetSettingsJSON: () => {ipcRenderer.invoke('get-json-settings-dbus');},
-        ODMProfilesAvailable: () => {ipcRenderer.invoke('odm-profiles-available-dbus');},
-        ODMPowerLimitsJSON: () => {ipcRenderer.invoke('odm-power-limits-available-dbus');},
-        GetKeyboardBacklightCapabilitiesJSON: () => {ipcRenderer.invoke('get-keyboard-backlight-capabilities-json-dbus');},
-        GetKeyboardBacklightStatesJSON: () => {ipcRenderer.invoke('get-keyboard-backlight-states-json-dbus');},
-        SetKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON) => {ipcRenderer.invoke('set-keyboard-backlight-states-json-dbus', keyboardBacklightStatesJSON);},
-        GetFansMinSpeed: () => {ipcRenderer.invoke('get-fans-min-speed-dbus');},
-        GetFansOffAvailable: () => {ipcRenderer.invoke('get-fans-off-available-dbus');},
-        GetChargingProfilesAvailable: () => {ipcRenderer.invoke('get-charging-profiles-available-dbus');},
-        GetCurrentChargingProfile: () => {ipcRenderer.invoke('get-current-charging-profile-dbus');},
-        SetChargingProfile: (profileDescriptor) => {ipcRenderer.invoke('set-charging-profile-dbus', profileDescriptor);},
-        GetChargingPrioritiesAvailable: () => {ipcRenderer.invoke('get-charging-priorities-available-dbus');},
-        GetCurrentChargingPriority: () => {ipcRenderer.invoke('get-current-charging-priority-dbus');},
-        SetChargingPriority: (priorityDescriptor) => {ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor);},
-    
-        displayBrightnessNotSupportedGnome: () => {ipcRenderer.sendSync('get-display-brightness-not-supported-sync').data},
-        setDisplayBrightnessGnome: (valuePercent: number) => {ipcRenderer.invoke('set-display-brightness-gnome',valuePercent)},
-        
-    
+        init: () => ipcRenderer.invoke('init-dbus'),
+        disconnect: () => ipcRenderer.invoke('disconnect-dbus'),
+        TuxedoWmiAvailable: () => ipcRenderer.invoke('tuxedo-wmi-available-dbus'),
+        TccdVersion: () => ipcRenderer.invoke('tccd-version-dbus'),
+        GetFanDataCPU: () => ipcRenderer.invoke('get-fan-data-cpu-dbus'),
+        GetFanDataGPU1: () => ipcRenderer.invoke('get-fan-data-gpu1-dbus'),
+        GetFanDataGPU2: () => ipcRenderer.invoke('get-fan-data-gpu2-dbus'),
+        WebcamSWAvailable: () => ipcRenderer.invoke('webcam-sw-available-dbus'),
+        GetWebcamSWStatus: () => ipcRenderer.invoke('get-webcam-sw-status-dbus'),
+        GetForceYUV420OutputSwitchAvailable: () => ipcRenderer.invoke('get-force-yub420-output-switch-available-dbus'),
+        ConsumeModeReapplyPending: () => ipcRenderer.invoke('consume-mode-reapply-pending-dbus'),
+        GetActiveProfileJSON: () => ipcRenderer.invoke('get-active-profile-json-dbus'),
+        SetTempProfile: (profileName) => ipcRenderer.invoke('set-temp-profile-dbus',profileName),
+        SetTempProfileById: (profileId) => ipcRenderer.invoke('set-temp-profile-by-id-dbus',profileId),
+        GetProfilesJSON: () => ipcRenderer.invoke('get-profiles-json-dbus'),
+        GetCustomProfilesJSON: () => ipcRenderer.invoke('get-custom-profiles-json-dbus'),
+        GetDefaultProfilesJSON: () => ipcRenderer.invoke('get-default-profiles-json-dbus'),
+        GetDefaultValuesProfileJSON: () => ipcRenderer.invoke('get-default-values-profile-json-dbus'),
+        GetSettingsJSON: () => ipcRenderer.invoke('get-json-settings-dbus'),
+        ODMProfilesAvailable: () => ipcRenderer.invoke('odm-profiles-available-dbus'),
+        ODMPowerLimitsJSON: () => ipcRenderer.invoke('odm-power-limits-available-dbus'),
+        GetKeyboardBacklightCapabilitiesJSON: () => ipcRenderer.invoke('get-keyboard-backlight-capabilities-json-dbus'),
+        GetKeyboardBacklightStatesJSON: () => ipcRenderer.invoke('get-keyboard-backlight-states-json-dbus'),
+        SetKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON) => ipcRenderer.invoke('set-keyboard-backlight-states-json-dbus', keyboardBacklightStatesJSON),
+        GetFansMinSpeed: () => ipcRenderer.invoke('get-fans-min-speed-dbus'),
+        GetFansOffAvailable: () => ipcRenderer.invoke('get-fans-off-available-dbus'),
+        GetChargingProfilesAvailable: () => ipcRenderer.invoke('get-charging-profiles-available-dbus'),
+        GetCurrentChargingProfile: () => ipcRenderer.invoke('get-current-charging-profile-dbus'),
+        SetChargingProfile: (profileDescriptor) => ipcRenderer.invoke('set-charging-profile-dbus', profileDescriptor),
+        GetChargingPrioritiesAvailable: () => ipcRenderer.invoke('get-charging-priorities-available-dbus'),
+        GetCurrentChargingPriority: () => ipcRenderer.invoke('get-current-charging-priority-dbus'),
+        SetChargingPriority: (priorityDescriptor) => ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor),   
+        displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
+        setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
     }
 );
 
@@ -108,7 +105,7 @@ contextBridge.exposeInMainWorld(
     'https',
     {
         getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
-        getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync')
+        getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync'),
     }
 );
 
@@ -119,10 +116,10 @@ contextBridge.exposeInMainWorld(
         pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => ipcRenderer.send('config-pkexec-write-custom-profiles',customProfiles),
         pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => ipcRenderer.invoke('config-pkexec-write-custom-profiles-async',customProfiles),
         pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[])  => ipcRenderer.invoke('config-pkexec-write-config-async',settings,customProfiles),
-        getDefaultFanProfiles: () => ipcRenderer.send('config-get-default-fan-profiles'),
-        copyProfilesSync: (profiles: ITccProfile[]) => ipcRenderer.send('config-copy-profiles-sync', profiles),
-        copyProfileSync: (profile: ITccProfile) => ipcRenderer.send('config-copy-profile-sync', profile),
-        copySettingsSync: (settings: ITccSettings) => ipcRenderer.send('config-copy-settings-sync', settings),
+        getDefaultFanProfiles: () => ipcRenderer.sendSync('config-get-default-fan-profiles'),
+        copyProfilesSync: (profiles: ITccProfile[]) => ipcRenderer.sendSync('config-copy-profiles-sync', profiles),
+        copyProfileSync: (profile: ITccProfile) => ipcRenderer.sendSync('config-copy-profile-sync', profile),
+        copySettingsSync: (settings: ITccSettings) => ipcRenderer.sendSync('config-copy-settings-sync', settings),
     }
 );
 
@@ -136,34 +133,41 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'cpu',
     {
-        getGeneralCpuInfoSync: () => ipcRenderer.send('get-general-cpu-info-sync'),
-        getLogicalCoreInfoSync: () => ipcRenderer.send('get-logical-core-info-sync'),
-        getIntelPstateTurboValueSync: () => ipcRenderer.send('get-intel-pstate-turbo-value-sync'),
+        getGeneralCpuInfoSync: () => ipcRenderer.sendSync('get-general-cpu-info-sync'),
+        getLogicalCoreInfoSync: () => ipcRenderer.sendSync('get-logical-core-info-sync'),
+        getIntelPstateTurboValueSync: () => ipcRenderer.sendSync('get-intel-pstate-turbo-value-sync'),
     }
 );
 
 contextBridge.exposeInMainWorld(
     'backlight',
     {
-        getDisplayBrightnessInfo: () => ipcRenderer.send('get-display-brightness-info-sync'),
+        getDisplayBrightnessInfo: () => ipcRenderer.sendSync('get-display-brightness-info-sync'),
     }
 );
 
 contextBridge.exposeInMainWorld(
     'state',
     {
-        determineState: () => ipcRenderer.send("state-determine-state"),
+        determineState: () => ipcRenderer.sendSync("state-determine-state"),
     }
 );
 
 contextBridge.exposeInMainWorld(
     'comp',
     {
-        getProductSKU: () => ipcRenderer.send('comp-get-product-sku'),
-        getBoardVendor: () => ipcRenderer.send('comp-get-board-vendor'),
-        getChassisVendor: () => ipcRenderer.send('comp-get-chassis-vendor'),
-        getSysVendor: () => ipcRenderer.send('comp-get-sys-vendor'),
-        getScalingDriverAcpiCpuFreq: () => ipcRenderer.send('comp-get-scaling-driver-acpi-cpu-freq'),
+        getProductSKU: () => ipcRenderer.sendSync('comp-get-product-sku'),
+        getBoardVendor: () => ipcRenderer.sendSync('comp-get-board-vendor'),
+        getChassisVendor: () => ipcRenderer.sendSync('comp-get-chassis-vendor'),
+        getSysVendor: () => ipcRenderer.sendSync('comp-get-sys-vendor'),
+        getScalingDriverAcpiCpuFreq: () => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq'),
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'stuff',
+    {
+        logStuff: (stuff) => ipcRenderer.send('log-stuff', stuff),
     }
 );
 

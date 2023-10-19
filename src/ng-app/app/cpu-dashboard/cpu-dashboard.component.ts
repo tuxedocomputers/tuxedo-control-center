@@ -97,10 +97,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       this.fanData = fanData;
       let avgTemp: number;
       let avgSpeed: number;
-      const temp1 = this.fanData.gpu1.temp.data.value;
-      const temp2 = this.fanData.gpu2.temp.data.value;
-      const speed1 = this.fanData.gpu1.speed.data.value;
-      const speed2 = this.fanData.gpu2.speed.data.value;
+      const temp1 = this.fanData.gpu1.temp.data;
+      const temp2 = this.fanData.gpu2.temp.data;
+      const speed1 = this.fanData.gpu1.speed.data;
+      const speed2 = this.fanData.gpu2.speed.data;
       // TODO: Validation should in the future be decided in the data layer
       if (this.validTemp(temp1) && this.validTemp(temp2)) {
         avgTemp = (temp1 + temp2) / 2;
@@ -118,12 +118,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
       this.gaugeGPUSpeed = Math.round(avgSpeed);
 
       // Workaround for gauge not updating (in some cases) when the value is the same
-      this.fanData.cpu.speed.data.value += this.tweakVal;
-      this.fanData.cpu.temp.data.value += this.tweakVal;
-      this.fanData.gpu1.speed.data.value += this.tweakVal;
-      this.fanData.gpu1.temp.data.value += this.tweakVal;
-      this.fanData.gpu2.speed.data.value += this.tweakVal;
-      this.fanData.gpu2.temp.data.value += this.tweakVal;
+      this.fanData.cpu.speed.data += this.tweakVal;
+      this.fanData.cpu.temp.data += this.tweakVal;
+      this.fanData.gpu1.speed.data += this.tweakVal;
+      this.fanData.gpu1.temp.data += this.tweakVal;
+      this.fanData.gpu2.speed.data += this.tweakVal;
+      this.fanData.gpu2.temp.data += this.tweakVal;
       if (this.tweakVal === 0) {
         this.tweakVal = 0.0001;
       } else {

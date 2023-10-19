@@ -313,6 +313,8 @@ function quitCurrentTccSession() {
 ########################################################
 */
 
+
+// TODO might be the source of "unhandled promise rejection" error message I keep getting in console
 async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
     let result = [];
     if (!await dbus.dbusAvailable()) return [];
@@ -342,7 +344,7 @@ async function getActiveProfile(dbus: TccDBusController): Promise<TccProfile> {
         result = JSON.parse(await dbus.getActiveProfileJSON());
     } catch {
     }
-    return result;
+    return result; 
 }
 
 /* 
@@ -377,7 +379,10 @@ async function createTccWindow(langId: string, module?: string) {
         },
         show: false
     });
-
+    // TODO remove debugging code again
+    // tccWindow.webContents.on ("ipc-message-sync", (event, channel, args) => {
+    //     console.log(channel);
+    // });
     // Hide menu bar
     tccWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
@@ -495,34 +500,46 @@ async function createWebcamPreview(langId: string, arg: any) {
 ################# IPC Backend for TCC API ########################
 ##################################################################
 */
+
+// logging channel name of all ipcRenderer.Send events 
+// https://github.com/ungoldman/electron-ipc-log/blob/master/index.js
+// var oldOn = ipcMain.on;
+// ipcMain.on = function (channel, event, ...data)
+// {
+//     console.log(channel);
+//     if(channel === "log-stuff")
+//     console.log(data);
+//     return oldOn.apply(ipcMain, arguments)
+// }
+
 import { determineState } from '../common/classes/StateUtils';
-ipcMain.on("state-determine-state",() =>
+ipcMain.on("state-determine-state",(event) =>
 {
-    return determineState();
+    event.returnValue = determineState();
 });
 
 import { DMIController } from '../common/classes/DMIController';
 const dmi = new DMIController('/sys/class/dmi/id');
 
-ipcMain.on("comp-get-product-sku",() =>
+ipcMain.on("comp-get-product-sku",(event) =>
 {
-    return dmi.productSKU.readValueNT();
+    event.returnValue = dmi.productSKU.readValueNT();
 });
-ipcMain.on("comp-get-board-vendor",() =>
+ipcMain.on("comp-get-board-vendor",(event) =>
 {
-    return dmi.boardVendor.readValueNT();
+    event.returnValue = dmi.boardVendor.readValueNT();
 });
-ipcMain.on("comp-get-chassis-vendor",() =>
+ipcMain.on("comp-get-chassis-vendor",(event) =>
 {
-    return dmi.chassisVendor.readValueNT();
+    event.returnValue = dmi.chassisVendor.readValueNT();
 });
-ipcMain.on("comp-get-sys-vendor",() =>
+ipcMain.on("comp-get-sys-vendor",(event) =>
 {
-    return dmi.sysVendor.readValueNT();
+    event.returnValue = dmi.sysVendor.readValueNT();
 });
-ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",() =>
+ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event) =>
 {
-    return ScalingDriver.acpi_cpufreq;
+    event.returnValue = ScalingDriver.acpi_cpufreq;
 });
 
 
@@ -579,21 +596,21 @@ let webcamConfigHandler: ConfigHandler = new ConfigHandler(
         ipcMain.on('webcam-read-v4l2-names', (event, path: string) => {
             if (path)
             {
-                return webcamConfigHandler.readV4l2Names(path);
+                event.returnValue = webcamConfigHandler.readV4l2Names(path);
             }
             else
             {
-                return webcamConfigHandler.readV4l2Names();
+                event.returnValue = webcamConfigHandler.readV4l2Names();
             }
         });
 
         
         ipcMain.on('webcam-read-settings', (event ) => {
-            return webcamConfigHandler.readWebcamSettings()
+            event.returnValue = webcamConfigHandler.readWebcamSettings()
         });
 
 
-        ipcMain.on('webcam-pkexec-write-config-async', (event, webcamSettings: WebcamPreset[]) => {
+        ipcMain.handle('webcam-pkexec-write-config-async', (event, webcamSettings: WebcamPreset[]) => {
             return new Promise<boolean>(resolve => {
                 const tmpWebcamPath = '/tmp/tmptccwebcam';
                 webcamConfigHandler.writeWebcamSettings(webcamSettings, tmpWebcamPath);
@@ -627,7 +644,7 @@ let webcamConfigHandler: ConfigHandler = new ConfigHandler(
 let systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
 
 ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
-    return systeminfosURL;
+    event.returnValue = systeminfosURL;
 });
 
 ipcMain.handle('utils-get-systeminfos', async (event, arg) => {
@@ -695,7 +712,7 @@ ipcMain.handle('fs-read-text-file', async (event, filePath) => {
 });
 
 ipcMain.on('fs-file-exists-sync', (event, filePath) => {
-    return fs.existsSync(filePath);
+    event.returnValue = fs.existsSync(filePath);
 });
 
 
@@ -741,8 +758,7 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
     } catch (err) {
       console.log(err);
     }
-
-    return cpuInfo;
+    event.returnValue = cpuInfo;
   });
 
 
@@ -777,11 +793,11 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
         console.log(err);
       }
     }
-    return coreInfoList;
+    event.returnValue = coreInfoList;
   });
 
   ipcMain.on('get-intel-pstate-turbo-value-sync', (event) => {
-    return cpu.intelPstate.noTurbo.readValueNT()
+    event.returnValue = cpu.intelPstate.noTurbo.readValueNT()
   });
 
   // #####   Backend for sys-fs service backlight stuff ########
@@ -809,7 +825,7 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
         console.log(err);
       }
     }
-    return infoArray;
+    event.returnValue = infoArray;
   });
 
 //########################
@@ -911,22 +927,23 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
 
 
 ipcMain.on('config-copy-profiles-sync', (event, profiles: ITccProfile[]) => {
-    return config.copyConfig<ITccProfile[]>(profiles)
+    event.returnValue = config.copyConfig<ITccProfile[]>(profiles);
 });
 
 ipcMain.on('config-copy-profile-sync', (event, profile: ITccProfile) => {
-    return config.copyConfig<ITccProfile>(profile)
+    event.returnValue = config.copyConfig<ITccProfile>(profile);
 });
 
 ipcMain.on('config-copy-settings-sync', (event, settings: ITccSettings) => {
-    return config.copyConfig<ITccSettings>(settings)
+    event.returnValue = config.copyConfig<ITccSettings>(settings);
 });
 
 ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccProfile[]) => {
-    return pkexecWriteCustomProfiles(customProfiles);
+    event.returnValue = pkexecWriteCustomProfiles(customProfiles);
     
 });
 
+// TODO
 ipcMain.handle('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
    return pkexecWriteCustomProfilesAsync(customProfiles);
 });
@@ -936,7 +953,7 @@ ipcMain.handle('config-pkexec-write-config-async', (event, settings: ITccSetting
 });
 
 ipcMain.on('config-get-default-fan-profiles', (event) => {
-return config.getDefaultFanProfiles();
+event.returnValue = config.getDefaultFanProfiles();
 });
 
 
@@ -944,7 +961,7 @@ return config.getDefaultFanProfiles();
 
 
 ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
-    return systeminfosURL;
+    event.returnValue = systeminfosURL;
 });
 
 // TODO exec cmd has to be replaced completely by specific commands.###########
@@ -1009,15 +1026,6 @@ ipcMain.on('minimize-window', () => {
     tccWindow.minimize();
 })
 
-// TODO might not be needed anymore, I think it was just a hacky fix for something that I resolved differently
-ipcMain.on('node-require', (event, requiree) => {
-    try {
-        event.returnValue = { data: require(requiree), error: undefined };
-    } catch (err) {
-        event.returnValue = { data: undefined, error: err };
-    }
-});
-
 ipcMain.handle('get-app-version', async (event, arg) => {
     return new Promise<string>((resolve, reject) => {
         let requestedInfo = app.getVersion();
@@ -1078,12 +1086,15 @@ ipcMain.on('trigger-language-change', (event, arg) => {
 ###############   Dbus Communication API ####################
 */
 
+// TODO, we already have dbus controller controlled by main process, if anything actually tries to call
+// this function here, we should remove that
 ipcMain.handle('init-dbus', async (event, arg) => {
     return new Promise<boolean>((resolve, reject) => {
         resolve(tccDBus.init());
     });
 });
 
+// same as init
 ipcMain.handle('disconnect-dbus', async (event, arg) => {
     return new Promise<void>((resolve, reject) => {
         resolve(tccDBus.disconnect());
@@ -1102,20 +1113,21 @@ ipcMain.handle('tccd-version-dbus', async (event, arg) => {
     });
 });
 
-ipcMain.handle('get-fan-data-cpu-dbus', async (event, arg) => {
-    return new Promise<FanData>((resolve, reject) => {
+
+ipcMain.handle('get-fan-data-cpu-dbus', async (event) => {
+    return new Promise<string>((resolve, reject) => {
         resolve(tccDBus.getFanDataCPU());
     });
 });
 
-ipcMain.handle('get-fan-data-gpu1-dbus', async (event, arg) => {
-    return new Promise<FanData>((resolve, reject) => {
+ipcMain.handle('get-fan-data-gpu1-dbus', async (event) => {
+    return new Promise<string>((resolve, reject) => {
         resolve(tccDBus.getFanDataGPU1());
     });
 });
 
-ipcMain.handle('get-fan-data-gpu2-dbus', async (event, arg) => {
-    return new Promise<FanData>((resolve, reject) => {
+ipcMain.handle('get-fan-data-gpu2-dbus', async (event) => {
+    return new Promise<string>((resolve, reject) => {
         resolve(tccDBus.getFanDataGPU2());
     });
 });
@@ -1276,82 +1288,84 @@ ipcMain.handle('set-charging-priority-dbus', async (event, priorityDescriptor) =
 let sessionBus: any;
 const dbus = require('dbus-next');
 
-  let observeDisplayBrightness: Observable<number>;
-  let displayBrightnessSubject: Subject<number>;
-  let currentDisplayBrightness: number;
-  let displayBrightnessNotSupported = false;
+let observeDisplayBrightness: Observable<number>;
+let displayBrightnessSubject: Subject<number>;
+let currentDisplayBrightness: number;
+let displayBrightnessNotSupported = false;
 
-  let displayBrightnessGnome: DBusDisplayBrightnessGnome;
+let displayBrightnessGnome: DBusDisplayBrightnessGnome;
 
-  let dbusDriverNames: string[] = [];
+let dbusDriverNames: string[] = [];
 
-    displayBrightnessSubject = new Subject<number>();
-    observeDisplayBrightness = displayBrightnessSubject.asObservable();
+displayBrightnessSubject = new Subject<number>();
+observeDisplayBrightness = displayBrightnessSubject.asObservable();
 
-    try {
-      sessionBus = dbus.sessionBus();
+try {
+    sessionBus = dbus.sessionBus();
+} catch (err) {
+    console.log('dbus.sessionBus() error: ', err);
+    sessionBus = undefined;
+}
 
-    } catch (err) {
-      console.log('dbus.sessionBus() error: ', err);
-      sessionBus = undefined;
+
+initDusDisplayBrightness().then(() => {
+    const driversList: string[] = [];
+    if (displayBrightnessNotSupported === false) {
+    driversList.push(displayBrightnessGnome.getDescriptiveString());
+    }
+    dbusDriverNames = driversList;
+});
+
+async function initDusDisplayBrightness(): Promise<void> {
+return new Promise<void>(async resolve => {
+    if (sessionBus === undefined) {
+    displayBrightnessNotSupported = true;
+    } else {
+    displayBrightnessGnome = new DBusDisplayBrightnessGnome(sessionBus);
+    if (!await displayBrightnessGnome.isAvailable()) {
+        displayBrightnessNotSupported = true;
+        return;
     }
 
-    initDusDisplayBrightness().then(() => {
-      const driversList: string[] = [];
-      if (displayBrightnessNotSupported === false) {
-        driversList.push(displayBrightnessGnome.getDescriptiveString());
-      }
-      dbusDriverNames = driversList;
-    });
-
-  async function initDusDisplayBrightness(): Promise<void> {
-    return new Promise<void>(async resolve => {
-
-      if (this.sessionBus === undefined) {
+    try {
+        const result = await displayBrightnessGnome.getBrightness();
+        currentDisplayBrightness = result;
+        displayBrightnessSubject.next(currentDisplayBrightness);
+    } catch (err) {
         displayBrightnessNotSupported = true;
-      } else {
-        this.displayBrightnessGnome = new DBusDisplayBrightnessGnome(sessionBus);
-        if (!await this.displayBrightnessGnome.isAvailable()) {
-          displayBrightnessNotSupported = true;
-          return;
+        return;
+    }
+
+    displayBrightnessGnome.setOnPropertiesChanged(
+        (value) => {
+        currentDisplayBrightness = value;
+        displayBrightnessSubject.next(currentDisplayBrightness);
         }
+    );
+    }
+    resolve();
+});
+}
 
-        try {
-          const result = await this.displayBrightnessGnome.getBrightness();
-          this.currentDisplayBrightness = result;
-          this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-        } catch (err) {
-          this.displayBrightnessNotSupported = true;
-          return;
-        }
+async function setDisplayBrightness(valuePercent: number): Promise<void> {
+return displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
+}
 
-        this.displayBrightnessGnome.setOnPropertiesChanged(
-          (value) => {
-            this.currentDisplayBrightness = value;
-            this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-          }
-        );
-      }
-      resolve();
-    });
-  }
-
-  function getDBusDriverNames(): string[] {
-    return this.dbusDriverNames;
-  }
-
-  async function setDisplayBrightness(valuePercent: number): Promise<void> {
-    return this.displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
-  }
-
-  ipcMain.handle('set-display-brightness-gnome', async (event, valuePercent) => {
+ipcMain.handle('set-display-brightness-gnome', async (event, valuePercent) => {
     return new Promise<void>((resolve, reject) => {
         resolve(setDisplayBrightness(valuePercent));
     });
 });
 
+
 ipcMain.on('get-display-brightness-not-supported-sync', (event) => {
-    event.returnValue = { data: currentDisplayBrightness }
+    event.returnValue = currentDisplayBrightness;
+});
+
+
+ipcMain.on('log-stuff', (event,stuff) =>
+{
+    console.log(stuff);
 });
 
 

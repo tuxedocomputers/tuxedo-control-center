@@ -65,7 +65,7 @@ export class CompatibilityService {
     if (boardName === "GMxRGxx") {
       return false;
     }*/
-    return this.tccDbus.tuxedoWmiAvailable.value && this.tccDbus.fanData.value.cpu.temp.data.value > 1;
+    return this.tccDbus.tuxedoWmiAvailable.value && this.tccDbus.fanData.value.cpu.temp.data > 1;
   }
 
   get fanControlCompatibilityMessage(): string {
