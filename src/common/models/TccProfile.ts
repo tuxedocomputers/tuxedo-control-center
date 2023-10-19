@@ -31,6 +31,7 @@ export interface ITccProfile {
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
     odmPowerLimits: ITccODMPowerLimits;
+    nvidiaPowerCTRLProfile: ITccNVIDIAPowerCTRLProfile;
 }
 
 export class TccProfile implements ITccProfile {
@@ -43,6 +44,7 @@ export class TccProfile implements ITccProfile {
     fan: ITccProfileFanControl;
     odmProfile: ITccODMProfile;
     odmPowerLimits: ITccODMPowerLimits;
+    nvidiaPowerCTRLProfile: ITccNVIDIAPowerCTRLProfile;
     public constructor(init: ITccProfile) {
         this.id = init.id;
         this.name = init.name;
@@ -53,6 +55,7 @@ export class TccProfile implements ITccProfile {
         this.fan = JSON.parse(JSON.stringify(init.fan));
         this.odmProfile = JSON.parse(JSON.stringify(init.odmProfile));
         this.odmPowerLimits = JSON.parse(JSON.stringify(init.odmPowerLimits));
+        this.nvidiaPowerCTRLProfile = JSON.parse(JSON.stringify(init.nvidiaPowerCTRLProfile));
     }
 }
 
@@ -94,6 +97,10 @@ interface ITccODMProfile {
 
 interface ITccODMPowerLimits {
     tdpValues: number[];
+}
+
+interface ITccNVIDIAPowerCTRLProfile {
+    ctgp_offset: number;
 }
 
 export function generateProfileId(): string {

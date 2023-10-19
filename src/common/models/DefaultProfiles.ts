@@ -72,7 +72,8 @@ const maxEnergySave: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: 'power_save' },
-    odmPowerLimits: { tdpValues: [5, 10, 15] }
+    odmPowerLimits: { tdpValues: [5, 10, 15] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: 0 }
 };
 
 const silent: ITccProfile = {
@@ -108,7 +109,8 @@ const silent: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: 'power_save' },
-    odmPowerLimits: { tdpValues: [10, 15, 25] }
+    odmPowerLimits: { tdpValues: [10, 15, 25] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: 0 }
 };
 
 const office: ITccProfile = {
@@ -144,7 +146,8 @@ const office: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: 'enthusiast' },
-    odmPowerLimits: { tdpValues: [25, 35, 35] }
+    odmPowerLimits: { tdpValues: [25, 35, 35] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
 };
 
 const highPerformance: ITccProfile = {
@@ -180,7 +183,8 @@ const highPerformance: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: 'overboost' },
-    odmPowerLimits: { tdpValues: [60, 60, 70] }
+    odmPowerLimits: { tdpValues: [60, 60, 70] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: 25 }
 };
 
 export const defaultCustomProfile: ITccProfile = {
@@ -216,7 +220,8 @@ export const defaultCustomProfile: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [] }
+    odmPowerLimits: { tdpValues: [] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
 };
 
 export const defaultMobileCustomProfileTDP: ITccProfile = {
@@ -252,7 +257,8 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [15, 25, 50] }
+    odmPowerLimits: { tdpValues: [15, 25, 50] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
 };
 
 export const defaultMobileCustomProfileCl: ITccProfile = {
@@ -288,7 +294,8 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
         offsetFanspeed: 0
     },
     odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [] }
+    odmPowerLimits: { tdpValues: [] },
+    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
 };
 
 export enum TUXEDODevice {
