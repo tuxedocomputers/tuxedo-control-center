@@ -128,4 +128,16 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             return false;
         }
     }
+
+    /**
+     * Set a callback on changes to value
+     */
+    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => any): Array<fs.FSWatcher> {
+        if (this.readPath == this.writePath) {
+            return [fs.watch(this.readPath, listener)];
+        }
+        else {
+            return [fs.watch(this.readPath, listener), fs.watch(this.readPath, listener)];
+        }
+    }
 }
