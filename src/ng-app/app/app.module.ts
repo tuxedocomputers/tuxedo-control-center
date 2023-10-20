@@ -60,7 +60,7 @@ import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-ov
 import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
 import { InfoComponent } from './info/info.component';
 
-//import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownModule } from 'ngx-markdown';
 import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 
 import localeDe from '@angular/common/locales/de';
@@ -152,7 +152,7 @@ declare const require;
     MatSlideToggleModule,
     MatTabsModule,
     MatDialogModule,
-    //MarkdownModule.forRoot(),
+    MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),
     //ChartsModule,
