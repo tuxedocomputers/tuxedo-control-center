@@ -390,6 +390,14 @@ export class TccDBusController {
         }
     }
 
+    async getNVIDIAPowerCTRLAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.GetNVIDIAPowerCTRLAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function) {
         this.interface.on('ModeReapplyPendingChanged', callback_function);
     }

@@ -109,6 +109,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
     private fansOffAvailableSubscription: Subscription = new Subscription();
+
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
     public stateInputArray: IStateInfo[];
@@ -131,6 +132,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public fansMinSpeed = 0;
     public fansOffAvailable = true;
+
+    public nvidiaPowerCTRLAvailable: boolean = false;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
@@ -212,6 +215,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.refreshRateSupported.subscribe(nextrefreshRateSupported => {
             if (nextrefreshRateSupported !== this.refreshRateSupported) {
                 this.refreshRateSupported = nextrefreshRateSupported;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLAvailable.subscribe(nextNVIDIAPowerCTRLAvailable => {
+            if (nextNVIDIAPowerCTRLAvailable !== this.nvidiaPowerCTRLAvailable) {
+                this.nvidiaPowerCTRLAvailable = nextNVIDIAPowerCTRLAvailable;
             }
         }));
 

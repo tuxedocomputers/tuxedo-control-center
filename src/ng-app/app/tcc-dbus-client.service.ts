@@ -87,6 +87,8 @@ export class TccDBusClientService implements OnDestroy {
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
 
+  public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
+
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -244,6 +246,8 @@ export class TccDBusClientService implements OnDestroy {
 
     this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
     this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
+
+    this.nvidiaPowerCTRLAvailable.next(await this.tccDBusInterface.getNVIDIAPowerCTRLAvailable());
   }
 
   public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
