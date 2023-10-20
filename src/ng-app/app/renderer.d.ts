@@ -11,13 +11,13 @@ export interface IPC extends EventEmitter {
     // TODO probably have to modify this somehow
     send: (channel: string, args) => Promise<IPCReturnValue>,
     invoke: (channel: string, args) => Promise<IPCReturnValue>,
-    getAppVersion: () => Promise<IPCReturnValue>,
+    getAppVersion: () => Promise<string>,
     closeApp: () => void,
     closeWindow: () => void,
     minimizeWindow: () => void,
     getCWD: () => Promise<IPCReturnValue>,
     getCWDSync: () => string,
-    getProcessVersions: () => Promise<IPCReturnValue>,
+    getProcessVersions: () => Promise<IProcessVersions>,
     getBrightnessMode: () => Promise<'light' | 'dark' | 'system'>,
     getShouldUseDarkColors: () => Promise<boolean>,
     tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
@@ -161,4 +161,11 @@ export interface COMP
     // TODO give matching types
     data;
     error;
+  }
+
+  export interface IProcessVersions
+  {
+    node: string;
+    electron: string;
+    chrome: string;
   }

@@ -36,15 +36,18 @@ export class InfoComponent implements OnInit {
     private utils: UtilsService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.init();
+  }
 
-    this.appVersion = await this.utils.getAppVersion();
-    let processVersions = await this.utils.getProcessVersions();
+  private async init()
+  {
+    this.appVersion = await window.ipc.getAppVersion();
+    let processVersions = await window.ipc.getProcessVersions();
     this.nodeVersion = processVersions.node;
     this.electronVersion = processVersions.electron;
     this.chromeVersion = processVersions.chrome;
     this.angularVersion = VERSION.full;
-
   }
 
   public changeLanguage(languageId: string) {

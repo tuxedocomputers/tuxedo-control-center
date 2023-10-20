@@ -162,18 +162,6 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
   }
 
-  public async getAppVersion(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        window.ipc.getAppVersion().then((result) => {
-          if (result) {
-            resolve(result.data);
-          } else {
-            reject(result.data);
-          }
-        });
-      });
-  }
-
   public quit()
   {
     window.ipc.closeApp(); 
@@ -207,20 +195,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
         return window.ipc.getCWDSync();
    }
 
-  public async getProcessVersions(): Promise<NodeJS.ProcessVersions> {
-    return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        window.ipc.getProcessVersions().then((result) => {
-          if (result) {
-            resolve(result.data);
-          } else {
-            reject(result.data);
-          }
-        });
-      });
-  }
-
-
-  public changeLanguage(languageId: string) {
+   public changeLanguage(languageId: string) {
     window.ipc.send('trigger-language-change', languageId);
   }
 
