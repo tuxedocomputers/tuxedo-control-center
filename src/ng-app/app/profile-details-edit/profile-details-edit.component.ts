@@ -31,6 +31,7 @@ import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
+import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -139,6 +140,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
     @ViewChild('inputName') inputName: MatInput;
+
+    @ViewChild(FanSliderComponent)
+    private sliderComponent: FanSliderComponent;
 
     constructor(
         private utils: UtilsService,
@@ -257,24 +261,34 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput() {
+        const customFanCurveValues = this.sliderComponent.getFanFormGroupValues();
+        this.profileFormGroup
+            .get("fan")
+            .get("customFanCurve")
+            .patchValue(customFanCurveValues);
+
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
-
-        const defaultProfile = this.config.getDefaultValuesProfile();
 
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
             const newProfileStateAssignments = this.selectStateControl.value;
-            this.config.writeProfile(this.viewProfile.id, formProfileData, newProfileStateAssignments).then(success => {
-                if (success) {
-                    this.profileFormGroup.markAsPristine();
-                    this.selectStateControl.markAsPristine();
-                    this.profile = formProfileData;
-                }
-                this.profileFormProgress = false;
-                this.utils.pageDisabled = false;
-            });
+            this.config
+                .writeProfile(
+                    this.viewProfile.id,
+                    formProfileData,
+                    newProfileStateAssignments
+                )
+                .then((success) => {
+                    if (success) {
+                        this.profileFormGroup.markAsPristine();
+                        this.selectStateControl.markAsPristine();
+                        this.profile = formProfileData;
+                    }
+                    this.profileFormProgress = false;
+                    this.utils.pageDisabled = false;
+                });
         } else {
             this.profileFormProgress = false;
             this.utils.pageDisabled = false;
@@ -283,14 +297,23 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
-        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
+        this.selectStateControl.reset(
+            this.state.getProfileStates(this.viewProfile.id)
+        );
         // Also restore brightness to active profile if applicable
         if (!this.dbus.displayBrightnessNotSupported) {
             const activeProfile = this.state.getActiveProfile();
             if (activeProfile.display.useBrightness) {
-                this.dbus.setDisplayBrightness(activeProfile.display.brightness);
+                this.dbus.setDisplayBrightness(
+                    activeProfile.display.brightness
+                );
             }
         }
+
+        const customFanCurveValues: AbstractControl = this.profileFormGroup
+            .get("fan")
+            .get("customFanCurve");
+        this.sliderComponent.patchFanFormGroup(customFanCurveValues);
     }
 
     private createProfileFormGroup(profile: ITccProfile) {
@@ -742,8 +765,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return valueChanged;
     }
 
+    setVerticalSliderDirty() {
+        this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
+    }
+
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
-
 }

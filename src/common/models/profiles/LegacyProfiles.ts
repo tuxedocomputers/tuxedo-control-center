@@ -1,4 +1,5 @@
 import { LegacyDefaultProfileIDs } from "../DefaultProfiles";
+import { customFanPreset } from "../TccFanTable";
 import { ITccProfile } from "../TccProfile";
 
 export const defaultProfiles: ITccProfile[] = [
@@ -33,7 +34,8 @@ export const defaultProfiles: ITccProfile[] = [
             fanProfile: 'Balanced',
             minimumFanspeed: 0,
             maximumFanspeed: 100,
-            offsetFanspeed: 0
+            offsetFanspeed: 0,
+            customFanCurve: customFanPreset,
         },
         odmProfile: { name: undefined },
         odmPowerLimits: { tdpValues: [] }
@@ -69,7 +71,8 @@ export const defaultProfiles: ITccProfile[] = [
             fanProfile: 'Quiet',
             minimumFanspeed: 0,
             maximumFanspeed: 100,
-            offsetFanspeed: 0
+            offsetFanspeed: 0,
+            customFanCurve: customFanPreset,
         },
         odmProfile: { name: undefined },
         odmPowerLimits: { tdpValues: [] }
@@ -105,7 +108,8 @@ export const defaultProfiles: ITccProfile[] = [
             fanProfile: 'Silent',
             minimumFanspeed: 0,
             maximumFanspeed: 100,
-            offsetFanspeed: 0
+            offsetFanspeed: 0,
+            customFanCurve: customFanPreset,
         },
         odmProfile: { name: undefined },
         odmPowerLimits: { tdpValues: [] }
@@ -143,7 +147,8 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
         maximumFanspeed: 100,
-        offsetFanspeed: 0
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] }

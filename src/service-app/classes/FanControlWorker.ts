@@ -18,7 +18,6 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { DMIController } from '../../common/classes/DMIController';
 
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
@@ -50,40 +49,110 @@ export class FanControlWorker extends DaemonWorker {
         this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
     }
 
+    private convertProfile(fanData: any) {
+        const completeFanData = [];
+
+        for (let i = 0; i <= 100; i++) {
+            const temp = i;
+            let speed: number;
+
+            if (i < 30) {
+                speed = fanData[0].speed;
+            } else if (i <= 40) {
+                speed = fanData[1].speed;
+            } else if (i <= 50) {
+                speed = fanData[2].speed;
+            } else if (i <= 60) {
+                speed = fanData[3].speed;
+            } else if (i <= 70) {
+                speed = fanData[4].speed;
+            } else if (i <= 80) {
+                speed = fanData[5].speed;
+            } else {
+                speed = fanData[6].speed;
+            }
+
+            completeFanData.push({ temp, speed });
+        }
+
+        return completeFanData;
+    }
+
+    private getCurrentCustomProfile() {
+        const tableCPUFanProfile = this.convertProfile(
+            this.activeProfile.fan.customFanCurve.tableCPU
+        );
+        const tableGPUFanProfile = this.convertProfile(
+            this.activeProfile.fan.customFanCurve.tableGPU
+        );
+
+        const currentFanProfile = {
+            name: "Custom",
+            tableCPU: tableCPUFanProfile,
+            tableGPU: tableGPUFanProfile,
+        };
+
+        return currentFanProfile;
+    }
+
+    // todo: check if profile changed, checking profile name is not enough
+    private setFanProfileValues() {
+        for (const fanNumber of this.fans.keys()) {
+            if (this.activeProfile.fan.fanProfile == "Custom") {
+                this.fans.get(fanNumber).minimumFanspeed = 0;
+                this.fans.get(fanNumber).maximumFanspeed = 100;
+                this.fans.get(fanNumber).offsetFanspeed = 0;
+
+                const currentFanProfile = this.getCurrentCustomProfile();
+                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
+            }
+
+            if (this.activeProfile.fan.fanProfile != "Custom") {
+                this.fans.get(fanNumber).minimumFanspeed =
+                    this.activeProfile.fan.minimumFanspeed;
+                this.fans.get(fanNumber).maximumFanspeed =
+                    this.activeProfile.fan.maximumFanspeed;
+                this.fans.get(fanNumber).offsetFanspeed =
+                    this.activeProfile.fan.offsetFanspeed;
+
+                const currentFanProfile = this.tccd.getCurrentFanProfile(
+                    this.activeProfile
+                );
+                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
+            }
+        }
+
+        for (const fanNumber of this.fans.keys()) {
+            this.fans.get(fanNumber).fansMinSpeedHWLimit =
+                this.fansMinSpeedHWLimit;
+            this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
+        }
+    }
+
     private initFanControl(): void {
         const nrFans = ioAPI.getNumberFans();
 
         if (this.fans === undefined || this.fans.size !== nrFans) {
             // Map logic to fan number
             this.fans = new Map();
-            if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
-            if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
-            if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+            if (nrFans >= 1) {
+                this.fans.set(1, this.cpuLogic);
+            }
+            if (nrFans >= 2) {
+                this.fans.set(2, this.gpu1Logic);
+            }
+            if (nrFans >= 3) {
+                this.fans.set(3, this.gpu2Logic);
+            }
         }
 
         if (nrFans === 0) {
             return;
         }
 
-        // Update fan logic
-        const currentFanProfile = this.tccd.getCurrentFanProfile(this.activeProfile);
-        for (const fanNumber of this.fans.keys()) {
-            if (this.fans.get(fanNumber).getFanProfile() === undefined ||
-                this.fans.get(fanNumber).getFanProfile().name !== currentFanProfile.name) {
-                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
-            }
-            this.fans.get(fanNumber).minimumFanspeed = this.activeProfile.fan.minimumFanspeed;
-            this.fans.get(fanNumber).maximumFanspeed = this.activeProfile.fan.maximumFanspeed;
-
-            this.fans.get(fanNumber).offsetFanspeed = this.activeProfile.fan.offsetFanspeed;
-        }
-
-        for (const fanNumber of this.fans.keys()) {
-            this.fans.get(fanNumber).fansMinSpeedHWLimit = this.fansMinSpeedHWLimit;
-            this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
-        }
+        this.setFanProfileValues();
     }
-
+    
     public onStart(): void {
         this.initHardwareCapabilities();
         this.initFanControl();

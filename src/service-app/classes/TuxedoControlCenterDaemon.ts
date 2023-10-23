@@ -35,7 +35,7 @@ import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
-import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { ITccFanProfile, customFanPreset } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
 import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
@@ -707,7 +707,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 fanProfile: 'Balanced',
                 minimumFanspeed: 0,
                 maximumFanspeed: 100,
-                offsetFanspeed: 0
+                offsetFanspeed: 0,
+                customFanCurve: customFanPreset,
             };
         } else {
             profile.fan.useControl = true;
