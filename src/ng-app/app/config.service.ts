@@ -75,6 +75,10 @@ export class ConfigService implements OnDestroy {
             this.settings = nextSettings
             this.settingsSubject.next(this.settings);
         }));
+
+        // TODO subscription doesn't work
+        // hmmm maybe I can just make it like in webcam and let main process send a nofitication when there's been changes
+        // and then put that into it?
     }
 
     ngOnDestroy(): void {
