@@ -314,6 +314,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             .get("fan")
             .get("customFanCurve");
         this.sliderComponent.patchFanFormGroup(customFanCurveValues);
+
+        this.overwriteDefaultRefreshRateValue()
     }
 
     private createProfileFormGroup(profile: ITccProfile) {
