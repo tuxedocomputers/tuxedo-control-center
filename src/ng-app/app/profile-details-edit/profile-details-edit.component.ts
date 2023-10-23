@@ -311,6 +311,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             tdpValues: odmTDPValuesArray
         });
 
+        const nvidiaPowerCTRLProfileGroup: FormGroup = this.fb.group(profile.nvidiaPowerCTRLProfile);
+
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
@@ -330,7 +332,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             webcam: webcamGroup,
             fan: fanControlGroup,
             odmProfile: odmProfileGroup,
-            odmPowerLimits: odmPowerLimits
+            odmPowerLimits: odmPowerLimits,
+            nvidiaPowerCTRLProfile: nvidiaPowerCTRLProfileGroup
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);

@@ -697,22 +697,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <h4 i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel" *ngIf="nvidiaPowerCTRLAvailable">NVIDIA Power Control</h4>
 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="nvidiaPowerCTRLAvailable">
-                    <div formGroupName="nvidiaPowerCTRL">
+                    <div formGroupName="nvidiaPowerCTRLProfile">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header i18n="@@cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel">Configurable TGP offset</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value">{{ profileFormGroup.get('nvidiaPowerCTRL').get('cTGPOffset') }} W</content>
+                            <content class="value">{{ profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset') }} W</content>
                             <button mat-icon-button color="primary"
                                 [hidden]="!editProfile"
-                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRL').get('cTGPOffset'), -1, 0, 25));"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), -1, 0, 25));"
                                 (mouseup)="buttonRepeatUp()"
                                 (mouseleave)="buttonRepeatUp()">
                                 <mat-icon>remove</mat-icon>
                             </button>
                             <button mat-icon-button color="primary"
                                 [hidden]="!editProfile"
-                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRL').get('cTGPOffset'), +1, 0, 25));"
+                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), +1, 0, 25));"
                                 (mouseup)="buttonRepeatUp()"
                                 (mouseleave)="buttonRepeatUp()">
                                 <mat-icon>add</mat-icon>
@@ -729,8 +729,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-slider>
                                 <button mat-icon-button
                                     color="primary"
-                                    (click)="profileFormGroup.get('nvidiaPowerCTRL').get('cTGPOffset').reset(0)"
-                                    [hidden]="!profileFormGroup.get('nvidiaPowerCTRL').get('cTGPOffset').dirty">
+                                    (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(0)"
+                                    [hidden]="!profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').dirty">
                                     <mat-icon>undo</mat-icon>
                                 </button>
                             </content>
