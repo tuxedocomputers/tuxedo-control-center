@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { Subscription } from "rxjs";
 import {
     WebcamPreset,
     WebcamDeviceInformation,
@@ -43,7 +42,6 @@ export class WebcamSettingsComponent implements OnInit {
     mediaDeviceStream: MediaStream;
 
     timer: NodeJS.Timeout = null;
-    subscriptions: Subscription = new Subscription();
     mutex = new Mutex();
 
     spinnerActive: boolean = false;
@@ -93,17 +91,6 @@ export class WebcamSettingsComponent implements OnInit {
                 this.webcamFormGroup.getRawValue()
             );
           });
-          /*   const webcamApplyObservable = fromEvent(
-            this.electron.ipcRenderer,
-            "onApplyControls"
-        );
-        this.subscriptions.add(
-            webcamApplyObservable.subscribe(async () => {
-                await this.executeWebcamCtrlsList(
-                    this.webcamFormGroup.getRawValue()
-                );
-            })
-        ); */
 
         window.webcam.onExternalWebcamPreviewClosed(() => {
             this.detachedWebcamWindowActive = false;
@@ -111,32 +98,10 @@ export class WebcamSettingsComponent implements OnInit {
             this.applyPreset(this.webcamFormGroup.getRawValue());
         });
 
-       /*  const webcamWindowObservable = fromEvent(
-            this.electron.ipcRenderer,
-            "onExternalWebcamPreviewClosed"
-        );
-        this.subscriptions.add(
-            webcamWindowObservable.subscribe(() => {
-                this.detachedWebcamWindowActive = false;
-                document.getElementById("hidden").style.display = "flex";
-                this.applyPreset(this.webcamFormGroup.getRawValue());
-            })
-        ); */
-
         window.webcam.onVideoEnded(() => {
             this.handleVideoEnded();
         });
-/* 
-        const videoEndedObservable = fromEvent(
-            this.electron.ipcRenderer,
-            "onVideoEnded"
-        );
-        this.subscriptions.add(
-            videoEndedObservable.subscribe(() => {
-                this.handleVideoEnded();
-            })
-        );
- */
+
         await this.reloadWebcamList();
     }
 
@@ -719,7 +684,6 @@ export class WebcamSettingsComponent implements OnInit {
         let renamed: boolean = false;
         let unknown: boolean = false;
         let renamedKeys: string[] = [];
-
         this.v4l2Renames.forEach((knownRename) => {
             let includedFormGroupKey = knownRename.find((configName) =>
                 formGroupKeys.includes(configName)
@@ -866,7 +830,6 @@ export class WebcamSettingsComponent implements OnInit {
             this.allPresetData = this.allPresetData.filter(
                 (webcamPreset) => webcamPreset.presetName != "Default"
             );
-
             this.allPresetData.forEach((config) => {
                 if (config.webcamId == this.selectedWebcam.id) {
                     this.webcamPresetsCurrentDevice.push(config);
@@ -1369,7 +1332,6 @@ export class WebcamSettingsComponent implements OnInit {
 
     ngOnDestroy() {
         this.stopWebcam();
-        this.subscriptions.unsubscribe();
 
         if (this.detachedWebcamWindowActive) {
             window.webcam.closeWebcamPreview()
