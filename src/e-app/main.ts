@@ -78,7 +78,7 @@ let tccDBus: TccDBusController;
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
-// https://stackoverflow.com/questions/62165555/how-can-i-change-environments-variables-in-electron-between-production-and-stage
+//https://github.com/electron/electron/blob/main/docs/api/app.md#appispackaged-readonly
 let environmentIsProduction = app.isPackaged;
 let profilesHash;
 
