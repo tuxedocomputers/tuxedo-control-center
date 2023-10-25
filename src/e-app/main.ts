@@ -41,7 +41,6 @@ import { IDrive } from '../common/models/IDrive';
 import { ConfigHandler } from '../common/classes/ConfigHandler';
 import { TccPaths } from '../common/classes/TccPaths';
 import { WebcamPreset } from '../common/models/TccWebcamSettings';
-import { environment } from '../ng-app/environments/environment';
 import { CpuController } from '../common/classes/CpuController';
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
 import { ScalingDriver } from '../common/classes/LogicalCpuController';
@@ -79,7 +78,7 @@ let tccDBus: TccDBusController;
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
-
+let environmentIsProduction = process.env.NODE_ENV === 'production';
 let profilesHash;
 
 let powersaveBlockerId = undefined;
@@ -615,7 +614,7 @@ let webcamConfigHandler: ConfigHandler = new ConfigHandler(
                 const tmpWebcamPath = '/tmp/tmptccwebcam';
                 webcamConfigHandler.writeWebcamSettings(webcamSettings, tmpWebcamPath);
                 let tccdExec: string;
-                if (environment.production) {
+                if (environmentIsProduction) {
                     tccdExec = TccPaths.TCCD_EXEC_FILE;
                 } else {
                     tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
@@ -845,7 +844,7 @@ async function pkexecWriteCustomProfilesAsync(newProfileList)
         const tmpProfilesPath = '/tmp/tmptccprofiles';
         config.writeProfiles(newProfileList, tmpProfilesPath);
         let tccdExec: string;
-        if (environment.production) {
+        if (environmentIsProduction) {
             tccdExec = TccPaths.TCCD_EXEC_FILE;
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
@@ -866,7 +865,7 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[])
     const tmpProfilesPath = '/tmp/tmptccprofiles';
     config.writeProfiles(profiles, tmpProfilesPath);
     let tccdExec: string;
-    if (environment.production) {
+    if (environmentIsProduction) {
         tccdExec = TccPaths.TCCD_EXEC_FILE;
     } else {
         tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
@@ -891,7 +890,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
         config.writeProfiles(profiles, tmpProfilesPath);
         config.writeSettings(settings, tmpSettingsPath);
         let tccdExec: string;
-        if (environment.production) {
+        if (environmentIsProduction) {
             tccdExec = TccPaths.TCCD_EXEC_FILE;
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
@@ -916,7 +915,7 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
     config.writeSettings(newSettings, tmpSettingsPath);
     let tccdExec: string;
 
-    if (environment.production) {
+    if (environmentIsProduction) {
         tccdExec = TccPaths.TCCD_EXEC_FILE;
     } else {
         tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
