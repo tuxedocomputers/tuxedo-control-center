@@ -41,9 +41,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
 
         // Register light/dark update from main process
-        const observeBrightnessMode = fromEvent(window.ipc, 'update-brightness-mode');
-        this.subscriptions.add(observeBrightnessMode.subscribe(() => this.utils.updateBrightnessMode()));
-
+        window.ipc.onUpdateBrightnessMode(async () => {
+            this.utils.updateBrightnessMode();
+          });
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
     }

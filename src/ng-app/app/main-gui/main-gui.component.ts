@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { CompatibilityService } from '../compatibility.service';
@@ -35,8 +34,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public profileSelect: string;
     public activeProfileName: string;
-
-    private subscriptions: Subscription = new Subscription();
 
     public useTCCTitleBar = false;
 
@@ -60,7 +57,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.updateLanguageName();
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
-        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
+        // TODO replace this :)
+        //this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
         if (!this.dataLoaded) {
             /*
             this.utils.confirmDialog(
@@ -80,7 +78,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
     }
 
     public buttonExit(): void {

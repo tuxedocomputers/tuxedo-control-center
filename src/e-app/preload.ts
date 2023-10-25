@@ -27,7 +27,9 @@ contextBridge.exposeInMainWorld(
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => ipcRenderer.sendSync(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
     ),
-
+    onUpdateBrightnessMode: (callback) => {
+        ipcRenderer.on('update-brightness-mode', callback);
+    },
   }
 );
 
