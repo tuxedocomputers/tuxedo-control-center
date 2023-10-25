@@ -606,7 +606,7 @@ let webcamConfigHandler: ConfigHandler = new ConfigHandler(
 
         
         ipcMain.on('webcam-read-settings', (event ) => {
-            event.returnValue = webcamConfigHandler.readWebcamSettings()
+            event.returnValue = webcamConfigHandler.readWebcamSettings();
         });
 
 
@@ -620,8 +620,7 @@ let webcamConfigHandler: ConfigHandler = new ConfigHandler(
                 } else {
                     tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
                 }
-        
-                child_process.execFile(
+                child_process.exec(
                     'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath,
                 (err, stdout, stderr) => {
                     if (err) {
@@ -897,7 +896,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        child_process.execFile(
+        child_process.exec(
             'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath, (err, stdout, stderr) => {
             if (err) {
                 resolve(false);

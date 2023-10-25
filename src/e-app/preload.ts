@@ -90,7 +90,7 @@ contextBridge.exposeInMainWorld(
     },
     videoEnded: () => ipcRenderer.send('video-ended'),
     applyControls: () => ipcRenderer.send('apply-controls'),
-    readWebcamSettings: () => ipcRenderer.send('webcam-read-settings'),
+    readWebcamSettings: () => ipcRenderer.sendSync('webcam-read-settings'),
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke('webcam-pkexec-write-config-async', settings),
     readV4l2Names: (path: string) => ipcRenderer.send('config-read-v4l2-names',path),
     }
