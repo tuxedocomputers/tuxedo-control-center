@@ -85,6 +85,9 @@ contextBridge.exposeInMainWorld(
     onVideoEnded: (callback) => {
         ipcRenderer.on('video-ended', callback);
     },
+    onSettingWebcamWithLoading: (callback) => {
+        ipcRenderer.on("setting-webcam-with-loading", callback);
+    },
     videoEnded: () => ipcRenderer.send('video-ended'),
     applyControls: () => ipcRenderer.send('apply-controls'),
     readWebcamSettings: () => ipcRenderer.send('webcam-read-settings'),

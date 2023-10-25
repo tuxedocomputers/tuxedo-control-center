@@ -91,7 +91,8 @@ export interface WEBCAM
     onApplyControls: (callback) => void,
     readWebcamSettings: () => WebcamPreset[],
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
-    readV4l2Names: (path: string) => string[][],  
+    readV4l2Names: (path: string) => string[][], 
+    onSettingWebcamWithLoading: (callback) => void,
 }
 export interface STUFF
 {
