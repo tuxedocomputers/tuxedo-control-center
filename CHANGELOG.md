@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.10] - 2023-10-26
+### Added
+- Support for Polaris/Stellaris AMD Gen5
+
 ## [2.0.9] - 2023-09-22
 ### Added
 - Support for Aura Gen3 (default mobile profile)
