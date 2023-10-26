@@ -67,8 +67,8 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
     // maybe in the future we will put them in a more centralized spot
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
     
-    public formatFrequency(frequency: number): string {
-        return this.utils.formatFrequency(frequency);
+    public formatCpuFrequency(frequency: number): string {
+        return this.utils.formatCpuFrequency(frequency);
     }
     
     public cancel() 

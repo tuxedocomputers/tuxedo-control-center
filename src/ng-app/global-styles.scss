@@ -17,6 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+* {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 .content-container {
     max-width: 900px;
     margin:auto;
@@ -123,6 +131,7 @@
 
 .mat-tooltip {
     font-size: 1.2em !important;
+    text-align: center !important;
 }
 
 .green-slide-toggle {
