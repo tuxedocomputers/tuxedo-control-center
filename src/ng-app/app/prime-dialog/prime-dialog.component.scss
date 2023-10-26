@@ -1,0 +1,46 @@
+*, *.light {
+    background: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+    *, *.dark {
+        background: #252525;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.mat-dialog-title {
+    margin-top: 0;
+}
+
+.mat-dialog-content {
+    flex-grow: 1;
+}
+
+.content {
+    overflow-wrap: break-word;
+}
+
+.action-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+}
+
+button {
+    margin-left: 8px;
+}
+
+.mat-progress-bar {
+    width: 100%;
+    height: 2px;
+    margin-bottom: -2px;
+}

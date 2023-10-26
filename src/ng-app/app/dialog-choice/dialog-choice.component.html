@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
+
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="mat-typography">
     <h3 *ngIf="data.heading">{{ data.heading }}</h3>
@@ -26,6 +27,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{
         data.checkboxNoBotherLabel }}</mat-checkbox>
     <div class="bx--row" *ngFor="let label of data.labelData; let i = index;">
-        <button mat-button (click)="closeDialog(label.name)">{{ label.value }}</button>
+        <button mat-button (click)="closeDialog(label.value)">{{ label.label }}</button>
     </div>
 </mat-dialog-actions>
