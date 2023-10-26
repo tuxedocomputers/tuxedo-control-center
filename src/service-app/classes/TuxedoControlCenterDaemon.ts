@@ -750,6 +750,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
         }
 
+        if (profile.nvidiaPowerCTRLProfile === undefined) {
+            profile.nvidiaPowerCTRLProfile = { cTGPOffset: 0 };
+        }
+
+        if (profile.nvidiaPowerCTRLProfile.cTGPOffset === undefined) {
+            profile.nvidiaPowerCTRLProfile.cTGPOffset = 0;
+        }
+
         return profile;
     }
 

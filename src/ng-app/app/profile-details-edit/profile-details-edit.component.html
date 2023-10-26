@@ -702,7 +702,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <header i18n="@@cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel">Configurable TGP offset</header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value">{{ profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset') }} W</content>
+                            <content class="value">{{ profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').value }} W</content>
                             <button mat-icon-button color="primary"
                                 [hidden]="!editProfile"
                                 (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), -1, 0, 25));"
@@ -729,7 +729,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-slider>
                                 <button mat-icon-button
                                     color="primary"
-                                    (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(0)"
+                                    (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(viewProfile.nvidiaPowerCTRLProfile.cTGPOffset)"
                                     [hidden]="!profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').dirty">
                                     <mat-icon>undo</mat-icon>
                                 </button>

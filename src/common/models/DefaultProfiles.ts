@@ -73,7 +73,7 @@ const maxEnergySave: ITccProfile = {
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [5, 10, 15] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
 };
 
 const silent: ITccProfile = {
@@ -110,7 +110,7 @@ const silent: ITccProfile = {
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [10, 15, 25] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
 };
 
 const office: ITccProfile = {
@@ -147,7 +147,7 @@ const office: ITccProfile = {
     },
     odmProfile: { name: 'enthusiast' },
     odmPowerLimits: { tdpValues: [25, 35, 35] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
 };
 
 const highPerformance: ITccProfile = {
@@ -184,7 +184,7 @@ const highPerformance: ITccProfile = {
     },
     odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: 25 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
 };
 
 export const defaultCustomProfile: ITccProfile = {
@@ -221,7 +221,7 @@ export const defaultCustomProfile: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
 };
 
 export const defaultMobileCustomProfileTDP: ITccProfile = {
@@ -258,7 +258,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [15, 25, 50] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
 };
 
 export const defaultMobileCustomProfileCl: ITccProfile = {
@@ -295,7 +295,7 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { ctgp_offset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
 };
 
 export enum TUXEDODevice {

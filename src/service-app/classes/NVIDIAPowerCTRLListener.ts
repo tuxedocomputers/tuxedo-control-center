@@ -50,6 +50,6 @@ export class NVIDIAPowerCTRLListener {
     }
 
     private applyActiveProfile(): void {
-        this.ctgp_offset_sysfs_prop.writeValue(this.tccd.activeProfile.nvidiaPowerCTRLProfile.ctgp_offset);
+        this.ctgp_offset_sysfs_prop.writeValue(this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset);
     }
 }

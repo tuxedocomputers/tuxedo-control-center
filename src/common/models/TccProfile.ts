@@ -100,7 +100,7 @@ interface ITccODMPowerLimits {
 }
 
 interface ITccNVIDIAPowerCTRLProfile {
-    ctgp_offset: number;
+    cTGPOffset: number;
 }
 
 export function generateProfileId(): string {
