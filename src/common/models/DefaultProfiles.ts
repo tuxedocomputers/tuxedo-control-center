@@ -270,11 +270,13 @@ export enum TUXEDODevice {
     POLARIS1XI02,
     POLARIS1XA03,
     POLARIS1XI03,
+    POLARIS1XA05,
     STELLARIS1XA03,
     STELLARIS1XI03,
     STELLARIS1XI04,
     STEPOL1XA04,
-    STELLARIS1XI05
+    STELLARIS1XI05,
+    STELLARIS1XA05
 };
 
 /*
@@ -295,6 +297,7 @@ deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, h
 deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.POLARIS1XA02, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.POLARIS1XA03, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XA05, [ maxEnergySave, silent, office, highPerformance ]);
 
 deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.STELLARIS1XI04, [ maxEnergySave, silent, office, highPerformance ]);
@@ -302,6 +305,7 @@ deviceProfiles.set(TUXEDODevice.STELLARIS1XI05, [ maxEnergySave, silent, office,
 
 deviceProfiles.set(TUXEDODevice.STELLARIS1XA03, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.STEPOL1XA04, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XA05, [ maxEnergySave, silent, office, highPerformance ]);
 
 
 export const deviceCustomProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
