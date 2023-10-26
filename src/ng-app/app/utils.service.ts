@@ -27,12 +27,13 @@ import * as path from 'path';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
-import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
+import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent, WaitingDialogData } from './dialog-choice/dialog-choice.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
+import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
 
 @Injectable({
   providedIn: 'root'
@@ -95,10 +96,9 @@ export class UtilsService {
       });
   }
 
-
-   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
-   // for selecting existing files
-   // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
+  // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
+  // for selecting existing files
+  // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
   public async openFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
@@ -220,8 +220,12 @@ export class UtilsService {
     });
   }
 
-  public formatFrequency(frequency: number): string {
+  public formatCpuFrequency(frequency: number): string {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
+  }
+
+  public formatGpuFrequency(frequency: number): string {
+    return this.decimalPipe.transform(frequency / 1000, '1.1-1');
   }
 
   public getAppVersion(): string {
@@ -310,12 +314,13 @@ export class UtilsService {
     return result;
   }
 
-  public async choiceDialog(config: ChoiceDialogData): Promise<ConfirmChoiceResult> {
+  public async choiceDialog(config: ChoiceDialogData, disableClose: boolean = false): Promise<ConfirmChoiceResult> {
     const dialogRef = this.dialog.open(DialogChoiceComponent, {
       minWidth: 350,
       maxWidth: 550,
       data: config,
-      autoFocus: false
+      autoFocus: false,
+      disableClose: disableClose
     });
     let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
     if (result === undefined) {
@@ -325,6 +330,22 @@ export class UtilsService {
       };
     }
     return result;
+  }
+
+  public async waitingDialog(
+    config: WaitingDialogData,
+    pkexecSetPrimeSelectAsync: Promise<Boolean>
+  ): Promise<Boolean> {
+    const dialogRef = this.dialog.open(DialogWaitingComponent, {
+      minWidth: 350,
+      maxWidth: 550,
+      data: config,
+      autoFocus: false,
+      disableClose: true,
+    });
+    const status = await pkexecSetPrimeSelectAsync;
+    dialogRef.close();
+    return status;
   }
 
   public async inputTextDialog(config: any) {
