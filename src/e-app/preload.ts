@@ -5,6 +5,8 @@ import { WebcamPreset } from "src/common/models/TccWebcamSettings";
 
 const { contextBridge, ipcRenderer } = require('electron');
 
+let callbacks = [];
+
 contextBridge.exposeInMainWorld(
   'ipc',
   {
@@ -28,7 +30,12 @@ contextBridge.exposeInMainWorld(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
     ),
     onUpdateBrightnessMode: (callback) => {
-        ipcRenderer.on('update-brightness-mode', callback);
+        var channelname = 'update-brightness-mode';
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
     },
   }
 );
@@ -79,16 +86,36 @@ contextBridge.exposeInMainWorld(
     closeWebcamPreview: () => ipcRenderer.send("close-webcam-preview"),
     // https://github.com/electron/electron/issues/21437
     onApplyControls: (callback) => {
-        ipcRenderer.on('apply-controls', callback);
+        var channelname = 'apply-controls';
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
     },
     onExternalWebcamPreviewClosed: (callback) => {
-        ipcRenderer.on('external-webcam-preview-closed', callback);
+        var channelname = 'external-webcam-preview-closed';
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
     },
     onVideoEnded: (callback) => {
-        ipcRenderer.on('video-ended', callback);
+        var channelname = 'video-ended';
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
     },
     onSettingWebcamWithLoading: (callback) => {
-        ipcRenderer.on("setting-webcam-with-loading", callback);
+        var channelname = "setting-webcam-with-loading";
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
     },
     videoEnded: () => ipcRenderer.send('video-ended'),
     applyControls: () => ipcRenderer.send('apply-controls'),
