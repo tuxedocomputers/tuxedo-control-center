@@ -76,10 +76,9 @@ export class FanSliderComponent implements OnInit {
     }
 
     public getFanFormGroupValues(): ITccFanProfile {
-        const temperatures = ["20c", "30c", "40c", "50c", "60c", "70c", "80c"];
-        const fanTable = temperatures.map((temp) => ({
-            temp: parseInt(temp.slice(0, -1)),
-            speed: this.fanFormGroup.get(temp).value,
+        const fanTable = customFanPreset.tableCPU.map(({ temp }) => ({
+            temp,
+            speed: this.fanFormGroup.get(`${temp}c`).value,
         }));
 
         return {
