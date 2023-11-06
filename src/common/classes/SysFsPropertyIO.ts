@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as fs from 'fs';
+import * as fsp from 'fs/promises';
 import { ISysFsProperty } from '../models/IDeviceProperty';
 
 /**
@@ -56,6 +57,18 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     }
 
     /**
+     * Async version of readValue
+     */
+    public async readValueA(): Promise<T> {
+        try {
+            const readValue: string = (await fsp.readFile(this.readPath, { flag: 'r' })).toString();
+            return this.convertStringToType(readValue);
+        } catch (err) {
+            throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
+        }
+    }
+
+    /**
      * Reads value from device path and tries to convert it with
      * convertStringToType. Does not throw on error.
      *
@@ -65,6 +78,17 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    /**
+     * Async version of readValueNT
+     */
+    public async readValueNTA(): Promise<T> {
+        try {
+            return await this.readValueA();
         } catch (err) {
             return undefined;
         }
@@ -84,6 +108,18 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             } else {
                 fs.writeFileSync(this.writePath, stringValue, { flag: 'w' });
             }
+        } catch (err) {
+            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
+        }
+    }
+
+    /**
+     * Async version of writeValue
+     */
+    public async writeValueA(value: T) {
+        const stringValue = this.convertTypeToString(value);
+        try {
+            return await fsp.writeFile(this.writePath, stringValue, { flag: 'w' });
         } catch (err) {
             throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
         }
