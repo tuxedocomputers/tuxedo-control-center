@@ -1078,6 +1078,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
     },
 ];
 
+// currently only utilizing CPU table since both have same values, subject to change
 export const customFanPreset: ITccFanProfile = {
     tableCPU: [
         { temp: 20, speed: 12 },

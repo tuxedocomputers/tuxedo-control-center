@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
-import { ITccFanProfile } from "src/common/models/TccFanTable";
+import { ITccFanProfile, customFanPreset } from "src/common/models/TccFanTable";
 
 @Component({
     selector: "app-fan-slider",
@@ -33,6 +33,8 @@ export class FanSliderComponent implements OnInit {
     public setSliderDirty = new EventEmitter<void>();
 
     public fanFormGroup: FormGroup;
+
+    public customFanPreset = customFanPreset;
 
     constructor(private fb: FormBuilder) {}
 
@@ -82,7 +84,7 @@ export class FanSliderComponent implements OnInit {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    public async criticialSliderMinTemp(
+    public async updateComponents(
         sliderValue: number,
         temp: number
     ): Promise<void> {

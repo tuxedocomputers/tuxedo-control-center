@@ -17,61 +17,19 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div>
-    <mat-grid-list [cols]="7" rowHeight="150px">
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['20c']" color="primary" (change)="dirtyFanFormGroup()">
-            </mat-slider>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['30c']" color="primary" (change)="dirtyFanFormGroup()">
-            </mat-slider>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['40c']" color="primary" (change)="dirtyFanFormGroup()">
-            </mat-slider>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['50c']" color="primary" (change)="dirtyFanFormGroup()">
-            </mat-slider>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['60c']" color="primary" (change)="dirtyFanFormGroup()">
-            </mat-slider>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['70c']" color="primary" (change)="dirtyFanFormGroup()"
-                (change)="criticialSliderMinTemp($event.value, 70)">
-            </mat-slider>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            <mat-slider vertical="true" thumbLabel [formControl]="fanFormGroup.controls['80c']" color="primary" (change)="dirtyFanFormGroup()"
-                (change)="criticialSliderMinTemp($event.value, 80)">
+<div *ngIf="customFanPreset?.tableCPU">
+    <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="150px">
+        <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
+            <mat-slider vertical="true" thumbLabel color="primary"
+                [formControl]="fanFormGroup.controls[fanTableEntry.temp+'c']" (change)="dirtyFanFormGroup()"
+                (change)="updateComponents($event.value, fanTableEntry.temp)">
             </mat-slider>
         </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-grid-list [cols]="7" rowHeight="15px">
-        <mat-grid-tile [colspan]="1">
-            20c
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            30c
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            40c
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            50c
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            60c
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            70c
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1">
-            80c
+    <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="15px">
+        <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
+            {{ fanTableEntry.temp }}c
         </mat-grid-tile>
     </mat-grid-list>
 </div>
