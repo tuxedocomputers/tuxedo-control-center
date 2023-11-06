@@ -36,15 +36,24 @@ import { interpolatePointsArray } from "src/common/classes/FanUtils";
     styleUrls: ["./fan-slider.component.scss"],
 })
 export class FanSliderComponent implements OnInit {
+    public customFanPreset = customFanPreset;
+
     @Input()
     public customFanCurve: ITccFanProfile;
 
     @Output()
     public setSliderDirty = new EventEmitter<void>();
 
-    public fanFormGroup: FormGroup;
+    @Output()
+    public customFanCurveEvent = new EventEmitter<ITccFanProfile>();
 
-    public customFanPreset = customFanPreset;
+    @Output()
+    public chartToggleEvent = new EventEmitter<boolean>();
+
+    @Input()
+    public tempCustomFanCurve: ITccFanProfile;
+
+    public fanFormGroup: FormGroup;
 
     @Input()
     public showFanGraphs: boolean = false;
@@ -157,5 +166,10 @@ export class FanSliderComponent implements OnInit {
         if (canvas) {
             canvas.style.display = this.showFanGraphs ? "flex" : "none";
         }
+    }
+
+    public ngOnDestroy() {
+        this.customFanCurveEvent.emit(this.getFanFormGroupValues());
+        this.chartToggleEvent.emit(this.showFanGraphs);
     }
 }

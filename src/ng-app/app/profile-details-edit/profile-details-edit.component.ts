@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
+import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
@@ -32,6 +32,7 @@ import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 import { FanSliderComponent } from '../fan-slider/fan-slider.component';
+import { ITccFanProfile } from 'src/common/models/TccFanTable';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -136,6 +137,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public fansMaxSpeed = 100;
 
     public fansOffAvailable = true;
+
+    public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
@@ -261,11 +264,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput() {
-        const customFanCurveValues = this.sliderComponent.getFanFormGroupValues();
-        this.profileFormGroup
-            .get("fan")
-            .get("customFanCurve")
-            .patchValue(customFanCurveValues);
+        if (this.sliderComponent) {
+            const customFanCurveValues =
+                this.sliderComponent.getFanFormGroupValues();
+            this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve")
+                .patchValue(customFanCurveValues);
+        }
 
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
@@ -315,7 +321,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             .get("customFanCurve");
         this.sliderComponent.patchFanFormGroup(customFanCurveValues);
 
-        this.overwriteDefaultRefreshRateValue()
+        this.overwriteDefaultRefreshRateValue();
+        this.tempCustomFanCurve = undefined;
+    }
+
+    public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile) {
+        this.tempCustomFanCurve = tempCustomFanCurve;
+    }
+
+    public setChartToggleStatus(status: boolean) {
+        this.showFanGraphs = status;
     }
 
     private createProfileFormGroup(profile: ITccProfile) {

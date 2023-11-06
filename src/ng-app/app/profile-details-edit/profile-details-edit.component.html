@@ -415,8 +415,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
 
-                <div [hidden]="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'" [ngClass]="{ 'hide-element': profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom' }">
-                    <app-fan-slider [customFanCurve]="profileFormGroup.get('fan').get('customFanCurve').value" (setSliderDirty)="setVerticalSliderDirty()"></app-fan-slider>
+                <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value == 'Custom'">
+                    <app-fan-slider [customFanCurve]="profileFormGroup.get('fan').get('customFanCurve').value"
+                        [showFanGraphs]="showFanGraphs" (setSliderDirty)="setVerticalSliderDirty()"
+                        (customFanCurveEvent)="setCustomFanCurve($event)" [tempCustomFanCurve]="tempCustomFanCurve"
+                        (chartToggleEvent)="setChartToggleStatus($event)"
+                        [events]="eventsSubject.asObservable()"></app-fan-slider>
                 </div>
 
                 <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'"
@@ -426,14 +430,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-icon>bar_chart</mat-icon>
                     </button>
 
-                
                     <app-fan-graph *ngIf="showFanGraphs"
                         [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
-                        [minFanspeed]="profileFormGroup.get('fan').get('minimumFanspeed').value" [maxFanspeed]="profileFormGroup.get('fan').get('maximumFanspeed').value"
+                        [minFanspeed]="profileFormGroup.get('fan').get('minimumFanspeed').value"
+                        [maxFanspeed]="profileFormGroup.get('fan').get('maximumFanspeed').value"
                         [offsetFanspeed]="profileFormGroup.get('fan').get('offsetFanspeed').value">
                     </app-fan-graph>
-
                 </div>
+
             </mat-card-content>
         </div>
                             
