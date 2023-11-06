@@ -18,7 +18,12 @@
  */
 import * as path from 'path';
 import { SysFsController } from './SysFsController';
-import { SysFsPropertyBoolean, SysFsPropertyString } from './SysFsProperties';
+import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyString } from './SysFsProperties';
+
+enum PowerSupplyTypes {
+    Mains = 'Mains',
+    Battery = 'Battery',
+}
 
 export class PowerSupplyController extends SysFsController {
 
@@ -28,4 +33,13 @@ export class PowerSupplyController extends SysFsController {
 
     public readonly online = new SysFsPropertyBoolean(path.join(this.basePath, 'online'));
     public readonly type = new SysFsPropertyString(path.join(this.basePath, 'type'));
+
+    // Charge control official
+    public readonly chargeControlStartThreshold = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_start_threshold'));
+    public readonly chargeControlEndThreshold = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_end_threshold'));
+    public readonly chargeType = new SysFsPropertyString(path.join(this.basePath, 'charge_type'));
+
+    // Charge control unofficial
+    public readonly chargeControlStartAvailableThresholds = new SysFsPropertyNumList(path.join(this.basePath, 'charge_control_start_available_thresholds'));
+    public readonly chargeControlEndAvailableThresholds = new SysFsPropertyNumList(path.join(this.basePath, 'charge_control_end_available_thresholds'));
 }
