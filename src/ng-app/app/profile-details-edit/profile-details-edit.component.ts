@@ -23,7 +23,7 @@ import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
-import { Subscription } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
@@ -33,6 +33,7 @@ import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
+import { ElectronService } from 'ngx-electron';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -146,7 +147,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild(FanSliderComponent)
     private sliderComponent: FanSliderComponent;
-
+    
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
@@ -155,8 +156,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private dbus: DBusService,
         private tccDBus: TccDBusClientService,
-        public compat: CompatibilityService
-    ) { }
+        public compat: CompatibilityService,
+        private electron: ElectronService
+    ) {}
 
     ngOnInit() {
         if (this.viewProfile === undefined) { return; }
@@ -230,6 +232,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
+
+        const suspendObservable = fromEvent(
+            this.electron.ipcRenderer,
+            "wakeup-from-suspend"
+        );
+        this.subscriptions.add(
+            suspendObservable.subscribe(async () => {
+                // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
+                this.showFanGraphs = false;
+                this.sliderComponent.showFanGraphs = false;
+            })
+        );
     }
 
     private overwriteDefaultRefreshRateValue() {
