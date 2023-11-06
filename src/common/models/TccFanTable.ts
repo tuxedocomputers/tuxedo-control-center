@@ -1088,6 +1088,8 @@ export const customFanPreset: ITccFanProfile = {
         { temp: 60, speed: 44 },
         { temp: 70, speed: 56 },
         { temp: 80, speed: 79 },
+        { temp: 90, speed: 85 },
+        { temp: 100, speed: 90 },
     ],
     tableGPU: [
         { temp: 20, speed: 12 },
@@ -1097,5 +1099,7 @@ export const customFanPreset: ITccFanProfile = {
         { temp: 60, speed: 44 },
         { temp: 70, speed: 56 },
         { temp: 80, speed: 79 },
+        { temp: 90, speed: 85 },
+        { temp: 100, speed: 90 },
     ],
 };

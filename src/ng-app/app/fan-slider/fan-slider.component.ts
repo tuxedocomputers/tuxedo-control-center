@@ -18,6 +18,7 @@
  */
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import { Mutex } from "async-mutex";
 import { ITccFanProfile, customFanPreset } from "src/common/models/TccFanTable";
 import {
     fantableDatasets,
@@ -47,6 +48,8 @@ export class FanSliderComponent implements OnInit {
 
     @Input()
     public showFanGraphs: boolean = false;
+
+    private mutex = new Mutex();
 
     public tempsLabels: Label[] = tempsLabels;
     public graphOptions: ChartOptions = graphOptions;
@@ -87,32 +90,53 @@ export class FanSliderComponent implements OnInit {
         };
     }
 
-    private delay(ms: number) {
+    private delay(ms: number): Promise<void> {
         return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    private setFormValue(temp: number, sliderValue: number): void {
+        this.fanFormGroup.patchValue({
+            [`${temp}c`]: sliderValue,
+        });
+    }
+
+    public async adjustSliderValues(
+        sliderValue: number,
+        temp: number
+    ): Promise<void> {
+        await this.mutex.runExclusive(async () => {
+            const delta = 10;
+            const leftTemp = temp - delta;
+            const rightTemp = temp + delta;
+            let finalValue = sliderValue;
+
+            if (temp !== 20) {
+                const leftSlider = this.fanFormGroup.get(`${leftTemp}c`).value;
+                finalValue = Math.max(finalValue, leftSlider);
+
+                if (temp > 70 && finalValue < 40) {
+                    finalValue = 40;
+                }
+            }
+
+            if (temp !== 100) {
+                const rightSlider = this.fanFormGroup.get(
+                    `${rightTemp}c`
+                ).value;
+                finalValue = Math.min(finalValue, rightSlider);
+            }
+
+            await this.delay(100);
+            this.setFormValue(temp, finalValue);
+            this.updateFanChartDataset();
+        });
     }
 
     public async updateComponents(
         sliderValue: number,
         temp: number
-    ): Promise<void> {
-        // instantly setting value sometimes results in not moved slider
-        await this.delay(100);
-
-        if (temp == 70 && sliderValue < 40) {
-            this.fanFormGroup.setValue({
-                ...this.fanFormGroup.value,
-                "70c": 40,
-            });
-        }
-
-        if (temp == 80 && sliderValue < 40) {
-            this.fanFormGroup.setValue({
-                ...this.fanFormGroup.value,
-                "80c": 40,
-            });
-        }
-
-        this.updateFanChartDataset();
+    ) {
+        await this.adjustSliderValues(sliderValue, temp);
     }
 
     public dirtyFanFormGroup() {
