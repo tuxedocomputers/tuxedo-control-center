@@ -419,8 +419,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <app-fan-slider [customFanCurve]="profileFormGroup.get('fan').get('customFanCurve').value"
                         [showFanGraphs]="showFanGraphs" (setSliderDirty)="setVerticalSliderDirty()"
                         (customFanCurveEvent)="setCustomFanCurve($event)" [tempCustomFanCurve]="tempCustomFanCurve"
-                        (chartToggleEvent)="setChartToggleStatus($event)"
-                        [events]="eventsSubject.asObservable()"></app-fan-slider>
+                        (chartToggleEvent)="setChartToggleStatus($event)">
+                    </app-fan-slider>
                 </div>
 
                 <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'"
