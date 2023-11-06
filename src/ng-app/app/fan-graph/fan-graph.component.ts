@@ -16,12 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color, Label, ThemeService } from 'ng2-charts';
-import { Subscription } from 'rxjs';
+import { Color, Label } from 'ng2-charts';
 import { defaultFanProfiles, ITccFanProfile, ITccFanTableEntry } from 'src/common/models/TccFanTable';
-import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-fan-graph',
@@ -29,7 +27,6 @@ import { UtilsService } from '../utils.service';
     styleUrls: ['./fan-graph.component.scss']
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
-
     // Inputs
     private _fanProfile: ITccFanProfile;
     @Input() set fanProfile(nextProfile: string) {
@@ -145,35 +142,12 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         },
     };
 
-    @ViewChild('chartTextE') chartTextE: ElementRef;
-    public get chartTextColor(): string { return this.elementColor(this.chartTextE); };
+    constructor(private cdref: ChangeDetectorRef) {}
 
-    initDone = false;
-
-    private subscriptions: Subscription = new Subscription();
-
-    constructor(
-        private utils: UtilsService,
-        private cdref: ChangeDetectorRef,
-        private themeService: ThemeService) { }
+    ngOnInit() {}
 
     ngAfterViewInit(): void {
-        this.initDone = true;
         this.cdref.detectChanges();
-    }
-
-    ngOnInit() {
-        // Workaround for applying theme overrides
-        this.subscriptions.add(this.utils.themeClass.subscribe( (next) => {
-            if (!this.initDone) { return; }
-            setTimeout( () => {
-                this.updateTheme();
-            }, 100);
-        }));
-    }
-
-    ngOnDestroy(): void {
-        this.subscriptions.unsubscribe();
     }
 
     private updateDatasets(): void {
@@ -235,32 +209,5 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         return `${value} %`;
     }
 
-    private elementColor(element: ElementRef): string {
-        if (element !== undefined && this.initDone) {
-            return getComputedStyle(element.nativeElement).color;
-        } else {
-            return '';
-        }
-    }
-
-    private updateTheme() {
-        let overrides: ChartOptions;
-        overrides = {
-            legend: {
-                labels: { fontColor: this.chartTextColor }
-            },
-            scales: {
-                xAxes: [{
-                    ticks: { fontColor: this.chartTextColor },
-                    gridLines: { color: `rgba(${this.chartTextColor.slice(4, -1)}, 0.2)` }
-                }],
-                yAxes: [{
-                    ticks: { fontColor: this.chartTextColor },
-                    gridLines: { color: `rgba(${this.chartTextColor.slice(4, -1)}, 0.2)` }
-                }]
-            }
-        };
-        this.themeService.setColorschemesOptions(overrides);
-    }
-
+    ngOnDestroy(): void {}
 }
