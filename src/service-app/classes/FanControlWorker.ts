@@ -21,6 +21,8 @@ import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
+import { ITccFanProfile } from 'src/common/models/TccFanTable';
+import { interpolatePointsArray } from "../../common/classes/FanUtils";
 
 export class FanControlWorker extends DaemonWorker {
 
@@ -49,50 +51,20 @@ export class FanControlWorker extends DaemonWorker {
         this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
     }
 
-    private convertProfile(fanData: any) {
-        const completeFanData = [];
-
-        for (let i = 0; i <= 100; i++) {
-            const temp = i;
-            let speed: number;
-
-            if (i < 30) {
-                speed = fanData[0].speed;
-            } else if (i <= 40) {
-                speed = fanData[1].speed;
-            } else if (i <= 50) {
-                speed = fanData[2].speed;
-            } else if (i <= 60) {
-                speed = fanData[3].speed;
-            } else if (i <= 70) {
-                speed = fanData[4].speed;
-            } else if (i <= 80) {
-                speed = fanData[5].speed;
-            } else {
-                speed = fanData[6].speed;
-            }
-
-            completeFanData.push({ temp, speed });
-        }
-
-        return completeFanData;
-    }
-
     private getCurrentCustomProfile() {
-        const tableCPUFanProfile = this.convertProfile(
-            this.activeProfile.fan.customFanCurve.tableCPU
-        );
-        const tableGPUFanProfile = this.convertProfile(
-            this.activeProfile.fan.customFanCurve.tableGPU
-        );
-
-        const currentFanProfile = {
+        const { customFanCurve } = this.activeProfile.fan;
+        const tableCPU = interpolatePointsArray(customFanCurve.tableCPU);
+        const tableGPU = interpolatePointsArray(customFanCurve.tableGPU);
+        const tccFanTable = (temp: number, i: number) => ({
+            temp: i,
+            speed: temp,
+        });
+        const tccFanProfile: ITccFanProfile = {
             name: "Custom",
-            tableCPU: tableCPUFanProfile,
-            tableGPU: tableGPUFanProfile,
+            tableCPU: tableCPU.map(tccFanTable),
+            tableGPU: tableGPU.map(tccFanTable),
         };
-
-        return currentFanProfile;
+        return tccFanProfile;
     }
 
     // todo: check if profile changed, checking profile name is not enough
