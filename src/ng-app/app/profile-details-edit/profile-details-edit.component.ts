@@ -330,10 +330,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }
 
-        const customFanCurveValues: AbstractControl = this.profileFormGroup
-            .get("fan")
-            .get("customFanCurve");
-        this.sliderComponent.patchFanFormGroup(customFanCurveValues);
+        if (this.sliderComponent) {
+            const customFanCurveValues: AbstractControl = this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve");
+            this.sliderComponent.patchFanFormGroup(customFanCurveValues);
+        }
 
         this.overwriteDefaultRefreshRateValue();
         this.tempCustomFanCurve = undefined;
