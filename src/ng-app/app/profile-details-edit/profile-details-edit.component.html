@@ -242,7 +242,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <mat-grid-tile [colspan]="gridParams.valueSpan"
                             [ngClass]="{'inactive': !inputUseRefRate.checked}">
-                            <content class="value">{{ profileFormGroup.get('display').value.refreshRate
+                            <content class="value">{{ roundValue(profileFormGroup.get('display').value.refreshRate)
                                 }}Hz</content>
                         </mat-grid-tile>
 
@@ -252,7 +252,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
                                     <mat-option *ngFor="let refreshRate of getCurrentResolutionRefreshRates()"
                                         [value]="refreshRate" [ngValue]="refreshRate" color="primary">
-                                        {{ refreshRate }}Hz
+                                        {{ roundValue(refreshRate) }}Hz
                                     </mat-option>
                                 </mat-select>
                             </content>

@@ -675,7 +675,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (!matchingMode) {
             return [-1];
         }
-        return matchingMode.refreshRates;
+        return matchingMode.refreshRates.sort((a, b) => b - a);
+    }
+
+    public roundValue(value: number): number {
+        return Math.round(value)
     }
 
     private getMatchingMode(
