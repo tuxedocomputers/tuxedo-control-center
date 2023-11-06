@@ -32,4 +32,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             {{ fanTableEntry.temp }}c
         </mat-grid-tile>
     </mat-grid-list>
+
+    <div class="fan-slider-container">
+        <button mat-stroked-button (click)="toggleFanGraphs()">
+            <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container>
+            <mat-icon>bar_chart</mat-icon>
+        </button>
+    </div>
+
+    <div *ngIf="showFanGraphs" style="display: block; height: 200px">
+        <canvas id="hidden" baseChart class="tcc-charts" [chartType]="graphType" [datasets]="fantableDatasets"
+            [colors]="graphColors" [labels]="tempsLabels" [options]="graphOptions">
+        </canvas>
+    </div>
 </div>

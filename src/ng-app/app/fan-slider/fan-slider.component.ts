@@ -19,6 +19,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { ITccFanProfile, customFanPreset } from "src/common/models/TccFanTable";
+import {
+    fantableDatasets,
+    graphColors,
+    graphOptions,
+    tempsLabels,
+} from "src/common/classes/FanChartProperties";
+import { Color, Label } from "ng2-charts";
+import { ChartDataSets, ChartOptions } from "chart.js";
+import { interpolatePointsArray } from "src/common/classes/FanUtils";
 
 @Component({
     selector: "app-fan-slider",
@@ -35,6 +44,15 @@ export class FanSliderComponent implements OnInit {
     public fanFormGroup: FormGroup;
 
     public customFanPreset = customFanPreset;
+
+    @Input()
+    public showFanGraphs: boolean = false;
+
+    public tempsLabels: Label[] = tempsLabels;
+    public graphOptions: ChartOptions = graphOptions;
+    public fantableDatasets: ChartDataSets[] = fantableDatasets;
+    public graphColors: Color[] = graphColors;
+    public graphType = "line";
 
     constructor(private fb: FormBuilder) {}
 
@@ -104,9 +122,27 @@ export class FanSliderComponent implements OnInit {
                 "80c": 40,
             });
         }
+
+        this.updateFanChartDataset();
     }
 
     public dirtyFanFormGroup() {
         this.setSliderDirty.emit();
+    }
+
+    public updateFanChartDataset() {
+        let { tableCPU, tableGPU } = this.getFanFormGroupValues();
+
+        this.fantableDatasets[0].data = interpolatePointsArray(tableCPU);
+        this.fantableDatasets[1].data = interpolatePointsArray(tableGPU);
+    }
+
+    public toggleFanGraphs() {
+        this.updateFanChartDataset();
+        const canvas = document.getElementById("hidden");
+        this.showFanGraphs = !this.showFanGraphs;
+        if (canvas) {
+            canvas.style.display = this.showFanGraphs ? "flex" : "none";
+        }
     }
 }

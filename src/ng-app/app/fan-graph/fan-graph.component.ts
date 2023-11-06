@@ -16,21 +16,47 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
-import { defaultFanProfiles, ITccFanProfile, ITccFanTableEntry } from 'src/common/models/TccFanTable';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnDestroy,
+    OnInit,
+} from "@angular/core";
+import { ChartDataSets, ChartOptions } from "chart.js";
+import { Color, Label } from "ng2-charts";
+import {
+    defaultFanProfiles,
+    ITccFanProfile,
+    ITccFanTableEntry,
+} from "src/common/models/TccFanTable";
+import {
+    fantableDatasets,
+    graphColors,
+    graphOptions,
+    tempsLabels,
+} from "src/common/classes/FanChartProperties";
 
 @Component({
-    selector: 'app-fan-graph',
-    templateUrl: './fan-graph.component.html',
-    styleUrls: ['./fan-graph.component.scss']
+    selector: "app-fan-graph",
+    templateUrl: "./fan-graph.component.html",
+    styleUrls: ["./fan-graph.component.scss"],
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
+    // Graph data
+    public tempsLabels: Label[] = tempsLabels;
+    public graphOptions: ChartOptions = graphOptions;
+    public fantableDatasets: ChartDataSets[] = fantableDatasets;
+    public graphColors: Color[] = graphColors;
+    public graphType = "line";
+
     // Inputs
     private _fanProfile: ITccFanProfile;
     @Input() set fanProfile(nextProfile: string) {
-        const nextProfileIndex = defaultFanProfiles.findIndex(profile => profile.name === nextProfile);
+        const nextProfileIndex = defaultFanProfiles.findIndex(
+            (profile) => profile.name === nextProfile
+        );
         if (nextProfileIndex !== -1) {
             this._fanProfile = defaultFanProfiles[nextProfileIndex];
             this.updateDatasets();
@@ -40,115 +66,45 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         return this._fanProfile.name;
     }
 
-    private _minFanspeed:number = 0;
+    private _minFanspeed: number = 0;
     @Input() set minFanspeed(value: number) {
         this._minFanspeed = value;
         this.updateDatasets();
     }
-    get minFanspeed() { return this._minFanspeed; }
+    get minFanspeed() {
+        return this._minFanspeed;
+    }
 
-    private _maxFanspeed:number = 0;
+    private _maxFanspeed: number = 0;
     @Input() set maxFanspeed(value: number) {
         this._maxFanspeed = value;
         this.updateDatasets();
     }
-    get maxFanspeed() { return this._maxFanspeed; }
+    get maxFanspeed() {
+        return this._maxFanspeed;
+    }
 
     private _offsetFanspeed: number = 0;
     @Input() set offsetFanspeed(value: number) {
         this._offsetFanspeed = value;
         this.updateDatasets();
     }
-    get offsetFanspeed() { return this._offsetFanspeed; }
+    get offsetFanspeed() {
+        return this._offsetFanspeed;
+    }
 
-    // Graph data
-    public tempsLabels: Label[] = Array.from(Array(100).keys()).concat(100).map(e => this.formatTemp(e));
-    public fantableDatasets: ChartDataSets[] = [
-        {
-            label: $localize `:@@cProfMgrDetailsFanChartCPULabel:CPU Fan`,
-            data: [],
-            spanGaps: true,
-            lineTension: 0.1,
-            steppedLine: true,
-            showLine: true,
-            pointRadius: 2
-        },
-        {
-            label: $localize `:@@cProfMgrDetailsFanChartGPULabel:GPU Fan`,
-            data: [],
-            spanGaps: true,
-            lineTension: 0.1,
-            steppedLine: true,
-            showLine: true,
-            pointRadius: 2
-        }
-    ];
-    public graphType = 'line';
-    public graphColors: Color[] = [
-        {
-            borderColor: 'rgba(120, 120, 120, 0.4)',
-            backgroundColor: 'rgba(10, 10, 10, 0.4)'
-        },
-        {
-            borderColor: 'rgba(227, 0, 22, 0.3)',
-            backgroundColor: 'rgba(227, 0, 22, 0.3)'
-        }
-    ];
-
-    public graphOptions: ChartOptions = {
-        animation: {
-            duration: 300
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        tooltips: {
-            callbacks: {
-                label: (item, data) => {
-                    return data.datasets[item.datasetIndex].label + ' ' + this.formatSpeed(item.yLabel);
-                }
-            }
-        },
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                        suggestedMax: 100,
-                        callback: (value: number) => {
-                            if (value % 20 === 0) {
-                                return this.formatSpeed(value);
-                            } else {
-                                return null;
-                            }
-                        }
-                    }
-                }
-            ],
-            xAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                        autoSkip: false,
-                        callback: (value, index) => {
-                            if (index % 5 === 0) {
-                                return value;
-                            } else {
-                                return null;
-                            }
-                        }
-                    }
-                }
-            ]
-        },
-    };
+    initDone = false;
 
     constructor(private cdref: ChangeDetectorRef) {}
 
     ngOnInit() {}
 
     ngAfterViewInit(): void {
+        this.initDone = true;
         this.cdref.detectChanges();
     }
+
+    ngOnDestroy(): void {}
 
     private updateDatasets(): void {
         if (this._fanProfile === undefined) return;
@@ -178,36 +134,26 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         if (temp > criticalTemp && speed < minimumCriticalFanSpeed) {
             speed = minimumCriticalFanSpeed;
         }
-        return speed
+        return speed;
     }
 
     /**
      * Applies min, max and offset parameters and returns the resulting speed
      * Ref. FanControlLogic.ts: calculateSpeedPercent()
-     * 
+     *
      * @param entry Fan table entry to be evaluated
      * @returns Resulting speed
      */
     private applyParameters(entry: ITccFanTableEntry): number {
         let { temp, speed } = entry;
-        
+
         speed += this.offsetFanspeed;
 
         speed = Math.max(this.minFanspeed, Math.min(this.maxFanspeed, speed));
         speed = Math.max(0, Math.min(100, speed));
 
-        speed = this.manageCriticalTemperature(temp, speed)
+        speed = this.manageCriticalTemperature(temp, speed);
 
         return speed;
     }
-    
-    private formatTemp(value: number | string): string {
-        return `${value} °C`;
-    }
-    
-    private formatSpeed(value: number | string): string {
-        return `${value} %`;
-    }
-
-    ngOnDestroy(): void {}
 }
