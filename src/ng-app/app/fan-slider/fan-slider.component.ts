@@ -58,24 +58,14 @@ export class FanSliderComponent implements OnInit {
 
     public ngOnInit(): void {
         // currently only using cpu values for both gpu and cpu
-        this.fanFormGroup = this.fb.group({
-            "20c": 10,
-            "30c": 10,
-            "40c": 20,
-            "50c": 30,
-            "60c": 40,
-            "70c": 50,
-            "80c": 50,
-        });
+        const initialValues = this.customFanCurve.tableCPU.reduce(
+            (acc, { temp, speed }) => {
+                return { ...acc, ...{ [`${temp}c`]: speed } };
+            },
+            {}
+        );
 
-        if (this.customFanCurve?.tableCPU) {
-            const initialValues = {};
-            this.customFanCurve.tableCPU.forEach(({ temp, speed }) => {
-                initialValues[temp.toString() + "c"] = speed;
-            });
-
-            this.fanFormGroup.patchValue(initialValues);
-        }
+        this.fanFormGroup = this.fb.group(initialValues);
     }
 
     public patchFanFormGroup(ac: AbstractControl): void {
