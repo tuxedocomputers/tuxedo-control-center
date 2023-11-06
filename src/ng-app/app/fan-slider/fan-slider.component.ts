@@ -69,8 +69,15 @@ export class FanSliderComponent implements OnInit {
     constructor(private fb: FormBuilder) {}
 
     public ngOnInit(): void {
+        this.initFanFormGroup();
+        this.updateFanChartDataset();
+    }
+
+    private initFanFormGroup(): void {
+        const fanCurve = this.tempCustomFanCurve || this.customFanCurve;
+
         // currently only using cpu values for both gpu and cpu
-        const initialValues = this.customFanCurve.tableCPU.reduce(
+        const initialValues = fanCurve.tableCPU.reduce(
             (acc, { temp, speed }) => {
                 return { ...acc, ...{ [`${temp}c`]: speed } };
             },
