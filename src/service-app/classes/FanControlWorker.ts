@@ -32,7 +32,8 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
-    private previousProfileName;
+
+    private previousFanProfile: ITccFanProfile;
 
     private modeSameSpeed = false;
 
@@ -67,15 +68,13 @@ export class FanControlWorker extends DaemonWorker {
         return tccFanProfile;
     }
 
-    // todo: check if profile changed, checking profile name is not enough
-    private setFanProfileValues() {
+    private setFanProfileValues(currentFanProfile: ITccFanProfile) {
         for (const fanNumber of this.fans.keys()) {
             if (this.activeProfile.fan.fanProfile == "Custom") {
                 this.fans.get(fanNumber).minimumFanspeed = 0;
                 this.fans.get(fanNumber).maximumFanspeed = 100;
                 this.fans.get(fanNumber).offsetFanspeed = 0;
 
-                const currentFanProfile = this.getCurrentCustomProfile();
                 this.fans.get(fanNumber).setFanProfile(currentFanProfile);
             }
 
@@ -87,9 +86,6 @@ export class FanControlWorker extends DaemonWorker {
                 this.fans.get(fanNumber).offsetFanspeed =
                     this.activeProfile.fan.offsetFanspeed;
 
-                const currentFanProfile = this.tccd.getCurrentFanProfile(
-                    this.activeProfile
-                );
                 this.fans.get(fanNumber).setFanProfile(currentFanProfile);
             }
         }
@@ -101,30 +97,58 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
+    private createFansMap(nrFans: number): Map<number, FanControlLogic> {
+        const fansMap = new Map<number, FanControlLogic>();
+
+        if (nrFans >= 1) {
+            fansMap.set(1, this.cpuLogic);
+        }
+        if (nrFans >= 2) {
+            fansMap.set(2, this.gpu1Logic);
+        }
+        if (nrFans >= 3) {
+            fansMap.set(3, this.gpu2Logic);
+        }
+
+        return fansMap;
+    }
+
+    private isEqual(first: ITccFanProfile, second: ITccFanProfile): boolean {
+        return JSON.stringify(first) === JSON.stringify(second);
+    }
+
+    private setFanProfile() {
+        const currentFanProfile =
+            this.activeProfile.fan.fanProfile === "Custom"
+                ? this.getCurrentCustomProfile()
+                : this.tccd.getCurrentFanProfile(this.activeProfile);
+
+        if (
+            this.previousFanProfile &&
+            (this.previousFanProfile?.name !==
+                this.activeProfile.fan.fanProfile ||
+                !this.isEqual(this.previousFanProfile, currentFanProfile))
+        ) {
+            this.setFanProfileValues(currentFanProfile);
+        }
+
+        this.previousFanProfile = currentFanProfile;
+    }
+
     private initFanControl(): void {
         const nrFans = ioAPI.getNumberFans();
 
         if (this.fans === undefined || this.fans.size !== nrFans) {
-            // Map logic to fan number
-            this.fans = new Map();
-            if (nrFans >= 1) {
-                this.fans.set(1, this.cpuLogic);
-            }
-            if (nrFans >= 2) {
-                this.fans.set(2, this.gpu1Logic);
-            }
-            if (nrFans >= 3) {
-                this.fans.set(3, this.gpu2Logic);
-            }
+            this.fans = this.createFansMap(nrFans);
         }
 
         if (nrFans === 0) {
             return;
         }
 
-        this.setFanProfileValues();
+        this.setFanProfile();
     }
-    
+
     public onStart(): void {
         this.initHardwareCapabilities();
         this.initFanControl();
