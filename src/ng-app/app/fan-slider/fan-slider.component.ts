@@ -92,6 +92,7 @@ export class FanSliderComponent implements OnInit {
             const { temp, speed } = obj;
             this.fanFormGroup.controls[temp.toString() + "c"].setValue(speed);
         }
+        this.updateFanChartDataset();
     }
 
     public getFanFormGroupValues(): ITccFanProfile {
