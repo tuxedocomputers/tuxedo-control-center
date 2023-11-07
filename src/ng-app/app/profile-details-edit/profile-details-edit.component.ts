@@ -241,7 +241,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             suspendObservable.subscribe(async () => {
                 // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
                 this.showFanGraphs = false;
-                this.sliderComponent.showFanGraphs = false;
+                if (this.sliderComponent) {
+                    this.sliderComponent.showFanGraphs = false;
+                }
             })
         );
     }
