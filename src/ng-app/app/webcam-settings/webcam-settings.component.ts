@@ -1241,11 +1241,38 @@ export class WebcamSettingsComponent implements OnInit {
         });
     }
 
-    public getPercentValue(preset: string): number {
-        let max = Number(this.getOptionValue(preset, "max"));
-        let min = Number(this.getOptionValue(preset, "min"));
-        let current = this.webcamFormGroup.get(preset).value;
-        return Math.round(((current - min) * 100) / (max - min));
+    public getPercentValue(preset: string): string {
+        const { max, min } = this.getMinMaxOptionValues(preset);
+        const current = Number(this.webcamFormGroup.get(preset).value);
+
+        const roundingDigits = this.getRoundingDigits(preset);
+        return this.calculatePercentValue(current, min, max, roundingDigits);
+    }
+
+    private getMinMaxOptionValues(preset: string): {
+        max: number;
+        min: number;
+    } {
+        const max = Number(this.getOptionValue(preset, "max"));
+        const min = Number(this.getOptionValue(preset, "min"));
+        return { max, min };
+    }
+
+    private getRoundingDigits(preset: string): number {
+        return preset === "exposure_time_absolute" ||
+            preset === "exposure_absolute"
+            ? 2
+            : 1;
+    }
+
+    private calculatePercentValue(
+        current: number,
+        min: number,
+        max: number,
+        roundingDigits: number
+    ): string {
+        const percent = ((current - min) * 100) / (max - min);
+        return percent.toFixed(roundingDigits);
     }
 
     public async discardFormInput(): Promise<void> {
