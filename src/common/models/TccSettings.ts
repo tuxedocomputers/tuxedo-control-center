@@ -113,6 +113,6 @@ export const defaultSettingsMobile: ITccSettings = {
 
 export const deviceCustomSettings: Map<TUXEDODevice, ITccSettings> = new Map();
 
-deviceCustomSettings.set(TUXEDODevice.IBPG8MK1, defaultSettingsMobile);
+deviceCustomSettings.set(TUXEDODevice.IBPG8, defaultSettingsMobile);
 deviceCustomSettings.set(TUXEDODevice.AURA14G3, defaultSettingsMobile);
 deviceCustomSettings.set(TUXEDODevice.AURA15G3, defaultSettingsMobile);
