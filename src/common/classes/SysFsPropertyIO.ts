@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as fs from 'fs';
-import * as fsp from 'fs/promises';
+import { promises as fsp} from 'fs';
 import { ISysFsProperty } from '../models/IDeviceProperty';
 
 /**
