@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.11] - 2023-11-10
+### Fixed
+- Missing profiles for InfinityBook Pro Gen8
+
 ## [2.0.10] - 2023-10-26
 ### Added
 - Support for Polaris/Stellaris AMD Gen5
