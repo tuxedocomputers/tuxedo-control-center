@@ -261,8 +261,7 @@ export enum TUXEDODevice {
     IBP14G6_TRX,
     IBP14G6_TQF,
     IBP14G7_AQF_ARX,
-    IBPG8MK1,
-    IBP16I08MK2,
+    IBPG8,
     PULSE1502,
     AURA14G3,
     AURA15G3,
@@ -288,8 +287,7 @@ deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G7_AQF_ARX, [ maxEnergySave, silent, office ]);
-deviceProfiles.set(TUXEDODevice.IBPG8MK1, [ maxEnergySave, silent, office ]);
-deviceProfiles.set(TUXEDODevice.IBP16I08MK2, [ maxEnergySave, silent, office ]);
+deviceProfiles.set(TUXEDODevice.IBPG8, [ maxEnergySave, silent, office ]);
 
 deviceProfiles.set(TUXEDODevice.PULSE1502, [ maxEnergySave, silent, office ]);
 
@@ -310,7 +308,6 @@ deviceProfiles.set(TUXEDODevice.STELLARIS1XA05, [ maxEnergySave, silent, office,
 
 export const deviceCustomProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 
-deviceCustomProfiles.set(TUXEDODevice.IBPG8MK1, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
-deviceCustomProfiles.set(TUXEDODevice.IBP16I08MK2, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
+deviceCustomProfiles.set(TUXEDODevice.IBPG8, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
 deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
 deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
