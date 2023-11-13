@@ -17,9 +17,18 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import {
+    AbstractControl,
+    FormBuilder,
+    FormGroup,
+    Validators,
+} from "@angular/forms";
 import { Mutex } from "async-mutex";
-import { ITccFanProfile, customFanPreset } from "src/common/models/TccFanTable";
+import {
+    ITccFanProfile,
+    ITccFanTableEntry,
+    customFanPreset,
+} from "src/common/models/TccFanTable";
 import {
     fantableDatasets,
     graphColors,
@@ -88,10 +97,9 @@ export class FanSliderComponent implements OnInit {
     }
 
     public patchFanFormGroup(ac: AbstractControl): void {
-        for (let obj of ac.value.tableGPU) {
-            const { temp, speed } = obj;
-            this.fanFormGroup.controls[temp.toString() + "c"].setValue(speed);
-        }
+        ac.value.tableGPU.forEach(({ temp, speed }) => {
+            this.fanFormGroup.controls[`${temp}c`].setValue(speed);
+        });
         this.updateFanChartDataset();
     }
 
@@ -100,11 +108,7 @@ export class FanSliderComponent implements OnInit {
             temp,
             speed: this.fanFormGroup.get(`${temp}c`).value,
         }));
-
-        return {
-            tableCPU: fanTable,
-            tableGPU: fanTable,
-        };
+        return { tableCPU: fanTable, tableGPU: fanTable };
     }
 
     private delay(ms: number): Promise<void> {
@@ -122,37 +126,61 @@ export class FanSliderComponent implements OnInit {
         temp: number
     ): Promise<void> {
         await this.mutex.runExclusive(async () => {
-            const delta = 10;
-            const leftTemp = temp - delta;
-            const rightTemp = temp + delta;
-            let finalValue = sliderValue;
+            const clampedSliderValue = this.safeguardFanSpeed(
+                sliderValue,
+                temp
+            );
+            const leftSliders = this.getSlidersToAdjust(temp, "left");
+            const rightSliders = this.getSlidersToAdjust(temp, "right");
 
-            if (temp !== 20) {
-                const leftSlider = this.fanFormGroup.get(`${leftTemp}c`).value;
-                finalValue = Math.max(finalValue, leftSlider);
+            this.adjustSliders(leftSliders, clampedSliderValue, temp, "left");
+            this.adjustSliders(rightSliders, clampedSliderValue, temp, "right");
 
-                if (temp > 70 && finalValue < 40) {
-                    finalValue = 40;
-                }
-            }
-
-            if (temp !== 100) {
-                const rightSlider = this.fanFormGroup.get(
-                    `${rightTemp}c`
-                ).value;
-                finalValue = Math.min(finalValue, rightSlider);
-            }
-
-            await this.delay(100);
-            this.setFormValue(temp, finalValue);
+            // slider won't adjust to formgroup value without delay
+            await this.delay(10);
+            this.setFormValue(temp, clampedSliderValue);
             this.updateFanChartDataset();
         });
     }
 
-    public async updateComponents(
+    private getSlidersToAdjust(
+        temp: number,
+        direction: "left" | "right"
+    ): number[] {
+        const comparison = direction === "left" ? "<" : ">";
+        return this.customFanPreset.tableCPU
+            .filter((entry: ITccFanTableEntry) =>
+                eval(`${entry.temp} ${comparison} ${temp}`)
+            )
+            .map((entry) => entry.temp);
+    }
+
+    private adjustSliders(
+        sliders: number[],
         sliderValue: number,
-        temp: number
-    ) {
+        temp: number,
+        direction: "left" | "right"
+    ): void {
+        const targetValue = this.safeguardFanSpeed(sliderValue, temp);
+
+        for (const slider of sliders) {
+            const sliderControl = this.fanFormGroup.get(`${slider}c`);
+            const sliderControlValue = sliderControl.value;
+
+            if (
+                (direction === "left" && sliderControlValue > sliderValue) ||
+                (direction === "right" && sliderControlValue < sliderValue)
+            ) {
+                sliderControl.setValue(targetValue);
+            }
+        }
+    }
+
+    private safeguardFanSpeed(sliderValue: number, temp: number): number {
+        return temp > 70 ? Math.max(40, sliderValue) : sliderValue;
+    }
+
+    public async updateComponents(sliderValue: number, temp: number) {
         await this.adjustSliderValues(sliderValue, temp);
     }
 
