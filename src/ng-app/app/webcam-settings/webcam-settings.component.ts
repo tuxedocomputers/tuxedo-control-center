@@ -1233,7 +1233,7 @@ export class WebcamSettingsComponent implements OnInit {
                             this.allPresetData = webcamConfigs;
                             this.webcamFormGroup.markAsPristine();
                             this.selectedPreset = this.defaultPreset;
-                            this.applyPreset(this.defaultSettings);
+                            this.applyPreset(this.defaultSettings, false, true);
                         }
                     });
                 this.utils.pageDisabled = false;
