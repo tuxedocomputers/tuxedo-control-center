@@ -821,7 +821,6 @@ export class WebcamSettingsComponent implements OnInit {
                 await this.setTimeout(500);
 
                 document.getElementById("video").style.visibility = "visible";
-                this.unsetLoading(true);
             }
 
             if (this.detachedWebcamWindowActive) {
@@ -833,6 +832,8 @@ export class WebcamSettingsComponent implements OnInit {
             if (setViewWebcam) {
                 this.viewWebcam = config;
             }
+
+            this.unsetLoading(true);
         });
     }
 
