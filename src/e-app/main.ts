@@ -850,7 +850,7 @@ async function pkexecWriteCustomProfilesAsync(newProfileList)
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        child_process.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath, (err, stdout, stderr) => {
+        child_process.exec('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath, (err, stdout, stderr) => {
                 if (err) {
                     resolve(false);
                 } else {
