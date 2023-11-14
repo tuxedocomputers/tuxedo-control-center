@@ -149,9 +149,6 @@ contextBridge.exposeInMainWorld(
         pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => ipcRenderer.invoke('config-pkexec-write-custom-profiles-async',customProfiles),
         pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[])  => ipcRenderer.invoke('config-pkexec-write-config-async',settings,customProfiles),
         getDefaultFanProfiles: () => ipcRenderer.sendSync('config-get-default-fan-profiles'),
-        copyProfilesSync: (profiles: ITccProfile[]) => ipcRenderer.sendSync('config-copy-profiles-sync', profiles),
-        copyProfileSync: (profile: ITccProfile) => ipcRenderer.sendSync('config-copy-profile-sync', profile),
-        copySettingsSync: (settings: ITccSettings) => ipcRenderer.sendSync('config-copy-settings-sync', settings),
     }
 );
 

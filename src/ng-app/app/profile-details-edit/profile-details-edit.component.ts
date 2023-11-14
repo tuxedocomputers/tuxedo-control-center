@@ -30,6 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { ITccFanProfile } from 'src/common/models/TccFanTable';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -59,6 +60,7 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public viewProfile: ITccProfile;
+    public defaultFanProfiles: ITccFanProfile [];
 
     @Input()
     set profile(profile: ITccProfile) {
@@ -144,6 +146,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        this.defaultFanProfiles = this.config.getFanProfiles();
         if (this.viewProfile === undefined) { return; }
         this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => {
             this.cpuInfo = generalCpuInfo;
@@ -480,8 +483,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.utils.formatFrequency(frequency);
     }
 
+    // TODO, we need some variable buffering here, else it will be run 100 times a minute or more
     public getFanProfileNames(): string[] {
-        return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
+        return this.defaultFanProfiles.map(fanProfile => fanProfile.name);
     }
 
     public governorSelectionChange() {

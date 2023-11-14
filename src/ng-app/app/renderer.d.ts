@@ -115,9 +115,6 @@ export interface BACKLIGHT
 export interface CONFIG 
 { 
     pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
-    copyProfilesSync: (profiles: ITccProfile[]) => ITccProfile[],
-    copyProfileSync: (profile: ITccProfile) => ITccProfile,
-    copySettingsSync: (settings: ITccSettings) => ITccSettings,  
     getDefaultFanProfiles: () => ITccFanProfile[],     
     setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,    
     pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,

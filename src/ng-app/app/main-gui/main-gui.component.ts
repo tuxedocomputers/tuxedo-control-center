@@ -88,6 +88,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.utils.minimizeWindow();
     }
 
+    // TODO this function is called many times a minute, needs to be lightweight!
     public getSettings(): ITccSettings {
         if (this.state.getActiveProfile()) {
             this.activeProfileName = this.state.getActiveProfile().name;
@@ -130,7 +131,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public getActiveProfile(): ITccProfile {
         return this.state.getActiveProfile();
     }
-
+    
+    // TODO this function is called many times a minute, needs to be lightweight!
     public getStateProfileName(state: IStateInfo) {
         const stateProfileId = this.getSettings().stateMap[state.value];
         const defaultProfileName = this.utils.getDefaultProfileName(stateProfileId);

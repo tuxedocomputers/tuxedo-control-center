@@ -85,6 +85,10 @@ export class ConfigService implements OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    public copyConfig<T>(config: T): T {
+        return JSON.parse(JSON.stringify(config));
+    }
+
     public updateConfigData(): void {
         this.customProfiles = this.dbus.customProfiles.value;
         this.settings = this.dbus.settings.value;
@@ -147,7 +151,7 @@ export class ConfigService implements OnDestroy {
             return undefined;
         }
 
-        const newProfile: ITccProfile = window.config.copyProfileSync(profileToCopy);
+        const newProfile: ITccProfile = this.copyConfig<ITccProfile>(profileToCopy);
         newProfile.name = newProfileName;
         newProfile.id = generateProfileId();
         const newProfileList = this.getCustomProfiles().concat(newProfile);
@@ -211,7 +215,7 @@ export class ConfigService implements OnDestroy {
 
     public writeCurrentEditingProfile(): boolean {
         if (this.editProfileChanges()) {
-            const changedCustomProfiles: ITccProfile[] = window.config.copyProfilesSync(this.customProfiles);
+            const changedCustomProfiles: ITccProfile[] = this.copyConfig<ITccProfile[]>(this.customProfiles);
             changedCustomProfiles[this.currentProfileEditIndex] = this.getCurrentEditingProfile();
 
             const result = window.config.pkexecWriteCustomProfiles(changedCustomProfiles);
@@ -230,7 +234,7 @@ export class ConfigService implements OnDestroy {
 
             // Copy custom profiles and if provided profile is one of them, overwrite with
             // provided profile
-            const customProfilesCopy = window.config.copyProfilesSync(this.customProfiles);
+            const customProfilesCopy = this.copyConfig<ITccProfile[]>(this.customProfiles);
             const willOverwriteProfile =
                 // Is custom profile
                 profileIndex !== -1;
@@ -240,7 +244,7 @@ export class ConfigService implements OnDestroy {
             }
 
             // Copy config and if states are provided, assign the chosen profile to these states
-            const newSettings: ITccSettings = window.config.copySettingsSync(this.getSettings());
+            const newSettings: ITccSettings = this.copyConfig<ITccSettings>(this.getSettings());
             if (states !== undefined) {
                 for (const stateId of states) {
                     newSettings.stateMap[stateId] = profile.id;
@@ -258,8 +262,8 @@ export class ConfigService implements OnDestroy {
 
     public async saveSettings(): Promise<boolean> {
                 return new Promise<boolean>(resolve => {
-            const customProfilesCopy = window.config.copyProfilesSync(this.customProfiles);
-            const newSettings: ITccSettings = window.config.copySettingsSync(this.getSettings());
+            const customProfilesCopy = this.copyConfig<ITccProfile[]>(this.customProfiles);
+            const newSettings: ITccSettings = this.copyConfig<ITccSettings>(this.getSettings());
             window.config.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {
                 if (success) {
                     this.updateConfigData();
@@ -281,7 +285,7 @@ export class ConfigService implements OnDestroy {
     public getProfileByName(searchedProfileName: string): ITccProfile {
         const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.name === searchedProfileName);
         if (foundProfile !== undefined) {
-            return window.config.copyProfileSync(foundProfile);
+            return this.copyConfig<ITccProfile>(foundProfile);
         } else {
             return undefined;
         }
@@ -290,7 +294,7 @@ export class ConfigService implements OnDestroy {
     public getProfileById(searchedProfileId: string): ITccProfile {
         const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.id === searchedProfileId);
         if (foundProfile !== undefined) {
-            return window.config.copyProfileSync(foundProfile);
+            return this.copyConfig<ITccProfile>(foundProfile);
         } else {
             return undefined;
         }
@@ -299,7 +303,7 @@ export class ConfigService implements OnDestroy {
     public getCustomProfileByName(searchedProfileName: string): ITccProfile {
         const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
         if (foundProfile !== undefined) {
-            return window.config.copyProfileSync(foundProfile);
+            return this.copyConfig<ITccProfile>(foundProfile);
         } else {
             return undefined;
         }
@@ -308,7 +312,7 @@ export class ConfigService implements OnDestroy {
     public getCustomProfileById(searchedProfileId: string): ITccProfile {
         const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
         if (foundProfile !== undefined) {
-            return window.config.copyProfileSync(foundProfile);
+            return this.copyConfig<ITccProfile>(foundProfile);
         } else {
             return undefined;
         }
@@ -346,7 +350,7 @@ export class ConfigService implements OnDestroy {
             return false;
         } else {
             this.currentProfileEditIndex = index;
-            this.currentProfileEdit = window.config.copyProfileSync(this.customProfiles[index]);
+            this.currentProfileEdit = this.copyConfig<ITccProfile>(this.customProfiles[index]);
             this.editingProfileSubject.next(this.currentProfileEdit);
             this.editingProfile.next(this.currentProfileEdit);
             return true;

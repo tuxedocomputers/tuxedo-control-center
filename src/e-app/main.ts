@@ -925,18 +925,6 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
 });
 
 
-ipcMain.on('config-copy-profiles-sync', (event, profiles: ITccProfile[]) => {
-    event.returnValue = config.copyConfig<ITccProfile[]>(profiles);
-});
-
-ipcMain.on('config-copy-profile-sync', (event, profile: ITccProfile) => {
-    event.returnValue = config.copyConfig<ITccProfile>(profile);
-});
-
-ipcMain.on('config-copy-settings-sync', (event, settings: ITccSettings) => {
-    event.returnValue = config.copyConfig<ITccSettings>(settings);
-});
-
 ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccProfile[]) => {
     event.returnValue = pkexecWriteCustomProfiles(customProfiles);
     
