@@ -37,6 +37,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
+    openExternal: (url: string) => { ipcRenderer.send('ipc-open-external', url) }
   }
 );
 

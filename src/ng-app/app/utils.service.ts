@@ -75,7 +75,7 @@ export class UtilsService {
 
   // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
   public async getPath(path: string): Promise<string>
-  {
+  { // TODO remove invoke stuff
     return new Promise<string>((resolve, reject) => {
         window.ipc.invoke('get-path', path).then((result) => {
           if (result) {
@@ -131,11 +131,10 @@ export class UtilsService {
     });
   }
 
-  // TODO finish this function and implement some sanitization function
-  // in theory it's enought to check if it starts with http:// or https://
-  openExternal(url: string) {
-    throw new Error('Method not implemented.');
-}
+  public async openExternal(url)
+  {
+    window.ipc.openExternal(url);
+  }
 
 public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?): Promise<void> {
     return window.fs.writeTextFile(filePath,fileData,writeFileOptions);

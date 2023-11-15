@@ -82,6 +82,6 @@ export class DialogChoiceComponent {
     }
 // TODO this causes circular dependencies
     public async openExternalUrl(url: string) {
-        await this.utils.openExternal(url);
+        window.ipc.openExternal(url);
     }
 }

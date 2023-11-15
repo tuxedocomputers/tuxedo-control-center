@@ -79,6 +79,6 @@ export class DialogConfirmComponent {
     }
 
     public async openExternalUrl(url: string) {
-        await this.utils.openExternal(url); // TODO this causes a circular dependency
+        window.ipc.openExternal(url);
     }
 }

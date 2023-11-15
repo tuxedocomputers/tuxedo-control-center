@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme, IpcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme, shell } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -1054,6 +1054,20 @@ ipcMain.handle('get-path', async (event, arg) => {
         let requestedPath = app.getPath(arg);
         resolve(requestedPath);
     });
+});
+
+ipcMain.on('ipc-open-external', (event, url) => {
+    // Explanation: openExternal can theoretically pose a security risk
+    // that's why we only let weblinks happen.
+    // https://benjamin-altpeter.de/shell-openexternal-dangers/
+    if(url.startsWith('http://') || url.startsWith('https://'))
+    {
+        shell.openExternal(url);
+    }
+    else
+    {
+        console.error("Link violates security! Needs to be a weblink! Link: " + url);
+    }
 });
 
 // Renderer to main nativeTheme API
