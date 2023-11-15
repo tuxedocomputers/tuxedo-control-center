@@ -1035,21 +1035,21 @@ ipcMain.handle('get-process-versions', async (event, arg) => {
 });
 
 ipcMain.handle('show-save-dialog', async (event, arg) => {
+    let results = await dialog.showSaveDialog(arg);
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
-        let results = dialog.showSaveDialog(arg);
         resolve(results);
     });
 });
 
 
 ipcMain.handle('show-open-dialog', async (event, arg) => {
+    let results = await dialog.showOpenDialog(arg);
     return new Promise<OpenDialogReturnValue>((resolve, reject) => {
-        let results = dialog.showOpenDialog(arg);
         resolve(results);
     });
 });
 
-ipcMain.handle('get-path', async (event, arg) => {
+ipcMain.handle('ipc-get-path', async (event, arg) => {
     return new Promise<string>((resolve, reject) => {
         let requestedPath = app.getPath(arg);
         resolve(requestedPath);

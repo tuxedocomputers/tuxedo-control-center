@@ -24,6 +24,9 @@ export interface IPC extends EventEmitter {
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
     onUpdateBrightnessMode: (callback) => void,
     openExternal: (url: string) => void,
+    getPath: (path: string) => Promise<string>,
+    openFileDialog: (properties) => Promise<any>,
+    saveFileDialog: (properties) => Promise<any>,
   }
   
 

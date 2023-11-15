@@ -74,30 +74,23 @@ export class UtilsService {
   }
 
   // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
+  // logic moved to main.ts
   public async getPath(path: string): Promise<string>
-  { // TODO remove invoke stuff
-    return new Promise<string>((resolve, reject) => {
-        window.ipc.invoke('get-path', path).then((result) => {
-          if (result) {
-            resolve(result.data);
-          } else {
-            reject(result.error);
-          }
-        });
-      });
+  { 
+    return window.ipc.getPath(path);
   }
 
 
    // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
    // for selecting existing files
    // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
-  public async openFileDialog(properties): Promise<Buffer> {
-    return new Promise<Buffer>((resolve, reject) => {
-      window.ipc.invoke('show-open-dialog', properties).then((result) => {
-        if (result.data.canceled) {
-            reject(result.data.canceled);
+  public async openFileDialog(properties): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      window.ipc.openFileDialog(properties).then((result) => {
+        if (result.canceled) {
+            reject(result.canceled);
           } else {
-            resolve(result.data.filePaths);
+            resolve(result.filePaths);
           }
       });
     });
@@ -109,11 +102,11 @@ export class UtilsService {
   // does not save anything, just returns a path
   public async saveFileDialog(properties): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
-      window.ipc.invoke('show-save-dialog', properties).then((result) => {
-        if (result.data.canceled) {
-          reject(result.data.canceled);
+      window.ipc.saveFileDialog(properties).then((result) => {
+        if (result.canceled) {
+          reject(result.canceled);
         } else {
-          resolve(result.data.filePath);
+          resolve(result.filePath);
         }
       });
     });

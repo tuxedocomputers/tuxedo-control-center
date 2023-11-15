@@ -37,7 +37,10 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    openExternal: (url: string) => { ipcRenderer.send('ipc-open-external', url) }
+    openExternal: (url: string) => ipcRenderer.send('ipc-open-external', url),
+    getPath: (path: string) => ipcRenderer.invoke('ipc-get-path', path),
+    openFileDialog: (properties) => ipcRenderer.invoke('show-open-dialog', properties),
+    saveFileDialog: (properties) => ipcRenderer.invoke('show-save-dialog', properties),
   }
 );
 
