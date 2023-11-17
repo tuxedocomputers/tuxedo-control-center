@@ -198,6 +198,31 @@ export class TccDBusInterface extends dbus.interface.Interface {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
 
+    async GetChargeStartAvailableThresholds() {
+        return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeStartAvailableThresholds());
+    }
+    async GetChargeEndAvailableThresholds() {
+        return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeEndAvailableThresholds());
+    }
+    async GetChargeStartThreshold() {
+        return await this.interfaceOptions.chargingWorker.getChargeStartThreshold();
+    }
+    async GetChargeEndThreshold() {
+        return await this.interfaceOptions.chargingWorker.getChargeEndThreshold();
+    }
+    async SetChargeStartThreshold(value) {
+        return await this.interfaceOptions.chargingWorker.setChargeStartThreshold(value);
+    }
+    async SetChargeEndThreshold(value) {
+        return await this.interfaceOptions.chargingWorker.setChargeEndThreshold(value);
+    }
+    async GetChargeType() {
+        return await this.interfaceOptions.chargingWorker.getChargeType();
+    }
+    async SetChargeType(type) {
+        return await this.interfaceOptions.chargingWorker.setChargeType(type);
+    }
+
     GetFnLockSupported() {
         return this.fnLock.getFnLockSupported();
     }
@@ -249,6 +274,14 @@ TccDBusInterface.configureMembers({
         GetChargingPrioritiesAvailable: { outSignature: 's' },
         GetCurrentChargingPriority: { outSignature: 's' },
         SetChargingPriority: { inSignature: 's', outSignature: 'b' },
+        GetChargeStartAvailableThresholds: { outSignature: 's' },
+        GetChargeEndAvailableThresholds: { outSignature: 's' },
+        GetChargeStartThreshold: { outSignature: 'i' },
+        GetChargeEndThreshold: { outSignature: 'i' },
+        SetChargeStartThreshold: { inSignature: 'i', outSignature: 'b' },
+        SetChargeEndThreshold: { inSignature: 'i', outSignature: 'b' },
+        GetChargeType: { outSignature: 's' },
+        SetChargeType: { inSignature: 's', outSignature: 'b' },
         GetFnLockSupported: { outSignature: "b" },
         GetFnLockStatus: { outSignature: "b" },
         SetFnLockStatus: { inSignature: "b" },
