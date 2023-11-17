@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
 import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AquarisClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
@@ -93,7 +92,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             name: $localize `:@@aqFanPresetFastLabel:Fast`,
             value: 80
         });
-        this.aquaris = window.aquarisApi;
+        this.aquaris = window.aquarisAPI;
     }
 
     ngOnInit() {
@@ -590,4 +589,3 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         await this.utils.openExternal(url);
     }
 }
-*/

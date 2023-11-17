@@ -79,7 +79,7 @@ import { FanGraphComponent } from './fan-graph/fan-graph.component';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
-//import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
@@ -110,7 +110,7 @@ declare const require;
     ChangeCryptPasswordComponent,
     FanGraphComponent,
     MainGuiComponent,
-    //AquarisControlComponent,
+    AquarisControlComponent,
     DialogInputTextComponent,
     DialogConfirmComponent,
     DialogChoiceComponent,
