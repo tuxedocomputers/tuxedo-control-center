@@ -25,7 +25,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
     </a>
 </label>
-<div class="charging-profile-note" i18n="@@chargingProfileNoteLabel">
+<div class="charging-profile-note" i18n="@@chargingProfileNoteLabel"
+     *ngIf="chargingProfilesAvailable.length > 0 || chargingPriosAvailable.length > 0">
     Please note: The system will still show 100% capacity in "Reduced capacity"
     and "Stationary use" modes. The limitation of the actual capacity takes place
     in the background on firmware level and is not visible for the operating system.
@@ -64,3 +65,35 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </mat-radio-button>
 </mat-radio-group>
+
+<div *ngIf="chargeType !== 'Unknown'" class="charging-thresholds">
+    <label class="charging-group-label" i18n="@@chargingThresholdsLabel">Charging thresholds</label>
+    <mat-checkbox #enableThresholds color="primary"
+        [formControl]="ctrlEnableThresholds"
+        (change)="checkboxEnableThresholdsChange($event)"
+        [disabled]="chargingThresholdsProgress">
+        Enable charging thresholds
+    </mat-checkbox>
+    <div>
+        <mat-slider #startThreshold
+            [formControl]="ctrlChargeStartThreshold"
+            (change)="sliderStartThresholdChange($event)"
+            [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+            min="0"
+            max="100"
+            step="1"
+            color="primary">
+        </mat-slider> Start threshold: {{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %
+    </div>
+    <div>
+        <mat-slider #endThreshold
+            [formControl]="ctrlChargeEndThreshold"
+            (change)="sliderEndThresholdChange($event)"
+            [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+            min="0"
+            max="100"
+            step="1"
+            color="primary">
+        </mat-slider> End threshold: {{ findClosest(endThreshold.value, chargeEndAvailableThresholds) }} %
+    </div>
+</div>
