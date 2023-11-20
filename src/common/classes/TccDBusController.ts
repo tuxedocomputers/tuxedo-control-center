@@ -345,7 +345,7 @@ export class TccDBusController {
 
     async getChargeStartAvailableThresholds(): Promise<number[]> {
         try {
-            return await this.interface.GetChargeStartAvailableThresholds();
+            return JSON.parse(await this.interface.GetChargeStartAvailableThresholds());
         } catch (err) {
             return [];
         }
@@ -353,7 +353,7 @@ export class TccDBusController {
 
     async getChargeEndAvailableThresholds(): Promise<number[]> {
         try {
-            return await this.interface.GetChargeEndAvailableThresholds();
+            return JSON.parse(await this.interface.GetChargeEndAvailableThresholds());
         } catch (err) {
             return [];
         }
