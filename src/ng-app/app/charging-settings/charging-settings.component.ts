@@ -185,7 +185,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
     public async sliderStartThresholdChange(changeEvent: MatSliderChange) {
         const dbus = this.tccdbus.getInterface();
-        this.chargingThresholdsProgress = true;
 
         let newValue = changeEvent.value;
         let validValues = this.chargeStartAvailableThresholds.filter(
@@ -194,14 +193,16 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         newValue = this.findClosest(newValue, validValues);
         this.ctrlChargeStartThreshold.setValue(newValue);
 
-        await dbus.setChargeStartThreshold(newValue);
-        await this.readAvailableSettings(true);
-        this.chargingThresholdsProgress = false;
+        if (newValue !== this.chargeStartThreshold) {
+            this.chargingThresholdsProgress = true;
+            await dbus.setChargeStartThreshold(newValue);
+            await this.readAvailableSettings(true);
+            this.chargingThresholdsProgress = false;
+        }
     }
 
     public async sliderEndThresholdChange(changeEvent: MatSliderChange) {
         const dbus = this.tccdbus.getInterface();
-        this.chargingThresholdsProgress = true;
 
         let newValue = changeEvent.value;
         let validValues = this.chargeEndAvailableThresholds.filter(
@@ -210,9 +211,12 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         newValue = this.findClosest(newValue, validValues);
         this.ctrlChargeEndThreshold.setValue(newValue);
 
-        await dbus.setChargeEndThreshold(newValue);
-        await this.readAvailableSettings(true);
-        this.chargingThresholdsProgress = false;
+        if (newValue !== this.chargeEndThreshold) {
+            this.chargingThresholdsProgress = true;
+            await dbus.setChargeEndThreshold(newValue);
+            await this.readAvailableSettings(true);
+            this.chargingThresholdsProgress = false;
+        }
     }
 
     public async checkboxEnableThresholdsChange(changeEvent: MatCheckboxChange) {
