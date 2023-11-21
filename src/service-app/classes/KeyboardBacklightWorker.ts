@@ -41,7 +41,6 @@ export class KeyboardBacklightWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1500, tccd);
-        this.updateLEDSPerKey();
     }
 
     // Converts Int Value: 0xRRGGBBAA to string value "RRR GGG BBB" (in decimal)
@@ -288,8 +287,17 @@ export class KeyboardBacklightWorker extends DaemonWorker {
         }
     }
 
+    private onStartRetryCount = 5;
+
     public onStart(): void {
+        this.updateLEDSPerKey();
         this.getKeyboardBacklightCapabilities();
+        if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
+            console.log("Could not find keyboard backlight. Retrying...\n");
+            --this.onStartRetryCount;
+            setTimeout(() => { this.onStart() }, 1000);
+            return;
+        }
 
         if (this.tccd.settings.keyboardBacklightControlEnabled) {
             this.updateSysFsFromSettings().then(() => {

@@ -1,0 +1,1856 @@
+<!--
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+
+<div [style.height.px]="divHeight" class="keyboard">
+    <ng-template
+        [ngIf]="[1, 3].includes(this.keyboardBacklightCapabilities.zones) || keyboardBacklightCapabilities.zones > 4">
+        <svg id="Svg1+3Zones" [attr.viewBox]="'0 0 ' + getSvgWidth() + ' ' + getSvgHeight()">
+            <g transform="translate(832.61151,535.06891)">
+                <g id="3zone_zone0" class="key-group" (click)="updateZoneOpacity($event, 0)"
+                    [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(0), 
+                    'key-background-unselected': keyboardBacklightCapabilities.zones == 3 && !selectedZones.includes(0) }" data-zone="0">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="M 0,0 V 205 h 181 v -34.6 h 36.6 v -36.6 h -17.3 v -36.6 h -19.3 v -97.2"
+                        transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone0" />
+                    <g id="3zone_bar0" *ngIf="keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(0)"
+                        transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect width="181" height="5" x="0" y="210" style="fill: {{chosenColorHex[0]}}"
+                            filter="url(#blur)" />
+                    </g>
+                    <g id="Esc">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-534.06891" x="-831.61151"
+                            height="20" width="30.6" id="rect1552"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1752" width="20.6"
+                            height="10" x="-826.61151" y="-529.06891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F1" transform="translate(36.599976,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1758" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" style="fill:none;stroke-width:4;stroke-linecap:round" ry="0.44194174"
+                            rx="0.44194174" y="-496.56891" x="-826.61151" height="10" width="20.6" id="rect1760"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F2" transform="translate(73.199977,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1772"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1774" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F3" transform="translate(109.79998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1782" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1784" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F4" transform="translate(146.39998,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1792"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1794" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="°" transform="translate(0,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2110" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2112"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="1" transform="translate(36.599976,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2118"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2120" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="2" transform="translate(73.199977,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2124" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2126"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="3" transform="translate(109.79998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2130"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2132" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="4" transform="translate(146.39998,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2136" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2138"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Q" transform="translate(73.199989)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2364" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2366"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="W" transform="translate(109.79999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2372"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2374" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="E" transform="translate(146.39999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2386" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2388"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Tab" transform="rotate(-90,-450.31155,-126.76892)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect2542"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2544" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="CapsLock">
+                        <rect transform="rotate(-90)" style="fill:none;stroke-width:2;stroke-linecap:round"
+                            id="rect2548" width="30.599998" height="86.380257" x="404.26889" y="-831.61151"
+                            rx="4.3310289" ry="4.3310289" class="key_outline" />
+                        <rect transform="rotate(-90)" class="key_color" ry="0.44194174" rx="0.44194174" y="-826.61157"
+                            x="409.26889" height="76.380005" width="20.6" id="rect2550"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="A" transform="translate(92.400004,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2554"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2556" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="S" transform="translate(129,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2562" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2564"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="D" transform="translate(165.6,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2570"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2572" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="&lt;" transform="translate(73.199989,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2778" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2780"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Y" transform="translate(109.79999,87.900026)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2786"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2788" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="X" transform="translate(146.39999,87.900026)" style="display:inline">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2794" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2796"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="C" transform="translate(182.99999,73.200014)" style="display:inline">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2802"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2804" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Shift_links" transform="rotate(-90,-413.71154,-90.168911)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2980" width="30.6"
+                            height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156"
+                            height="57.200001" width="20.6" id="rect2982"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Strg_links" transform="rotate(-90,-395.41154,-71.868909)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect3069"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3071" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Fn" transform="translate(73.199989,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3075"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3077" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Tux" transform="translate(109.79999,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3083" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect3085"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Alt" transform="translate(146.39999,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3091"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3093" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                </g>
+            </g>
+            <g [attr.transform]="'translate(' + calculateTranslateValue(1) + ')'">
+                <g id="3zone_zone1" class="key-group" (click)="updateZoneOpacity($event, 1)" [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(1), 
+                'key-background-unselected': keyboardBacklightCapabilities.zones == 3 && !selectedZones.includes(1) }"
+                    data-zone="1">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="m 181,0 v 97.2 h 19.3 v 36.6 h 17.3 v 36.6 h -36.6 v 34.6 h 329.4 v -34.6 h -36.6 v -36.6 h 19.4 v -36.6 h -19.4 v -73.2 h 36.6 v -24"
+                        id="SelectionDummyZone1" transform="translate(-832.61151,-535.06891)" />
+                    <g id="3zone_bar1" *ngIf="keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(1)"
+                        transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect width="329.4" height="5" x="181" y="210"
+                            style="fill: {{keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]}}"
+                            filter="url(#blur)" />
+                    </g>
+                    <g id="F5" transform="translate(182.99998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1802" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1804" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F6" transform="translate(219.59998,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1812"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1814" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F7" transform="translate(256.19998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1822" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1824" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F8" transform="translate(292.79998,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1832"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1834" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F9" transform="translate(329.39998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1842" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1844" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F10">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1856" width="30.6"
+                            height="20" x="-465.61154" y="-534.06891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-529.06891" x="-460.61154"
+                            height="10" width="20.6" id="rect1858" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F11" transform="translate(402.59995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1860"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1862" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F12" transform="translate(439.19995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1868" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1870" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Druck" transform="translate(475.79995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1878"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1880" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="5" transform="translate(182.99998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2142"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2144" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="6" transform="translate(219.59998,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2148" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2150"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="7" transform="translate(256.19998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2154"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2156" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="8" transform="translate(292.79998,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2160" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2162"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="9" transform="translate(329.39998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2166"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2168" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="0" transform="translate(365.99997,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2172" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2174"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="?" transform="translate(402.59995,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2178"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2180" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="`" transform="translate(439.19995,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2184" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2186"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="R" transform="translate(182.99999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2406"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2408" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="T" transform="translate(219.59999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2414" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2416"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Z" transform="translate(256.19999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2422"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2424" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="U" transform="translate(292.79999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2430" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2432"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="I" transform="translate(329.39999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2438"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2440" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="O" transform="translate(365.99999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2446" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2448"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="P" transform="translate(402.59998)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2454"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2456" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Ü" transform="translate(439.19996)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2462" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2464"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="F" transform="translate(202.2,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2578" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2580"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="G" transform="translate(238.8,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2586"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2588" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="H" transform="translate(275.40001,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2594" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2596"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="J" transform="translate(312,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2602"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2604" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="K" transform="translate(348.6,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2610" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2612"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="L" transform="translate(385.20001,36.600016)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2618"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2620" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Ö" transform="translate(421.8,51.300028)" style="display:inline">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2626" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2628"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Ä" transform="translate(458.39997,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2634"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2636" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="V" transform="translate(219.59999,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2810" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2812"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="B" transform="translate(256.19999,73.200014)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2818"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2820" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="N" transform="translate(292.79999,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2826" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2828"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="M" transform="translate(329.39999,87.900026)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2834"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2836" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="," transform="translate(365.99999,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2842" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2844"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="." transform="translate(402.59998,73.200014)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2850"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2852" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="-" transform="translate(439.19996,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2858" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2860"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Space">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3099" width="177"
+                            height="30.6" x="-648.61157" y="-361.66888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-356.66888" x="-643.61151"
+                            height="20.6" width="167" id="rect3101"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="AltGr" transform="translate(365.99999,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3112"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3114" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Kontextmenü" transform="translate(402.59998,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3120" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect3122"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Strg_rechts" transform="rotate(-90,-175.81156,-291.46889)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect3136"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3138" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[1] : chosenColorHex[0]" />
+                    </g>
+                </g>
+            </g>
+            <g [attr.transform]="'translate(' + calculateTranslateValue(2) + ')'">
+                <g id="3zone_zone2" class="key-group" (click)="updateZoneOpacity($event, 2)"
+                    [ngClass]="{ 'key-background-selected': keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(2), 
+                    'key-background-unselected': keyboardBacklightCapabilities.zones == 3 && !selectedZones.includes(2) }" data-zone="2">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="m 510.4,0 v 24 h -36.6 v 73.2 h 19.4 v 36.6 h -19.4 v 36.6 h 36.6 v 34.6 h 217.6 v -205"
+                        transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone2" />
+                    <g id="3zone_bar2" *ngIf="keyboardBacklightCapabilities.zones == 3 && selectedZones.includes(2)"
+                        transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect width="217.6" height="5" x="510.4" y="210" style="fill: {{
+                        keyboardBacklightCapabilities.zones> 1 && keyboardBacklightCapabilities.zones
+                        <= 4 ? chosenColorHex[2] : chosenColorHex[0]}}" filter="url(#blur)" />
+                    </g>
+                    <g id="Einfg" transform="translate(512.39995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1888" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1890" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Entf" transform="translate(548.99995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1898"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1900" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Pos1" transform="translate(585.59995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1908" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1910" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Ende" transform="translate(622.19995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1918"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1920" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Bild hoch" transform="translate(658.79995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1928" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1930" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Bild runter" transform="translate(695.39995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1938"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1940" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Backspace">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06891" x="-355.81155"
+                            height="30.6" width="103.8" id="rect2190"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2192" width="93.800003"
+                            height="20.6" x="-350.81152" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Num" transform="translate(585.59995,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2198"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2200" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_/" transform="translate(622.19995,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2204" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2206"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_*" transform="translate(658.79995,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2210"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2212" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_-" transform="translate(695.39995,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2216" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2218"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_7" transform="translate(585.59995,14.700012)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2228" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2230"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_8" transform="translate(622.19995,14.700012)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2234"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2236" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_9" transform="translate(658.79995,14.700012)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2240" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2242"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_+" transform="translate(0,36.599975)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect2246"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2248" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_Enter" transform="translate(0,109.79996)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2284" width="30.6"
+                            height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156"
+                            height="57.200001" width="20.6" id="rect2286"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_4" transform="translate(585.59995,51.300018)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2290"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2292" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_5" transform="translate(622.19995,51.300018)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2296" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2298"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_6" transform="translate(658.79995,51.300018)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2302"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2304" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_1" transform="translate(585.59995,87.900024)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2319" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2321"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_2" transform="translate(622.19995,87.900024)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2325"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2327" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_3" transform="translate(658.79995,87.900024)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2331" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2333"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Pfeiltaste_rechts" transform="translate(585.59995,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2339"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2341" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_0" transform="translate(622.19995,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2345" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2347"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Numpad_," transform="translate(658.79995,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2351"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2353" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="+" transform="translate(475.79996,14.700012)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2470"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2472" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Enter">
+                        <path id="rect2486" d="m -314.88086,-471.46875 c -2.39939,0 -4.33008,1.93069 -4.33008,4.33008 v 21.93945 c 0,2.39939 1.93069,4.33008 4.33008,4.33008 
+                            h 14.86914 v 32.26953 c 0,2.39939 1.93264,4.33008 4.33203,4.33008 h 39.33789 c 2.39939,0 4.33008,-1.93069 4.33008,-4.33008 
+                            v -36.59961 -2.30859 -19.63086 c 0,-2.39939 -1.93069,-4.33008 -4.33008,-4.33008 z"
+                            style="display:inline;fill:none;stroke-width:2;stroke-linecap:round" class="key_outline" />
+                        <path id="rect2488" d="m -313.76953,-466.46875 c -0.24484,0 -0.44141,0.19657 -0.44141,0.44141 v 19.71679 c 0,0.24484 0.19657,0.44141 0.44141,0.44141 
+                            h 18.75781 v 36.1582 c 0,0.24484 0.19657,0.44141 0.44141,0.44141 h 37.11719 c 0.24483,0 0.4414,-0.19657 0.4414,-0.44141 
+                            v -36.59961 -8.11718 -11.59961 c 0,-0.24484 -0.19657,-0.44141 -0.4414,-0.44141 z"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="#" transform="translate(494.99997,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2642" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2644"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Shift_rechts" transform="rotate(-90,-175.81156,-328.06889)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3034" width="30.6"
+                            height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156"
+                            height="57.200001" width="20.6" id="rect3036"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Pfeiltaste_hoch" transform="translate(548.99979,87.900026)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3040"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3042" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Pfeiltaste_links" transform="translate(512.39996,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3057" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect3059"
+                            style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                    <g id="Pfeiltaste_runter" transform="translate(548.99979,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3063"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3065" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color"
+                            [style.stroke]="keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4 ? chosenColorHex[2] : chosenColorHex[0]" />
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </ng-template>
+
+    <ng-template [ngIf]="keyboardBacklightCapabilities.zones == 4">
+        <svg id="Svg4Zones" [attr.viewBox]="'0 0 776 ' + getSvgHeight()">
+            <g transform="translate(832.61151,535.06891)">
+                <g id="4zone_zone0" class="key-group" (click)="updateZoneOpacity($event, 0)"
+                    [ngClass]="{ 'key-background-selected': selectedZones.includes(0), 'key-background-unselected': !selectedZones.includes(0) }"
+                    data-zone="0">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="m 0,0 v 205 h 144.4  v -71.2 h -17.4 v -36.6 h 17.4 V 0"
+                        transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone0" />
+                    <g id="4zone_bar0" *ngIf="selectedZones.includes(0)" transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect id="4zone_1st" width="144.4" height="5" x="0" y="210" style="fill: {{chosenColorHex[0]}}"
+                            filter="url(#blur)" />
+                    </g>
+                    <g id="Esc">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-534.06891" x="-831.61151"
+                            height="20" width="30.6" id="rect1552"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1752" width="20.6"
+                            height="10" x="-826.61151" y="-529.06891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F1" transform="translate(36.599976,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1758" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1760" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F2" transform="translate(73.199977,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1772"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1774" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="F3" transform="translate(109.79998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1782" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1784" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="°" transform="translate(0,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2110" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2112"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="1" transform="translate(36.599976,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2118"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2120" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="2" transform="translate(73.199977,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2124" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2126"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="3" transform="translate(109.79998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2130"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2132" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Q" transform="translate(73.199989)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2364" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2366"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="W" transform="translate(109.79999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2372"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2374" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Tab" transform="rotate(-90,-450.31155,-126.76892)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect2542"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2544" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="CapsLock">
+                        <rect transform="rotate(-90)" style="fill:none;stroke-width:2;stroke-linecap:round"
+                            id="rect2548" width="30.599998" height="86.380257" x="404.26889" y="-831.61151"
+                            rx="4.3310289" ry="4.3310289" class="key_outline" />
+                        <rect transform="rotate(-90)" class="key_color" ry="0.44194174" rx="0.44194174" y="-826.61157"
+                            x="409.26889" height="76.380005" width="20.6" id="rect2550"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="A" transform="translate(92.400004,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2554"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2556" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="&lt;" transform="translate(73.199989,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2778" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2780"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Y" transform="translate(109.79999,87.900026)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2786"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2788" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Shift_links" transform="rotate(-90,-413.71154,-90.168911)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2980" width="30.6"
+                            height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156"
+                            height="57.200001" width="20.6" id="rect2982"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Strg_links" transform="rotate(-90,-395.41154,-71.868909)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect3069"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3071" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Fn" transform="translate(73.199989,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3075"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3077" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                    <g id="Tux" transform="translate(109.79999,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3083" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect3085"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[0]" />
+                    </g>
+                </g>
+            </g>
+            <g transform="translate(848.61151,535.06891)">
+                <g id="4zone_zone1" class="key-group" (click)="updateZoneOpacity($event, 1)"
+                    [ngClass]="{ 'key-background-selected': selectedZones.includes(1), 'key-background-unselected': !selectedZones.includes(1) }"
+                    data-zone="1">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="m 144.4,0 v 97.2 h -17.4 v 36.6 h 17.4 v 71.2 h 219.6 v -71.2 h 19.3 v -36.6 h -19.3 v -97.2"
+                        transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone1" />
+                    <g id="4zone_bar1" *ngIf="selectedZones.includes(1)" transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect width="219.6" height="5" x="144.4" y="210" style="fill: {{chosenColorHex[1]}}"
+                            filter="url(#blur)" />
+                    </g>
+                    <g id="F4" transform="translate(146.39998,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1792"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1794" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="F5" transform="translate(182.99998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1802" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1804" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="F6" transform="translate(219.59998,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1812"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1814" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="F7" transform="translate(256.19998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1822" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1824" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="F8" transform="translate(292.79998,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1832"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1834" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="F9" transform="translate(329.39998,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1842" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1844" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="4" transform="translate(146.39998,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2136" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2138"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="5" transform="translate(182.99998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2142"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2144" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="6" transform="translate(219.59998,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2148" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2150"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="7" transform="translate(256.19998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2154"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2156" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="8" transform="translate(292.79998,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2160" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2162"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="9" transform="translate(329.39998,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2166"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2168" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="E" transform="translate(146.39999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2386" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2388"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="R" transform="translate(182.99999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2406"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2408" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="T" transform="translate(219.59999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2414" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2416"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="Z" transform="translate(256.19999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2422"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2424" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="U" transform="translate(292.79999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2430" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2432"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="I" transform="translate(329.39999)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2438"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2440" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="S" transform="translate(129,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2562" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2564"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="D" transform="translate(165.6,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2570"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2572" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="F" transform="translate(202.2,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2578" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2580"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="G" transform="translate(238.8,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2586"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2588" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="H" transform="translate(275.40001,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2594" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2596"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="J" transform="translate(312,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2602"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2604" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="K" transform="translate(348.6,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2610" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2612"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="X" transform="translate(146.39999,87.900026)" style="display:inline">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2794" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2796"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="C" transform="translate(182.99999,73.200014)" style="display:inline">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2802"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2804" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="V" transform="translate(219.59999,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2810" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2812"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="B" transform="translate(256.19999,73.200014)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2818"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2820" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="N" transform="translate(292.79999,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2826" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2828"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="M" transform="translate(329.39999,87.900026)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2834"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2836" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="Alt" transform="translate(146.39999,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3091"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3093" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                    <g id="Space">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3099" width="177"
+                            height="30.6" x="-648.61157" y="-361.66888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-356.66888" x="-643.61151"
+                            height="20.6" width="167" id="rect3101"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[1]" />
+                    </g>
+                </g>
+            </g>
+            <g transform="translate(864.61151,535.06891)">
+                <g id="4zone_zone2" class="key-group" (click)="updateZoneOpacity($event, 2)"
+                    [ngClass]="{ 'key-background-selected': selectedZones.includes(2), 'key-background-unselected': !selectedZones.includes(2) }"
+                    data-zone="2">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="m 364,0 v 97.2 h 19.3 v 36.6 h -19.3 v 71.2 h 146.4 v -34.6 h 36.6 v -36.6 h -17.3 v -36.6 h -19.3 v -36.6 h -36.6 v -60.6"
+                        transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone2" />
+                    <g id="4zone_bar2" *ngIf="selectedZones.includes(2)" transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect width="146.4" height="5" x="364" y="210" style="fill: {{chosenColorHex[2]}}"
+                            filter="url(#blur)" />
+                    </g>
+                    <g id="F10">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1856" width="30.6"
+                            height="20" x="-465.61154" y="-534.06891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-529.06891" x="-460.61154"
+                            height="10" width="20.6" id="rect1858" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="F11" transform="translate(402.59995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1860"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1862" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="F12" transform="translate(439.19995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1868" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1870" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="0" transform="translate(365.99997,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2172" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2174"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="?" transform="translate(402.59995,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2178"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2180" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="`" transform="translate(439.19995,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2184" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2186"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="O" transform="translate(365.99999)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2446" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2448"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="P" transform="translate(402.59998)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2454"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2456" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="Ü" transform="translate(439.19996)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2462" width="30.6"
+                            height="30.6" x="-831.61151" y="-471.4689" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-466.4689" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2464"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="+" transform="translate(475.79996,14.700012)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2470"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2472" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="L" transform="translate(385.20001,36.600016)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2618"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2620" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="Ö" transform="translate(421.8,51.300028)" style="display:inline">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2626" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2628"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="Ä" transform="translate(458.39997,51.300028)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2634"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2636" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="#" transform="translate(494.99997,51.300028)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2642" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2644"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="," transform="translate(365.99999,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2842" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2844"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="." transform="translate(402.59998,73.200014)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-471.4689" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2850"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2852" width="20.6"
+                            height="20.6" x="-826.61151" y="-466.4689" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="-" transform="translate(439.19996,87.900026)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2858" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2860"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="Shift_rechts" transform="rotate(-90,-175.81156,-328.06889)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3034" width="30.6"
+                            height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156"
+                            height="57.200001" width="20.6" id="rect3036"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="AltGr" transform="translate(365.99999,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3112"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3114" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="Kontextmenü" transform="translate(402.59998,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3120" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect3122"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                    <g id="Strg_rechts" transform="rotate(-90,-175.81156,-291.46889)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect3136"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3138" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[2]" />
+                    </g>
+                </g>
+            </g>
+            <g transform="translate(880.61151,535.06891)">
+                <g id="4zone_zone3" class="key-group" (click)="updateZoneOpacity($event, 3)"
+                    [ngClass]="{ 'key-background-selected': selectedZones.includes(3), 'key-background-unselected': !selectedZones.includes(3) }"
+                    data-zone="3">
+                    <path style="fill:white;fill-opacity:0;stroke:white;stroke-opacity:0"
+                        d="m 473.8,0 v 60.6 h 36.6 v 36.6 h 19.3 v 36.6 h 17.3 v 36.6 h -36.6 v 34.6 h 217.6 v -205"
+                        transform="translate(-832.61151,-535.06891)" id="SelectionDummyZone3" />
+                    <g id="4zone_bar3" *ngIf="selectedZones.includes(3)" transform="translate(-832.61151,-535.06891)">
+                        <filter id="blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        </filter>
+                        <rect id="4zone_3nd" width="217.6" height="5" x="510.4" y="210"
+                            style="fill: {{chosenColorHex[3]}}" filter="url(#blur)" />
+                    </g>
+                    <g id="Druck" transform="translate(475.79995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1878"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1880" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Einfg" transform="translate(512.39995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1888" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1890" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Entf" transform="translate(548.99995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1898"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1900" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Pos1" transform="translate(585.59995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1908" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1910" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Ende" transform="translate(622.19995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1918"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1920" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Bild hoch" transform="translate(658.79995,-32.5)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect1928" width="30.6"
+                            height="20" x="-831.61151" y="-501.56891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-496.56891" x="-826.61151"
+                            height="10" width="20.6" id="rect1930" style="fill:none;stroke-width:4;stroke-linecap:round"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Bild runter" transform="translate(695.39995,-32.5)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-501.56891" x="-831.61151"
+                            height="20" width="30.6" id="rect1938"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect1940" width="20.6"
+                            height="10" x="-826.61151" y="-496.56891" rx="0.44194174" ry="0.44194174" class="key_color"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Backspace">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06891" x="-355.81155"
+                            height="30.6" width="103.8" id="rect2190"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2192" width="93.800003"
+                            height="20.6" x="-350.81152" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Num" transform="translate(585.59995,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2198"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2200" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_/" transform="translate(622.19995,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2204" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2206"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_*" transform="translate(658.79995,-21.899994)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2210"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2212" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_-" transform="translate(695.39995,-21.899994)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2216" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2218"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Enter">
+                        <path id="rect2486" d="m -314.88086,-471.46875 c -2.39939,0 -4.33008,1.93069 -4.33008,4.33008 v 21.93945 c 0,2.39939 1.93069,4.33008 4.33008,4.33008 
+                            h 14.86914 v 32.26953 c 0,2.39939 1.93264,4.33008 4.33203,4.33008 h 39.33789 c 2.39939,0 4.33008,-1.93069 4.33008,-4.33008 
+                            v -36.59961 -2.30859 -19.63086 c 0,-2.39939 -1.93069,-4.33008 -4.33008,-4.33008 z"
+                            style="display:inline;fill:none;stroke-width:2;stroke-linecap:round" class="key_outline" />
+                        <path id="rect2488" d="m -313.76953,-466.46875 c -0.24484,0 -0.44141,0.19657 -0.44141,0.44141 v 19.71679 c 0,0.24484 0.19657,0.44141 0.44141,0.44141 
+                            h 18.75781 v 36.1582 c 0,0.24484 0.19657,0.44141 0.44141,0.44141 h 37.11719 c 0.24483,0 0.4414,-0.19657 0.4414,-0.44141 
+                            v -36.59961 -8.11718 -11.59961 c 0,-0.24484 -0.19657,-0.44141 -0.4414,-0.44141 z"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" class="key_color"
+                            [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_7" transform="translate(585.59995,14.700012)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2228" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2230"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_8" transform="translate(622.19995,14.700012)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2234"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2236" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_9" transform="translate(658.79995,14.700012)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2240" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2242"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_+" transform="translate(0,36.599975)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-508.06888" x="-136.21156"
+                            height="67.199997" width="30.6" id="rect2246"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2248" width="20.6"
+                            height="57.200001" x="-131.21156" y="-503.06891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_4" transform="translate(585.59995,51.300018)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2290"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2292" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_5" transform="translate(622.19995,51.300018)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2296" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2298"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_6" transform="translate(658.79995,51.300018)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2302"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2304" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Pfeiltaste_hoch" transform="translate(548.99979,87.900026)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3040"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3042" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_1" transform="translate(585.59995,87.900024)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2319" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2321"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_2" transform="translate(622.19995,87.900024)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2325"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2327" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_3" transform="translate(658.79995,87.900024)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2331" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2333"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Pfeiltaste_links" transform="translate(512.39996,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect3057" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect3059"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Pfeiltaste_runter" transform="translate(548.99979,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect3063"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect3065" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Pfeiltaste_rechts" transform="translate(585.59995,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2339"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2341" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_0" transform="translate(622.19995,124.50003)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2345" width="30.6"
+                            height="30.6" x="-831.61151" y="-486.16891" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-481.16891" x="-826.61151"
+                            height="20.6" width="20.6" id="rect2347"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_," transform="translate(658.79995,124.50003)">
+                        <rect class="key_outline" ry="4.3310289" rx="4.3310289" y="-486.16891" x="-831.61151"
+                            height="30.6" width="30.6" id="rect2351"
+                            style="fill:none;stroke-width:2;stroke-linecap:round" />
+                        <rect style="fill:none;stroke-width:4;stroke-linecap:round" id="rect2353" width="20.6"
+                            height="20.6" x="-826.61151" y="-481.16891" rx="0.44194174" ry="0.44194174"
+                            class="key_color" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                    <g id="Numpad_Enter" transform="translate(0,109.79996)">
+                        <rect style="fill:none;stroke-width:2;stroke-linecap:round" id="rect2284" width="30.6"
+                            height="67.199997" x="-136.21156" y="-508.06888" rx="4.3310289" ry="4.3310289"
+                            class="key_outline" />
+                        <rect class="key_color" ry="0.44194174" rx="0.44194174" y="-503.06891" x="-131.21156"
+                            height="57.200001" width="20.6" id="rect2286"
+                            style="fill:none;stroke-width:4;stroke-linecap:round" [style.stroke]="chosenColorHex[3]" />
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </ng-template>
+</div>

@@ -25,7 +25,9 @@ $tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-p
         dialog: #252525,
         card: #252525,
         status-bar: #151515,
-    ))
+    )),
+    
+    --icon-invert: 100%
 ));
 
 .dark-theme {
