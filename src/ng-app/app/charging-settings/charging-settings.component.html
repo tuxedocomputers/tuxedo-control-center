@@ -71,10 +71,53 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-checkbox #enableThresholds color="primary"
         [formControl]="ctrlEnableThresholds"
         (change)="checkboxEnableThresholdsChange($event)"
-        [disabled]="chargingThresholdsProgress">
+        [disabled]="chargingThresholdsProgress"
+        *ngIf="false">
         Enable charging thresholds
     </mat-checkbox>
-    <div>
+    <mat-radio-group #thresholdGroup
+        class="charging-radio-group"
+        [formControl]="ctrlChargingThresholdGroup"
+        (change)="thresholdRadioGroupChange($event)"
+        *ngIf="true">
+        <mat-radio-button
+            value="high_capacity"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header>Full capacity</header>
+                <ng-container>This is the default setting. Highest capacity for best possible runtimes.</ng-container>
+            </div>
+        </mat-radio-button>
+        <mat-radio-button
+            value="balanced"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header>Reduced capacity</header>
+                <ng-container>Reduced battery capacity (~90 %) for better battery lifespan.</ng-container>
+            </div>
+        </mat-radio-button>
+        <mat-radio-button
+            value="stationary"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header>Stationary use</header>
+                <ng-container>Very significant reduced battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</ng-container>
+            </div>
+        </mat-radio-button>
+        <mat-radio-button
+            value="custom"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header>Custom</header>
+                <ng-container>Manually set battery charging thresholds.</ng-container>
+            </div>
+        </mat-radio-button>
+    </mat-radio-group>
+    <div *ngIf="ctrlChargingThresholdGroup.value === 'custom'">
         <mat-slider #startThreshold
             [formControl]="ctrlChargeStartThreshold"
             (change)="sliderStartThresholdChange($event)"
@@ -85,7 +128,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             color="primary">
         </mat-slider> Start threshold: {{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %
     </div>
-    <div>
+    <div *ngIf="ctrlChargingThresholdGroup.value === 'custom'">
         <mat-slider #endThreshold
             [formControl]="ctrlChargeEndThreshold"
             (change)="sliderEndThresholdChange($event)"
