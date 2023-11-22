@@ -18,8 +18,8 @@
  */
 
 import { Component, OnInit } from "@angular/core";
-import { ConfigService } from "../config.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
+import { ConfigService } from '../config.service';
 import {
     KeyboardBacklightCapabilitiesInterface,
     KeyboardBacklightColorModes,
@@ -37,7 +37,9 @@ import { interval, Subscription } from "rxjs";
 export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
     public chosenBrightness: number;
+    public chosenBrightnessPending: number = undefined;
     public chosenColorHex: Array<string>;
+    public chosenColorHexPending: Array<string> = undefined;
     public selectedZones: Array<number>;
     private pressTimer: NodeJS.Timeout;
     private pressInterval: Subscription;
@@ -45,7 +47,7 @@ export class KeyboardBacklightComponent implements OnInit {
     private colorPickerTimeout: NodeJS.Timeout;
     private brightnessSliderInUsage: boolean;
     private brightnessSliderTimeout: number | null = null;
-    private timeoutDuration: number = 10000;
+    private timeoutDuration: number = 1000;
 
     constructor(
         private config: ConfigService,
@@ -53,7 +55,6 @@ export class KeyboardBacklightComponent implements OnInit {
     ) {}
 
     public ngOnInit() {
-        this.setChosenValues();
         this.subscribeKeyboardBacklightCapabilities();
         this.subscribeKeyboardBacklightStates();
         this.setColorPickerInUsageDefault();
@@ -73,15 +74,6 @@ export class KeyboardBacklightComponent implements OnInit {
 
     private clamp(input: number, min: number, max: number): number {
         return Math.min(Math.max(input, min), max);
-    }
-
-    private setChosenValues(): void {
-        const settings = this.config.getSettings();
-        const keyboardBacklightColor = settings.keyboardBacklightColor;
-        this.chosenColorHex = keyboardBacklightColor.map((color) =>
-            this.intToRGBSharpString(color)
-        );
-        this.chosenBrightness = settings.keyboardBacklightBrightness;
     }
 
     private setColorPickerInUsageDefault(): void {
@@ -126,12 +118,18 @@ export class KeyboardBacklightComponent implements OnInit {
             (keyboardBacklightStates) => {
                 const hasChosenColor = keyboardBacklightStates?.length > 0;
                 const hasNoPickerInUsage = !this.isPickerInUsage();
+                const { brightness, red, green, blue } =
+                    keyboardBacklightStates[0];
 
                 if (hasChosenColor && hasNoPickerInUsage) {
-                    const { brightness, red, green, blue } =
-                        keyboardBacklightStates[0];
                     this.chosenBrightness = brightness;
                     this.chosenColorHex = this.createColorHexArray(
+                        keyboardBacklightStates
+                    );
+                }
+                else {
+                    this.chosenBrightnessPending = brightness;
+                    this.chosenColorHexPending = this.createColorHexArray(
                         keyboardBacklightStates
                     );
                 }
@@ -230,6 +228,7 @@ export class KeyboardBacklightComponent implements OnInit {
         this.brightnessSliderInUsage = true;
         this.brightnessSliderTimeout = window.setTimeout(() => {
             this.brightnessSliderInUsage = false;
+            this.applyPendingChanges();
         }, this.timeoutDuration);
     }
 
@@ -245,7 +244,21 @@ export class KeyboardBacklightComponent implements OnInit {
             selectedZones.forEach((zone) => {
                 this.colorPickerInUsage[zone] = false;
             });
+            this.applyPendingChanges();
         }, this.timeoutDuration);
+    }
+
+    private applyPendingChanges(): void {
+        if (!this.isPickerInUsage()) {
+            if (this.chosenBrightnessPending != undefined) {
+                this.chosenBrightness = this.chosenBrightnessPending;
+                this.chosenBrightnessPending = undefined;
+            }
+            if (this.chosenColorHexPending != undefined) {
+                this.chosenColorHex = this.chosenColorHexPending;
+                this.chosenColorHexPending = undefined;
+            }
+        }
     }
 
     public startPress(
