@@ -7,9 +7,18 @@
   supported devices.
 - Dashboard CPU and GPU power usage info
 - Dashboard iGPU info
+- Charging thresholds
+- Custom fan profile
 
 ### Changed
 - Rework of dGPU selection in tray menu and additionally added to GUI
+## [2.0.11] - 2023-11-10
+### Fixed
+- Missing profiles for InfinityBook Pro Gen8
+
+## [2.0.10] - 2023-10-26
+### Added
+- Support for Polaris/Stellaris AMD Gen5
 
 ## [2.0.9] - 2023-09-22
 ### Added
