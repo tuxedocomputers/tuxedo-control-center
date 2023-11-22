@@ -117,26 +117,50 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
         </mat-radio-button>
     </mat-radio-group>
-    <div *ngIf="ctrlChargingThresholdGroup.value === 'custom'">
-        <mat-slider #startThreshold
-            [formControl]="ctrlChargeStartThreshold"
-            (change)="sliderStartThresholdChange($event)"
-            [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
-            min="0"
-            max="100"
-            step="1"
-            color="primary">
-        </mat-slider> Start threshold: {{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %
-    </div>
-    <div *ngIf="ctrlChargingThresholdGroup.value === 'custom'">
-        <mat-slider #endThreshold
-            [formControl]="ctrlChargeEndThreshold"
-            (change)="sliderEndThresholdChange($event)"
-            [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
-            min="0"
-            max="100"
-            step="1"
-            color="primary">
-        </mat-slider> End threshold: {{ findClosest(endThreshold.value, chargeEndAvailableThresholds) }} %
-    </div>
+
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="edit-grid">
+        <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <header>Start threshold</header>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="value">
+                <span>{{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %</span>
+            </content>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="input">
+                <mat-slider #startThreshold
+                    [formControl]="ctrlChargeStartThreshold"
+                    (change)="sliderStartThresholdChange($event)"
+                    [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+                    min="0"
+                    max="100"
+                    step="1"
+                    color="primary">
+                </mat-slider>
+            </content>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <header>End threshold</header>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="value">
+                <span>{{ findClosest(endThreshold.value, chargeEndAvailableThresholds) }} %</span>
+            </content>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="input">
+                <mat-slider #endThreshold
+                    [formControl]="ctrlChargeEndThreshold"
+                    (change)="sliderEndThresholdChange($event)"
+                    [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+                    min="0"
+                    max="100"
+                    step="1"
+                    color="primary">
+                </mat-slider>
+            </content>
+        </mat-grid-tile>
+    </mat-grid-list>
 </div>

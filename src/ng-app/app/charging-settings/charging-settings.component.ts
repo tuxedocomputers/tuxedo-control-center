@@ -76,6 +76,13 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     private updateInterval = 1000;
     private timeout;
 
+    public gridParams = {
+        cols: 9,
+        headerSpan: 4,
+        valueSpan: 2,
+        inputSpan: 3
+    };
+
     public chargingProfileLabels: Map<string, string> = new Map();
     public chargingProfileDescriptions: Map<string, string> = new Map();
     public chargingPriorityLabels: Map<string, string> = new Map();
@@ -297,8 +304,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
 
         await this.readAvailableSettings();
-
-        console.log('changed to ' + event.value + ' model value ' + this.chargingThresholdGroupValue);
 
         this.chargingThresholdsProgress = false;
     }
