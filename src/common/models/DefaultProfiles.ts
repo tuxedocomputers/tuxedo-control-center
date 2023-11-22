@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -274,7 +274,12 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -293,7 +298,10 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
+        
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] }
