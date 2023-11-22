@@ -32,6 +32,8 @@ export enum DefaultProfileIDs {
     HighPerformance = '__high_performance__',
 }
 
+export const defaultMobileCustomProfileID = '__default_mobile_custom_profile__';
+
 export interface IProfileTextMappings {
     name: string;
     description: string;
@@ -218,7 +220,7 @@ export const defaultCustomProfile: ITccProfile = {
 };
 
 export const defaultMobileCustomProfileTDP: ITccProfile = {
-    id: '__default_mobile_custom_profile__',
+    id: defaultMobileCustomProfileID,
     name: 'TUXEDO Mobile Default',
     description: 'Edit profile to change behaviour',
     display: {
@@ -253,6 +255,37 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     odmPowerLimits: { tdpValues: [15, 25, 50] }
 };
 
+export const defaultMobileCustomProfileCl: ITccProfile = {
+    id: defaultMobileCustomProfileID,
+    name: 'TUXEDO Mobile Default',
+    description: 'Edit profile to change behaviour',
+    display: {
+        brightness: 100,
+        useBrightness: false
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: 3500000,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        offsetFanspeed: 0
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [] }
+};
+
 export enum TUXEDODevice {
     IBP14G6_TUX,
     IBP14G6_TRX,
@@ -261,6 +294,8 @@ export enum TUXEDODevice {
     IBPG8MK1,
     IBP16I08MK2,
     PULSE1502,
+    AURA14G3,
+    AURA15G3,
     POLARIS1XA02,
     POLARIS1XI02,
     POLARIS1XA03,
@@ -303,3 +338,5 @@ export const deviceCustomProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 
 deviceCustomProfiles.set(TUXEDODevice.IBPG8MK1, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
 deviceCustomProfiles.set(TUXEDODevice.IBP16I08MK2, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
+deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
+deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
