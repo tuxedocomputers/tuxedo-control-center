@@ -18,6 +18,7 @@
  */
 
 import { ITccProfile } from './TccProfile';
+import { customFanPreset } from "./TccFanTable";
 
 export enum LegacyDefaultProfileIDs {
     Default = '__legacy_default__',
@@ -69,7 +70,9 @@ const maxEnergySave: ITccProfile = {
         useControl: true,
         fanProfile: 'Silent',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [5, 10, 15] }
@@ -105,7 +108,9 @@ const silent: ITccProfile = {
         useControl: true,
         fanProfile: 'Silent',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [10, 15, 25] }
@@ -141,7 +146,9 @@ const office: ITccProfile = {
         useControl: true,
         fanProfile: 'Quiet',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'enthusiast' },
     odmPowerLimits: { tdpValues: [25, 35, 35] }
@@ -177,7 +184,9 @@ const highPerformance: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] }
@@ -213,7 +222,9 @@ export const defaultCustomProfile: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] }
@@ -249,7 +260,9 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [15, 25, 50] }
