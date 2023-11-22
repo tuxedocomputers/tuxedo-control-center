@@ -20,6 +20,7 @@ import * as dbus from 'dbus-next';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
+import { ChargeType } from './PowerSupplyController';
 
 export class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
@@ -337,6 +338,70 @@ export class TccDBusController {
     async setChargingPriority(priorityDescriptor: string): Promise<boolean> {
         try {
             return await this.interface.SetChargingPriority(priorityDescriptor);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargeStartAvailableThresholds(): Promise<number[]> {
+        try {
+            return JSON.parse(await this.interface.GetChargeStartAvailableThresholds());
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async getChargeEndAvailableThresholds(): Promise<number[]> {
+        try {
+            return JSON.parse(await this.interface.GetChargeEndAvailableThresholds());
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async getChargeStartThreshold(): Promise<number> {
+        try {
+            return await this.interface.GetChargeStartThreshold();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setChargeStartThreshold(value: number): Promise<boolean> {
+        try {
+            return await this.interface.SetChargeStartThreshold(value);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargeEndThreshold(): Promise<number> {
+        try {
+            return await this.interface.GetChargeEndThreshold();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setChargeEndThreshold(value: number): Promise<boolean> {
+        try {
+            return await this.interface.SetChargeEndThreshold(value);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargeType(): Promise<string> {
+        try {
+            return await this.interface.GetChargeType();
+        } catch (err) {
+            return ChargeType.Unknown.toString();
+        }
+    }
+
+    async setChargeType(chargeType: ChargeType): Promise<boolean> {
+        try {
+            return await this.interface.SetChargeType(chargeType);
         } catch (err) {
             return false;
         }
