@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,31 +16,135 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
-import { SysFsPropertyString, SysFsPropertyInteger, SysFsPropertyBoolean } from './SysFsProperties';
+import * as path from "path";
+import {
+    SysFsPropertyString,
+    SysFsPropertyInteger,
+    SysFsPropertyBoolean,
+} from "./SysFsProperties";
 
 export class IntelRAPLController {
-    constructor(private readonly basePath: string) {}
+    private properties: {
+        name: SysFsPropertyString;
 
-    private readonly name = new SysFsPropertyString(path.join(this.basePath, 'name'));
-    private readonly constraint_0_name = new SysFsPropertyString(path.join(this.basePath, 'constraint_0_name'));
-    private readonly constraint_0_max_power_uw = new SysFsPropertyInteger(path.join(this.basePath, 'constraint_0_max_power_uw'));
-    private readonly constraint_0_power_limit_uw = new SysFsPropertyInteger(path.join(this.basePath, 'constraint_0_power_limit_uw'));
-    private readonly enabled = new SysFsPropertyBoolean(path.join(this.basePath, 'enabled'));
+        constraint0Name: SysFsPropertyString;
+        constraint0MaxPower: SysFsPropertyInteger;
+        constraint0PowerLimit: SysFsPropertyInteger;
+
+        constraint1Name: SysFsPropertyString;
+        constraint1MaxPower: SysFsPropertyInteger;
+        constraint1PowerLimit: SysFsPropertyInteger;
+
+        constraint2Name: SysFsPropertyString;
+        constraint2MaxPower: SysFsPropertyInteger;
+        constraint2PowerLimit: SysFsPropertyInteger;
+
+        enabled: SysFsPropertyBoolean;
+        energyUJ: SysFsPropertyInteger;
+    };
+
+    constructor(private readonly basePath: string) {
+        this.properties = {
+            name: new SysFsPropertyString(path.join(basePath, "name")),
+
+            constraint0Name: new SysFsPropertyString(
+                path.join(basePath, "constraint_0_name")
+            ),
+            constraint0MaxPower: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_0_max_power_uw")
+            ),
+            constraint0PowerLimit: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_0_power_limit_uw")
+            ),
+
+            constraint1Name: new SysFsPropertyString(
+                path.join(basePath, "constraint_1_name")
+            ),
+            constraint1MaxPower: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_1_max_power_uw")
+            ),
+            constraint1PowerLimit: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_1_power_limit_uw")
+            ),
+
+            constraint2Name: new SysFsPropertyString(
+                path.join(basePath, "constraint_2_name")
+            ),
+            constraint2MaxPower: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_2_max_power_uw")
+            ),
+            constraint2PowerLimit: new SysFsPropertyInteger(
+                path.join(basePath, "constraint_2_power_limit_uw")
+            ),
+
+            enabled: new SysFsPropertyBoolean(path.join(basePath, "enabled")),
+            energyUJ: new SysFsPropertyInteger(
+                path.join(basePath, "energy_uj")
+            ),
+        };
+    }
 
     /**
      * Check if CPU supports necessary Intel RAPL variables
      *
      * @returns Boolean indicating wether or not this Intel RAPL controller can be used
      */
-    public getIntelRAPLAvailable(): boolean {
-        return this.name.isAvailable() &&
-               this.constraint_0_name.isAvailable() &&
-               this.constraint_0_max_power_uw.isAvailable() &&
-               this.constraint_0_power_limit_uw.isAvailable() &&
-               this.enabled.isAvailable() &&
-               this.name.readValueNT() === "package-0" &&
-               this.constraint_0_name.readValueNT() === "long_term"
+    public getIntelRAPLPowerAvailable(): boolean {
+        const props = this.properties;
+        return (
+            props.name.isAvailable() &&
+            props.enabled.isAvailable() &&
+            props.energyUJ.isAvailable() &&
+            props.name.readValueNT() === "package-0"
+        );
+    }
+
+    /**
+     * Check if CPU supports power constraints
+     *
+     * @returns Boolean indicating if constraints are available
+     */
+    public getIntelRAPLConstraint0Available(): boolean {
+        const props = this.properties;
+
+        return (
+            props.constraint0Name.isAvailable() &&
+            props.constraint0MaxPower.isAvailable() &&
+            props.constraint0PowerLimit.isAvailable() &&
+            props.constraint0Name.readValueNT() === "long_term"
+        );
+    }
+
+    public getIntelRAPLConstraint1Available(): boolean {
+        const props = this.properties;
+
+        return (
+            props.constraint1Name.isAvailable() &&
+            props.constraint1MaxPower.isAvailable() &&
+            props.constraint1PowerLimit.isAvailable() &&
+            props.constraint1Name.readValueNT() === "short_term"
+        );
+    }
+
+    public getIntelRAPLConstraint2Available(): boolean {
+        const props = this.properties;
+
+        return (
+            props.constraint2Name.isAvailable() &&
+            props.constraint2MaxPower.isAvailable() &&
+            props.constraint2PowerLimit.isAvailable() &&
+            props.constraint2Name.readValueNT() === "peak_power"
+        );
+    }
+
+    /**
+     * Check if energyUJ is available
+     *
+     * @returns Boolean indicating if it is available
+     */
+    public getIntelRAPLEnergyAvailable(): boolean {
+        const props = this.properties;
+        return props.energyUJ.isAvailable();
     }
 
     /**
@@ -48,8 +152,25 @@ export class IntelRAPLController {
      *
      * @returns Integer that is the maximum input value for long term power limit in micro watts or undefined on error
      */
-    public getMaxPower(): number {
-        return this.constraint_0_max_power_uw.readValueNT();
+    public getConstraint0MaxPower(): number {
+        return this.properties.constraint0PowerLimit.readValueNT();
+    }
+
+    public getConstraint1MaxPower(): number {
+        return this.properties.constraint1PowerLimit.readValueNT();
+    }
+
+    public getConstraint2MaxPower(): number {
+        return this.properties.constraint2PowerLimit.readValueNT();
+    }
+
+    /**
+     * Get the current energy counter in micro joules
+     *
+     * @returns Integer that returns the current energy counter
+     */
+    public getEnergy(): number {
+        return this.properties.energyUJ.readValueNT();
     }
 
     /**
@@ -58,19 +179,19 @@ export class IntelRAPLController {
      * @param setPowerLimit Long term power limit to set in micro watts. Defaults to maximum value possible.
      * Automatically clamped to range [maxPower/2, maxPower].
      */
-    public setPowerLimit(setPowerLimit?: number): void {
-        let maxPower = this.getMaxPower();
+    public setPowerPL1Limit(setPowerLimit?: number): void {
+        const props = this.properties;
+        const maxPower = this.getConstraint0MaxPower();
 
         try {
-            if (setPowerLimit === undefined) {
-                this.constraint_0_power_limit_uw.writeValue(maxPower);
-            }
-            else {
-                this.constraint_0_power_limit_uw.writeValue(Math.max(maxPower/2, Math.min(setPowerLimit, maxPower)))
-            }
-            this.enabled.writeValue(true);
-        }
-        catch (err) {
+            let powerLimit =
+                setPowerLimit === undefined
+                    ? maxPower
+                    : Math.max(maxPower / 2, Math.min(setPowerLimit, maxPower));
+
+            props.constraint0PowerLimit.writeValue(powerLimit);
+            props.enabled.writeValue(true);
+        } catch (err) {
             console.log("IntelRAPLController: Failed to set power limit.");
         }
     }

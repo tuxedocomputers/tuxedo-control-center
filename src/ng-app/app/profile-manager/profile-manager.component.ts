@@ -331,8 +331,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         return Object.values(this.config.getSettings().stateMap).includes(this.currentProfile.id);
     }
 
-    public formatFrequency(frequency: number): string {
-        return this.utils.formatFrequency(frequency);
+    public formatCpuFrequency(frequency: number): string {
+        return this.utils.formatCpuFrequency(frequency);
     }
 
     public defineButtons(): void {

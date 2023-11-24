@@ -179,14 +179,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 [hidden]="!editProfile"
                                 (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
                                 (mouseup)="buttonRepeatUp()"
-                                (mouseleave)="buttonRepeatUp()">
+                                (mouseleave)="buttonRepeatUp()"
+                                [ngClass]="{'inactive': !inputUseBrightness.checked}">
                                 <mat-icon>remove</mat-icon>
                             </button>
                             <button mat-icon-button color="primary"
                                 [hidden]="!editProfile"
                                 (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
                                 (mouseup)="buttonRepeatUp()"
-                                (mouseleave)="buttonRepeatUp()">
+                                (mouseleave)="buttonRepeatUp()"
+                                [ngClass]="{'inactive': !inputUseBrightness.checked}">
                                 <mat-icon>add</mat-icon>
                             </button>
                         </mat-grid-tile>
@@ -208,7 +210,53 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </button>
                             </content>
                         </mat-grid-tile>
+                    </mat-grid-list>
+                    
+                    <!-- Refresh Rate and Resolution -->
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                        [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !isX11()}" 
+                        *ngIf="getCurrentResolutionRefreshRates().length > 1">
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cProfMgrDetailsRefRateOnProfileActivationHeader">Set refresh rate on profile
+                                activation</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value">
+                                <span [hidden]="!inputUseRefRate.checked"
+                                    i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
+                                <span [hidden]="inputUseRefRate.checked"
+                                    i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
+                            </content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile">
+                                <mat-checkbox #inputUseRefRate formControlName="useRefRate" color="primary">
+                                </mat-checkbox>
+                            </content>
+                        </mat-grid-tile>
 
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header [ngClass]="{'inactive': !inputUseRefRate.checked}"
+                                i18n="@@cProfMgrDetailsRefRateLabelProfile">Refresh rate</header>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="gridParams.valueSpan"
+                            [ngClass]="{'inactive': !inputUseRefRate.checked}">
+                            <content class="value">{{ profileFormGroup.get('display').value.refreshRate
+                                }}Hz</content>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input" [hidden]="!editProfile"
+                                [ngClass]="{'inactive': !inputUseRefRate.checked}">
+                                <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
+                                    <mat-option *ngFor="let refreshRate of getCurrentResolutionRefreshRates()"
+                                        [value]="refreshRate" [ngValue]="refreshRate" color="primary">
+                                        {{ refreshRate }}Hz
+                                    </mat-option>
+                                </mat-select>
+                            </content>
+                        </mat-grid-tile>
                     </mat-grid-list>
                 </div>
             </div>
@@ -535,9 +583,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
-                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
-                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
-                                <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
+                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatCpuFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
+                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatCpuFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
+                                <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatCpuFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
                                 <button mat-icon-button color="primary"
                                     [hidden]="!editProfile"
                                     (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
@@ -588,11 +636,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
-                                    {{ formatFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
+                                    {{ formatCpuFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
-                                    {{ formatFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
+                                    {{ formatCpuFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && !hasMaxFreqWorkaround)" [ngClass]="{'inactive': true}">
-                                    {{ formatFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
+                                    {{ formatCpuFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
                                     Boost</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && hasMaxFreqWorkaround && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) === cpuInfo.maxFreq)">

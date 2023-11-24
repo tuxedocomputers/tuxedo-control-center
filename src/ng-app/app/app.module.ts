@@ -90,6 +90,9 @@ import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.compo
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
 import { DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
 import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.component';
+import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
+import { PrimeSelectComponent } from './prime-select/prime-select.component';
+import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -121,6 +124,9 @@ declare const require;
     TomteGuiComponent,
     ProfileConflictComponent,
     KeyboardVisualComponent,
+    DialogWaitingComponent,
+    PrimeSelectComponent,
+    PrimeDialogComponent,
   ],
   imports: [
     BrowserModule,

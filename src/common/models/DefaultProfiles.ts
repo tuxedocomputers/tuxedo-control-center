@@ -43,7 +43,12 @@ const maxEnergySave: ITccProfile = {
     description: '',
     display: {
         brightness: 40,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: 60,
+        useRefRate: false,
+        xResolution: 1920,
+        yResolution: 1080,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -74,7 +79,12 @@ const silent: ITccProfile = {
     description: '',
     display: {
         brightness: 50,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -105,7 +115,12 @@ const office: ITccProfile = {
     description: '',
     display: {
         brightness: 60,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -136,7 +151,12 @@ const highPerformance: ITccProfile = {
     description: '',
     display: {
         brightness: 60,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -167,7 +187,12 @@ export const defaultCustomProfile: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -198,7 +223,12 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,

@@ -17,12 +17,29 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+.dashboard {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+}
+
+.inner-dashboard {
+    margin: 0 10px 10px 10px;
+}
+
 .system-monitor-gauges {
     display: flex;
     flex-flow: row;
     justify-content: space-evenly;
     
     margin: 10px auto 30px auto;
+    padding-bottom: 5px;
 
     &.bottom {
         margin-bottom: 30px;
@@ -30,6 +47,9 @@
 }
 
 .active-profile {
+    padding-top: 5px;
+    padding-bottom: 5px;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,6 +68,10 @@
         padding: 0px;
         --icon-detail: var(--icon-main);
     }
+}
+
+.active-tcc-profile{
+    padding-bottom: 15px;
 }
 
 .profile-overview {
@@ -114,4 +138,8 @@
             }
         }
     }
+}
+
+.gauge-tabs {
+    min-height: 270px
 }

@@ -18,10 +18,10 @@
  */
 import { Injectable, OnDestroy } from '@angular/core';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
-import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
+import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
+import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
@@ -75,10 +75,6 @@ export class ConfigService implements OnDestroy {
             this.settings = nextSettings
             this.settingsSubject.next(this.settings);
         }));
-
-        // TODO subscription doesn't work
-        // hmmm maybe I can just make it like in webcam and let main process send a nofitication when there's been changes
-        // and then put that into it?
     }
 
     ngOnDestroy(): void {
@@ -261,7 +257,7 @@ export class ConfigService implements OnDestroy {
     }
 
     public async saveSettings(): Promise<boolean> {
-                return new Promise<boolean>(resolve => {
+        return new Promise<boolean>(resolve => {
             const customProfilesCopy = this.copyConfig<ITccProfile[]>(this.customProfiles);
             const newSettings: ITccSettings = this.copyConfig<ITccSettings>(this.getSettings());
             window.config.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then(success => {

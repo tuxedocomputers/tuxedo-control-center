@@ -1,5 +1,16 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Laptop screen refresh rate configurable per TCC profile
+- Fn-lock status viewable and changeable in the tray menu for
+  supported devices.
+- Dashboard CPU and GPU power usage info
+- Dashboard iGPU info
+
+### Changed
+- Rework of dGPU selection in tray menu and additionally added to GUI
+
 ## [2.0.8] - 2023-07-14
 ### Added
 - Four-zone keyboard backlight GUI support

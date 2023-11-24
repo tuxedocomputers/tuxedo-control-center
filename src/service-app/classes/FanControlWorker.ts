@@ -18,7 +18,6 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { DMIController } from '../../common/classes/DMIController';
 import { FanData} from '../../common/models/IFanData';
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
@@ -31,7 +30,6 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
     private fanData: FanData[];
     private controlAvailableMessage = false;
-    private previousProfileName;
 
     private modeSameSpeed = false;
 
@@ -149,7 +147,7 @@ export class FanControlWorker extends DaemonWorker {
             if (tempSensorAvailable[fanIndex]) {
                 fanTemps.push(currentTemperatureCelcius.value);
             } else {
-                fanTemps.push(0);
+                fanTemps.push(-1);
             }
 
             // If there is temp sensor value report temperature to logic
@@ -184,7 +182,10 @@ export class FanControlWorker extends DaemonWorker {
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
             let currentSpeed: number;
-            if (useFanControl) {
+
+            if (fanTemps[i] === -1) {
+                currentSpeed = -1
+            } else if (useFanControl) {
                 currentSpeed = fanSpeedsSet[i];
             } else {
                 currentSpeed = fanSpeedsRead[i];

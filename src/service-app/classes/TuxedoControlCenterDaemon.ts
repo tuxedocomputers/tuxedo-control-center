@@ -28,6 +28,7 @@ import { defaultSettings, ITccSettings, ProfileStates } from '../../common/model
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
+import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
@@ -47,6 +48,10 @@ import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultP
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { ChargingWorker } from './ChargingWorker';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { GpuInfoWorker } from "./GpuInfoWorker";
+import { CpuPowerWorker } from './CpuPowerWorker';
+import { PrimeWorker } from './PrimeWorker';
+import { VendorService } from "../../common/classes/Vendor.service";
 
 const tccPackage = require('../../package.json');
 
@@ -73,7 +78,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private stateWorker: StateSwitcherWorker;
     private chargingWorker: ChargingWorker;
-
+    private displayWorker: DisplayRefreshRateWorker;
     constructor() {
         super(TccPaths.PID_FILE);
         this.config = new ConfigHandler(
@@ -102,6 +107,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
 
         // If program is still running this is the start of the daemon
+
+        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
         this.setupSignalHandling();
 
@@ -115,10 +122,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new YCbCr420WorkaroundWorker(this));
+        this.workers.push(new GpuInfoWorker(this, new VendorService()));
+        this.workers.push(new CpuPowerWorker(this));
+        this.workers.push(new PrimeWorker(this));
         this.workers.push(new KeyboardBacklightWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
+        this.workers.push(this.displayWorker);
 
         this.startWorkers();
 
@@ -246,8 +257,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
-        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
+        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
 
@@ -639,6 +650,41 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (profile.cpu.noTurbo === undefined) {
             profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
         }
+
+        if(profile.display.useRefRate === undefined)
+        {
+            profile.display.useRefRate = false;
+        }
+        if(profile.display.useResolution === undefined)
+        {
+            profile.display.useResolution = false;
+        }
+        let activeDisplayMode;
+        try
+        {
+            activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+        }
+        catch(err)
+        {
+            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
+        }
+        if (!activeDisplayMode)
+        {
+            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
+        }       
+        if(profile.display.refreshRate === undefined)
+        {
+            profile.display.refreshRate = activeDisplayMode.refreshRates[0];
+        }
+        if(profile.display.xResolution === undefined)
+        {
+            profile.display.xResolution = activeDisplayMode.xResolution;
+        }
+        if(profile.display.yResolution === undefined)
+        {
+            profile.display.yResolution = activeDisplayMode.yResolution;
+        }
+         
 
         if (profile.webcam === undefined) {
             profile.webcam = {

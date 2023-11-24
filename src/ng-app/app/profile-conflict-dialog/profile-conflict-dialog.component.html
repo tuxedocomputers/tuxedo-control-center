@@ -87,8 +87,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg class="status-icon-container" viewBox="0 0 512 512" >
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                         </svg>
-                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - {{ formatFrequency(data.oldProfile.cpu.scalingMaxFrequency) }} GHz</p>
-                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - Boost</p>
+                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(data.oldProfile.cpu.scalingMaxFrequency) }} GHz</p>
+                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - Boost</p>
                         <p class="status-info" *ngIf="data.oldProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</p>
                     </div>
 
@@ -151,8 +151,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg class="status-icon-container" viewBox="0 0 512 512" >
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                         </svg>
-                        <span *ngIf="!data.newProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.newProfile.cpu.scalingMinFrequency) }} - {{ formatFrequency(data.newProfile.cpu.scalingMaxFrequency) }} GHz</span>
-                        <span *ngIf="!data.newProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatFrequency(data.newProfile.cpu.scalingMinFrequency) }} - Boost</span>
+                        <span *ngIf="!data.newProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.newProfile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(data.newProfile.cpu.scalingMaxFrequency) }} GHz</span>
+                        <span *ngIf="!data.newProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.newProfile.cpu.scalingMinFrequency) }} - Boost</span>
                         <span *ngIf="data.newProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </div>
 

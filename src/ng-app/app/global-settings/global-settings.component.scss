@@ -1,3 +1,19 @@
+.global-settings {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+}
+
+.inner-global-settings {
+    margin: 0 10px 10px 10px;
+}
+
 header {
     width: 100%;
     padding-right: 20px;
@@ -13,13 +29,7 @@ content.value {
 }
 
 content.input {
-    mat-slider {
-        width: 200px;
-    }
-
-    mat-select {
-        width: 200px;
-    }
+    flex: 1;
 }
 
 .margin-top {
