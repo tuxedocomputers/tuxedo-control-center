@@ -21,6 +21,8 @@ import { FanData } from '../../common/models/IFanData';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { DBUS } from 'src/ng-app/app/renderer';
 
+
+// TODO maybe it would make sense to get rid of this file completely and use window.dbus everywhere
 export class TccDBusControllerPreload {
     private interface: DBUS;
 
@@ -41,6 +43,51 @@ export class TccDBusControllerPreload {
     // Gnome Workaround
 
     private displayBrightnessNotSupportedGnomeVariable = false;
+
+    async getDGpuInfoValuesJSON()
+    {
+        return this.interface.getDGpuInfoValuesJSON();
+    }
+
+    async getIGpuInfoValuesJSON()
+    {
+        return this.interface.getIGpuInfoValuesJSON();
+    }
+
+    async getSensorDataCollectionStatus()
+    {
+        return this.interface.getSensorDataCollectionStatus();
+    }
+
+    async getPrimeState()
+    {
+        return this.interface.getPrimeState();
+    }
+
+    async getCpuPowerValuesJSON()
+    {
+        return this.interface.getCpuPowerValuesJSON();
+    }
+
+    async getDisplayModesJSON()
+    {
+        return this.interface.getDisplayModesJSON();
+    }
+
+    async getRefreshRateSupported()
+    {
+        return this.interface.getRefreshRateSupported();
+    }
+
+    async setSensorDataCollectionStatus(status)
+    {
+        return this.interface.setSensorDataCollectionStatus(status);
+    }
+
+    async setDGpuD0Metrics(status)
+    {
+        return this.interface.setDGpuD0Metrics(status);
+    }
 
     displayBrightnessNotSupportedGnome()
     {

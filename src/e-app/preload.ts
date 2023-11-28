@@ -96,8 +96,25 @@ contextBridge.exposeInMainWorld(
         SetChargingPriority: (priorityDescriptor) => ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor),   
         displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
         setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
+        getDGpuInfoValuesJSON: () => ipcRenderer.invoke('get-dgpu-info-values-json-dbus'),
+        getIGpuInfoValuesJSON: () => ipcRenderer.invoke('get-igpu-info-values-json-dbus'),
+        getSensorDataCollectionStatus: () => ipcRenderer.invoke('get-sensor-data-collection-status-dbus'),
+        getPrimeState: () => ipcRenderer.invoke('get-prime-state-dbus'),
+        getCpuPowerValuesJSON: () => ipcRenderer.invoke('get-cpu-power-values-json-dbus'),
+        getDisplayModesJSON: () => ipcRenderer.invoke('get-display-modes-json-dbus'),
+        getRefreshRateSupported: () => ipcRenderer.invoke('get-refresh-rate-supported-dbus'),
+        setSensorDataCollectionStatus: (status) => ipcRenderer.invoke('set-sensor-data-collection-status-dbus', status),
+        setDGpuD0Metrics: (status) => ipcRenderer.invoke('set-dgpu-do-metrics-dbus', status),
     }
 );
+
+contextBridge.exposeInMainWorld(
+    'vendor',
+    {
+        getCpuVendor: () => ipcRenderer.invoke('get-cpu-vendor'),
+        
+    }
+)
 
 contextBridge.exposeInMainWorld(
     'webcam',

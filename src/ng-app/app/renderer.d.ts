@@ -66,7 +66,21 @@ export interface IPC extends EventEmitter {
     SetChargingPriority: (priorityDescriptor: string) => Promise<boolean>,
     displayBrightnessNotSupportedGnome: () => boolean,
     setDisplayBrightnessGnome: (valuePercent: number) => Promise<void>,
-    
+    getDGpuInfoValuesJSON: () => Promise<string>,
+    getIGpuInfoValuesJSON: () => Promise<string>,
+    getSensorDataCollectionStatus: () => Promise<boolean>,
+    getPrimeState: () => Promise<string>,
+    getCpuPowerValuesJSON: () => Promise<string>,
+    getDisplayModesJSON: () => Promise<string>,
+    getRefreshRateSupported: () => Promise<boolean>,
+    setSensorDataCollectionStatus: (status) => Promise<boolean>,
+    setDGpuD0Metrics: (status) => Promise<boolean>,
+  }
+
+  export interface VENDOR
+  {
+    getCpuVendor: () => string,
+
   }
 
   export interface HTTPS 
@@ -155,6 +169,7 @@ export interface COMP
       state: STATE,
       comp: COMP,
       stuff: STUFF,
+      vendor: VENDOR,
     }
   }
   

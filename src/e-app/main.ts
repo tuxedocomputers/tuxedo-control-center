@@ -46,6 +46,7 @@ import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../co
 import { ScalingDriver } from '../common/classes/LogicalCpuController';
 import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
 import { ITccSettings } from '../common/models/TccSettings';
+import { VendorService } from '../common/classes/Vendor.service'
 
 
 // Tweak to get correct dirname for resource files outside app.asar
@@ -1364,6 +1365,74 @@ ipcMain.handle('set-charging-priority-dbus', async (event, priorityDescriptor) =
         resolve(tccDBus.setChargingPriority(priorityDescriptor));
     });
 });
+
+ipcMain.handle('get-dgpu-info-values-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getDGpuInfoValuesJSON());
+    });
+});
+
+ipcMain.handle('get-igpu-info-values-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getIGpuInfoValuesJSON());
+    });
+});
+
+ipcMain.handle('get-sensor-data-collection-status-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.getSensorDataCollectionStatus());
+    });
+});
+
+ipcMain.handle('get-prime-state-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getPrimeState());
+    });
+});
+
+ipcMain.handle('get-cpu-power-values-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getCpuPowerValuesJSON());
+    });
+});
+
+
+ipcMain.handle('get-display-modes-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getDisplayModesJSON());
+    });
+});
+
+
+ipcMain.handle('get-refresh-rate-supported-dbus', async (event, arg) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.getRefreshRateSupported());
+    });
+});
+
+
+ipcMain.handle('set-sensor-data-collection-status-dbus', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setSensorDataCollectionStatus(status));
+    });
+});
+
+
+ipcMain.handle('set-dgpu-do-metrics-dbus', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setDGpuD0Metrics(status));
+    });
+});
+// ######## vendor service backend ######
+
+let vendorService = new VendorService();
+
+ipcMain.handle('get-cpu-vendor', async (event, status) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(vendorService.getCpuVendor());
+    });
+});
+
 
 
 // ######## Gnome Brightness Workaround Functions ########

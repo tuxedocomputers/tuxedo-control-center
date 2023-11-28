@@ -35,7 +35,6 @@ import { ICpuPower } from "src/common/models/TccPowerSettings";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
-import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
 
 @Component({
@@ -105,7 +104,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private config: ConfigService,
         public compat: CompatibilityService,
-        private vendor: VendorService,
         private power: PowerStateService
     ) {}
 
@@ -275,7 +273,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.gaugeIGpuFreq =
             maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.iGpuFreq = coreFrequency;
-        this.iGpuVendor = await this.vendor.getCpuVendor();
+        this.iGpuVendor = await window.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
     }
 
