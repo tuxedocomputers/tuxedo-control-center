@@ -17,9 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { NumericLiteral } from "typescript";
 import { DefaultProfileIDs, LegacyDefaultProfileIDs } from "./DefaultProfiles";
-import { defaultProfiles } from "./profiles/LegacyProfiles";
+import { ITccFanProfile } from "./TccFanTable";
 
 export interface ITccProfile {
     id: string;
@@ -84,7 +83,9 @@ interface ITccProfileFanControl {
     useControl: boolean;
     fanProfile: string;
     minimumFanspeed: number;
+    maximumFanspeed: number;
     offsetFanspeed: number;
+    customFanCurve: ITccFanProfile;
 }
 
 interface ITccODMProfile {

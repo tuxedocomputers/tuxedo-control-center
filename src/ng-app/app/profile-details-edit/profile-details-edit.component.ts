@@ -30,6 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 
@@ -110,6 +111,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
+    private fansMaxSpeedSubscription: Subscription = new Subscription();
+
     private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
@@ -132,12 +135,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public infoTooltipShowDelay = 700;
 
     public fansMinSpeed = 0;
+    public fansMaxSpeed = 100;
+
     public fansOffAvailable = true;
+
+    public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
     @ViewChild('inputName') inputName: MatInput;
 
+    @ViewChild(FanSliderComponent)
+    private sliderComponent: FanSliderComponent;
+    
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
@@ -221,6 +231,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
+
+        window.ipc.onWakeupFromSuspend(() => {
+                // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
+                this.showFanGraphs = false;
+                if (this.sliderComponent) {
+                    this.sliderComponent.showFanGraphs = false;
+                }
+            });
     }
 
     private overwriteDefaultRefreshRateValue() {
@@ -255,6 +273,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput() {
+        if (this.sliderComponent) {
+            const customFanCurveValues =
+                this.sliderComponent.getFanFormGroupValues();
+            this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve")
+                .patchValue(customFanCurveValues);
+        }
+
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
@@ -281,7 +308,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
-        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
+        this.selectStateControl.reset(
+            this.state.getProfileStates(this.viewProfile.id)
+        );
         // Also restore brightness to active profile if applicable
         if (!this.tccDBus.displayBrightnessNotSupportedGnome()) {
             const activeProfile = this.state.getActiveProfile();
@@ -289,6 +318,24 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 this.tccDBus.setDisplayBrightnessGnome(activeProfile.display.brightness);
             }
         }
+
+        if (this.sliderComponent) {
+            const customFanCurveValues: AbstractControl = this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve");
+            this.sliderComponent.patchFanFormGroup(customFanCurveValues);
+        }
+
+        this.overwriteDefaultRefreshRateValue();
+        this.tempCustomFanCurve = undefined;
+    }
+
+    public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile) {
+        this.tempCustomFanCurve = tempCustomFanCurve;
+    }
+
+    public setChartToggleStatus(status: boolean) {
+        this.showFanGraphs = status;
     }
 
     private createProfileFormGroup(profile: ITccProfile) {
@@ -386,6 +433,28 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public sliderMinFanChange() {
+        const { minimumFanspeed, maximumFanspeed } =
+            this.profileFormGroup.controls.fan.value;
+
+        if (minimumFanspeed > maximumFanspeed) {
+            this.profileFormGroup.patchValue({
+                fan: { minimumFanspeed: maximumFanspeed },
+            });
+        }
+    }
+
+    public sliderMaxFanChange() {
+        const { minimumFanspeed, maximumFanspeed } =
+            this.profileFormGroup.controls.fan.value;
+
+        if (maximumFanspeed < minimumFanspeed) {
+            this.profileFormGroup.patchValue({
+                fan: { maximumFanspeed: minimumFanspeed },
+            });
+        }
+    }
+      
     get getODMTDPControls() {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
@@ -596,7 +665,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (!matchingMode) {
             return [-1];
         }
-        return matchingMode.refreshRates;
+        return matchingMode.refreshRates.sort((a, b) => b - a);
+    }
+
+    public roundValue(value: number): number {
+        return Math.round(value)
     }
 
     private getMatchingMode(
@@ -638,6 +711,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private buttonRepeatTimer: NodeJS.Timeout;
     public buttonRepeatDown(action: () => void) {
+        console.log("this: ", this.profileFormGroup.get('fan'))
+
         if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
         const repeatDelayMS = 200;
 
@@ -717,8 +792,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return valueChanged;
     }
 
+    setVerticalSliderDirty() {
+        this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
+    }
+
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
     }
-
 }

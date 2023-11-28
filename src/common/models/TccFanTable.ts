@@ -17,9 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 export interface ITccFanProfile {
-    name: string;
-    tableCPU: ITccFanTableEntry[];
-    tableGPU: ITccFanTableEntry[];
+    name?: string;
+    tableCPU?: ITccFanTableEntry[];
+    tableGPU?: ITccFanTableEntry[];
 }
 
 export interface ITccFanTableEntry {
@@ -27,9 +27,9 @@ export interface ITccFanTableEntry {
     speed: number;
 }
 
-export const defaultFanProfiles = [
+export const defaultFanProfiles: ITccFanProfile[] = [
     {
-        name: 'Silent',
+        name: "Silent",
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -131,7 +131,7 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
+            { temp: 100, speed: 100 },
         ],
         tableGPU: [
             { temp: 0, speed: 0 },
@@ -234,11 +234,11 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
-        ]
+            { temp: 100, speed: 100 },
+        ],
     },
     {
-        name: 'Quiet',
+        name: "Quiet",
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -340,7 +340,7 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
+            { temp: 100, speed: 100 },
         ],
         tableGPU: [
             { temp: 0, speed: 0 },
@@ -443,11 +443,11 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
-        ]
+            { temp: 100, speed: 100 },
+        ],
     },
     {
-        name: 'Balanced',
+        name: "Balanced",
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -549,7 +549,7 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
+            { temp: 100, speed: 100 },
         ],
         tableGPU: [
             { temp: 0, speed: 0 },
@@ -652,11 +652,11 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
-        ]
+            { temp: 100, speed: 100 },
+        ],
     },
     {
-        name: 'Cool',
+        name: "Cool",
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -758,7 +758,7 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
+            { temp: 100, speed: 100 },
         ],
         tableGPU: [
             { temp: 0, speed: 0 },
@@ -861,11 +861,11 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
-        ]
+            { temp: 100, speed: 100 },
+        ],
     },
     {
-        name: 'Freezy',
+        name: "Freezy",
         tableCPU: [
             { temp: 0, speed: 20 },
             { temp: 1, speed: 20 },
@@ -967,7 +967,7 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
+            { temp: 100, speed: 100 },
         ],
         tableGPU: [
             { temp: 0, speed: 25 },
@@ -1070,7 +1070,36 @@ export const defaultFanProfiles = [
             { temp: 97, speed: 100 },
             { temp: 98, speed: 100 },
             { temp: 99, speed: 100 },
-            { temp: 100, speed: 100 }
-        ]
-    }
+            { temp: 100, speed: 100 },
+        ],
+    },
+    {
+        name: "Custom",
+    },
 ];
+
+// currently only utilizing CPU table since both have same values, subject to change
+export const customFanPreset: ITccFanProfile = {
+    tableCPU: [
+        { temp: 20, speed: 12 },
+        { temp: 30, speed: 14 },
+        { temp: 40, speed: 22 },
+        { temp: 50, speed: 35 },
+        { temp: 60, speed: 44 },
+        { temp: 70, speed: 56 },
+        { temp: 80, speed: 79 },
+        { temp: 90, speed: 85 },
+        { temp: 100, speed: 90 },
+    ],
+    tableGPU: [
+        { temp: 20, speed: 12 },
+        { temp: 30, speed: 14 },
+        { temp: 40, speed: 22 },
+        { temp: 50, speed: 35 },
+        { temp: 60, speed: 44 },
+        { temp: 70, speed: 56 },
+        { temp: 80, speed: 79 },
+        { temp: 90, speed: 85 },
+        { temp: 100, speed: 90 },
+    ],
+};

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -56,4 +56,65 @@
 
 .info-icon-link {
     height: 30px;
+}
+
+.charging-thresholds {
+    display: flex;
+    flex-flow: column nowrap;
+
+    mat-checkbox {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    mat-slider {
+        width: 250px;
+    }
+}
+
+.edit-grid {
+
+    .inactive {
+        opacity: 0.2;
+        pointer-events: none;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+
+        width: 100%;
+        text-align: left;
+        font-size: 1.10em;
+    }
+
+    content.value {
+        width: 100%;
+        text-align: left;
+        font-weight: bold;
+        font-size: 1.15em;
+    }
+
+    content.input {
+        width: 100%;
+
+        mat-slider {
+            width: 200px;
+        }
+
+        mat-select {
+            width: 200px;
+        }
+
+        mat-form-field {
+            width: 360px;
+
+            &.input-description {
+
+                textarea {
+                    resize: none;
+                }
+            }
+        }
+    }
 }

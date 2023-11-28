@@ -22,7 +22,7 @@ import * as fs from 'fs';
 
 import { SysFsPropertyNumList } from './SysFsProperties';
 
-describe('SysDevPropertyStringList', () => {
+describe('SysDevPropertyNumList', () => {
 
     const dev = new SysFsPropertyNumList('/sys/devices/system/cpu/online');
 

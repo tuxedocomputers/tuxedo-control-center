@@ -2,14 +2,35 @@
 
 ## [] - UNRELEASED
 ### Added
-- Laptop screen refresh rate configurable per TCC profile
+- Laptop screen refresh rate configurable per TCC profile allowing
+  configuration of reduced refresh rate in battery operation
 - Fn-lock status viewable and changeable in the tray menu for
-  supported devices.
-- Dashboard CPU and GPU power usage info
-- Dashboard iGPU info
+  supported devices
+- Dashboard is extended with CPU and GPU power usage info
+  - CPU power usage is displayed where available in the CPU section
+  - GPU section now shows iGPU or dGPU (or both) depending on graphics mode
+  - GPU section also showing power usage and current frequency where available
+- Charging thresholds (for supported devices) in the Settings => Battery Charging Options area
+  - Allows fine-tuning of how the battery is charged in the form of start and end thresholds
+  - Available to choose from three preset profiles plus a custom mode where the thresholds are freely configurable
+- Fan profiles extended with further options
+  - Maximum fan speed parameter to adjust the preset profiles
+  - All-new custom fan mode that allows configuring of a special fan profile in nine temperature ranges
 
 ### Changed
-- Rework of dGPU selection in tray menu and additionally added to GUI
+- Rework of GPU selection in tray menu and additionally added to GUI in Settings => Graphics switching
+
+## [2.0.11] - 2023-11-10
+### Fixed
+- Missing profiles for InfinityBook Pro Gen8
+
+## [2.0.10] - 2023-10-26
+### Added
+- Support for Polaris/Stellaris AMD Gen5
+
+## [2.0.9] - 2023-09-22
+### Added
+- Support for Aura Gen3 (default mobile profile)
 
 ## [2.0.8] - 2023-07-14
 ### Added

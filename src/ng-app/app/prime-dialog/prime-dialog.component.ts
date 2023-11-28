@@ -69,7 +69,6 @@ export class PrimeDialogComponent implements OnInit {
         );
 
         if (status) {
-            console.log("rebootStatus: ", rebootStatus);
             if (rebootStatus === "REBOOT") {
                 this.utils.execCmd("reboot");
             }

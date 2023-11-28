@@ -47,7 +47,7 @@ import { ScalingDriver } from '../common/classes/LogicalCpuController';
 import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
 import { ITccSettings } from '../common/models/TccSettings';
 import { VendorService } from '../common/classes/Vendor.service'
-
+import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -1118,16 +1118,16 @@ ipcMain.handle('get-process-versions', async (event, arg) => {
 });
 
 ipcMain.handle('show-save-dialog', async (event, arg) => {
-    let results = await dialog.showSaveDialog(arg);
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
+        let results = await dialog.showSaveDialog(arg);
         resolve(results);
     });
 });
 
 
 ipcMain.handle('show-open-dialog', async (event, arg) => {
-    let results = await dialog.showOpenDialog(arg);
     return new Promise<OpenDialogReturnValue>((resolve, reject) => {
+        let results = await dialog.showOpenDialog(arg);
         resolve(results);
     });
 });

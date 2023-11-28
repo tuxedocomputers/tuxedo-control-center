@@ -23,13 +23,12 @@ import {
     IDisplayMode,
 } from "../../common/models/DisplayFreqRes";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { ITccProfile } from "src/common/models/TccProfile";
+import { ITccProfile } from "../../common/models/TccProfile";
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
     private refreshRateSupported: boolean;
-    private retryCount: number = 0;
     private displayInfoFound: boolean = false;
 
     private activeprofile: ITccProfile;
@@ -42,25 +41,16 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     public onStart(): void {}
 
     public onWork(): void {
-        this.retryCount += 1;
         this.activeprofile = this.tccd.getCurrentProfile();
 
-        if (this.retryCount < 5 && !this.displayInfoFound) {
-            this.setDisplayInfo();
+        if (!this.displayInfoFound) {
+            this.updateDisplayData();
         }
 
         this.setActiveDisplayMode();
     }
 
     public onExit(): void {}
-
-    private setDisplayInfo() {
-        this.updateDisplayData();
-        // happens right after boot when user was not logged into graphical DE yet (but into tty)
-        if (!this.activeprofile || !this.displayInfo) {
-            return;
-        }
-    }
 
     private setActiveDisplayMode(): void {
         const useRefRate = this.activeprofile?.display?.useRefRate;

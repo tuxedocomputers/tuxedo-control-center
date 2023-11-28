@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -88,12 +88,15 @@ export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
     }
 }
 
+/**
+ * Parses a numeric list with ranges (of type "cpu lists")
+ */
 export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
 
     constructor(
         readonly readPath: string,
         readonly writePath: string = readPath,
-        private readonly listSeparator = ',') {
+        readonly listSeparator = ',') {
             super(readPath, writePath);
         }
 
@@ -140,6 +143,37 @@ export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
                 }
             }
         }
-        return resultArray.join(',');
+        return resultArray.join(this.listSeparator);
+    }
+}
+
+/**
+ * Parses a numeric list without ranges
+ */
+export class SysFsPropertyNumListExplicit extends SysFsPropertyIO<number[]> {
+
+    constructor(
+        readonly readPath: string,
+        readonly writePath: string = readPath,
+        readonly listSeparator = ' ') {
+            super(readPath, writePath);
+        }
+
+    convertStringToType(value: string): number[] {
+        if (value.trim() === '') {
+            return [];
+        } else {
+            const trimmedList = value.split(this.listSeparator).map((element) => parseInt(element.trim()));
+            // Finally filter all empty strings
+            return trimmedList.filter(e => !isNaN(e));
+        }
+    }
+
+    convertTypeToString(value: number[]): string {
+        if (value.length === 0) {
+            return '';
+        } else {
+            return value.join(this.listSeparator);
+        }
     }
 }

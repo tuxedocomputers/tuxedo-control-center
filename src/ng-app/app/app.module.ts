@@ -93,6 +93,7 @@ import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.compo
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
 import { PrimeSelectComponent } from './prime-select/prime-select.component';
 import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
+import { FanSliderComponent } from './fan-slider/fan-slider.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -127,6 +128,7 @@ declare const require;
     DialogWaitingComponent,
     PrimeSelectComponent,
     PrimeDialogComponent,
+    FanSliderComponent,
   ],
   imports: [
     BrowserModule,
