@@ -28,6 +28,8 @@ export interface IPC extends EventEmitter {
     getPath: (path: string) => Promise<string>,
     openFileDialog: (properties) => Promise<any>,
     saveFileDialog: (properties) => Promise<any>,
+    primeWindowClose: () => void,
+    onSetPrimeSelectMode: (callback) => void,
   }
 
   export interface POWER 

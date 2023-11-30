@@ -19,7 +19,6 @@
 
 import { Component, OnInit } from "@angular/core";
 import { UtilsService } from "../utils.service";
-import { ElectronService } from "ngx-electron";
 import { ConfigService } from "../config.service";
 
 @Component({
@@ -35,24 +34,20 @@ export class PrimeDialogComponent implements OnInit {
     dialogStatus: string = "info";
 
     constructor(
-        private electron: ElectronService,
         private config: ConfigService,
         private utils: UtilsService
     ) {}
 
     public ngOnInit(): void {
-        this.electron.ipcRenderer.on(
-            "set-prime-select-mode",
-            async (event, primeSelectMode) => {
-                this.primeSelectMode = primeSelectMode;
+        window.ipc.onSetPrimeSelectMode( async (event, primeSelectMode) => {
+            this.primeSelectMode = primeSelectMode;
 
-                // small delay required to avoid flickering ui since html does not instantly update
-                setTimeout(async () => {
-                    this.electron.ipcRenderer.send("show-prime-window");
-                }, 250);
-            }
+            // small delay required to avoid flickering ui since html does not instantly update
+            setTimeout(async () => {
+                window.ipc.primeWindowClose();
+            }, 250);
+        }
         );
-
         this.langId = this.utils.getCurrentLanguageId();
     }
 
@@ -72,14 +67,14 @@ export class PrimeDialogComponent implements OnInit {
             if (rebootStatus === "REBOOT") {
                 this.utils.execCmd("reboot");
             }
-            this.electron.ipcRenderer.send("prime-window-close");
+            window.ipc.primeWindowClose();
         }
         if (!status) {
-            this.electron.ipcRenderer.send("prime-window-close");
+            window.ipc.primeWindowClose();
         }
     }
 
     public closeWindow() {
-        this.electron.ipcRenderer.send("prime-window-close");
+        window.ipc.primeWindowClose();
     }
 }

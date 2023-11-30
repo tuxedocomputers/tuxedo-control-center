@@ -64,6 +64,15 @@ contextBridge.exposeInMainWorld(
     getPath: (path: string) => ipcRenderer.invoke('ipc-get-path', path),
     openFileDialog: (properties) => ipcRenderer.invoke('show-open-dialog', properties),
     saveFileDialog: (properties) => ipcRenderer.invoke('show-save-dialog', properties),
+    primeWindowClose: () => ipcRenderer.send("prime-window-close"),
+    onSetPrimeSelectMode: (callback) => {
+        var channelname = "set-prime-select-mode";
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
+    },
   }
 );
 
