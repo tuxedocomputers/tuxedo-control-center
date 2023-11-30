@@ -30,7 +30,7 @@ import { aquarisAPIHandle, AquarisState, AquarisClientAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { resolve } from 'path';
-import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
+import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 import { FanData } from '../common/models/IFanData';
 import { TDPInfo } from '../native-lib/TuxedoIOAPI';
 import { Injectable, OnDestroy } from '@angular/core';
@@ -47,7 +47,6 @@ import { ScalingDriver } from '../common/classes/LogicalCpuController';
 import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
 import { ITccSettings } from '../common/models/TccSettings';
 import { VendorService } from '../common/classes/Vendor.service'
-import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -1119,7 +1118,7 @@ ipcMain.handle('get-process-versions', async (event, arg) => {
 
 ipcMain.handle('show-save-dialog', async (event, arg) => {
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
-        let results = await dialog.showSaveDialog(arg);
+        let results = dialog.showSaveDialog(arg);
         resolve(results);
     });
 });
@@ -1127,7 +1126,7 @@ ipcMain.handle('show-save-dialog', async (event, arg) => {
 
 ipcMain.handle('show-open-dialog', async (event, arg) => {
     return new Promise<OpenDialogReturnValue>((resolve, reject) => {
-        let results = await dialog.showOpenDialog(arg);
+        let results = dialog.showOpenDialog(arg);
         resolve(results);
     });
 });
@@ -1294,9 +1293,9 @@ ipcMain.handle('odm-profiles-available-dbus', async (event, arg) => {
     });
 });
 
-ipcMain.handle('odm-power-limits-available-dbus', async (event, arg) => {
-    return new Promise<TDPInfo[]>((resolve, reject) => {
-        resolve(tccDBus.odmPowerLimits());
+ipcMain.handle('odm-power-limits-json-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.odmPowerLimitsJSON());
     });
 });
 
@@ -1423,6 +1422,97 @@ ipcMain.handle('set-dgpu-do-metrics-dbus', async (event, status) => {
         resolve(tccDBus.setDGpuD0Metrics(status));
     });
 });
+
+ipcMain.handle('get-charge-start-available-thresholds-dbus', async (event, arg) => {
+    return new Promise<number[]>((resolve, reject) => {
+        resolve(tccDBus.getChargeStartAvailableThresholds());
+    });
+});
+
+ipcMain.handle('get-charge-end-available-thresholds-dbus', async (event, arg) => {
+    return new Promise<number[]>((resolve, reject) => {
+        resolve(tccDBus.getChargeEndAvailableThresholds());
+    });
+});
+
+
+ipcMain.handle('get-charge-start-threshold-dbus', async (event, arg) => {
+    return new Promise<number>((resolve, reject) => {
+        resolve(tccDBus.getChargeStartThreshold());
+    });
+});
+
+ipcMain.handle('get-charge-end-threshold-dbus', async (event, arg) => {
+    return new Promise<number>((resolve, reject) => {
+        resolve(tccDBus.getChargeEndThreshold());
+    });
+});
+
+ipcMain.handle('get-charge-type-dbus', async (event, arg) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(tccDBus.getChargeType());
+    });
+});
+
+ipcMain.handle('set-charge-start-threshold-dbus', async (event, newValue) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setChargeStartThreshold(newValue));
+    });
+});
+
+ipcMain.handle('set-charge-end-threshold-dbus', async (event, newValue) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setChargeEndThreshold(newValue));
+    });
+});
+
+ipcMain.handle('set-charge-type-dbus', async (event, chargeType) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.setChargeType(chargeType));
+    });
+});
+
+ipcMain.handle('is-available-dbus', async (event, chargeType) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.dbusAvailable());
+    });
+});
+
+ipcMain.handle('get-dgpu-power-state-power', async (event, arg) => {
+    return getDGpuPowerState();
+});
+
+async function execCMD(cmd): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+    child_process.exec(cmd, (err, stdout, stderr) => {
+        if (err) {
+            resolve(stderr);
+        } else {
+            resolve(stdout);
+        }
+    });});
+}
+
+async function getDGpuPowerState(): Promise<string> {
+    const nvidiaBusPath = (
+        await execCMD(
+            "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
+        )
+    ).toString();
+
+    if (nvidiaBusPath) {
+        return (
+            await execCMD(
+                `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
+            )
+        )
+            .toString()
+            .trim();
+    }
+    return "-1";
+}
+
+
 // ######## vendor service backend ######
 
 let vendorService = new VendorService();

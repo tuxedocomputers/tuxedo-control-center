@@ -144,7 +144,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 try {
                     worker.work();
                 } catch (err) {
-                    this.logLine('Failed executing onWork() => ' + err);
+                    this.logLine('Failed executing onWork() of ' + worker + ' => ' + err);
                 }
             }, worker.timeout);
         }

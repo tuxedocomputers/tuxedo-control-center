@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, OnDestroy } from '@angular/core';
-import { TccDBusControllerPreload } from '../../common/classes/TccDBusControllerPreload';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../common/models/IFanData';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
@@ -27,6 +26,7 @@ import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ICpuPower } from 'src/common/models/TccPowerSettings';
 import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
+import { DBUS } from './renderer';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -38,8 +38,6 @@ export interface IDBusFanData {
   providedIn: 'root'
 })
 export class TccDBusClientService implements OnDestroy {
-
-  private tccDBusInterface: TccDBusControllerPreload;
   private isAvailable: boolean;
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
@@ -72,7 +70,7 @@ export class TccDBusClientService implements OnDestroy {
   private previousSettingsJSON = '';
 
   public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
-  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
+  public keyboardBacklightStates = new BehaviorSubject<KeyboardBacklightStateInterface[]>(undefined);
 
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
@@ -86,9 +84,10 @@ export class TccDBusClientService implements OnDestroy {
 
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
+  private tccDBusInterface: DBUS;
 
   constructor(private utils: UtilsService) {
-    this.tccDBusInterface = new TccDBusControllerPreload();
+    this.tccDBusInterface = window.dbus;
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
@@ -127,9 +126,9 @@ export class TccDBusClientService implements OnDestroy {
     try 
     {
         const fanData: IDBusFanData = {
-            cpu: await this.tccDBusInterface.getFanDataCPU(),
-            gpu1: await this.tccDBusInterface.getFanDataGPU1(),
-            gpu2: await this.tccDBusInterface.getFanDataGPU2()
+            cpu: JSON.parse(await this.tccDBusInterface.getFanDataCPU()),
+            gpu1: JSON.parse(await this.tccDBusInterface.getFanDataGPU1()),
+            gpu2: JSON.parse(await this.tccDBusInterface.getFanDataGPU2())
           };
           this.fanData.next(fanData);
     }
@@ -170,8 +169,12 @@ export class TccDBusClientService implements OnDestroy {
 
     const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable();
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
-    const nextODMPowerLimits = await this.tccDBusInterface.odmPowerLimits();
-    this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
+    const nextODMPowerLimitsJSON = await this.tccDBusInterface.odmPowerLimitsJSON();
+    if (nextODMPowerLimitsJSON) {
+        let nextODMPowerLimits = JSON.parse(nextODMPowerLimitsJSON);
+        this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
+    }
+
     // Retrieve and parse profiles
     const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
     if (activeProfileJSON !== undefined) {
@@ -273,7 +276,7 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   public async setTempProfile(profileName: string) {
-    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileName(profileName);
+    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfile(profileName);
     return result;
   }
 
@@ -290,7 +293,7 @@ export class TccDBusClientService implements OnDestroy {
     await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuD0Metrics(status)
   }
 
-  public getInterface(): TccDBusControllerPreload | undefined {
+  public getInterface(): DBUS | undefined {
     if (this.isAvailable) {
         return this.tccDBusInterface;
     } else {

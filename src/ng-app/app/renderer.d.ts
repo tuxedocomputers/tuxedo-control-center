@@ -23,10 +23,16 @@ export interface IPC extends EventEmitter {
     tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
     onUpdateBrightnessMode: (callback) => void,
+    onWakeupFromSuspend: (callback) => void,
     openExternal: (url: string) => void,
     getPath: (path: string) => Promise<string>,
     openFileDialog: (properties) => Promise<any>,
     saveFileDialog: (properties) => Promise<any>,
+  }
+
+  export interface POWER 
+  {
+    getDGpuPowerState: () => Promise<string>,
   }
   
 
@@ -34,36 +40,36 @@ export interface IPC extends EventEmitter {
   {
     init: () => Promise<boolean>,
     disconnect: () => Promise<boolean>,
-    TuxedoWmiAvailable: () => Promise<boolean>,
-    TccdVersion: () => Promise<string>,
-    GetFanDataCPU: () => Promise<string>,
-    GetFanDataGPU1: () => Promise<string>,
-    GetFanDataGPU2: () => Promise<string>,
-    WebcamSWAvailable: () => Promise<boolean>,
-    GetWebcamSWStatus: () => Promise<boolean>,
-    GetForceYUV420OutputSwitchAvailable: () => Promise<boolean>,
-    ConsumeModeReapplyPending: () => Promise<boolean>,
-    GetActiveProfileJSON: () => Promise<string>,
-    SetTempProfile: (profileName: string) => Promise<boolean>,
-    SetTempProfileById: (profileId: string) => Promise<boolean>,
-    GetProfilesJSON: () => Promise<string>,
-    GetCustomProfilesJSON: () => Promise<string>,
-    GetDefaultProfilesJSON: () => Promise<string>,
-    GetDefaultValuesProfileJSON: () => Promise<string>,
-    GetSettingsJSON: () => Promise<string>,
-    ODMProfilesAvailable: () => Promise<string[]>,
-    ODMPowerLimitsJSON: () => Promise<string>,
-    GetKeyboardBacklightCapabilitiesJSON: () => Promise<string>,
-    GetKeyboardBacklightStatesJSON: () => Promise<string>,
-    SetKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON: string) => Promise<boolean>,
-    GetFansMinSpeed: () => Promise<number>,
-    GetFansOffAvailable: () => Promise<boolean>,
-    GetChargingProfilesAvailable: () => Promise<string>,
-    GetCurrentChargingProfile: () => Promise<string>,
-    SetChargingProfile: (profileDescriptor: string) => Promise<boolean>,
-    GetChargingPrioritiesAvailable: () => Promise<string>,
-    GetCurrentChargingPriority: () => Promise<string>,
-    SetChargingPriority: (priorityDescriptor: string) => Promise<boolean>,
+    tuxedoWmiAvailable: () => Promise<boolean>,
+    tccdVersion: () => Promise<string>,
+    getFanDataCPU: () => Promise<string>,
+    getFanDataGPU1: () => Promise<string>,
+    getFanDataGPU2: () => Promise<string>,
+    webcamSWAvailable: () => Promise<boolean>,
+    getWebcamSWStatus: () => Promise<boolean>,
+    getForceYUV420OutputSwitchAvailable: () => Promise<boolean>,
+    consumeModeReapplyPending: () => Promise<boolean>,
+    getActiveProfileJSON: () => Promise<string>,
+    setTempProfile: (profileName: string) => Promise<boolean>,
+    setTempProfileById: (profileId: string) => Promise<boolean>,
+    getProfilesJSON: () => Promise<string>,
+    getCustomProfilesJSON: () => Promise<string>,
+    getDefaultProfilesJSON: () => Promise<string>,
+    getDefaultValuesProfileJSON: () => Promise<string>,
+    getSettingsJSON: () => Promise<string>,
+    odmProfilesAvailable: () => Promise<string[]>,
+    odmPowerLimitsJSON: () => Promise<string>,
+    getKeyboardBacklightCapabilitiesJSON: () => Promise<string>,
+    getKeyboardBacklightStatesJSON: () => Promise<string>,
+    setKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON: string) => Promise<boolean>,
+    getFansMinSpeed: () => Promise<number>,
+    getFansOffAvailable: () => Promise<boolean>,
+    getChargingProfilesAvailable: () => Promise<string[]>,
+    getCurrentChargingProfile: () => Promise<string>,
+    setChargingProfile: (profileDescriptor: string) => Promise<boolean>,
+    getChargingPrioritiesAvailable: () => Promise<string[]>,
+    getCurrentChargingPriority: () => Promise<string>,
+    setChargingPriority: (priorityDescriptor: string) => Promise<boolean>,
     displayBrightnessNotSupportedGnome: () => boolean,
     setDisplayBrightnessGnome: (valuePercent: number) => Promise<void>,
     getDGpuInfoValuesJSON: () => Promise<string>,
@@ -75,11 +81,21 @@ export interface IPC extends EventEmitter {
     getRefreshRateSupported: () => Promise<boolean>,
     setSensorDataCollectionStatus: (status) => Promise<boolean>,
     setDGpuD0Metrics: (status) => Promise<boolean>,
+    dbusAvailable: () => Promise<boolean>,
+    getChargeStartAvailableThresholds: () => Promise<number[]>,
+    getChargeEndAvailableThresholds: () => Promise<number[]>,
+    getChargeStartThreshold: () => Promise<number>,
+    getChargeEndThreshold: () => Promise<number>,
+    getChargeType: () => Promise<string>,
+    setChargeStartThreshold: (newValue: number) => Promise<boolean>,
+    setChargeEndThreshold: (newValue: number) => Promise<boolean>,
+    setChargeType: (chargeType) => Promise<boolean>,
+
   }
 
   export interface VENDOR
   {
-    getCpuVendor: () => string,
+    getCpuVendor: () => Promise<string>,
 
   }
 
@@ -170,6 +186,7 @@ export interface COMP
       comp: COMP,
       stuff: STUFF,
       vendor: VENDOR,
+      power: POWER,
     }
   }
   

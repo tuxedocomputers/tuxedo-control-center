@@ -275,6 +275,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.iGpuFreq = coreFrequency;
         this.iGpuVendor = await window.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
+
     }
 
     // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values

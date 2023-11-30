@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -141,6 +141,12 @@ export class FanControlWorker extends DaemonWorker {
             this.fans = this.createFansMap(nrFans);
         }
 
+        this.fanData = new Array(nrFans);
+        for (let i = 0; i < nrFans; i++)
+        {
+            this.fanData[i] = new FanData();
+        }
+
         if (nrFans === 0) {
             return;
         }
@@ -161,7 +167,6 @@ export class FanControlWorker extends DaemonWorker {
 
     public onWork(): void {
         this.initFanControl(); // Make sure structures are up to date before doing anything
-
         const fanTemps: number[] = [];
         const fanSpeedsRead: number[] = [];
         const fanSpeedsSet: number[] = new Array<number>(this.fans.size);
@@ -182,7 +187,6 @@ export class FanControlWorker extends DaemonWorker {
             }
             this.controlAvailableMessage = false;
         }
-
         const useFanControl = this.getFanControlStatus();
 
         // Decide on a fan control approach
@@ -212,7 +216,6 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 fanTemps.push(-1);
             }
-
             // If there is temp sensor value report temperature to logic
             // Also, fill fanSpeedsSet
             if (tempSensorAvailable[fanIndex]) {

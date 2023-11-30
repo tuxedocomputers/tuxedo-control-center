@@ -17,9 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as dbus from 'dbus-next';
-import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 import { ChargeType } from './PowerSupplyController';
 
 export class TccDBusController {
@@ -239,6 +237,14 @@ export class TccDBusController {
     async odmPowerLimits(): Promise<TDPInfo[]> {
         try {
             return JSON.parse(await this.interface.ODMPowerLimitsJSON());
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async odmPowerLimitsJSON(): Promise<string> {
+        try {
+            return await this.interface.ODMPowerLimitsJSON();
         } catch (err) {
             return undefined;
         }
