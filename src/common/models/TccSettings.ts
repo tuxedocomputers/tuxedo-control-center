@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileTDP } from "./DefaultProfiles";
+import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileCl, defaultMobileCustomProfileTDP, defaultMobileCustomProfileID } from "./DefaultProfiles";
 
 export enum ProfileStates {
     AC = 'power_ac',
@@ -55,9 +55,7 @@ export interface ITccSettings {
     ycbcr420Workaround: Array<Object>;
     chargingProfile: string | null;
     chargingPriority: string | null;
-    keyboardBacklightBrightness: number;
-    keyboardBacklightColorMode: KeyboardBacklightColorModes;
-    keyboardBacklightColor: Array<number>;
+    keyboardBacklightStates: Array<KeyboardBacklightStateInterface>;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -72,9 +70,7 @@ export const defaultSettings: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightBrightness: undefined, // undefined is interpreted as "default brightness" aka 50% by tccd
-    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
-    keyboardBacklightColor: []
+    keyboardBacklightStates: []
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -89,15 +85,13 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightBrightness: 0,
-    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
-    keyboardBacklightColor: []
+    keyboardBacklightStates: []
 };
 
-export const defaultSettingsMobileTDP: ITccSettings = {
+export const defaultSettingsMobile: ITccSettings = {
     stateMap: {
         power_ac: defaultCustomProfile.id,
-        power_bat: defaultMobileCustomProfileTDP.id
+        power_bat: defaultMobileCustomProfileID
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
@@ -106,11 +100,11 @@ export const defaultSettingsMobileTDP: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightBrightness: undefined, // undefined is interpreted as "default brightness" aka 50% by tccd
-    keyboardBacklightColorMode: KeyboardBacklightColorModes.static,
-    keyboardBacklightColor: []
+    keyboardBacklightStates: []
 };
 
 export const deviceCustomSettings: Map<TUXEDODevice, ITccSettings> = new Map();
 
-deviceCustomSettings.set(TUXEDODevice.IBPG8MK1, defaultSettingsMobileTDP);
+deviceCustomSettings.set(TUXEDODevice.IBPG8, defaultSettingsMobile);
+deviceCustomSettings.set(TUXEDODevice.AURA14G3, defaultSettingsMobile);
+deviceCustomSettings.set(TUXEDODevice.AURA15G3, defaultSettingsMobile);

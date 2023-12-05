@@ -66,7 +66,7 @@ async function buildDeb(): Promise<void> {
             icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         deb: {
-            depends: ['tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
+            depends: ['tuxedo-keyboard (>= 3.1.2) | tuxedo-drivers (>= 3.1.2)', 'libayatana-appindicator3-1'],
             category: 'System',
             fpm: [
                 '--after-install=./build-src/after_install.sh',
@@ -127,7 +127,7 @@ async function buildSuseRpm(): Promise<void> {
             icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         rpm: {
-            depends: [ 'tuxedo-keyboard >= 3.1.2', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)' ],
+            depends: ['(tuxedo-keyboard >= 3.1.2 or tuxedo-drivers >= 3.1.2)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
             fpm: [
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh',

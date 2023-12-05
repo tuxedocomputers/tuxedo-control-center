@@ -35,14 +35,13 @@ import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
-import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { ITccFanProfile, customFanPreset } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
 import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
-import { KeyboardBacklightWorker } from './KeyboardBacklightWorker';
 import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
@@ -52,6 +51,7 @@ import { GpuInfoWorker } from "./GpuInfoWorker";
 import { CpuPowerWorker } from './CpuPowerWorker';
 import { PrimeWorker } from './PrimeWorker';
 import { VendorService } from "../../common/classes/Vendor.service";
+import { KeyboardBacklightListener } from './KeyboardBacklightListener';
 
 const tccPackage = require('../../package.json');
 
@@ -73,6 +73,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
+    private listeners = [];
 
     protected started = false;
 
@@ -125,11 +126,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new GpuInfoWorker(this, new VendorService()));
         this.workers.push(new CpuPowerWorker(this));
         this.workers.push(new PrimeWorker(this));
-        this.workers.push(new KeyboardBacklightWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
         this.workers.push(this.displayWorker);
+
+        this.listeners.push(new KeyboardBacklightListener(this));
 
         this.startWorkers();
 
@@ -375,34 +377,46 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.settings = this.config.readSettings();
             var missingSetting: boolean = false;
 
+            // If settings are missing, attempt to recreate default
+            // TODO purge settings no longer in ITccSettings
             if (this.settings.stateMap === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing statemap');
                 this.settings.stateMap = this.config.getDefaultSettings(device).stateMap;
                 missingSetting = true;
             }
             if (this.settings.cpuSettingsEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing cpuSettingsEnabled setting');
                 this.settings.cpuSettingsEnabled = this.config.getDefaultSettings(device).cpuSettingsEnabled;
                 missingSetting = true;
             }
             if (this.settings.fanControlEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing fanControlEnabled setting');
                 this.settings.fanControlEnabled = this.config.getDefaultSettings(device).fanControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightControlEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing keyboardBacklightControlEnabled setting');
                 this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.ycbcr420Workaround === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing ycbcr420Workaround setting');
                 this.settings.ycbcr420Workaround = this.config.getDefaultSettings(device).ycbcr420Workaround;
+                missingSetting = true;
+            }
+            if (this.settings.chargingProfile === undefined) {
+                this.logLine('Missing chargingProfile setting');
+                this.settings.chargingProfile = this.config.getDefaultSettings(device).chargingProfile;
+                missingSetting = true;
+            }
+            if (this.settings.chargingPriority === undefined) {
+                this.logLine('Missing chargingPriority setting');
+                this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
+                missingSetting = true;
+            }
+            if (this.settings.keyboardBacklightStates === undefined) {
+                this.logLine('Missing keyboardBacklightStates setting');
+                this.settings.keyboardBacklightStates = this.config.getDefaultSettings(device).keyboardBacklightStates;
                 missingSetting = true;
             }
             missingSetting = this.syncOutputPortsSetting();
@@ -489,8 +503,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         TuxedoIOAPI.getModuleInfo(modInfo);
 
         const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
-        dmiSKUDeviceMap.set('IBP1XI08MK1', TUXEDODevice.IBPG8MK1);
-        dmiSKUDeviceMap.set('IBP16I08MK2', TUXEDODevice.IBP16I08MK2);
+        dmiSKUDeviceMap.set('IBP1XI08MK1', TUXEDODevice.IBPG8);
+        dmiSKUDeviceMap.set('IBP1XI08MK2', TUXEDODevice.IBPG8);
+        dmiSKUDeviceMap.set('IBP14I08MK2', TUXEDODevice.IBPG8);
+        dmiSKUDeviceMap.set('IBP16I08MK2', TUXEDODevice.IBPG8);
+        dmiSKUDeviceMap.set('OMNIA08IMK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
         dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
         dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
@@ -501,6 +518,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
         dmiSKUDeviceMap.set('STELLARIS1XI05', TUXEDODevice.STELLARIS1XI05);
+        dmiSKUDeviceMap.set('POLARIS1XA05', TUXEDODevice.POLARIS1XA05);
+        dmiSKUDeviceMap.set('STELLARIS1XA05', TUXEDODevice.STELLARIS1XA05);
+        dmiSKUDeviceMap.set('AURA14GEN3', TUXEDODevice.AURA14G3);
+        dmiSKUDeviceMap.set('AURA15GEN3', TUXEDODevice.AURA15G3);
 
         const skuMatch = dmiSKUDeviceMap.get(productSKU);
 
@@ -706,12 +727,17 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 useControl: true,
                 fanProfile: 'Balanced',
                 minimumFanspeed: 0,
-                offsetFanspeed: 0
+                maximumFanspeed: 100,
+                offsetFanspeed: 0,
+                customFanCurve: customFanPreset,
             };
         } else {
             profile.fan.useControl = true;
             if (profile.fan.minimumFanspeed === undefined) {
                 profile.fan.minimumFanspeed = 0;
+            }
+            if (profile.fan.maximumFanspeed === undefined) {
+                profile.fan.maximumFanspeed = 100;
             }
             if (profile.fan.offsetFanspeed === undefined) {
                 profile.fan.offsetFanspeed = 0;

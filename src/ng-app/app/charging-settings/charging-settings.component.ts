@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,6 +19,25 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { ElectronService } from "ngx-electron";
+import { FormControl } from "@angular/forms";
+import { MatSliderChange } from "@angular/material/slider";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+import { ChargeType } from "src/common/classes/PowerSupplyController";
+import { MatRadioChange } from "@angular/material/radio";
+
+class ThresholdPresets {
+    constructor(
+        public start: number,
+        public end: number,
+    ) {}
+}
+
+enum BatteryThresholdOptions {
+    HighCapacity = 'high_capacity',
+    Balanced = 'balanced',
+    Stationary = 'stationary',
+    Custom = 'custom',
+}
 
 @Component({
     selector: 'app-charging-settings',
@@ -38,8 +57,31 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingProfileProgress = false;
     public chargingPriorityProgress = false;
 
+    public chargeStartAvailableThresholds: number[] = [];
+    public chargeEndAvailableThresholds: number[] = [];
+    public chargeStartThreshold: number;
+    public chargeEndThreshold: number;
+    public chargeType: string;
+    public chargeThresholdsEnabled = false;
+
+    public ctrlChargeStartThreshold = new FormControl(null);
+    public ctrlChargeEndThreshold = new FormControl(null);
+    public ctrlEnableThresholds = new FormControl(null);
+    public ctrlChargingThresholdGroup = new FormControl(null);
+    public chargingThresholdsProgress = false;
+
+    public chargingThresholdGroupValue = null;
+    public thresholdPresets = new Map<String, ThresholdPresets>();
+
     private updateInterval = 1000;
     private timeout;
+
+    public gridParams = {
+        cols: 9,
+        headerSpan: 4,
+        valueSpan: 2,
+        inputSpan: 3
+    };
 
     public chargingProfileLabels: Map<string, string> = new Map();
     public chargingProfileDescriptions: Map<string, string> = new Map();
@@ -65,6 +107,9 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
         this.chargingPriorityDescriptions.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryDescription:Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.`);
         this.chargingPriorityDescriptions.set('performance', $localize `:@@chargingPriorityPerformanceDescription:Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.`);
+
+        this.thresholdPresets.set(BatteryThresholdOptions.Balanced, new ThresholdPresets(80, 90));
+        this.thresholdPresets.set(BatteryThresholdOptions.Stationary, new ThresholdPresets(40, 80));
     }
 
     ngOnInit() {
@@ -81,12 +126,17 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
     private async periodicUpdate() {
         await this.readAvailableSettings();
-        if (this.chargingPriosAvailable.length > 0 || this.chargingProfilesAvailable.length > 0) {
+
+        const featureAvailable =
+            (this.chargingPriosAvailable.length > 0 || this.chargingProfilesAvailable.length > 0) ||
+            (this.chargeStartAvailableThresholds.length > 0 || this.chargeEndAvailableThresholds.length > 0);
+
+        if (featureAvailable) {
             this.hasFeature.emit(true);
         }
     }
 
-    public async readAvailableSettings() {
+    public async readAvailableSettings(resetControls: boolean = false) {
         const dbus = this.tccdbus.getInterface();
         if (dbus === undefined) {
             return false;
@@ -98,7 +148,44 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.chargingPriosAvailable = await dbus.getChargingPrioritiesAvailable();
         this.currentChargingPriority = await dbus.getCurrentChargingPriority();
 
+        this.chargeStartAvailableThresholds = await dbus.getChargeStartAvailableThresholds();
+        this.chargeEndAvailableThresholds = await dbus.getChargeEndAvailableThresholds();
+        this.chargeStartThreshold = await dbus.getChargeStartThreshold();
+        this.chargeEndThreshold = await dbus.getChargeEndThreshold();
+        this.chargeType = await dbus.getChargeType();
+        this.chargeThresholdsEnabled = this.chargeType === ChargeType.Custom;
+
+        if (this.ctrlEnableThresholds.value === null || resetControls) {
+            this.ctrlEnableThresholds.setValue(this.chargeThresholdsEnabled);
+        }
+        if (this.ctrlChargeEndThreshold.value === null || resetControls) {
+            this.ctrlChargeEndThreshold.setValue(this.chargeEndThreshold);
+        }
+        if (this.ctrlChargeStartThreshold.value === null || resetControls) {
+            this.ctrlChargeStartThreshold.setValue(this.chargeStartThreshold);
+        }
+        if (this.ctrlChargingThresholdGroup.value === null || resetControls) {
+            this.ctrlChargingThresholdGroup.setValue(this.getThresholdOptionFromData())
+        }
+
         return true;
+    }
+
+    private getThresholdOptionFromData() {
+        let thresholdOption;
+        if (!this.chargeThresholdsEnabled) {
+            thresholdOption = BatteryThresholdOptions.HighCapacity;
+        } else if (this.chargeStartThreshold === this.thresholdPresets.get(BatteryThresholdOptions.Balanced).start &&
+                   this.chargeEndThreshold === this.thresholdPresets.get(BatteryThresholdOptions.Balanced).end) {
+            thresholdOption = BatteryThresholdOptions.Balanced;
+        } else if (this.chargeStartThreshold === this.thresholdPresets.get(BatteryThresholdOptions.Stationary).start &&
+                   this.chargeEndThreshold === this.thresholdPresets.get(BatteryThresholdOptions.Stationary).end) {
+            thresholdOption = BatteryThresholdOptions.Stationary;
+        } else {
+            thresholdOption = BatteryThresholdOptions.Custom;
+        }
+
+        return thresholdOption;
     }
 
     public async setChargingProfile(chargingProfileDescriptor: string) {
@@ -129,5 +216,95 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
     public async openExternalUrl(url: string) {
         await this.electron.shell.openExternal(url);
+    }
+
+    public findClosest(value: number, arr: number[]) {
+        if (arr.length === 0) {
+            return 0;
+        }
+
+        let closest = arr[0];
+        for (let i = 1; i < arr.length; ++i) {
+            if (Math.abs(arr[i] - value) < Math.abs(closest - value)) {
+                closest = arr[i];
+            }
+        }
+        return closest;
+    }
+
+    public async sliderStartThresholdChange(changeEvent: MatSliderChange) {
+        const dbus = this.tccdbus.getInterface();
+
+        let newValue = changeEvent.value;
+        let validValues = this.chargeStartAvailableThresholds.filter(
+            value => value < this.ctrlChargeEndThreshold.value
+        );
+        newValue = this.findClosest(newValue, validValues);
+        this.ctrlChargeStartThreshold.setValue(newValue);
+
+        if (newValue !== this.chargeStartThreshold) {
+            this.chargingThresholdsProgress = true;
+            await dbus.setChargeStartThreshold(newValue);
+            await this.readAvailableSettings(true);
+            this.chargingThresholdsProgress = false;
+        }
+    }
+
+    public async sliderEndThresholdChange(changeEvent: MatSliderChange) {
+        const dbus = this.tccdbus.getInterface();
+
+        let newValue = changeEvent.value;
+        let validValues = this.chargeEndAvailableThresholds.filter(
+            value => value > this.ctrlChargeStartThreshold.value
+        );
+        newValue = this.findClosest(newValue, validValues);
+        this.ctrlChargeEndThreshold.setValue(newValue);
+
+        if (newValue !== this.chargeEndThreshold) {
+            this.chargingThresholdsProgress = true;
+            await dbus.setChargeEndThreshold(newValue);
+            await this.readAvailableSettings(true);
+            this.chargingThresholdsProgress = false;
+        }
+    }
+
+    public async checkboxEnableThresholdsChange(changeEvent: MatCheckboxChange) {
+        const dbus = this.tccdbus.getInterface();
+        this.chargingThresholdsProgress = true;
+
+        let nextChargeType;
+        if (changeEvent.checked) {
+            nextChargeType = ChargeType.Custom;
+        } else {
+            nextChargeType = ChargeType.Standard;
+        }
+
+        await dbus.setChargeType(nextChargeType);
+        await this.readAvailableSettings(true);
+        this.chargingThresholdsProgress = false;
+    }
+
+    public async thresholdRadioGroupChange(event: MatRadioChange) {
+        const dbus = this.tccdbus.getInterface();
+
+        this.chargingThresholdsProgress = true;
+
+        if (event.value === BatteryThresholdOptions.HighCapacity) {
+            await dbus.setChargeType(ChargeType.Standard);
+        } else if (event.value === BatteryThresholdOptions.Balanced) {
+            await dbus.setChargeType(ChargeType.Custom);
+            await dbus.setChargeEndThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Balanced).end);
+            await dbus.setChargeStartThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Balanced).start);
+        } else if (event.value === BatteryThresholdOptions.Stationary) {
+            await dbus.setChargeType(ChargeType.Custom);
+            await dbus.setChargeEndThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Stationary).end);
+            await dbus.setChargeStartThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Stationary).start);
+        } else if (event.value === BatteryThresholdOptions.Custom) {
+            await dbus.setChargeType(ChargeType.Custom);
+        }
+
+        await this.readAvailableSettings();
+
+        this.chargingThresholdsProgress = false;
     }
 }

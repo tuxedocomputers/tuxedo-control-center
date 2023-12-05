@@ -28,8 +28,8 @@ import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
-import { resolve } from 'path';
-import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
+import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
+import electron = require("electron");
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -90,6 +90,14 @@ if (!userConfigDirExists()) {
 app.on('second-instance', (event, cmdLine, workingDir) => {
     // If triggered by a second instance, find/show/start GUI
     activateTccGui();
+});
+
+app.on("ready", () => {
+    electron.powerMonitor.on("resume", () => {
+        if (tccWindow) {
+            tccWindow.webContents.send("wakeup-from-suspend");
+        }
+    });
 });
 
 app.whenReady().then( async () => {

@@ -18,10 +18,11 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { DMIController } from '../../common/classes/DMIController';
 
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
+import { ITccFanProfile } from 'src/common/models/TccFanTable';
+import { interpolatePointsArray } from "../../common/classes/FanUtils";
 
 export class FanControlWorker extends DaemonWorker {
 
@@ -31,7 +32,8 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
-    private previousProfileName;
+
+    private previousFanProfile: ITccFanProfile;
 
     private modeSameSpeed = false;
 
@@ -50,36 +52,101 @@ export class FanControlWorker extends DaemonWorker {
         this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
     }
 
+    private getCurrentCustomProfile() {
+        const { customFanCurve } = this.activeProfile.fan;
+        const tableCPU = interpolatePointsArray(customFanCurve.tableCPU);
+        const tableGPU = interpolatePointsArray(customFanCurve.tableGPU);
+        const tccFanTable = (temp: number, i: number) => ({
+            temp: i,
+            speed: temp,
+        });
+        const tccFanProfile: ITccFanProfile = {
+            name: "Custom",
+            tableCPU: tableCPU.map(tccFanTable),
+            tableGPU: tableGPU.map(tccFanTable),
+        };
+        return tccFanProfile;
+    }
+
+    private setFanProfileValues(currentFanProfile: ITccFanProfile) {
+        for (const fanNumber of this.fans.keys()) {
+            if (this.activeProfile.fan.fanProfile == "Custom") {
+                this.fans.get(fanNumber).minimumFanspeed = 0;
+                this.fans.get(fanNumber).maximumFanspeed = 100;
+                this.fans.get(fanNumber).offsetFanspeed = 0;
+
+                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
+            }
+
+            if (this.activeProfile.fan.fanProfile != "Custom") {
+                this.fans.get(fanNumber).minimumFanspeed =
+                    this.activeProfile.fan.minimumFanspeed;
+                this.fans.get(fanNumber).maximumFanspeed =
+                    this.activeProfile.fan.maximumFanspeed;
+                this.fans.get(fanNumber).offsetFanspeed =
+                    this.activeProfile.fan.offsetFanspeed;
+
+                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
+            }
+        }
+
+        for (const fanNumber of this.fans.keys()) {
+            this.fans.get(fanNumber).fansMinSpeedHWLimit =
+                this.fansMinSpeedHWLimit;
+            this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
+        }
+    }
+
+    private createFansMap(nrFans: number): Map<number, FanControlLogic> {
+        const fansMap = new Map<number, FanControlLogic>();
+
+        if (nrFans >= 1) {
+            fansMap.set(1, this.cpuLogic);
+        }
+        if (nrFans >= 2) {
+            fansMap.set(2, this.gpu1Logic);
+        }
+        if (nrFans >= 3) {
+            fansMap.set(3, this.gpu2Logic);
+        }
+
+        return fansMap;
+    }
+
+    private isEqual(first: ITccFanProfile, second: ITccFanProfile): boolean {
+        return JSON.stringify(first) === JSON.stringify(second);
+    }
+
+    private setFanProfile() {
+        const currentFanProfile =
+            this.activeProfile.fan.fanProfile === "Custom"
+                ? this.getCurrentCustomProfile()
+                : this.tccd.getCurrentFanProfile(this.activeProfile);
+
+        if (
+            this.previousFanProfile &&
+            (this.previousFanProfile?.name !==
+                this.activeProfile.fan.fanProfile ||
+                !this.isEqual(this.previousFanProfile, currentFanProfile))
+        ) {
+            this.setFanProfileValues(currentFanProfile);
+        }
+
+        this.previousFanProfile = currentFanProfile;
+    }
+
     private initFanControl(): void {
         const nrFans = ioAPI.getNumberFans();
 
         if (this.fans === undefined || this.fans.size !== nrFans) {
-            // Map logic to fan number
-            this.fans = new Map();
-            if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
-            if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
-            if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+            this.fans = this.createFansMap(nrFans);
         }
 
         if (nrFans === 0) {
             return;
         }
 
-        // Update fan logic
-        const currentFanProfile = this.tccd.getCurrentFanProfile(this.activeProfile);
-        for (const fanNumber of this.fans.keys()) {
-            if (this.fans.get(fanNumber).getFanProfile() === undefined ||
-                this.fans.get(fanNumber).getFanProfile().name !== currentFanProfile.name) {
-                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
-            }
-            this.fans.get(fanNumber).minimumFanspeed = this.activeProfile.fan.minimumFanspeed;
-            this.fans.get(fanNumber).offsetFanspeed = this.activeProfile.fan.offsetFanspeed;
-        }
-
-        for (const fanNumber of this.fans.keys()) {
-            this.fans.get(fanNumber).fansMinSpeedHWLimit = this.fansMinSpeedHWLimit;
-            this.fans.get(fanNumber).fansOffAvailable = this.fansOffAvailable;
-        }
+        this.setFanProfile();
     }
 
     public onStart(): void {
