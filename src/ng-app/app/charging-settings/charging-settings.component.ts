@@ -108,7 +108,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.chargingPriorityDescriptions.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryDescription:Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.`);
         this.chargingPriorityDescriptions.set('performance', $localize `:@@chargingPriorityPerformanceDescription:Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.`);
 
-        this.thresholdPresets.set(BatteryThresholdOptions.Balanced, new ThresholdPresets(80, 90));
+        this.thresholdPresets.set(BatteryThresholdOptions.Balanced, new ThresholdPresets(60, 90));
         this.thresholdPresets.set(BatteryThresholdOptions.Stationary, new ThresholdPresets(40, 80));
     }
 
