@@ -742,6 +742,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (profile.fan.offsetFanspeed === undefined) {
                 profile.fan.offsetFanspeed = 0;
             }
+            if (profile.fan.customFanCurve === undefined) {
+                profile.fan.customFanCurve = customFanPreset;
+            }
         }
 
         const defaultODMProfileName: ObjWrapper<string> = { value: '' };
