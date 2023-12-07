@@ -16,58 +16,105 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { DaemonWorker } from "./DaemonWorker";
+import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
-import { TuxedoIOAPI as ioAPI, ObjWrapper} from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
+
+import {
+    SysFsPropertyString,
+    SysFsPropertyStringList,
+} from "../../common/classes/SysFsProperties";
 
 export class ODMProfileWorker extends DaemonWorker {
-
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(1000, tccd);
+        super(10000, tccd);
     }
 
     public onStart(): void {
+        const platformProfile = new SysFsPropertyString(
+            "/sys/devices/platform/tuxedo_platform_profile/platform_profile"
+        );
+
+        const platformProfileChoices = new SysFsPropertyStringList(
+            "/sys/devices/platform/tuxedo_platform_profile/platform_profile_choices"
+        );
+
+        if (
+            platformProfile.isAvailable() &&
+            platformProfileChoices.isAvailable()
+        ) {
+            this.ODM(platformProfile, platformProfileChoices);
+        }
+
+        if (
+            !platformProfile.isAvailable() ||
+            !platformProfileChoices.isAvailable()
+        ) {
+            this.fallbackODM();
+        }
+    }
+
+    public onWork(): void {}
+
+    public onExit(): void {}
+
+    public ODM(
+        platformProfile: SysFsPropertyString,
+        platformProfileChoices: SysFsPropertyStringList
+    ): void {
+        const availableProfiles = platformProfileChoices.readValueNT();
+        this.tccd.dbusData.odmProfilesAvailable = availableProfiles;
+
+        let chosenODMProfileName = this.getODMProfileName();
+        if (availableProfiles.includes(chosenODMProfileName)) {
+            platformProfile.writeValue(chosenODMProfileName);
+        }
+    }
+
+    private fallbackODM(): void {
         const availableProfiles: ObjWrapper<string[]> = { value: [] };
-        const odmProfilesAvailable = ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
+        const odmProfilesAvailable =
+            ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
         if (odmProfilesAvailable) {
-            const odmProfileSettings = this.activeProfile.odmProfile;
-            let chosenODMProfileName;
-            if (odmProfileSettings !== undefined) {
-                chosenODMProfileName = odmProfileSettings.name;
-            }
+            let chosenODMProfileName = this.getODMProfileName();
 
             // If saved profile name does not match available ones
             // attempt to get the default profile name
             if (!availableProfiles.value.includes(chosenODMProfileName)) {
-                const defaultProfileName: ObjWrapper<string> = { value: '' };
+                const defaultProfileName: ObjWrapper<string> = { value: "" };
                 ioAPI.getDefaultODMPerformanceProfile(defaultProfileName);
                 chosenODMProfileName = defaultProfileName.value;
             }
-            
+
             // Make sure a valid one could be found before proceeding, otherwise abort
             if (availableProfiles.value.includes(chosenODMProfileName)) {
-                this.tccd.logLine('Set ODM profile \'' + chosenODMProfileName + '\' ');
+                this.tccd.logLine(
+                    "Set ODM profile '" + chosenODMProfileName + "' "
+                );
                 if (!ioAPI.setODMPerformanceProfile(chosenODMProfileName)) {
-                    this.tccd.logLine('ODMProfileWorker: Failed to apply profile');
+                    this.tccd.logLine(
+                        "ODMProfileWorker: Failed to apply profile"
+                    );
                 }
             } else {
-                this.tccd.logLine('ODMProfileWorker: Unexpected error, default profile name \'' + chosenODMProfileName + '\' not valid');
+                this.tccd.logLine(
+                    "ODMProfileWorker: Unexpected error, default profile name '" +
+                        chosenODMProfileName +
+                        "' not valid"
+                );
             }
         }
 
         this.tccd.dbusData.odmProfilesAvailable = availableProfiles.value;
     }
 
-    public onWork(): void {
-
-    }
-
-    public onExit(): void {
-        // Attempt to set default profile on exit
-        const defaultProfileName: ObjWrapper<string> = { value: '' };
-        if (ioAPI.getDefaultODMPerformanceProfile(defaultProfileName)) {
-            ioAPI.setODMPerformanceProfile(defaultProfileName.value);
+    private getODMProfileName(): string {
+        const odmProfileSettings = this.activeProfile.odmProfile;
+        let chosenODMProfileName: string;
+        if (odmProfileSettings !== undefined) {
+            chosenODMProfileName = odmProfileSettings.name;
         }
+        return chosenODMProfileName;
     }
 }
