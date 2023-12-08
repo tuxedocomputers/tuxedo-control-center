@@ -100,16 +100,13 @@ export class CompatibilityService {
         const { cpu } = fanData;
         const cpuTemp = cpu?.temp;
 
-        return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
-            this.hasDataWithValue(cpuTemp)
-        );
+        return this.hasDataWithValue(cpuTemp);
     }
 
     get hasIGpuTemp(): boolean {
         const temp = this.tccDbus.iGpuInfo?.value?.temp ?? -1;
 
-        return temp > 0 && this.tccDbus.tuxedoWmiAvailable.value;
+        return temp > 0;
     }
 
     get hasDGpuTemp(): boolean {
@@ -119,29 +116,20 @@ export class CompatibilityService {
         const gpu2Temp = gpu2?.temp;
 
         return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
-            (this.hasDataWithValue(gpu1Temp) || this.hasDataWithValue(gpu2Temp))
+            this.hasDataWithValue(gpu1Temp) || this.hasDataWithValue(gpu2Temp)
         );
     }
 
     get hasIGpuFreq(): boolean {
         const iGpuInfo: IiGpuInfo | undefined = this.tccDbus.iGpuInfo?.value;
 
-        return (
-            iGpuInfo !== undefined &&
-            this.hasFrequencyWithValue(iGpuInfo) &&
-            this.tccDbus.tuxedoWmiAvailable.value
-        );
+        return iGpuInfo !== undefined && this.hasFrequencyWithValue(iGpuInfo);
     }
 
     get hasDGpuFreq(): boolean {
         const dGpuInfo: IdGpuInfo | undefined = this.tccDbus.dGpuInfo?.value;
 
-        return (
-            dGpuInfo !== undefined &&
-            this.hasFrequencyWithValue(dGpuInfo) &&
-            this.tccDbus.tuxedoWmiAvailable.value
-        );
+        return dGpuInfo !== undefined && this.hasFrequencyWithValue(dGpuInfo);
     }
 
     get hasCpuFan(): boolean {
@@ -149,10 +137,7 @@ export class CompatibilityService {
         const { cpu } = fanData;
         const cpuSpeed = cpu?.speed;
 
-        return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
-            this.hasDataWithValue(cpuSpeed)
-        );
+        return this.hasDataWithValue(cpuSpeed);
     }
 
     get hasDGpuFan(): boolean {
@@ -162,9 +147,7 @@ export class CompatibilityService {
         const gpu2Speed = gpu2?.speed;
 
         return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
-            (this.hasDataWithValue(gpu1Speed) ||
-                this.hasDataWithValue(gpu2Speed))
+            this.hasDataWithValue(gpu1Speed) || this.hasDataWithValue(gpu2Speed)
         );
     }
 
@@ -172,10 +155,7 @@ export class CompatibilityService {
         const { cpuPower } = this.tccDbus;
         const { value: cpuPowerValue } = cpuPower;
 
-        return (
-            this.hasPowerDrawWithValue(cpuPowerValue) &&
-            this.tccDbus.tuxedoWmiAvailable.value
-        );
+        return this.hasPowerDrawWithValue(cpuPowerValue);
     }
 
     get hasIGpuPowerDraw(): boolean {
@@ -183,8 +163,7 @@ export class CompatibilityService {
 
         return (
             iGpuPowerDraw !== undefined &&
-            this.hasPowerDrawWithValue({ powerDraw: iGpuPowerDraw }) &&
-            this.tccDbus.tuxedoWmiAvailable.value
+            this.hasPowerDrawWithValue({ powerDraw: iGpuPowerDraw })
         );
     }
 
@@ -193,8 +172,7 @@ export class CompatibilityService {
 
         return (
             dGpuPowerDraw !== undefined &&
-            this.hasPowerDrawWithValue({ powerDraw: dGpuPowerDraw }) &&
-            this.tccDbus.tuxedoWmiAvailable.value
+            this.hasPowerDrawWithValue({ powerDraw: dGpuPowerDraw })
         );
     }
 
@@ -206,10 +184,7 @@ export class CompatibilityService {
     if (boardName === "GMxRGxx") {
       return false;
     }*/
-        return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
-            this.tccDbus.fanData.value.cpu.temp.data.value > 1
-        );
+        return this.tccDbus.fanData.value.cpu.temp.data.value > 1;
     }
 
     get compatibilityMessage(): string {
@@ -217,15 +192,11 @@ export class CompatibilityService {
     }
 
     get hasWebcamControl(): boolean {
-        return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
-            this.tccDbus.webcamSWAvailable.value
-        );
+        return this.tccDbus.webcamSWAvailable.value;
     }
 
     get hasODMProfileControl(): boolean {
         return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
             this.tccDbus.odmProfilesAvailable.value !== undefined &&
             this.tccDbus.odmProfilesAvailable.value.length > 0
         );
@@ -233,7 +204,6 @@ export class CompatibilityService {
 
     get hasODMPowerLimitControl(): boolean {
         return (
-            this.tccDbus.tuxedoWmiAvailable.value &&
             this.tccDbus.odmPowerLimits.value !== undefined &&
             this.tccDbus.odmPowerLimits.value.length > 0
         );
