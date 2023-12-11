@@ -278,12 +278,12 @@ export class FanControlWorker extends DaemonWorker {
     private updateFanSpeed(index: number, input: number, max: number): void {
         this.tccd.dbusData.fans[index].speed.set(
             Date.now(),
-            (input / max) * 100
+            Math.round((input / max) * 100)
         );
     }
 
     private updateFanTemp(index: number, input: number): void {
-        this.tccd.dbusData.fans[index].temp.set(Date.now(), input / 1000);
+        this.tccd.dbusData.fans[index].temp.set(Date.now(), Math.round(input / 1000));
     }
 
     private fanControl(hwmonPath: string): void {
