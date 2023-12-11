@@ -27,29 +27,29 @@ import {
 } from "../../common/classes/SysFsProperties";
 
 export class ODMProfileWorker extends DaemonWorker {
+    private static platformProfile = new SysFsPropertyString(
+        "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile"
+    );
+    private static platformProfileChoices = new SysFsPropertyStringList(
+        "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices"
+    );
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, tccd);
     }
 
     public onStart(): void {
-        const platformProfile = new SysFsPropertyString(
-            "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile"
-        );
-
-        const platformProfileChoices = new SysFsPropertyStringList(
-            "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices"
-        );
 
         if (
-            platformProfile.isAvailable() &&
-            platformProfileChoices.isAvailable()
+            ODMProfileWorker.platformProfile.isAvailable() &&
+            ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            this.ODM(platformProfile, platformProfileChoices);
+            this.ODM(ODMProfileWorker.platformProfile, ODMProfileWorker.platformProfileChoices);
         }
 
         if (
-            !platformProfile.isAvailable() ||
-            !platformProfileChoices.isAvailable()
+            !ODMProfileWorker.platformProfile.isAvailable() ||
+            !ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
             this.fallbackODM();
         }
@@ -116,5 +116,40 @@ export class ODMProfileWorker extends DaemonWorker {
             chosenODMProfileName = odmProfileSettings.name;
         }
         return chosenODMProfileName;
+    }
+
+    public static getDefaultODMPerformanceProfile(): string {
+        if (
+            this.platformProfile.isAvailable() &&
+            this.platformProfileChoices.isAvailable()
+        ) {
+            const availableProfiles = this.platformProfileChoices.readValueNT();
+            if (availableProfiles !== undefined && availableProfiles.length > 0) {
+                return availableProfiles[availableProfiles.length-1];
+            }
+        } else {
+            const defaultODMProfileName: ObjWrapper<string> = { value: '' };
+            ioAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
+            return defaultODMProfileName.value;
+        }
+        return '';
+    }
+
+    public static getAvailableODMPerformanceProfiles(): string[] {
+        if (
+            this.platformProfile.isAvailable() &&
+            this.platformProfileChoices.isAvailable()
+        ) {
+            const availableProfiles = this.platformProfileChoices.readValueNT();
+            if (availableProfiles !== undefined) {
+                return availableProfiles;
+            }
+        } else {
+                const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
+                ioAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
+                return availableODMProfiles.value;
+        }
+
+        return [];
     }
 }

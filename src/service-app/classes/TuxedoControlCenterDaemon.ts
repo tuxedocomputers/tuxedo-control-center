@@ -37,7 +37,7 @@ import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
@@ -679,18 +679,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         }
 
-        const defaultODMProfileName: ObjWrapper<string> = { value: '' };
-        const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
-        TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
-        TuxedoIOAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
-        if (profile.odmProfile === undefined || !availableODMProfiles.value.includes(profile.odmProfile.name)) {
+        const defaultODMProfileName = ODMProfileWorker.getDefaultODMPerformanceProfile();
+        const availableODMProfiles = ODMProfileWorker.getAvailableODMPerformanceProfiles();
+        if (profile.odmProfile === undefined || !availableODMProfiles.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
-                name: defaultODMProfileName.value
+                name: defaultODMProfileName
             };
         }
 
         if (profile.odmProfile.name === undefined) {
-            profile.odmProfile.name = defaultODMProfileName.value;
+            profile.odmProfile.name = defaultODMProfileName;
         }
 
         let tdpInfo: TDPInfo[] = [];

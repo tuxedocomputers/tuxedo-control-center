@@ -84,8 +84,7 @@ export class CompatibilityService {
   }
 
   get hasODMProfileControl(): boolean {
-      return this.tccDbus.tuxedoWmiAvailable.value &&
-        this.tccDbus.odmProfilesAvailable.value !== undefined &&
+      return this.tccDbus.odmProfilesAvailable.value !== undefined &&
         this.tccDbus.odmProfilesAvailable.value.length > 0;
   }
 
