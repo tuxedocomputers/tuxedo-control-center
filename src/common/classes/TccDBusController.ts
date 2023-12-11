@@ -61,6 +61,14 @@ export class TccDBusController {
         }
     }
 
+    async fanHwmonAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.FanHwmonAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
+
     async tccdVersion(): Promise<string> {
         try {
             return await this.interface.TccdVersion();

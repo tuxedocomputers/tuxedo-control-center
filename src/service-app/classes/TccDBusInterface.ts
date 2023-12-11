@@ -73,6 +73,7 @@ export class TccDBusData {
     public displayModes: string;
     public refreshRateSupported: boolean;
     public tuxedoWmiAvailable: boolean;
+    public fanHwmonAvailable: boolean;
     public tccdVersion: string;
     public fans: FanData[];
     public webcamSwitchAvailable: boolean;
@@ -124,6 +125,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDisplayModesJSON() { return this.data.displayModes; }
     GetRefreshRateSupported() { return this.data.refreshRateSupported; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
+    FanHwmonAvailable() { return this.data.fanHwmonAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
     GetFanDataGPU1() { return this.data.fans[1].export(); }
@@ -241,6 +243,7 @@ TccDBusInterface.configureMembers({
         GetDisplayModesJSON: {outSignature: 's'},
         GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
+        FanHwmonAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },

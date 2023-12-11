@@ -262,9 +262,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
 
         </div>
-        
+
         <!-- Fan control settings -->
-        <div #fancontrolHeader class="tcc-options-group"
+        <!-- todo: currently only showing fan controls for wmi, should be adjusted for hwmon later -->
+        <div #fancontrolHeader class="tcc-options-group" *ngIf="this.tccDBus.tuxedoWmiAvailable?.value && !this.tccDBus.fanHwmonAvailable?.value"
             [ngClass]="{'not-available': !compat.hasFanControl || !this.config.getSettings().fanControlEnabled }"
             [matTooltip]="!compat.hasFanControl ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
