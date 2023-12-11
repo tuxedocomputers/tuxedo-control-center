@@ -33,11 +33,11 @@ export class ODMProfileWorker extends DaemonWorker {
 
     public onStart(): void {
         const platformProfile = new SysFsPropertyString(
-            "/sys/devices/platform/tuxedo_platform_profile/platform_profile"
+            "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile"
         );
 
         const platformProfileChoices = new SysFsPropertyStringList(
-            "/sys/devices/platform/tuxedo_platform_profile/platform_profile_choices"
+            "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices"
         );
 
         if (
