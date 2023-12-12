@@ -18,7 +18,7 @@
  */
 
 import { DefaultProfileIDs, LegacyDefaultProfileIDs } from "./DefaultProfiles";
-import { defaultProfiles } from "./profiles/LegacyProfiles";
+import { ITccFanProfile } from "./TccFanTable";
 
 export interface ITccProfile {
     id: string;
@@ -57,6 +57,11 @@ export class TccProfile implements ITccProfile {
 interface ITccProfileDisplay {
     brightness: number;
     useBrightness: boolean;
+    refreshRate: number;
+    useRefRate: boolean;
+    xResolution: number;
+    yResolution: number;
+    useResolution: boolean;
 }
 
 interface ITccProfileCpu {
@@ -78,7 +83,9 @@ interface ITccProfileFanControl {
     useControl: boolean;
     fanProfile: string;
     minimumFanspeed: number;
+    maximumFanspeed: number;
     offsetFanspeed: number;
+    customFanCurve: ITccFanProfile;
 }
 
 interface ITccODMProfile {

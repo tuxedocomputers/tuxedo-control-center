@@ -1,0 +1,48 @@
+<!--
+Copyright (c) 2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div *ngIf="customFanPreset?.tableCPU">
+    <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="150px">
+        <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
+            <mat-slider vertical="true" thumbLabel color="primary"
+                [formControl]="fanFormGroup.controls[fanTableEntry.temp+'c']" (change)="dirtyFanFormGroup()"
+                (change)="updateComponents($event.value, fanTableEntry.temp)">
+            </mat-slider>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="15px">
+        <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
+            {{ fanTableEntry.temp }} °C
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <div class="fan-slider-container">
+        <button mat-stroked-button (click)="toggleFanGraphs()">
+            <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container>
+            <mat-icon>bar_chart</mat-icon>
+        </button>
+    </div>
+
+    <div *ngIf="showFanGraphs" style="display: block; height: 200px">
+        <canvas id="hidden" baseChart class="tcc-charts" [chartType]="graphType" [datasets]="fantableDatasets"
+            [colors]="graphColors" [labels]="tempsLabels" [options]="graphOptions">
+        </canvas>
+    </div>
+</div>

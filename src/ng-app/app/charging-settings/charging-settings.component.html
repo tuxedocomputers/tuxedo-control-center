@@ -25,7 +25,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
     </a>
 </label>
-<div class="charging-profile-note" i18n="@@chargingProfileNoteLabel">
+<div class="charging-profile-note" i18n="@@chargingProfileNoteLabel"
+     *ngIf="chargingProfilesAvailable.length > 0 || chargingPriosAvailable.length > 0">
     Please note: The system will still show 100% capacity in "Reduced capacity"
     and "Stationary use" modes. The limitation of the actual capacity takes place
     in the background on firmware level and is not visible for the operating system.
@@ -64,3 +65,102 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
     </mat-radio-button>
 </mat-radio-group>
+
+<div *ngIf="chargeType !== 'Unknown'" class="charging-thresholds">
+    <label class="charging-group-label" i18n="@@chargingThresholdsLabel">Charging thresholds</label>
+    <mat-checkbox #enableThresholds color="primary"
+        [formControl]="ctrlEnableThresholds"
+        (change)="checkboxEnableThresholdsChange($event)"
+        [disabled]="chargingThresholdsProgress"
+        *ngIf="false">
+        Enable charging thresholds
+    </mat-checkbox>
+    <mat-radio-group #thresholdGroup
+        class="charging-radio-group"
+        [formControl]="ctrlChargingThresholdGroup"
+        (change)="thresholdRadioGroupChange($event)"
+        *ngIf="true">
+        <mat-radio-button
+            value="high_capacity"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header i18n="@@chargingThresholdsLabelFullCapacity">Full capacity</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionFullCapacity">This is the default setting. Highest capacity for best possible runtimes.</ng-container>
+            </div>
+        </mat-radio-button>
+        <mat-radio-button
+            value="balanced"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header i18n="@@chargingThresholdsLabelReducedCapacity">Reduced capacity</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionReducedCapacity">Reduced battery capacity (~90 %) for better battery lifespan.</ng-container>
+            </div>
+        </mat-radio-button>
+        <mat-radio-button
+            value="stationary"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header i18n="@@chargingThresholdsLabelStationary">Stationary use</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionStationary">Very significant reduced battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</ng-container>
+            </div>
+        </mat-radio-button>
+        <mat-radio-button
+            value="custom"
+            color="primary"
+            [disabled]="chargingThresholdsProgress">
+            <div class="inner-label">
+                <header i18n="@@chargingThresholdsLabelCustom">Custom</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionCustom">Manually set battery charging thresholds.</ng-container>
+            </div>
+        </mat-radio-button>
+    </mat-radio-group>
+
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="edit-grid">
+        <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <header i18n="@@chargingThresholdsLabelStartThreshold">Start threshold</header>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="value">
+                <span>{{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %</span>
+            </content>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="input">
+                <mat-slider #startThreshold
+                    [formControl]="ctrlChargeStartThreshold"
+                    (change)="sliderStartThresholdChange($event)"
+                    [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+                    min="0"
+                    max="100"
+                    step="1"
+                    color="primary">
+                </mat-slider>
+            </content>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <header i18n="@@chargingThresholdsLabelEndThreshold">End threshold</header>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="value">
+                <span>{{ findClosest(endThreshold.value, chargeEndAvailableThresholds) }} %</span>
+            </content>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+            <content class="input">
+                <mat-slider #endThreshold
+                    [formControl]="ctrlChargeEndThreshold"
+                    (change)="sliderEndThresholdChange($event)"
+                    [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+                    min="0"
+                    max="100"
+                    step="1"
+                    color="primary">
+                </mat-slider>
+            </content>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

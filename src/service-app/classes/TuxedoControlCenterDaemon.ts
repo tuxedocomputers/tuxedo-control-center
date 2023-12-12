@@ -28,25 +28,30 @@ import { defaultSettings, ITccSettings, ProfileStates } from '../../common/model
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
+import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
 import { ITccAutosave } from '../../common/models/TccAutosave';
 import { StateSwitcherWorker } from './StateSwitcherWorker';
 import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
-import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { ITccFanProfile, customFanPreset } from '../../common/models/TccFanTable';
 import { TccDBusService } from './TccDBusService';
 import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo, ObjWrapper, TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI, ModuleInfo, TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ODMProfileWorker } from './ODMProfileWorker';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { CpuController } from '../../common/classes/CpuController';
-import { KeyboardBacklightWorker } from './KeyboardBacklightWorker';
 import { DMIController } from '../../common/classes/DMIController';
 import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultProfiles';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { ChargingWorker } from './ChargingWorker';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { GpuInfoWorker } from "./GpuInfoWorker";
+import { CpuPowerWorker } from './CpuPowerWorker';
+import { PrimeWorker } from './PrimeWorker';
+import { VendorService } from "../../common/classes/Vendor.service";
+import { KeyboardBacklightListener } from './KeyboardBacklightListener';
 
 const tccPackage = require('../../package.json');
 
@@ -68,12 +73,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
+    private listeners = [];
 
     protected started = false;
 
     private stateWorker: StateSwitcherWorker;
     private chargingWorker: ChargingWorker;
-
+    private displayWorker: DisplayRefreshRateWorker;
     constructor() {
         super(TccPaths.PID_FILE);
         this.config = new ConfigHandler(
@@ -102,6 +108,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
 
         // If program is still running this is the start of the daemon
+
+        this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
         this.setupSignalHandling();
 
@@ -115,10 +123,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new WebcamWorker(this));
         this.workers.push(new FanControlWorker(this));
         this.workers.push(new YCbCr420WorkaroundWorker(this));
-        this.workers.push(new KeyboardBacklightWorker(this));
+        this.workers.push(new GpuInfoWorker(this, new VendorService()));
+        this.workers.push(new CpuPowerWorker(this));
+        this.workers.push(new PrimeWorker(this));
         this.workers.push(new TccDBusService(this, this.dbusData));
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
+        this.workers.push(this.displayWorker);
+
+        this.listeners.push(new KeyboardBacklightListener(this));
 
         this.startWorkers();
 
@@ -246,8 +259,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults)
-        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults);
+        const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
+        let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
 
@@ -364,34 +377,46 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.settings = this.config.readSettings();
             var missingSetting: boolean = false;
 
+            // If settings are missing, attempt to recreate default
+            // TODO purge settings no longer in ITccSettings
             if (this.settings.stateMap === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing statemap');
                 this.settings.stateMap = this.config.getDefaultSettings(device).stateMap;
                 missingSetting = true;
             }
             if (this.settings.cpuSettingsEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing cpuSettingsEnabled setting');
                 this.settings.cpuSettingsEnabled = this.config.getDefaultSettings(device).cpuSettingsEnabled;
                 missingSetting = true;
             }
             if (this.settings.fanControlEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing fanControlEnabled setting');
                 this.settings.fanControlEnabled = this.config.getDefaultSettings(device).fanControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightControlEnabled === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing keyboardBacklightControlEnabled setting');
                 this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.ycbcr420Workaround === undefined) {
-                // If settings are missing, attempt to recreate default
                 this.logLine('Missing ycbcr420Workaround setting');
                 this.settings.ycbcr420Workaround = this.config.getDefaultSettings(device).ycbcr420Workaround;
+                missingSetting = true;
+            }
+            if (this.settings.chargingProfile === undefined) {
+                this.logLine('Missing chargingProfile setting');
+                this.settings.chargingProfile = this.config.getDefaultSettings(device).chargingProfile;
+                missingSetting = true;
+            }
+            if (this.settings.chargingPriority === undefined) {
+                this.logLine('Missing chargingPriority setting');
+                this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
+                missingSetting = true;
+            }
+            if (this.settings.keyboardBacklightStates === undefined) {
+                this.logLine('Missing keyboardBacklightStates setting');
+                this.settings.keyboardBacklightStates = this.config.getDefaultSettings(device).keyboardBacklightStates;
                 missingSetting = true;
             }
             missingSetting = this.syncOutputPortsSetting();
@@ -647,6 +672,41 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
         }
 
+        if(profile.display.useRefRate === undefined)
+        {
+            profile.display.useRefRate = false;
+        }
+        if(profile.display.useResolution === undefined)
+        {
+            profile.display.useResolution = false;
+        }
+        let activeDisplayMode;
+        try
+        {
+            activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+        }
+        catch(err)
+        {
+            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
+        }
+        if (!activeDisplayMode)
+        {
+            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
+        }       
+        if(profile.display.refreshRate === undefined)
+        {
+            profile.display.refreshRate = activeDisplayMode.refreshRates[0];
+        }
+        if(profile.display.xResolution === undefined)
+        {
+            profile.display.xResolution = activeDisplayMode.xResolution;
+        }
+        if(profile.display.yResolution === undefined)
+        {
+            profile.display.yResolution = activeDisplayMode.yResolution;
+        }
+         
+
         if (profile.webcam === undefined) {
             profile.webcam = {
                 useStatus: false,
@@ -667,30 +727,36 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 useControl: true,
                 fanProfile: 'Balanced',
                 minimumFanspeed: 0,
-                offsetFanspeed: 0
+                maximumFanspeed: 100,
+                offsetFanspeed: 0,
+                customFanCurve: customFanPreset,
             };
         } else {
             profile.fan.useControl = true;
             if (profile.fan.minimumFanspeed === undefined) {
                 profile.fan.minimumFanspeed = 0;
             }
+            if (profile.fan.maximumFanspeed === undefined) {
+                profile.fan.maximumFanspeed = 100;
+            }
             if (profile.fan.offsetFanspeed === undefined) {
                 profile.fan.offsetFanspeed = 0;
             }
+            if (profile.fan.customFanCurve === undefined) {
+                profile.fan.customFanCurve = customFanPreset;
+            }
         }
 
-        const defaultODMProfileName: ObjWrapper<string> = { value: '' };
-        const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
-        TuxedoIOAPI.getDefaultODMPerformanceProfile(defaultODMProfileName);
-        TuxedoIOAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
-        if (profile.odmProfile === undefined || !availableODMProfiles.value.includes(profile.odmProfile.name)) {
+        const defaultODMProfileName = ODMProfileWorker.getDefaultODMPerformanceProfile();
+        const availableODMProfiles = ODMProfileWorker.getAvailableODMPerformanceProfiles();
+        if (profile.odmProfile === undefined || !availableODMProfiles.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
-                name: defaultODMProfileName.value
+                name: defaultODMProfileName
             };
         }
 
         if (profile.odmProfile.name === undefined) {
-            profile.odmProfile.name = defaultODMProfileName.value;
+            profile.odmProfile.name = defaultODMProfileName;
         }
 
         let tdpInfo: TDPInfo[] = [];

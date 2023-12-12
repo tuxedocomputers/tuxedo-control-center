@@ -134,6 +134,10 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public getStateProfileName(state: IStateInfo) {
+        if (!this.getSettings()) {
+            return undefined
+        }
+
         const stateProfileId = this.getSettings().stateMap[state.value];
         const defaultProfileName = this.utils.getDefaultProfileName(stateProfileId);
         if (defaultProfileName !== undefined) {
@@ -146,5 +150,12 @@ export class MainGuiComponent implements OnInit, OnDestroy {
                 return undefined;
             }
         }
+    }
+
+    public getProfileLink(state: any) {
+        if (!this.getSettings()) {
+            return 'profile-manager/'
+        }
+        return 'profile-manager/' + this.getSettings()?.stateMap[state.value]
     }
 }

@@ -18,10 +18,15 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { DMIController } from '../../common/classes/DMIController';
-
+import {
+    SysFsPropertyInteger,
+    SysFsPropertyString,
+} from '../../common/classes/SysFsProperties';
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
+import { exec } from 'child_process';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export class FanControlWorker extends DaemonWorker {
 
@@ -31,18 +36,54 @@ export class FanControlWorker extends DaemonWorker {
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
 
     private controlAvailableMessage = false;
-    private previousProfileName;
 
     private modeSameSpeed = false;
 
     private fansOffAvailable: boolean = true;
     private fansMinSpeedHWLimit: number = 0;
 
+    private hwmonPath: string
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
     }
 
-    private initHardwareCapabilities() {
+    public async onStart(): Promise<void> {
+        this.hwmonPath = await this.getHwmonPath();
+
+        if(this.hwmonPath) {
+            this.tccd.dbusData.fanHwmonAvailable = true
+        }
+
+        if(!this.hwmonPath) {
+            this.setupTuxedoIO()
+        }
+    }
+
+    public onWork(): void {
+        if (this.hwmonPath) {
+            this.fanControl(this.hwmonPath);
+        }
+
+        if (!this.hwmonPath) {
+            this.fallbackFanControl();
+        }
+    }
+
+    public onExit(): void {}
+
+    private setupTuxedoIO() {
+        this.initHardwareCapabilities();
+        this.initFanControl();
+
+        const useFanControl = this.getFanControlStatus();
+
+        if (useFanControl) {
+            ioAPI.setEnableModeSet(true); // FIXME Dummy function, tuxedo-io always sets the manual bit
+        }
+    }
+
+    private initHardwareCapabilities(): void {
         this.fansOffAvailable = ioAPI.getFansOffAvailable();
         this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
 
@@ -54,18 +95,22 @@ export class FanControlWorker extends DaemonWorker {
         const nrFans = ioAPI.getNumberFans();
 
         if (this.fans === undefined || this.fans.size !== nrFans) {
-            // Map logic to fan number
-            this.fans = new Map();
-            if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
-            if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
-            if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+            this.mapLogicToFans(nrFans)
         }
 
-        if (nrFans === 0) {
-            return;
+        if (nrFans !== 0) {
+            this.updateFanLogic()
         }
+    }
 
-        // Update fan logic
+    private mapLogicToFans(nrFans: number): void {
+        this.fans = new Map();
+        if (nrFans >= 1) { this.fans.set(1, this.cpuLogic); }
+        if (nrFans >= 2) { this.fans.set(2, this.gpu1Logic); }
+        if (nrFans >= 3) { this.fans.set(3, this.gpu2Logic); }
+    }
+
+    private updateFanLogic(): void {
         const currentFanProfile = this.tccd.getCurrentFanProfile(this.activeProfile);
         for (const fanNumber of this.fans.keys()) {
             if (this.fans.get(fanNumber).getFanProfile() === undefined ||
@@ -82,18 +127,7 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
-    public onStart(): void {
-        this.initHardwareCapabilities();
-        this.initFanControl();
-
-        const useFanControl = this.getFanControlStatus();
-
-        if (useFanControl) {
-            ioAPI.setEnableModeSet(true); //FIXME Dummy function, tuxedo-io always sets the manual bit
-        }
-    }
-
-    public onWork(): void {
+    private fallbackFanControl(): void {
         this.initFanControl(); // Make sure structures are up to date before doing anything
 
         const fanTemps: number[] = [];
@@ -102,7 +136,7 @@ export class FanControlWorker extends DaemonWorker {
         const fanTimestamps: number[] = [];
         const tempSensorAvailable: boolean[] = [];
 
-        const moduleInfo = new ModuleInfo();
+        // const moduleInfo = new ModuleInfo();
         const fanCtrlUnavailableCondition = !TuxedoIOAPI.wmiAvailable() || this.fans.size === 0;
         if (fanCtrlUnavailableCondition) {
             if (this.controlAvailableMessage === false) {
@@ -136,7 +170,7 @@ export class FanControlWorker extends DaemonWorker {
             const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
             const tempReadSuccess = ioAPI.getFanTemperature(fanIndex, currentTemperatureCelcius);
             const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
-            const speedReadSuccess = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
+            // const speedReadSuccess = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
 
             tempSensorAvailable.push(tempReadSuccess);
             fanTimestamps.push(Date.now());
@@ -144,7 +178,7 @@ export class FanControlWorker extends DaemonWorker {
             if (tempSensorAvailable[fanIndex]) {
                 fanTemps.push(currentTemperatureCelcius.value);
             } else {
-                fanTemps.push(0);
+                fanTemps.push(-1);
             }
 
             // If there is temp sensor value report temperature to logic
@@ -163,6 +197,7 @@ export class FanControlWorker extends DaemonWorker {
         // Write fan speeds
         if (useFanControl) {
             const highestSpeed = fanSpeedsSet.reduce((prev, cur) => cur > prev ? cur : prev, 0);
+
             for (const fanNumber of this.fans.keys()) {
                 const fanIndex = fanNumber - 1;
                 // Use highest speed decided by fan logic for current fan if "same speed" mode
@@ -179,21 +214,140 @@ export class FanControlWorker extends DaemonWorker {
         for (const fanNumber of this.fans.keys()) {
             const i = fanNumber - 1;
             let currentSpeed: number;
-            if (useFanControl) {
+
+            if (fanTemps[i] === -1) {
+                currentSpeed = -1
+            } else if (useFanControl) {
                 currentSpeed = fanSpeedsSet[i];
             } else {
                 currentSpeed = fanSpeedsRead[i];
             }
+
             this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
-            this.tccd.dbusData.fans[i].speed.set(fanTimestamps[i], currentSpeed);
+            this.tccd.dbusData.fans[i].speed.set(
+                fanTimestamps[i],
+                currentSpeed
+            );
         }
     }
 
-    public onExit(): void {
-        // Stop TCC fan control for all fans
-        if (this.getFanControlStatus()) {
-            ioAPI.setFansAuto();
-            ioAPI.setEnableModeSet(false);  //FIXME Dummy function, tuxedo-io always sets the manual bit
+    private async getHwmonPath(): Promise<string | undefined> {
+        return await execCommand(
+            "grep -rl '^tuxedo$' /sys/class/hwmon/*/name | sed 's|/name$||'"
+        );
+    }
+
+    private getFilteredAndMappedFiles(
+        files: string[],
+        pattern: RegExp
+    ): string[] {
+        return Array.from(
+            new Set(
+                files
+                    .filter((entry) => entry.match(pattern))
+                    .map((entry) => entry.split("_")[0])
+            )
+        );
+    }
+
+    private isPropertiesAvailable(
+        ...props: (SysFsPropertyInteger | SysFsPropertyString)[]
+    ): boolean {
+        return props.every((prop) => prop.isAvailable());
+    }
+
+    private getLabelIndex(label: string): number | undefined {
+        const labels = ["cpu0", "gpu0", "gpu1"];
+        return labels.indexOf(label);
+    }
+
+    private getPropertyInteger(
+        hwmonPath: string,
+        fileName: string,
+        suffix: string
+    ): SysFsPropertyInteger {
+        return new SysFsPropertyInteger(
+            path.join(hwmonPath, fileName + suffix)
+        );
+    }
+
+    private getPropertyString(
+        hwmonPath: string,
+        fileName: string,
+        suffix: string
+    ): SysFsPropertyString {
+        return new SysFsPropertyString(path.join(hwmonPath, fileName + suffix));
+    }
+
+    private updateFanSpeed(index: number, input: number, max: number): void {
+        this.tccd.dbusData.fans[index].speed.set(
+            Date.now(),
+            Math.round((input / max) * 100)
+        );
+    }
+
+    private updateFanTemp(index: number, input: number): void {
+        this.tccd.dbusData.fans[index].temp.set(Date.now(), Math.round(input / 1000));
+    }
+
+    private fanControl(hwmonPath: string): void {
+        const files = fs.readdirSync(hwmonPath);
+
+        const fanFiles = this.getFilteredAndMappedFiles(files, /^fan\d/);
+        const tempFiles = this.getFilteredAndMappedFiles(files, /^temp\d/);
+
+        for (const fanFile of fanFiles) {
+            const fanInput = this.getPropertyInteger(
+                hwmonPath,
+                fanFile,
+                "_input"
+            );
+            const fanLabel = this.getPropertyString(
+                hwmonPath,
+                fanFile,
+                "_label"
+            );
+            const fanMin = this.getPropertyInteger(hwmonPath, fanFile, "_min");
+            const fanMax = this.getPropertyInteger(hwmonPath, fanFile, "_max");
+
+            if (
+                this.isPropertiesAvailable(fanInput, fanLabel, fanMin, fanMax)
+            ) {
+                const input = fanInput.readValueNT();
+                const label = fanLabel.readValueNT();
+                // const min = fanMin.readValueNT();
+                const max = fanMax.readValueNT();
+
+                const index = this.getLabelIndex(label);
+
+                if (index !== undefined && index !== -1) {
+                    this.updateFanSpeed(index, input, max);
+                }
+            }
+        }
+
+        for (const tempFile of tempFiles) {
+            const tempInput = this.getPropertyInteger(
+                hwmonPath,
+                tempFile,
+                "_input"
+            );
+            const tempLabel = this.getPropertyString(
+                hwmonPath,
+                tempFile,
+                "_label"
+            );
+
+            if (this.isPropertiesAvailable(tempInput, tempLabel)) {
+                const input = tempInput.readValueNT();
+                const label = tempLabel.readValueNT();
+
+                const index = this.getLabelIndex(label);
+
+                if (index !== undefined && index !== -1) {
+                    this.updateFanTemp(index, input);
+                }
+            }
         }
     }
 
@@ -206,4 +360,16 @@ export class FanControlWorker extends DaemonWorker {
         }*/
         return this.tccd.settings.fanControlEnabled;
     }
+}
+
+async function execCommand(command: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        exec(command, (error, stdout, stderr) => {
+            if (error || stderr) {
+                resolve(undefined);
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
 }

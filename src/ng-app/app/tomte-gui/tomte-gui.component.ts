@@ -50,13 +50,13 @@ export class TomteGuiComponent implements OnInit {
     tomteListArray: ITomteModule[] = [];
     moduleToolTips = new Map();
     columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
-    // TODO maybe there is a better way to handle this too :) 
+    // TODO maybe there is a better way to handle this too :)
     tomteMode = "";
     tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
     // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
     showRetryButton = false;
     loadingInformation = false;
-    // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and 
+    // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and
     // set this variable to false to output the correct error message in the control center
     isTuxedoDevice = true;
     constructor(
@@ -92,7 +92,7 @@ export class TomteGuiComponent implements OnInit {
         this.loadingInformation = true;
         this.tomteIsInstalled = await this.pmgs.isInstalled("tuxedo-tomte");
         if (this.tomteIsInstalled)
-            {   
+            {
                 await this.tomteListJson();
             }
             this.loadingInformation = false;
@@ -100,12 +100,12 @@ export class TomteGuiComponent implements OnInit {
 
     private async tomteListJson()
     {
-        // retries to list the information a couple of times, this is only triggered if tomte is already running.      
+        // retries to list the information a couple of times, this is only triggered if tomte is already running.
         for (let i = 0; i < 30; i++)
-        {             
+        {
             let command = "tuxedo-tomte listjson"
             let results
-            try 
+            try
             {
                 results = await this.utils.execCmd(command + "");
                 results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
@@ -116,7 +116,7 @@ export class TomteGuiComponent implements OnInit {
             catch (e)
             {
                 if(i === 10)
-                {                                       
+                {
                     this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
                 }
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -135,7 +135,7 @@ export class TomteGuiComponent implements OnInit {
         {
             return;
         }
-        try 
+        try
         {
             let givenobject = JSON.parse(rawTomteListOutput);
             this.jsonError = false;
@@ -160,11 +160,11 @@ export class TomteGuiComponent implements OnInit {
 
     /*
         Loads the descriptions for each module in the background and puts it into moduleToolTips Variable that is then
-        read in the HTML file 
+        read in the HTML file
     */
     private async getModuleDescriptions()
     {
-        if (this.moduleToolTips.size < this.tomteListArray.length) 
+        if (this.moduleToolTips.size < this.tomteListArray.length)
         {
         for (let i = 0; i < this.tomteListArray.length; i++)
             {
@@ -173,8 +173,8 @@ export class TomteGuiComponent implements OnInit {
                 {
                     continue;
                 }
-                let command = "tuxedo-tomte description " + modulename;
-                try 
+                let command = "LANGUAGE=" + this.utils.getCurrentLanguageId() + " tuxedo-tomte description " + modulename;
+                try
                 {
                     let results = await this.utils.execCmd(command);
                     this.moduleToolTips.set(modulename, results);
@@ -212,7 +212,7 @@ export class TomteGuiComponent implements OnInit {
             else
             {
                 return $localize `:@@tomteGuiSliderToolTipBlock:Block this module`
-            }      
+            }
         }
         if (whichButton === 'installed')
         {
@@ -233,8 +233,8 @@ export class TomteGuiComponent implements OnInit {
                 return $localize `:@@tomteGuiSliderToolTipInstall:Install this module`
             }
         }
-        
-    
+
+
     }
 
     /*
@@ -258,7 +258,7 @@ export class TomteGuiComponent implements OnInit {
 
 
     /*
-        Opens Dialogue asking the user if they are sure to proceed 
+        Opens Dialogue asking the user if they are sure to proceed
     */
     private async confirmChangesDialogue()
     {
@@ -274,16 +274,16 @@ export class TomteGuiComponent implements OnInit {
                 checkboxNoBotherLabel: $localize `:@@tomteDialogCheckboxNoBotherLabel:Don't ask again`,
                 showCheckboxNoBother: true
             });
-            if (askToClose.noBother) 
+            if (askToClose.noBother)
             {
                 localStorage.setItem('connectNoticeDisable', 'true');
-            }  
-            if (!askToClose.confirm) 
+            }
+            if (!askToClose.confirm)
             {
                 return false;
-            }      
-        }   
-        return true;      
+            }
+        }
+        return true;
     }
 
 
@@ -302,14 +302,14 @@ export class TomteGuiComponent implements OnInit {
             checkboxNoBotherLabel: '',
             showCheckboxNoBother: false
         });
-        if (askToClose.confirm) 
+        if (askToClose.confirm)
         {
             return true;
-        }    
-        if (!askToClose.confirm) 
+        }
+        if (!askToClose.confirm)
         {
             return false;
-        }                  
+        }
     }
 
 /*
@@ -340,7 +340,7 @@ export class TomteGuiComponent implements OnInit {
         let res3;
         try
         {
-            
+
             res1 = await this.utils.execFile(command1);
             res2 = await this.utils.execFile(command2);
             res3 = await this.utils.execFile(command3);
@@ -348,13 +348,13 @@ export class TomteGuiComponent implements OnInit {
         }
         catch
         {
-            console.error("One of the reset commands failed, here is their output: Function 1 Command: " 
-            + command1 + " Results: " + res1 + 
+            console.error("One of the reset commands failed, here is their output: Function 1 Command: "
+            + command1 + " Results: " + res1 +
             " Function 2 Command: " + command2 + " Results: " + res2 +
             " Function 3 Command: " + command3 + " Results: " + res3
             );
             this.throwErrorMessage($localize `:@@tomteGuiResetFailedPopup:Reset failed. Maybe Tomte is already running? If that is the case simply try again later.`);
-        }        
+        }
         this.utils.pageDisabled = false;
     }
 
@@ -381,7 +381,7 @@ export class TomteGuiComponent implements OnInit {
         if (isInstalled)
         {
             let command = "yes | pkexec tuxedo-tomte remove " + name;
-        
+
             let results = await this.utils.execCmd(command).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
@@ -475,5 +475,5 @@ export class TomteGuiComponent implements OnInit {
         this.tomtelist();
     }
 
- 
+
 }

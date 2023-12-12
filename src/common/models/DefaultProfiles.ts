@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,6 +18,7 @@
  */
 
 import { ITccProfile } from './TccProfile';
+import { customFanPreset } from "./TccFanTable";
 
 export enum LegacyDefaultProfileIDs {
     Default = '__legacy_default__',
@@ -45,7 +46,12 @@ const maxEnergySave: ITccProfile = {
     description: '',
     display: {
         brightness: 40,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: 60,
+        useRefRate: false,
+        xResolution: 1920,
+        yResolution: 1080,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -64,7 +70,9 @@ const maxEnergySave: ITccProfile = {
         useControl: true,
         fanProfile: 'Silent',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [5, 10, 15] }
@@ -76,7 +84,12 @@ const silent: ITccProfile = {
     description: '',
     display: {
         brightness: 50,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -95,7 +108,9 @@ const silent: ITccProfile = {
         useControl: true,
         fanProfile: 'Silent',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [10, 15, 25] }
@@ -107,7 +122,12 @@ const office: ITccProfile = {
     description: '',
     display: {
         brightness: 60,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -126,7 +146,9 @@ const office: ITccProfile = {
         useControl: true,
         fanProfile: 'Quiet',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'enthusiast' },
     odmPowerLimits: { tdpValues: [25, 35, 35] }
@@ -138,7 +160,12 @@ const highPerformance: ITccProfile = {
     description: '',
     display: {
         brightness: 60,
-        useBrightness: true
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -157,7 +184,9 @@ const highPerformance: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] }
@@ -169,7 +198,12 @@ export const defaultCustomProfile: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -188,7 +222,9 @@ export const defaultCustomProfile: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] }
@@ -200,7 +236,12 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -219,7 +260,9 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [15, 25, 50] }
@@ -231,7 +274,12 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
     description: 'Edit profile to change behaviour',
     display: {
         brightness: 100,
-        useBrightness: false
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
     },
     cpu: {
         onlineCores: undefined,
@@ -250,7 +298,10 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
         useControl: true,
         fanProfile: 'Balanced',
         minimumFanspeed: 0,
-        offsetFanspeed: 0
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
+        
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] }

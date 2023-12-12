@@ -17,19 +17,23 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ITccProfile, TccProfile } from '../../../common/models/TccProfile';
+import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
-import { Subscription } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
+import { FanSliderComponent } from '../fan-slider/fan-slider.component';
+import { ITccFanProfile } from 'src/common/models/TccFanTable';
+import { ElectronService } from 'ngx-electron';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -107,10 +111,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
+    private fansMaxSpeedSubscription: Subscription = new Subscription();
+
     private fansOffAvailableSubscription: Subscription = new Subscription();
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
-
     public stateInputArray: IStateInfo[];
 
     public selectableFrequencies;
@@ -119,6 +124,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public odmProfileToName: Map<string, string> = new Map();
 
     public odmPowerLimitInfos: TDPInfo[] = [];
+    public displayModes: IDisplayFreqRes;
+    public refreshRateSupported: boolean;
+    public refreshRate: number;
 
     private tdpLabels: Map<string, string>;
 
@@ -127,12 +135,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public infoTooltipShowDelay = 700;
 
     public fansMinSpeed = 0;
+    public fansMaxSpeed = 100;
+
     public fansOffAvailable = true;
+
+    public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
     @ViewChild('inputName') inputName: MatInput;
 
+    @ViewChild(FanSliderComponent)
+    private sliderComponent: FanSliderComponent;
+    
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
@@ -141,8 +156,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private dbus: DBusService,
         private tccDBus: TccDBusClientService,
-        public compat: CompatibilityService
-    ) { }
+        public compat: CompatibilityService,
+        private electron: ElectronService
+    ) {}
 
     ngOnInit() {
         if (this.viewProfile === undefined) { return; }
@@ -193,10 +209,22 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             }
         ));
-
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.displayModes.subscribe(nextdisplayModes => {
+            if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
+                this.displayModes = nextdisplayModes;
+                this.overwriteDefaultRefreshRateValue();
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.refreshRateSupported.subscribe(nextrefreshRateSupported => {
+            if (nextrefreshRateSupported !== this.refreshRateSupported) {
+                this.refreshRateSupported = nextrefreshRateSupported;
             }
         }));
 
@@ -204,10 +232,35 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
+
+        const suspendObservable = fromEvent(
+            this.electron.ipcRenderer,
+            "wakeup-from-suspend"
+        );
+        this.subscriptions.add(
+            suspendObservable.subscribe(async () => {
+                // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
+                this.showFanGraphs = false;
+                if (this.sliderComponent) {
+                    this.sliderComponent.showFanGraphs = false;
+                }
+            })
+        );
     }
 
-    ngOnDestroy() {
-        this.subscriptions.unsubscribe();
+    private overwriteDefaultRefreshRateValue() {
+        let displayFormGroupValue = this.profileFormGroup.get("display").value;
+
+        if (displayFormGroupValue.refreshRate === -1) {
+            const refreshRate = this.displayModes.activeMode.refreshRates[0];
+
+            displayFormGroupValue.refreshRate = refreshRate;
+            this.profileFormGroup.patchValue({
+                display: displayFormGroupValue,
+            });
+
+            this.refreshRate = refreshRate;
+        }
     }
 
     private clampCurrentMinimumFanSpeedToHWCapabilities() {
@@ -227,24 +280,37 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput() {
+        if (this.sliderComponent) {
+            const customFanCurveValues =
+                this.sliderComponent.getFanFormGroupValues();
+            this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve")
+                .patchValue(customFanCurveValues);
+        }
+
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
-
-        const defaultProfile = this.config.getDefaultValuesProfile();
 
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
             const newProfileStateAssignments = this.selectStateControl.value;
-            this.config.writeProfile(this.viewProfile.id, formProfileData, newProfileStateAssignments).then(success => {
-                if (success) {
-                    this.profileFormGroup.markAsPristine();
-                    this.selectStateControl.markAsPristine();
-                    this.profile = formProfileData;
-                }
-                this.profileFormProgress = false;
-                this.utils.pageDisabled = false;
-            });
+            this.config
+                .writeProfile(
+                    this.viewProfile.id,
+                    formProfileData,
+                    newProfileStateAssignments
+                )
+                .then((success) => {
+                    if (success) {
+                        this.profileFormGroup.markAsPristine();
+                        this.selectStateControl.markAsPristine();
+                        this.profile = formProfileData;
+                    }
+                    this.profileFormProgress = false;
+                    this.utils.pageDisabled = false;
+                });
         } else {
             this.profileFormProgress = false;
             this.utils.pageDisabled = false;
@@ -253,14 +319,36 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public discardFormInput() {
         this.profileFormGroup.reset(this.viewProfile);
-        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
+        this.selectStateControl.reset(
+            this.state.getProfileStates(this.viewProfile.id)
+        );
         // Also restore brightness to active profile if applicable
         if (!this.dbus.displayBrightnessNotSupported) {
             const activeProfile = this.state.getActiveProfile();
             if (activeProfile.display.useBrightness) {
-                this.dbus.setDisplayBrightness(activeProfile.display.brightness);
+                this.dbus.setDisplayBrightness(
+                    activeProfile.display.brightness
+                );
             }
         }
+
+        if (this.sliderComponent) {
+            const customFanCurveValues: AbstractControl = this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve");
+            this.sliderComponent.patchFanFormGroup(customFanCurveValues);
+        }
+
+        this.overwriteDefaultRefreshRateValue();
+        this.tempCustomFanCurve = undefined;
+    }
+
+    public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile) {
+        this.tempCustomFanCurve = tempCustomFanCurve;
+    }
+
+    public setChartToggleStatus(status: boolean) {
+        this.showFanGraphs = status;
     }
 
     private createProfileFormGroup(profile: ITccProfile) {
@@ -358,6 +446,28 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public sliderMinFanChange() {
+        const { minimumFanspeed, maximumFanspeed } =
+            this.profileFormGroup.controls.fan.value;
+
+        if (minimumFanspeed > maximumFanspeed) {
+            this.profileFormGroup.patchValue({
+                fan: { minimumFanspeed: maximumFanspeed },
+            });
+        }
+    }
+
+    public sliderMaxFanChange() {
+        const { minimumFanspeed, maximumFanspeed } =
+            this.profileFormGroup.controls.fan.value;
+
+        if (maximumFanspeed < minimumFanspeed) {
+            this.profileFormGroup.patchValue({
+                fan: { maximumFanspeed: minimumFanspeed },
+            });
+        }
+    }
+      
     get getODMTDPControls() {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
@@ -477,12 +587,123 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public formatFrequency(frequency: number): string {
-        return this.utils.formatFrequency(frequency);
+    public formatCpuFrequency(frequency: number): string {
+        return this.utils.formatCpuFrequency(frequency);
     }
 
     public getFanProfileNames(): string[] {
         return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
+    }
+
+    // public getDisplayModesString(): string[]
+    // {
+    //     let displayModesString = [];
+    //     if(!this.displayModes)
+    //     {
+    //         return [undefined];
+    //     }
+    //     let displayModes = this.getDisplayModes();
+    //     for (let i = 0; i < displayModes.length; i++)
+    //     {
+    //         displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
+    //     }
+    //     return displayModesString;
+    // }
+
+    // public getActiveDisplayModeString(): string
+    // {
+    //     if(this.displayModes != undefined)   
+    //    {
+    //     return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
+    //    } 
+    //    else
+    //    {
+    //     return "";
+    //    }
+    // }
+
+    // public setProfileResolutionByString(event)
+    // {
+    //     if(event && event.value)
+    //     {
+    //         let res = event.value.split("x");
+    //         let xRes = parseInt(res[0]);
+    //         let yRes = parseInt(res[1]);
+    //         this.profileFormGroup.controls.display.markAsDirty();
+    //         let displayObject = {xResolution: 0, yResolution: 0};
+    //         displayObject.xResolution = xRes;
+    //         displayObject.yResolution = yRes;
+    //         this.profileFormGroup.controls.display.patchValue(displayObject);
+    //     }
+    // }
+
+    public getDisplayModes(): IDisplayMode[]
+    {
+        if(!this.displayModes)
+        {
+            return undefined;
+        }
+        return this.displayModes.displayModes;
+    }
+
+    public isX11(): boolean
+    {
+        return this.refreshRateSupported;
+    }
+
+    getRefreshRateNotAvailableTooltipText(): string
+    {
+        if(this.isX11())
+        {
+            return "";
+        }
+        else
+        {
+            return $localize `:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`
+        }
+    }
+
+    public getCurrentResolutionRefreshRates(): number[] {
+        const activeMode = this.displayModes?.activeMode;
+        if (
+            !activeMode ||
+            activeMode.xResolution <= 0 ||
+            activeMode.yResolution <= 0
+        ) {
+            return [-1];
+        }
+        const { xResolution, yResolution } = activeMode;
+        const matchingMode = this.getMatchingMode(xResolution, yResolution);
+        if (!matchingMode) {
+            return [-1];
+        }
+        return matchingMode.refreshRates.sort((a, b) => b - a);
+    }
+
+    public roundValue(value: number): number {
+        return Math.round(value)
+    }
+
+    private getMatchingMode(
+        xResolution: number,
+        yResolution: number
+    ): IDisplayMode | undefined {
+        return this.displayModes?.displayModes.find((mode) => {
+            return (
+                mode.xResolution === xResolution &&
+                mode.yResolution === yResolution
+            );
+        });
+    }
+    
+    // returns currently active refresh rate
+    public getActiveRefreshRate(): number
+    {
+        if(!this.displayModes)
+        {
+            return undefined;
+        }
+        return this.displayModes.activeMode.refreshRates[0];
     }
 
     public governorSelectionChange() {
@@ -502,6 +723,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private buttonRepeatTimer: NodeJS.Timeout;
     public buttonRepeatDown(action: () => void) {
+        console.log("this: ", this.profileFormGroup.get('fan'))
+
         if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
         const repeatDelayMS = 200;
 
@@ -579,5 +802,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.profileFormGroup.get(groupName).markAsDirty();
         }
         return valueChanged;
+    }
+
+    setVerticalSliderDirty() {
+        this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 }

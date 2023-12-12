@@ -28,8 +28,8 @@ import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
-import { resolve } from 'path';
-import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
+import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
+import electron = require("electron");
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -53,6 +53,7 @@ if (startTCCAccelerator === '') {
 let tccWindow: Electron.BrowserWindow;
 let aquarisWindow: Electron.BrowserWindow;
 let webcamWindow: Electron.BrowserWindow;
+let primeWindow: Electron.BrowserWindow;
 
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
@@ -91,6 +92,14 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
     activateTccGui();
 });
 
+app.on("ready", () => {
+    electron.powerMonitor.on("resume", () => {
+        if (tccWindow) {
+            tccWindow.webContents.send("wakeup-from-suspend");
+        }
+    });
+});
+
 app.whenReady().then( async () => {
     try {
         const systemLanguageId = app.getLocale().substring(0, 2);
@@ -119,8 +128,12 @@ app.whenReady().then( async () => {
 
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
-    tray.state.primeQuery = primeSelectQuery();
-    tray.state.isPrimeSupported = primeSupported();
+    tray.state.fnLockSupported = await fnLockSupported(tccDBus);
+    if (tray.state.fnLockSupported) {
+        tray.state.fnLockStatus = await fnLockStatus(tccDBus);
+    }
+    [tray.state.isPrimeSupported, tray.state.primeQuery] = await checkPrimeAvailabilityStatus();
+
     await updateTrayProfiles(tccDBus);
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
@@ -134,16 +147,23 @@ app.whenReady().then( async () => {
         tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
         tray.create();
     };
-    const messageBoxprimeSelectAccept = {
-        type: 'question',
-        buttons: [ 'yes', 'cancel' ],
-        message: 'Change graphics configuration and shutdown?'
+    
+    tray.events.fnLockClick = (status: boolean) => {
+        tray.state.fnLockStatus = !status
+        tccDBus.setFnLockStatus(tray.state.fnLockStatus);
     };
-    tray.events.selectNvidiaClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('on'); }
+
+    tray.events.selectNvidiaClick = async () => {
+        const langId = await userConfig.get("langId");
+        createPrimeWindow(langId, "dGPU");
     };
-    tray.events.selectBuiltInClick = () => {
-        if (dialog.showMessageBoxSync(messageBoxprimeSelectAccept) === 0) { primeSelectSet('off'); }
+    tray.events.selectOnDemandClick = async () => {
+        const langId = await userConfig.get("langId");
+        createPrimeWindow(langId, "on-demand");
+    };
+    tray.events.selectBuiltInClick = async () => {
+        const langId = await userConfig.get("langId");
+        createPrimeWindow(langId, "iGPU");
     };
     tray.events.profileClick = (profileId: string) => { setTempProfileById(tccDBus, profileId); };
     tray.create();
@@ -167,23 +187,21 @@ app.whenReady().then( async () => {
         // Regularly check if running tccd version is different to running gui version
         const tccdVersionCheckInterval = 5000;
         setInterval(async () => {
-            if (await tccDBus.tuxedoWmiAvailable()) {
-                const tccdVersion = await tccDBus.tccdVersion();
-                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                    console.log('Other tccd version detected, restarting..');
-                    process.on('exit', function () {
-                        child_process.spawn(
-                            process.argv[0],
-                            process.argv.slice(1).concat(['--tray']),
-                            {
-                                cwd: process.cwd(),
-                                detached : true,
-                                stdio: "inherit"
-                            }
-                        );
-                    });
-                    process.exit();
-                }
+            const tccdVersion = await tccDBus.tccdVersion();
+            if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                console.log('Other tccd version detected, restarting..');
+                process.on('exit', function () {
+                    child_process.spawn(
+                        process.argv[0],
+                        process.argv.slice(1).concat(['--tray']),
+                        {
+                            cwd: process.cwd(),
+                            detached : true,
+                            stdio: "inherit"
+                        }
+                    );
+                });
+                process.exit();
             }
         }, tccdVersionCheckInterval);
     }
@@ -394,6 +412,77 @@ ipcMain.on("video-ended", (event) => {
     tccWindow.webContents.send("video-ended");
 });
 
+async function createPrimeWindow(langId: string, primeSelectMode: string) {
+    if (primeWindow && !primeWindow.isDestroyed()) {
+        primeWindow.focus();
+        return;
+    }
+
+    let windowWidth = 740;
+    let windowHeight = 230;
+
+    primeWindow = new BrowserWindow({
+        title: "Prime Select Configuration",
+        width: windowWidth,
+        height: windowHeight,
+        frame: true,
+        resizable: false,
+        minWidth: windowWidth,
+        minHeight: windowHeight,
+        icon: path.join(
+            __dirname,
+            "../../data/dist-data/tuxedo-control-center_256.png"
+        ),
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+        show: false,
+    });
+
+    // Workaround to set window title
+    primeWindow.on("page-title-updated", function (e) {
+        e.preventDefault();
+    });
+
+    primeWindow.setMenuBarVisibility(false);
+
+    // Workaround to menu bar appearing after full screen state
+    primeWindow.on("leave-full-screen", () => {
+        primeWindow.setMenuBarVisibility(false);
+    });
+
+    const indexPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "ng-app",
+        langId,
+        "index.html"
+    );
+    primeWindow.loadFile(indexPath, { hash: "/prime-dialog" });
+
+    primeWindow.webContents.once("dom-ready", () => {
+        primeWindow.webContents.send("set-prime-select-mode", primeSelectMode);
+    });
+
+    primeWindow.on("close", async function () {
+        primeWindow = null;
+    });
+}
+
+ipcMain.on("prime-window-close", () => {
+    if (primeWindow) {
+        primeWindow.close();
+    }
+});
+
+ipcMain.on("show-prime-window", () => {
+    if (primeWindow) {
+        primeWindow.show();
+    }
+});
+
 async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
     let result = [];
     if (!await dbus.dbusAvailable()) return [];
@@ -499,8 +588,6 @@ ipcMain.handle('exec-cmd-async', async (event, arg) => {
     });
 });
 
-
-
 ipcMain.handle('show-save-dialog', async (event, arg) => {
     return new Promise<SaveDialogReturnValue>((resolve, reject) => {
         let results = dialog.showSaveDialog(arg);
@@ -522,7 +609,6 @@ ipcMain.handle('get-path', async (event, arg) => {
         resolve(requestedPath);
     });
 });
-
 
 ipcMain.handle('exec-file-async', async (event, arg) => {
     return new Promise((resolve, reject) => {
@@ -696,53 +782,19 @@ function createUserConfigDir(): boolean {
     }
 }
 
-function primeSupported(): boolean {
-    let query: string;
-    let result: boolean;
-    try {
-        query = child_process.execSync('prime-supported /dev/null').toString();
-        result = query.trim() === 'yes';
-    } catch (err) {
-        result = false;
-    }
-    return result;
+async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
+    const primeStatus = await tccDBus.getPrimeState();
+    const primeAvailable =
+        primeStatus !== undefined && ["off", "-1"].indexOf(primeStatus) === -1;
+    return [primeAvailable, primeStatus];
 }
 
-function primeSelectQuery(): string {
-    let query: string;
-    let result: string;
-    try {
-        query = child_process.execSync('prime-select query').toString();
-        if (query.includes('nvidia')) {
-            result = 'on';
-        } else if (query.includes('intel')) {
-            result = 'off';
-        } else {
-            // Not supported, result undefined
-            result = undefined;
-        }
-    } catch (err) {
-        // Doesn't exist, result undefined
-        result = undefined;
-    }
-
-    return result;
+async function fnLockSupported(tccDBus: TccDBusController) {
+    return await tccDBus.getFnLockSupported();
 }
 
-function primeSelectSet(status: string): boolean {
-    let result: boolean;
-    try {
-        if (status === 'on') {
-            child_process.execSync('pkexec bash -c "prime-select nvidia; shutdown -h now"');
-        } else if (status === 'off') {
-            child_process.execSync('pkexec bash -c "prime-select intel; shutdown -h now"');
-        }
-        result = true;
-    } catch (err) {
-        // Can't set, return undefined
-    }
-
-    return result;
+async function fnLockStatus(tccDBus: TccDBusController) {
+    return await tccDBus.getFnLockStatus();
 }
 
 async function updateTrayProfiles(dbus: TccDBusController) {

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,6 +19,8 @@
 import * as dbus from 'dbus-next';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
+import { ChargeType } from './PowerSupplyController';
 
 export class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
@@ -59,6 +61,14 @@ export class TccDBusController {
         }
     }
 
+    async fanHwmonAvailable(): Promise<boolean> {
+        try {
+            return await this.interface.FanHwmonAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
+
     async tccdVersion(): Promise<string> {
         try {
             return await this.interface.TccdVersion();
@@ -80,6 +90,24 @@ export class TccDBusController {
             return await this.interface.GetFanDataGPU1();
         } catch (err) {
             return new FanData();
+        }
+    }
+
+    async getDisplayModesJSON(): Promise<string>
+    {
+        try {
+            return await this.interface.GetDisplayModesJSON();
+        } catch (err) {
+            return undefined; 
+        }
+    }
+
+    async getRefreshRateSupported():Promise<boolean>
+    {
+        try {
+            return await this.interface.GetRefreshRateSupported();
+        } catch (err) {
+            return false; 
         }
     }
 
@@ -112,6 +140,38 @@ export class TccDBusController {
             return await this.interface.GetForceYUV420OutputSwitchAvailable();
         } catch (err) {
             return false;
+        }
+    }
+
+    async getDGpuInfoValuesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetDGpuInfoValuesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getIGpuInfoValuesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetIGpuInfoValuesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getCpuPowerValuesJSON(): Promise<string> {
+        try {
+            return await this.interface.GetCpuPowerValuesJSON();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getPrimeState(): Promise<string> {
+        try {
+            return await this.interface.GetPrimeState();
+        } catch (err) {
+            return undefined;
         }
     }
 
@@ -286,6 +346,118 @@ export class TccDBusController {
     async setChargingPriority(priorityDescriptor: string): Promise<boolean> {
         try {
             return await this.interface.SetChargingPriority(priorityDescriptor);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargeStartAvailableThresholds(): Promise<number[]> {
+        try {
+            return JSON.parse(await this.interface.GetChargeStartAvailableThresholds());
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async getChargeEndAvailableThresholds(): Promise<number[]> {
+        try {
+            return JSON.parse(await this.interface.GetChargeEndAvailableThresholds());
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async getChargeStartThreshold(): Promise<number> {
+        try {
+            return await this.interface.GetChargeStartThreshold();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setChargeStartThreshold(value: number): Promise<boolean> {
+        try {
+            return await this.interface.SetChargeStartThreshold(value);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargeEndThreshold(): Promise<number> {
+        try {
+            return await this.interface.GetChargeEndThreshold();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async setChargeEndThreshold(value: number): Promise<boolean> {
+        try {
+            return await this.interface.SetChargeEndThreshold(value);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getChargeType(): Promise<string> {
+        try {
+            return await this.interface.GetChargeType();
+        } catch (err) {
+            return ChargeType.Unknown.toString();
+        }
+    }
+
+    async setChargeType(chargeType: ChargeType): Promise<boolean> {
+        try {
+            return await this.interface.SetChargeType(chargeType);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getFnLockSupported(): Promise<boolean> {
+        try {
+            return await this.interface.GetFnLockSupported();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getFnLockStatus(): Promise<boolean> {
+        try {
+            return await this.interface.GetFnLockStatus();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async setFnLockStatus(status: boolean): Promise<boolean> {
+        try {
+            return await this.interface.SetFnLockStatus(status);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async setSensorDataCollectionStatus(status: boolean): Promise<boolean> {
+        try {
+            return await this.interface.SetSensorDataCollectionStatus(status);
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async getSensorDataCollectionStatus(): Promise<boolean> {
+        try {
+            return await this.interface.GetSensorDataCollectionStatus();
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async setDGpuD0Metrics(status: boolean): Promise<boolean> {
+        try {
+            return await this.interface.SetDGpuD0Metrics(status);
         } catch (err) {
             return false;
         }
