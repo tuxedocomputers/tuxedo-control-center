@@ -20,9 +20,9 @@ import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 
 export class NVIDIAPowerCTRLListener {
-    private ctgp_offset_path: string = "/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset";
-    private ctgp_offset_sysfs_prop: SysFsPropertyInteger = new SysFsPropertyInteger(this.ctgp_offset_path);
-    private available: boolean = this.ctgp_offset_sysfs_prop.isAvailable();
+    private ctgpOffsetPath: string = "/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset";
+    private ctgpOffsetSysfsProp: SysFsPropertyInteger = new SysFsPropertyInteger(this.ctgpOffsetPath);
+    private available: boolean = this.ctgpOffsetSysfsProp.isAvailable();
 
     constructor(private tccd: TuxedoControlCenterDaemon) {
         if (!this.isAvailable()) {
@@ -33,10 +33,10 @@ export class NVIDIAPowerCTRLListener {
     }
 
     private async init(): Promise<void> {
-        this.ctgp_offset_sysfs_prop.setFSWatchListener((async function(event: "rename" | "change", filename: string): Promise<void> {
-            let ctgp_offset: number = this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset;
-            if (event == "change" && this.ctgp_offset_sysfs_prop.readValueNT() != ctgp_offset) {
-                this.ctgp_offset_sysfs_prop.writeValue(ctgp_offset);
+        this.ctgpOffsetSysfsProp.setFSWatchListener((async function(event: "rename" | "change", filename: string): Promise<void> {
+            let ctgpOffset: number = this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset;
+            if (event == "change" && this.ctgpOffsetSysfsProp.readValueNT() != ctgpOffset) {
+                this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
             }
         }).bind(this));
 
@@ -50,6 +50,6 @@ export class NVIDIAPowerCTRLListener {
     }
 
     private applyActiveProfile(): void {
-        this.ctgp_offset_sysfs_prop.writeValue(this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset);
+        this.ctgpOffsetSysfsProp.writeValue(this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset);
     }
 }
