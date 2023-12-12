@@ -211,11 +211,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.gaugeDGPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
         this.dGpuFreq = coreFrequency > -1 ? coreFrequency : 0;
-        this.gaugeDGPUFreq = this.tccdbus.tuxedoWmiAvailable?.value
-            ? maxCoreFrequency > 0
-                ? (coreFrequency / maxCoreFrequency) * 100
-                : 0
-            : 0;
+        this.gaugeDGPUFreq =
+            maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
     }
 
     private subscribeToDGpuInfo(): void {
@@ -390,19 +387,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     };
 
     public formatIGpuFrequency = this.createFormatter(
-        (val) =>
-            val >= 0 &&
-            (this.powerState == "D3cold" ||
-                this.tccdbus.tuxedoWmiAvailable?.value),
+        (val) => val >= 0,
         (val) => this.utils.formatGpuFrequency(val)
     );
 
     public formatDGpuFrequency = this.createFormatter(
         (val) =>
-            val >= 0 &&
-            (this.powerState == "D3cold" ||
-                (this.tccdbus.tuxedoWmiAvailable?.value &&
-                    this.d0MetricsUsage)),
+            val >= 0 && (this.powerState == "D3cold" || this.d0MetricsUsage),
         (val) => this.utils.formatGpuFrequency(val)
     );
 
