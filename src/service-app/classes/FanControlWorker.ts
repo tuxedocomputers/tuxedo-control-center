@@ -51,6 +51,10 @@ export class FanControlWorker extends DaemonWorker {
     public async onStart(): Promise<void> {
         this.hwmonPath = await this.getHwmonPath();
 
+        if(this.hwmonPath) {
+            this.tccd.dbusData.fanHwmonAvailable = true
+        }
+
         if(!this.hwmonPath) {
             this.setupTuxedoIO()
         }
