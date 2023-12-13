@@ -65,6 +65,7 @@ contextBridge.exposeInMainWorld(
     openFileDialog: (properties) => ipcRenderer.invoke('show-open-dialog', properties),
     saveFileDialog: (properties) => ipcRenderer.invoke('show-save-dialog', properties),
     primeWindowClose: () => ipcRenderer.send("prime-window-close"),
+    primeWindowShow: () => ipcRenderer.send("prime-window-show"),
     onSetPrimeSelectMode: (callback) => {
         var channelname = "set-prime-select-mode";
         if(callbacks.indexOf(channelname) < 0)
@@ -90,9 +91,7 @@ contextBridge.exposeInMainWorld(
         disconnect: () => ipcRenderer.invoke('disconnect-dbus'),
         tuxedoWmiAvailable: () => ipcRenderer.invoke('tuxedo-wmi-available-dbus'),
         tccdVersion: () => ipcRenderer.invoke('tccd-version-dbus'),
-        getFanDataCPU: () => ipcRenderer.invoke('get-fan-data-cpu-dbus'),
-        getFanDataGPU1: () => ipcRenderer.invoke('get-fan-data-gpu1-dbus'),
-        getFanDataGPU2: () => ipcRenderer.invoke('get-fan-data-gpu2-dbus'),
+        getFanData: () => ipcRenderer.invoke('get-fan-data-dbus'),
         webcamSWAvailable: () => ipcRenderer.invoke('webcam-sw-available-dbus'),
         getWebcamSWStatus: () => ipcRenderer.invoke('get-webcam-sw-status-dbus'),
         getForceYUV420OutputSwitchAvailable: () => ipcRenderer.invoke('get-force-yub420-output-switch-available-dbus'),

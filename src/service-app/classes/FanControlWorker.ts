@@ -18,7 +18,7 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { FanData} from '../../common/models/IFanData';
+import { FanData, IDBusFanData } from '../../common/models/IFanData';
 import { TuxedoIOAPI as ioAPI, TuxedoIOAPI, ObjWrapper, ModuleInfo } from '../../native-lib/TuxedoIOAPI';
 import { FanControlLogic, FAN_LOGIC } from './FanControlLogic';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
@@ -29,7 +29,7 @@ export class FanControlWorker extends DaemonWorker {
     private cpuLogic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.CPU);
     private gpu1Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
     private gpu2Logic = new FanControlLogic(this.tccd.getCurrentFanProfile(), FAN_LOGIC.GPU);
-    private fanData: FanData[];
+    private fanData: IDBusFanData;
     private controlAvailableMessage = false;
 
     private previousFanProfile: ITccFanProfile;
@@ -141,12 +141,6 @@ export class FanControlWorker extends DaemonWorker {
             this.fans = this.createFansMap(nrFans);
         }
 
-        this.fanData = new Array(nrFans);
-        for (let i = 0; i < nrFans; i++)
-        {
-            this.fanData[i] = new FanData();
-        }
-
         if (nrFans === 0) {
             return;
         }
@@ -243,6 +237,9 @@ export class FanControlWorker extends DaemonWorker {
                 ioAPI.setFanSpeedPercent(fanIndex, fanSpeedsSet[fanIndex]);
             }
         }
+        let cpu = new FanData(-1, -1, -1);
+        let gpu1 = new FanData(-1, -1, -1);
+        let gpu2 = new FanData(-1, -1, -1);
 
         // Publish the data on the dbus whether written by this control or values read from hw interface
         for (const fanNumber of this.fans.keys()) {
@@ -256,9 +253,19 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 currentSpeed = fanSpeedsRead[i];
             }
-            this.fanData[i] = new FanData(fanTimestamps[i], currentSpeed, fanTemps[i]);
-            this.tccd.dbusData.fans[i] = JSON.stringify(this.fanData[i]);
+            if ( i === 0)
+            cpu = new FanData(fanTimestamps[i], currentSpeed, fanTemps[i]);
+            if ( i === 1)
+            gpu1 = new FanData(fanTimestamps[i], currentSpeed, fanTemps[i]);
+            if ( i === 2)
+            gpu2 = new FanData(fanTimestamps[i], currentSpeed, fanTemps[i]);
         }
+        this.fanData = {
+                cpu: cpu,
+                gpu1: gpu1,
+                gpu2: gpu2
+              };
+        this.tccd.dbusData.fanData = JSON.stringify(this.fanData);
     }
 
     public onExit(): void {

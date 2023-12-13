@@ -67,17 +67,10 @@ export class TccDBusController {
         }
     }
 
-    async getFanDataCPU(): Promise<string> {
-        return this.interface.GetFanDataCPUJSON();
+    async getFanDataJSON(): Promise<string> {
+        return this.interface.GetFanDataJSON();
     }
 
-    async getFanDataGPU1(): Promise<string> {
-        return this.interface.GetFanDataGPU1JSON();
-    }
-
-    async getFanDataGPU2(): Promise<string> {
-        return this.interface.GetFanDataGPU2JSON();
-    }
 
     async getDisplayModesJSON(): Promise<string>
     {

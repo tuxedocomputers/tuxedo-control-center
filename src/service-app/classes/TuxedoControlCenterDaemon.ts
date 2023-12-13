@@ -68,7 +68,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public autosave: ITccAutosave;
     public fanTables: ITccFanProfile[];
 
-    public dbusData = new TccDBusData(3);
+    public dbusData = new TccDBusData();
 
     public activeProfile: ITccProfile;
 

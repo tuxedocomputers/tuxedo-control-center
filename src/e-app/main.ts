@@ -616,8 +616,9 @@ async function createPrimeWindow(langId: string, primeSelectMode: string) {
             "../../data/dist-data/tuxedo-control-center_256.png"
         ),
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js')
         },
         show: false,
     });
@@ -659,7 +660,7 @@ ipcMain.on("prime-window-close", () => {
     }
 });
 
-ipcMain.on("show-prime-window", () => {
+ipcMain.on("prime-window-show", () => {
     if (primeWindow) {
         primeWindow.show();
     }
@@ -1197,21 +1198,9 @@ ipcMain.handle('tccd-version-dbus', async (event, arg) => {
 });
 
 
-ipcMain.handle('get-fan-data-cpu-dbus', async (event) => {
+ipcMain.handle('get-fan-data-dbus', async (event) => {
     return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getFanDataCPU());
-    });
-});
-
-ipcMain.handle('get-fan-data-gpu1-dbus', async (event) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getFanDataGPU1());
-    });
-});
-
-ipcMain.handle('get-fan-data-gpu2-dbus', async (event) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getFanDataGPU2());
+        resolve(tccDBus.getFanDataJSON());
     });
 });
 

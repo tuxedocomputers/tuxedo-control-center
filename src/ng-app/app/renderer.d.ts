@@ -28,6 +28,7 @@ export interface IPC extends EventEmitter {
     getPath: (path: string) => Promise<string>,
     openFileDialog: (properties) => Promise<any>,
     saveFileDialog: (properties) => Promise<any>,
+    primeWindowShow: () => void,
     primeWindowClose: () => void,
     onSetPrimeSelectMode: (callback) => void,
   }
@@ -44,9 +45,7 @@ export interface IPC extends EventEmitter {
     disconnect: () => Promise<boolean>,
     tuxedoWmiAvailable: () => Promise<boolean>,
     tccdVersion: () => Promise<string>,
-    getFanDataCPU: () => Promise<string>,
-    getFanDataGPU1: () => Promise<string>,
-    getFanDataGPU2: () => Promise<string>,
+    getFanData: () => Promise<string>,
     webcamSWAvailable: () => Promise<boolean>,
     getWebcamSWStatus: () => Promise<boolean>,
     getForceYUV420OutputSwitchAvailable: () => Promise<boolean>,

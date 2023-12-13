@@ -1,4 +1,8 @@
-
+export interface IDBusFanData {
+    cpu: FanData;
+    gpu1: FanData;
+    gpu2: FanData;
+  }
 
 export class dbusVariant<T>
 {

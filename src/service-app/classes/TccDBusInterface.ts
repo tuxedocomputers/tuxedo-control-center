@@ -30,7 +30,7 @@ export class TccDBusData {
     public refreshRateSupported: boolean;
     public tuxedoWmiAvailable: boolean;
     public tccdVersion: string;
-    public fans: string[];
+    public fanData: string;
     public webcamSwitchAvailable: boolean;
     public webcamSwitchStatus: boolean;
     public forceYUV420OutputSwitchAvailable: boolean;
@@ -56,8 +56,7 @@ export class TccDBusData {
     public fansOffAvailable: boolean;
     public sensorDataCollectionStatus: boolean = false;
     public d0MetricsUsage: boolean = false;
-    constructor(numberFans: number) { this.fans = new Array<string>(numberFans).fill("") }
-    // export() { return this.fans.map(fan => fan.export()); }
+    
 }
 
 export class TccDBusOptions {
@@ -81,9 +80,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetRefreshRateSupported() { return this.data.refreshRateSupported; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
-    GetFanDataCPUJSON() { return this.data.fans[0]; }
-    GetFanDataGPU1JSON() { return this.data.fans[1]; }
-    GetFanDataGPU2JSON() { return this.data.fans[2]; }
+    GetFanDataJSON() { return this.data.fanData; }
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
@@ -198,9 +195,7 @@ TccDBusInterface.configureMembers({
         GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
-        GetFanDataCPUJSON: { outSignature: 's' },
-        GetFanDataGPU1JSON: { outSignature: 's' },
-        GetFanDataGPU2JSON: { outSignature: 's' },
+        GetFanDataJSON: { outSignature: 's' },
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },

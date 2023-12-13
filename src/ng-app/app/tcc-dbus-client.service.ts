@@ -18,7 +18,7 @@
  */
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FanData } from '../../common/models/IFanData';
+import { FanData, IDBusFanData } from '../../common/models/IFanData';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
@@ -27,12 +27,6 @@ import { ICpuPower } from 'src/common/models/TccPowerSettings';
 import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 import { DBUS } from './renderer';
-
-export interface IDBusFanData {
-  cpu: FanData;
-  gpu1: FanData;
-  gpu2: FanData;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -123,19 +117,29 @@ export class TccDBusClientService implements OnDestroy {
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);
-    try 
-    {
-        const fanData: IDBusFanData = {
-            cpu: JSON.parse(await this.tccDBusInterface.getFanDataCPU()),
-            gpu1: JSON.parse(await this.tccDBusInterface.getFanDataGPU1()),
-            gpu2: JSON.parse(await this.tccDBusInterface.getFanDataGPU2())
-          };
-          this.fanData.next(fanData);
+    const fanDataJSON = await this.tccDBusInterface.getFanData();
+    if (fanDataJSON) {
+        this.fanData.next(JSON.parse(fanDataJSON));
     }
-    catch(err)
-    {
-        console.log(err);
-    }
+    // let cpu = new FanData();
+    // let gpu1 = new FanData();
+    // let gpu2 = new FanData();
+    // try 
+    // {
+    //     cpu = JSON.parse(await this.tccDBusInterface.getFanDataCPU()),
+    //     gpu1 = JSON.parse(await this.tccDBusInterface.getFanDataGPU1()),
+    //     gpu2 = JSON.parse(await this.tccDBusInterface.getFanDataGPU2())
+    // }
+    // catch(err)
+    // {
+    //     console.log(err);
+    // }
+    // const fanData: IDBusFanData = {
+    //     cpu: cpu,
+    //     gpu1: gpu1,
+    //     gpu2: gpu2
+    //   };
+    //   this.fanData.next(fanData);
 
     const dGpuInfoValuesJSON = await this.tccDBusInterface.getDGpuInfoValuesJSON();
     const iGpuInfoValuesJSON = await this.tccDBusInterface.getIGpuInfoValuesJSON();
@@ -143,6 +147,28 @@ export class TccDBusClientService implements OnDestroy {
     if (dGpuInfoValuesJSON) {
         this.dGpuInfo.next(JSON.parse(dGpuInfoValuesJSON));
     }
+
+    /*
+
+    Pseudocode, maybe it's possible to rework setting all observables manual somehow like this here?
+    function setObservable(observable, dbusFunction){
+        let jsondata = await dbusFunction();
+        if (jsondata)
+        {
+            let data;
+            try 
+            {
+                data = JSON.parse(jsondata);
+                observable.next(data);
+            }
+            catch(err)
+            {
+                console.log("An error occured, trying to parse JSON data of dbus Function: " + dbusFunction.name + "JSON data: " + jsondata)
+            }
+        }
+    }
+
+    */
 
     if (iGpuInfoValuesJSON) {
         this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
