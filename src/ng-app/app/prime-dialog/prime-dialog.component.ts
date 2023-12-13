@@ -44,7 +44,7 @@ export class PrimeDialogComponent implements OnInit {
 
             // small delay required to avoid flickering ui since html does not instantly update
             setTimeout(async () => {
-                window.ipc.primeWindowClose();
+                window.ipc.primeWindowShow();
             }, 250);
         }
         );
