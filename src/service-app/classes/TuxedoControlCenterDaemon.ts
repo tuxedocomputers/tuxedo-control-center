@@ -52,7 +52,7 @@ import { GpuInfoWorker } from "./GpuInfoWorker";
 import { CpuPowerWorker } from './CpuPowerWorker';
 import { PrimeWorker } from './PrimeWorker';
 import { VendorService } from "../../common/classes/Vendor.service";
-import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
+import { NVIDIAPowerCTRLWorker } from './NVIDIAPowerCTRLWorker';
 
 const tccPackage = require('../../package.json');
 
@@ -74,7 +74,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
-    private listeners: any[] = [];
 
     protected started = false;
 
@@ -132,8 +131,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new ODMProfileWorker(this));
         this.workers.push(new ODMPowerLimitWorker(this));
         this.workers.push(this.displayWorker);
-
-        this.listeners.push(new NVIDIAPowerCTRLListener(this));
+        this.workers.push(new NVIDIAPowerCTRLWorker(this));
 
         this.startWorkers();
 
