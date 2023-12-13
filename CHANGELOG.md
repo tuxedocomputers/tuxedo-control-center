@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.1] - 2023-12-13
 ### Added
 - Laptop screen refresh rate configurable per TCC profile allowing
   configuration of reduced refresh rate in battery operation
