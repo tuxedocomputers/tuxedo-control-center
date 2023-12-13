@@ -85,8 +85,6 @@ export class TccTray {
         } else {
             showAquarisMenu = true;
         }
-        // TODO remove after testing is done
-        showAquarisMenu = true;
 
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
