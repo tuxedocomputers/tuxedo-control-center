@@ -30,7 +30,7 @@ tuxedo-control-center
 1. Install git, gcc, g++, make, nodejs, npm and libudev-dev \
    Ex (deb):
    ```
-   curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+   curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 
    sudo apt install -y git gcc g++ make nodejs libudev-dev
    ```
@@ -49,7 +49,7 @@ tuxedo-control-center
    Manual instructions:
    1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
    2. Edit the `tccd.service` (exec start/stop) to point to `<dev path>/dist/tuxedo-control-center/data/service/tccd`.
-   3. Copy `com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
+   3. Copy `com.tuxedocomputers.tccd.conf` (from src/dist-data) to `/usr/share/dbus-1/system.d/`
    4. Start service `systemctl start tccd`. (And enable for autostart `systemctl enable tccd tccd-sleep`)
 
 ### NPM scripts 
