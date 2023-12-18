@@ -19,7 +19,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UtilsService } from '../utils.service';
 
 export interface ConfirmDialogData {
     title: string,
@@ -48,7 +47,6 @@ export class DialogConfirmComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
-        private utils: UtilsService,
         public dialogRef: MatDialogRef<DialogConfirmComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {
 

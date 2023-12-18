@@ -325,8 +325,6 @@ function quitCurrentTccSession() {
 ########################################################
 */
 
-
-// TODO might be the source of "unhandled promise rejection" error message I keep getting in console
 async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
     let result = [];
     if (!await dbus.dbusAvailable()) return [];
@@ -391,10 +389,6 @@ async function createTccWindow(langId: string, module?: string) {
         },
         show: false
     });
-    // TODO remove debugging code again
-    // tccWindow.webContents.on ("ipc-message-sync", (event, channel, args) => {
-    //     console.log(channel);
-    // });
     // Hide menu bar
     tccWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
@@ -1013,7 +1007,6 @@ ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccPr
     
 });
 
-// TODO
 ipcMain.handle('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
    return pkexecWriteCustomProfilesAsync(customProfiles);
 });
@@ -1170,8 +1163,6 @@ ipcMain.on('trigger-language-change', (event, arg) => {
 ###############   Dbus Communication API ####################
 */
 
-// TODO, we already have dbus controller controlled by main process, if anything actually tries to call
-// this function here, we should remove that
 ipcMain.handle('init-dbus', async (event, arg) => {
     return new Promise<boolean>((resolve, reject) => {
         resolve(tccDBus.init());

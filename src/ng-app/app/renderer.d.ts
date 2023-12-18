@@ -8,7 +8,6 @@ import { ITccSettings } from "src/common/models/TccSettings";
 import { ITccFanProfile } from "src/common/models/TccFanTable";
 
 export interface IPC extends EventEmitter {
-    // TODO probably have to modify this somehow
     send: (channel: string, args) => Promise<IPCReturnValue>,
     invoke: (channel: string, args) => Promise<IPCReturnValue>,
     getAppVersion: () => Promise<string>,
@@ -194,7 +193,6 @@ export interface COMP
 
   export interface IPCReturnValue
   {
-    // TODO give matching types
     data;
     error;
   }

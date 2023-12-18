@@ -20,7 +20,6 @@
 import { Component, Inject } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { UtilsService } from "../utils.service";
 
 export interface ChoiceDialogData {
     title: string;
@@ -57,7 +56,6 @@ export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
-        private utils: UtilsService,
         public dialogRef: MatDialogRef<DialogChoiceComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ChoiceDialogData
     ) {
@@ -86,7 +84,6 @@ export class DialogChoiceComponent {
         }
         this.dialogRef.close(dialogResult);
     }
-// TODO this causes circular dependencies
     public async openExternalUrl(url: string) {
         window.ipc.openExternal(url);
     }

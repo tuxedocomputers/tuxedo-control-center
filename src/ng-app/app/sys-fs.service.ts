@@ -26,7 +26,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class SysFsService implements OnDestroy {
-  // TODO do not use backlight controller directly, use specific methods over the contextbridge 
 
 
   private updateInterval: NodeJS.Timeout;

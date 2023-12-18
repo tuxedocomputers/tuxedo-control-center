@@ -36,8 +36,6 @@ contextBridge.exposeInMainWorld(
     getProcessVersions: () => ipcRenderer.invoke('get-process-versions'),
     getBrightnessMode: () => ipcRenderer.invoke('get-brightness-mode'),
     getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
-    // TODO pretty sure it should not have to give it either of those parameters, they should be
-    // saved in main, apart from us having to remove exec-cmd completely anyway
     tccdNewSettings: (tccdExec,tmpSettingsPath) => ipcRenderer.sendSync(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
     ),
