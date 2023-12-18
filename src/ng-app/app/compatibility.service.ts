@@ -32,7 +32,6 @@ export class CompatibilityService {
         private tccDbus: TccDBusClientService,
         private sysfs: SysFsService
     ) {    
-    // TODO: Manual read until general device id get merged
         const deviceName = window.comp.getProductSKU();
         const boardVendor = window.comp.getBoardVendor();
         const chassisVendor = window.comp.getChassisVendor();

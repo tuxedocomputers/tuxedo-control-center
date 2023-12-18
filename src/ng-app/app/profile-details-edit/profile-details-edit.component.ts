@@ -578,7 +578,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.utils.formatCpuFrequency(frequency);
     }
 
-    // TODO, we need some variable buffering here, else it will be run 100 times a minute or more
     public getFanProfileNames(): string[] {
         return this.defaultFanProfiles.map(fanProfile => fanProfile.name);
     }

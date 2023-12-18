@@ -24,6 +24,7 @@ import { ConfigService } from '../config.service';
 import { IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main-gui',
@@ -34,7 +35,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public profileSelect: string;
     public activeProfileName: string;
-
+    private subscriptions: Subscription = new Subscription();
     public useTCCTitleBar = false;
 
     public dataLoaded: boolean;
@@ -56,21 +57,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
         this.updateLanguageName();
         this.getSettings();
-        // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
-        // TODO replace this :)
-        //this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
+        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
         if (!this.dataLoaded) {
-            /*
-            this.utils.confirmDialog(
-                {
-                    title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
-                    description: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
-                    buttonConfirmLabel: 'Ok'
-                  }
-
-            ).then((result) => { this.electron.ipcRenderer.send('close-main-window');}, (error) => { this.electron.ipcRenderer.send('close-main-window');}); 
-                  */
-
             // We need a blocking dialog box here or everything goes to hell.
             var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`);
             this.utils.quit();
@@ -78,6 +66,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     public buttonExit(): void {
@@ -133,6 +122,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
     
     // TODO this function is called many times a minute, needs to be lightweight!
+    // furthermore it's values only change like after saving in profiles-detals-edit??
     public getStateProfileName(state: IStateInfo) {
         if (!this.getSettings()) {
             return undefined
