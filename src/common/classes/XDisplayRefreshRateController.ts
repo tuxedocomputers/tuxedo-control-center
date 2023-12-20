@@ -19,6 +19,7 @@
 
 import { IDisplayFreqRes, IDisplayMode } from "../models/DisplayFreqRes";
 import * as child_process from "child_process";
+import * as fs from 'fs';
 export class XDisplayRefreshRateController {
     private displayName: string;
     private isX11: boolean;
@@ -48,6 +49,12 @@ export class XDisplayRefreshRateController {
         var username = match[1];
         this.displayEnvVariable = match[3].replace("(", "").replace(")", "");
         this.xAuthorityFile = "/home/" + username + "/.Xauthority";
+        if (!fs.existsSync(this.xAuthorityFile)) {
+            this.isX11 = false;
+            this.displayEnvVariable = '';
+            this.xAuthorityFile = '';
+            return;
+        }
         this.isX11 = true;
     }
 
