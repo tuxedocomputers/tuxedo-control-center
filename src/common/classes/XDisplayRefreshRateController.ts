@@ -33,7 +33,7 @@ export class XDisplayRefreshRateController {
         let result = child_process.execSync(`who`) + "";
 
         // Capturing groups: 1 is user name, 2 can be ignored and 3 is the display variable.
-        var correctLineRegex = /(\w+)\s+(.+\s+)+(\(:.+\))/;
+        var correctLineRegex = /(\w+)(.*)(\(:.+\))/;
 
         var match = result.match(correctLineRegex);
 
