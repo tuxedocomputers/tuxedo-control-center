@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.2] - 2023-12-21
+## Added
+- Support for Sirius keyboard backlight
+- Support for Sirius system profiles
+
+## Fixed
+- Issue on tccd start causing one thread to get stuck on full load blocking the initialization for an extended amount of time
+- .Xauthority file not found causing excessive tccd log output
+
 ## [2.1.1] - 2023-12-13
 ### Added
 - Laptop screen refresh rate configurable per TCC profile allowing
