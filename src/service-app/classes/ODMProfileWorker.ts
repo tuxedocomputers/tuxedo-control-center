@@ -27,11 +27,18 @@ import {
 } from "../../common/classes/SysFsProperties";
 
 export class ODMProfileWorker extends DaemonWorker {
-    private static platformProfile = new SysFsPropertyString(
+    private static tuxedoPlatformProfile = new SysFsPropertyString(
         "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile"
     );
-    private static platformProfileChoices = new SysFsPropertyStringList(
+    private static tuxedoPlatformProfileChoices = new SysFsPropertyStringList(
         "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices"
+    );
+
+    private static platformProfile = new SysFsPropertyString(
+        "/sys/firmware/acpi/platform_profile"
+    );
+    private static platformProfileChoices = new SysFsPropertyStringList(
+        "/sys/firmware/acpi/platform_profile_choices"
     );
 
     constructor(tccd: TuxedoControlCenterDaemon) {
@@ -41,16 +48,16 @@ export class ODMProfileWorker extends DaemonWorker {
     public onStart(): void {
 
         if (
+            ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
+            ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
+        ) {
+            this.ODM(ODMProfileWorker.tuxedoPlatformProfile, ODMProfileWorker.tuxedoPlatformProfileChoices);
+        } else if (
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
             this.ODM(ODMProfileWorker.platformProfile, ODMProfileWorker.platformProfileChoices);
-        }
-
-        if (
-            !ODMProfileWorker.platformProfile.isAvailable() ||
-            !ODMProfileWorker.platformProfileChoices.isAvailable()
-        ) {
+        } else {
             this.fallbackODM();
         }
     }
@@ -120,8 +127,16 @@ export class ODMProfileWorker extends DaemonWorker {
 
     public static getDefaultODMPerformanceProfile(): string {
         if (
-            this.platformProfile.isAvailable() &&
-            this.platformProfileChoices.isAvailable()
+            this.tuxedoPlatformProfile.isAvailable() &&
+            this.tuxedoPlatformProfileChoices.isAvailable()
+        ) {
+            const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
+            if (availableProfiles !== undefined && availableProfiles.length > 0) {
+                return availableProfiles[availableProfiles.length-1];
+            }
+        } else if (
+            ODMProfileWorker.platformProfile.isAvailable() &&
+            ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
             const availableProfiles = this.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined && availableProfiles.length > 0) {
@@ -137,8 +152,16 @@ export class ODMProfileWorker extends DaemonWorker {
 
     public static getAvailableODMPerformanceProfiles(): string[] {
         if (
-            this.platformProfile.isAvailable() &&
-            this.platformProfileChoices.isAvailable()
+            this.tuxedoPlatformProfile.isAvailable() &&
+            this.tuxedoPlatformProfileChoices.isAvailable()
+        ) {
+            const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
+            if (availableProfiles !== undefined) {
+                return availableProfiles;
+            }
+        } else if (
+            ODMProfileWorker.platformProfile.isAvailable() &&
+            ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
             const availableProfiles = this.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
