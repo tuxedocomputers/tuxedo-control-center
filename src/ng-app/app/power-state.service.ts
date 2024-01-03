@@ -10,20 +10,16 @@ export class PowerStateService {
 
     public async getDGpuPowerState(): Promise<string> {
         try {
-            const nvidiaBusPath = (
-                await this.utils.execCmd(
-                    "grep -lx 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
-                )
-            ).toString();
+            const nvidiaBusPath = await this.utils.execCmdAsync(
+                "grep -lx 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
+            );
 
             if (nvidiaBusPath) {
                 return (
-                    await this.utils.execCmd(
+                    await this.utils.execCmdAsync(
                         `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
                     )
-                )
-                    .toString()
-                    .trim();
+                ).trim();
             }
         } catch (err) {
             console.log("Failed to get power state of GPU: ", err);

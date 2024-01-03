@@ -270,12 +270,12 @@ export class WebcamSettingsComponent implements OnInit {
     private getWebcamSettings(): Promise<string> {
         return new Promise<string>(async (resolve) => {
             try {
-                let data = await this.utils.execCmd(
+                let data = await this.utils.execCmdAsync(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${this.selectedWebcam.path} -j`
                 );
-                resolve(data.toString());
+                resolve(data);
             } catch (error) {
                 console.log(error);
                 this.mutex.release();
@@ -380,7 +380,7 @@ export class WebcamSettingsComponent implements OnInit {
 
         for (let devicePath of webcamPaths) {
             try {
-                await this.utils.execCmd(
+                await this.utils.execCmdAsync(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${devicePath} -c ${parameter}=${value}`
@@ -415,7 +415,7 @@ export class WebcamSettingsComponent implements OnInit {
 
         for (let devicePath of webcamPaths) {
             try {
-                await this.utils.execCmd(
+                await this.utils.execCmdAsync(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${devicePath} -c ${controlStr}`
