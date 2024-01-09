@@ -147,7 +147,7 @@ app.whenReady().then( async () => {
         tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
         tray.create();
     };
-    
+
     tray.events.fnLockClick = (status: boolean) => {
         tray.state.fnLockStatus = !status
         tccDBus.setFnLockStatus(tray.state.fnLockStatus);
@@ -1100,7 +1100,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisStateExpected.pumpOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
-    
+
     .set(ClientAPI.prototype.saveState.name, async () => {
         if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));

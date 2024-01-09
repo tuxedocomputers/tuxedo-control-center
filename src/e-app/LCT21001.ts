@@ -155,7 +155,7 @@ export class LCT21001 {
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
             } catch (err) {
-                await blDevice.disconnect();
+                console.log("Error getting device: " + err);
                 continue;
             }
             const info = new DeviceInfo();
@@ -164,7 +164,7 @@ export class LCT21001 {
             try {
                 info.rssi = parseInt(await blDevice.getRSSI());
             } catch (err) {
-                await blDevice.disconnect();
+                console.log("Error getting RSSI: " + err);
                 continue;
             }
 
@@ -173,8 +173,6 @@ export class LCT21001 {
             } catch (err) {
                 info.name = '';
             }
-
-            await blDevice.disconnect();
 
             if (info.name.toLowerCase().indexOf('lct21001') !== -1) {
                 deviceInfo.push(info);
@@ -202,9 +200,9 @@ export class LCT21001 {
 
     /**
      * Write to the uart tx characteristic
-     * 
+     *
      * @param buffer `Buffer` of data to write
-     * 
+     *
      * Note: Throws error if not connected
      */
     async writeBuffer(buffer: Buffer) {
@@ -217,9 +215,9 @@ export class LCT21001 {
 
     /**
      * Read from the uart rx characteristic
-     * 
+     *
      * @returns A `Buffer` with the data read
-     * 
+     *
      * Note: Throws error if not connected
      */
     async readBuffer() {
@@ -233,10 +231,10 @@ export class LCT21001 {
     /**
      * Write to the uart tx characteristic and wait for a
      * notification on the uart rx characteristic
-     * 
+     *
      * @param inputBuffer `Buffer` to write to device
      * @returns A `Buffer` with the response
-     * 
+     *
      * Note: Throws error if not connected
      */
     async writeReceive(inputBuffer: Buffer): Promise<Buffer> {
@@ -263,7 +261,7 @@ export class LCT21001 {
 
     /**
      * Write RGB color and state to device
-     * 
+     *
      * @param red Red color 0-255
      * @param green Green color 0-255
      * @param blue Blue color 0-255
@@ -286,7 +284,7 @@ export class LCT21001 {
 
     /**
      * Write fan speed to device
-     * 
+     *
      * @param dutyCyclePercent Fan speed in percent 0-100
      */
     async writeFanMode(dutyCyclePercent: number) {
@@ -302,7 +300,7 @@ export class LCT21001 {
 
     /**
      * Write pump parameters to device
-     * 
+     *
      * @param pumpDutyCyclePercent Duty cycle in percent 0-100
      * @param pumpVoltage See `PumpVoltage` for valid settings
      */
@@ -327,7 +325,7 @@ export class LCT21001 {
 
     /**
      * Read firmware version from device
-     * 
+     *
      * @returns A `Buffer` representing a string describing the firmware version
      */
     async readFwVersion() {
