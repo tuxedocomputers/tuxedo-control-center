@@ -59,6 +59,11 @@ export class FanControlWorker extends DaemonWorker {
     private hwmonPath: string;
 
     private previousFanProfile: ITccFanProfile;
+    private previousFanSpeeds: { min: number; max: number; offset: number } = {
+        min: -1,
+        max: -1,
+        offset: -1,
+    };
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
@@ -176,21 +181,38 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private updateFanLogic(): void {
-        const currentFanProfile =
-            this.activeProfile.fan.fanProfile === "Custom"
-                ? this.getCurrentCustomProfile()
-                : this.tccd.getCurrentFanProfile(this.activeProfile);
+        const fanProfile = this.activeProfile.fan.fanProfile;
+        const isCustomProfile = fanProfile === "Custom";
+        
+        const currentFanProfile = isCustomProfile
+            ? this.getCurrentCustomProfile()
+            : this.tccd.getCurrentFanProfile(this.activeProfile);
 
-        if (
+        const profileChanged =
             this.previousFanProfile &&
-            (this.previousFanProfile?.name !==
-                this.activeProfile.fan.fanProfile ||
-                !this.isEqual(this.previousFanProfile, currentFanProfile))
-        ) {
+            (this.previousFanProfile.name !== fanProfile ||
+                !this.isEqual(this.previousFanProfile, currentFanProfile));
+
+        const profileValuesChanged =
+            this.previousFanSpeeds.min !==
+                this.activeProfile.fan.minimumFanspeed ||
+            this.previousFanSpeeds.max !==
+                this.activeProfile.fan.maximumFanspeed ||
+            this.previousFanSpeeds.offset !==
+                this.activeProfile.fan.offsetFanspeed;
+
+        const profileNotSet = !this.previousProfile && currentFanProfile;
+
+        if (profileChanged || profileValuesChanged || profileNotSet) {
             this.setFanProfileValues(currentFanProfile);
         }
 
         this.previousFanProfile = currentFanProfile;
+        this.previousFanSpeeds = {
+            min: this.activeProfile.fan.minimumFanspeed,
+            max: this.activeProfile.fan.maximumFanspeed,
+            offset: this.activeProfile.fan.offsetFanspeed,
+        };
     }
 
     private fallbackFanControl(): void {
