@@ -29,7 +29,10 @@ import {
 } from "../../native-lib/TuxedoIOAPI";
 import { FanControlLogic, FAN_LOGIC } from "./FanControlLogic";
 import { interpolatePointsArray } from "../../common/classes/FanUtils";
-import { ITccFanProfile } from "src/common/models/TccFanTable";
+import {
+    ITccFanProfile,
+    ITccFanTableEntry,
+} from "src/common/models/TccFanTable";
 import { exec } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
@@ -63,6 +66,13 @@ export class FanControlWorker extends DaemonWorker {
         min: -1,
         max: -1,
         offset: -1,
+    };
+    private previousCustomCurve: {
+        tableCPU: ITccFanTableEntry[];
+        tableGPU: ITccFanTableEntry[];
+    } = {
+        tableCPU: [],
+        tableGPU: [],
     };
 
     constructor(tccd: TuxedoControlCenterDaemon) {
@@ -180,39 +190,74 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
-    private updateFanLogic(): void {
-        const fanProfile = this.activeProfile.fan.fanProfile;
-        const isCustomProfile = fanProfile === "Custom";
-        
-        const currentFanProfile = isCustomProfile
-            ? this.getCurrentCustomProfile()
-            : this.tccd.getCurrentFanProfile(this.activeProfile);
+    private setPreviousValues(currentFanProfile: ITccFanProfile): void {
+        const { customFanCurve } = this.activeProfile.fan;
 
-        const profileChanged =
-            this.previousFanProfile &&
-            (this.previousFanProfile.name !== fanProfile ||
-                !this.isEqual(this.previousFanProfile, currentFanProfile));
+        this.previousCustomCurve = {
+            tableCPU: customFanCurve.tableCPU,
+            tableGPU: customFanCurve.tableGPU,
+        };
 
-        const profileValuesChanged =
-            this.previousFanSpeeds.min !==
-                this.activeProfile.fan.minimumFanspeed ||
-            this.previousFanSpeeds.max !==
-                this.activeProfile.fan.maximumFanspeed ||
-            this.previousFanSpeeds.offset !==
-                this.activeProfile.fan.offsetFanspeed;
-
-        const profileNotSet = !this.previousProfile && currentFanProfile;
-
-        if (profileChanged || profileValuesChanged || profileNotSet) {
-            this.setFanProfileValues(currentFanProfile);
-        }
-
-        this.previousFanProfile = currentFanProfile;
         this.previousFanSpeeds = {
             min: this.activeProfile.fan.minimumFanspeed,
             max: this.activeProfile.fan.maximumFanspeed,
             offset: this.activeProfile.fan.offsetFanspeed,
         };
+
+        this.previousFanProfile = currentFanProfile;
+    }
+
+    private isCustomProfileChanged(): boolean {
+        const { customFanCurve } = this.activeProfile.fan;
+
+        return !this.isEqual(this.previousCustomCurve, customFanCurve);
+    }
+
+    private isMinMaxOffsetChanged(): boolean {
+        return (
+            this.previousFanSpeeds.min !==
+                this.activeProfile.fan.minimumFanspeed ||
+            this.previousFanSpeeds.max !==
+                this.activeProfile.fan.maximumFanspeed ||
+            this.previousFanSpeeds.offset !==
+                this.activeProfile.fan.offsetFanspeed
+        );
+    }
+
+    private isProfileNameChanged(fanProfile: string): boolean {
+        return (
+            this.previousFanProfile?.name !== fanProfile ||
+            this.previousFanProfile === undefined
+        );
+    }
+
+    private updateFanLogic(): void {
+        const fanProfile = this.activeProfile.fan.fanProfile;
+        const isCustomProfile = fanProfile === "Custom";
+        const isCustomProfileChanged = this.isCustomProfileChanged();
+        const isMinMaxOffsetChanged = this.isMinMaxOffsetChanged();
+
+        if (
+            (isCustomProfile && !isCustomProfileChanged) ||
+            (!isCustomProfile && !isMinMaxOffsetChanged)
+        ) {
+            return;
+        }
+
+        const isProfileNameChanged = this.isProfileNameChanged(fanProfile);
+
+        if (
+            isProfileNameChanged ||
+            isCustomProfileChanged ||
+            isMinMaxOffsetChanged
+        ) {
+            const currentFanProfile = isCustomProfile
+                ? this.getCurrentCustomProfile()
+                : this.tccd.getCurrentFanProfile(this.activeProfile);
+
+            this.setFanProfileValues(currentFanProfile);
+            this.setPreviousValues(currentFanProfile);
+        }
     }
 
     private fallbackFanControl(): void {
