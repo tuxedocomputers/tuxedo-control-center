@@ -236,14 +236,6 @@ export class FanControlWorker extends DaemonWorker {
         const isCustomProfile = fanProfile === "Custom";
         const isCustomProfileChanged = this.isCustomProfileChanged();
         const isMinMaxOffsetChanged = this.isMinMaxOffsetChanged();
-
-        if (
-            (isCustomProfile && !isCustomProfileChanged) ||
-            (!isCustomProfile && !isMinMaxOffsetChanged)
-        ) {
-            return;
-        }
-
         const isProfileNameChanged = this.isProfileNameChanged(fanProfile);
 
         if (
