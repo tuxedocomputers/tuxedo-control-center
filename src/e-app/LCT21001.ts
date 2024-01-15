@@ -155,7 +155,7 @@ export class LCT21001 {
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
             } catch (err) {
-                await blDevice.disconnect();
+                await blDevice.cleanup();
                 continue;
             }
             const info = new DeviceInfo();
@@ -164,7 +164,7 @@ export class LCT21001 {
             try {
                 info.rssi = parseInt(await blDevice.getRSSI());
             } catch (err) {
-                await blDevice.disconnect();
+                await blDevice.cleanup();
                 continue;
             }
 
@@ -174,7 +174,7 @@ export class LCT21001 {
                 info.name = '';
             }
 
-            await blDevice.disconnect();
+            await blDevice.cleanup();
 
             if (info.name.toLowerCase().indexOf('lct21001') !== -1) {
                 deviceInfo.push(info);
