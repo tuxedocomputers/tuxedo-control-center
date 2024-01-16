@@ -1,11 +1,20 @@
 # Changelog
 
+## [2.1.3] - 2024-01-16
+### Added
+- Support for Aquaris Gen6
+
+### Fixed
+- Custom fan mode. Fixes certain cases where custom fan table did not
+  get applied, throwing errors in log, etc.
+- Disconnection of other bluetooth devices while scanning for Aquaris.
+
 ## [2.1.2] - 2023-12-21
-## Added
+### Added
 - Support for Sirius keyboard backlight
 - Support for Sirius system profiles
 
-## Fixed
+### Fixed
 - Issue on tccd start causing one thread to get stuck on full load blocking the initialization for an extended amount of time
 - .Xauthority file not found causing excessive tccd log output
 
