@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -39,6 +39,11 @@ export enum PumpVoltage {
     V8 = 0x03
 }
 
+export enum LCTDeviceModel {
+    LCT21001 = 'LCT21001',
+    LCT22002 = 'LCT22002',
+}
+
 export class DeviceInfo {
     uuid: string;
     name: string;
@@ -68,7 +73,22 @@ export class LCT21001 {
     private uartTx: NodeBle.GattCharacteristic | undefined;
     private destroy: (() => any) | undefined;
 
+    private connectedModel: LCTDeviceModel | undefined;
+
     constructor() {}
+
+    public getConnectedModel(): LCTDeviceModel | undefined {
+        return this.connectedModel;
+    }
+
+    private async deviceModelFromName(name: string): Promise<LCTDeviceModel | undefined> {
+        for (const model of Object.values(LCTDeviceModel)) {
+            if (name.toLowerCase().includes(model.toLowerCase())) {
+                return LCTDeviceModel[model];
+            }
+        }
+        return undefined;
+    }
 
     /**
      * Initialize bluetooth communication and attempt to connect to device
@@ -76,10 +96,16 @@ export class LCT21001 {
     async connect(deviceUUID: string) {
         this.device = await this.adapter.getDevice(deviceUUID);
 
-        let rssi;
+        let rssi, deviceName: string;
         try { rssi = await this.device.getRSSI(); } catch (err) {}
         if (rssi === undefined) {
             throw Error('connect(): device appears offline/unavailable');
+        }
+
+        try {
+            deviceName = await this.device.getName();
+        } catch (err) {
+            throw Error('connect(): failed reading name');
         }
 
         const connectionTimeout = sleep(5000, 'timeout');
@@ -96,6 +122,8 @@ export class LCT21001 {
         const uartService = await gattServer.getPrimaryService(LCT21001.NORDIC_UART_SERVICE_UUID);
         this.uartTx = await uartService.getCharacteristic(LCT21001.NORDIC_UART_CHAR_TX);
         this.uartRx = await uartService.getCharacteristic(LCT21001.NORDIC_UART_CHAR_RX);
+
+        this.connectedModel = await this.deviceModelFromName(deviceName);
     }
 
     /**
@@ -108,6 +136,7 @@ export class LCT21001 {
             try { await this.writeReset(); } catch(err) {}
             try { await this.device.disconnect(); } catch (err) {}
             this.device = undefined;
+            this.connectedModel = undefined;
         }
     }
 
@@ -176,7 +205,8 @@ export class LCT21001 {
 
             await blDevice.cleanup();
 
-            if (info.name.toLowerCase().indexOf('lct21001') !== -1) {
+            const model = await this.deviceModelFromName(info.name);
+            if (model !== undefined) {
                 deviceInfo.push(info);
             }
         };

@@ -26,7 +26,7 @@ import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
-import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
+import { DeviceInfo, LCT21001, LCTDeviceModel, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 import electron = require("electron");
