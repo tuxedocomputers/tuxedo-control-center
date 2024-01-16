@@ -17,9 +17,6 @@ export class PowerStateService {
             ).toString();
 
             if (nvidiaBusPath) {
-                console.log(
-                    `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
-                );
                 return (
                     await this.utils.execCmd(
                         `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
