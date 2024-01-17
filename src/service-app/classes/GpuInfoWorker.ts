@@ -34,7 +34,9 @@ export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: Boolean = false;
     private cpuVendor: string;
 
-    private hwmonPath: string;
+    private amdIGpuHwmonPath: string;
+    private hwmonRetryCount: number = 3;
+
     private intelRAPLGPU: IntelRAPLController = new IntelRAPLController(
         "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
     );
@@ -50,7 +52,7 @@ export class GpuInfoWorker extends DaemonWorker {
     public async onStart(): Promise<void> {
         this.cpuVendor = await this.vendor.getCpuVendor();
         if (this.cpuVendor === "amd") {
-            this.hwmonPath = await this.getHwmonPath();
+            this.amdIGpuHwmonPath = await this.getAmdIGpuHwmonPath();
         } else if (this.cpuVendor === "intel") {
             this.powerWorker = new PowerController(this.intelRAPLGPU);
         }
@@ -103,27 +105,38 @@ export class GpuInfoWorker extends DaemonWorker {
         return this.powerWorker.getCurrentPower();
     }
 
-    private async getHwmonPath(): Promise<string | undefined> {
+    private async getAmdIGpuHwmonPath(): Promise<string | undefined> {
         return await execCommand(
             "grep -rl '^amdgpu$' /sys/class/hwmon/*/name | sed 's|/name$||'"
         );
     }
 
     async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
-        const hwmonPath = this.hwmonPath;
-        const devicePath = "/sys/class/drm/card0/device/";
+        let amdIGpuHwmonPath: string;
 
-        if (!hwmonPath) {
+        if (this.amdIGpuHwmonPath) {
+            amdIGpuHwmonPath = this.amdIGpuHwmonPath;
+        }
+
+        if (!this.amdIGpuHwmonPath && this.hwmonRetryCount > 0) {
+            this.hwmonRetryCount -= 1;
+            amdIGpuHwmonPath = this.amdIGpuHwmonPath =
+                await this.getAmdIGpuHwmonPath();
+        }
+
+        if (!amdIGpuHwmonPath) {
             return iGpuValues;
         }
 
         const amdProperties = {
-            temp: new SysFsPropertyInteger(path.join(hwmonPath, "temp1_input")),
+            temp: new SysFsPropertyInteger(
+                path.join(amdIGpuHwmonPath, "temp1_input")
+            ),
             cur_freq: new SysFsPropertyInteger(
-                path.join(hwmonPath, "freq1_input")
+                path.join(amdIGpuHwmonPath, "freq1_input")
             ),
             max_freq: new SysFsPropertyString(
-                path.join(devicePath, "pp_dpm_sclk")
+                path.join(amdIGpuHwmonPath, "device/pp_dpm_sclk")
             ),
         };
 
