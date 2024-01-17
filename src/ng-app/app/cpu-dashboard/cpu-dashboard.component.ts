@@ -39,6 +39,7 @@ import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
 import { AvailabilityService } from "../availability.service";
+import { ElectronService } from "ngx-electron";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -111,7 +112,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         public compat: CompatibilityService,
         private vendor: VendorService,
         private power: PowerStateService,
-        public availability: AvailabilityService
+        public availability: AvailabilityService,
+        private electron: ElectronService
     ) {}
 
     public async ngOnInit(): Promise<void> {
@@ -120,6 +122,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.dashboardVisibility = document.visibilityState == "visible";
+
+        // not instantly showing window to give enough time to load window
+        setTimeout(async () => {
+            this.electron.ipcRenderer.send("show-tcc-window");
+        }, 200);
     }
 
     private setValuesFromRoute() {
