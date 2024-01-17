@@ -29,25 +29,31 @@ import * as path from "path";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 import { PowerController } from "../../common/classes/PowerController";
 import { VendorService } from "../../common/classes/Vendor.service";
-import { execCommandAsync } from "../../common/classes/Utils";
+import {
+    amdIGpuDeviceIdString,
+    intelIGpuDeviceIdString,
+} from "../../common/classes/DeviceIDs";
+import { execCommandAsync, countLines } from "../../common/classes/Utils";
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: Boolean = false;
     private cpuVendor: string;
 
     private amdIGpuHwmonPath: string;
-    private hwmonRetryCount: number = 3;
 
-    private intelRAPLGPU: IntelRAPLController = new IntelRAPLController(
+    private intelIGpuDrmPath: string;
+    private intelRAPLGpu: IntelRAPLController = new IntelRAPLController(
         "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
     );
-    private powerWorker: PowerController;
+    private intelPowerWorker: PowerController;
+
+    private hwmonRetryCount: number = 3;
 
     constructor(
         public tccd: TuxedoControlCenterDaemon,
         private vendor: VendorService
     ) {
-        super(2000, tccd);
+        super(2500, tccd);
     }
 
     public async onStart(): Promise<void> {
@@ -55,10 +61,11 @@ export class GpuInfoWorker extends DaemonWorker {
         if (this.cpuVendor === "amd") {
             this.amdIGpuHwmonPath = await this.getAmdIGpuHwmonPath();
         } else if (this.cpuVendor === "intel") {
-            this.powerWorker = new PowerController(this.intelRAPLGPU);
+            this.intelPowerWorker = new PowerController(this.intelRAPLGpu);
+            this.intelIGpuDrmPath = await this.getIntelIGpuDrmPath();
         }
 
-        this.isNvidiaSmiInstalled = await isNvidiaSmiInstalled();
+        this.isNvidiaSmiInstalled = await this.checkNvidiaSmiInstalled();
         this.onWork();
     }
 
@@ -68,23 +75,40 @@ export class GpuInfoWorker extends DaemonWorker {
             this.getDGPUValues();
         } else {
             this.tccd.dbusData.iGpuInfoValuesJSON = JSON.stringify(
-                getDefaultValuesIGpu()
+                this.getDefaultValuesIGpu()
             );
             this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(
-                getDefaultValuesDGpu()
+                this.getDefaultValuesDGpu()
             );
         }
     }
 
     public onExit(): void {}
 
-    getIntelIGpuValues(iGpuValues: IiGpuInfo): IiGpuInfo {
+    private async getIntelIGpuDrmPath(): Promise<string | undefined> {
+        const intelIGpuDevices = await execCommandAsync(
+            `grep -lP '${intelIGpuDeviceIdString}' /sys/bus/pci/devices/*/drm/card*/device/uevent | sed 's|/device/uevent$||'`
+        );
+        const amountIntelIGpuDevices = countLines(intelIGpuDevices);
+
+        if (amountIntelIGpuDevices === 1) {
+            return intelIGpuDevices;
+        }
+
+        return undefined;
+    }
+
+    async getIntelIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
+        if (!this.intelIGpuDrmPath) {
+            return iGpuValues;
+        }
+
         const intelProperties = {
             cur_freq: new SysFsPropertyInteger(
-                "/sys/class/drm/card0/gt_act_freq_mhz"
+                path.join(this.intelIGpuDrmPath, "gt_act_freq_mhz")
             ),
             max_freq: new SysFsPropertyInteger(
-                "/sys/class/drm/card0/gt_RP0_freq_mhz"
+                path.join(this.intelIGpuDrmPath, "gt_RP0_freq_mhz")
             ),
         };
 
@@ -103,13 +127,20 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private getCurrentPower(): number {
-        return this.powerWorker.getCurrentPower();
+        return this.intelPowerWorker.getCurrentPower();
     }
 
     private async getAmdIGpuHwmonPath(): Promise<string | undefined> {
-        return await execCommandAsync(
-            "grep -rl '^amdgpu$' /sys/class/hwmon/*/name | sed 's|/name$||'"
+        const amdIGpuDevices = await execCommandAsync(
+            `grep -lP '${amdIGpuDeviceIdString}' /sys/class/hwmon/*/device/uevent | sed 's|/device/uevent$||'`
         );
+        const amountAmdIGpuDevices = countLines(amdIGpuDevices);
+
+        if (amountAmdIGpuDevices === 1) {
+            return amdIGpuDevices;
+        }
+
+        return undefined;
     }
 
     async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
@@ -153,7 +184,7 @@ export class GpuInfoWorker extends DaemonWorker {
             const maxFreqValue = amdProperties.max_freq.readValueNT();
 
             iGpuValues.coreFrequency = curFreqValue / 1000000;
-            iGpuValues.maxCoreFrequency = parseMaxAmdFreq(maxFreqValue);
+            iGpuValues.maxCoreFrequency = this.parseMaxAmdFreq(maxFreqValue);
         }
 
         return iGpuValues;
@@ -161,12 +192,12 @@ export class GpuInfoWorker extends DaemonWorker {
 
     async getIGPUValues(): Promise<void> {
         const iGpuValues: IiGpuInfo = {
-            ...getDefaultValuesIGpu(),
+            ...this.getDefaultValuesIGpu(),
             vendor: this.cpuVendor,
         };
 
         if (iGpuValues.vendor === "intel") {
-            this.getIntelIGpuValues(iGpuValues);
+            await this.getIntelIGpuValues(iGpuValues);
         } else if (iGpuValues.vendor === "amd") {
             await this.getAmdIGpuValues(iGpuValues);
         }
@@ -177,13 +208,13 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private async getDGPUValues(): Promise<void> {
         if (!this.isNvidiaSmiInstalled) {
-            this.isNvidiaSmiInstalled = await isNvidiaSmiInstalled();
+            this.isNvidiaSmiInstalled = await this.checkNvidiaSmiInstalled();
             return;
         }
 
         const dGpuPowerValues = this.tccd.dbusData.d0MetricsUsage
-            ? await getDGpuPowerValues()
-            : getDefaultValuesDGpu();
+            ? await this.getDGpuPowerValues()
+            : this.getDefaultValuesDGpu();
 
         const dGpuInfo: IdGpuInfo = {
             coreFrequency: dGpuPowerValues.coreFrequency,
@@ -196,81 +227,83 @@ export class GpuInfoWorker extends DaemonWorker {
 
         this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(dGpuInfo);
     }
-}
 
-function parseMaxAmdFreq(s: string): number {
-    const mhzNumbers = s.match(/\d+Mhz/g).map((str) => parseInt(str));
-    return Math.max(...mhzNumbers);
-}
+    private parseMaxAmdFreq(s: string): number {
+        const mhzNumbers = s.match(/\d+Mhz/g).map((str) => parseInt(str));
+        return Math.max(...mhzNumbers);
+    }
 
-function isNvidiaSmiInstalled(): Promise<Boolean> {
-    return new Promise((resolve, reject) => {
-        exec("which nvidia-smi", (err, stdout, stderr) => {
-            if (err || stderr) {
-                resolve(false);
-            } else {
-                resolve(stdout.trim().length > 0);
-            }
+    private checkNvidiaSmiInstalled(): Promise<Boolean> {
+        return new Promise((resolve, reject) => {
+            exec("which nvidia-smi", (err, stdout, stderr) => {
+                if (err || stderr) {
+                    resolve(false);
+                } else {
+                    resolve(stdout.trim().length > 0);
+                }
+            });
         });
-    });
-}
-
-async function getDGpuPowerValues(): Promise<IdGpuInfo> {
-    const command =
-        "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
-
-    try {
-        const stdout = await execCommandAsync(command);
-        const gpuInfo = parseOutput(stdout);
-        return gpuInfo;
-    } catch (error) {
-        return getDefaultValuesDGpu();
     }
-}
 
-function parseOutput(output: string): IdGpuInfo {
-    const [
-        powerDraw,
-        maxPowerLimit,
-        enforcedPowerLimit,
-        coreFrequency,
-        maxCoreFrequency,
-    ] = output.split(",").map((value) => parseNumberWithMetric(value.trim()));
+    private async getDGpuPowerValues(): Promise<IdGpuInfo> {
+        const command =
+            "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
 
-    return {
-        powerDraw,
-        maxPowerLimit,
-        enforcedPowerLimit,
-        coreFrequency,
-        maxCoreFrequency,
-    };
-}
-
-function parseNumberWithMetric(value: string): number {
-    const numberRegex = /(\d+(\.\d+)?)/;
-    const match = numberRegex.exec(value);
-    if (match !== null) {
-        return Number(match[0]);
+        try {
+            const stdout = await execCommandAsync(command);
+            const gpuInfo = this.parseOutput(stdout);
+            return gpuInfo;
+        } catch (error) {
+            return this.getDefaultValuesDGpu();
+        }
     }
-    return -1;
-}
 
-function getDefaultValuesDGpu(): IdGpuInfo {
-    return {
-        powerDraw: -1,
-        maxPowerLimit: -1,
-        enforcedPowerLimit: -1,
-        coreFrequency: -1,
-        maxCoreFrequency: -1,
-    };
-}
+    private parseOutput(output: string): IdGpuInfo {
+        const [
+            powerDraw,
+            maxPowerLimit,
+            enforcedPowerLimit,
+            coreFrequency,
+            maxCoreFrequency,
+        ] = output
+            .split(",")
+            .map((value) => this.parseNumberWithMetric(value.trim()));
 
-function getDefaultValuesIGpu(): IiGpuInfo {
-    return {
-        vendor: "unknown",
-        temp: -1,
-        coreFrequency: -1,
-        maxCoreFrequency: -1,
-        powerDraw: -1,
-    };
+        return {
+            powerDraw,
+            maxPowerLimit,
+            enforcedPowerLimit,
+            coreFrequency,
+            maxCoreFrequency,
+        };
+    }
+
+    private parseNumberWithMetric(value: string): number {
+        const numberRegex = /(\d+(\.\d+)?)/;
+        const match = numberRegex.exec(value);
+        if (match !== null) {
+            return Number(match[0]);
+        }
+        return -1;
+    }
+
+    private getDefaultValuesDGpu(): IdGpuInfo {
+        return {
+            powerDraw: -1,
+            maxPowerLimit: -1,
+            enforcedPowerLimit: -1,
+            coreFrequency: -1,
+            maxCoreFrequency: -1,
+        };
+    }
+
+    private getDefaultValuesIGpu(): IiGpuInfo {
+        return {
+            vendor: "unknown",
+            temp: -1,
+            coreFrequency: -1,
+            maxCoreFrequency: -1,
+            powerDraw: -1,
+        };
+    }
 }
