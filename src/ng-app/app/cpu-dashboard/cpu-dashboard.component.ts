@@ -38,6 +38,7 @@ import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
+import { AvailabilityService } from "../availability.service";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -109,7 +110,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private config: ConfigService,
         public compat: CompatibilityService,
         private vendor: VendorService,
-        private power: PowerStateService
+        private power: PowerStateService,
+        public availability: AvailabilityService
     ) {}
 
     public async ngOnInit(): Promise<void> {

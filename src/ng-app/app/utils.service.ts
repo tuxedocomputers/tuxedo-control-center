@@ -70,21 +70,22 @@ export class UtilsService {
       this.themeClass = new BehaviorSubject(undefined);
     }
 
-  // if return status code is not zero, it will count as an error
-  // grep returning nothing will count as an error
-  public execCmdSync(command: string): Buffer {
-    const data = this.electron.ipcRenderer.sendSync('exec-cmd-sync', command)
+    // if return status code is not zero, it will count as an error
+    // and grep returning nothing will count as an error
+    public execCmdSync(command: string): string {
+        const data = this.electron.ipcRenderer.sendSync(
+            "exec-cmd-sync",
+            command
+        );
 
-    if (data.error) {
-        console.error("Sync Exec CMD failed: ", data.error)
-    }
-    
-    if (data.data) {
-        return Buffer.from(data.data.buffer)
-    }
+        if (data.error) {
+            console.error("Sync Exec CMD failed: ", data.error);
+        }
 
-    return Buffer.from("")
-  }
+        if (data.data) {
+            return Buffer.from(data.data.buffer).toString();
+        }
+    }
 
   public async execCmdAsync(command: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {

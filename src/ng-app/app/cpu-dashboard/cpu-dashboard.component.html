@@ -113,7 +113,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- GPU -->
-                <div *ngIf="primeState !== 'off'">
+                <div *ngIf="(availability.getIGpuAvailable() && !availability.getDGpuAvailable()) 
+                        || (!availability.getIGpuAvailable() && availability.getDGpuAvailable()) 
+                        || (availability.getIGpuAvailable() && availability.getDGpuAvailable() && primeState)">
                     <div class="content-container profile-overview">
                         <div class="column">
                             <div class="title">
@@ -125,7 +127,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
 
-                    <div *ngIf="isX11 && primeState != undefined && primeState != '-1'" class="content-container active-profile">
+                    <div class="content-container active-profile" *ngIf="isX11 && availability.getIGpuAvailable() 
+                            && availability.getDGpuAvailable() && primeState != undefined && primeState != '-1'">
                         <span i18n="@@cDashboardActiveGraphicsMode">Active Graphics Mode:</span>
                         <a mat-button class="link" (click)="gotoSettings()">
                             {{ getPrimeStateLabel(primeState) }}
@@ -134,8 +137,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- iGPU -->
-                <div class="content-container system-monitor-gauges"
-                    *ngIf="(powerState == '-1' && primeState == 'iGPU') || (powerState == '-1' && primeState == '-1') || primeState === 'iGPU'">
+                <div class="content-container system-monitor-gauges" *ngIf="(availability.getIGpuAvailable() 
+                        && !availability.getDGpuAvailable()) || (availability.getIGpuAvailable() 
+                        && availability.getDGpuAvailable() && primeState === 'iGPU')">
                     <div class="tcc-gauge" *ngIf="iGpuVendor == 'amd'"
                         [ngClass]="{'not-available': !compat.hasIGpuTemp }"
                         [matTooltip]="!compat.hasIGpuTemp ? compat.compatibilityMessage: ''">
@@ -186,7 +190,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- dGPU -->
-                <div class="content-container system-monitor-gauges" *ngIf="primeState === 'dGPU'">
+                <div class="content-container system-monitor-gauges" *ngIf="(!availability.getIGpuAvailable() 
+                        && availability.getDGpuAvailable()) || (availability.getIGpuAvailable() 
+                        && availability.getDGpuAvailable() && primeState === 'dGPU')">
                     <div class="tcc-gauge" [ngClass]="{'not-available': !compat.hasDGpuTemp }"
                         [matTooltip]="!compat.hasDGpuTemp ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUTemp" [showValue]="false"
@@ -254,7 +260,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <!-- TABS -->
-                <div class="gauge-tabs" *ngIf="primeState === 'on-demand'">
+                <div class="gauge-tabs"
+                    *ngIf="availability.getIGpuAvailable() && availability.getDGpuAvailable() && (primeState === 'on-demand' || primeState === '-1')">
                     <mat-tab-group mat-align-tabs="center" disablePagination="true">
                         <mat-tab label="Power-saving CPU graphics processor (iGPU)" i18n-label="@@primeSelectIGpu">
                             <div class="content-container system-monitor-gauges">

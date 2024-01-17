@@ -24,6 +24,7 @@ import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AvailabilityService } from '../availability.service';
 
 @Component({
     selector: 'app-global-settings',
@@ -61,6 +62,7 @@ export class GlobalSettingsComponent implements OnInit {
         private tccdbus: TccDBusClientService,
         private router: Router,
         private route: ActivatedRoute,
+        public availability: AvailabilityService
     ) { }
 
     ngOnInit() {
