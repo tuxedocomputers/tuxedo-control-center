@@ -712,8 +712,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private buttonRepeatTimer: NodeJS.Timeout;
     public buttonRepeatDown(action: () => void) {
-        console.log("this: ", this.profileFormGroup.get('fan'))
-
         if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
         const repeatDelayMS = 200;
 
