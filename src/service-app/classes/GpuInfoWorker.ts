@@ -29,6 +29,7 @@ import * as path from "path";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 import { PowerController } from "../../common/classes/PowerController";
 import { VendorService } from "../../common/classes/Vendor.service";
+import { execCommandAsync } from "../../common/classes/Utils";
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: Boolean = false;
@@ -106,7 +107,7 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private async getAmdIGpuHwmonPath(): Promise<string | undefined> {
-        return await execCommand(
+        return await execCommandAsync(
             "grep -rl '^amdgpu$' /sys/class/hwmon/*/name | sed 's|/name$||'"
         );
     }
@@ -219,24 +220,12 @@ async function getDGpuPowerValues(): Promise<IdGpuInfo> {
         "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
 
     try {
-        const stdout = await execCommand(command);
+        const stdout = await execCommandAsync(command);
         const gpuInfo = parseOutput(stdout);
         return gpuInfo;
     } catch (error) {
         return getDefaultValuesDGpu();
     }
-}
-
-async function execCommand(command: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error || stderr) {
-                resolve(undefined);
-            } else {
-                resolve(stdout.trim());
-            }
-        });
-    });
 }
 
 function parseOutput(output: string): IdGpuInfo {

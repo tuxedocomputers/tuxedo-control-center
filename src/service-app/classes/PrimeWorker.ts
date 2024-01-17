@@ -17,9 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec } from "child_process";
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import { execCommandAsync } from "src/common/classes/Utils";
 
 export class PrimeWorker extends DaemonWorker {
     primeSupported: Boolean;
@@ -50,12 +50,12 @@ export class PrimeWorker extends DaemonWorker {
 
     private async checkPrimeSupported() {
         this.primeSupported =
-            (await execCommand("prime-supported /dev/null")) === "yes";
+            (await execCommandAsync("prime-supported /dev/null")) === "yes";
     }
 
     private async checkPrimeStatus() {
         this.tccd.dbusData.primeState = this.transformPrimeStatus(
-            await execCommand("prime-select query")
+            await execCommandAsync("prime-select query")
         );
     }
 
@@ -71,16 +71,4 @@ export class PrimeWorker extends DaemonWorker {
                 return "off";
         }
     }
-}
-
-async function execCommand(command: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                resolve("");
-            } else {
-                resolve(stdout.trim());
-            }
-        });
-    });
 }
