@@ -28,7 +28,6 @@ import { ITccProfile } from "../../common/models/TccProfile";
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
-    private refreshRateSupported: boolean;
     private displayInfoFound: boolean = false;
 
     private activeprofile: ITccProfile;
@@ -75,15 +74,15 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private updateDisplayData(): void {
         this.displayInfo = this.controller.getDisplayModes();
         // check if x11 because of future wayland support
-        this.refreshRateSupported = this.controller.getIsX11();
+        this.tccd.dbusData.isX11 = this.controller.getIsX11();
         if (this.displayInfo === undefined) {
             this.tccd.dbusData.displayModes = undefined;
         } else {
             this.displayInfoFound = true;
             this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
         }
-        this.tccd.dbusData.refreshRateSupported = this.refreshRateSupported;
     }
+
 
     public getActiveDisplayMode(): IDisplayMode {
         if (this.displayInfo === undefined) {
