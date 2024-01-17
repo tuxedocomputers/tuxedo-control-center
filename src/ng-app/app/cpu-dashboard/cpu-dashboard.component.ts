@@ -98,7 +98,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
 
-    public isX11: boolean
+    public isX11: boolean;
 
     constructor(
         private sysfs: SysFsService,
@@ -175,11 +175,14 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribePrimeState(): void {
         this.subscriptions.add(
-            this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
-                if (state) {
+            this.tccdbus.primeState
+                .pipe(
+                    filter((value) => value !== undefined),
+                    first()
+                )
+                .subscribe((state: string) => {
                     this.primeState = state;
-                }
-            })
+                })
         );
     }
 
