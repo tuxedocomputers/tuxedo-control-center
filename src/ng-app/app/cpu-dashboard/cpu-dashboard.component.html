@@ -125,7 +125,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
 
-                    <div *ngIf="primeState != undefined && primeState != '-1'" class="content-container active-profile">
+                    <div *ngIf="isX11 && primeState != undefined && primeState != '-1'" class="content-container active-profile">
                         <span i18n="@@cDashboardActiveGraphicsMode">Active Graphics Mode:</span>
                         <a mat-button class="link" (click)="gotoSettings()">
                             {{ getPrimeStateLabel(primeState) }}

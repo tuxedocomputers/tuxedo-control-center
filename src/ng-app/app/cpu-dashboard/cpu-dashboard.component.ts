@@ -97,6 +97,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
 
+    public isX11: boolean
+
     constructor(
         private sysfs: SysFsService,
         private utils: UtilsService,
@@ -121,6 +123,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private setValuesFromRoute() {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;
+        this.isX11 = data.x11Status;
     }
 
     private initializeEventListeners(): void {
