@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.4] - 2024-01-18
+### Fixed
+- Fan control issue manifesting as missing temp and speed in dashboard
+
 ## [2.1.3] - 2024-01-16
 ### Added
 - Support for Aquaris Gen6
