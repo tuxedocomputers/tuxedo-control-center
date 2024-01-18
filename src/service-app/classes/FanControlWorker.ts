@@ -32,10 +32,12 @@ import { interpolatePointsArray } from "../../common/classes/FanUtils";
 import {
     ITccFanProfile,
     ITccFanTableEntry,
-} from "src/common/models/TccFanTable";
+    customFanPreset,
+} from "../../common/models/TccFanTable";
 import { exec } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
+import { ITccProfile } from "../../common/models/TccProfile";
 
 export class FanControlWorker extends DaemonWorker {
     private fans: Map<number, FanControlLogic>;
@@ -134,6 +136,14 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
+    private getCustomFanCurve(profile: ITccProfile) {
+        if (profile.fan.customFanCurve === undefined) {
+            return customFanPreset;
+        } else {
+            return profile.fan.customFanCurve;
+        }
+    }
+
     private mapLogicToFans(nrFans: number): void {
         this.fans = new Map();
         if (nrFans >= 1) {
@@ -148,7 +158,7 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private getCurrentCustomProfile() {
-        const { customFanCurve } = this.activeProfile.fan;
+        const customFanCurve = this.getCustomFanCurve(this.activeProfile);
         const tableCPU = interpolatePointsArray(customFanCurve.tableCPU);
         const tableGPU = interpolatePointsArray(customFanCurve.tableGPU);
         const tccFanTable = (temp: number, i: number) => ({
@@ -191,7 +201,7 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private setPreviousValues(currentFanProfile: ITccFanProfile): void {
-        const { customFanCurve } = this.activeProfile.fan;
+        const customFanCurve = this.getCustomFanCurve(this.activeProfile);
 
         this.previousCustomCurve = {
             tableCPU: customFanCurve.tableCPU,
