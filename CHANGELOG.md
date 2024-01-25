@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.5] - 2024-01-25
+### Fixed
+- CPU frequency limits not working for devices using amd-pstate-epp cpufreq driver
+
 ## [2.1.4] - 2024-01-18
 ### Fixed
 - Fan control issue manifesting as missing temp and speed in dashboard
