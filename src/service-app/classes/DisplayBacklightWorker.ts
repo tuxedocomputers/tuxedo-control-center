@@ -28,7 +28,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
     private useAutosave = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd);
+        super(3000, "DisplayBacklightWorker", tccd);
     }
 
     /**

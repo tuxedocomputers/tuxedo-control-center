@@ -196,23 +196,21 @@ app.whenReady().then( async () => {
         // Regularly check if running tccd version is different to running gui version
         const tccdVersionCheckInterval = 5000;
         setInterval(async () => {
-            if (await tccDBus.tuxedoWmiAvailable()) {
-                const tccdVersion = await tccDBus.tccdVersion();
-                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                    console.log('Other tccd version detected, restarting..');
-                    process.on('exit', function () {
-                        child_process.spawn(
-                            process.argv[0],
-                            process.argv.slice(1).concat(['--tray']),
-                            {
-                                cwd: process.cwd(),
-                                detached : true,
-                                stdio: "inherit"
-                            }
-                        );
-                    });
-                    process.exit();
-                }
+            const tccdVersion = await tccDBus.tccdVersion();
+            if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                console.log('Other tccd version detected, restarting..');
+                process.on('exit', function () {
+                    child_process.spawn(
+                        process.argv[0],
+                        process.argv.slice(1).concat(['--tray']),
+                        {
+                            cwd: process.cwd(),
+                            detached : true,
+                            stdio: "inherit"
+                        }
+                    );
+                });
+                process.exit();
             }
         }, tccdVersionCheckInterval);
     }
@@ -1458,6 +1456,12 @@ ipcMain.handle('is-available-dbus', async (event, chargeType) => {
     });
 });
 
+ipcMain.handle('get-fan-hwmon-available-dbus', async (event, chargeType) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(tccDBus.fanHwmonAvailable());
+    });
+});
+
 ipcMain.handle('get-dgpu-power-state-power', async (event, arg) => {
     return getDGpuPowerState();
 });
@@ -1474,22 +1478,30 @@ async function execCMD(cmd): Promise<string> {
 }
 
 async function getDGpuPowerState(): Promise<string> {
-    const nvidiaBusPath = (
-        await execCMD(
-            "grep -l 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
-        )
-    ).toString();
+        try {
+            const nvidiaBusPath = (
+                await execCMD(
+                    "grep -lx 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
+                )
+            ).toString();
 
-    if (nvidiaBusPath) {
-        return (
-            await execCMD(
-                `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
-            )
-        )
-            .toString()
-            .trim();
-    }
-    return "-1";
+            if (nvidiaBusPath) {
+                console.log(
+                    `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
+                );
+                return (
+                    await execCMD(
+                        `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
+                    )
+                )
+                    .toString()
+                    .trim();
+            }
+        } catch (err) {
+            console.log("Failed to get power state of GPU: ", err);
+        }
+
+        return "-1";
 }
 
 

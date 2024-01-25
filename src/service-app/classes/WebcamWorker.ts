@@ -24,7 +24,7 @@ import { TuxedoIOAPI, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 export class WebcamWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(2000, tccd);
+        super(2000, "WebCamWorker", tccd);
     }
 
     public onStart(): void {

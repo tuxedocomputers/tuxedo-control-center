@@ -31,7 +31,7 @@ export class CpuWorker extends DaemonWorker {
     private readonly preferredPerformanceAcpiFreqGovernors = [ 'performance' ];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, tccd);
+        super(10000, "CpuWorker", tccd);
         this.cpuCtrl = new CpuController(this.basePath);
     }
 

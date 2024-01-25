@@ -25,7 +25,7 @@ import { fileOK } from '../../common/classes/Utils';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(100000, tccd);
+        super(100000, "YCbCr420WorkaroundWorker", tccd);
 
         if (this.tccd.settings.ycbcr420Workaround.length > 0) {
             let card: number = 0;

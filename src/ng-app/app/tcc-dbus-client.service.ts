@@ -38,6 +38,7 @@ export class TccDBusClientService implements OnDestroy {
 
   public available = new Subject<boolean>();
   public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
+  public fanHwmonAvailable = new BehaviorSubject<boolean>(true);
   public dataLoaded = false;
   public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
@@ -121,26 +122,9 @@ export class TccDBusClientService implements OnDestroy {
     if (fanDataJSON) {
         this.fanData.next(JSON.parse(fanDataJSON));
     }
-    // let cpu = new FanData();
-    // let gpu1 = new FanData();
-    // let gpu2 = new FanData();
-    // try 
-    // {
-    //     cpu = JSON.parse(await this.tccDBusInterface.getFanDataCPU()),
-    //     gpu1 = JSON.parse(await this.tccDBusInterface.getFanDataGPU1()),
-    //     gpu2 = JSON.parse(await this.tccDBusInterface.getFanDataGPU2())
-    // }
-    // catch(err)
-    // {
-    //     console.log(err);
-    // }
-    // const fanData: IDBusFanData = {
-    //     cpu: cpu,
-    //     gpu1: gpu1,
-    //     gpu2: gpu2
-    //   };
-    //   this.fanData.next(fanData);
 
+    const fanHwmonAvailability = await this.tccDBusInterface.fanHwmonAvailable();
+    this.fanHwmonAvailable.next(fanHwmonAvailability)
     const dGpuInfoValuesJSON = await this.tccDBusInterface.getDGpuInfoValuesJSON();
     const iGpuInfoValuesJSON = await this.tccDBusInterface.getIGpuInfoValuesJSON();
 

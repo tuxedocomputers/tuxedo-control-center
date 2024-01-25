@@ -24,7 +24,7 @@ import { TuxedoIOAPI as ioAPI, TDPInfo} from '../../native-lib/TuxedoIOAPI';
 export class ODMPowerLimitWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(5000, tccd);
+        super(5000, "ODMPowerlimitWorker", tccd);
     }
 
     public onStart(): void {

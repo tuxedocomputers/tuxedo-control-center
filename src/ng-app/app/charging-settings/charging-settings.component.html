@@ -85,8 +85,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             color="primary"
             [disabled]="chargingThresholdsProgress">
             <div class="inner-label">
-                <header>Full capacity</header>
-                <ng-container>This is the default setting. Highest capacity for best possible runtimes.</ng-container>
+                <header i18n="@@chargingThresholdsLabelFullCapacity">Full capacity</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionFullCapacity">This is the default setting. Highest capacity for best possible runtimes.</ng-container>
             </div>
         </mat-radio-button>
         <mat-radio-button
@@ -94,8 +94,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             color="primary"
             [disabled]="chargingThresholdsProgress">
             <div class="inner-label">
-                <header>Reduced capacity</header>
-                <ng-container>Reduced battery capacity (~90 %) for better battery lifespan.</ng-container>
+                <header i18n="@@chargingThresholdsLabelReducedCapacity">Reduced capacity</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionReducedCapacity">Reduced battery capacity (~90 %) for better battery lifespan.</ng-container>
             </div>
         </mat-radio-button>
         <mat-radio-button
@@ -103,8 +103,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             color="primary"
             [disabled]="chargingThresholdsProgress">
             <div class="inner-label">
-                <header>Stationary use</header>
-                <ng-container>Very significant reduced battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</ng-container>
+                <header i18n="@@chargingThresholdsLabelStationary">Stationary use</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionStationary">Very significant reduced battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.</ng-container>
             </div>
         </mat-radio-button>
         <mat-radio-button
@@ -112,15 +112,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             color="primary"
             [disabled]="chargingThresholdsProgress">
             <div class="inner-label">
-                <header>Custom</header>
-                <ng-container>Manually set battery charging thresholds.</ng-container>
+                <header i18n="@@chargingThresholdsLabelCustom">Custom</header>
+                <ng-container i18n="@@chargingThresholdsDescriptionCustom">Manually set battery charging thresholds.</ng-container>
             </div>
         </mat-radio-button>
     </mat-radio-group>
 
     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="edit-grid">
         <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
-            <header>Start threshold</header>
+            <header i18n="@@chargingThresholdsLabelStartThreshold">Start threshold</header>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="value">
@@ -142,7 +142,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-grid-tile>
 
         <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
-            <header>End threshold</header>
+            <header i18n="@@chargingThresholdsLabelEndThreshold">End threshold</header>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="value">

@@ -44,7 +44,7 @@ export class GpuInfoWorker extends DaemonWorker {
         public tccd: TuxedoControlCenterDaemon,
         private vendor: VendorService
     ) {
-        super(2000, tccd);
+        super(2000, "GpuInfoWorker", tccd);
     }
 
     public async onStart(): Promise<void> {

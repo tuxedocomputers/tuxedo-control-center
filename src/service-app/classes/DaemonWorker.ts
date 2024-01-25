@@ -24,6 +24,7 @@ export abstract class DaemonWorker {
 
     constructor(
         public readonly timeout: number,
+        public readonly name: string,
         // Also inject the state (i.e configs etc..)
         protected tccd: TuxedoControlCenterDaemon) {}
 

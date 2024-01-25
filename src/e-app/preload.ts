@@ -134,7 +134,8 @@ contextBridge.exposeInMainWorld(
         getChargeType: () => ipcRenderer.invoke('get-charge-type-dbus'),
         setChargeStartThreshold: (newValue) => ipcRenderer.invoke('set-charge-start-threshold-dbus', newValue),
         setChargeEndThreshold: (newValue) => ipcRenderer.invoke('set-charge-end-threshold-dbus', newValue),
-        setChargeType: (chargeType) => ipcRenderer.invoke('set-charge-type-dbus', chargeType)
+        setChargeType: (chargeType) => ipcRenderer.invoke('set-charge-type-dbus', chargeType),
+        fanHwmonAvailable: () => ipcRenderer.invoke('get-fan-hwmon-available-dbus'),
     }
 );
 

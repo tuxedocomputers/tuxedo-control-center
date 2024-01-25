@@ -34,7 +34,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private activeprofile: ITccProfile;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd);
+        super(3000, "DisplayRefreshrateWorker", tccd);
         this.controller = new XDisplayRefreshRateController();
     }
 

@@ -34,7 +34,7 @@ export class CpuPowerWorker extends DaemonWorker {
     private powerWorker: PowerController;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(2000, tccd);
+        super(2000, "CpuPowerWorker", tccd);
     }
 
     public onStart(): void {

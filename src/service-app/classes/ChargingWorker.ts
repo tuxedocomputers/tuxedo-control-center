@@ -28,7 +28,7 @@ export class ChargingWorker extends DaemonWorker {
     private chargingPriority = new ChargingPriorityController('/sys/devices/platform/tuxedo_keyboard/charging_priority');
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, tccd);
+        super(10000, "ChargingWorker", tccd);
     }
 
     public onStart(): void {

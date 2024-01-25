@@ -90,6 +90,7 @@ export interface IPC extends EventEmitter {
     setChargeStartThreshold: (newValue: number) => Promise<boolean>,
     setChargeEndThreshold: (newValue: number) => Promise<boolean>,
     setChargeType: (chargeType) => Promise<boolean>,
+    fanHwmonAvailable: () => Promise<boolean>,
 
   }
 

@@ -33,7 +33,7 @@ export class TccDBusService extends DaemonWorker {
     private started = false;
 
     constructor(tccd: TuxedoControlCenterDaemon, private dbusData: TccDBusData) {
-        super(1500, tccd);
+        super(1500, "TccDbusServiceWorker", tccd);
 
         const options: TccDBusOptions = new TccDBusOptions();
         options.triggerStateCheck = async () => { this.tccd.triggerStateCheck(); }

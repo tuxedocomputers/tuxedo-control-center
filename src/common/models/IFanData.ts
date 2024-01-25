@@ -21,7 +21,7 @@ export class dbusVariant<T>
 export class FanData {
     public speed: TimeData;
     public temp: TimeData;
-    constructor(timestamp = 0, speed = 0, temp = 0)
+    constructor(timestamp = -1, speed = -1, temp = -1)
     {
         this.speed = new TimeData(timestamp, speed);
         this.temp = new TimeData(timestamp, temp);

@@ -40,6 +40,7 @@ export class KeyboardBacklightListener {
 
     private async init() {
         this.updateKeyboardBacklightCapabilities();
+        
         if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
             console.log("Could not find keyboard backlight. Retrying...");
             --this.onStartRetryCount;
@@ -47,28 +48,34 @@ export class KeyboardBacklightListener {
             return;
         }
 
-        // Init state in settings if not yet done or anything is wonky
-        if (this.keyboardBacklightCapabilities.zones != this.tccd.settings.keyboardBacklightStates.length) {
-            this.tccd.settings.keyboardBacklightStates = []
-            for (let i: number = 0; i < this.keyboardBacklightCapabilities.zones ; ++i) {
-                this.tccd.settings.keyboardBacklightStates[i] = {
-                    mode: this.keyboardBacklightCapabilities.modes[0],
-                    brightness: this.keyboardBacklightCapabilities.maxBrightness,
-                    red: this.keyboardBacklightCapabilities.maxRed,
-                    green: this.keyboardBacklightCapabilities.maxGreen,
-                    blue: this.keyboardBacklightCapabilities.maxBlue
+        if (this.keyboardBacklightCapabilities.zones !== undefined) {
+            // Init state in settings if not yet done or anything is wonky
+            if (this.keyboardBacklightCapabilities.zones != this.tccd.settings.keyboardBacklightStates.length) {
+                this.tccd.settings.keyboardBacklightStates = []
+                for (let i: number = 0; i < this.keyboardBacklightCapabilities.zones ; ++i) {
+                    this.tccd.settings.keyboardBacklightStates[i] = {
+                        mode: this.keyboardBacklightCapabilities.modes[0],
+                        brightness: this.keyboardBacklightCapabilities.maxBrightness,
+                        red: this.keyboardBacklightCapabilities.maxRed,
+                        green: this.keyboardBacklightCapabilities.maxGreen,
+                        blue: this.keyboardBacklightCapabilities.maxBlue
+                    }
                 }
+                this.tccd.config.writeSettingsAsync(this.tccd.settings);
             }
-            this.tccd.config.writeSettingsAsync(this.tccd.settings);
+
+            await this.initUPower();
+            await this.initSysFSListener();
+            this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(
+                this.keyboardBacklightStatesNewJSONSubscriptionHandler.bind(this));
+
+            if (this.tccd.settings.keyboardBacklightControlEnabled) {
+                this.setKeyboardBacklightStates(this.tccd.settings.keyboardBacklightStates, true, false, true);
+            }
         }
 
-        await this.initUPower();
-        await this.initSysFSListener();
-        this.tccd.dbusData.keyboardBacklightStatesNewJSON.subscribe(
-            this.keyboardBacklightStatesNewJSONSubscriptionHandler.bind(this));
-
-        if (this.tccd.settings.keyboardBacklightControlEnabled) {
-            this.setKeyboardBacklightStates(this.tccd.settings.keyboardBacklightStates, true, false, true);
+        if (this.keyboardBacklightCapabilities.zones === undefined) {
+            console.log("Failed to configure keyboard backlight.");
         }
     }
 
