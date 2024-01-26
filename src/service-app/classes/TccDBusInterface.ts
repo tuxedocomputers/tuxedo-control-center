@@ -70,6 +70,7 @@ export class FanData {
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public device: string;
     public displayModes: string;
     public refreshRateSupported: boolean;
     public tuxedoWmiAvailable: boolean;
@@ -122,6 +123,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
+    GetDeviceName() { return this.data.device; }
     GetDisplayModesJSON() { return this.data.displayModes; }
     GetRefreshRateSupported() { return this.data.refreshRateSupported; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -240,6 +242,7 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        GetDevice: {outSignature: 's'},
         GetDisplayModesJSON: {outSignature: 's'},
         GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },

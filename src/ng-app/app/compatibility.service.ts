@@ -23,6 +23,8 @@ import { SysFsService } from "./sys-fs.service";
 import { TccDBusClientService } from "./tcc-dbus-client.service";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { TimeData } from "src/service-app/classes/TccDBusInterface";
+import { deviceSystemProfileInfo, SystemProfileInfo } from "src/common/models/ISystemProfileInfo";
+import { TUXEDODevice } from "src/common/models/DefaultProfiles";
 
 @Injectable({
     providedIn: "root",
@@ -32,7 +34,8 @@ export class CompatibilityService {
 
     constructor(
         private tccDbus: TccDBusClientService,
-        private sysfs: SysFsService
+        private sysfs: SysFsService,
+        private device: TUXEDODevice,
     ) {
         // TODO: Manual read until general device id get merged
         const dmi = new DMIController("/sys/class/dmi/id");
@@ -64,6 +67,11 @@ export class CompatibilityService {
             showAquarisMenu = true;
         }
         this.hasAquarisValue = showAquarisMenu;
+    }
+
+    get SystemProfileInfo(): SystemProfileInfo
+    {
+        return deviceSystemProfileInfo.get(this.tccDbus.device);
     }
 
     get hasFanInfo(): boolean {

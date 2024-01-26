@@ -255,7 +255,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
-
+        this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
