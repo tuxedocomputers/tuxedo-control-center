@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec } from "child_process";
+import { exec, execSync } from "child_process";
 import * as fs from "fs";
 
 export function getDirectories(source: string) {
@@ -98,16 +98,27 @@ export function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// seperate exec cmd functionality because tccd can not access electron
 export async function execCommandAsync(command: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(command, (error, stdout, stderr) => {
             if (error) {
+                console.error("Async Exec CMD failed: ", error);
                 resolve("");
             } else {
                 resolve(stdout.trim());
             }
         });
     });
+}
+
+export function execCommandSync(command: string): string {
+    try {
+        return execSync(command).toString();
+    } catch (err) {
+        console.error("Sync Exec CMD failed: ", err);
+        return undefined;
+    }
 }
 
 export function countLines(input: string): number {

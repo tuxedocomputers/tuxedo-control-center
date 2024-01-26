@@ -82,7 +82,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public gaugeIGpuFreq: number = 0;
     public iGpuTemp: number = 0;
     public iGpuFreq: number = 0;
-    public iGpuVendor: string = "unknown";
+    public cpuVendor: string = "unknown";
     public iGpuPower: number = 0;
 
     public activeProfile: ITccProfile;
@@ -288,7 +288,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.gaugeIGpuFreq =
             maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.iGpuFreq = coreFrequency;
-        this.iGpuVendor = await this.vendor.getCpuVendor();
+        this.cpuVendor = await this.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
     }
 

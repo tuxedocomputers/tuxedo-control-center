@@ -597,3 +597,12 @@ const amdVendorId = "1002";
 export const amdIGpuDeviceIdString = amdIGpuDeviceIds
     .map((id) => `${amdVendorId}:${id}`)
     .join("|");
+
+const amdDGpuDeviceIds = [
+    // 7600M XT
+    "7480",
+];
+
+export const amdDGpuDeviceIdString = amdDGpuDeviceIds
+    .map((id) => `${amdVendorId}:${id}`)
+    .join("|");
