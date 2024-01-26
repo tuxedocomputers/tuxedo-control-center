@@ -16,25 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme, shell, IpcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, dialog, screen, powerSaveBlocker, nativeTheme, shell, IpcMain, powerMonitor } from 'electron';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as https from 'https';
 import { TccDBusController } from '../common/classes/TccDBusController';
-import { ITccProfile, TccProfile, generateProfileId } from '../common/models/TccProfile';
+import { ITccProfile, TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, AquarisClientAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
-import { resolve } from 'path';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
-import { FanData } from '../common/models/IFanData';
-import { TDPInfo } from '../native-lib/TuxedoIOAPI';
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../common/classes/DBusDisplayBrightnessGnome';
 import { DriveController } from '../common/classes/DriveController';
 import { IDrive } from '../common/models/IDrive';
@@ -241,6 +237,14 @@ app.whenReady().then( async () => {
 app.on('second-instance', (event, cmdLine, workingDir) => {
     // If triggered by a second instance, find/show/start GUI
     activateTccGui();
+});
+
+app.on("ready", () => {
+    powerMonitor.on("resume", () => {
+        if (tccWindow) {
+            tccWindow.webContents.send("wakeup-from-suspend");
+        }
+    });
 });
 
 app.on('will-quit', async (event) => {

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,7 +18,7 @@
  */
 import * as path from 'path';
 import { LogicalCpuController, ScalingDriver } from './LogicalCpuController';
-import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean } from './SysFsProperties';
+import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean, SysFsPropertyString } from './SysFsProperties';
 import { IntelPstateController } from './IntelPStateController';
 import { findClosestValue } from './Utils';
 
@@ -40,6 +40,7 @@ export class CpuController {
     public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
 
     public readonly boost = new SysFsPropertyBoolean(path.join(this.basePath, 'cpufreq/boost'));
+    public readonly amdPstateStatus = new SysFsPropertyString(path.join(this.basePath, 'amd_pstate/status'));
 
     public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores

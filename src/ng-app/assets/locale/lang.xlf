@@ -551,25 +551,11 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html">
-        <source>Fan control</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">277</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html">
-        <source>Fan profile </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">287,288</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html">
         <source>Webcam</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">454</context>
+          <context context-type="linenumber">455</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
@@ -580,77 +566,77 @@
         <source>Webcam status (on/off)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">462</context>
+          <context context-type="linenumber">463</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html">
         <source>on</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">466</context>
+          <context context-type="linenumber">467</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html">
         <source>off</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">467</context>
+          <context context-type="linenumber">468</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
         <source>System performance</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">490</context>
+          <context context-type="linenumber">491</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
         <source>CPU frequency control</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">585</context>
+          <context context-type="linenumber">586</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
         <source>Number of logical cores</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">594</context>
+          <context context-type="linenumber">595</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
         <source>Maximum performance</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">614</context>
+          <context context-type="linenumber">615</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
         <source>yes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">618</context>
+          <context context-type="linenumber">619</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
         <source>no</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">619</context>
+          <context context-type="linenumber">620</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
         <source>Minimum frequency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">633</context>
+          <context context-type="linenumber">634</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
         <source>Maximum frequency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">685</context>
+          <context context-type="linenumber">686</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
@@ -681,32 +667,46 @@
           <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html">
+        <source>Fan control</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">278</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html">
+        <source>Fan profile </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
+          <context context-type="linenumber">288,289</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
         <source>Minimum fan speed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">310</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFanSpeedLabel" datatype="html">
         <source>Maximum fan speed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">348</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
         <source>Offset fan speed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">383</context>
+          <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsToggleFanChartsLabel" datatype="html">
         <source>Toggle fan table chart</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">429</context>
+          <context context-type="linenumber">430</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/fan-slider/fan-slider.component.html</context>
@@ -717,21 +717,21 @@
         <source>System profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">503</context>
+          <context context-type="linenumber">504</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemProfileiInfoTooltip" datatype="html">
         <source>The system profiles limit the maximal energy consumption of the processors.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">507</context>
+          <context context-type="linenumber">508</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
         <source>CPU power limit control</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">530</context>
+          <context context-type="linenumber">531</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
@@ -801,14 +801,14 @@ Commercial register number - Part B of the commercial register - 27755
         <source>N/A</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">372</context>
+          <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
       <trans-unit id="primeSelectIGpu" datatype="html">
         <source>Power-saving CPU graphics processor (iGPU)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">496</context>
+          <context context-type="linenumber">487</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
@@ -827,7 +827,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>High-performance graphics processor (dGPU)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">499</context>
+          <context context-type="linenumber">490</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.html</context>
@@ -846,7 +846,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>Hybrid graphics mode (on-demand)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/cpu-dashboard/cpu-dashboard.component.ts</context>
-          <context context-type="linenumber">502</context>
+          <context context-type="linenumber">493</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/prime-select/prime-select.component.html</context>
@@ -1964,7 +1964,7 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteDescription" datatype="html">
-        <source> TUXEDO Tomte is a configuration service hat only works with TUXEDO hardware and automatically checks your computer for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving. </source>
+        <source> TUXEDO Tomte is a configuration service that only works with TUXEDO hardware and automatically checks your computer for missing drivers or required packages, relieving users of tedious troubleshooting and problem solving. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
           <context context-type="linenumber">27,30</context>
@@ -3010,34 +3010,6 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">45,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="webcamDialogUnsavedChangesTitle" datatype="html">
-        <source>Unsaved changes</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="webcamDialogUnsavedChangesDescription" datatype="html">
-        <source>Changes were not saved. Are you sure that you want to leave before saving?</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="dialogReturn" datatype="html">
-        <source>Go back</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="dialogLeave" datatype="html">
-        <source>Leave</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="profileNameQuiet" datatype="html">
         <source>Quiet</source>
         <context-group purpose="location">
@@ -3136,6 +3108,34 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">396</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="webcamDialogUnsavedChangesTitle" datatype="html">
+        <source>Unsaved changes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="webcamDialogUnsavedChangesDescription" datatype="html">
+        <source>Changes were not saved. Are you sure that you want to leave before saving?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogReturn" datatype="html">
+        <source>Go back</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dialogLeave" datatype="html">
+        <source>Leave</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/webcam.service.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrDetailsFanChartCPULabel" datatype="html">
         <source>CPU Fan</source>
         <context-group purpose="location">
@@ -3175,7 +3175,7 @@ Commercial register number - Part B of the commercial register - 27755
         <source>This feature is currently not available.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/compatibility.service.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="stateLabelMains" datatype="html">

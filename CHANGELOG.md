@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.1.5] - 2024-01-25
+### Fixed
+- CPU frequency limits not working for devices using amd-pstate-epp cpufreq driver
+
+## [2.1.4] - 2024-01-18
+### Fixed
+- Fan control issue manifesting as missing temp and speed in dashboard
+
+## [2.1.3] - 2024-01-16
+### Added
+- Support for Aquaris Gen6
+
+### Fixed
+- Custom fan mode. Fixes certain cases where custom fan table did not
+  get applied, throwing errors in log, etc.
+- Disconnection of other bluetooth devices while scanning for Aquaris.
+
+## [2.1.2] - 2023-12-21
+### Added
+- Support for Sirius keyboard backlight
+- Support for Sirius system profiles
+
+### Fixed
+- Issue on tccd start causing one thread to get stuck on full load blocking the initialization for an extended amount of time
+- .Xauthority file not found causing excessive tccd log output
+
 ## [2.1.1] - 2023-12-13
 ### Added
 - Laptop screen refresh rate configurable per TCC profile allowing

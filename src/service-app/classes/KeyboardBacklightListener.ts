@@ -241,6 +241,20 @@ export class KeyboardBacklightListener {
             }
         }
 
+        iteKeyboardDevices =
+            getSymbolicLinks("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight")
+                .filter(name => fileOK("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + name + "/leds"));
+        for (const iteKeyboardDevice of iteKeyboardDevices) {
+            let path = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + iteKeyboardDevice + "/leds"
+            if (fileOK(path)) {
+                ledsPerKey = ledsPerKey.concat(
+                    getDirectories(path)
+                        .filter(name => name.includes("rgb:kbd_backlight"))
+                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map(name => path + "/" + name));
+            }
+        }
+
         if (ledsPerKey.length > 0) {
             this.ledsRGBZones = ledsPerKey;
         }
