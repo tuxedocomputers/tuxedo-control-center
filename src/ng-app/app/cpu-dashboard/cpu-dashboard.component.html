@@ -58,7 +58,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             [animationDuration]="animatedGaugesDuration">
                         </mwl-gauge>
                         <div class="custom-value-text">{{ gaugeCpuTempFormat(fanData.cpu.temp.data.value) }}</div>
-                        <div class="unit-text">&deg;C</div>
+                        <div *ngIf="!getUsingFahrenheit()" class="unit-text">&deg;C</div>
+                        <div *ngIf="getUsingFahrenheit()" class="unit-text">&deg;F</div>
                         <svg viewBox="0 0 512 512" class="icon">
                             <use href="./assets/images/icon_temperature.svg#Icon"></use>
                         </svg>
@@ -144,7 +145,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             [animationDuration]="animatedGaugesDuration">
                         </mwl-gauge>
                         <div class="custom-value-text">{{ gaugeIGpuTempFormat(iGpuTemp) }}</div>
-                        <div class="unit-text">&deg;C</div>
+                        <div *ngIf="!getUsingFahrenheit()" class="unit-text">&deg;C</div>
+                        <div *ngIf="getUsingFahrenheit()" class="unit-text">&deg;F</div>
                         <svg viewBox="0 0 512 512" class="icon">
                             <use href="./assets/images/icon_temperature.svg#Icon"></use>
                         </svg>
@@ -194,7 +196,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             [animationDuration]="animatedGaugesDuration">
                         </mwl-gauge>
                         <div class="custom-value-text">{{ gaugeDGpuTempFormat(gaugeDGPUTemp) }}</div>
-                        <div class="unit-text">&deg;C</div>
+                        <div *ngIf="!getUsingFahrenheit()" class="unit-text">&deg;C</div>
+                        <div *ngIf="getUsingFahrenheit()" class="unit-text">&deg;F</div>
                         <svg viewBox="0 0 512 512" class="icon">
                             <use href="./assets/images/icon_temperature.svg#Icon"></use>
                         </svg>
@@ -266,7 +269,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         [animationDuration]="animatedGaugesDuration">
                                     </mwl-gauge>
                                     <div class="custom-value-text">{{ gaugeIGpuTempFormat(iGpuTemp) }}</div>
-                                    <div class="unit-text">&deg;C</div>
+                                    <div *ngIf="!getUsingFahrenheit()" class="unit-text">&deg;C</div>
+                                    <div *ngIf="getUsingFahrenheit()" class="unit-text">&deg;F</div>
                                     <svg viewBox="0 0 512 512" class="icon">
                                         <use href="./assets/images/icon_temperature.svg#Icon"></use>
                                     </svg>
@@ -318,7 +322,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         [animationDuration]="animatedGaugesDuration">
                                     </mwl-gauge>
                                     <div class="custom-value-text">{{ gaugeDGpuTempFormat(gaugeDGPUTemp) }}</div>
-                                    <div class="unit-text">&deg;C</div>
+                                    <div *ngIf="!getUsingFahrenheit()" class="unit-text">&deg;C</div>
+                        <div *ngIf="getUsingFahrenheit()" class="unit-text">&deg;F</div>
                                     <svg viewBox="0 0 512 512" class="icon">
                                         <use href="./assets/images/icon_temperature.svg#Icon"></use>
                                     </svg>

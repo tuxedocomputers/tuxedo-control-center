@@ -35,8 +35,10 @@ import {
     fantableDatasets,
     graphColors,
     graphOptions,
-    tempsLabels,
 } from "src/common/classes/FanChartProperties";
+import { formatTemp } from "../../../common/classes/FanUtils";
+import { ConfigService } from "../config.service";
+import { UtilsService } from "../utils.service";
 
 @Component({
     selector: "app-fan-graph",
@@ -45,7 +47,9 @@ import {
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     // Graph data
-    public tempsLabels: Label[] = tempsLabels;
+    public tempsLabels: Label[] = Array.from(Array(100).keys())
+    .concat(100)
+    .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));;
     public graphOptions: ChartOptions = graphOptions;
     public fantableDatasets: ChartDataSets[] = fantableDatasets;
     public graphColors: Color[] = graphColors;
@@ -95,8 +99,10 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
     initDone = false;
 
-    constructor(private cdref: ChangeDetectorRef) {}
-
+    constructor(private cdref: ChangeDetectorRef,
+        private config: ConfigService,
+        ) {}
+        
     ngOnInit() {}
 
     ngAfterViewInit(): void {

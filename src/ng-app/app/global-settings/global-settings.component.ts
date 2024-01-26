@@ -45,7 +45,7 @@ export class GlobalSettingsComponent implements OnInit {
     public keyboardBacklightControlEnabled: boolean = true;
     public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
-
+    public temperatureDisplayFahrenheit: boolean;
     public ctrlBrightnessMode = new FormControl();
 
     public hasChargingSettings = false;
@@ -76,6 +76,7 @@ export class GlobalSettingsComponent implements OnInit {
         ));
 
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
+        this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
         for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
@@ -116,6 +117,22 @@ export class GlobalSettingsComponent implements OnInit {
             }
             
             this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled
+
+            this.utils.pageDisabled = false;
+        });
+    }
+
+    onTemperatureDisplayChanged(event: any) {
+        this.utils.pageDisabled = true;
+
+        this.config.getSettings().fahrenheit = event.checked;
+        
+        this.config.saveSettings().then(success => {
+            if (!success) {
+                this.config.getSettings().fahrenheit = !event.checked;
+            }
+            
+            this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit
 
             this.utils.pageDisabled = false;
         });

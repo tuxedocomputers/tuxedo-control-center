@@ -47,6 +47,7 @@ export interface KeyboardBacklightStateInterface {
 }
 
 export interface ITccSettings {
+    fahrenheit: boolean;
     stateMap: any;
     shutdownTime: string | null;
     cpuSettingsEnabled: boolean;
@@ -59,6 +60,7 @@ export interface ITccSettings {
 }
 
 export const defaultSettings: ITccSettings = {
+    fahrenheit: false,
     stateMap: {
         power_ac: '__default_custom_profile__',
         power_bat: '__default_custom_profile__'
@@ -74,6 +76,7 @@ export const defaultSettings: ITccSettings = {
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
+    fahrenheit: false,
     stateMap: {
         power_ac: 'Default',
         power_bat: 'Custom XP1508 UHD'
@@ -89,6 +92,7 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
 };
 
 export const defaultSettingsMobile: ITccSettings = {
+    fahrenheit: false,
     stateMap: {
         power_ac: defaultCustomProfile.id,
         power_bat: defaultMobileCustomProfileID

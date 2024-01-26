@@ -48,7 +48,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];
     public cpuInfo: IGeneralCPUInfo;
     public pstateInfo: IPstateInfo;
-
+    public usingFahrenheit: boolean;
     public activeCores: number;
     public activeScalingMinFreqs: string[];
     public activeScalingMaxFreqs: string[];
@@ -116,6 +116,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.dashboardVisibility = document.visibilityState == "visible";
+        this.usingFahrenheit = this.config.getSettings().fahrenheit;
     }
 
     private setValuesFromRoute() {
@@ -404,17 +405,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public gaugeCpuTempFormat = this.createFormatter(
         () => this.compat.hasCpuTemp,
-        (val) => Math.round(val).toString()
+        (val) => this.formatFahrenheit(val).toString()
     );
 
     public gaugeIGpuTempFormat = this.createFormatter(
         () => this.compat.hasIGpuTemp,
-        (val) => Math.round(val).toString()
+        (val) => this.formatFahrenheit(val).toString()
     );
 
     public gaugeDGpuTempFormat = this.createFormatter(
         () => this.compat.hasDGpuTemp,
-        (val) => Math.round(val).toString()
+        (val) => this.formatFahrenheit(val).toString()
     );
 
     public gaugeCpuFanSpeedFormat = this.createFormatter(
@@ -453,10 +454,21 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         }
     };
 
+    private formatFahrenheit(val: number) {
+        if (this.usingFahrenheit) {
+            val = this.utils.getFahrenheitFromCelsius(val);
+        }
+        return Math.round(val);
+     }
+
     public gotoSettings(): void {
         this.router.navigate(["global-settings", true], {
             relativeTo: this.route.parent,
         });
+    }
+
+    public getUsingFahrenheit(): boolean {
+        return this.usingFahrenheit;
     }
 
     public getCPUSettingsEnabled(): boolean {
