@@ -38,7 +38,7 @@ import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
-import { AvailabilityService } from "../availability.service";
+import { AvailabilityService } from "../../../common/classes/availability.service";
 import { ElectronService } from "ngx-electron";
 
 @Component({

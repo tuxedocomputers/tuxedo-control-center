@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AvailabilityService } from '../availability.service';
+import { AvailabilityService } from "../../../common/classes/availability.service";
 
 @Component({
     selector: 'app-global-settings',

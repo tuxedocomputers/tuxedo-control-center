@@ -3,8 +3,8 @@ import {
     amdDGpuDeviceIdString,
     amdIGpuDeviceIdString,
     intelIGpuDeviceIdString,
-} from "../../common/classes/DeviceIDs";
-import { countLines, execCommandSync } from "../../common/classes/Utils";
+} from "./DeviceIDs";
+import { countLines, execCommandSync } from "./Utils";
 import { IDeviceCounts } from "src/common/models/TccGpuValues";
 
 @Injectable({
