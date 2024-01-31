@@ -64,7 +64,7 @@ export class PrimeWorker extends DaemonWorker {
             ) == true;
 
         const primeAvailable = (
-            await execCommandAsync("which prime-select | :")
+            await execCommandAsync("which prime-select | cat")
         )
             .toString()
             .trim();
