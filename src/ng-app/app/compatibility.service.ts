@@ -79,10 +79,7 @@ export class CompatibilityService {
 
     private hasFrequencyWithValue(gpuInfo: IiGpuInfo | IdGpuInfo): boolean {
         return (
-            gpuInfo.coreFrequency !== undefined &&
-            gpuInfo.coreFrequency >= 0 &&
-            gpuInfo.maxCoreFrequency !== undefined &&
-            gpuInfo.maxCoreFrequency >= 0
+            gpuInfo.coreFrequency !== undefined && gpuInfo.coreFrequency >= 0
         );
     }
 
@@ -99,7 +96,6 @@ export class CompatibilityService {
         const fanData = this.tccDbus.fanData?.value;
         const { cpu } = fanData;
         const cpuTemp = cpu?.temp;
-
         return this.hasDataWithValue(cpuTemp);
     }
 

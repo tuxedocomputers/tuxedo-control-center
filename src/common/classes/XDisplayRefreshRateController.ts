@@ -19,7 +19,7 @@
 
 import { IDisplayFreqRes, IDisplayMode } from "../models/DisplayFreqRes";
 import * as child_process from "child_process";
-import * as fs from 'fs';
+import * as fs from "fs";
 export class XDisplayRefreshRateController {
     private displayName: string;
     private isX11: boolean;
@@ -31,35 +31,44 @@ export class XDisplayRefreshRateController {
     }
 
     private setEnvVariables(): void {
-        let result = child_process.execSync(`who`) + "";
+        const output = child_process
+            .execSync(
+                `ps -u $(id -u) -o pid= | xargs -I{} cat /proc/{}/environ 2>/dev/null | tr '\\0' '\\n'`
+            )
+            .toString();
 
-        // Capturing groups: 1 is user name, 2 can be ignored and 3 is the display variable.
-        var correctLineRegex = /(\w+)(.*)(\(:.+\))/;
+        const displayMatch = output.match(/^DISPLAY=(.*)$/m);
+        const xAuthorityMatch = output.match(/^XAUTHORITY=(.*)$/m);
+        const xdgSessionMatch = output.match(/^XDG_SESSION_TYPE=(.*)$/m);
 
-        var match = result.match(correctLineRegex);
+        this.displayEnvVariable = displayMatch
+            ? displayMatch[1].replace("DISPLAY=", "").trim()
+            : "";
 
-        // If there is no match, the X server is not running, which can be because it's too early or because we are on Wayland.
-        // This check may need to be repeated during the runtime.
-        if (!match) {
-            this.isX11 = false;
-            this.displayEnvVariable = "";
-            this.xAuthorityFile = "";
-            return;
-        }
-        var username = match[1];
-        this.displayEnvVariable = match[3].replace("(", "").replace(")", "");
-        this.xAuthorityFile = "/home/" + username + "/.Xauthority";
-        if (!fs.existsSync(this.xAuthorityFile)) {
-            this.isX11 = false;
-            this.displayEnvVariable = '';
-            this.xAuthorityFile = '';
-            return;
-        }
-        this.isX11 = true;
+        const xAuthorityFile = xAuthorityMatch
+            ? xAuthorityMatch[1].replace("XAUTHORITY=", "").trim()
+            : "";
+
+        this.xAuthorityFile = fs.existsSync(xAuthorityFile)
+            ? xAuthorityFile
+            : "";
+
+        const sessionType = xdgSessionMatch
+            ? xdgSessionMatch[1]
+                  .replace("XDG_SESSION_TYPE=", "")
+                  .trim()
+                  .toLowerCase()
+            : "";
+
+        this.isX11 =
+            sessionType === "x11"
+                ? true
+                : sessionType === "wayland"
+                ? false
+                : undefined;
     }
 
     public getIsX11(): boolean {
-        // Always reset the env variables, because states can change during runtime.
         this.setEnvVariables();
         return this.isX11;
     }

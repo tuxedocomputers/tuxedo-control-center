@@ -102,10 +102,10 @@ export class TccDBusController {
         }
     }
 
-    async getRefreshRateSupported():Promise<boolean>
+    async getIsX11():Promise<boolean>
     {
         try {
-            return await this.interface.GetRefreshRateSupported();
+            return await this.interface.GetIsX11();
         } catch (err) {
             return false; 
         }

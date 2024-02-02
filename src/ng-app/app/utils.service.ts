@@ -70,13 +70,30 @@ export class UtilsService {
       this.themeClass = new BehaviorSubject(undefined);
     }
 
-  public async execCmd(command: string): Promise<Buffer> {
-    return new Promise<Buffer>((resolve, reject) => {
+    // if return status code is not zero, it will count as an error
+    // and grep returning nothing will count as an error
+    public execCmdSync(command: string): string {
+        const data = this.electron.ipcRenderer.sendSync(
+            "exec-cmd-sync",
+            command
+        );
+
+        if (data.error) {
+            console.error("Sync Exec CMD failed: ", data.error);
+        }
+
+        if (data.data) {
+            return Buffer.from(data.data.buffer).toString();
+        }
+    }
+
+  public async execCmdAsync(command: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('exec-cmd-async', command).then((result) => {
         if (result.error === null) {
-          resolve(result.data);
+          resolve(result.data.toString());
         } else {
-          reject(result.error);
+          reject(result.error.toString());
         }
       });
     });

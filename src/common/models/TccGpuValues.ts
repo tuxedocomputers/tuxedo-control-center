@@ -14,3 +14,10 @@ export interface IdGpuInfo {
     enforcedPowerLimit: number;
     d0MetricsUsage?: boolean;
 }
+
+export interface IDeviceCounts {
+    intelIGpuDevices: number;
+    amdIGpuDevices: number;
+    amdDGpuDevices: number;
+    nvidiaDevices: number;
+}

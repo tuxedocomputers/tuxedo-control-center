@@ -70,7 +70,7 @@ export class PrimeDialogComponent implements OnInit {
 
         if (status) {
             if (rebootStatus === "REBOOT") {
-                this.utils.execCmd("reboot");
+                this.utils.execCmdAsync("reboot");
             }
             this.electron.ipcRenderer.send("prime-window-close");
         }
