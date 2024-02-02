@@ -73,7 +73,7 @@ export class CompatibilityService {
     private hasPowerDrawWithValue(powerData: any): boolean {
         return (
             typeof powerData?.powerDraw !== "undefined" &&
-            powerData.powerDraw > 0
+            powerData.powerDraw > -1
         );
     }
 
