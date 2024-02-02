@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.tuxedocomputers.tcc</id>
+  
+  <name>TUXEDO Control Center</name>
+  <summary>Our in-house developed system tuning app for your TUXEDO laptop</summary>
+  <summary xml:lang="de">Unsere inhouse-entwickelte Systemsteuerungssoftware für Ihr TUXEDO-Notebook</summary>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <description>
+    <p>
+      No notebook is perfectly adapted to every situation and the requirements of every user. At TUXEDO, we want to give you the best possible control and customizability with your TUXEDO notebook and have developed our TUXEDO Control Center (TCC), a comprehensive tool with which you can adjust and monitor all performance, energy and comfort functions.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">tuxedo-control-center.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/blob/master/screenshots/de/DarkTheme_TCC.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/en/Profiles_TCC.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/blob/master/screenshots/en/Profile_Settings_TCC.png</image>
+    </screenshot>
+  </screenshots>
+</component>
