@@ -35,7 +35,6 @@ export class CompatibilityService {
     constructor(
         private tccDbus: TccDBusClientService,
         private sysfs: SysFsService,
-        private device: TUXEDODevice,
     ) {
         // TODO: Manual read until general device id get merged
         const dmi = new DMIController("/sys/class/dmi/id");
@@ -69,9 +68,16 @@ export class CompatibilityService {
         this.hasAquarisValue = showAquarisMenu;
     }
 
-    get SystemProfileInfo(): SystemProfileInfo
-    {
+    public getSystemProfileInfo(): SystemProfileInfo {
         return deviceSystemProfileInfo.get(this.tccDbus.device);
+    }
+
+    public getCurrentDevice(): TUXEDODevice {
+        return this.tccDbus.device;
+    }
+
+    public getHasSystemProfileInfo(): boolean {
+        return (deviceSystemProfileInfo.get(this.tccDbus.device) !== undefined);
     }
 
     get hasFanInfo(): boolean {

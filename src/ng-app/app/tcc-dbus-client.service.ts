@@ -145,7 +145,6 @@ export class TccDBusClientService implements OnDestroy {
     }
 
     const deviceJSON = await this.tccDBusInterface.getDeviceJSON();
-
     if (deviceJSON) {
         this.device = JSON.parse(deviceJSON);
     }

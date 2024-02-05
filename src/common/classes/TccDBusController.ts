@@ -80,9 +80,9 @@ export class TccDBusController {
     async getDeviceJSON(): Promise<string>
      {
         try {
-            return await this.interface.GetDevice();
+            return await this.interface.GetDeviceName();
         } catch (err) {
-            return;
+            return '';
         }
      }
 

@@ -242,7 +242,7 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
-        GetDevice: {outSignature: 's'},
+        GetDeviceName: {outSignature: 's'},
         GetDisplayModesJSON: {outSignature: 's'},
         GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },

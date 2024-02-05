@@ -511,19 +511,36 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-icon>
                             </header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
-                                <mat-select formControlName="name" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
-                                        {{ odmProfileToName.get(odmProfileName) }}
-                                    </mat-option>
-                                </mat-select>
-                            </content>
-                        </mat-grid-tile>
+                        <ng-container *ngIf="!hasDeviceSystemProfileInfo">
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
+                                <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                    <mat-select formControlName="name" [disableOptionCentering]="true">
+                                        <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                            {{ odmProfileToName.get(odmProfileName) }}
+                                        </mat-option>
+                                    </mat-select>
+                                </content>
+                            </mat-grid-tile>
+                        </ng-container>
+                        <ng-container *ngIf="hasDeviceSystemProfileInfo">
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(viewProfile.odmProfile.name) }}</content>
+                                <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                    <mat-select formControlName="name" [disableOptionCentering]="true">
+                                        <mat-option *ngFor="let pl of deviceSystemProfileInfo.pl" [value]="pl.odmName" color="primary">
+                                            {{ pl.limit }} W
+                                        </mat-option>
+                                    </mat-select>
+                                </content>
+                            </mat-grid-tile>
+                        </ng-container>
                     </div>
 
                 </mat-grid-list>

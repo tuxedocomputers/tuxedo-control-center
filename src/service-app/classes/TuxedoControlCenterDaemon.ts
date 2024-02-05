@@ -503,6 +503,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         TuxedoIOAPI.getModuleInfo(modInfo);
 
         const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
+        dmiSKUDeviceMap.set('IBS1706', TUXEDODevice.IBP17G6);
         dmiSKUDeviceMap.set('IBP1XI08MK1', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP1XI08MK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP14I08MK2', TUXEDODevice.IBPG8);

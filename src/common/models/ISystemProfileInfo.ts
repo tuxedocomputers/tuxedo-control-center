@@ -13,7 +13,8 @@ export interface PowerLimit {
 export enum SystemProfile { 
         ENERGYSAVE,
         SILENT,
-        MAXPERFORMACE
+        MAXPERFORMACE,
+        ENTERTAINMENT
 }
 
 
@@ -22,24 +23,19 @@ export enum SystemProfile {
  */
 export const deviceSystemProfileInfo: Map<TUXEDODevice, SystemProfileInfo> = new Map();
 
-deviceSystemProfileInfo.set(TUXEDODevice.IBP14G6_TUX,  { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.IBP14G6_TRX, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.IBP14G6_TQF,{ pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.IBP14G7_AQF_ARX, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.IBPG8, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-
-deviceSystemProfileInfo.set(TUXEDODevice.PULSE1502, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-
-deviceSystemProfileInfo.set(TUXEDODevice.POLARIS1XI02,{ pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.POLARIS1XI03, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.POLARIS1XA02, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.POLARIS1XA03, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.POLARIS1XA05, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-
-deviceSystemProfileInfo.set(TUXEDODevice.STELLARIS1XI03, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.STELLARIS1XI04, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.STELLARIS1XI05, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-
-deviceSystemProfileInfo.set(TUXEDODevice.STELLARIS1XA03, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.STEPOL1XA04, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
-deviceSystemProfileInfo.set(TUXEDODevice.STELLARIS1XA05, { pl:[{ limit: 1, odmName: "blubb", systemProfile: SystemProfile.ENERGYSAVE}]});
+deviceSystemProfileInfo.set(TUXEDODevice.IBP17G6,  { 
+    pl:[
+        { limit: 40, odmName: "performance", systemProfile: SystemProfile.MAXPERFORMACE},
+        { limit: 36, odmName: "entertainment", systemProfile: SystemProfile.ENTERTAINMENT},
+        { limit: 24, odmName: "powersaving", systemProfile: SystemProfile.ENERGYSAVE},
+        { limit: 24, odmName: "quiet", systemProfile: SystemProfile.SILENT}
+                    
+    ]
+});
+deviceSystemProfileInfo.set(TUXEDODevice.PULSE1403,  { 
+    pl:[
+        { limit: 70, odmName: "performance", systemProfile: SystemProfile.MAXPERFORMACE},
+        { limit: 40, odmName: "powersaving", systemProfile: SystemProfile.ENERGYSAVE},
+        { limit: 30, odmName: "quiet", systemProfile: SystemProfile.SILENT}              
+    ]
+});
