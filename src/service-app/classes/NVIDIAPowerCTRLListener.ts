@@ -34,7 +34,10 @@ export class NVIDIAPowerCTRLListener {
 
     private async init(): Promise<void> {
         this.ctgpOffsetSysfsProp.setFSWatchListener((async function(event: "rename" | "change", filename: string): Promise<void> {
-            let ctgpOffset: number = this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset;
+            let ctgpOffset: number =
+                this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
+                this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined?
+                    this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset : 0;
             if (event == "change" && this.ctgpOffsetSysfsProp.readValueNT() != ctgpOffset) {
                 this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
             }
@@ -50,6 +53,10 @@ export class NVIDIAPowerCTRLListener {
     }
 
     private applyActiveProfile(): void {
-        this.ctgpOffsetSysfsProp.writeValue(this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset);
+        let ctgpOffset: number =
+            this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
+            this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined?
+                this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset : 0;
+        this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
     }
 }
