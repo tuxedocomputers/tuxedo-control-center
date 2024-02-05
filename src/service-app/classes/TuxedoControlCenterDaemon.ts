@@ -27,6 +27,7 @@ import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { defaultSettings, ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
+import { DaemonListener } from './DaemonListener';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
@@ -74,7 +75,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
-    private listeners: any[] = [];
+    private listeners: DaemonListener[] = [];
 
     protected started = false;
 
@@ -561,22 +562,28 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     setCurrentProfileByName(profileName: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     setCurrentProfileById(id: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {

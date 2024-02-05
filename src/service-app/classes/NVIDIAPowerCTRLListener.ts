@@ -16,23 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+import { DaemonListener } from "./DaemonListener";
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 
-export class NVIDIAPowerCTRLListener {
+export class NVIDIAPowerCTRLListener extends DaemonListener {
     private ctgpOffsetPath: string = "/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset";
     private ctgpOffsetSysfsProp: SysFsPropertyInteger = new SysFsPropertyInteger(this.ctgpOffsetPath);
     private available: boolean = this.ctgpOffsetSysfsProp.isAvailable();
 
-    constructor(private tccd: TuxedoControlCenterDaemon) {
-        if (!this.isAvailable()) {
-            return;
-        }
+    constructor(tccd: TuxedoControlCenterDaemon) {
+        super(tccd);
 
         this.init();
     }
 
+    public onActiveProfileChanged(): void {
+        this.applyActiveProfile();
+    }
+
     private async init(): Promise<void> {
+        if (!this.isAvailable()) {
+            return;
+        }
+
         this.ctgpOffsetSysfsProp.setFSWatchListener((async function(event: "rename" | "change", filename: string): Promise<void> {
             let ctgpOffset: number =
                 this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
