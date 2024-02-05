@@ -242,7 +242,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <mat-grid-tile [colspan]="gridParams.valueSpan"
                             [ngClass]="{'inactive': !inputUseRefRate.checked}">
-                            <content class="value">{{ profileFormGroup.get('display').value.refreshRate
+                            <content class="value">{{ roundValue(profileFormGroup.get('display').value.refreshRate)
                                 }}Hz</content>
                         </mat-grid-tile>
 
@@ -252,7 +252,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
                                     <mat-option *ngFor="let refreshRate of getCurrentResolutionRefreshRates()"
                                         [value]="refreshRate" [ngValue]="refreshRate" color="primary">
-                                        {{ refreshRate }}Hz
+                                        {{ roundValue(refreshRate) }}Hz
                                     </mat-option>
                                 </mat-select>
                             </content>
@@ -260,18 +260,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
             </div>
+
         </div>
 
         <!-- Fan control settings -->
-        <div #fancontrolHeader
-            class="tcc-options-group"
+        <!-- todo: currently only showing fan controls for wmi, should be adjusted for hwmon later -->
+        <div #fancontrolHeader class="tcc-options-group" *ngIf="this.tccDBus.tuxedoWmiAvailable?.value && !this.tccDBus.fanHwmonAvailable?.value"
             [ngClass]="{'not-available': !compat.hasFanControl || !this.config.getSettings().fanControlEnabled }"
             [matTooltip]="!compat.hasFanControl ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
             <div class="title-row">
                 <hr />
                 <div class="title">
-                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <svg viewBox="0 0 512 512" class="tcc-icons">
+                        <use href="./assets/images/icon_fan.svg#Icon"></use>
+                    </svg>
                     <ng-container i18n="@@cProfMgrDetailsFanControlHeaderLabel">Fan control</ng-container>
                 </div>
                 <hr />
@@ -279,119 +282,167 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-content class="content">
                 <div formGroupName="fan">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+
                         <!-- Fan profile -->
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsFanProfileLabel">Fan profile</header>
+                            <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsFanProfileLabel">Fan profile
+                            </header>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ viewProfile.fan.fanProfile }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
+                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{
+                                viewProfile.fan.fanProfile }}</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{
+                                profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                 <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()" [value]="fanProfileName" color="primary">
+                                    <mat-option *ngFor="let fanProfileName of getFanProfileNames()"
+                                        [value]="fanProfileName" color="primary">
                                         {{ fanProfileName }}
                                     </mat-option>
                                 </mat-select>
                             </content>
                         </mat-grid-tile>
-                        <!-- Minimum fan speed -->
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsMinFanSpeedLabel">Minimum fan speed</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile">{{ !fansOffAvailable && viewProfile.fan.minimumFanspeed < fansMinSpeed ? fansMinSpeed : viewProfile.fan.minimumFanspeed }} %</content>
-                            <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }} %</content>
-                            <button mat-icon-button color="primary"
-                                [hidden]="!editProfile"
-                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
-                                (mouseup)="buttonRepeatUp()"
-                                (mouseleave)="buttonRepeatUp()">
-                                <mat-icon>remove</mat-icon>
-                            </button>
-                            <button mat-icon-button color="primary"
-                                [hidden]="!editProfile"
-                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
-                                (mouseup)="buttonRepeatUp()"
-                                (mouseleave)="buttonRepeatUp()">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile">
-                                <mat-slider #inputMinimumFanspeed
-                                    formControlName="minimumFanspeed"
-                                    [min]="fansOffAvailable ? 0 : fansMinSpeed"
-                                    [max]="100"
-                                    step="1"
-                                    color="primary">
-                                </mat-slider>
-                                <button mat-icon-button
-                                    color="primary"
-                                    (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
-                                    [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
-                                    <mat-icon>undo</mat-icon>
+
+                        <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'">
+                            <!-- Minimum fan speed -->
+                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <header i18n="@@cProfMgrDetailsMinFanSpeedLabel">Minimum fan speed</header>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ !fansOffAvailable &&
+                                    viewProfile.fan.minimumFanspeed < fansMinSpeed ? fansMinSpeed :
+                                        viewProfile.fan.minimumFanspeed }} %</content>
+                                        <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }}
+                                            %</content>
+                                        <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                            (change)="sliderMinFanChange()">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                            (change)="sliderMinFanChange()">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputMinimumFanspeed formControlName="minimumFanspeed"
+                                        [min]="fansOffAvailable ? 0 : fansMinSpeed" [max]="100" step="1" color="primary"
+                                        (change)="sliderMinFanChange()">
+                                    </mat-slider>
+                                    <button mat-icon-button color="primary"
+                                        (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
+                                        [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </content>
+                            </mat-grid-tile>
+
+                            <!-- Maximum fan speed -->
+                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <header i18n="@@cProfMgrDetailsMaxFanSpeedLabel">Maximum fan speed</header>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ !fansOffAvailable &&
+                                    viewProfile.fan.maximumFanspeed < fansMaxSpeed ? fansMinSpeed :
+                                        viewProfile.fan.maximumFanspeed }} %</content>
+                                        <content class="value" [hidden]="!editProfile">{{ inputMaximumFanspeed.value }}
+                                            %</content>
+                                        <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), -1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
+                                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                            (change)="sliderMaxFanChange()">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), +1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
+                                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                            (change)="sliderMaxFanChange()">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputMaximumFanspeed formControlName="maximumFanspeed" [min]="0"
+                                        [max]="100" step="1" color="primary" (change)="sliderMaxFanChange()">
+                                    </mat-slider>
+                                    <button mat-icon-button color="primary"
+                                        (click)="profileFormGroup.get('fan').get('maximumFanspeed').reset(viewProfile.fan.maximumFanspeed)"
+                                        [hidden]="!profileFormGroup.get('fan').get('maximumFanspeed').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </content>
+                            </mat-grid-tile>
+
+                            <!-- Offset fan speed -->
+                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <header i18n="@@cProfMgrDetailsOffsetFanSpeedLabel">Offset fan speed</header>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ?
+                                    '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
+                                <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' +
+                                    inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
+                                <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                    (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>remove</mat-icon>
                                 </button>
-                            </content>
-                        </mat-grid-tile>
-                        <!-- Offset fan speed -->
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
-                            <header i18n="@@cProfMgrDetailsOffsetFanSpeedLabel">Offset fan speed</header>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ? '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
-                            <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' + inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
-                            <button mat-icon-button color="primary"
-                                [hidden]="!editProfile"
-                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
-                                (mouseup)="buttonRepeatUp()"
-                                (mouseleave)="buttonRepeatUp()">
-                                <mat-icon>remove</mat-icon>
-                            </button>
-                            <button mat-icon-button color="primary"
-                                [hidden]="!editProfile"
-                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
-                                (mouseup)="buttonRepeatUp()"
-                                (mouseleave)="buttonRepeatUp()">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile">
-                                <mat-slider #inputOffsetFanspeed
-                                    formControlName="offsetFanspeed"
-                                    [min]="-100"
-                                    [max]="100"
-                                    step="1"
-                                    color="primary">
-                                </mat-slider>
-                                <button mat-icon-button
-                                    color="primary"
-                                    (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
-                                    [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
-                                    <mat-icon>undo</mat-icon>
+                                <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                    (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>add</mat-icon>
                                 </button>
-                            </content>
-                        </mat-grid-tile>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputOffsetFanspeed formControlName="offsetFanspeed" [min]="-100"
+                                        [max]="100" step="1" color="primary">
+                                    </mat-slider>
+                                    <button mat-icon-button color="primary"
+                                        (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
+                                        [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </content>
+                            </mat-grid-tile>
+                        </div>
 
                     </mat-grid-list>
                 </div>
-                <div class="fan-graph-container">
-                    <button mat-stroked-button
-                        (click)="toggleFanGraphs()">
-                        <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container> <mat-icon>bar_chart</mat-icon>
+
+                <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value == 'Custom'">
+                    <app-fan-slider [customFanCurve]="profileFormGroup.get('fan').get('customFanCurve').value"
+                        [showFanGraphs]="showFanGraphs" (setSliderDirty)="setVerticalSliderDirty()"
+                        (customFanCurveEvent)="setCustomFanCurve($event)" [tempCustomFanCurve]="tempCustomFanCurve"
+                        (chartToggleEvent)="setChartToggleStatus($event)">
+                    </app-fan-slider>
+                </div>
+
+                <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'"
+                    class="fan-graph-container">
+                    <button mat-stroked-button (click)="toggleFanGraphs()">
+                        <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container>
+                        <mat-icon>bar_chart</mat-icon>
                     </button>
-                    <app-fan-graph
-                        *ngIf="showFanGraphs"
+
+                    <app-fan-graph *ngIf="showFanGraphs"
                         [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
-                        [minFanspeed]="inputMinimumFanspeed.value"
-                        [offsetFanspeed]="inputOffsetFanspeed.value">
+                        [minFanspeed]="profileFormGroup.get('fan').get('minimumFanspeed').value"
+                        [maxFanspeed]="profileFormGroup.get('fan').get('maximumFanspeed').value"
+                        [offsetFanspeed]="profileFormGroup.get('fan').get('offsetFanspeed').value">
                     </app-fan-graph>
                 </div>
+
             </mat-card-content>
         </div>
-
+                            
+        
         <!-- Webcam settings -->
         <div class="tcc-options-group"
             [hidden]="!compat.hasWebcamControl"

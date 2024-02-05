@@ -26,10 +26,10 @@ import { TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
-import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
+import { DeviceInfo, LCT21001, LCTDeviceModel, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
-import { resolve } from 'path';
-import { OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron/main';
+import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
+import electron = require("electron");
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -90,6 +90,14 @@ if (!userConfigDirExists()) {
 app.on('second-instance', (event, cmdLine, workingDir) => {
     // If triggered by a second instance, find/show/start GUI
     activateTccGui();
+});
+
+app.on("ready", () => {
+    electron.powerMonitor.on("resume", () => {
+        if (tccWindow) {
+            tccWindow.webContents.send("wakeup-from-suspend");
+        }
+    });
 });
 
 app.whenReady().then( async () => {
@@ -179,23 +187,21 @@ app.whenReady().then( async () => {
         // Regularly check if running tccd version is different to running gui version
         const tccdVersionCheckInterval = 5000;
         setInterval(async () => {
-            if (await tccDBus.tuxedoWmiAvailable()) {
-                const tccdVersion = await tccDBus.tccdVersion();
-                if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                    console.log('Other tccd version detected, restarting..');
-                    process.on('exit', function () {
-                        child_process.spawn(
-                            process.argv[0],
-                            process.argv.slice(1).concat(['--tray']),
-                            {
-                                cwd: process.cwd(),
-                                detached : true,
-                                stdio: "inherit"
-                            }
-                        );
-                    });
-                    process.exit();
-                }
+            const tccdVersion = await tccDBus.tccdVersion();
+            if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
+                console.log('Other tccd version detected, restarting..');
+                process.on('exit', function () {
+                    child_process.spawn(
+                        process.argv[0],
+                        process.argv.slice(1).concat(['--tray']),
+                        {
+                            cwd: process.cwd(),
+                            detached : true,
+                            stdio: "inherit"
+                        }
+                    );
+                });
+                process.exit();
             }
         }, tccdVersionCheckInterval);
     }

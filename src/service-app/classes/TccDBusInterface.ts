@@ -73,6 +73,7 @@ export class TccDBusData {
     public displayModes: string;
     public refreshRateSupported: boolean;
     public tuxedoWmiAvailable: boolean;
+    public fanHwmonAvailable: boolean;
     public tccdVersion: string;
     public fans: FanData[];
     public webcamSwitchAvailable: boolean;
@@ -125,6 +126,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDisplayModesJSON() { return this.data.displayModes; }
     GetRefreshRateSupported() { return this.data.refreshRateSupported; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
+    FanHwmonAvailable() { return this.data.fanHwmonAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
     GetFanDataCPU() { return this.data.fans[0].export(); }
     GetFanDataGPU1() { return this.data.fans[1].export(); }
@@ -199,6 +201,31 @@ export class TccDBusInterface extends dbus.interface.Interface {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
 
+    async GetChargeStartAvailableThresholds() {
+        return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeStartAvailableThresholds());
+    }
+    async GetChargeEndAvailableThresholds() {
+        return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeEndAvailableThresholds());
+    }
+    async GetChargeStartThreshold() {
+        return await this.interfaceOptions.chargingWorker.getChargeStartThreshold();
+    }
+    async GetChargeEndThreshold() {
+        return await this.interfaceOptions.chargingWorker.getChargeEndThreshold();
+    }
+    async SetChargeStartThreshold(value) {
+        return await this.interfaceOptions.chargingWorker.setChargeStartThreshold(value);
+    }
+    async SetChargeEndThreshold(value) {
+        return await this.interfaceOptions.chargingWorker.setChargeEndThreshold(value);
+    }
+    async GetChargeType() {
+        return await this.interfaceOptions.chargingWorker.getChargeType();
+    }
+    async SetChargeType(type) {
+        return await this.interfaceOptions.chargingWorker.setChargeType(type);
+    }
+
     GetFnLockSupported() {
         return this.fnLock.getFnLockSupported();
     }
@@ -221,6 +248,7 @@ TccDBusInterface.configureMembers({
         GetDisplayModesJSON: {outSignature: 's'},
         GetRefreshRateSupported: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
+        FanHwmonAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
         GetFanDataCPU: { outSignature: 'a{sa{sv}}' },
         GetFanDataGPU1: { outSignature: 'a{sa{sv}}' },
@@ -254,6 +282,14 @@ TccDBusInterface.configureMembers({
         GetChargingPrioritiesAvailable: { outSignature: 's' },
         GetCurrentChargingPriority: { outSignature: 's' },
         SetChargingPriority: { inSignature: 's', outSignature: 'b' },
+        GetChargeStartAvailableThresholds: { outSignature: 's' },
+        GetChargeEndAvailableThresholds: { outSignature: 's' },
+        GetChargeStartThreshold: { outSignature: 'i' },
+        GetChargeEndThreshold: { outSignature: 'i' },
+        SetChargeStartThreshold: { inSignature: 'i', outSignature: 'b' },
+        SetChargeEndThreshold: { inSignature: 'i', outSignature: 'b' },
+        GetChargeType: { outSignature: 's' },
+        SetChargeType: { inSignature: 's', outSignature: 'b' },
         GetFnLockSupported: { outSignature: "b" },
         GetFnLockStatus: { outSignature: "b" },
         SetFnLockStatus: { inSignature: "b" },

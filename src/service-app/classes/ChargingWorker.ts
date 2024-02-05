@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2021-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -20,6 +20,7 @@ import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ChargingProfileController } from '../../common/classes/ChargingProfileController';
 import { ChargingPriorityController } from '../../common/classes/ChargingPriorityController';
+import { ChargeType, PowerSupplyController } from '../../common/classes/PowerSupplyController';
 
 export class ChargingWorker extends DaemonWorker {
 
@@ -149,5 +150,102 @@ export class ChargingWorker extends DaemonWorker {
         } catch (e) {
             return [];
         }
+    }
+
+    public async getChargeStartAvailableThresholds() {
+        const bat = await PowerSupplyController.getFirstBattery();
+
+        // Default to empty if no configurable threshold detected.
+        if (!bat.chargeControlStartThreshold.isAvailable()) {
+            return [];
+        }
+
+        try {
+            // Read available thresholds if list is available
+            return await bat.chargeControlStartAvailableThresholds.readValueA();
+        } catch (err) {
+            // Default to 0-100 if the unofficial available lists are not there
+            return Array.from(Array(101).keys());
+        }
+    }
+
+    public async getChargeEndAvailableThresholds() {
+        const bat = await PowerSupplyController.getFirstBattery();
+
+        // Default to empty if no configurable threshold detected.
+        if (!bat.chargeControlEndThreshold.isAvailable()) {
+            return [];
+        }
+
+        try {
+            // Read available thresholds if list is available
+            return await bat.chargeControlEndAvailableThresholds.readValueA();
+        } catch (err) {
+            // Default to 0-100 if the unofficial available lists are not there
+            return Array.from(Array(101).keys());
+        }
+    }
+
+    public async getChargeStartThreshold() {
+        const bat = await PowerSupplyController.getFirstBattery();
+        try {
+            return await bat.chargeControlStartThreshold.readValueA();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    public async setChargeStartThreshold(value: number) {
+        const bat = await PowerSupplyController.getFirstBattery();
+        try {
+            await bat.chargeControlStartThreshold.writeValueA(value);
+        } catch (err) {
+            this.tccd.logLine('Failed writing start threshold => ' + err);
+            return false;
+        }
+
+        return true;
+    }
+
+    public async getChargeEndThreshold() {
+        const bat = await PowerSupplyController.getFirstBattery();
+        try {
+            return await bat.chargeControlEndThreshold.readValueA();
+        } catch (err) {
+            undefined;
+        }
+    }
+
+    public async setChargeEndThreshold(value: number) {
+        const bat = await PowerSupplyController.getFirstBattery();
+        try {
+            await bat.chargeControlEndThreshold.writeValueA(value);
+        } catch (err) {
+            this.tccd.logLine('Failed writing end threshold => ' + err);
+            return false;
+        }
+
+        return true;
+    }
+
+    public async getChargeType() {
+        const bat = await PowerSupplyController.getFirstBattery();
+        try {
+            return (await bat.chargeType.readValueA()).trim();
+        } catch (err) {
+            return ChargeType.Unknown.toString();
+        }
+    }
+
+    public async setChargeType(chargeType: ChargeType) {
+        const bat = await PowerSupplyController.getFirstBattery();
+        try {
+            bat.chargeType.writeValueA(chargeType.toString());
+        } catch (err) {
+            this.tccd.logLine('Failed writing charge type => ' + err);
+            return false;
+        }
+
+        return true;
     }
 }

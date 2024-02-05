@@ -1,7 +1,7 @@
 {
   "name": "tuxedo-control-center",
   "description": "TUXEDO Control Center Application",
-  "version": "2.0.9",
+  "version": "2.1.5",
   "main": "./dist/tuxedo-control-center/e-app/e-app/main.js",
   "author": {
     "name": "TUXEDO Computers GmbH",
@@ -64,7 +64,7 @@
     "ng2-charts": "^2.4.3",
     "ngx-color-picker": "^11.0.0",
     "ngx-markdown": "^10.1.1",
-    "node-ble": "git+https://github.com/tuxedoxt/node-ble.git#match-and-event-leak-fixes",
+    "node-ble": "git+https://github.com/tuxedoxt/node-ble.git#match-and-event-leak-fixes-v2",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
     "xliff": "^6.0.3",

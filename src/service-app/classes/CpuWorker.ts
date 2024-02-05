@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -136,6 +136,22 @@ export class CpuWorker extends DaemonWorker {
             // Reset everything to default on all cores before applying settings
             // Set online status last so that all cores get the same settings
             this.setCpuDefaultConfig();
+
+            // To use amd-pstate-epp min/max freq settings 'passive' mode is required.
+            // Set active if no limit is changed in profile, otherwise set passive.
+            if (this.cpuCtrl.amdPstateStatus.isAvailable() && this.cpuCtrl.amdPstateStatus.isWritable()) {
+                const cpuinfoMinFreq = this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT();
+                const cpuinfoMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValueNT();
+                if ((profile.cpu.scalingMinFrequency === undefined ||
+                    profile.cpu.scalingMinFrequency == cpuinfoMinFreq)
+                    &&
+                    (profile.cpu.scalingMaxFrequency === undefined ||
+                    profile.cpu.scalingMaxFrequency == cpuinfoMaxFreq)) {
+                    this.cpuCtrl.amdPstateStatus.writeValue('active');
+                } else {
+                    this.cpuCtrl.amdPstateStatus.writeValue('passive');
+                }
+            }
 
             if (!profile.cpu.useMaxPerfGov) {
                 // Note: Hard set governor to default (not included in profiles atm)
