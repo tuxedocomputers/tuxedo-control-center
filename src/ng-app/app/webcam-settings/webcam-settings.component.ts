@@ -397,34 +397,28 @@ export class WebcamSettingsComponent implements OnInit {
     private async executeWebcamCtrlsList(
         controls: WebcamPresetValues
     ): Promise<void> {
-        let controlStr = "";
-        // todo: make cleaner
-        Object.entries(controls).forEach((webcamPresetEntry) => {
-            if (
-                webcamPresetEntry[1] != undefined &&
-                webcamPresetEntry[0] != "fps" &&
-                webcamPresetEntry[0] != "resolution"
-            ) {
-                controlStr =
-                    controlStr +
-                    `${webcamPresetEntry[0]}=${webcamPresetEntry[1]},`;
-            }
-        });
+        const filteredControls = Object.entries(controls)
+            .filter(
+                ([key, value]) =>
+                    value !== undefined && key !== "fps" && key !== "resolution"
+            )
+            .map(([key, value]) => `${key}=${value}`)
+            .join(",");
 
-        let webcamPaths = this.getPathsWithId(this.selectedWebcam.id);
+        const webcamPaths = this.getPathsWithId(this.selectedWebcam.id);
 
-        for (let devicePath of webcamPaths) {
-            try {
-                await this.utils.execCmdAsync(
-                    "python3 " +
-                        this.getWebcamCtrlPythonPath() +
-                        ` -d ${devicePath} -c ${controlStr}`
-                );
-            } catch (error) {
-                console.log(error);
-                this.mutex.release();
-                this.webcamNotAvailabledDialog();
-                await this.reloadWebcamList(undefined);
+        if (filteredControls) {
+            for (const devicePath of webcamPaths) {
+                try {
+                    await this.utils.execCmdAsync(
+                        `python3 ${this.getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`
+                    );
+                } catch (error) {
+                    console.error(error);
+                    this.mutex.release();
+                    this.webcamNotAvailabledDialog();
+                    await this.reloadWebcamList(undefined);
+                }
             }
         }
     }
