@@ -23,16 +23,16 @@
       <li xml:lang="de">Dashboard: Temperaturen | Stromverbrauch | Taktfrequenzen | Lüfterdrehzahlen</li>
       <li>Pre-defined profile | Custom profiles</li>
       <li xml:lang="de">Vordefinierte Profile | Benutzerdefinierte Profile</li>
-      <li>System diagnostics | Remote support</li>
-      <li xml:lang="de">Systemdiagnose | Fern-Support</li>
-      <li>Power limit control | Clock speed control</li>
-      <li xml:lang="de">Power-Limit-Steuerung | Taktfrequenzsteuerung</li>
+      <li>Customer support: System diagnostics | Remote support | Restore system</li>
+      <li xml:lang="de">Direkter Draht zum Kundendienst: Systemdiagnose | Fern-Support | Systemwiederherstellung</li>
+      <li>CPU: Power limit control | Clock speed control</li>
+      <li xml:lang="de">CPU: Powerlimit-Steuerung | Taktfrequenzsteuerung</li>
       <li>Keyboard: Color and brightness control</li>
       <li xml:lang="de">Tastatur: Farb- und Helligkeitssteuerung</li>
       <li>Webcam: Exposure | Balance | Colors</li>
       <li xml:lang="de">Webcam: Belichtung | Balance | Farbe</li>
-      <li>Cool refreshment: TUXEDO Aquaris control</li>
-      <li xml:lang="de">Wasser marsch! TUXEDO Aquarissteuerung</li>
+      <li>TUXEDO Aquaris - Water cooling docking station for selected TUXEDO laptops</li>
+      <li xml:lang="de">"TUXEDO Aquaris - Liquid-Cooling-Dockingstation für ausgesuchte TUXEDO-Notebooks</li>
     </ul>
   </description>
 
@@ -61,9 +61,9 @@
   </categories>
   <keywords>
     <keyword>fan control</keyword>
-    <keyword xml:lang="de">fansteuerung</keyword>
-    <keyword>backlight</keyword>
-    <keyword xml:lang="de">hintergrundbeleuchtung</keyword>
+    <keyword xml:lang="de">Lüftersteuerung</keyword>
+    <keyword>keyboard backlight</keyword>
+    <keyword xml:lang="de">Tastaturbeleuchtung</keyword>
     <keyword>keyboard</keyword>
     <keyword xml:lang="de">tastatur</keyword>
     <keyword>webcam</keyword>
