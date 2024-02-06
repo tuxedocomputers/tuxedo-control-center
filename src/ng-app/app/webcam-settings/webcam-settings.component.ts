@@ -813,7 +813,7 @@ export class WebcamSettingsComponent implements OnInit {
             if (!this.detachedWebcamWindowActive) {
                 await this.setWebcamWithConfig(webcamConfig);
                 await this.executeWebcamCtrlsList(config);
-                await this.setTimeout(500);
+                await this.setTimeout(1000);
 
                 document.getElementById("video").style.visibility = "visible";
             }
