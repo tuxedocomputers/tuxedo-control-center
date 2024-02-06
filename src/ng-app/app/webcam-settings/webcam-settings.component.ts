@@ -185,7 +185,7 @@ export class WebcamSettingsComponent implements OnInit {
                     resolve(JSON.parse(data.toString()));
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error(error);
                     resolve(null);
                 });
         });
@@ -277,7 +277,7 @@ export class WebcamSettingsComponent implements OnInit {
                 );
                 resolve(data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -386,7 +386,7 @@ export class WebcamSettingsComponent implements OnInit {
                         ` -d ${devicePath} -c ${parameter}=${value}`
                 );
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -565,7 +565,8 @@ export class WebcamSettingsComponent implements OnInit {
                     this.video.nativeElement.srcObject = stream;
                     this.mediaDeviceStream = stream;
                 },
-                async (err) => {
+                async (error) => {
+                    console.error(error);
                     document.getElementById("hidden").style.display = "none";
                     if (!this.warnedOnceWebcamAccessError) {
                         this.warnedOnceWebcamAccessError = true;
