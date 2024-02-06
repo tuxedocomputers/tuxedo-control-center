@@ -40,20 +40,27 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/tuxedocomputers/tuxedo-control-center/blob/master/screenshots/de/DarkTheme_TCC.png</image>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/metainfo/dark-dashboard.png</image>
       <caption></caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/en/Profiles_TCC.png</image>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/metainfo/light-custom-fan.png</image>
       <caption></caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/tuxedocomputers/tuxedo-control-center/blob/master/screenshots/en/Profile_Settings_TCC.png</image>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/metainfo/dark-profile-overview.png</image>
+      <caption></caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/metainfo/light-kbd-bl.png</image>
+      <caption></caption>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/metainfo/light-aquaris-blue.png</image>
       <caption></caption>
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.tuxedocomputers.com/en/TUXEDO-Control-Center-TCC.tuxedo</url>
-  <url type="homepage" xml:lang="de">https://www.tuxedocomputers.com/de/TUXEDO-Control-Center-TCC.tuxedo</url>
   <url type="bugtracker">https://github.com/tuxedocomputers/tuxedo-control-center/issues</url>
   <categories>
     <category>Settings</category>
