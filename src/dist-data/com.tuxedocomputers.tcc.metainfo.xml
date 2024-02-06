@@ -1,30 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>com.tuxedocomputers.tcc</id>
-  
+
   <name>TUXEDO Control Center</name>
   <summary>Our in-house developed system tuning app for your TUXEDO laptop</summary>
   <summary xml:lang="de">Unsere inhouse-entwickelte Systemsteuerungssoftware für Ihr TUXEDO-Notebook</summary>
-  
+
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  
+
   <description>
     <p>
       No notebook is perfectly adapted to every situation and the requirements of every user. At TUXEDO, we want to give you the best possible control and customizability with your TUXEDO notebook and have developed our TUXEDO Control Center (TCC), a comprehensive tool with which you can adjust and monitor all performance, energy and comfort functions.
     </p>
+    <p xml:lang="de">
+      Kein Notebook ist perfekt abgestimmt auf jede Situation und die Anforderungen aller Benutzer. Bei TUXEDO möchten wir Ihnen die bestmögliche Kontrolle und Anpassbarkeit über Ihr TUXEDO-Notebook geben und haben mit unserem TUXEDO Control Center (TCC) ein umfangreiches Werkzeug entwickelt, mit dem Sie sämtliche Leistungs-, Energie- und Komfortfunktionen steuern und überwachen können.
+    </p>
+    <ul>
+      <li>Dashboard: Temperatures | Power draw | Clock frequencies | Fan speeds</li>
+      <li xml:lang="de">Dashboard: Temperaturen | Stromverbrauch | Taktfrequenzen | Lüfterdrehzahlen</li>
+      <li>Pre-defined profile | Custom profiles</li>
+      <li xml:lang="de">Vordefinierte Profile | Benutzerdefinierte Profile</li>
+      <li>System diagnostics | Remote support</li>
+      <li xml:lang="de">Systemdiagnose | Fern-Support</li>
+      <li>Power limit control | Clock speed control</li>
+      <li xml:lang="de">Power-Limit-Steuerung | Taktfrequenzsteuerung</li>
+      <li>Keyboard: Color and brightness control</li>
+      <li xml:lang="de">Tastatur: Farb- und Helligkeitssteuerung</li>
+      <li>Webcam: Exposure | Balance | Colors</li>
+      <li xml:lang="de">Webcam: Belichtung | Balance | Farbe</li>
+      <li>Cool refreshment: TUXEDO Aquaris control</li>
+      <li xml:lang="de">Wasser marsch! TUXEDO Aquarissteuerung</li>
+    </ul>
   </description>
-  
+
   <launchable type="desktop-id">tuxedo-control-center.desktop</launchable>
+
   <screenshots>
     <screenshot type="default">
       <image>https://github.com/tuxedocomputers/tuxedo-control-center/blob/master/screenshots/de/DarkTheme_TCC.png</image>
+      <caption></caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/tuxedocomputers/tuxedo-control-center/raw/master/screenshots/en/Profiles_TCC.png</image>
+      <caption></caption>
     </screenshot>
     <screenshot>
       <image>https://github.com/tuxedocomputers/tuxedo-control-center/blob/master/screenshots/en/Profile_Settings_TCC.png</image>
+      <caption></caption>
     </screenshot>
   </screenshots>
+  <url type="homepage">https://www.tuxedocomputers.com/en/TUXEDO-Control-Center-TCC.tuxedo</url>
+  <url type="homepage" xml:lang="de">https://www.tuxedocomputers.com/de/TUXEDO-Control-Center-TCC.tuxedo</url>
+  <url type="bugtracker">https://github.com/tuxedocomputers/tuxedo-control-center/issues</url>
+  <categories>
+    <category>Settings</category>
+    <category>System</category>
+  </categories>
+  <keywords>
+    <keyword>fan control</keyword>
+    <keyword xml:lang="de">fansteuerung</keyword>
+    <keyword>backlight</keyword>
+    <keyword xml:lang="de">hintergrundbeleuchtung</keyword>
+    <keyword>keyboard</keyword>
+    <keyword xml:lang="de">tastatur</keyword>
+    <keyword>webcam</keyword>
+  </keywords>
 </component>
