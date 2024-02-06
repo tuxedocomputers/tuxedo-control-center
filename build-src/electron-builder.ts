@@ -72,7 +72,8 @@ async function buildDeb(): Promise<void> {
                 '--after-install=./build-src/after_install.sh',
                 '--before-remove=./build-src/before_remove.sh',
                 '--conflicts=tuxedofancontrol',
-                '--replaces=tuxedofancontrol'
+                '--replaces=tuxedofancontrol',
+                '--inputs=build-src/package-files.txt'
             ]
         }
     };
