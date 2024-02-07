@@ -133,6 +133,7 @@ async function buildSuseRpm(): Promise<void> {
             afterRemove: "./build-src/after_remove.sh",
             fpm: [
                 '--replaces=tuxedofancontrol <= 0.1.9',
+                '--inputs=build-src/package-files.txt',
                 '--rpm-tag=%define _build_id_links none'
             ]
         }
