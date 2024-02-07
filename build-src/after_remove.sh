@@ -19,9 +19,6 @@ if [ "$1" != "upgrade" ]; then
     rm -rf /etc/tcc/ || true
 fi
 
-# Remove link to GUI
-rm -rf /usr/bin/tuxedo-control-center || true
-
 # Remove policy kit and desktop files
 rm /usr/share/polkit-1/actions/com.tuxedocomputers.tccd.policy || true
 rm /usr/share/polkit-1/actions/com.tuxedocomputers.tomte.policy || true
@@ -31,3 +28,6 @@ rm /usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf || true
 
 # remove udev rule
 rm /etc/udev/rules.d/99-webcam.rules || true
+
+# Delete the link to the binary
+rm -f '/usr/bin/${executable}'

@@ -24,9 +24,17 @@ systemctl daemon-reload
 systemctl enable tccd tccd-sleep
 systemctl restart tccd
 
-# chmod +x /opt/tuxedocc/resources/output/dist/data/tuxedocc-pkexec
-ln -s /opt/tuxedo-control-center/tuxedo-control-center /usr/bin/tuxedo-control-center || true
-
 # set up udev rules
 mv ${DIST_DATA}/99-webcam.rules /etc/udev/rules.d/99-webcam.rules
 udevadm control --reload-rules && udevadm trigger
+
+# ---
+# Original electron-builder after-install.tpl
+# ---
+ln -sf '/opt/tuxedo-control-center/${executable}' '/usr/bin/${executable}' || true
+
+# SUID chrome-sandbox for Electron 5+
+chmod 4755 '/opt/tuxedo-control-center/chrome-sandbox' || true
+
+update-mime-database /usr/share/mime || true
+update-desktop-database /usr/share/applications || true
