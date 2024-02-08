@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# On RPM update don't remove anything
-if [ "$1" -gt 0 2>/dev/null ]; then
-    exit 0
-fi
-
 # Stop, disable and remove services
 systemctl disable tccd tccd-sleep || true
 systemctl stop tccd || true
@@ -12,8 +7,8 @@ rm /etc/systemd/system/tccd.service || true
 rm /etc/systemd/system/tccd-sleep.service || true
 systemctl daemon-reload || true
 
-# Remove log and config files (unless deb upgrade)
-if [ "$1" != "upgrade" ]; then
+# Remove log and config files if pure uninstall
+if [ "$1" = "remove" ] || [ "$1" = "purge" ] || [ "$1" = "0" ]; then
     rm -rf /var/log/tcc/ || true
     rm -rf /var/log/tccd/ || true
     rm -rf /etc/tcc/ || true
@@ -30,4 +25,4 @@ rm /usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf || true
 rm /etc/udev/rules.d/99-webcam.rules || true
 
 # Delete the link to the binary
-rm -f '/usr/bin/${executable}'
+rm -f '/usr/bin/tuxedo-control-center'

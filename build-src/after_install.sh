@@ -31,7 +31,7 @@ udevadm control --reload-rules && udevadm trigger
 # ---
 # Original electron-builder after-install.tpl
 # ---
-ln -sf '/opt/tuxedo-control-center/${executable}' '/usr/bin/${executable}' || true
+ln -sf '/opt/tuxedo-control-center/tuxedo-control-center' '/usr/bin/tuxedo-control-center' || true
 
 # SUID chrome-sandbox for Electron 5+
 chmod 4755 '/opt/tuxedo-control-center/chrome-sandbox' || true

@@ -129,10 +129,11 @@ async function buildSuseRpm(): Promise<void> {
         },
         rpm: {
             depends: ['(tuxedo-keyboard >= 3.1.2 or tuxedo-drivers >= 3.1.2)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
-            afterInstall: "./build-src/after_install.sh",
-            afterRemove: "./build-src/after_remove.sh",
+            afterInstall: './build-src/dummy.sh',
+            afterRemove: './build-src/after_remove.sh',
             fpm: [
                 '--replaces=tuxedofancontrol <= 0.1.9',
+                '--rpm-posttrans=./build-src/after_install.sh',
                 '--inputs=build-src/package-files.txt',
                 '--rpm-tag=%define _build_id_links none'
             ]
