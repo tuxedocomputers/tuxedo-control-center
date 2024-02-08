@@ -1,5 +1,17 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Appstream metainfo for packaging
+
+### Fixed 
+- Webcam view throwing errors not being able to open webcam (most notably on Pulse Gen3)
+- Dashboard
+  - Missing GPU sensor values
+  - Sensor value missing when actually only zero
+  - Display one floating point for low wattage numbers instead of rounding down
+- RPM package upgrade ending up without executable link in /usr/bin
+
 ## [2.1.5] - 2024-01-25
 ### Fixed
 - CPU frequency limits not working for devices using amd-pstate-epp cpufreq driver
