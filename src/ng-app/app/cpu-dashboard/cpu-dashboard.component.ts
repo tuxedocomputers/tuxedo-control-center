@@ -444,7 +444,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public cpuPowerFormat = this.createFormatter(
         () => this.compat.hasCpuPower,
-        (val) => Math.round(val).toString()
+        (val) => this.roundWattage(val)
     );
 
     public dGpuPowerFormat = this.createFormatter(
@@ -452,12 +452,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             this.powerState == "D3cold" ||
             (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
         (val) =>
-            this.powerState == "D3cold" ? "0" : Math.round(val).toString()
+            this.powerState == "D3cold" ? "0" : this.roundWattage(val)
     );
 
     public iGpuPowerFormat = this.createFormatter(
         () => this.compat.hasIGpuPowerDraw,
-        (val) => Math.round(val).toString()
+        (val) => this.roundWattage(val)
     );
 
     public goToProfileEdit = (profile: ITccProfile): void => {
@@ -467,6 +467,19 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             });
         }
     };
+    
+    // Make numbers smaller than 1W not show 0, but <1W
+    private roundWattage(val: number): string {
+        let num = Math.round(val);
+        let ret = "";
+        if (num < 1) {
+            ret = "<1";
+        }
+        else {
+            ret = num.toString();
+         }
+        return ret;
+    }
 
     public gotoSettings(): void {
         this.router.navigate(["global-settings", true], {
