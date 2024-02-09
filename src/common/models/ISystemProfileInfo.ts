@@ -27,7 +27,7 @@ deviceSystemProfileInfo.set(TUXEDODevice.IBP17G6,  {
     pl:[
         { limit: 40, odmName: "performance", systemProfile: SystemProfile.MAXPERFORMACE},
         { limit: 36, odmName: "entertainment", systemProfile: SystemProfile.ENTERTAINMENT},
-        { limit: 24, odmName: "powersaving", systemProfile: SystemProfile.ENERGYSAVE},
+        { limit: 26, odmName: "powersaving", systemProfile: SystemProfile.ENERGYSAVE},
         { limit: 24, odmName: "quiet", systemProfile: SystemProfile.SILENT}
                     
     ]

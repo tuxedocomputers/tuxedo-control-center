@@ -264,6 +264,35 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    public getODMprofilePowerLimitID() {
+        let profile = this.profile;
+        let profileName = "";
+        if (!profile) {
+            profile = this.viewProfile;
+        }
+        if (!profile) {
+            profileName = this.profileFormGroup.controls.odmProfile.value;
+        }
+        else  {
+            profileName = profile.odmProfile.name;
+        }
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === profileName)
+            {
+                return i;
+            }
+        }
+    }
+
+    public sliderODMProfileChange(index: number) {
+        let profileInfo = this.deviceSystemProfileInfo.pl[index].odmName;
+        this.profileFormGroup.patchValue({
+            odmProfile: { name: profileInfo },
+        });
+        this.profileFormGroup.markAsDirty();
+    }
+
     private overwriteDefaultRefreshRateValue() {
         let displayFormGroupValue = this.profileFormGroup.get("display").value;
 

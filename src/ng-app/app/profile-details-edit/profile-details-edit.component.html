@@ -501,7 +501,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div formGroupName="odmProfile">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
-                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                <ng-container *ngIf="!hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                <ng-container *ngIf="hasDeviceSystemProfileInfo" >Power Limit</ng-container>
                                 <mat-icon
                                     class="info-icon"
                                     i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
@@ -533,11 +534,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
-                                    <mat-select formControlName="name" [disableOptionCentering]="true">
-                                        <mat-option *ngFor="let pl of deviceSystemProfileInfo.pl" [value]="pl.odmName" color="primary">
-                                            {{ pl.limit }} W
-                                        </mat-option>
-                                    </mat-select>
+                                    <mat-slider
+                                            #odmProfilesPowerLimitSlider
+                                            [min]="0"
+                                            [max]="deviceSystemProfileInfo.pl.length -1"
+                                            [value]="getODMprofilePowerLimitID()"
+                                            step="1"
+                                            (change)="sliderODMProfileChange(odmProfilesPowerLimitSlider.value)"
+                                            color="primary">
+                                    </mat-slider>
                                 </content>
                             </mat-grid-tile>
                         </ng-container>
