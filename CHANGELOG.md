@@ -1,15 +1,16 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.6] - 2024-02-13
 ### Added
 - Appstream metainfo for packaging
+- Support for Pulse Gen3 keyboard backlight
 
-### Fixed 
+### Fixed
 - Webcam view throwing errors not being able to open webcam (most notably on Pulse Gen3)
 - Dashboard
   - Missing GPU sensor values
   - Sensor value missing when actually only zero
-  - Display one floating point for low wattage numbers instead of rounding down
+  - Alternate display for low numbers instead of rounding down
 - RPM package upgrade ending up without executable link in /usr/bin
 
 ## [2.1.5] - 2024-01-25
