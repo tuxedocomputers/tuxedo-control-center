@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=TUXEDO Control Center
 Comment=An application helping you to tune your TUXEDO
-Exec="/usr/bin/tuxedo-control-center" %U
+Exec="/opt/tuxedo-control-center/tuxedo-control-center" %U
 Terminal=false
 Type=Application
 Icon=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg

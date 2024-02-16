@@ -2164,6 +2164,30 @@ def get_available_webcams(ignore_grey: bool = True):
             camera_info[dev_name] = f"{vendor_id}:{product_id}"
     return camera_info
 
+# only returning one device path per webcam id and keeping the path with lowest number
+# {"/dev/video0": "id1", "/dev/video2": "id1"} will return {"/dev/video0": "id1"}
+def deduplicate_device_paths(original_dict):
+    deduplicated_dict = {}
+
+    for path, device_id in original_dict.items():
+        path_numbers = re.findall(r'\d+', path)
+        if path_numbers:
+            path_number = int(path_numbers[0])
+        else:
+            continue
+
+        if device_id not in deduplicated_dict.values() or path_number < min(
+                int(re.findall(r'\d+', k)[0])
+                for k, v in deduplicated_dict.items()
+                if v == device_id):
+            deduplicated_dict = {
+                k: v for k, v in deduplicated_dict.items()
+                if v != device_id
+            }
+            deduplicated_dict[path] = device_id
+
+    return deduplicated_dict
+
 def usage():
     print(f'usage: {sys.argv[0]} [--help] [-d DEVICE] [--list] [-c CONTROLS]\n')
     print(f'optional arguments:')
@@ -2230,7 +2254,9 @@ def main():
             list_information = True
 
     if list_information:
-        print(json.dumps(get_available_webcams(ignore_grey)))
+        available_webcams = get_available_webcams(ignore_grey)
+        available_webcams = deduplicate_device_paths(available_webcams)
+        print(json.dumps(available_webcams))
         sys.exit(0)
     elif list_devices:
         for d in get_devices(v4ldirs):

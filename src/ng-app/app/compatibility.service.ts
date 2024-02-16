@@ -69,16 +69,13 @@ export class CompatibilityService {
     private hasPowerDrawWithValue(powerData: any): boolean {
         return (
             typeof powerData?.powerDraw !== "undefined" &&
-            powerData.powerDraw > 0
+            powerData.powerDraw > -1
         );
     }
 
     private hasFrequencyWithValue(gpuInfo: IiGpuInfo | IdGpuInfo): boolean {
         return (
-            gpuInfo.coreFrequency !== undefined &&
-            gpuInfo.coreFrequency >= 0 &&
-            gpuInfo.maxCoreFrequency !== undefined &&
-            gpuInfo.maxCoreFrequency >= 0
+            gpuInfo.coreFrequency !== undefined && gpuInfo.coreFrequency >= 0
         );
     }
 
@@ -95,7 +92,6 @@ export class CompatibilityService {
         const fanData = this.tccDbus.fanData?.value;
         const { cpu } = fanData;
         const cpuTemp = cpu?.temp;
-
         return this.hasDataWithValue(cpuTemp);
     }
 

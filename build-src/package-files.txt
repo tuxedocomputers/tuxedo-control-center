@@ -1,0 +1,1 @@
+usr/share/metainfo/com.tuxedocomputers.tcc.metainfo.xml

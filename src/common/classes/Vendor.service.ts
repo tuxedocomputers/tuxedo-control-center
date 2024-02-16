@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { exec } from "child_process";
+import { execCommandAsync } from "./Utils";
 
 @Injectable({
     providedIn: "root",
@@ -26,7 +26,7 @@ export class VendorService {
 
     private async checkCpuVendor(): Promise<string> {
         const stdout = (
-            await this.execCommand("cat /proc/cpuinfo | grep vendor_id")
+            await execCommandAsync("cat /proc/cpuinfo | grep vendor_id")
         ).toString();
 
         const outputLines = stdout.split("\n");
@@ -44,17 +44,5 @@ export class VendorService {
             }
         }
         return "unknown";
-    }
-
-    async execCommand(command: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            exec(command, (error, stdout, stderr) => {
-                if (error || stderr) {
-                    resolve(undefined);
-                } else {
-                    resolve(stdout.trim());
-                }
-            });
-        });
     }
 }

@@ -150,7 +150,7 @@ export class WebcamSettingsComponent implements OnInit {
                     resolve(JSON.parse(data.toString()));
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error(error);
                     resolve(null);
                 });
         });
@@ -235,14 +235,14 @@ export class WebcamSettingsComponent implements OnInit {
     private getWebcamSettings(): Promise<string> {
         return new Promise<string>(async (resolve) => {
             try {
-                let data = await this.utils.execCmd(
+                let data = await this.utils.execCmdAsync(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${this.selectedWebcam.path} -j`
                 );
-                resolve(data.toString());
+                resolve(data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -345,13 +345,13 @@ export class WebcamSettingsComponent implements OnInit {
 
         for (let devicePath of webcamPaths) {
             try {
-                await this.utils.execCmd(
+                await this.utils.execCmdAsync(
                     "python3 " +
                         this.getWebcamCtrlPythonPath() +
                         ` -d ${devicePath} -c ${parameter}=${value}`
                 );
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -362,34 +362,28 @@ export class WebcamSettingsComponent implements OnInit {
     private async executeWebcamCtrlsList(
         controls: WebcamPresetValues
     ): Promise<void> {
-        let controlStr = "";
-        // todo: make cleaner
-        Object.entries(controls).forEach((webcamPresetEntry) => {
-            if (
-                webcamPresetEntry[1] != undefined &&
-                webcamPresetEntry[0] != "fps" &&
-                webcamPresetEntry[0] != "resolution"
-            ) {
-                controlStr =
-                    controlStr +
-                    `${webcamPresetEntry[0]}=${webcamPresetEntry[1]},`;
-            }
-        });
+        const filteredControls = Object.entries(controls)
+            .filter(
+                ([key, value]) =>
+                    value !== undefined && key !== "fps" && key !== "resolution"
+            )
+            .map(([key, value]) => `${key}=${value}`)
+            .join(",");
 
-        let webcamPaths = this.getPathsWithId(this.selectedWebcam.id);
+        const webcamPaths = this.getPathsWithId(this.selectedWebcam.id);
 
-        for (let devicePath of webcamPaths) {
-            try {
-                await this.utils.execCmd(
-                    "python3 " +
-                        this.getWebcamCtrlPythonPath() +
-                        ` -d ${devicePath} -c ${controlStr}`
-                );
-            } catch (error) {
-                console.log(error);
-                this.mutex.release();
-                this.webcamNotAvailabledDialog();
-                await this.reloadWebcamList(undefined);
+        if (filteredControls) {
+            for (const devicePath of webcamPaths) {
+                try {
+                    await this.utils.execCmdAsync(
+                        `python3 ${this.getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`
+                    );
+                } catch (error) {
+                    console.error(error);
+                    this.mutex.release();
+                    this.webcamNotAvailabledDialog();
+                    await this.reloadWebcamList(undefined);
+                }
             }
         }
     }
@@ -536,7 +530,8 @@ export class WebcamSettingsComponent implements OnInit {
                     this.video.nativeElement.srcObject = stream;
                     this.mediaDeviceStream = stream;
                 },
-                async (err) => {
+                async (error) => {
+                    console.error(error);
                     document.getElementById("hidden").style.display = "none";
                     if (!this.warnedOnceWebcamAccessError) {
                         this.warnedOnceWebcamAccessError = true;
@@ -782,7 +777,7 @@ export class WebcamSettingsComponent implements OnInit {
             if (!this.detachedWebcamWindowActive) {
                 await this.setWebcamWithConfig(webcamConfig);
                 await this.executeWebcamCtrlsList(config);
-                await this.setTimeout(500);
+                await this.setTimeout(1000);
 
                 document.getElementById("video").style.visibility = "visible";
             }

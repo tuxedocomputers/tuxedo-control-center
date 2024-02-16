@@ -41,6 +41,7 @@ import { WebcamSettingsGuard } from "./webcam.service";
 import { TomteGuiComponent } from "./tomte-gui/tomte-gui.component";
 import { PrimeDialogComponent } from "./prime-dialog/prime-dialog.component";
 import { PowerStateStatusResolver } from "./dashboard.resolver";
+import { X11StatusResolver } from "./x11.resolver";
 
 const routes: Routes = [
     { path: "", redirectTo: "/main-gui/cpu-dashboard", pathMatch: "full" },
@@ -59,7 +60,10 @@ const routes: Routes = [
             {
                 path: "cpu-dashboard",
                 component: CpuDashboardComponent,
-                resolve: { powerStateStatus: PowerStateStatusResolver },
+                resolve: {
+                    powerStateStatus: PowerStateStatusResolver,
+                    x11Status: X11StatusResolver,
+                },
             },
             { path: "tools", component: ToolsComponent },
             {

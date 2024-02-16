@@ -66,9 +66,9 @@ export class UtilsService {
     return new Promise<Buffer>((resolve, reject) => {
       window.ipc.invoke('exec-cmd-async', command).then((result) => {
         if (result.error === null) {
-          resolve(result.data);
+          resolve(result.data.toString());
         } else {
-          reject(result.error);
+          reject(result.error.toString());
         }
       });
     });

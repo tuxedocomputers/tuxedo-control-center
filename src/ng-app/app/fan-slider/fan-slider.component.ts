@@ -38,6 +38,7 @@ import {
 import { Color, Label } from "ng2-charts";
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { interpolatePointsArray } from "src/common/classes/FanUtils";
+import { delay } from "src/common/classes/Utils";
 
 @Component({
     selector: "app-fan-slider",
@@ -111,10 +112,6 @@ export class FanSliderComponent implements OnInit {
         return { tableCPU: fanTable, tableGPU: fanTable };
     }
 
-    private delay(ms: number): Promise<void> {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
     private setFormValue(temp: number, sliderValue: number): void {
         this.fanFormGroup.patchValue({
             [`${temp}c`]: sliderValue,
@@ -137,7 +134,7 @@ export class FanSliderComponent implements OnInit {
             this.adjustSliders(rightSliders, clampedSliderValue, temp, "right");
 
             // slider won't adjust to formgroup value without delay
-            await this.delay(10);
+            await delay(10);
             this.setFormValue(temp, clampedSliderValue);
             this.updateFanChartDataset();
         });

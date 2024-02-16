@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as fs from 'fs';
+
+import { exec, execSync } from "child_process";
+import * as fs from "fs";
 
 export function getDirectories(source: string) {
     try {
-        return fs.readdirSync(source, { withFileTypes: true })
-            .filter(dirent => dirent.isDirectory())
-            .map(dirent => dirent.name);
+        return fs
+            .readdirSync(source, { withFileTypes: true })
+            .filter((dirent) => dirent.isDirectory())
+            .map((dirent) => dirent.name);
     } catch (err) {
         return [];
     }
@@ -30,9 +33,10 @@ export function getDirectories(source: string) {
 
 export function getFiles(source) {
     try {
-        return fs.readdirSync(source, { withFileTypes: true })
-            .filter(dirent => dirent.isFile())
-            .map(dirent => dirent.name);
+        return fs
+            .readdirSync(source, { withFileTypes: true })
+            .filter((dirent) => dirent.isFile())
+            .map((dirent) => dirent.name);
     } catch (err) {
         return [];
     }
@@ -40,16 +44,19 @@ export function getFiles(source) {
 
 export function getSymbolicLinks(source: string) {
     try {
-        return fs.readdirSync(source, { withFileTypes: true })
-            .filter(dirent => dirent.isSymbolicLink())
-            .map(dirent => dirent.name);
+        return fs
+            .readdirSync(source, { withFileTypes: true })
+            .filter((dirent) => dirent.isSymbolicLink())
+            .map((dirent) => dirent.name);
     } catch (err) {
         return [];
     }
 }
 
 export function findClosestValue(value: number, array: number[]): number {
-    if (array === undefined) { return value; }
+    if (array === undefined) {
+        return value;
+    }
 
     let closest: number;
     let closestDiff: number;
@@ -65,7 +72,10 @@ export function findClosestValue(value: number, array: number[]): number {
 
 export function fileOK(path: string): boolean {
     try {
-        fs.accessSync(path, fs.constants.F_OK |  fs.constants.R_OK | fs.constants.W_OK);
+        fs.accessSync(
+            path,
+            fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
+        );
         return true;
     } catch (err) {
         return false;
@@ -74,9 +84,43 @@ export function fileOK(path: string): boolean {
 
 export async function fileOKAsync(path: string): Promise<boolean> {
     try {
-        await fs.promises.access(path, fs.constants.F_OK |  fs.constants.R_OK | fs.constants.W_OK);
+        await fs.promises.access(
+            path,
+            fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
+        );
         return true;
     } catch (err) {
         return false;
     }
+}
+
+export function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// seperate exec cmd functionality because tccd can not access electron
+export async function execCommandAsync(command: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                console.error("Async Exec CMD failed: ", error);
+                resolve("");
+            } else {
+                resolve(stdout.trim());
+            }
+        });
+    });
+}
+
+export function execCommandSync(command: string): string {
+    try {
+        return execSync(command).toString();
+    } catch (err) {
+        console.error("Sync Exec CMD failed: ", err);
+        return undefined;
+    }
+}
+
+export function countLines(input: string): number {
+    return input.split("\n").filter((str) => str !== "").length;
 }

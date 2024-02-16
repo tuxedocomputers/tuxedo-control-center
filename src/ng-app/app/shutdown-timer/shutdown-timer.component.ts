@@ -44,7 +44,7 @@ export class ShutdownTimerComponent implements OnInit {
 
     public saveTime() {
         this.utils.pageDisabled = true;
-        this.utils.execCmd("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
+        this.utils.execCmdAsync("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
             this.updateTime();
             this.utils.pageDisabled = false;
         }).catch(() => {
@@ -55,7 +55,7 @@ export class ShutdownTimerComponent implements OnInit {
 
     public deleteTime() {
         this.utils.pageDisabled = true;
-        this.utils.execCmd("pkexec shutdown -c").then(() => {
+        this.utils.execCmdAsync("pkexec shutdown -c").then(() => {
             this.updateTime();
             this.utils.pageDisabled = false;
         }).catch(() => {
@@ -65,7 +65,7 @@ export class ShutdownTimerComponent implements OnInit {
     }
 
     public updateTime() {
-        this.utils.execCmd("cat /run/systemd/shutdown/scheduled").then((result) => {
+        this.utils.execCmdAsync("cat /run/systemd/shutdown/scheduled").then((result) => {
             let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
             let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
             this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");

@@ -17,9 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec } from "child_process";
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import { execCommandAsync, delay } from "../../common/classes/Utils";
+import * as fs from "fs";
 
 export class PrimeWorker extends DaemonWorker {
     primeSupported: Boolean;
@@ -29,33 +30,51 @@ export class PrimeWorker extends DaemonWorker {
     }
 
     public async onStart() {
-        await this.checkPrimeSupported();
+        // not instantly setting prime status in onStart() because requires_offloading only gets updated after some delay
+        // checking it directly in onStart() will result in getting a wrong state
+        await delay(2000);
         this.setPrimeStatus();
     }
 
     public async onWork() {
+        // checking in case someone changes state externally, otherwise could be removed to avoid periodic checking
         this.setPrimeStatus();
     }
 
-    public onExit() {}
+    private async setPrimeStatus() {
+        const primeSupported = await this.checkPrimeSupported();
 
-    private setPrimeStatus() {
-        if (this.primeSupported) {
-            this.checkPrimeStatus();
+        if (primeSupported) {
+            this.tccd.dbusData.primeState = await this.checkPrimeStatus();
+            this.primeSupported = primeSupported;
         }
-        if (!this.primeSupported) {
+        if (!primeSupported) {
             this.tccd.dbusData.primeState = "-1";
         }
     }
 
-    private async checkPrimeSupported() {
-        this.primeSupported =
-            (await execCommand("prime-supported /dev/null")) === "yes";
+    public onExit() {}
+
+    // only supporting gpu switch on systems which can use prime-select since primary focus is Tuxdeo OS and Ubuntu
+    // other operating systems may handle this differently and thus can't easily be supported
+    private async checkPrimeSupported(): Promise<boolean> {
+        const offloadingStatus =
+            fs.existsSync(
+                "/var/lib/ubuntu-drivers-common/requires_offloading"
+            ) == true;
+
+        const primeAvailable = (
+            await execCommandAsync("which prime-select | cat")
+        )
+            .toString()
+            .trim();
+
+        return offloadingStatus && !!primeAvailable;
     }
 
-    private async checkPrimeStatus() {
-        this.tccd.dbusData.primeState = this.transformPrimeStatus(
-            await execCommand("prime-select query")
+    private async checkPrimeStatus(): Promise<string> {
+        return this.transformPrimeStatus(
+            await execCommandAsync("prime-select query")
         );
     }
 
@@ -71,16 +90,4 @@ export class PrimeWorker extends DaemonWorker {
                 return "off";
         }
     }
-}
-
-async function execCommand(command: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                resolve("");
-            } else {
-                resolve(stdout.trim());
-            }
-        });
-    });
 }

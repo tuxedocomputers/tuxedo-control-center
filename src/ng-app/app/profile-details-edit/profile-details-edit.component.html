@@ -214,7 +214,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     
                     <!-- Refresh Rate and Resolution -->
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
-                        [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !isX11()}" 
+                        [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !isX11}" 
                         *ngIf="getCurrentResolutionRefreshRates().length > 1">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header i18n="@@cProfMgrDetailsRefRateOnProfileActivationHeader">Set refresh rate on profile
