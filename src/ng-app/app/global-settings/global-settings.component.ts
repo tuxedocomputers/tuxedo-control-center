@@ -24,7 +24,6 @@ import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AvailabilityService } from "../../../common/classes/availability.service";
 
 @Component({
     selector: 'app-global-settings',
@@ -62,7 +61,6 @@ export class GlobalSettingsComponent implements OnInit {
         private tccdbus: TccDBusClientService,
         private router: Router,
         private route: ActivatedRoute,
-        public availability: AvailabilityService
     ) { }
 
     ngOnInit() {
@@ -185,4 +183,12 @@ export class GlobalSettingsComponent implements OnInit {
     public onPrimeStateChanged(newPrimeState: string) {
         this.primeState = newPrimeState;
     }
+
+    public isDGpuAvailable() {
+        return window.power.isDGpuAvailable();
+    }
+
+    public isIGpuAvailable() {
+        return window.power.isIGpuAvailable();
+    }  
 }

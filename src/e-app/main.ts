@@ -774,20 +774,24 @@ return new Promise<void>((resolve, reject) => {
 });
 
 ipcMain.handle('fs-read-text-file', async (event, filePath) => {
-    return new Promise<string>((resolve, reject) => {
-      try {
-        fs.readFile(filePath,(err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data + "");
-          }
-        });
-      } catch (err) {
-        reject(err);
-      }
-    });
+    return readTextFile(filePath);
 });
+
+async function readTextFile(filePath: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        try {
+          fs.readFile(filePath,(err, data) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(data + "");
+            }
+          });
+        } catch (err) {
+          reject(err);
+        }
+      });
+}
 
 ipcMain.on('fs-file-exists-sync', (event, filePath) => {
     event.returnValue = fs.existsSync(filePath);
@@ -1165,6 +1169,7 @@ ipcMain.on('trigger-language-change', (event, arg) => {
 ###############   Dbus Communication API ####################
 */
 
+// we don#t need that anymore as ipc communication
 ipcMain.handle('init-dbus', async (event, arg) => {
     return new Promise<boolean>((resolve, reject) => {
         resolve(tccDBus.init());
@@ -1385,9 +1390,9 @@ ipcMain.handle('get-display-modes-json-dbus', async (event, arg) => {
 });
 
 
-ipcMain.handle('get-refresh-rate-supported-dbus', async (event, arg) => {
+ipcMain.handle('get-is-x11-dbus', async (event, arg) => {
     return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.getRefreshRateSupported());
+        resolve(tccDBus.getIsX11());
     });
 });
 
@@ -1466,11 +1471,68 @@ ipcMain.handle('get-fan-hwmon-available-dbus', async (event, chargeType) => {
     });
 });
 
-ipcMain.handle('get-dgpu-power-state-power', async (event, arg) => {
-    return getDGpuPowerState();
+// #### power state service backend + availablity service backend ####
+
+import { AvailabilityService } from "src/common/classes/availability.service";
+let availabilityService = new AvailabilityService();
+
+ipcMain.on('get-nvidia-dgpu-count-power', (event, arg) => {
+    event.returnValue = availabilityService.getNvidiaDGpuCount();
+});
+ipcMain.on('get-amd-dgpu-count-power', (event, arg) => {
+    event.returnValue = availabilityService.getAmdDGpuCount();
 });
 
-async function execCMD(cmd): Promise<string> {
+ipcMain.on('get-is-dgpu-available-power', (event, arg) => {
+    event.returnValue = availabilityService.isDGpuAvailable();
+});
+ipcMain.on('get-is-igpu-available-power', (event, arg) => {
+    event.returnValue = availabilityService.isIGpuAvailable();
+});
+
+ipcMain.handle('get-dgpu-power-state-power', async (event, arg) => {
+    return getDGpuPowerState(arg);
+});
+
+async function getDGpuPowerState(busPath: string) {
+    if (busPath) {
+        try {
+            const powerStatePath = path.join(busPath, "power_state");
+            const powerState = await readTextFile(
+                powerStatePath
+            );
+
+            return powerState.trim();
+        } catch (err) {
+            console.error("Failed to get power state of GPU: ", err);
+        }
+    }
+    return "-1";
+}
+
+
+import { amdDGpuDeviceIdString } from "src/common/classes/DeviceIDs";
+ipcMain.on('get-bus-path-power', (event, arg) => {
+    event.returnValue = getBusPath(arg);
+});
+
+function getBusPath(driver: string): string {
+    let devicePattern: string;
+
+    if (driver === "nvidia") {
+        devicePattern = "DRIVER=nvidia";
+    } else if (driver === "amd") {
+        devicePattern = "PCI_ID=" + amdDGpuDeviceIdString;
+    }
+
+    if (devicePattern) {
+        const grepCmd = `grep -lx '${devicePattern}' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'`;
+        return execCmdSync(grepCmd).trim();
+    }
+    return undefined;
+}
+
+async function execCmd(cmd): Promise<string> {
     return new Promise<string>((resolve, reject) => {
     child_process.exec(cmd, (err, stdout, stderr) => {
         if (err) {
@@ -1481,32 +1543,14 @@ async function execCMD(cmd): Promise<string> {
     });});
 }
 
-async function getDGpuPowerState(): Promise<string> {
+function execCmdSync(cmd):string {
         try {
-            const nvidiaBusPath = (
-                await execCMD(
-                    "grep -lx 'DRIVER=nvidia' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'"
-                )
-            ).toString();
-
-            if (nvidiaBusPath) {
-                console.log(
-                    `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
-                );
-                return (
-                    await execCMD(
-                        `cat ${path.join(nvidiaBusPath.trim(), "power_state")}`
-                    )
-                )
-                    .toString()
-                    .trim();
-            }
+            return child_process.execSync(cmd).toString();
         } catch (err) {
-            console.log("Failed to get power state of GPU: ", err);
+            return err.toString();
         }
-
-        return "-1";
 }
+
 
 
 // ######## vendor service backend ######

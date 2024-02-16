@@ -65,7 +65,7 @@ export class TccDBusClientService implements OnDestroy {
   private previousSettingsJSON = '';
 
   public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
-  public keyboardBacklightStates = new BehaviorSubject<KeyboardBacklightStateInterface[]>(undefined);
+  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
 
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
@@ -79,6 +79,7 @@ export class TccDBusClientService implements OnDestroy {
 
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
+  public isX11 = new BehaviorSubject<boolean>(undefined);
   private tccDBusInterface: DBUS;
 
   constructor(private utils: UtilsService) {
@@ -282,11 +283,9 @@ export class TccDBusClientService implements OnDestroy {
     if (this.timeout !== undefined) {
       clearInterval(this.timeout);
     }
-    this.tccDBusInterface.disconnect();
   }
-
   public async setTempProfile(profileName: string) {
-    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfile(profileName);
+    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileByName(profileName);
     return result;
   }
 

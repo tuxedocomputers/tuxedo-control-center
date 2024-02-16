@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld(
   'ipc',
   {
     send: async (channel: string, args) => ipcRenderer.send(channel, args),
+    sendSync: async (channel: string, args) => ipcRenderer.sendSync(channel, args),
     invoke: async (channel: string, args) => ipcRenderer.invoke(channel, args),
     getAppVersion: async () => ipcRenderer.invoke('get-app-version'),
     closeApp: () => ipcRenderer.send('close-app'),
@@ -78,7 +79,12 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'power',
     {
-        getDGpuPowerState: () => ipcRenderer.invoke('get-dgpu-power-state-power'),
+        getDGpuPowerState: (driver) => ipcRenderer.invoke('get-dgpu-power-state-power', driver),
+        getBusPath: (busPath) => ipcRenderer.sendSync('get-bus-path-power', busPath),
+        getNvidiaDGpuCount: () => ipcRenderer.sendSync('get-nvidia-dgpu-count-power'),
+        getAmdDGpuCount: () => ipcRenderer.sendSync('get-amd-dgpu-count-power'),
+        isDGpuAvailable: () => ipcRenderer.sendSync('get-is-dgpu-available-power'),
+        isIGpuAvailable: () => ipcRenderer.sendSync('get-is-igpu-available-power'),
     }
 );
 
@@ -95,7 +101,7 @@ contextBridge.exposeInMainWorld(
         getForceYUV420OutputSwitchAvailable: () => ipcRenderer.invoke('get-force-yub420-output-switch-available-dbus'),
         consumeModeReapplyPending: () => ipcRenderer.invoke('consume-mode-reapply-pending-dbus'),
         getActiveProfileJSON: () => ipcRenderer.invoke('get-active-profile-json-dbus'),
-        setTempProfile: (profileName) => ipcRenderer.invoke('set-temp-profile-dbus',profileName),
+        setTempProfileByName: (profileName) => ipcRenderer.invoke('set-temp-profile-dbus',profileName),
         setTempProfileById: (profileId) => ipcRenderer.invoke('set-temp-profile-by-id-dbus',profileId),
         getProfilesJSON: () => ipcRenderer.invoke('get-profiles-json-dbus'),
         getCustomProfilesJSON: () => ipcRenderer.invoke('get-custom-profiles-json-dbus'),
@@ -123,7 +129,6 @@ contextBridge.exposeInMainWorld(
         getPrimeState: () => ipcRenderer.invoke('get-prime-state-dbus'),
         getCpuPowerValuesJSON: () => ipcRenderer.invoke('get-cpu-power-values-json-dbus'),
         getDisplayModesJSON: () => ipcRenderer.invoke('get-display-modes-json-dbus'),
-        getRefreshRateSupported: () => ipcRenderer.invoke('get-refresh-rate-supported-dbus'),
         setSensorDataCollectionStatus: (status) => ipcRenderer.invoke('set-sensor-data-collection-status-dbus', status),
         setDGpuD0Metrics: (status) => ipcRenderer.invoke('set-dgpu-do-metrics-dbus', status),
         dbusAvailable: () => ipcRenderer.invoke('is-available-dbus'),
@@ -136,6 +141,7 @@ contextBridge.exposeInMainWorld(
         setChargeEndThreshold: (newValue) => ipcRenderer.invoke('set-charge-end-threshold-dbus', newValue),
         setChargeType: (chargeType) => ipcRenderer.invoke('set-charge-type-dbus', chargeType),
         fanHwmonAvailable: () => ipcRenderer.invoke('get-fan-hwmon-available-dbus'),
+        getIsX11: () => ipcRenderer.invoke('get-is-x11-dbus'),
     }
 );
 
@@ -268,7 +274,7 @@ contextBridge.exposeInMainWorld(
 );
 
 
-// contextBridge.exposeInMainWorld('aquarisAPI', new AquarisClientAPI(ipcRenderer, aquarisAPIHandle));
+// contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);
 
 contextBridge.exposeInMainWorld(
     'aquarisAPI', 

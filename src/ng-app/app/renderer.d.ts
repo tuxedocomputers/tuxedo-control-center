@@ -9,6 +9,7 @@ import { ITccFanProfile } from "src/common/models/TccFanTable";
 
 export interface IPC extends EventEmitter {
     send: (channel: string, args) => Promise<IPCReturnValue>,
+    sendSync: (channel: string, args) => IPCReturnValue,
     invoke: (channel: string, args) => Promise<IPCReturnValue>,
     getAppVersion: () => Promise<string>,
     closeApp: () => void,
@@ -34,7 +35,12 @@ export interface IPC extends EventEmitter {
 
   export interface POWER 
   {
-    getDGpuPowerState: () => Promise<string>,
+    getDGpuPowerState: (driver: string) => Promise<string>,
+    getBusPath: (busPath: string) => string,
+    getNvidiaDGpuCount: () => number,
+    getAmdDGpuCount: () => number,
+    isDGpuAvailable: () => boolean,
+    isIGpuAvailable: () => boolean,
   }
   
 
@@ -50,7 +56,7 @@ export interface IPC extends EventEmitter {
     getForceYUV420OutputSwitchAvailable: () => Promise<boolean>,
     consumeModeReapplyPending: () => Promise<boolean>,
     getActiveProfileJSON: () => Promise<string>,
-    setTempProfile: (profileName: string) => Promise<boolean>,
+    setTempProfileByName: (profileName: string) => Promise<boolean>,
     setTempProfileById: (profileId: string) => Promise<boolean>,
     getProfilesJSON: () => Promise<string>,
     getCustomProfilesJSON: () => Promise<string>,
@@ -78,7 +84,6 @@ export interface IPC extends EventEmitter {
     getPrimeState: () => Promise<string>,
     getCpuPowerValuesJSON: () => Promise<string>,
     getDisplayModesJSON: () => Promise<string>,
-    getRefreshRateSupported: () => Promise<boolean>,
     setSensorDataCollectionStatus: (status) => Promise<boolean>,
     setDGpuD0Metrics: (status) => Promise<boolean>,
     dbusAvailable: () => Promise<boolean>,
@@ -91,7 +96,7 @@ export interface IPC extends EventEmitter {
     setChargeEndThreshold: (newValue: number) => Promise<boolean>,
     setChargeType: (chargeType) => Promise<boolean>,
     fanHwmonAvailable: () => Promise<boolean>,
-
+    getIsX11: () => Promise<boolean>,
   }
 
   export interface VENDOR

@@ -37,8 +37,6 @@ import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { PowerStateService } from "../power-state.service";
-import { AvailabilityService } from "../../../common/classes/availability.service";
-import { ElectronService } from "ngx-electron";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -121,7 +119,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
         // not instantly showing window to give enough time to load window
         setTimeout(async () => {
-            this.electron.ipcRenderer.send("show-tcc-window");
+            window.ipc.send("show-tcc-window",'');
         }, 200);
     }
 
@@ -202,6 +200,19 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             })
         );
     }
+
+    public getAmdDGpuCount(): number {
+        return window.power.getAmdDGpuCount();
+    }
+
+    public isDGpuAvailable(): boolean {
+        return window.power.isDGpuAvailable();
+    }
+
+    public isIGpuAvailable(): boolean {
+        return window.power.isIGpuAvailable();
+    }
+
 
     private subscribeToPstate(): void {
         this.subscriptions.add(
@@ -284,7 +295,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.gaugeIGpuFreq =
             maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.iGpuFreq = coreFrequency;
-        this.iGpuVendor = await window.vendor.getCpuVendor();
+        this.cpuVendor = await window.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
 
     }
