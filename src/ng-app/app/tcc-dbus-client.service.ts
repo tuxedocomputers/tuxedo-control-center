@@ -86,7 +86,7 @@ export class TccDBusClientService implements OnDestroy {
   public primeState = new BehaviorSubject<string>(undefined);
 
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
-  public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
+  public isX11 = new BehaviorSubject<boolean>(undefined);
 
   public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
 
@@ -231,8 +231,8 @@ export class TccDBusClientService implements OnDestroy {
     {
         this.displayModes.next(undefined);
     }
-    const refreshRateSupportedBool = await this.tccDBusInterface.getRefreshRateSupported();
-    this.refreshRateSupported.next(refreshRateSupportedBool);
+    const isX11 = await this.tccDBusInterface.getIsX11();
+    this.isX11.next(isX11);
 
     const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
     if (keyboardBacklightCapabilitiesJSON !== undefined) {

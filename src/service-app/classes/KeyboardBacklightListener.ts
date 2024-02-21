@@ -27,6 +27,7 @@ import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../com
 
 export class KeyboardBacklightListener extends DaemonListener {
     protected ledsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
+    protected ledsWhiteOnlyNB05: string = "/sys/bus/platform/devices/tuxedo_nb05_kbd_backlight/leds/white:kbd_backlight";
     protected ledsRGBZones: Array<string> = ["/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight",
                                              "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_1",
                                              "/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight_2"];
@@ -159,9 +160,16 @@ export class KeyboardBacklightListener extends DaemonListener {
 
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
 
+        let ledsWhitePath;
         if (fileOK(this.ledsWhiteOnly + "/max_brightness")) {
+            ledsWhitePath = this.ledsWhiteOnly;
+        } else if (fileOK(this.ledsWhiteOnlyNB05 + "/max_brightness")) {
+            ledsWhitePath = this.ledsWhiteOnlyNB05;
+        }
+
+        if (ledsWhitePath) {
             console.log("Detected white only keyboard backlight");
-            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsWhiteOnly + "/max_brightness"));
+            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(ledsWhitePath + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
         else {

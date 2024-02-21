@@ -126,7 +126,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
-    public refreshRateSupported: boolean;
+    public isX11: boolean;
     public refreshRate: number;
 
     private tdpLabels: Map<string, string>;
@@ -224,9 +224,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }));
 
-        this.subscriptions.add(this.tccDBus.refreshRateSupported.subscribe(nextrefreshRateSupported => {
-            if (nextrefreshRateSupported !== this.refreshRateSupported) {
-                this.refreshRateSupported = nextrefreshRateSupported;
+        this.subscriptions.add(this.tccDBus.isX11.subscribe(nextIsX11 => {
+            if (nextIsX11 !== this.isX11) {
+                this.isX11 = nextIsX11;
             }
         }));
 
@@ -648,29 +648,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     //     }
     // }
 
-    public getDisplayModes(): IDisplayMode[]
-    {
-        if(!this.displayModes)
-        {
+    public getDisplayModes(): IDisplayMode[] {
+        if (!this.displayModes) {
             return undefined;
         }
         return this.displayModes.displayModes;
     }
 
-    public isX11(): boolean
-    {
-        return this.refreshRateSupported;
-    }
-
-    getRefreshRateNotAvailableTooltipText(): string
-    {
-        if(this.isX11())
-        {
+    getRefreshRateNotAvailableTooltipText(): string {
+        if (this.isX11) {
             return "";
-        }
-        else
-        {
-            return $localize `:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`
+        } else {
+            return $localize`:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`;
         }
     }
 
@@ -734,8 +723,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private buttonRepeatTimer: NodeJS.Timeout;
     public buttonRepeatDown(action: () => void) {
-        console.log("this: ", this.profileFormGroup.get('fan'))
-
         if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
         const repeatDelayMS = 200;
 

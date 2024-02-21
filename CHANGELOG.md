@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.6] - 2024-02-13
+### Added
+- Appstream metainfo for packaging
+- Support for Pulse Gen3 keyboard backlight
+
+### Fixed
+- Webcam view throwing errors not being able to open webcam (most notably on Pulse Gen3)
+- Dashboard
+  - Missing GPU sensor values
+  - Sensor value missing when actually only zero
+  - Alternate display for low numbers instead of rounding down
+- RPM package upgrade ending up without executable link in /usr/bin
+
 ## [2.1.5] - 2024-01-25
 ### Fixed
 - CPU frequency limits not working for devices using amd-pstate-epp cpufreq driver

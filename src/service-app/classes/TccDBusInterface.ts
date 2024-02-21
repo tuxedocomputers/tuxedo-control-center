@@ -71,7 +71,7 @@ export class FanData {
  */
 export class TccDBusData {
     public displayModes: string;
-    public refreshRateSupported: boolean;
+    public isX11: boolean;
     public tuxedoWmiAvailable: boolean;
     public fanHwmonAvailable: boolean;
     public tccdVersion: string;
@@ -124,7 +124,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }
     }
     GetDisplayModesJSON() { return this.data.displayModes; }
-    GetRefreshRateSupported() { return this.data.refreshRateSupported; }
+    GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     FanHwmonAvailable() { return this.data.fanHwmonAvailable; }
     TccdVersion() { return this.data.tccdVersion; }
@@ -246,7 +246,7 @@ TccDBusInterface.configureMembers({
     },
     methods: {
         GetDisplayModesJSON: {outSignature: 's'},
-        GetRefreshRateSupported: { outSignature: 'b'},
+        GetIsX11: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
         FanHwmonAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
