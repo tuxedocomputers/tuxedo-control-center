@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.7] - 2024-02-22
+### Fixed
+- Always restoring keyboard backlight brightness to zero after lid close
+
 ## [2.1.6] - 2024-02-13
 ### Added
 - Appstream metainfo for packaging
