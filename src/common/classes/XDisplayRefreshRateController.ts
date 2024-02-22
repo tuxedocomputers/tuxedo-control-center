@@ -23,6 +23,7 @@ import * as fs from "fs";
 export class XDisplayRefreshRateController {
     private displayName: string;
     private isX11: boolean;
+    private dataIsFresh: boolean;
     private displayEnvVariable: string;
     private xAuthorityFile: string;
     public XDisplayRefreshRateController() {
@@ -31,6 +32,9 @@ export class XDisplayRefreshRateController {
     }
 
     private setEnvVariables(): void {
+        if(this.dataIsFresh){
+            return;
+        }
         const output = child_process
             .execSync(
                 `ps -u $(id -u) -o pid= | xargs -I{} cat /proc/{}/environ 2>/dev/null | tr '\\0' '\\n'`
@@ -66,6 +70,9 @@ export class XDisplayRefreshRateController {
                 : sessionType === "wayland"
                 ? false
                 : undefined;
+
+        this.dataIsFresh = true;
+        setTimeout(() => this.dataIsFresh = false, 60_000)
     }
 
     public getIsX11(): boolean {
