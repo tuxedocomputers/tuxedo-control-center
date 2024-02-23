@@ -88,6 +88,8 @@ export class TccDBusClientService implements OnDestroy {
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public isX11 = new BehaviorSubject<boolean>(undefined);
 
+  public nvidiaPowerCTRLDefaultPowerLimit = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
   public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
 
   constructor(private utils: UtilsService) {
@@ -251,6 +253,8 @@ export class TccDBusClientService implements OnDestroy {
     this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
     this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
 
+    this.nvidiaPowerCTRLDefaultPowerLimit.next(await this.tccDBusInterface.getNVIDIAPowerCTRLDefaultPowerLimit());
+    this.nvidiaPowerCTRLMaxPowerLimit.next(await this.tccDBusInterface.getNVIDIAPowerCTRLMaxPowerLimit());
     this.nvidiaPowerCTRLAvailable.next(await this.tccDBusInterface.getNVIDIAPowerCTRLAvailable());
   }
 

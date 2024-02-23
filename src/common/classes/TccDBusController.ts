@@ -463,6 +463,22 @@ export class TccDBusController {
         }
     }
 
+    async getNVIDIAPowerCTRLDefaultPowerLimit(): Promise<number> {
+        try {
+            return await this.interface.GetNVIDIAPowerCTRLDefaultPowerLimit();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getNVIDIAPowerCTRLMaxPowerLimit(): Promise<number> {
+        try {
+            return await this.interface.GetNVIDIAPowerCTRLMaxPowerLimit();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
     async getNVIDIAPowerCTRLAvailable(): Promise<boolean> {
         try {
             return await this.interface.GetNVIDIAPowerCTRLAvailable();

@@ -140,7 +140,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public fansOffAvailable = true;
 
+    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 0;
     public nvidiaPowerCTRLAvailable: boolean = false;
+
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
@@ -227,6 +230,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.isX11.subscribe(nextIsX11 => {
             if (nextIsX11 !== this.isX11) {
                 this.isX11 = nextIsX11;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLDefaultPowerLimit.subscribe(nextNVIDIAPowerCTRLDefaultPowerLimit => {
+            if (nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit) {
+                this.nvidiaPowerCTRLDefaultPowerLimit = nextNVIDIAPowerCTRLDefaultPowerLimit;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
+            if (nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
+                this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
             }
         }));
 
