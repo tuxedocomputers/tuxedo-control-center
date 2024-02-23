@@ -20,6 +20,7 @@
 import { DaemonListener } from "./DaemonListener";
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
+import { execCommandAsync } from "../../common/classes/Utils";
 
 export class NVIDIAPowerCTRLListener extends DaemonListener {
     private ctgpOffsetPath: string = "/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset";
@@ -57,6 +58,10 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
 
         this.applyActiveProfile();
 
+        this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit =
+            Number(await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.default_limit"));
+        this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit =
+            Number(await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.max_limit"));
         this.tccd.dbusData.nvidiaPowerCTRLAvailable = true;
     }
 

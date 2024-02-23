@@ -101,6 +101,8 @@ export class TccDBusData {
     public fansOffAvailable: boolean;
     public sensorDataCollectionStatus: boolean = false;
     public d0MetricsUsage: boolean = false;
+    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 0;
     public nvidiaPowerCTRLAvailable: boolean = false;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
@@ -236,6 +238,14 @@ export class TccDBusInterface extends dbus.interface.Interface {
         this.fnLock.setFnLockStatus(status);
     }
 
+    GetNVIDIAPowerCTRLDefaultPowerLimit() {
+        return this.data.nvidiaPowerCTRLDefaultPowerLimit;
+    }
+
+    GetNVIDIAPowerCTRLMaxPowerLimit() {
+        return this.data.nvidiaPowerCTRLMaxPowerLimit;
+    }
+
     GetNVIDIAPowerCTRLAvailable() {
         return this.data.nvidiaPowerCTRLAvailable;
     }
@@ -296,6 +306,8 @@ TccDBusInterface.configureMembers({
         SetSensorDataCollectionStatus: { inSignature: 'b' },
         GetSensorDataCollectionStatus: { outSignature: 'b' },
         SetDGpuD0Metrics: { inSignature: 'b' },
+        GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
+        GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' }
     },
     signals: {
