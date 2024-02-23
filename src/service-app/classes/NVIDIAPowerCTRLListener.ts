@@ -33,6 +33,10 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
     }
 
     public onActiveProfileChanged(): void {
+        if (!this.isAvailable()) {
+            return;
+        }
+
         this.applyActiveProfile();
     }
 
