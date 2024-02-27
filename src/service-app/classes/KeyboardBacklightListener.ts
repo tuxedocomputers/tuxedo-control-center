@@ -100,11 +100,13 @@ export class KeyboardBacklightListener extends DaemonListener {
         let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower/KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (async function(brightness: number): Promise<void> {
-            let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-            for (let i in keyboardBacklightStatesNew) {
-                keyboardBacklightStatesNew[i].brightness = brightness;
+            if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
+                let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
+                for (let i in keyboardBacklightStatesNew) {
+                    keyboardBacklightStatesNew[i].brightness = brightness;
+                }
+                this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
             }
-            this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
         }).bind(this));
     }
 
