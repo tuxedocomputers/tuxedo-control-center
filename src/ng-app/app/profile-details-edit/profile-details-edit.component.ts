@@ -148,6 +148,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
+    public min = Math.min;
+
     @ViewChild('inputName') inputName: MatInput;
 
     @ViewChild(FanSliderComponent)
