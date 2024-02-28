@@ -141,7 +141,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public fansOffAvailable = true;
 
     public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
-    public nvidiaPowerCTRLMaxPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
