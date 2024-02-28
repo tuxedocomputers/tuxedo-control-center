@@ -236,13 +236,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }));
 
         this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLDefaultPowerLimit.subscribe(nextNVIDIAPowerCTRLDefaultPowerLimit => {
-            if (nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit) {
+            if (nextNVIDIAPowerCTRLDefaultPowerLimit !== undefined && nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit) {
                 this.nvidiaPowerCTRLDefaultPowerLimit = nextNVIDIAPowerCTRLDefaultPowerLimit;
             }
         }));
 
         this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
-            if (nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
+            if (nextNVIDIAPowerCTRLMaxPowerLimit !== undefined && nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
                 this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
             }
         }));
