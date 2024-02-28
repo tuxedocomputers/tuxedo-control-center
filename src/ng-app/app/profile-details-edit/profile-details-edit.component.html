@@ -774,7 +774,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-slider #inputCTGPOffset
                                         formControlName="cTGPOffset"
                                         min="0"
-                                        max="25"
+                                        [max]="nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit"
                                         step="1"
                                         color="primary">
                                     </mat-slider>
