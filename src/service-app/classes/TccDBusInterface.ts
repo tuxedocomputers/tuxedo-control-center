@@ -113,6 +113,7 @@ export class TccDBusOptions {
 export class TccDBusInterface extends dbus.interface.Interface {
     private interfaceOptions: TccDBusOptions;
     private fnLock: FnLockController = new FnLockController();
+    private dataCollectionTimeout: NodeJS.Timeout | null = null;
 
     constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
         super('com.tuxedocomputers.tccd');
@@ -122,6 +123,17 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
+
+    private resetDataCollectionTimeout() {
+        if(this.dataCollectionTimeout) {
+            clearTimeout(this.dataCollectionTimeout);
+        }
+
+        this.dataCollectionTimeout = setTimeout(() => {
+            this.data.sensorDataCollectionStatus = false;
+        }, 10000);
+    }
+
     GetDisplayModesJSON() { return this.data.displayModes; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -133,8 +145,17 @@ export class TccDBusInterface extends dbus.interface.Interface {
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
-    GetDGpuInfoValuesJSON() { return this.data.dGpuInfoValuesJSON; }
-    GetIGpuInfoValuesJSON() { return this.data.iGpuInfoValuesJSON; }
+
+    GetDGpuInfoValuesJSON() { 
+        this.resetDataCollectionTimeout();
+        return this.data.dGpuInfoValuesJSON; 
+    }
+
+    GetIGpuInfoValuesJSON() { 
+        this.resetDataCollectionTimeout();
+        return this.data.iGpuInfoValuesJSON; 
+    }
+
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     GetPrimeState() { return this.data.primeState; }
     SetSensorDataCollectionStatus(status: boolean) {this.data.sensorDataCollectionStatus = status}
