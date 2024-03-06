@@ -493,7 +493,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <hr />
             </div>
             <mat-card-content class="content">
-                
+                <p class="sub-header" *ngIf="hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMTDPLabel" >CPU power limit control</p>                    
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                     *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <!-- ODM Profile -->
@@ -552,7 +552,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 </mat-grid-list>
 
-                <h4 i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</h4>
+                <p class="sub-header" i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</p>
 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
                     <div formGroupName="odmPowerLimits">
