@@ -302,10 +302,10 @@ export class FanControlWorker extends DaemonWorker {
             const fanLogic = this.fans.get(fanNumber);
 
             // Read and store sensor values
-            const currentTemperatureCelcius: ObjWrapper<number> = { value: 0 };
+            const currentTemperatureCelsius: ObjWrapper<number> = { value: 0 };
             const tempReadSuccess = ioAPI.getFanTemperature(
                 fanIndex,
-                currentTemperatureCelcius
+                currentTemperatureCelsius
             );
             const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
             // const speedReadSuccess = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
@@ -314,7 +314,7 @@ export class FanControlWorker extends DaemonWorker {
             fanTimestamps.push(Date.now());
             fanSpeedsRead.push(currentSpeedPercent.value);
             if (tempSensorAvailable[fanIndex]) {
-                fanTemps.push(currentTemperatureCelcius.value);
+                fanTemps.push(currentTemperatureCelsius.value);
             } else {
                 fanTemps.push(-1);
             }
@@ -322,7 +322,7 @@ export class FanControlWorker extends DaemonWorker {
             // If there is temp sensor value report temperature to logic
             // Also, fill fanSpeedsSet
             if (tempSensorAvailable[fanIndex]) {
-                fanLogic.reportTemperature(currentTemperatureCelcius.value);
+                fanLogic.reportTemperature(currentTemperatureCelsius.value);
                 const calculatedSpeed = fanLogic.getSpeedPercent();
                 fanSpeedsSet[fanIndex] = calculatedSpeed;
             } else {

@@ -122,14 +122,12 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onTemperatureDisplayChanged(event: any) {
+    onTemperatureDisplayChanged(event: boolean) {
         this.utils.pageDisabled = true;
-
-        this.config.getSettings().fahrenheit = event.checked;
-        
+        this.config.getSettings().fahrenheit = event;
         this.config.saveSettings().then(success => {
             if (!success) {
-                this.config.getSettings().fahrenheit = !event.checked;
+                this.config.getSettings().fahrenheit = !event;
             }
             
             this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit

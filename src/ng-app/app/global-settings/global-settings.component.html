@@ -53,21 +53,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value">
-                                <span [hidden]="inputTemperatureDisplaySettings.checked"
-                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celcius</span>
-                                <span [hidden]="!inputTemperatureDisplaySettings.checked"
+                                <span [hidden]="temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
+                                <span [hidden]="!temperatureDisplayFahrenheit"
                                     i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input">
-                                <mat-checkbox #inputTemperatureDisplaySettings color="primary" [(ngModel)]="temperatureDisplayFahrenheit"
-                                    (change)="onTemperatureDisplayChanged($event)">
-                                </mat-checkbox>
+                                <mat-button-toggle #inputTemperatureDisplaySettings color="primary"
+                                    (change)="onTemperatureDisplayChanged(!temperatureDisplayFahrenheit)" [value]="!temperatureDisplayFahrenheit">
+                                    <span [hidden]="!temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
+                                <span [hidden]="temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
+                                </mat-button-toggle>
                             </content>
                         </mat-grid-tile>
                     </mat-grid-list>
-                    <div class=margin-bottom i18n="@@cGlobalSettingsTemperatureDisplayDescription">Switch between Celcius and Fahrenheit
+                    <div class=margin-bottom i18n="@@cGlobalSettingsTemperatureDisplayDescription">Switch between Celsius and Fahrenheit
                     </div>
 
 

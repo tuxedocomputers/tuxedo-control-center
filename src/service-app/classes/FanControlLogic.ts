@@ -173,7 +173,7 @@ export class FanControlLogic {
     /**
      * Used to report temperature to the logic handler.
      *
-     * @param temperatureValue New temperature sensor value in celcius
+     * @param temperatureValue New temperature sensor value in Celsius
      */
     public reportTemperature(temperatureValue: number) {
         this.tempBuffer.addValue(temperatureValue);
