@@ -309,7 +309,7 @@ export class KeyboardBacklightListener {
                 }
             }
             if (this.ledsRGBZones.length > 0) {
-                this.setBufferInput(this.ledsRGBZones[0], false)
+                this.setBufferInput(this.ledsRGBZones[0], false);
             }
         }
 
