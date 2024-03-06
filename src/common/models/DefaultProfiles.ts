@@ -154,7 +154,7 @@ const office: ITccProfile = {
     },
     odmProfile: { name: 'enthusiast' },
     odmPowerLimits: { tdpValues: [25, 35, 35] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
 };
 
 const highPerformance: ITccProfile = {
@@ -193,7 +193,7 @@ const highPerformance: ITccProfile = {
     },
     odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
 };
 
 export const defaultCustomProfile: ITccProfile = {
@@ -232,7 +232,7 @@ export const defaultCustomProfile: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
 };
 
 export const defaultMobileCustomProfileTDP: ITccProfile = {
@@ -271,7 +271,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [15, 25, 50] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
 };
 
 export const defaultMobileCustomProfileCl: ITccProfile = {
