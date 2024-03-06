@@ -259,7 +259,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         {
             if (this.deviceSystemProfileInfo.pl[i].odmName === name)
             {
-                return this.deviceSystemProfileInfo.pl[i].limit + " W";
+                return "max.: " + this.deviceSystemProfileInfo.pl[i].limit + " W";
             }
         }
     }

@@ -19,6 +19,11 @@
 .profile-details-edit {
     margin: 0 10px 10px 10px;
 
+    .sub-header
+    {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
     .profile-title {
         position: fixed;
         top: 10px;
@@ -62,6 +67,7 @@
             text-align: left;
             font-size: 1.10em;
         }
+
 
         content.value {
             width: 100%;
