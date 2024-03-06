@@ -311,7 +311,85 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+};
+
+const highPerformance25WcTGP: ITccProfile = {
+    id: DefaultProfileIDs.HighPerformance,
+    name: DefaultProfileIDs.HighPerformance,
+    description: '',
+    display: {
+        brightness: 60,
+        useBrightness: true,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
+    },
+    odmProfile: { name: 'overboost' },
+    odmPowerLimits: { tdpValues: [60, 60, 70] },
+    nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
+};
+
+export const defaultCustomProfile25WcTGP: ITccProfile = {
+    id: '__default_custom_profile__',
+    name: 'TUXEDO Defaults',
+    description: 'Edit profile to change behaviour',
+    display: {
+        brightness: 100,
+        useBrightness: false,
+        refreshRate: -1,
+        useRefRate: false,
+        xResolution: -1,
+        yResolution: -1,
+        useResolution: false
+    },
+    cpu: {
+        onlineCores: undefined,
+        useMaxPerfGov: false,
+        scalingMinFrequency: undefined,
+        scalingMaxFrequency: undefined,
+        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
+        energyPerformancePreference: 'balance_performance',
+        noTurbo: false
+    },
+    webcam: {
+        status: true,
+        useStatus: true
+    },
+    fan: {
+        useControl: true,
+        fanProfile: 'Balanced',
+        minimumFanspeed: 0,
+        maximumFanspeed: 100,
+        offsetFanspeed: 0,
+        customFanCurve: customFanPreset,
+    },
+    odmProfile: { name: undefined },
+    odmPowerLimits: { tdpValues: [] },
+    nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
 };
 
 export enum TUXEDODevice {
@@ -351,8 +429,8 @@ deviceProfiles.set(TUXEDODevice.PULSE1502, [ maxEnergySave, silent, office ]);
 
 deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, highPerformance ]);
 deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XA02, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XA03, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XA02, [ maxEnergySave, silent, office, highPerformance25WcTGP ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XA03, [ maxEnergySave, silent, office, highPerformance25WcTGP ]);
 deviceProfiles.set(TUXEDODevice.POLARIS1XA05, [ maxEnergySave, silent, office, highPerformance ]);
 
 deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
@@ -369,3 +447,5 @@ export const deviceCustomProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 deviceCustomProfiles.set(TUXEDODevice.IBPG8, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
 deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
 deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
+deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA02, [ defaultCustomProfile25WcTGP ]);
+deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA03, [ defaultCustomProfile25WcTGP ]);
