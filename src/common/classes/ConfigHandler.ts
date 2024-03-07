@@ -92,7 +92,23 @@ export class ConfigHandler {
         await this.writeConfigAsync<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
-    readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
+    recursivelyFillObject(obj: object, defaultObj: object): boolean {
+        let objModified = false;
+        for (const key in defaultObj) {
+            if (defaultObj[key].value !== undefined && obj[key].value === undefined) {
+                obj[key].value = defaultObj[key].value;
+                objModified = true;
+            }
+            if (typeof obj[key].value === 'object') {
+                if (this.recursivelyFillObject(obj[key].value, defaultObj[key].value)) {
+                    objModified = true;
+                }
+            }
+        }
+        return objModified;
+    }
+
+    readProfiles(device: TUXEDODevice, filePath: string = this.pathProfiles): ITccProfile[] {
         let idUpdated = false;
         const profiles = this.readConfig<ITccProfile[]>(filePath).map(profile => {
             if (profile.id === undefined) {
@@ -102,7 +118,14 @@ export class ConfigHandler {
             }
             return profile;
         });
-        if (idUpdated) {
+        let valueFilledFromDefault: boolean = false;
+        profiles.forEach((profile: ITccProfile) => {
+            // TODO: get default mobile custom profile by id and use this.getDefaultCustomProfiles(device)[1] as the base to fill from, or do id matching in general for this
+            if (this.recursivelyFillObject(profile, this.getDefaultCustomProfiles(device)[0])) {
+                valueFilledFromDefault = true;
+            }
+        });
+        if (idUpdated || valueFilledFromDefault) {
             this.writeProfiles(profiles);
             console.log(`Saved updated profiles`);
         }
@@ -217,7 +240,7 @@ export class ConfigHandler {
 
     public getCustomProfilesNoThrow(device: TUXEDODevice): ITccProfile[] {
         try {
-            return this.readProfiles();
+            return this.readProfiles(device);
         } catch (err) {
             return this.getDefaultCustomProfiles(device);
         }

@@ -441,7 +441,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         try {
-            this.customProfiles = this.config.readProfiles();
+            this.customProfiles = this.config.readProfiles(device);
         } catch (err) {
             this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
