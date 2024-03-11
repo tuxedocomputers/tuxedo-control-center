@@ -118,17 +118,32 @@ export class ConfigHandler {
             }
             return profile;
         });
+
         let valueFilledFromDefault: boolean = false;
+        let defaultCustomProfiles: ITccProfile[] = this.getDefaultCustomProfiles(device);
+        let defaultCustomProfilesIDs: string[];
+        defaultCustomProfilesIDs = defaultCustomProfiles.map((profile) => {
+            return profile.id;
+        });
+
         profiles.forEach((profile: ITccProfile) => {
-            // TODO: get default mobile custom profile by id and use this.getDefaultCustomProfiles(device)[1] as the base to fill from, or do id matching in general for this
-            if (this.recursivelyFillObject(profile, this.getDefaultCustomProfiles(device)[0])) {
+            let defaultCustomProfile = defaultCustomProfiles[0];
+            defaultCustomProfilesIDs.forEach((defaultCustomProfileID, index) => {
+                if (profile.id === defaultCustomProfileID) {
+                    defaultCustomProfile = defaultCustomProfiles[index];
+                }
+            });
+
+            if (this.recursivelyFillObject(profile, defaultCustomProfile)) {
                 valueFilledFromDefault = true;
             }
         });
+
         if (idUpdated || valueFilledFromDefault) {
             this.writeProfiles(profiles);
             console.log(`Saved updated profiles`);
         }
+
         return profiles;
     }
 
