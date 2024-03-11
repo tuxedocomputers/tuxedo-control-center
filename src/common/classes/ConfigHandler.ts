@@ -99,7 +99,7 @@ export class ConfigHandler {
                 obj[key].value = defaultObj[key].value;
                 objModified = true;
             }
-            if (typeof obj[key].value === 'object') {
+            if (typeof defaultObj[key].value === 'object') {
                 if (this.recursivelyFillObject(obj[key].value, defaultObj[key].value)) {
                     objModified = true;
                 }
