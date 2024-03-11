@@ -1473,7 +1473,7 @@ ipcMain.handle('get-fan-hwmon-available-dbus', async (event, chargeType) => {
 
 // #### power state service backend + availablity service backend ####
 
-import { AvailabilityService } from "src/common/classes/availability.service";
+import { AvailabilityService } from "../common/classes/availability.service";
 let availabilityService = new AvailabilityService();
 
 ipcMain.on('get-nvidia-dgpu-count-power', (event, arg) => {
@@ -1511,7 +1511,7 @@ async function getDGpuPowerState(busPath: string) {
 }
 
 
-import { amdDGpuDeviceIdString } from "src/common/classes/DeviceIDs";
+import { amdDGpuDeviceIdString } from "../common/classes/DeviceIDs";
 ipcMain.on('get-bus-path-power', (event, arg) => {
     event.returnValue = getBusPath(arg);
 });
