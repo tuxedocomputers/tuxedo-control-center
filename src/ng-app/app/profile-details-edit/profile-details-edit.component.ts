@@ -132,6 +132,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private tdpLabels: Map<string, string>;
 
     public showFanGraphs = false;
+    public showTGPChart = false;
 
     public infoTooltipShowDelay = 700;
 
@@ -784,6 +785,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         } else {
             this.showFanGraphs = false;
         }
+    }
+
+    public toggleTGPChart() {
+        this.showTGPChart = !this.showTGPChart;
     }
 
     public odmTDPLabel(tdpDescriptor: string) {

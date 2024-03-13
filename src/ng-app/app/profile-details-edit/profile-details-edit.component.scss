@@ -63,6 +63,7 @@
             font-size: 1.10em;
         }
 
+        text.value,
         content.value {
             width: 100%;
             text-align: left;
@@ -109,6 +110,7 @@
         }
     }
 
+    .tgp-chart-container,
     .fan-graph-container {
         display: flex;
         flex-direction: column;
@@ -118,8 +120,7 @@
         margin-top: 20px;
         width: 100%;
 
-
-
+        .tgp-chart,
         app-fan-graph {
             width: 100%;
             margin-top: 20px;
