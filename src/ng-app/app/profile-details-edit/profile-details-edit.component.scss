@@ -119,10 +119,13 @@
         margin-top: 20px;
         width: 100%;
 
-        .tgp-chart,
         app-fan-graph {
             width: 100%;
             margin-top: 20px;
+        }
+
+        .tgp-chart {
+            width: 100%;
         }
     }
 }

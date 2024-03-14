@@ -797,32 +797,35 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <mat-grid-list *ngIf="showTGPChart" cols=1 rowHeight="1004:145" class="profile-details-edit-grid tgp-chart">
                             <mat-grid-tile colspan=1>
-                                <svg viewBox="0 0 1004 95">
-                                    <rect y="50" height="40" style="fill:red;stroke:darkred;stroke-width:1"
-                                        x="0"
+                                <svg viewBox="0 0 1004 62">
+                                    <path style="stroke:dimgrey;stroke-width:1" d="m 0,60 1004,0" />
+                                    <path style="stroke:dimgrey;stroke-width:2" d="m 0,20 0,42" />
+                                    <path *ngFor="let xPosition of tgpChartTicksXPositions" style="stroke:grey;stroke-width:0.25" [attr.d]="'m ' + (xPosition+1)*10*1000/nvidiaPowerCTRLMaxPowerLimit + ',20 0,42'" />
+                                    <rect y="30" height="20" style="fill:rgba(74, 0, 7, 0.56);stroke:rgba(114, 0, 10, 0.31);stroke-width:1"
+                                        x="1"
                                         [attr.width]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
-                                    <rect y="50" height="40" style="fill:blue;stroke:darkblue;stroke-width:1"
+                                    <rect y="30" height="20" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1"
                                         [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit"
                                         [attr.width]="min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
-                                    <path style="stroke:black;stroke-width:4" d="m 1002,45 0,50" />
-                                    <text class="value" text-anchor="middle" [style]="nvidiaPowerCTRLDefaultPowerLimit < 3 ? 'fill-opacity:0' : ''">
-                                        <tspan y="74"
+                                    <path style="stroke:dimgrey;stroke-width:4" d="m 1002,25 0,30" />
+                                    <text class="value" text-anchor="middle" [style]="nvidiaPowerCTRLDefaultPowerLimit < 4 ? 'fill-opacity: 0;' : ''">
+                                        <tspan style="fill: #444444;" y="45"
                                             [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)/2*1000/nvidiaPowerCTRLMaxPowerLimit"
                                             >{{ nvidiaPowerCTRLDefaultPowerLimit + inputCTGPOffset.value }} W</tspan>
                                     </text>
-                                    <text class="value" text-anchor="middle" [style]="min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) < 3 ? 'fill-opacity:0' : ''">
-                                        <tspan y="74"
+                                    <text class="value" text-anchor="middle" [style]="min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) < 4 ? 'fill-opacity: 0;' : ''">
+                                        <tspan style="fill: #444444;" y="45"
                                             [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value+min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)/2)*1000/nvidiaPowerCTRLMaxPowerLimit"
                                             >{{ min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) }} W</tspan>
                                     </text>
-                                    <svg viewBox="0 0 614 95">
-                                        <rect x="0" y="0" width="20" height="20" style="fill:red;stroke:darkred;stroke-width:1" />
-                                        <rect x="200" y="0" width="20" height="20" style="fill:blue;stroke:darkblue;stroke-width:1" />
-                                        <path style="stroke:black;stroke-width:2" d="m 410,0 0,20" />
+                                    <svg viewBox="0 0 618 95">
+                                        <rect x="0" y="5" width="24" height="10" style="fill:rgba(74, 0, 7, 0.56);stroke:rgba(114, 0, 10, 0.31);stroke-width:1" />
+                                        <rect x="200" y="5" width="24" height="10" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1" />
+                                        <path style="stroke:dimgrey;stroke-width:2" d="m 412,0 0,20" />
                                         <text>
-                                            <tspan x="30" y="14">Configurable TGP</tspan>
-                                            <tspan x="230" y="14">Dynamic Boost Range</tspan>
-                                            <tspan x="430" y="14">Maximum Power Limit ({{ nvidiaPowerCTRLMaxPowerLimit }} W)</tspan>
+                                            <tspan style="fill: dimgrey;" x="34" y="14">Configurable TGP</tspan>
+                                            <tspan style="fill: dimgrey;" x="234" y="14">Dynamic Boost Range</tspan>
+                                            <tspan style="fill: dimgrey;" x="434" y="14">Maximum Power Limit ({{ nvidiaPowerCTRLMaxPowerLimit }} W)</tspan>
                                         </text>
                                     </svg>
                                 </svg>
