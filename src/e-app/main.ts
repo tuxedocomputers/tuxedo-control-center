@@ -122,10 +122,27 @@ app.whenReady().then( async () => {
         });
         if (!success) { console.log('Failed to register global shortcut'); }
     }
-
     tccDBus = new TccDBusController();
-    await tccDBus.init();
+    startDbusAndInit();
+});
 
+async function startDbusAndInit()
+{
+    if( !(await tccDBus.init()))
+    {
+        setTimeout(() => {
+            startDbusAndInit()
+        }, 3000);
+    }
+    else 
+    {
+        initTray();
+        initMain();
+    }
+}
+
+async function initTray()
+{
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.fnLockSupported = await fnLockSupported(tccDBus);
@@ -178,7 +195,10 @@ app.whenReady().then( async () => {
         tray.state.powersaveBlockerActive = powerSaveBlocker.isStarted(powersaveBlockerId);
         tray.create();
     }
+}
 
+async function initMain()
+{
     if (!trayOnlyOption) {
         await activateTccGui();
     }
@@ -221,7 +241,7 @@ app.whenReady().then( async () => {
 
     const profilesCheckInterval = 4000;
     setInterval(async () => { updateTrayProfiles(tccDBus); }, profilesCheckInterval);
-});
+}
 
 app.on('will-quit', async (event) => {
     // Prevent default quit action
