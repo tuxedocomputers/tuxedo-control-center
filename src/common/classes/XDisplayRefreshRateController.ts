@@ -21,10 +21,12 @@ import { IDisplayFreqRes, IDisplayMode } from "../models/DisplayFreqRes";
 import * as child_process from "child_process";
 import * as fs from "fs";
 export class XDisplayRefreshRateController {
-    private displayName: string;
-    private isX11: boolean;
-    private displayEnvVariable: string;
-    private xAuthorityFile: string;
+    private displayName: string = "";
+    private isX11: boolean = undefined;
+    private isWayland: boolean = undefined;
+
+    private displayEnvVariable: string = "";
+    private xAuthorityFile: string = "";
     public XDisplayRefreshRateController() {
         this.displayName = "";
         this.setEnvVariables();
@@ -46,12 +48,26 @@ export class XDisplayRefreshRateController {
         const xAuthorityMatch = envVariables.match(/^XAUTHORITY=(.*)$/m);
         const xdgSessionMatch = envVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
 
-        this.displayEnvVariable = displayMatch
-            ? displayMatch[1].replace("DISPLAY=", "").trim()
-            : "";
+        // sddm XDG_SESSION_TYPE can differ from actual session type
+        if (xAuthorityMatch && xAuthorityMatch[1].includes("/var/run/sddm/{")) {
+            return;
+        }
 
         const xAuthorityFile = xAuthorityMatch
             ? xAuthorityMatch[1].replace("XAUTHORITY=", "").trim()
+            : "";
+
+        // gdm XDG_SESSION_TYPE can differ from actual session type
+        const xAuthorityFileInfo = child_process
+            .execSync(`ls -l ${xAuthorityFile}`)
+            .toString();
+
+        if (xAuthorityFileInfo.includes(" gdm gdm ")) {
+            return undefined;
+        }
+
+        this.displayEnvVariable = displayMatch
+            ? displayMatch[1].replace("DISPLAY=", "").trim()
             : "";
 
         this.xAuthorityFile = fs.existsSync(xAuthorityFile)
@@ -65,26 +81,40 @@ export class XDisplayRefreshRateController {
                   .toLowerCase()
             : "";
 
-        this.isX11 =
-            sessionType === "x11"
-                ? true
-                : sessionType === "wayland"
-                ? false
-                : undefined;
+        this.isX11 = sessionType === "x11" ? true : false;
+        this.isWayland = sessionType === "wayland" ? true : false;
     }
 
     public getIsX11(): boolean {
-        this.setEnvVariables();
         return this.isX11;
     }
 
-    public getDisplayModes(): IDisplayFreqRes {
-        this.setEnvVariables();
+    public getIsWayland(): boolean {
+        return this.isWayland;
+    }
 
-        if (!this.isX11 || !this.displayEnvVariable || !this.xAuthorityFile) {
-            this.isX11 = false;
-            this.displayEnvVariable = "";
-            this.xAuthorityFile = "";
+    public resetValues(): void {
+        this.isX11 = undefined;
+        this.isWayland = undefined;
+        this.displayEnvVariable = "";
+        this.xAuthorityFile = "";
+    }
+
+    private checkEnvVariablesAvailable(): boolean {
+        return (
+            this.isX11 !== undefined ||
+            this.isWayland !== undefined ||
+            !!this.displayEnvVariable ||
+            !!this.xAuthorityFile
+        );
+    }
+
+    public getDisplayModes(): IDisplayFreqRes {
+        if (!this.checkEnvVariablesAvailable()) {
+            this.setEnvVariables();
+        }
+
+        if (!this.checkEnvVariablesAvailable() || this.isWayland) {
             return undefined;
         }
 
