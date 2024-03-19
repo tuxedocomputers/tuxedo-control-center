@@ -31,15 +31,20 @@ export class XDisplayRefreshRateController {
     }
 
     private setEnvVariables(): void {
-        const output = child_process
+        const envVariables = child_process
             .execSync(
-                `ps -u $(id -u) -o pid= | xargs -I{} cat /proc/{}/environ 2>/dev/null | tr '\\0' '\\n'`
+                `cat $(printf "/proc/%s/environ " $(pgrep -vu root | tail -n 20)) 2>/dev/null | \
+                tr '\\0' '\\n' | \
+                awk ' /DISPLAY=/ && !countDisplay {print; countDisplay++} \
+                    /XAUTHORITY=/ && !countXAuthority {print; countXAuthority++} \
+                    /XDG_SESSION_TYPE=/ && !countSessionType {print; countSessionType++} \
+                    {if (countDisplay && countXAuthority && countSessionType) exit} '`
             )
             .toString();
 
-        const displayMatch = output.match(/^DISPLAY=(.*)$/m);
-        const xAuthorityMatch = output.match(/^XAUTHORITY=(.*)$/m);
-        const xdgSessionMatch = output.match(/^XDG_SESSION_TYPE=(.*)$/m);
+        const displayMatch = envVariables.match(/^DISPLAY=(.*)$/m);
+        const xAuthorityMatch = envVariables.match(/^XAUTHORITY=(.*)$/m);
+        const xdgSessionMatch = envVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
 
         this.displayEnvVariable = displayMatch
             ? displayMatch[1].replace("DISPLAY=", "").trim()
