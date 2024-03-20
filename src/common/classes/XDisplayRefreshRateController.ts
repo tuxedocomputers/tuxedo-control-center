@@ -40,14 +40,18 @@ export class XDisplayRefreshRateController {
                 awk ' /DISPLAY=/ && !countDisplay {print; countDisplay++} \
                     /XAUTHORITY=/ && !countXAuthority {print; countXAuthority++} \
                     /XDG_SESSION_TYPE=/ && !countSessionType {print; countSessionType++} \
-                    {if (countDisplay && countXAuthority && countSessionType) exit} '`
+                    /USER=/ && !countUser {print; countUser++} \
+                    {if (countDisplay && countXAuthority && countSessionType && countUser) exit} '`
             )
             .toString();
 
         const displayMatch = envVariables.match(/^DISPLAY=(.*)$/m);
         const xAuthorityMatch = envVariables.match(/^XAUTHORITY=(.*)$/m);
         const xdgSessionMatch = envVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
+        const userMatch = envVariables.match(/^USER=(.*)$/m);
 
+        // additional checks to make sure env variables are not taken from login screen
+        // they shouldn't be triggered since no collection happens with logged in users
         // sddm XDG_SESSION_TYPE can differ from actual session type
         if (xAuthorityMatch && xAuthorityMatch[1].includes("/var/run/sddm/{")) {
             return;
@@ -58,11 +62,17 @@ export class XDisplayRefreshRateController {
             : "";
 
         // gdm XDG_SESSION_TYPE can differ from actual session type
+        // Ubuntu creates xAuthority file with user gdm and that user name is unavailable,
+        // but Tuxedo OS with sddm allows the user name gdm
         const xAuthorityFileInfo = child_process
             .execSync(`ls -l ${xAuthorityFile}`)
             .toString();
 
-        if (xAuthorityFileInfo.includes(" gdm gdm ")) {
+        if (
+            xAuthorityFileInfo.includes(" gdm gdm ") &&
+            userMatch &&
+            userMatch[1] === "gdm"
+        ) {
             return undefined;
         }
 
