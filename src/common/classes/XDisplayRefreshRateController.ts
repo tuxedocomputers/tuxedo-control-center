@@ -51,9 +51,13 @@ export class XDisplayRefreshRateController {
         const userMatch = envVariables.match(/^USER=(.*)$/m);
 
         // additional checks to make sure env variables are not taken from login screen
-        // they shouldn't be triggered since no collection happens with logged in users
+        // they shouldn't be triggered since no collection happens when no users are logged in
         // sddm XDG_SESSION_TYPE can differ from actual session type
-        if (xAuthorityMatch && xAuthorityMatch[1].includes("/var/run/sddm/{")) {
+        if (
+            xAuthorityMatch &&
+            (xAuthorityMatch[1].includes("/var/run/sddm/{") ||
+                xAuthorityMatch[1].includes("/var/lib/lightdm"))
+        ) {
             return;
         }
 
