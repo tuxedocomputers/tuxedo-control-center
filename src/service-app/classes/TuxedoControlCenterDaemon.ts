@@ -112,11 +112,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
         this.setupSignalHandling();
-        // add delay to trigger bug
-        var d = 10000;
-        console.log("setting delay to: " + d)
-        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-        await delay(d);
 
         this.dbusData.tccdVersion = tccPackage.version;
         this.stateWorker = new StateSwitcherWorker(this);

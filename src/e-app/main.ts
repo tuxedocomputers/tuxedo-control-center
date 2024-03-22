@@ -126,23 +126,19 @@ app.whenReady().then( async () => {
     startDbusAndInit();
 });
 
-async function startDbusAndInit()
-{
-    if( !(await tccDBus.init()))
-    {
+async function startDbusAndInit() {
+    const dbusInitialized = await tccDBus.init();
+    if(!dbusInitialized) {
         setTimeout(() => {
             startDbusAndInit()
         }, 3000);
+        return;
     }
-    else 
-    {
-        initTray();
-        initMain();
-    }
+    initTray();
+    initMain();
 }
 
-async function initTray()
-{
+async function initTray() {
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.fnLockSupported = await fnLockSupported(tccDBus);
@@ -197,8 +193,7 @@ async function initTray()
     }
 }
 
-async function initMain()
-{
+async function initMain() {
     if (!trayOnlyOption) {
         await activateTccGui();
     }
