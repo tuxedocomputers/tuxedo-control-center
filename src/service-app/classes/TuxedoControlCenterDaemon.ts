@@ -680,32 +680,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         {
             profile.display.useResolution = false;
         }
-        let activeDisplayMode;
-        try
-        {
-            activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+
+        if (profile.display.refreshRate === undefined) {
+            profile.display.refreshRate = -1;
         }
-        catch(err)
-        {
-            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
+        if (profile.display.xResolution === undefined) {
+            profile.display.xResolution = -1;
         }
-        if (!activeDisplayMode)
-        {
-            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
-        }       
-        if(profile.display.refreshRate === undefined)
-        {
-            profile.display.refreshRate = activeDisplayMode.refreshRates[0];
-        }
-        if(profile.display.xResolution === undefined)
-        {
-            profile.display.xResolution = activeDisplayMode.xResolution;
-        }
-        if(profile.display.yResolution === undefined)
-        {
-            profile.display.yResolution = activeDisplayMode.yResolution;
-        }
-         
+        if (profile.display.yResolution === undefined) {
+            profile.display.yResolution = -1;
+        }         
 
         if (profile.webcam === undefined) {
             profile.webcam = {
