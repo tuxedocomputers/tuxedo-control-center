@@ -308,6 +308,8 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
 };
 
 export enum TUXEDODevice {
+    IBP17G6,
+    PULSE1403,
     IBP14G6_TUX,
     IBP14G6_TRX,
     IBP14G6_TQF,

@@ -34,6 +34,7 @@ import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes'
 import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { ElectronService } from 'ngx-electron';
+import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -122,6 +123,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
+    public hasDeviceSystemProfileInfo: boolean;
+    public deviceSystemProfileInfo: SystemProfileInfo;
 
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
@@ -173,6 +176,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         odmProfileLEDNames.set('power_save', $localize `:@@odmLEDNone:all LEDs off`);
         odmProfileLEDNames.set('enthusiast', $localize `:@@odmLEDOne:one LED on`);
         odmProfileLEDNames.set('overboost', $localize `:@@odmLEDTwo:two LEDs on`);
+
+        this.hasDeviceSystemProfileInfo = this.compat.getHasSystemProfileInfo();
+        this.deviceSystemProfileInfo = this.compat.getSystemProfileInfo();
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
             this.odmProfileNames = nextAvailableODMProfiles;
@@ -246,6 +252,45 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             })
         );
+    }
+
+    public getPowerLimitToName(name: string) {
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === name)
+            {
+                return this.deviceSystemProfileInfo.pl[i].limit + " W";
+            }
+        }
+    }
+
+    public getODMprofilePowerLimitID() {
+        let profile = this.profile;
+        let profileName = "";
+        if (!profile) {
+            profile = this.viewProfile;
+        }
+        if (!profile) {
+            profileName = this.profileFormGroup.controls.odmProfile.value;
+        }
+        else  {
+            profileName = profile.odmProfile.name;
+        }
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === profileName)
+            {
+                return i;
+            }
+        }
+    }
+
+    public sliderODMProfileChange(index: number) {
+        let profileInfo = this.deviceSystemProfileInfo.pl[index].odmName;
+        this.profileFormGroup.patchValue({
+            odmProfile: { name: profileInfo },
+        });
+        this.profileFormGroup.markAsDirty();
     }
 
     private overwriteDefaultRefreshRateValue() {

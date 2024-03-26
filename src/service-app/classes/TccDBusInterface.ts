@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -70,6 +70,7 @@ export class FanData {
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public device: string;
     public displayModes: string;
     public isX11: boolean;
     public tuxedoWmiAvailable: boolean;
@@ -134,6 +135,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }, 10000);
     }
 
+    GetDeviceName() { return this.data.device; }
     GetDisplayModesJSON() { return this.data.displayModes; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -261,6 +263,7 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        GetDeviceName: {outSignature: 's'},
         GetDisplayModesJSON: {outSignature: 's'},
         GetIsX11: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },

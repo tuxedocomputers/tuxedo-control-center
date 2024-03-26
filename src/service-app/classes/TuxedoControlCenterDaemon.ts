@@ -255,7 +255,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
-
+        this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
@@ -503,6 +503,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         TuxedoIOAPI.getModuleInfo(modInfo);
 
         const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
+        dmiSKUDeviceMap.set('IBS1706', TUXEDODevice.IBP17G6);
         dmiSKUDeviceMap.set('IBP1XI08MK1', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP1XI08MK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP14I08MK2', TUXEDODevice.IBPG8);
@@ -517,6 +518,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
+        dmiSKUDeviceMap.set('PULSE1403', TUXEDODevice.PULSE1403);
         dmiSKUDeviceMap.set('STELLARIS1XI05', TUXEDODevice.STELLARIS1XI05);
         dmiSKUDeviceMap.set('POLARIS1XA05', TUXEDODevice.POLARIS1XA05);
         dmiSKUDeviceMap.set('STELLARIS1XA05', TUXEDODevice.STELLARIS1XA05);
