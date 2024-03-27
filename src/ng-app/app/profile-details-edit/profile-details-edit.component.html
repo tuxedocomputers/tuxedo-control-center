@@ -797,10 +797,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <mat-grid-list *ngIf="showTGPChart" cols=1 rowHeight="1004:145" class="profile-details-edit-grid tgp-chart">
                             <mat-grid-tile colspan=1>
-                                <svg viewBox="0 0 1004 62">
-                                    <path style="stroke:dimgrey;stroke-width:1" d="m 0,60 1004,0" />
-                                    <path style="stroke:dimgrey;stroke-width:2" d="m 0,20 0,42" />
-                                    <path *ngFor="let xPosition of tgpChartTicksXPositions" style="stroke:grey;stroke-width:0.25" [attr.d]="'m ' + (xPosition+1)*10*1000/nvidiaPowerCTRLMaxPowerLimit + ',20 0,42'" />
+                                <svg viewBox="0 0 1004 55">
                                     <rect y="30" height="20" style="fill:rgba(74, 0, 7, 0.56);stroke:rgba(114, 0, 10, 0.31);stroke-width:1"
                                         x="1"
                                         [attr.width]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
