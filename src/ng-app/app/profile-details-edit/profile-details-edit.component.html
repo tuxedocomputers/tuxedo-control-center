@@ -746,11 +746,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
 
                 <div *ngIf="nvidiaPowerCTRLAvailable">
-                    <h4 i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA Power Control</h4>
+                    <h4 i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA power control</h4>
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                         <div formGroupName="nvidiaPowerCTRLProfile">
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
-                                <header i18n="@@cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel">Configurable TGP</header>
+                                <header i18n="@@cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel">Configurable graphics power (cTGP)</header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value">{{ nvidiaPowerCTRLDefaultPowerLimit + inputCTGPOffset.value }} W</content>
@@ -815,14 +815,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value+min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)/2)*1000/nvidiaPowerCTRLMaxPowerLimit"
                                             >{{ min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) }} W</tspan>
                                     </text>
-                                    <svg viewBox="0 0 618 95">
+                                    <svg viewBox="0 0 668 95">
                                         <rect x="0" y="5" width="24" height="10" style="fill:rgba(227, 0, 22, 0.5);stroke:rgba(227, 0, 22, 0.3);stroke-width:1" />
                                         <rect x="200" y="5" width="24" height="10" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1" />
                                         <path style="stroke:dimgrey;stroke-width:2" d="m 412,0 0,20" />
                                         <text>
-                                            <tspan style="fill: dimgrey;" x="34" y="14">Configurable TGP</tspan>
-                                            <tspan style="fill: dimgrey;" x="234" y="14">Dynamic Boost Range</tspan>
-                                            <tspan style="fill: dimgrey;" x="434" y="14">Maximum Power Limit ({{ nvidiaPowerCTRLMaxPowerLimit }} W)</tspan>
+                                            <tspan style="fill: dimgrey;" x="34" y="14" i18n="@@cProfMgrDetailsTGPChartCTGPLabel">Configurable graphics power (cTGP)</tspan>
+                                            <tspan style="fill: dimgrey;" x="284" y="14" i18n="@@cProfMgrDetailsTGPChartDBLabel">Dynamic Boost range</tspan>
+                                            <tspan style="fill: dimgrey;" x="484" y="14" i18n="@@cProfMgrDetailsTGPChartMaxLimitLabel">Maximum power limit ({{ nvidiaPowerCTRLMaxPowerLimit }} W)</tspan>
                                         </text>
                                     </svg>
                                 </svg>
