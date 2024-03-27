@@ -57,9 +57,9 @@ export function formatSpeed(value: number | string): string {
  * Ensure minimum fan speed if temperature is high
  */
 export function manageCriticalTemperature(temp: number, speed: number): number {
-    return temp > 85
+    return temp >= 90
         ? Math.max(40, speed)
-        : temp > 75
+        : temp >= 80
         ? Math.max(30, speed)
         : speed;
 }
