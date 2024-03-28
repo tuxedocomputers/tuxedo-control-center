@@ -37,6 +37,7 @@ import {
     graphOptions,
     tempsLabels,
 } from "src/common/classes/FanChartProperties";
+import { manageCriticalTemperature } from "src/common/classes/FanUtils";
 
 @Component({
     selector: "app-fan-graph",
@@ -125,19 +126,6 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Ensure minimum fan speed if temperature is high
-     */
-    private manageCriticalTemperature(temp: number, speed: number): number {
-        const minimumCriticalFanSpeed: number = 40;
-        const criticalTemp: number = 75;
-
-        if (temp > criticalTemp && speed < minimumCriticalFanSpeed) {
-            speed = minimumCriticalFanSpeed;
-        }
-        return speed;
-    }
-
-    /**
      * Applies min, max and offset parameters and returns the resulting speed
      * Ref. FanControlLogic.ts: calculateSpeedPercent()
      *
@@ -152,7 +140,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         speed = Math.max(this.minFanspeed, Math.min(this.maxFanspeed, speed));
         speed = Math.max(0, Math.min(100, speed));
 
-        speed = this.manageCriticalTemperature(temp, speed);
+        speed = manageCriticalTemperature(temp, speed);
 
         return speed;
     }
