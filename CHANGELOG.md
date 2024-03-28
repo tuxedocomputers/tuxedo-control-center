@@ -7,6 +7,11 @@
   power limit info instead of profile name, introduced for
   Pulse Gen3
 
+### Changed
+- Critical temperature (aka minimum speed for high temperatures) of
+  fan control split into two ranges: from 80 &deg;C 30% and from
+  90 &deg;C 40%
+
 ### Fixed
 - Irregular fan speed on wakeup or when disabling fan control,
   sometimes manifesting as full fan on wakeup from suspend
