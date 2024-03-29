@@ -75,6 +75,36 @@ export class FanControlLogic {
     private useTable: string
 
     /**
+     * Minimum fan speed hardware is capable of
+     */
+    private _fansMinSpeedHWLimit: number = 0;
+    get fansMinSpeedHWLimit() { return this._fansMinSpeedHWLimit; }
+    set fansMinSpeedHWLimit(speed: number) {
+        if (speed === undefined) {
+            this._fansMinSpeedHWLimit = 0;
+        } else if (speed < 0) {
+            this._fansMinSpeedHWLimit = 0;
+        } else if (speed > 100) {
+            this._fansMinSpeedHWLimit = 100;
+        } else {
+            this._fansMinSpeedHWLimit = speed;
+        }
+    }
+
+    /**
+     * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
+     */
+    private _fansOffAvailable: boolean = true;
+    get fansOffAvailable() { return this._fansOffAvailable; }
+    set fansOffAvailable(fansOffAvailableNew: boolean) {
+        if (fansOffAvailableNew === undefined) {
+            this._fansOffAvailable = true;
+        } else {
+            this._fansOffAvailable = fansOffAvailableNew;
+        }
+    }
+
+    /**
      * Minimum fan speed returned by logic
      */
     private _minimumFanspeed: number = 0;
@@ -88,6 +118,20 @@ export class FanControlLogic {
             this._minimumFanspeed = 100;
         } else {
             this._minimumFanspeed = speed;
+        }
+    }
+    
+    private _maximumFanspeed: number = 100;
+    get maximumFanspeed() { return this._maximumFanspeed; }
+    set maximumFanspeed(speed: number) {
+        if (speed === undefined) {
+            this._maximumFanspeed = 100;
+        } else if (speed < 0) {
+            this._maximumFanspeed = 0;
+        } else if (speed > 100) {
+            this._maximumFanspeed = 100;
+        } else {
+            this._maximumFanspeed = speed;
         }
     }
 
@@ -106,7 +150,7 @@ export class FanControlLogic {
         } else {
             this._offsetFanspeed = speed;
         }
-    }
+    } 
 
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
@@ -147,37 +191,68 @@ export class FanControlLogic {
         return this.latestSpeedPercent;
     }
 
-    private calculateSpeedPercent(): number {
-        const effectiveTemperature = this.tempBuffer.getFilteredValue();
-        const foundEntryIndex = this.findFittingEntryIndex(effectiveTemperature);
-        const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
-        
-        let newSpeed = foundEntry.speed;
-        
-        // Alter lookup value by offsetFanspeed parameter (aka apply offset)
-        const offsetDisableCondition = this.offsetFanspeed < 0 && effectiveTemperature > 75;
-        if (!offsetDisableCondition) {
-            newSpeed += this.offsetFanspeed;
-            if (newSpeed > 100) {
-                newSpeed = 100;
-            } else if (newSpeed < 0) {
-                newSpeed = 0;
+    private applyHwFanLimitations(speed: number): number {
+        const minSpeed = this._fansMinSpeedHWLimit;
+        const halfMinSpeed = minSpeed / 2;
+
+        if (speed < minSpeed) {
+            if (this.fansOffAvailable && speed < halfMinSpeed) {
+                return 0;
+            } else if (this.fansOffAvailable || speed >= halfMinSpeed) {
+                return minSpeed;
             }
         }
 
-        // Adjust for minimum speed parameter
-        if (newSpeed < this.minimumFanspeed) {
-            newSpeed = this.minimumFanspeed;
+        return speed;
+    }
+
+    private limitFanSpeedChange(speed: number): number {
+        const speedJump = speed - this.lastSpeed;
+        const isJumpTooBig =
+            this.lastSpeed > SPEED_JUMP_THRESHOLD &&
+            speedJump <= -MAX_SPEED_JUMP;
+
+        return isJumpTooBig ? this.lastSpeed - MAX_SPEED_JUMP : speed;
+    }
+
+    private getFanValues() {
+        const temp = this.tempBuffer.getFilteredValue();
+        const foundEntryIndex = this.findFittingEntryIndex(temp);
+        const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
+        let speed = foundEntry.speed;
+        return [temp, speed];
+    }
+
+    /**
+     * Ensure minimum fan speed if temperature is high
+     */
+    private manageCriticalTemperature(temp: number, speed: number): number {
+        const minimumCriticalFanSpeed: number = 40;
+        const criticalTemp: number = 75;
+
+        if (temp > criticalTemp && speed < minimumCriticalFanSpeed) {
+            speed = minimumCriticalFanSpeed;
         }
-        
-        // Limit falling speed change
-        let speedJump = newSpeed - this.lastSpeed;
-        if (this.lastSpeed > SPEED_JUMP_THRESHOLD && speedJump <= -MAX_SPEED_JUMP) {
-            speedJump = -MAX_SPEED_JUMP;
-            newSpeed = this.lastSpeed + speedJump;
-        }
-        this.lastSpeed = newSpeed;
-        return newSpeed;
+        return speed
+    }
+
+    private calculateSpeedPercent(): number {
+        let [temp, speed] = this.getFanValues();
+
+        speed += this.offsetFanspeed;
+
+        speed = Math.max(
+            this.minimumFanspeed,
+            Math.min(this.maximumFanspeed, speed)
+        );
+        speed = Math.max(0, Math.min(100, speed));
+
+        speed = this.applyHwFanLimitations(speed);
+        speed = this.limitFanSpeedChange(speed);
+        speed = this.manageCriticalTemperature(temp, speed)
+
+        this.lastSpeed = speed;
+        return speed;
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
@@ -187,7 +262,9 @@ export class FanControlLogic {
             return 0;
         }
 
-        const foundIndex = this.fanProfile[this.useTable].findIndex(entry => entry.temp === temperatureValue);
+        const foundIndex = this.fanProfile[this.useTable].findIndex(
+            (entry: { temp: number }) => entry.temp === temperatureValue
+        );
         if (foundIndex !== -1) {
             return foundIndex;
         } else {
@@ -197,5 +274,9 @@ export class FanControlLogic {
 
     public getFilteredTemp(): number {
         return this.tempBuffer.getFilteredValue();
+    }
+
+    public getFanProfile(): ITccFanProfile {
+        return this.fanProfile;
     }
 }

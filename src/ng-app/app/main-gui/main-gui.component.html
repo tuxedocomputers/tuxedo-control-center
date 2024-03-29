@@ -1,0 +1,149 @@
+<!--
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<mat-toolbar class="tcc-mat-toolbar" *ngIf="useTCCTitleBar">
+    <mat-toolbar-row class="title-row">
+        <div id="title-left">
+            <img src="./assets/taskbar_icon_free.svg" id="title-logo">
+            <span id="title-text" i18n>TUXEDO Control Center</span>
+        </div>
+        <div id="title-right">
+            <svg viewBox="0 0 376 376" (click)="buttonMinimize()">
+                <use href="./assets/images/icon_minimize.svg#Icon"></use>
+            </svg>
+            <svg viewBox="0 0 302 302" (click)="buttonExit()">
+                <use href="./assets/images/icon_close.svg#Icon"></use>
+            </svg>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container class="main-sidenav-container">
+    <mat-sidenav mode="side" opened [disableClose]="true" class="main-sidenav-nav">
+        <div class="sidenav-top">
+            <mat-nav-list>
+                <mat-list-item routerLink="cpu-dashboard" routerLinkActive="true">
+                    <content>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_dashboard.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
+                        <ng-container i18n="@@menuDashboard">Dashboard</ng-container>
+                    </content>
+                </mat-list-item>
+
+                <mat-divider></mat-divider>
+                <mat-list-item routerLink="profile-manager" routerLinkActive="true">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_allprofiles.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n="@@menuProfiles">Profiles</ng-container>
+                    </content>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
+                <mat-list-item routerLink="tools" routerLinkActive="true">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_tools.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n="@@menuTools">Tools</ng-container>
+                    </content>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
+                <mat-list-item routerLink="aquaris-control" routerLinkActive="true" *ngIf="compat.hasAquaris">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_aquaris.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n="@@menuAquaris">Aquaris</ng-container>
+                    </content>
+                </mat-list-item>
+                <mat-divider *ngIf="compat.hasAquaris"></mat-divider>
+
+                <mat-list-item style="cursor: default;" [disableRipple]="true">
+                    <content>
+                        <ng-container i18n="@@menuUsedProfilesLabel">Used profiles</ng-container>
+                    </content>
+                </mat-list-item>
+                <mat-list-item [routerLink]="getProfileLink(state)"
+                    routerLinkActive="true" *ngFor="let state of getStateInputs()">
+                    <content>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use attr.href="./assets/images/{{ state.icon }}"></use>
+                            </svg>
+                        </mat-icon>
+                        <span class="profile-name">{{ getStateProfileName(state) }}</span>
+                    </content>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-nav-list>
+        </div>
+
+        <div class="sidenav-bottom">
+            <mat-nav-list>
+                <mat-divider></mat-divider>
+                <mat-list-item routerLinkActive="true" (click)="buttonToggleLanguage()">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_language.svg#Icon"></use>
+                            </svg></mat-icon>
+                        {{ buttonLanguageLabel }}
+                    </content>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item routerLink="support" routerLinkActive="true">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_help.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n="@@menuSupport">Support</ng-container>
+                    </content>
+                </mat-list-item>
+            </mat-nav-list>
+            <mat-divider vertical="true"></mat-divider>
+            <mat-nav-list>
+                <mat-divider></mat-divider>
+                <mat-list-item routerLink="global-settings" routerLinkActive="true">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_settings.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n>Settings</ng-container>
+                    </content>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item routerLink="info" routerLinkActive="true">
+                    <content>
+                        <mat-icon><svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_info.svg#Icon"></use>
+                            </svg></mat-icon>
+                        <ng-container i18n>Info</ng-container>
+                    </content>
+                </mat-list-item>
+            </mat-nav-list>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content class="main-sidenav-content">
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

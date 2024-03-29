@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -20,14 +20,13 @@
     position: relative;
     z-index: 10;
 
-    user-select: none;
-
     width: 215px;
     margin: 8px;
     padding: 10px;
+    padding-top: 0px;
     padding-bottom: 15px;
 
-    border-radius: 5px;
+    border-radius: 15px;
 
     hr {
         opacity: 0.2;
@@ -42,19 +41,25 @@
 
         .profile-name {
             font-size: 20px;
+            font-weight: bold;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
             margin:auto;
         }
+    }
 
-        /*.state-icons {
-            display: flex;
-            .status-icon {
-                font-size: 17px;
-                width: 17px;
-            }
-        }*/
+    content {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+
+        .description {
+            height: 110px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     .profile-icon {
@@ -65,23 +70,31 @@
 
     .state-status-icons {
         display: flex;
-        flex-flow: row;
-        justify-content: flex-end;
+        flex-flow: row nowrap;
+        justify-content: space-between;
         align-items: center;
 
-        height: 50px;
+        height: 45px;
 
         .state-icon {
+            width: 30px;
+            height: 40px;
             svg {
                 width: 40px;
-                height: 40px;
-                
                 --icon-detail: var(--icon-main);
             }
         }
 
-        .dot {
-            margin: 8px;
+        mat-icon {
+            font-size: 30px;
+        }
+
+        .group-right {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+
+            opacity: 0.3;
         }
     }
 
@@ -118,107 +131,15 @@
             }
         }
     }
+}
 
-    .overlay {
-        display: none;
-        position: absolute;
-        z-index: 20;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
+::ng-deep .adjust-menu {
+    svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 16px;
+        vertical-align: middle;
 
-        border-radius: inherit;
-
-        opacity: 0.95;
-
-        &.show {
-            display: initial;
-        }
-
-        .overlay-content {
-            display: flex;
-            flex-flow: column;
-            justify-content: flex-start;
-
-            width: 100%;
-            height: 100%;
-
-            .icon-bar {
-                display: flex;
-                flex-flow: row;
-                justify-content: flex-end;
-                align-items: center;
-
-                padding: 10px;
-
-                svg {
-                    width: 48px;
-                    height: 48px;
-                    --icon-detail: var(--icon-main);
-                }
-
-                button {
-                    margin-left: 5px;
-                }
-            }
-
-            .state-selector {
-                margin-top: 20px;
-
-                mat-button-toggle-group {
-                    flex-flow: column;
-                    width: 100%;
-
-                    border-style: none;
-
-                    mat-button-toggle {
-
-                        svg {
-                            width: 48px;
-                            height: 48px;
-
-                            --icon-detail: var(--icon-main);
-                        }
-                    }
-
-                    ::ng-deep .mat-button-toggle-label-content {
-                        display: flex;
-                        flex-flow: column;
-                        justify-content: flex-start;
-                        align-items: center;
-                    }
-                }
-
-                .state-buttons {
-                    display: flex;
-                    flex-flow: row;
-                    justify-content: flex-end;
-                    align-items: center;
-                    
-                    padding: 10px;
-    
-                    svg {
-                        width: 48px;
-                        height: 48px;
-                        --icon-detail: var(--icon-main);
-                    }
-    
-                    button {
-                       margin:30px auto auto auto;
-                    }
-                }
-            }
-        }
-    }
-
-    mat-card-content {
-        height: auto;
-        
-        .add-profile-content {
-            mat-icon {
-                transform: scale(2);
-            }
-        }
+        --icon-detail: var(--icon-main);
     }
 }

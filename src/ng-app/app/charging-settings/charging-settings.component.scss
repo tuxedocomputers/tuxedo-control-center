@@ -1,0 +1,120 @@
+/*!
+ * Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.charging-group-label {
+    display: block;
+    font-size: 1.5em;
+    font-weight: bolder;
+    padding-top: 20px;
+}
+
+.charging-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+
+    mat-radio-button {
+        margin: 5px;
+
+        .inner-label {
+            padding-left: 8px;
+            white-space: normal;
+
+            header {
+                font-size: 1.2em;
+                font-weight: bolder;
+            }
+        }
+    }
+}
+
+.charging-profile-note {
+    padding-top: 10px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.info-icon-link {
+    height: 30px;
+}
+
+.charging-thresholds {
+    display: flex;
+    flex-flow: column nowrap;
+
+    mat-checkbox {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    mat-slider {
+        width: 250px;
+    }
+}
+
+.edit-grid {
+
+    .inactive {
+        opacity: 0.2;
+        pointer-events: none;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+
+        width: 100%;
+        text-align: left;
+        font-size: 1.10em;
+    }
+
+    content.value {
+        width: 100%;
+        text-align: left;
+        font-weight: bold;
+        font-size: 1.15em;
+    }
+
+    content.input {
+        width: 100%;
+
+        mat-slider {
+            width: 200px;
+        }
+
+        mat-select {
+            width: 200px;
+        }
+
+        mat-form-field {
+            width: 360px;
+
+            &.input-description {
+
+                textarea {
+                    resize: none;
+                }
+            }
+        }
+    }
+}

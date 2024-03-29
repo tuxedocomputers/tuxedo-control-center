@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+* {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 .content-container {
     max-width: 900px;
     margin:auto;
@@ -32,6 +40,15 @@
     &.row {
         margin-right:10px;
     }
+}
+
+.info-icon {
+    cursor: help;
+    --icon-detail: var(--icon-main);
+}
+
+.info-icon-link {
+    cursor: pointer;
 }
 
 .tcc-card {
@@ -70,7 +87,7 @@
         justify-content: stretch;
         align-items: center;
 
-        margin-top:60px;
+        margin-top: 30px;
         margin-bottom: 20px;
 
         &.top {
@@ -114,4 +131,28 @@
 
 .mat-tooltip {
     font-size: 1.2em !important;
+    text-align: center !important;
+}
+
+.green-slide-toggle {
+
+    &.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+        background-color: rgba(100, 209, 113, 0.54);
+    }
+
+    &.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+        background-color: rgba(100, 209, 113, 1.00);
+    }
+}
+
+mat-radio-button.hide-radio-circle {
+    .mat-radio-container {
+        display: none;
+    }
+}
+
+mat-tab-group.active-always-focused {
+    .mat-tab-label-active {
+        opacity: 1.0;
+    }
 }

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,6 +18,8 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CompatibilityService } from '../compatibility.service';
 
 @Component({
     selector: 'app-tools',
@@ -25,9 +27,16 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./tools.component.scss']
 })
 export class ToolsComponent implements OnInit {
-    constructor() {}
+    constructor(
+        public compat: CompatibilityService,
+        private router: Router,
+        private route: ActivatedRoute) {}
 
     ngOnInit() {
         
+    }
+
+    gotoComponent(component: string) {
+        this.router.navigate([ component ], { relativeTo: this.route.parent });
     }
 }

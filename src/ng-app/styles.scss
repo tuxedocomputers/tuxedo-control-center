@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,9 +21,11 @@
 
 @import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
 @import './app/profile-details-edit/profile-details-edit.component-theme.scss';
+@import './tcc-general-defs-theme.scss';
 @import './tcc-gauge-theme.scss';
 @import './tcc-changelog-theme.scss';
 @import './tcc-charts-theme.scss';
+@import './tcc-color-picker-theme.scss';
 
 @mixin component-themes($theme) {
     // Angular components
@@ -31,17 +33,15 @@
     @include profile-details-edit-theme($theme);
 
     // Other components
+    @include tcc-general-defs-theme($theme);
     @include tcc-gauge-theme($theme);
     @include tcc-changelog-theme($theme);
     @include tcc-charts-theme($theme);
+    @include tcc-color-picker-theme($theme);
 }
 
 @import './themes/tuxedo-light-theme.scss';
 @import './themes/tuxedo-dark-theme.scss';
-
-// Default theme
-@include angular-material-theme($tuxedo-control-center-light-theme);
-@include component-themes($tuxedo-control-center-light-theme);
 
 [hidden] {
     visibility: hidden !important;
@@ -55,7 +55,6 @@ body {
 
 .blur-no-input {
     pointer-events: none;
-    user-select: none;
     filter: blur(1px);
 }
 

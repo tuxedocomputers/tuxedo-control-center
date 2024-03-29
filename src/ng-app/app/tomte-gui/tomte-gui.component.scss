@@ -1,0 +1,99 @@
+/*!
+ * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+.tomte-list-output-table {
+
+    th,
+    td 
+    {
+        text-align: center;
+    }
+    th
+    {
+        font-size: large;
+    }
+}
+
+.tomte-gui-title
+{
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.tomte-local-spinner {
+    position: fixed;
+    left: 60%;
+    top: 60%;
+    transform: translate(-60%, -50%);
+    z-index: 1000;
+    font-size: 8rem;
+    color: rgb(133, 133, 133);
+}
+
+.tomte-warning-text {
+    color: rgb(230, 8, 8);
+}
+
+.tomte-gui-overlay {
+    background-color:rgba(235, 223, 223, 0.116);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.tomte-table-padding
+{
+    padding:20px;
+}
+
+.tomte-yes-button, .tomte-no-button 
+{
+    width: 100%;
+    height: 70px;
+    border:none;
+}
+
+.tomte-yes-button:disabled, .tomte-no-button:disabled, .tomte-yes-button:disabled:hover, .tomte-no-button:disabled:hover
+{
+    background-color: grey;
+    color: darkgrey;
+}
+
+.tomte-yes-button
+{
+    background-color: red;
+    
+}
+.tomte-yes-button:hover
+{
+    background-color: darkgreen;
+}
+
+.tomte-no-button
+{
+    background-color: green;
+}
+
+.tomte-no-button:hover
+{
+    background-color: darkred;
+}

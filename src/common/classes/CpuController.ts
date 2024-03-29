@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import * as path from 'path';
-import { LogicalCpuController } from './LogicalCpuController';
-import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean } from './SysFsProperties';
+import { LogicalCpuController, ScalingDriver } from './LogicalCpuController';
+import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean, SysFsPropertyString } from './SysFsProperties';
 import { IntelPstateController } from './IntelPStateController';
 import { findClosestValue } from './Utils';
 
@@ -40,6 +40,7 @@ export class CpuController {
     public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
 
     public readonly boost = new SysFsPropertyBoolean(path.join(this.basePath, 'cpufreq/boost'));
+    public readonly amdPstateStatus = new SysFsPropertyString(path.join(this.basePath, 'amd_pstate/status'));
 
     public getAvailableLogicalCores(): void {
         // Add "possible" and "present" logical cores
@@ -87,6 +88,8 @@ export class CpuController {
      * @param setMaxFrequency Maximum scaling frequency value to set, defaults to max value for core
      */
     public setGovernorScalingMaxFrequency(setMaxFrequency?: number): void {
+        let scalingDriver;
+
         for (const core of this.cores) {
             if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
                 || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
@@ -95,6 +98,7 @@ export class CpuController {
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             const scalingMinFrequency = core.scalingMinFreq.readValue();
             let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+            scalingDriver = core.scalingDriver.readValueNT();
             let newMaxFrequency: number;
 
 
@@ -102,10 +106,10 @@ export class CpuController {
             if (setMaxFrequency === undefined) {
                 newMaxFrequency = coreMaxFrequency;
             } else if (setMaxFrequency === -1) {
-                if (!this.boost.isAvailable()) {
-                    newMaxFrequency = core.getReducedAvailableFreq();
-                } else {
+                if (this.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
                     newMaxFrequency = coreMaxFrequency;
+                } else {
+                    newMaxFrequency = core.getReducedAvailableFreq();
                 }
             } else {
                 newMaxFrequency = setMaxFrequency;
@@ -138,7 +142,7 @@ export class CpuController {
         if (availableFrequencies !== undefined) {
             maximumAvailableFrequency = availableFrequencies[0];
         }
-        if (this.boost.isAvailable()) {
+        if (this.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
             if (setMaxFrequency === undefined || setMaxFrequency > maximumAvailableFrequency) {
                 this.boost.writeValue(true);
             }

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,6 +19,7 @@
 
 import { Menu, Tray } from "electron";
 import { TccProfile } from "../common/models/TccProfile";
+import { DMIController } from '../common/classes/DMIController';
 
 export class TccTray {
 
@@ -49,9 +50,9 @@ export class TccTray {
             // Creation of each profile selection submenu item
             return {
                 label: profile.name,
-                click: () => this.events.profileClick(profile.name),
+                click: () => this.events.profileClick(profile.id),
                 type: 'radio',
-                checked: profile.name === this.state.activeProfile.name
+                checked: profile.id === this.state.activeProfile.id
             };
         });
 
@@ -60,9 +61,34 @@ export class TccTray {
             { label: 'Activate profile temporarily', enabled: false },
             { type: 'separator' }
         );
-    
+
+        // TODO: Manual read until general device id get merged
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const deviceName = dmi.productSKU.readValueNT();
+        const boardVendor = dmi.boardVendor.readValueNT();
+        const chassisVendor = dmi.chassisVendor.readValueNT();
+        const sysVendor = dmi.sysVendor.readValueNT();
+        let showAquarisMenu;
+        const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
+                         (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
+                         (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+
+        if (isTuxedo) {
+            if (deviceName !== undefined &&
+                (deviceName === 'STELLARIS1XI04' ||
+                 deviceName === 'STEPOL1XA04' ||
+                 deviceName === 'STELLARIS1XI05')) {
+                showAquarisMenu = true;
+            } else {
+                showAquarisMenu = false;
+            }
+        } else {
+            showAquarisMenu = true;
+        }
+
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
+            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: showAquarisMenu },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
@@ -78,24 +104,39 @@ export class TccTray {
                 click: () => { this.events.powersaveBlockerClick(); },
                 checked: this.state.powersaveBlockerActive
             },
+            {
+                label: "Fn-Lock",
+                type: "checkbox",
+                click: () => {
+                    this.events.fnLockClick(this.state.fnLockStatus);
+                },
+                checked: this.state.fnLockStatus,
+                visible: this.state.fnLockSupported,
+            },
             { type: 'separator', visible: this.state.isPrimeSupported },
             {
                 label: 'Graphics',
                 visible: this.state.isPrimeSupported,
                 submenu: [
                     {
-                        label: 'Select NVIDIA',
+                        label: 'Select dGPU',
                         type: 'normal',
                         click: () => this.events.selectNvidiaClick(),
-                        visible: this.state.primeQuery !== 'on'
+                        visible: this.state.primeQuery !== 'dGPU',
                     },
                     {
-                        label: 'Select built-in',
+                        label: 'Apply on-demand mode',
+                        type: 'normal',
+                        click: () => this.events.selectOnDemandClick(),
+                        visible: this.state.primeQuery !== 'on-demand'
+                    },
+                    {
+                        label: 'Select iGPU',
                         type: 'normal',
                         click: () => this.events.selectBuiltInClick(),
-                        visible: this.state.primeQuery !== 'off'
+                        visible: this.state.primeQuery !== 'iGPU'
                     }
-                ]
+                ],
             },
             { type: 'separator' },
             { label: this.state.tccGUIVersion, type: 'normal', enabled: false },
@@ -114,14 +155,19 @@ export class TrayState {
     activeProfile: TccProfile;
     profiles: TccProfile[];
     powersaveBlockerActive: boolean
+    fnLockSupported: boolean;
+    fnLockStatus: boolean;
 };
 
 export class TrayEvents {
     startTCCClick: () => void;
+    startAquarisControl: () => void;
     exitClick: () => void;
     autostartTrayToggle: () => void;
     selectNvidiaClick: () => void;
+    selectOnDemandClick: () => void;
     selectBuiltInClick: () => void;
-    profileClick: (profileName: string) => void;
+    profileClick: (profileId: string) => void;
     powersaveBlockerClick: () => void;
+    fnLockClick: (value: boolean) => void;
 }

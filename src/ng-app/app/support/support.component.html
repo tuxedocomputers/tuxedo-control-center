@@ -72,13 +72,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     
                     <form [formGroup]="formTicketNumber">
                         <p>
-                            <ng-container i18n>Please enter the ticket number you received with your support request. If you do not have a ticket number, please contact us via our </ng-container>:
+                            <ng-container i18n="@@cSupportPleaseEnterTicketnumber">Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </ng-container>
                             <a style="color: currentColor; cursor: pointer; text-decoration: underline;" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')" i18n>online form</a>
                         </p>
                         <mat-form-field>
                             <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                         </mat-form-field> &nbsp;
                         <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
+                        <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty"
+                        class="alert alert-danger">
+                            <ng-container i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</ng-container>
+                        </div>
                     </form>
 
                 </mat-step>
@@ -140,8 +144,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <div class="content-container">
             <div i18n>
-                <p>With our "fully automated installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.</p>
-                <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only 3 clicks!</p>
+                <p>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.</p>
+                <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!</p>
             </div>
             <p>
                 <button mat-raised-button (click)="buttonInstallRemoveWebFAICreator()" [disabled]="progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName)">

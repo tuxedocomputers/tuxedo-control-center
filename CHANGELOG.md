@@ -1,5 +1,267 @@
 # Changelog
 
+## [2.1.7] - 2024-02-22
+### Fixed
+- Always restoring keyboard backlight brightness to zero after lid close
+
+## [2.1.6] - 2024-02-13
+### Added
+- Appstream metainfo for packaging
+- Support for Pulse Gen3 keyboard backlight
+
+### Fixed
+- Webcam view throwing errors not being able to open webcam (most notably on Pulse Gen3)
+- Dashboard
+  - Missing GPU sensor values
+  - Sensor value missing when actually only zero
+  - Alternate display for low numbers instead of rounding down
+- RPM package upgrade ending up without executable link in /usr/bin
+
+## [2.1.5] - 2024-01-25
+### Fixed
+- CPU frequency limits not working for devices using amd-pstate-epp cpufreq driver
+
+## [2.1.4] - 2024-01-18
+### Fixed
+- Fan control issue manifesting as missing temp and speed in dashboard
+
+## [2.1.3] - 2024-01-16
+### Added
+- Support for Aquaris Gen6
+
+### Fixed
+- Custom fan mode. Fixes certain cases where custom fan table did not
+  get applied, throwing errors in log, etc.
+- Disconnection of other bluetooth devices while scanning for Aquaris.
+
+## [2.1.2] - 2023-12-21
+### Added
+- Support for Sirius keyboard backlight
+- Support for Sirius system profiles
+
+### Fixed
+- Issue on tccd start causing one thread to get stuck on full load blocking the initialization for an extended amount of time
+- .Xauthority file not found causing excessive tccd log output
+
+## [2.1.1] - 2023-12-13
+### Added
+- Laptop screen refresh rate configurable per TCC profile allowing
+  configuration of reduced refresh rate in battery operation
+- Fn-lock status viewable and changeable in the tray menu for
+  supported devices
+- Dashboard is extended with CPU and GPU power usage info
+  - CPU power usage is displayed where available in the CPU section
+  - GPU section now shows iGPU or dGPU (or both) depending on graphics mode
+  - GPU section also showing power usage and current frequency where available
+- Charging thresholds (for supported devices) in the Settings => Battery Charging Options area
+  - Allows fine-tuning of how the battery is charged in the form of start and end thresholds
+  - Available to choose from three preset profiles plus a custom mode where the thresholds are freely configurable
+- Fan profiles extended with further options
+  - Maximum fan speed parameter to adjust the preset profiles
+  - All-new custom fan mode that allows configuring of a special fan profile in nine temperature ranges
+
+### Changed
+- Rework of GPU selection in tray menu and additionally added to GUI in Settings => Graphics switching
+
+## [2.0.11] - 2023-11-10
+### Fixed
+- Missing profiles for InfinityBook Pro Gen8
+
+## [2.0.10] - 2023-10-26
+### Added
+- Support for Polaris/Stellaris AMD Gen5
+
+## [2.0.9] - 2023-09-22
+### Added
+- Support for Aura Gen3 (default mobile profile)
+
+## [2.0.8] - 2023-07-14
+### Added
+- Four-zone keyboard backlight GUI support
+- Profile definitions for InfinityBook Pro 16 Gen8
+
+### Changed
+- Zoned keyboard backlight GUI design + usability improvements
+- Extended GUI info text in case keyboard backlight control is not found
+
+### Fixed
+- Occasionally not recognized keyboard backlight
+
+## [2.0.7] - 2023-05-23
+### Added
+- Clarifying info text + link added to battery charging profiles
+- Default profiles for IBP Gen8
+
+### Fixed
+- Wrong keyboard backlight restored after LID wakeup
+- Keyboard backlight GUI hover color
+- Tweaks to GUI loading
+
+## [2.0.5] - 2023-05-04
+### Fixed
+- Keyboard backlight for Stellaris Gen5 membrane version
+- Buffered write for keyboard backlight where available
+  (should greatly speed up keyboard painting for supported devices)
+
+## [2.0.4] - 2023-04-25
+### Added
+- Support for Stellaris 16 Gen5
+
+### Fixed
+- Keyboard backlight color picker missing styles and dark mode
+
+## [2.0.2] - 2023-03-28
+### Fixed
+- Keyboard backlight detection for certain devices like Stellaris and Fusion
+- Keyboard backlight paint order
+- Various text and translation adjustments
+- Error on acpi-cpufreq boost parameter validation
+- Now correctly blurs cpu freq settings when globally disabled
+
+## [2.0.0] - 2023-03-22
+### Added
+- Keyboard backlight GUI (Tools => Keyboard backlight)
+  - Set brightness
+  - Set color for single zone RGB keyboards
+  - Set colors for three-zone RGB keyboards
+  - Implements part of linux' `/sys/class/leds` interface: `kbd_backlight` for (single brightness, multi color/intensity)
+  - Restore last settings on boot
+- Webcam settings (Tools => Webcam)
+  - A number of useful and non-useful parameters exposed to tweak and play around with
+  - Preview of webcam picture while tweaking
+  - Save and restore presets
+  - Chosen preset restored on boot or reconnect of device
+- Tomte GUI (Settings => Tomte)
+  - Graphical interface to TUXEDO Tomte
+  - Exposes most of the knobs Tomte allows you to configure such as
+    - Choose operation mode
+    - View which modules are applied for your device
+    - Change behaviour of modules
+- Backup profile settings
+  - Exporting current custom profiles to file
+  - Importing custom profiles from file
+
+### Changed
+- TDP slider validation behaviour now moves other sliders accordingly instead of limiting currently changed slider
+- Removed CPU settings tabs and consequently allowing setting CPU TDP and CPU frequency settings simultaneously
+- Battery charging settings icon replaced
+- Tools icon replaced
+
+### Fixed
+- Temporary set profile retained when saving tccd settings or profiles
+- Fixes related to keeping and re-applying profiles on save
+
+## [1.2.5] - 2023-03-03
+### Fixed
+- Certain icon sizes and alignment
+- Theme colors sometimes not being applied correctly (like in dropdown menus)
+- Support ticket number validation range extended
+
+## [1.2.4] - 2023-01-11
+### Changed
+- Display backlight brightness now only set when explicitly chosen in profile
+
+### Fixed
+- Inadvertently blended out profile edit system control area now visible again
+- Fan availability conditions tweaked to not falsely show fan control for
+  unsupported devices
+
+## [1.2.3] - 2022-12-21
+### Added
+- Battery charging options for a number of devices
+  - Choose one of three "charging profiles" to influence peak charge and charging time
+  - Choose whether to priorize charging or performance when on USB-C PD
+  - For now available through "Settings" => "Battery charging options" (for devices with this feature)
+  - Tray shortcut coming soon
+
+### Changed
+- Dark/light mode adjustments
+  - Now three options available light, dark and "system setting".
+  - System setting attempts to use advertised system theme mode when
+    choosing TCC theme.
+  - Also fixes some GUI details (like scrollbars) that were not rendered in the correct theme
+- Config reload/save logic of `tccd` no longer requires restart of service
+
+### Fixed
+- Core available check on setting validation (should prevent some log
+  messages when cores are disabled)
+- `xrandr` output on systeminfos execution
+- Disable cpu min/max freq validation for `intel_pstate` while interface is bugged
+
+## [1.2.2] - 2022-10-17
+### Changed
+- Fan control logic tweaks and fixes
+
+## [1.2.1] - 2022-10-14
+### Changed
+- TDP Label text adjustments (EN)
+
+### Fixed
+- Old boost workaround for devices where max frequency is not available
+  broke frequency set GUI on newer AMD devices where the scaling driver is
+  `amd-pstate`. This has been fixed and the new driver allows more variable
+  frequency limits (similar to `intel_pstate`).
+- Frequency settings save fixed on some devices where TDP control is not available
+
+## [1.2.0] - 2022-10-10
+### Added
+- Support for system profile selection for a number of devices like
+  - BA1501
+  - Pulse 14/15 Gen 1
+  - Polaris gen 1
+- Support for multiple TDP selection for a number of devices like
+  - Infinitybook Pro 14 Gen 6/7
+  - Pulse 15 Gen 2
+  - Polaris Gen 2/3
+  - Stellaris Gen 2/3/4
+- TCC-profile description
+- Support for per-device profiles
+  - Old profiles stay for most devices
+  - New default profiles for TDP control capable devices
+
+### Changed
+- Password prompt improvements.
+  - If asked to change settings to `tccd` there will not be another prompt for awhile.
+  - More descriptive password prompt text
+- Profile edit layout adjustments
+- Profile overview refresh
+  - Overview now shows profile description initially
+  - Button added to activate profile temporarily
+  - Overlay to assign profiles to states removed
+  - Switchable between "description view" and detailed view for
+    profile comparison
+- Dashboard slimmed down
+
+## [1.1.8] - 2022-10-06
+### Added
+- Checks to detect a valid ticket number to send with the systeminfos
+  plus info about what could be missing or wrong
+
+### Changed
+- Re-enable fan control for Stellaris AMD Gen 4
+- Fan control logic change for newer devices taking into account
+  min fan speed and fan off possibility from driver
+
+## [1.1.7] - 2022-09-19
+### Added
+- Basic support for Stellaris AMD Gen 4
+
+## [1.1.6] - 2022-08-01
+### Changed
+- Packaging dependency tweaks (RPM) for wider compatibility
+
+## [1.1.5] - 2022-07-15
+### Added
+- TUXEDO Aquaris control
+  - Fan speed presets
+  - Fan speed manual set (slider + input)
+  - LED RGB color picker
+  - LED static/rainbow mode picker
+  - LED breath checkbox
+  - Assign custom name to find device easier
+  - Save/restore last used configuration
+  - Links and notices to online instructions on how to use the device
+
 ## [1.1.4] - 2022-04-21
 ### Changed
 - First steps of basic dependency/framework updates

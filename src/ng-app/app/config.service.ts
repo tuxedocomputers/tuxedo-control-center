@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -20,14 +20,16 @@ import { Injectable, OnDestroy } from '@angular/core';
 
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
+import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { environment } from '../environments/environment';
 import { ElectronService } from 'ngx-electron';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { ITccFanProfile, defaultFanProfiles } from '../../common/models/TccFanTable';
+import { ITccFanProfile } from '../../common/models/TccFanTable';
+import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
+import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +39,7 @@ export class ConfigService implements OnDestroy {
     private config: ConfigHandler;
 
     private defaultProfiles: ITccProfile[];
+    private defaultValuesProfile: ITccProfile;
     private customProfiles: ITccProfile[];
     private settings: ITccSettings;
 
@@ -70,9 +73,12 @@ export class ConfigService implements OnDestroy {
         this.config = new ConfigHandler(
             TccPaths.SETTINGS_FILE,
             TccPaths.PROFILES_FILE,
+            TccPaths.WEBCAM_FILE,
+            TccPaths.V4L2_NAMES_FILE,
             TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE
         );
+
         this.defaultProfiles = this.dbus.defaultProfiles.value;
         this.updateConfigData();
         this.subscriptions.add(this.dbus.customProfiles.subscribe(nextCustomProfiles => {
@@ -80,6 +86,19 @@ export class ConfigService implements OnDestroy {
         }));
         this.subscriptions.add(this.dbus.defaultProfiles.subscribe(nextDefaultProfiles => {
             this.defaultProfiles = nextDefaultProfiles;
+            for (const profile of this.defaultProfiles) {
+                this.utils.fillDefaultProfileTexts(profile);
+            }
+        }));
+
+        this.defaultValuesProfile = this.dbus.defaultValuesProfile.value;
+        this.subscriptions.add(this.dbus.defaultValuesProfile.subscribe(nextDefaultValuesProfile => {
+            this.defaultValuesProfile = nextDefaultValuesProfile;
+        }));
+
+        this.subscriptions.add(this.dbus.settings.subscribe(nextSettings => {
+            this.settings = nextSettings
+            this.settingsSubject.next(this.settings);
         }));
     }
 
@@ -88,13 +107,8 @@ export class ConfigService implements OnDestroy {
     }
 
     public updateConfigData(): void {
-        // this.customProfiles = this.config.getCustomProfilesNoThrow();
         this.customProfiles = this.dbus.customProfiles.value;
-        /*for (const profile of this.customProfiles) {
-            this.utils.fillDefaultValuesProfile(profile);
-        }*/
-        this.settings = this.config.getSettingsNoThrow();
-        this.settingsSubject.next(this.settings);
+        this.settings = this.dbus.settings.value;
     }
 
     public getSettings(): ITccSettings {
@@ -102,11 +116,15 @@ export class ConfigService implements OnDestroy {
     }
 
     get cpuSettingsDisabledMessage(): string {
-        return $localize `:@@messageCPUSettingsOff:CPU settings deactivated in Tools→Global\u00A0Settings`;
+        return $localize `:@@messageCPUSettingsOff:CPU frequency control deactivated in Settings→Global\u00A0profile\u00A0settings`;
     }
 
     get fanControlDisabledMessage(): string {
-        return $localize `:@@messageFanControlOff:Fan control deactivated in Tools→Global\u00A0Settings`;
+        return $localize `:@@messageFanControlOff:Fan control deactivated in Settings→Global\u00A0profile\u00A0settings`;
+    }
+
+    get keyboardBacklightControlDisabledMessage(): string {
+        return $localize `:@@messageKeyboardBacklightControlOff:Keyboard backlight control deactivated in Settings→Global\u00A0profile\u00A0settings`;
     }
 
     public getCustomProfiles(): ITccProfile[] {
@@ -117,15 +135,19 @@ export class ConfigService implements OnDestroy {
         return this.defaultProfiles;
     }
 
+    public getDefaultValuesProfile(): ITccProfile {
+        return this.defaultValuesProfile;
+    }
+
     public getAllProfiles(): ITccProfile[] {
         return this.defaultProfiles.concat(this.getCustomProfiles());
     }
 
-    public setActiveProfile(profileName: string, stateId: string): void {
-        // Copy existing current settings and set name of new profile
+    public setActiveProfile(profileId: string, stateId: string): void {
+        // Copy existing current settings and set id of new profile
         const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
 
-        newSettings.stateMap[stateId] = profileName;
+        newSettings.stateMap[stateId] = profileId;
         const tmpSettingsPath = '/tmp/tmptccsettings';
         this.config.writeSettings(newSettings, tmpSettingsPath);
         let tccdExec: string;
@@ -139,34 +161,90 @@ export class ConfigService implements OnDestroy {
         const result = this.electron.ipcRenderer.sendSync(
             'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
         );
-        
+
         this.updateConfigData();
     }
 
-    public copyProfile(profileName: string, newProfileName: string): boolean {
-        const profileToCopy: ITccProfile = this.getProfileByName(profileName);
+    /**
+     * Copy profile with specified ID
+     *
+     * @param sourceProfileId Profile ID to copy, if undefined use default values profile
+     * @param newProfileName Name for the copied profile
+     * @returns The new profile ID or undefined on error
+     */
+    public async copyProfile(sourceProfileId: string, newProfileName: string) {
+        let profileToCopy: ITccProfile;
 
-        if (profileToCopy === undefined) 
-        { return false; }
+        if (sourceProfileId === undefined) {
+            profileToCopy = this.dbus.defaultValuesProfile.value;
+        } else {
+            profileToCopy = this.getProfileById(sourceProfileId);
+        }
 
-        const existingProfile = this.getProfileByName(newProfileName);
-        if (existingProfile !== undefined) 
-        { return false; }
+        if (profileToCopy === undefined) {
+            return undefined;
+        }
 
         const newProfile: ITccProfile = this.config.copyConfig<ITccProfile>(profileToCopy);
         newProfile.name = newProfileName;
+        newProfile.id = generateProfileId();
         const newProfileList = this.getCustomProfiles().concat(newProfile);
-        const result = this.pkexecWriteCustomProfiles(newProfileList);
-        if (result) { this.updateConfigData(); }
-        return result;
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+            return newProfile.id;
+        } else {
+            return undefined;
+        }
     }
 
-    public deleteCustomProfile(profileNameToDelete: string): boolean {
-        const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.name !== profileNameToDelete);
-        if (newProfileList.length === this.getCustomProfiles().length) { return false; }
-        const result = this.pkexecWriteCustomProfiles(newProfileList);
-        if (result) { this.updateConfigData(); }
-        return result;
+    // appends given profiles to custom profiles but replaces all of those where IDs conflict!
+    // generates a new ID for new profiles
+    public async importProfiles(newProfiles: ITccProfile[])
+    {
+        let newProfileList = this.getCustomProfiles();
+        for (let i = 0; i < newProfiles.length; i++)
+        {
+            // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
+            let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+            if(oldProfileIndex !== -1)
+            {
+                newProfileList[oldProfileIndex] = newProfiles[i];
+            }
+            else
+            {
+                // when we want to override the old profile or there is no conflict we want to keep the
+                // original ID
+                let newProfile = newProfiles[i];
+                if (newProfile.id === "generateNewID")
+                {
+                    newProfile.id = generateProfileId();
+                }
+                newProfileList = newProfileList.concat(newProfile);
+            }
+        }
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public async deleteCustomProfile(profileIdToDelete: string) {
+        const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
+        if (newProfileList.length === this.getCustomProfiles().length) {
+            return false;
+        }
+        const success = await this.pkexecWriteCustomProfilesAsync(newProfileList);
+        if (success) {
+            this.updateConfigData();
+            await this.dbus.triggerUpdate();
+        }
+        return success;
     }
 
     public pkexecWriteCustomProfiles(customProfiles: ITccProfile[]) {
@@ -198,40 +276,34 @@ export class ConfigService implements OnDestroy {
         }
     }
 
-    private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            const tmpProfilesPath = '/tmp/tmptccprofiles';
-            this.config.writeProfiles(customProfiles, tmpProfilesPath);
-            let tccdExec: string;
-            if (environment.production) {
-                tccdExec = TccPaths.TCCD_EXEC_FILE;
-            } else {
-                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
-            }
-            this.utils.execCmd('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath).then(data => {
-                resolve(true);
-            }).catch(error => {
-                resolve(false);
-            });
-        });
+    private async pkexecWriteCustomProfilesAsync(customProfiles: ITccProfile[]) {
+        const tmpProfilesPath = '/tmp/tmptccprofiles';
+        this.config.writeProfiles(customProfiles, tmpProfilesPath);
+        let tccdExec: string;
+        if (environment.production) {
+            tccdExec = TccPaths.TCCD_EXEC_FILE;
+        } else {
+            tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+        }
+        try {
+            await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+            return true;
+        } catch (err) {
+            return false;
+        }
     }
 
-    public async writeProfile(currentProfileName: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
+    public async writeProfile(currentProfileId: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
-            const profileIndex = this.customProfiles.findIndex(p => p.name === currentProfileName);
-            const existingDefaultProfileWithNewName = this.defaultProfiles.findIndex(p => p.name === profile.name);
-            const exisitingCustomProfileWithNewName = this.customProfiles.findIndex(p => p.name === profile.name);
+            const profileIndex = this.customProfiles.findIndex(p => p.id === currentProfileId);
+            profile.id = currentProfileId;
 
             // Copy custom profiles and if provided profile is one of them, overwrite with
             // provided profile
             const customProfilesCopy = this.config.copyConfig<ITccProfile[]>(this.customProfiles);
             const willOverwriteProfile =
                 // Is custom profile
-                profileIndex !== -1
-                // No default profile with same name
-                && existingDefaultProfileWithNewName === -1
-                // Ensure that a profile with the same name doesn't exist, unless it's the changed one
-                && (exisitingCustomProfileWithNewName === -1 || exisitingCustomProfileWithNewName === profileIndex);
+                profileIndex !== -1;
 
             if (willOverwriteProfile) {
                 customProfilesCopy[profileIndex] = profile;
@@ -241,7 +313,7 @@ export class ConfigService implements OnDestroy {
             const newSettings: ITccSettings = this.config.copyConfig<ITccSettings>(this.getSettings());
             if (states !== undefined) {
                 for (const stateId of states) {
-                    newSettings.stateMap[stateId] = profile.name;
+                    newSettings.stateMap[stateId] = profile.id;
                 }
             }
 
@@ -268,6 +340,28 @@ export class ConfigService implements OnDestroy {
         });
     }
 
+    public async pkexecWriteWebcamConfigAsync(settings: WebcamPreset[]): Promise<boolean> {
+        return new Promise<boolean>(resolve => {
+            const tmpWebcamPath = '/tmp/tmptccwebcam';
+            this.config.writeWebcamSettings(settings, tmpWebcamPath);
+            let tccdExec: string;
+            if (environment.production) {
+                tccdExec = TccPaths.TCCD_EXEC_FILE;
+            } else {
+                tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
+            }
+
+            this.utils.execFile(
+                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
+            ).then(data => {
+                resolve(true);
+            }).catch(error => {
+                resolve(false);
+            });
+        });
+    }
+
+    
     private async pkexecWriteConfigAsync(settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             const tmpProfilesPath = '/tmp/tmptccprofiles';
@@ -280,13 +374,45 @@ export class ConfigService implements OnDestroy {
             } else {
                 tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
             }
-            this.utils.execCmd(
+            this.utils.execFile(
                 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
             ).then(data => {
                 resolve(true);
             }).catch(error => {
                 resolve(false);
             });
+        });
+    }
+
+    private transformPrimeStatus(status: string): string {
+        switch (status) {
+            case "dGPU":
+                return "nvidia";
+            case "iGPU":
+                return "intel";
+            case "on-demand":
+                return "on-demand";
+            default:
+                return "off";
+        }
+    }
+
+    public async pkexecSetPrimeSelectAsync(
+        selectedState: string
+    ): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            this.utils
+                .execFile(
+                    `pkexec prime-select ${this.transformPrimeStatus(
+                        selectedState
+                    )}`
+                )
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
         });
     }
 
@@ -308,8 +434,26 @@ export class ConfigService implements OnDestroy {
         }
     }
 
+    public getProfileById(searchedProfileId: string): ITccProfile {
+        const foundProfile: ITccProfile = this.getAllProfiles().find(profile => profile.id === searchedProfileId);
+        if (foundProfile !== undefined) {
+            return this.config.copyConfig<ITccProfile>(foundProfile);
+        } else {
+            return undefined;
+        }
+    }
+
     public getCustomProfileByName(searchedProfileName: string): ITccProfile {
         const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.name === searchedProfileName);
+        if (foundProfile !== undefined) {
+            return this.config.copyConfig<ITccProfile>(foundProfile);
+        } else {
+            return undefined;
+        }
+    }
+
+    public getCustomProfileById(searchedProfileId: string): ITccProfile {
+        const foundProfile: ITccProfile = this.getCustomProfiles().find(profile => profile.id === searchedProfileId);
         if (foundProfile !== undefined) {
             return this.config.copyConfig<ITccProfile>(foundProfile);
         } else {
@@ -334,17 +478,17 @@ export class ConfigService implements OnDestroy {
      * Set the current profile to edit. Effectively makes a new copy of the chosen profile
      * for edit and compare with current profile values. Overwrites any current changes.
      *
-     * @param customProfileName Profile name used to look up the profile
-     * @returns false if the name doesn't exist among the custom profiles, true if successfully set
+     * @param customProfileId Profile ID used to look up the profile
+     * @returns false if the ID doesn't exist among the custom profiles, true if successfully set
      */
-    public setCurrentEditingProfile(customProfileName: string): boolean {
-        if (customProfileName === undefined) {
+    public setCurrentEditingProfile(customProfileId: string): boolean {
+        if (customProfileId === undefined) {
             this.currentProfileEditIndex = -1;
             this.currentProfileEdit = undefined;
             this.editingProfileSubject.next(undefined);
             this.editingProfile.next(undefined);
         }
-        const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.name === customProfileName);
+        const index = this.currentProfileEditIndex = this.customProfiles.findIndex(e => e.id === customProfileId);
         if (index === -1) {
             return false;
         } else {

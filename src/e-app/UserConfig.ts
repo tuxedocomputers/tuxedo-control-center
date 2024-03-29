@@ -1,7 +1,26 @@
+/*!
+ * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 import * as fs from 'fs';
 
 export class UserConfig {
     private data: object;
+    private inProgress = false;
 
     constructor(private configFile: string) {
         if (configFile === undefined) { throw Error('No config path defined'); }
@@ -9,28 +28,43 @@ export class UserConfig {
         this.validateValues();
     }
 
+    private async setInProgress() {
+        while (this.inProgress) await new Promise(resolve => setTimeout(resolve, 10));
+        this.inProgress = true;
+    }
+
+    private async setProgressDone() {
+        this.inProgress = false;
+    }
+
     public async set(property: string, value: string) {
+        await this.setInProgress();
         try {
             await this.readConfig();
         } catch (err) {
             if (err.code === 'ENOENT') {
                 console.log('Config file (' + this.configFile + ') does not exist. Will be created.');
             } else {
+                await this.setProgressDone();
                 throw err;
             }
         }
         this.data[property] = value;
         await this.writeConfig();
+        await this.setProgressDone();
     }
 
     public async get(property: string): Promise<string> {
+        await this.setInProgress();
         try {
             await this.readConfig();
         } catch (err) {
             if (err.code !== 'ENOENT') {
+                await this.setProgressDone();
                 throw err;
             }
         }
+        await this.setProgressDone();
         return this.data[property];
     }
 

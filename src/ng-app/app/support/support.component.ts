@@ -59,7 +59,7 @@ export class SupportComponent implements OnInit {
     this.updateAnydeskInstallStatus();
     this.updateWebFAICreatorInstallStatus();
     this.formTicketNumber = new FormGroup({
-      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')])
+      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
     });
   }
 
@@ -166,7 +166,7 @@ export class SupportComponent implements OnInit {
         const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
         this.systeminfoOutput('Running systeminfos.sh');
         this.utils.pageDisabled = true;
-        await this.utils.execCmd('pkexec env XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
+        await this.utils.execCmdAsync('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
       } catch (err) {
         reject('Failed to execute script');
       } finally {

@@ -1,0 +1,134 @@
+<!--
+Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+
+<div class="backlight-settings-edit">
+    <mat-card class="tcc-card card-keyboard-backlight inner-backlight-settings-edit">
+        <div class="tcc-options-group">
+            <div class="title-row title-row-margin">
+                <hr>
+                <div class="title">
+                    <svg viewBox="0 0 512 512" class="tcc-icons">
+                        <use href="./assets/images/icon_kb_backlight5.svg#Icon"></use>
+                    </svg>
+                    <ng-container i18n="@@cKeyboardBacklightLabel">Keyboard Backlight</ng-container>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <div *ngIf="keyboardBacklightCapabilities != undefined && keyboardBacklightCapabilities.zones > 1 && keyboardBacklightCapabilities.zones <= 4"
+            class="resize-text">
+            <p i18n="@@cKeyboardBacklightDescription1" class="keyboardBacklightDescription1">Click on a key area to
+                select it.</p>
+            <p i18n="@@cKeyboardBacklightDescription2" class="keyboardBacklightDescription2">Hold down shift to select
+                multiple key areas.
+            </p>
+        </div>
+
+        <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined"
+            class="resize-text">
+            <p i18n="@@cKeyboardBacklightNotSupported">Your device has no keyboard backlight, is not (yet) supported by
+                this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite
+                0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer
+                versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these
+                driver versions do not get installed automatically.</p>
+        </div>
+
+        <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities !== undefined"
+            [ngClass]="{'not-available': !this.config.getSettings().keyboardBacklightControlEnabled }"
+            [matTooltip]="!this.config.getSettings().keyboardBacklightControlEnabled ? this.config.keyboardBacklightControlDisabledMessage : ''"
+            matTooltipClass="wider-tooltip">
+
+            <div class="keyboard-visual">
+                <app-keyboard-visual [keyboardBacklightCapabilities]="keyboardBacklightCapabilities"
+                    [chosenColorHex]="chosenColorHex" (selectedZonesChange)="selectedZonesChange($event)">
+                </app-keyboard-visual>
+            </div>
+
+            <!-- COLOR PICKER -->
+            <mat-grid-list [cols]="18" rowHeight="2rem" class="keyboard-backlight-grid"
+                *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
+                <mat-grid-tile [colspan]="2"></mat-grid-tile>
+                <mat-grid-tile [colspan]="4">
+                    <header i18n="@@cKeyboardBacklightColorLabel">Backlight Color:</header>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="4"></mat-grid-tile>
+                <mat-grid-tile [colspan]="6" style="overflow: visible">
+                    <div class="align-color-picker">
+                        <input #colorPickerElement id="colorPickerElement" class="looks-like-a-button"
+                            [style.background]="getSelectedColor()" readonly class="tcc-color-picker color-visualizer"
+                            mat-icon-button color="primary" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'"
+                            [cpPositionRelativeToArrow]="false" [colorPicker]="getSelectedColor()"
+                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpInputChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpSliderDragStart)="onColorPickerDragStart(selectedZones)"
+                            (cpSliderDragEnd)="onColorPickerDragEnd(selectedZones)">
+                        <button class="tcc-color-picker color-visualizer" mat-icon-button color="primary"
+                            style="margin-left: 1rem;" [cpPosition]="'left'" [cpPositionOffset]="'50%'"
+                            [cpPositionRelativeToArrow]="true" [colorPicker]="getSelectedColor()"
+                            cpAlphaChannel="disabled" (cpSliderChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpInputChange)="onColorPickerInput($event.color, selectedZones)"
+                            (cpSliderDragStart)="onColorPickerDragStart(selectedZones)"
+                            (cpSliderDragEnd)="onColorPickerDragEnd(selectedZones)">
+                            <mat-icon>colorize</mat-icon>
+                        </button>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="2">
+                </mat-grid-tile>
+            </mat-grid-list>
+
+            <mat-grid-list [cols]="18" rowHeight="2rem" class="keyboard-backlight-grid"
+                *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
+                <!-- BRIGHTNESS SLIDER -->
+                <mat-grid-tile [colspan]="2"></mat-grid-tile>
+                <mat-grid-tile [colspan]="6">
+                    <header i18n="@@cKeyboardBacklightBrightnessLabel">Backlight Brightness</header>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="2">
+                    <content class="value" style="text-align: center">{{ brightnessSlider.percent * 100 | number:
+                        '1.1-1'}}%
+                    </content>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="6" style="overflow: visible">
+                    <div class="align-slider-components">
+                        <button mat-icon-button color="primary"
+                            (mousedown)="startPress(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max)"
+                            (mouseup)="stopPress()" (mouseleave)="stopPress()">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary"
+                            (mousedown)="startPress(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max)"
+                            (mouseup)="stopPress()" (mouseleave)="stopPress()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <mat-slider class="brightness-slider" #brightnessSlider min="0" [(ngModel)]="chosenBrightness"
+                            [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary"
+                            (input)="onBrightnessSliderInput($event.value)"
+                            (onTouched)="onBrightnessSliderTouched($event)" (change)="onBrightnessSliderChange()">
+                        </mat-slider>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="2">
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </mat-card>
+</div>

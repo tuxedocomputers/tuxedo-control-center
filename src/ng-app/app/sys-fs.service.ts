@@ -20,6 +20,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { CpuController } from '../../common/classes/CpuController';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 import { BehaviorSubject } from 'rxjs';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +78,7 @@ export class SysFsService implements OnDestroy {
 
   public getGeneralCpuInfo(): IGeneralCPUInfo {
     let cpuInfo: IGeneralCPUInfo;
+    const scalingDriver = this.cpu.cores[0].scalingDriver.readValueNT();
     try {
       cpuInfo = {
         availableCores: this.cpu.cores.length,
@@ -91,7 +93,7 @@ export class SysFsService implements OnDestroy {
       if (cpuInfo.scalingAvailableFrequencies !== undefined) {
         cpuInfo.maxFreq = cpuInfo.scalingAvailableFrequencies[0];
       }
-      if (cpuInfo.boost !== undefined) {
+      if (cpuInfo.boost !== undefined && scalingDriver === ScalingDriver.acpi_cpufreq) {
         // FIXME: Use actual max boost frequency
         cpuInfo.maxFreq += 1000000;
         cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);

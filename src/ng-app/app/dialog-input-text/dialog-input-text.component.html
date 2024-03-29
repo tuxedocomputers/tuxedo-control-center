@@ -1,0 +1,37 @@
+<!--
+Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+
+This file is part of TUXEDO Control Center.
+
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="mat-typography">
+    <h3 *ngIf="data.heading">{{ data.heading }}</h3>
+    <mat-form-field class="input-text">
+        <input matInput #inputText="matInput"
+            cdkFocusInitial
+            type="text"
+            minLength="1"
+            maxLength="30"
+            [value]="data.prefill"
+            (keyup.enter)="closeDialog(inputText.value)"
+            (focus)="$event.target.select()">
+    </mat-form-field>
+    <p>{{ data.description }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">{{ data.buttonAbortLabel }}</button>
+    <button mat-button (click)="closeDialog(inputText.value)">{{ data.buttonConfirmLabel }}</button>
+</mat-dialog-actions>

@@ -19,7 +19,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
@@ -45,7 +45,7 @@ export class StateService implements OnDestroy {
   private stateSubject: Subject<ProfileStates>;
   public stateObserver: Observable<ProfileStates>;
 
-  public activeProfile;
+  public activeProfile: BehaviorSubject<ITccProfile>;
 
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
@@ -74,7 +74,7 @@ export class StateService implements OnDestroy {
         value: ProfileStates.AC.toString()
       })
       .set(ProfileStates.BAT.toString(), {
-        label: $localize `:@@stateLabelBattery:Battery `,
+        label: $localize `:@@stateLabelBattery:Battery`,
         tooltip: $localize `:@@stateTooltipBattery:Battery powered`,
         icon: 'icon_batterymode.svg#Icon',
         value: ProfileStates.BAT.toString()
@@ -97,10 +97,10 @@ export class StateService implements OnDestroy {
   /**
    * Get the array of state names that the profile is activated for
    */
-  public getProfileStates(profileName: string): string[] {
-    // Filter on value (profile name) and map on key (state)
+  public getProfileStates(profileId: string): string[] {
+    // Filter on value (profile id) and map on key (state)
     return Object.entries(this.currentSettings.stateMap)
-            .filter(entry => entry[1] === profileName)
+            .filter(entry => entry[1] === profileId)
             .map(entry => entry[0]);
   }
 

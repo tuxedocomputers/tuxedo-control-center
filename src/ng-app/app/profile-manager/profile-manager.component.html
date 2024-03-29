@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -23,13 +23,39 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <span>
             <ng-container i18n="@@cProfMgrTitle">Profiles</ng-container>
         </span>
-        <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
-            <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
-            <mat-button-toggle value="default" i18n="@@cProfMgrFilterPreset">Preset</mat-button-toggle>
-            <mat-button-toggle value="custom" i18n="@@cProfMgrFilterCustom">Custom</mat-button-toggle>
-            <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
-        </mat-button-toggle-group>
+        <span>
+            <div class="import-export-buttons mat-button-toggle-group">
+                <span i18n-matTooltip="@@cProfMgrButtonImportTooltip" matTooltip="Import Profile Settings">
+                    <button  (click)="importProfiles()" >
+                        <svg viewBox="0 0 512 512">
+                            <use href="./assets/images/icon_download.svg#Icon"></use>
+                            </svg>
+                    </button>
+                </span>
+                <span i18n-matTooltip="@@cProfMgrButtonExportTooltip" matTooltip="Export Profile Settings">
+                    <button (click)="exportProfiles()" >
+                        <svg viewBox="0 0 512 512">
+                            <use href="./assets/images/icon_save.svg#Icon"></use>
+                            </svg>
+                    </button>
+                </span>
+            </div>
+        </span>
+        <span>
+            <mat-button-toggle-group [(ngModel)]="viewDetails">
+                <mat-button-toggle [value]="false"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg></mat-button-toggle>
+                <mat-button-toggle [value]="true"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-button-toggle>
+            </mat-button-toggle-group>
+            <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
+                <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
+                <mat-button-toggle value="default" i18n="@@cProfMgrFilterPreset">Preset</mat-button-toggle>
+                <mat-button-toggle value="custom" i18n="@@cProfMgrFilterCustom">Custom</mat-button-toggle>
+                <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
+            </mat-button-toggle-group>
+        </span>
+        
     </mat-toolbar-row>
+
     
     <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
         <span style="flex: 1 1 auto"></span>
@@ -45,6 +71,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <button mat-raised-button color="basic" (click)="cancelInput()" i18n>Cancel</button>
         </form>
     </mat-toolbar-row>
+
     <!--/div-->
 
     <!-- Description message -->
@@ -58,9 +85,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             *ngFor="let profile of getProfilesForList()"
             [profile]="profile"
             [hoverEffect]="false"
-            [active]="isProfileActive(profile.name)"
-            [used]="isProfileUsed(profile.name)"
-            (copyClick)="copyProfile($event)">
+            [active]="isProfileActive(profile.id)"
+            [used]="isProfileUsed(profile.id)"
+            (copyClick)="copyProfile($event)"
+            [showDetails]="viewDetails">
         </app-profile-overview-tile>
         <app-profile-overview-tile
             *ngIf="['all', 'custom'].includes(inputProfileFilter)"
@@ -70,6 +98,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </app-profile-overview-tile>
     </div>
     <app-profile-details-edit #profileDetailsEdit
+        *ngIf="currentProfile !== undefined"
         [profile]="currentProfile"
         (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
     </app-profile-details-edit>

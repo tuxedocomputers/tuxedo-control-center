@@ -39,6 +39,10 @@
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "dbus-next",
+              "node-ble"
             ]
           },
           "configurations": {
@@ -60,7 +64,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3.5mb",
                   "maximumError": "5mb"
                 },
                 {

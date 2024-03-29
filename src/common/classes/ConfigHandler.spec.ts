@@ -23,7 +23,8 @@ import * as path from 'path';
 
 import { ConfigHandler } from './ConfigHandler';
 import { ITccSettings, defaultSettings} from '../models/TccSettings';
-import { ITccProfile, defaultProfiles } from '../models/TccProfile';
+import { ITccProfile } from '../models/TccProfile';
+import { defaultProfiles } from '../models/profiles/LegacyProfiles';
 import { TccPaths } from './TccPaths';
 
 describe('ConfigHandler file IO', () => {
@@ -31,6 +32,8 @@ describe('ConfigHandler file IO', () => {
     const config = new ConfigHandler(
         '/etc/test1/test2/settings.conf',
         '/etc/test1/test2/profiles.conf',
+        '/etc/test1/test2/webcam.conf',
+        '/etc/test1/test2/v4l2names.conf',
         '/etc/test1/test2/autosave.conf',
         '/etc/test1/test2/fantables.conf');
 

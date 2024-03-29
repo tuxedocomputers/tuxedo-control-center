@@ -38,6 +38,7 @@ async function buildDeb(): Promise<void> {
         directories: {
             output: './dist/packages'
         },
+
         files: [
             distSrc + '/**/*'
         ],
@@ -50,24 +51,29 @@ async function buildDeb(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
+            distSrc + '/data/camera/cameractrls.py',
+            distSrc + '/data/dist-data/99-webcam.rules',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tomte.policy',
+            distSrc + '/data/camera/v4l2_kernel_names.json'
         ],
         linux: {
             target: [
                 'deb'
             ],
             category: 'System',
-            description: 'TUXEDO Control Center Application'
+            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         deb: {
-            depends: ['tuxedo-keyboard (>= 3.0.6)', 'libayatana-appindicator3-1'],
+            depends: ['tuxedo-keyboard (>= 3.1.2) | tuxedo-drivers (>= 3.1.2)', 'libayatana-appindicator3-1'],
             category: 'System',
+            afterInstall: "./build-src/after_install.sh",
+            afterRemove: "./build-src/after_remove.sh",
             fpm: [
-                '--after-install=./build-src/after_install.sh',
-                '--before-remove=./build-src/before_remove.sh',
                 '--conflicts=tuxedofancontrol',
-                '--replaces=tuxedofancontrol'
+                '--replaces=tuxedofancontrol',
+                '--inputs=build-src/package-files.txt'
             ]
         }
     };
@@ -108,22 +114,27 @@ async function buildSuseRpm(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
+            distSrc + '/data/camera/cameractrls.py',
+            distSrc + '/data/camera/v4l2_kernel_names.json',
+            distSrc + '/data/dist-data/99-webcam.rules'
         ],
         linux: {
             target: [
                 'rpm'
             ],
             category: 'System',
-            description: 'TUXEDO Control Center Application'
+            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         rpm: {
-            depends: [ 'tuxedo-keyboard >= 3.0.6', '(libayatana-appindicator3-1 or libappindicator)' ],
+            depends: ['(tuxedo-keyboard >= 3.1.2 or tuxedo-drivers >= 3.1.2)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
+            afterInstall: './build-src/dummy.sh',
+            afterRemove: './build-src/after_remove.sh',
             fpm: [
-                '--after-install=./build-src/after_install.sh',
-                '--before-remove=./build-src/before_remove.sh',
                 '--replaces=tuxedofancontrol <= 0.1.9',
+                '--rpm-posttrans=./build-src/after_install.sh',
+                '--inputs=build-src/package-files.txt',
                 '--rpm-tag=%define _build_id_links none'
             ]
         }
@@ -167,15 +178,18 @@ async function buildAppImage(): Promise<void> {
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
             distSrc + '/data/dist-data/tuxedo-control-center.desktop',
             distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/de.tuxedocomputers.tcc.policy',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf'
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
+            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
+            distSrc + '/data/camera/cameractrls.py',
+            distSrc + '/data/camera/v4l2_kernel_names.json',
+            distSrc + '/data/dist-data/99-webcam.rules'
         ],
         linux: {
             target: [
                 'AppImage'
             ],
             category: 'System',
-            description: 'TUXEDO Control Center Application'
+            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         }
     };
 
