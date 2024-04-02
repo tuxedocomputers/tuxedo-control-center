@@ -551,6 +551,23 @@ async function createTccWindow(langId: string, module?: string) {
         tccWindow = null;
     });
 
+    tccWindow.on('close', async function (e) {
+        await tccDBus.setSensorDataCollectionStatus(false)
+    
+        let collectionStatus = undefined
+        let retryCount = 0
+        const maxRetries = 5
+        
+        while (collectionStatus !== false && retryCount < maxRetries) {
+            collectionStatus = await tccDBus.getSensorDataCollectionStatus()
+            retryCount++
+        }
+    
+        if (collectionStatus !== false) {
+            console.error('Failed to set sensor data collection status after multiple attempts')
+        }
+    });
+
     const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
     if (module !== undefined) {
         await tccWindow.loadFile(indexPath, { hash: '/' + module });

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -27,6 +27,7 @@ import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ICpuPower } from 'src/common/models/TccPowerSettings';
 import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
+import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
 
 export interface IDBusFanData {
   cpu: FanData;
@@ -87,6 +88,8 @@ export class TccDBusClientService implements OnDestroy {
 
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public isX11 = new BehaviorSubject<boolean>(undefined);
+  public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
+  public device: TUXEDODevice;
 
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
@@ -142,6 +145,13 @@ export class TccDBusClientService implements OnDestroy {
     if (iGpuInfoValuesJSON) {
         this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
     }
+
+    const deviceJSON = await this.tccDBusInterface.getDeviceJSON();
+    if (deviceJSON) {
+        this.device = JSON.parse(deviceJSON);
+    }
+
+    
 
     this.sensorDataCollectionStatus.next(await this.tccDBusInterface.getSensorDataCollectionStatus())
 

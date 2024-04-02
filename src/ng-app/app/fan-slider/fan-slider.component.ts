@@ -36,7 +36,10 @@ import {
 } from "src/common/classes/FanChartProperties";
 import { Color, Label } from "ng2-charts";
 import { ChartDataSets, ChartOptions } from "chart.js";
-import { interpolatePointsArray } from "src/common/classes/FanUtils";
+import {
+    interpolatePointsArray,
+    manageCriticalTemperature,
+} from "src/common/classes/FanUtils";
 import { delay } from "src/common/classes/Utils";
 import { formatTemp } from "../../../common/classes/FanUtils";
 import { ConfigService } from "../config.service";
@@ -140,9 +143,9 @@ export class FanSliderComponent implements OnInit {
         temp: number
     ): Promise<void> {
         await this.mutex.runExclusive(async () => {
-            const clampedSliderValue = this.safeguardFanSpeed(
-                sliderValue,
-                temp
+            const clampedSliderValue = manageCriticalTemperature(
+                temp,
+                sliderValue
             );
             const leftSliders = this.getSlidersToAdjust(temp, "left");
             const rightSliders = this.getSlidersToAdjust(temp, "right");
@@ -175,7 +178,7 @@ export class FanSliderComponent implements OnInit {
         temp: number,
         direction: "left" | "right"
     ): void {
-        const targetValue = this.safeguardFanSpeed(sliderValue, temp);
+        const targetValue = manageCriticalTemperature(temp, sliderValue);
 
         for (const slider of sliders) {
             const sliderControl = this.fanFormGroup.get(`${slider}c`);
@@ -188,10 +191,6 @@ export class FanSliderComponent implements OnInit {
                 sliderControl.setValue(targetValue);
             }
         }
-    }
-
-    private safeguardFanSpeed(sliderValue: number, temp: number): number {
-        return temp > 70 ? Math.max(40, sliderValue) : sliderValue;
     }
 
     public async updateComponents(sliderValue: number, temp: number) {

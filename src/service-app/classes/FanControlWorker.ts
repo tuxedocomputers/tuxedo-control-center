@@ -103,7 +103,12 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {}
+    public onExit(): void {
+        if (this.getFanControlStatus()) {
+            ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
+            ioAPI.setEnableModeSet(false); //FIXME Dummy function, tuxedo-io always sets the manual bit
+        }
+    }
 
     private setupTuxedoIO() {
         this.initHardwareCapabilities();
