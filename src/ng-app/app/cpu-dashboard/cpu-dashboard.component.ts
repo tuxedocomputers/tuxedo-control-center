@@ -191,7 +191,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 .subscribe((state: string) => {
                     this.primeState = state;
                 }
-            })
+            )
         );
     }
 
