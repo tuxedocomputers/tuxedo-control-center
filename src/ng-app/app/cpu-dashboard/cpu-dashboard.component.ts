@@ -38,6 +38,8 @@ import { filter, first, tap } from "rxjs/operators";
 import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
+import { AvailabilityService } from "../../../common/classes/availability.service";
+import { ElectronService } from "ngx-electron";
 
 @Component({
     selector: "app-cpu-dashboard",
@@ -80,7 +82,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public gaugeIGpuFreq: number = 0;
     public iGpuTemp: number = 0;
     public iGpuFreq: number = 0;
-    public iGpuVendor: string = "unknown";
+    public cpuVendor: string = "unknown";
     public iGpuPower: number = 0;
 
     public activeProfile: ITccProfile;
@@ -97,6 +99,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
 
+    public isX11: boolean;
+
     constructor(
         private sysfs: SysFsService,
         private utils: UtilsService,
@@ -107,7 +111,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         private config: ConfigService,
         public compat: CompatibilityService,
         private vendor: VendorService,
-        private power: PowerStateService
+        private power: PowerStateService,
+        public availability: AvailabilityService,
+        private electron: ElectronService
     ) {}
 
     public async ngOnInit(): Promise<void> {
@@ -117,11 +123,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.dashboardVisibility = document.visibilityState == "visible";
         this.usingFahrenheit = this.config.getSettings().fahrenheit;
+
+        // not instantly showing window to give enough time to load window
+        setTimeout(async () => {
+            this.electron.ipcRenderer.send("show-tcc-window");
+        }, 200);
     }
 
     private setValuesFromRoute() {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;
+        this.isX11 = data.x11Status;
     }
 
     private initializeEventListeners(): void {
@@ -171,8 +183,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribePrimeState(): void {
         this.subscriptions.add(
-            this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
-                if (state) {
+            this.tccdbus.primeState
+                .pipe(
+                    filter((value) => value !== undefined),
+                    first()
+                )
+                .subscribe((state: string) => {
                     this.primeState = state;
                 }
             })
@@ -274,7 +290,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.gaugeIGpuFreq =
             maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.iGpuFreq = coreFrequency;
-        this.iGpuVendor = await this.vendor.getCpuVendor();
+        this.cpuVendor = await this.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
     }
 
@@ -430,7 +446,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public cpuPowerFormat = this.createFormatter(
         () => this.compat.hasCpuPower,
-        (val) => Math.round(val).toString()
+        (val) => this.roundWattage(val)
     );
 
     public dGpuPowerFormat = this.createFormatter(
@@ -438,12 +454,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             this.powerState == "D3cold" ||
             (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
         (val) =>
-            this.powerState == "D3cold" ? "0" : Math.round(val).toString()
+            this.powerState == "D3cold" ? "0" : this.roundWattage(val)
     );
 
     public iGpuPowerFormat = this.createFormatter(
         () => this.compat.hasIGpuPowerDraw,
-        (val) => Math.round(val).toString()
+        (val) => this.roundWattage(val)
     );
 
     public goToProfileEdit = (profile: ITccProfile): void => {
@@ -453,6 +469,19 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             });
         }
     };
+    
+    // Make numbers smaller than 1W not show 0, but <1W
+    private roundWattage(val: number): string {
+        let num = Math.round(val);
+        let ret = "";
+        if (num < 1) {
+            ret = "<1";
+        }
+        else {
+            ret = num.toString();
+         }
+        return ret;
+    }
 
     private formatFahrenheit(val: number) {
         if (this.usingFahrenheit) {

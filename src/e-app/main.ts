@@ -557,8 +557,13 @@ async function createTccWindow(langId: string, module?: string) {
     } else {
         await tccWindow.loadFile(indexPath);
     }
-    tccWindow.show();
 }
+
+ipcMain.on('show-tcc-window', (event, arg) => {
+    if (tccWindow) {
+        tccWindow.show()
+    }
+});
 
 function quitCurrentTccSession() {
     if (tray.isActive()) {

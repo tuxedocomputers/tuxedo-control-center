@@ -107,7 +107,7 @@ export class TomteGuiComponent implements OnInit {
             let results
             try
             {
-                results = await this.utils.execCmd(command + "");
+                results = await this.utils.execCmdAsync(command + "");
                 results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
                 this.parseTomteListJson(results);
                 this.getModuleDescriptions();
@@ -176,7 +176,7 @@ export class TomteGuiComponent implements OnInit {
                 let command = "LANGUAGE=" + this.utils.getCurrentLanguageId() + " tuxedo-tomte description " + modulename;
                 try
                 {
-                    let results = await this.utils.execCmd(command);
+                    let results = await this.utils.execCmdAsync(command);
                     this.moduleToolTips.set(modulename, results);
                 }
                 catch (err)
@@ -382,7 +382,7 @@ export class TomteGuiComponent implements OnInit {
         {
             let command = "yes | pkexec tuxedo-tomte remove " + name;
 
-            let results = await this.utils.execCmd(command).catch((err) => {
+            let results = await this.utils.execCmdAsync(command).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
