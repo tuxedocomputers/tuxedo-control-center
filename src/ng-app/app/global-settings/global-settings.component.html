@@ -46,6 +46,35 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-expansion-panel-header>
 
                 <div class="content">
+
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <header i18n="@@cGlobalSettingsTemperatureDisplayHeader">Temperature Display</header>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <content class="value">
+                                <span [hidden]="temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
+                                <span [hidden]="!temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
+                            </content>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <content class="input">
+                                <mat-button-toggle #inputTemperatureDisplaySettings color="primary"
+                                    (change)="onTemperatureDisplayChanged(!temperatureDisplayFahrenheit)" [value]="!temperatureDisplayFahrenheit">
+                                    <span [hidden]="!temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
+                                <span [hidden]="temperatureDisplayFahrenheit"
+                                    i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
+                                </mat-button-toggle>
+                            </content>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                    <div class=margin-bottom i18n="@@cGlobalSettingsTemperatureDisplayDescription">Switch between Celsius and Fahrenheit
+                    </div>
+
+
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header i18n="@@cGlobalSettingsCpuFrequencyHeader">CPU Frequency Control</header>

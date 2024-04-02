@@ -33,7 +33,6 @@ import {
     fantableDatasets,
     graphColors,
     graphOptions,
-    tempsLabels,
 } from "src/common/classes/FanChartProperties";
 import { Color, Label } from "ng2-charts";
 import { ChartDataSets, ChartOptions } from "chart.js";
@@ -42,7 +41,9 @@ import {
     manageCriticalTemperature,
 } from "src/common/classes/FanUtils";
 import { delay } from "src/common/classes/Utils";
-
+import { formatTemp } from "../../../common/classes/FanUtils";
+import { ConfigService } from "../config.service";
+import { UtilsService } from "../utils.service";
 @Component({
     selector: "app-fan-slider",
     templateUrl: "./fan-slider.component.html",
@@ -72,15 +73,20 @@ export class FanSliderComponent implements OnInit {
     public showFanGraphs: boolean = false;
 
     private mutex = new Mutex();
-
-    public tempsLabels: Label[] = tempsLabels;
+    public tempsLabels: Label[] = Array.from(Array(100).keys())
+    .concat(100)
+    .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));;
     public graphOptions: ChartOptions = graphOptions;
     public fantableDatasets: ChartDataSets[] = fantableDatasets;
     public graphColors: Color[] = graphColors;
     public graphType = "line";
 
-    constructor(private fb: FormBuilder) {}
-
+    constructor(
+        private fb: FormBuilder,       
+        private config: ConfigService, 
+        private utils: UtilsService,
+        ) {}
+        
     public ngOnInit(): void {
         this.initFanFormGroup();
         this.updateFanChartDataset();
@@ -119,6 +125,17 @@ export class FanSliderComponent implements OnInit {
         this.fanFormGroup.patchValue({
             [`${temp}c`]: sliderValue,
         });
+    }
+
+
+    formatTemperatureLabel(temp: number) {
+        if(this.config.getSettings().fahrenheit) {
+            temp = Math.round(this.utils.getFahrenheitFromCelsius(temp));
+            return temp.toString() + " °F";
+        }   
+        else {
+            return temp.toString() + " °C";
+        }
     }
 
     public async adjustSliderValues(

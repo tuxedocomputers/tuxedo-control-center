@@ -45,8 +45,14 @@ export function interpolatePointsArray(
     return Array.from({ length: 101 }, (_, i) => interpolatePoints(points, i));
 }
 
-export function formatTemp(value: number | string): string {
-    return `${value} °C`;
+
+export function formatTemp(value: number, usingFahrenheit: boolean): string {
+    if (usingFahrenheit)  {
+        return `${Math.round(((value * 1.8) + 32))} °F`;
+    }
+    else {
+        return `${value} °C`;
+    }   
 }
 
 export function formatSpeed(value: number | string): string {
