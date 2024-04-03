@@ -33,6 +33,7 @@ export enum DefaultProfileIDs {
     HighPerformance = '__high_performance__',
 }
 
+export const defaultCustomProfileID = '__default_custom_profile__';
 export const defaultMobileCustomProfileID = '__default_mobile_custom_profile__';
 
 export interface IProfileTextMappings {
@@ -197,7 +198,7 @@ const highPerformance: ITccProfile = {
 };
 
 export const defaultCustomProfile: ITccProfile = {
-    id: '__default_custom_profile__',
+    id: defaultCustomProfileID,
     name: 'TUXEDO Defaults',
     description: 'Edit profile to change behaviour',
     display: {
@@ -354,7 +355,7 @@ const highPerformance25WcTGP: ITccProfile = {
 };
 
 export const defaultCustomProfile25WcTGP: ITccProfile = {
-    id: '__default_custom_profile__',
+    id: defaultCustomProfileID,
     name: 'TUXEDO Defaults',
     description: 'Edit profile to change behaviour',
     display: {
