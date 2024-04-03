@@ -77,6 +77,15 @@ export class TccDBusController {
         }
     }
 
+    async getDeviceJSON(): Promise<string>
+     {
+        try {
+            return await this.interface.GetDeviceName();
+        } catch (err) {
+            return '';
+        }
+     }
+
     async getFanDataCPU(): Promise<FanData> {
         try {
             return await this.interface.GetFanDataCPU();

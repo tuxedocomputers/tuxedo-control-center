@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import { DaemonWorker } from "./DaemonWorker";
 import { XDisplayRefreshRateController } from "../../common/classes/XDisplayRefreshRateController";
 import {
@@ -23,40 +24,66 @@ import {
     IDisplayMode,
 } from "../../common/models/DisplayFreqRes";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { ITccProfile } from "../../common/models/TccProfile";
+import * as child_process from "child_process";
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
     private displayInfoFound: boolean = false;
-
-    private activeprofile: ITccProfile;
+    private previousUsers: string = "";
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd);
+        super(5000, tccd);
         this.controller = new XDisplayRefreshRateController();
     }
 
     public onStart(): void {}
 
-    public onWork(): void {
-        this.activeprofile = this.tccd.getCurrentProfile();
+    // user is able to switch XDG_SESSION_TYPE in login screen and thus a new check needs to be done
+    // not checking XDG_SESSION_TYPE during login screen, checking again on user change
+    private checkUsers() {
+        const loggedInUsers = child_process.execSync(`users`).toString().trim();
 
-        if (!this.displayInfoFound) {
-            this.updateDisplayData();
+        const usersAvailable = Boolean(loggedInUsers);
+        const usersChanged = loggedInUsers !== this.previousUsers;
+
+        this.previousUsers = loggedInUsers;
+
+        return [usersAvailable, usersChanged];
+    }
+
+    private resetToDefault(): void {
+        this.displayInfo = undefined;
+        this.displayInfoFound = false;
+        this.controller.resetValues();
+    }
+
+    public onWork(): void {
+        const [usersAvailable, usersChanged] = this.checkUsers();
+
+        if (usersChanged) {
+            this.resetToDefault();
         }
 
-        this.setActiveDisplayMode();
+        if (usersAvailable && !this.controller.getIsWayland()) {
+            if (!this.displayInfoFound) {
+                this.updateDisplayData();
+            }
+
+            this.setActiveDisplayMode();
+        }
     }
 
     public onExit(): void {}
 
     private setActiveDisplayMode(): void {
-        const useRefRate = this.activeprofile?.display?.useRefRate;
+        const activeprofile = this.tccd.getCurrentProfile();
+
+        const useRefRate = activeprofile?.display?.useRefRate;
         const activeMode = this.displayInfo?.activeMode;
 
         if (useRefRate && activeMode) {
-            const refreshRate = this.activeprofile.display.refreshRate;
+            const refreshRate = activeprofile.display.refreshRate;
             const hasDifferentRefreshRate =
                 refreshRate !== activeMode.refreshRates[0];
 
@@ -73,8 +100,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     private updateDisplayData(): void {
         this.displayInfo = this.controller.getDisplayModes();
-        // check if x11 because of future wayland support
+
         this.tccd.dbusData.isX11 = this.controller.getIsX11();
+
         if (this.displayInfo === undefined) {
             this.tccd.dbusData.displayModes = undefined;
         } else {
@@ -82,7 +110,6 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
         }
     }
-
 
     public getActiveDisplayMode(): IDisplayMode {
         if (this.displayInfo === undefined) {
