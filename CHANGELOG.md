@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.8] - 2024-04-03
 ## Added
 - Support for Stellaris Intel Gen6
 - Alternative view of _profile edit => system profile_ displaying
@@ -10,8 +10,8 @@
 
 ### Changed
 - Critical temperature (aka minimum speed for high temperatures) of
-  fan control split into two ranges: from 80 &deg;C 30% and from
-  90 &deg;C 40%
+  fan control split into two ranges: from 80&deg;C 30% and from
+  90&deg;C 40%
 
 ### Fixed
 - Irregular fan speed on wakeup or when disabling fan control,
