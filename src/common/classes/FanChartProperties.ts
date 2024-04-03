@@ -18,13 +18,8 @@
  */
 
 import { ChartDataSets, ChartOptions } from "chart.js";
-import { Color, Label } from "ng2-charts";
-import { formatTemp } from "./FanUtils";
+import { Color } from "ng2-charts";
 import "@angular/localize/init";
-
-const tempsLabels: Label[] = Array.from(Array(100).keys())
-    .concat(100)
-    .map((e) => formatTemp(e));
 
 const graphOptions: ChartOptions = {
     animation: {
@@ -106,4 +101,4 @@ const graphColors: Color[] = [
         backgroundColor: "rgba(227, 0, 22, 0.3)",
     },
 ];
-export { tempsLabels, graphOptions, fantableDatasets, graphColors };
+export { graphOptions, fantableDatasets, graphColors };
