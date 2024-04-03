@@ -95,12 +95,12 @@ export class ConfigHandler {
     recursivelyFillObject(obj: object, defaultObj: object): boolean {
         let objModified = false;
         for (const key in defaultObj) {
-            if (defaultObj[key].value !== undefined && obj[key].value === undefined) {
-                obj[key].value = defaultObj[key].value;
+            if (defaultObj[key] !== undefined && obj[key] === undefined) {
+                obj[key] = defaultObj[key];
                 objModified = true;
             }
-            if (typeof defaultObj[key].value === 'object') {
-                if (this.recursivelyFillObject(obj[key].value, defaultObj[key].value)) {
+            if (typeof defaultObj[key] === 'object') {
+                if (this.recursivelyFillObject(obj[key], defaultObj[key])) {
                     objModified = true;
                 }
             }
