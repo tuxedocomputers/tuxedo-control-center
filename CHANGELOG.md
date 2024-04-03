@@ -6,6 +6,7 @@
 - Alternative view of _profile edit => system profile_ displaying
   power limit info instead of profile name, introduced for
   Pulse Gen3
+- Alternative display of temperatures in fahrenheit switchable in Global settings
 
 ### Changed
 - Critical temperature (aka minimum speed for high temperatures) of
@@ -20,6 +21,8 @@
 - Minor performance improvement fixes
 - Occasional crash on reload provoked through tuxedo-driver
   package update
+- Occasional race condition stability fix when GUI loading before the tccd DBus
+  is initialized (manifesting as missing profiles in tray menu)
 
 ## [2.1.7] - 2024-02-22
 ### Fixed
