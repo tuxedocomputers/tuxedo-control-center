@@ -91,6 +91,10 @@ export class TccDBusClientService implements OnDestroy {
   public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
   public device: TUXEDODevice;
 
+  public nvidiaPowerCTRLDefaultPowerLimit = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
+
   constructor(private utils: UtilsService) {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
@@ -258,6 +262,10 @@ export class TccDBusClientService implements OnDestroy {
 
     this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
     this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
+
+    this.nvidiaPowerCTRLDefaultPowerLimit.next(await this.tccDBusInterface.getNVIDIAPowerCTRLDefaultPowerLimit());
+    this.nvidiaPowerCTRLMaxPowerLimit.next(await this.tccDBusInterface.getNVIDIAPowerCTRLMaxPowerLimit());
+    this.nvidiaPowerCTRLAvailable.next(await this.tccDBusInterface.getNVIDIAPowerCTRLAvailable());
   }
 
   public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {

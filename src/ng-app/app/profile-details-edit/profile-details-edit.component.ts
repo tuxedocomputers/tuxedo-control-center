@@ -115,6 +115,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansMaxSpeedSubscription: Subscription = new Subscription();
 
     private fansOffAvailableSubscription: Subscription = new Subscription();
+
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
     public stateInputArray: IStateInfo[];
@@ -134,6 +135,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private tdpLabels: Map<string, string>;
 
     public showFanGraphs = false;
+    public showTGPChart = false;
 
     public infoTooltipShowDelay = 700;
 
@@ -142,9 +144,17 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public fansOffAvailable = true;
 
+    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
+    public nvidiaPowerCTRLAvailable: boolean = false;
+
+    public tgpChartTicksXPositions: number[];
+
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+
+    public min = Math.min;
 
     @ViewChild('inputName') inputName: MatInput;
 
@@ -231,6 +241,25 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.isX11.subscribe(nextIsX11 => {
             if (nextIsX11 !== this.isX11) {
                 this.isX11 = nextIsX11;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLDefaultPowerLimit.subscribe(nextNVIDIAPowerCTRLDefaultPowerLimit => {
+            if (nextNVIDIAPowerCTRLDefaultPowerLimit !== undefined && nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit) {
+                this.nvidiaPowerCTRLDefaultPowerLimit = nextNVIDIAPowerCTRLDefaultPowerLimit;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
+            if (nextNVIDIAPowerCTRLMaxPowerLimit !== undefined && nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
+                this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
+                this.tgpChartTicksXPositions = [...Array(this.nvidiaPowerCTRLMaxPowerLimit/10).keys()];
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLAvailable.subscribe(nextNVIDIAPowerCTRLAvailable => {
+            if (nextNVIDIAPowerCTRLAvailable !== this.nvidiaPowerCTRLAvailable) {
+                this.nvidiaPowerCTRLAvailable = nextNVIDIAPowerCTRLAvailable;
             }
         }));
 
@@ -409,6 +438,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             tdpValues: odmTDPValuesArray
         });
 
+        const nvidiaPowerCTRLProfileGroup: FormGroup = this.fb.group(profile.nvidiaPowerCTRLProfile);
+
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
@@ -428,7 +459,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             webcam: webcamGroup,
             fan: fanControlGroup,
             odmProfile: odmProfileGroup,
-            odmPowerLimits: odmPowerLimits
+            odmPowerLimits: odmPowerLimits,
+            nvidiaPowerCTRLProfile: nvidiaPowerCTRLProfileGroup
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
@@ -801,6 +833,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         } else {
             this.showFanGraphs = false;
         }
+    }
+
+    public toggleTGPChart() {
+        this.showTGPChart = !this.showTGPChart;
     }
 
     public odmTDPLabel(tdpDescriptor: string) {

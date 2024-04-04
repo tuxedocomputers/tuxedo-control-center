@@ -92,7 +92,23 @@ export class ConfigHandler {
         await this.writeConfigAsync<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
-    readProfiles(filePath: string = this.pathProfiles): ITccProfile[] {
+    recursivelyFillObject(obj: object, defaultObj: object): boolean {
+        let objModified = false;
+        for (const key in defaultObj) {
+            if (defaultObj[key] !== undefined && obj[key] === undefined) {
+                obj[key] = defaultObj[key];
+                objModified = true;
+            }
+            if (typeof defaultObj[key] === 'object') {
+                if (this.recursivelyFillObject(obj[key], defaultObj[key])) {
+                    objModified = true;
+                }
+            }
+        }
+        return objModified;
+    }
+
+    readProfiles(device: TUXEDODevice, filePath: string = this.pathProfiles): ITccProfile[] {
         let idUpdated = false;
         const profiles = this.readConfig<ITccProfile[]>(filePath).map(profile => {
             if (profile.id === undefined) {
@@ -102,10 +118,32 @@ export class ConfigHandler {
             }
             return profile;
         });
-        if (idUpdated) {
+
+        let valueFilledFromDefault: boolean = false;
+        let defaultCustomProfiles: ITccProfile[] = this.getDefaultCustomProfiles(device);
+        let defaultCustomProfilesIDs: string[];
+        defaultCustomProfilesIDs = defaultCustomProfiles.map((profile) => {
+            return profile.id;
+        });
+
+        profiles.forEach((profile: ITccProfile) => {
+            let defaultCustomProfile = defaultCustomProfiles[0];
+            defaultCustomProfilesIDs.forEach((defaultCustomProfileID, index) => {
+                if (profile.id === defaultCustomProfileID) {
+                    defaultCustomProfile = defaultCustomProfiles[index];
+                }
+            });
+
+            if (this.recursivelyFillObject(profile, defaultCustomProfile)) {
+                valueFilledFromDefault = true;
+            }
+        });
+
+        if (idUpdated || valueFilledFromDefault) {
             this.writeProfiles(profiles);
             console.log(`Saved updated profiles`);
         }
+
         return profiles;
     }
 
@@ -217,7 +255,7 @@ export class ConfigHandler {
 
     public getCustomProfilesNoThrow(device: TUXEDODevice): ITccProfile[] {
         try {
-            return this.readProfiles();
+            return this.readProfiles(device);
         } catch (err) {
             return this.getDefaultCustomProfiles(device);
         }

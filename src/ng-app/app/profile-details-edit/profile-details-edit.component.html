@@ -768,6 +768,93 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </mat-grid-list>
                 </div>
+
+                <div *ngIf="nvidiaPowerCTRLAvailable">
+                    <h4 i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA power control</h4>
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <div formGroupName="nvidiaPowerCTRLProfile">
+                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <header i18n="@@cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel">Configurable graphics power (cTGP)</header>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ nvidiaPowerCTRLDefaultPowerLimit + viewProfile.nvidiaPowerCTRLProfile.cTGPOffset }} W</content>
+                                <content class="value" [hidden]="!editProfile">{{ nvidiaPowerCTRLDefaultPowerLimit + inputCTGPOffset.value }} W</content>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), -1, 0, 25));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), +1, 0, 25));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputCTGPOffset
+                                        formControlName="cTGPOffset"
+                                        min="0"
+                                        [max]="nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit"
+                                        step="1"
+                                        color="primary">
+                                    </mat-slider>
+                                    <button mat-icon-button
+                                        color="primary"
+                                        (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(viewProfile.nvidiaPowerCTRLProfile.cTGPOffset)"
+                                        [hidden]="!profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </content>
+                            </mat-grid-tile>
+                        </div>
+                    </mat-grid-list>
+
+                    <div class="tgp-chart-container">
+                        <button mat-stroked-button (click)="toggleTGPChart()">
+                            <ng-container i18n="@@cProfMgrDetailsToggleTGPChartLabel">Toggle TGP chart</ng-container>
+                            <mat-icon>bar_chart</mat-icon>
+                        </button>
+
+                        <mat-grid-list *ngIf="showTGPChart" cols=1 rowHeight="1004:145" class="profile-details-edit-grid tgp-chart">
+                            <mat-grid-tile colspan=1>
+                                <svg viewBox="0 0 1004 55">
+                                    <rect y="30" height="20" style="fill:rgba(227, 0, 22, 0.5);stroke:rgba(227, 0, 22, 0.3);stroke-width:1"
+                                        x="1"
+                                        [attr.width]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
+                                    <rect y="30" height="20" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1"
+                                        [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit"
+                                        [attr.width]="min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
+                                    <path style="stroke:dimgrey;stroke-width:4" d="m 1002,25 0,30" />
+                                    <text class="value" text-anchor="middle" [style]="nvidiaPowerCTRLDefaultPowerLimit < 4 ? 'fill-opacity: 0;' : ''">
+                                        <tspan style="fill: #444444;" y="45"
+                                            [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)/2*1000/nvidiaPowerCTRLMaxPowerLimit"
+                                            >{{ nvidiaPowerCTRLDefaultPowerLimit + inputCTGPOffset.value }} W</tspan>
+                                    </text>
+                                    <text class="value" text-anchor="middle" [style]="min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) < 4 ? 'fill-opacity: 0;' : ''">
+                                        <tspan style="fill: #444444;" y="45"
+                                            [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value+min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)/2)*1000/nvidiaPowerCTRLMaxPowerLimit"
+                                            >{{ min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) }} W</tspan>
+                                    </text>
+                                    <svg viewBox="0 0 668 55">
+                                        <rect x="0" y="5" width="24" height="10" style="fill:rgba(227, 0, 22, 0.5);stroke:rgba(227, 0, 22, 0.3);stroke-width:1" />
+                                        <rect x="270" y="5" width="24" height="10" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1" />
+                                        <path style="stroke:dimgrey;stroke-width:2" d="m 462,0 0,20" />
+                                        <text>
+                                            <tspan style="fill: dimgrey;" x="34" y="14" i18n="@@cProfMgrDetailsTGPChartCTGPLabel">Configurable graphics power (cTGP)</tspan>
+                                            <tspan style="fill: dimgrey;" x="304" y="14" i18n="@@cProfMgrDetailsTGPChartDBLabel">Dynamic Boost range</tspan>
+                                            <tspan style="fill: dimgrey;" x="484" y="14" i18n="@@cProfMgrDetailsTGPChartMaxLimitLabel">Maximum power limit ({{ nvidiaPowerCTRLMaxPowerLimit }} W)</tspan>
+                                        </text>
+                                    </svg>
+                                </svg>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </div>
+                </div>
             </mat-card-content>
         </div>
 

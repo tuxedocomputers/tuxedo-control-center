@@ -27,6 +27,7 @@ import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { defaultSettings, ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
+import { DaemonListener } from './DaemonListener';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
@@ -51,6 +52,7 @@ import { GpuInfoWorker } from "./GpuInfoWorker";
 import { CpuPowerWorker } from './CpuPowerWorker';
 import { PrimeWorker } from './PrimeWorker';
 import { KeyboardBacklightListener } from './KeyboardBacklightListener';
+import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
 import { AvailabilityService } from "../../common/classes/availability.service";
 
 const tccPackage = require('../../package.json');
@@ -73,7 +75,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
-    private listeners = [];
+    private listeners: DaemonListener[] = [];
 
     protected started = false;
 
@@ -132,6 +134,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(this.displayWorker);
 
         this.listeners.push(new KeyboardBacklightListener(this));
+        this.listeners.push(new NVIDIAPowerCTRLListener(this));
 
         this.startWorkers();
 
@@ -438,7 +441,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         try {
-            this.customProfiles = this.config.readProfiles();
+            this.customProfiles = this.config.readProfiles(device);
         } catch (err) {
             this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
@@ -563,22 +566,28 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     setCurrentProfileByName(profileName: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     setCurrentProfileById(id: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
@@ -757,6 +766,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
         if (nrMissingValues > 0) {
             profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
+        }
+
+        if (profile.nvidiaPowerCTRLProfile === undefined) {
+            profile.nvidiaPowerCTRLProfile = { cTGPOffset: 0 };
+        }
+
+        if (profile.nvidiaPowerCTRLProfile.cTGPOffset === undefined) {
+            profile.nvidiaPowerCTRLProfile.cTGPOffset = 0;
         }
 
         return profile;

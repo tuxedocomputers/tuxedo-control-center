@@ -38,7 +38,8 @@ export const defaultProfiles: ITccProfile[] = [
             customFanCurve: customFanPreset,
         },
         odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
+        odmPowerLimits: { tdpValues: [] },
+        nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
     },
     {
         id: LegacyDefaultProfileIDs.CoolAndBreezy,
@@ -75,7 +76,8 @@ export const defaultProfiles: ITccProfile[] = [
             customFanCurve: customFanPreset,
         },
         odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
+        odmPowerLimits: { tdpValues: [] },
+        nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
     },
     {
         id: LegacyDefaultProfileIDs.PowersaveExtreme,
@@ -112,7 +114,8 @@ export const defaultProfiles: ITccProfile[] = [
             customFanCurve: customFanPreset,
         },
         odmProfile: { name: undefined },
-        odmPowerLimits: { tdpValues: [] }
+        odmPowerLimits: { tdpValues: [] },
+        nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
     }
 ];
 
@@ -151,5 +154,6 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         customFanCurve: customFanPreset,
     },
     odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [] }
+    odmPowerLimits: { tdpValues: [] },
+    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
 };
