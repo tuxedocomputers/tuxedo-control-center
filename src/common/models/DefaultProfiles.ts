@@ -451,6 +451,8 @@ deviceProfiles.set(TUXEDODevice.STELLARIS17I06, [ maxEnergySave, silent, office,
 
 export const deviceCustomProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 
+// Devices not listed here default to [ defaultCustomProfile ].
+// The first entry is used as the skeleton for new profiles created by the user.
 deviceCustomProfiles.set(TUXEDODevice.IBPG8, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
 deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
 deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
