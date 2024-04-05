@@ -228,7 +228,7 @@ export class ConfigHandler {
         return this.copyConfig<ITccProfile[]>(deviceDefaultProfiles);
     }
 
-    public getDefaultCustomProfile(): ITccProfile {
+    private getFallbackDefaultCustomProfile(): ITccProfile {
         return this.copyConfig<ITccProfile>(defaultCustomProfile);
     }
 
@@ -236,7 +236,7 @@ export class ConfigHandler {
 
         let defaultCustomProfiles: ITccProfile[] = deviceCustomProfiles.get(device);
         if (defaultCustomProfiles === undefined) {
-            defaultCustomProfiles = [ this.getDefaultCustomProfile() ];
+            defaultCustomProfiles = [ this.getFallbackDefaultCustomProfile() ];
         }
         return this.copyConfig<ITccProfile[]>(defaultCustomProfiles);
     }
