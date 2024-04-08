@@ -148,8 +148,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
 
-    public tgpChartTicksXPositions: number[];
-
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
@@ -253,7 +251,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
             if (nextNVIDIAPowerCTRLMaxPowerLimit !== undefined && nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
                 this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
-                this.tgpChartTicksXPositions = [...Array(this.nvidiaPowerCTRLMaxPowerLimit/10).keys()];
             }
         }));
 
