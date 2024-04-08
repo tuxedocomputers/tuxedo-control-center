@@ -769,7 +769,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-grid-list>
                 </div>
 
-                <div *ngIf="nvidiaPowerCTRLAvailable">
+                <div *ngIf="nvidiaPowerCTRLAvailable && nvidiaPowerCTRLMaxPowerLimit > 0">
                     <h4 i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA power control</h4>
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                         <div formGroupName="nvidiaPowerCTRLProfile">
