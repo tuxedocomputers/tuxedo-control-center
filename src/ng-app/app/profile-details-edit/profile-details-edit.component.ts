@@ -836,7 +836,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public toggleTGPChart() {
         this.showTGPChart = !this.showTGPChart;
         if (this.showTGPChart) {
-            this.scrollTo.emit(this.nvidiaPowerCTRLHeaderE.nativeElement.offsetTop - 50);
+            // The timeout is required here, because this is at the bottom of
+            // the page and the scroll needs to happen after the page already
+            // got rendered and is already bigger.
+            setTimeout(() => this.scrollTo.emit(this.nvidiaPowerCTRLHeaderE.nativeElement.offsetTop - 50), 10);
         }
     }
 
