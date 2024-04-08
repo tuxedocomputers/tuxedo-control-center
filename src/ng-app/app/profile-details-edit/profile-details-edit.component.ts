@@ -148,8 +148,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
 
-    public tgpChartTicksXPositions: number[];
-
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
@@ -253,7 +251,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
             if (nextNVIDIAPowerCTRLMaxPowerLimit !== undefined && nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
                 this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
-                this.tgpChartTicksXPositions = [...Array(this.nvidiaPowerCTRLMaxPowerLimit/10).keys()];
             }
         }));
 
@@ -835,8 +832,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    @ViewChild('nvidiaPowerCTRLHeader') nvidiaPowerCTRLHeaderE;
     public toggleTGPChart() {
         this.showTGPChart = !this.showTGPChart;
+        if (this.showTGPChart) {
+            // The timeout is required here, because this is at the bottom of
+            // the page and the scroll needs to happen after the page already
+            // got rendered and is already bigger.
+            setTimeout(() => this.scrollTo.emit(this.nvidiaPowerCTRLHeaderE.nativeElement.offsetTop - 50), 10);
+        }
     }
 
     public odmTDPLabel(tdpDescriptor: string) {
