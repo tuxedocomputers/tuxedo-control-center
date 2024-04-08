@@ -835,8 +835,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    @ViewChild('nvidiaPowerCTRLHeader') nvidiaPowerCTRLHeaderE;
     public toggleTGPChart() {
         this.showTGPChart = !this.showTGPChart;
+        if (this.showTGPChart) {
+            this.scrollTo.emit(this.nvidiaPowerCTRLHeaderE.nativeElement.offsetTop - 50);
+        }
     }
 
     public odmTDPLabel(tdpDescriptor: string) {
