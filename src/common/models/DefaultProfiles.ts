@@ -458,3 +458,4 @@ deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [ defaultCustomProfile, defaultM
 deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
 deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA02, [ defaultCustomProfile25WcTGP ]);
 deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA03, [ defaultCustomProfile25WcTGP ]);
+deviceCustomProfiles.set(TUXEDODevice.STELLARIS1XA03, [ defaultCustomProfile25WcTGP ]);
