@@ -31,6 +31,7 @@ import { TUXEDODevice } from "src/common/models/DefaultProfiles";
 })
 export class CompatibilityService {
     private hasAquarisValue: boolean;
+    private hideCTGPValue: boolean;
 
     constructor(
         private tccDbus: TccDBusClientService,
@@ -66,6 +67,10 @@ export class CompatibilityService {
             showAquarisMenu = true;
         }
         this.hasAquarisValue = showAquarisMenu;
+
+        this.hideCTGPValue = deviceName === "IBP14G6_TQF" ||
+                             deviceName === "IBP14G7_AQF_ARX" ||
+                             deviceName === "IBPG8";
     }
 
     public getSystemProfileInfo(): SystemProfileInfo {
@@ -229,6 +234,10 @@ export class CompatibilityService {
 
     get hasAquaris() {
         return this.hasAquarisValue;
+    }
+
+    get hideCTGP() {
+        return this.hideCTGPValue;
     }
 
     /**
