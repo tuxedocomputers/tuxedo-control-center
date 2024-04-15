@@ -1,4 +1,4 @@
-import { AquarisClientAPI } from "src/e-app/AquarisAPI";
+import { IAquarisClientAPI } from "../../e-app/preloadAPIs/AquarisClientAPI";
 import { EventEmitter } from 'node:events';
 import { IDrive } from "../../common/models/IDrive"; 
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
@@ -179,7 +179,7 @@ export interface COMP
   declare global {
     interface Window {
       ipc: IPC,
-      aquarisAPI: AquarisClientAPI,
+      aquarisAPI: IAquarisClientAPI,
       dbus: DBUS,
       https: HTTPS,
       fs: FS,

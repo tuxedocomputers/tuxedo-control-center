@@ -18,7 +18,6 @@
  */
 
 import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AquarisClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,7 +36,7 @@ interface FanPreset {
 })
 export class AquarisControlComponent implements OnInit, AfterContentInit, OnDestroy {
 
-    private aquaris: AquarisClientAPI;
+    private aquaris = window.aquarisAPI;
 
     private connectedTimeout: NodeJS.Timeout;
 

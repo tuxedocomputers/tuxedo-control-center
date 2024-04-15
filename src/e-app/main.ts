@@ -26,7 +26,7 @@ import { TccDBusController } from '../common/classes/TccDBusController';
 import { ITccProfile, TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
-import { aquarisAPIHandle, AquarisState, AquarisClientAPI } from './AquarisAPI';
+import { aquarisAPIHandle, AquarisState, AquarisAPIFunctions } from '../common/models/IAquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
@@ -250,7 +250,7 @@ app.on("ready", () => {
 app.on('will-quit', async (event) => {
     // Prevent default quit action
     event.preventDefault();
-
+    unregisterAPI(ipcMain, aquarisAPIHandle);
     // Close window but do not quit application unless tray is gone
     if (tccWindow) {
         tccWindow.close();
@@ -1841,7 +1841,7 @@ const debugAquarisAPICalls = false;
 function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {
 
     ipcMain.handle(apiHandle, async (event, args: any[]) => {
-        const mainsideFunction = mainsideHandlers.get(args[0]);
+        const mainsideFunction = mainsideHandlers.get(args[0]);registerAPI
         if (mainsideFunction === undefined) {
             throw Error(apiHandle + ': Undefined API function');
         } else {
@@ -2016,7 +2016,7 @@ async function aquarisConnectedDemo() {
 let devicesList: DeviceInfo[] = [];
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
-    .set(AquarisClientAPI.prototype.connect.name, async (deviceUUID) => {
+    .set(AquarisAPIFunctions.connect, async (deviceUUID) => {
         aquarisConnectProgress = true;
         try {
             await stopSearch();
@@ -2055,7 +2055,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         }
     })
 
-    .set(AquarisClientAPI.prototype.disconnect.name, async () => {
+    .set(AquarisAPIFunctions.disconnect, async () => {
         if (await aquarisConnectedDemo()) {
             await new Promise(resolve => setTimeout(resolve, 600));
         } else {
@@ -2065,7 +2065,7 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisStateCurrent.deviceUUID = undefined;
     })
 
-    .set(AquarisClientAPI.prototype.isConnected.name, async () => {
+    .set(AquarisAPIFunctions.isConnected, async () => {
         if (await aquarisConnectedDemo()) return true;
 
         if (aquarisIoProgress) {
@@ -2079,32 +2079,32 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         }
     })
 
-    .set(AquarisClientAPI.prototype.hasBluetooth.name, async () => {
+    .set(AquarisAPIFunctions.hasBluetooth, async () => {
         return aquarisHasBluetooth || await aquarisConnectedDemo();
     })
 
-    .set(AquarisClientAPI.prototype.startDiscover.name, async () => {
+    .set(AquarisAPIFunctions.startDiscover, async () => {
 
     })
 
-    .set(AquarisClientAPI.prototype.stopDiscover.name, async () => {
+    .set(AquarisAPIFunctions.stopDiscover, async () => {
 
     })
 
-    .set(AquarisClientAPI.prototype.getDevices.name, async () => {
+    .set(AquarisAPIFunctions.getDevices, async () => {
         await startSearch();
         return devicesList;
     })
 
-    .set(AquarisClientAPI.prototype.getState.name, async () => {
+    .set(AquarisAPIFunctions.getState, async () => {
         return aquarisStateExpected;
     })
 
-    .set(AquarisClientAPI.prototype.readFwVersion.name, async () => {
+    .set(AquarisAPIFunctions.readFwVersion, async () => {
         return (await aquaris.readFwVersion()).toString();
     })
 
-    .set(AquarisClientAPI.prototype.updateLED.name, async (red, green, blue, state) => {
+    .set(AquarisAPIFunctions.updateLED, async (red, green, blue, state) => {
         aquarisStateExpected.red = red;
         aquarisStateExpected.green = green;
         aquarisStateExpected.blue = blue;
@@ -2113,35 +2113,35 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisClientAPI.prototype.writeRGBOff.name, async () => {
+    .set(AquarisAPIFunctions.writeRGBOff, async () => {
         aquarisStateExpected.ledOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisClientAPI.prototype.writeFanMode.name, async (dutyCyclePercent) => {
+    .set(AquarisAPIFunctions.writeFanMode, async (dutyCyclePercent) => {
         aquarisStateExpected.fanDutyCycle = dutyCyclePercent;
         aquarisStateExpected.fanOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisClientAPI.prototype.writeFanOff.name, async () => {
+    .set(AquarisAPIFunctions.writeFanOff, async () => {
         aquarisStateExpected.fanOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisClientAPI.prototype.writePumpMode.name, async (dutyCyclePercent, voltage) => {
+    .set(AquarisAPIFunctions.writePumpMode, async (dutyCyclePercent, voltage) => {
         aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
         aquarisStateExpected.pumpVoltage = voltage;
         aquarisStateExpected.pumpOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisClientAPI.prototype.writePumpOff.name, async () => {
+    .set(AquarisAPIFunctions.writePumpOff, async () => {
         aquarisStateExpected.pumpOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
     
-    .set(AquarisClientAPI.prototype.saveState.name, async () => {
+    .set(AquarisAPIFunctions.saveState, async () => {
         if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });

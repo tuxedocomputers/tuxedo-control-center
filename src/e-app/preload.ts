@@ -1,24 +1,8 @@
 import { ITccProfile } from "src/common/models/TccProfile";
 import { ITccSettings } from "src/common/models/TccSettings";
 import { WebcamPreset } from "src/common/models/TccWebcamSettings";
-import { aquarisAPIHandle, AquarisClientAPI } from "./AquarisAPI"
-import { DeviceInfo, PumpVoltage, RGBState } from "./LCT21001";
+import { AquarisClientAPI } from "./preloadAPIs/AquarisClientAPI";
 const { contextBridge, ipcRenderer } = require('electron');
-
-export interface AquarisState {
-    deviceUUID: string,
-    red: number,
-    green: number,
-    blue: number,
-    ledMode: RGBState | number,
-    fanDutyCycle: number,
-    pumpDutyCycle: number,
-    pumpVoltage: PumpVoltage | number,
-    ledOn: boolean,
-    fanOn: boolean,
-    pumpOn: boolean
-}
-
 
 let callbacks = [];
 
@@ -274,26 +258,4 @@ contextBridge.exposeInMainWorld(
 );
 
 
-// contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);
-
-contextBridge.exposeInMainWorld(
-    'aquarisAPI', 
-    {
-        connect: (deviceUUID: string) => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.connect.name, deviceUUID]),
-        disconnect: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.disconnect.name]),
-        isConnected: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.isConnected.name]) as Promise<boolean>,
-        hasBluetooth: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.hasBluetooth.name]) as Promise<boolean>,
-        startDiscover: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.startDiscover.name]),
-        stopDiscover: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.stopDiscover.name]),
-        getDevices: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.getDevices.name]) as Promise<DeviceInfo[]>,
-        getState: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.getState.name]) as Promise<AquarisState>,
-        readFwVersion: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.readFwVersion.name]) as Promise<string>,
-        updateLED: (red: number, green: number, blue: number, state: RGBState | number) => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.updateLED.name, red, green, blue, state]),
-        writeRGBOff: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.writeRGBOff.name]),
-        writeFanMode: (dutyCyclePercent: number) => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.writeFanMode.name, dutyCyclePercent]),
-        writeFanOff: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.writeFanOff.name]),
-        writePumpMode: (dutyCyclePercent: number, voltage: PumpVoltage | number) => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.writePumpMode.name, dutyCyclePercent, voltage]),
-        writePumpOff: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.writePumpOff.name]),
-        saveState: () => ipcRenderer.invoke(aquarisAPIHandle, [AquarisClientAPI.prototype.saveState.name]),
-    }
-);
+contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);
