@@ -1,5 +1,10 @@
 # Changelog
 
+## [] - UNRELEASED
+## Added
+- NVIDIA cTGP (configurable TGP) adjustable per TCC profile for supported models
+  with this feature enabled
+
 ## [2.1.8] - 2024-04-03
 ## Added
 - Support for Stellaris Intel Gen6
