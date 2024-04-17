@@ -1,43 +1,61 @@
 import * as builder from 'electron-builder';
+import * as util from 'util';
+import * as child_process from 'child_process';
+const execp = util.promisify(child_process.exec);
+
+const tccPackage = require('../package.json');
+
+async function getGitDescribe() {
+    return (await execp("git describe")).stdout.trim();
+}
+
+async function getCurrentBranch() {
+    return (await execp('git branch --show-current')).stdout.trim();
+}
+
+async function setVersion(version: string) {
+    version.replace('"', '');
+    await execp(`npm run ver "${version} --allow-same-version"`);
+}
 
 /**
  * buildSteps is the List with the builds
  */
-const buildSteps: Array<() => Promise<void>> = [];
+const buildSteps: Array<(filenameAddition: string) => Promise<void>> = [];
 
 const distSrc = './dist/tuxedo-control-center';
 
 /**
  * Parse command line parameter and set up the build
  */
-if (process.argv.length == 2) {
-    buildSteps.push(buildDeb);
-    buildSteps.push(buildSuseRpm);
-}
-else {
-    process.argv.forEach((parameter, index, array) => {
-        if (parameter.startsWith('all')) {
-            buildSteps.push(buildDeb);
-            buildSteps.push(buildSuseRpm);
-        }
+let automaticVersion = false;
 
-        if (parameter.startsWith('deb')) {
-            buildSteps.push(buildDeb);
-        }
+process.argv.forEach((parameter, index, array) => {
+    if (parameter.startsWith('deb')) {
+        buildSteps.push(buildDeb);
+    }
 
-        if (parameter.startsWith('rpm')) {
-            buildSteps.push(buildSuseRpm);
-        }
-    });
-}
+    if (parameter.startsWith('rpm')) {
+        buildSteps.push(buildRpm);
+    }
+
+    if (parameter.startsWith('all')) {
+        buildSteps.push(buildDeb);
+        buildSteps.push(buildRpm);
+    }
+
+    if (parameter.startsWith('autoversion')) {
+        automaticVersion = true;
+    }
+});
 
 /**
  * Function for create the deb Package
  */
-async function buildDeb(): Promise<void> {
+async function buildDeb(filenameAddition: string): Promise<void> {
     const config = {
         appId: 'tuxedocontrolcenter',
-        artifactName: '${productName}_${version}.${ext}',
+        artifactName: '${productName}_${version}' + filenameAddition + '.${ext}',
         directories: {
             output: './dist/packages'
         },
@@ -99,10 +117,10 @@ async function buildDeb(): Promise<void> {
 /**
  * Function for create the Suse RPM Package
  */
-async function buildSuseRpm(): Promise<void> {
+async function buildRpm(filenameAddition: string): Promise<void> {
     const config: builder.Configuration = {
         appId: 'tuxedocontrolcenter',
-        artifactName: '${productName}_${version}.${ext}',
+        artifactName: '${productName}_${version}' + filenameAddition + '.${ext}',
         directories: {
             output: './dist/packages'
         },
@@ -163,9 +181,39 @@ async function buildSuseRpm(): Promise<void> {
  * Execute all Builds in the buildSteps List
  */
 async function startBuild() {
-    for (const step of buildSteps) {
-        await step();
-        console.log('\n');
+    console.log('Start packaging');
+    const previousVersion = tccPackage.version;
+    try {
+        let gitDescribe = await getGitDescribe();
+        let gitBranch = await getCurrentBranch();
+        let version = gitDescribe.slice(1);
+        let filenameAddition = '';
+
+        const addBranchNameToFilename = version.includes('-') &&
+                                        gitBranch !== '';
+
+        if (addBranchNameToFilename) {
+            filenameAddition = `_${gitBranch}`;
+        }
+
+        if (automaticVersion) {
+            console.log(`Set build version: '${version}'`);
+            await setVersion(version);
+        }
+
+        for (const step of buildSteps) {
+            console.log('Build step: ' + step.name);
+            await step(filenameAddition);
+            console.log('\n');
+        }
+
+    } catch (err) {
+        console.log('Error on build => ' + err);
+        process.exit(1);
+    } finally {
+        if (automaticVersion) {
+            await setVersion(previousVersion);
+        }
     }
 }
 
