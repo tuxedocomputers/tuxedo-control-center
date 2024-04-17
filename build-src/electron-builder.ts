@@ -49,6 +49,11 @@ process.argv.forEach((parameter, index, array) => {
     }
 });
 
+if (buildSteps.length === 0) {
+    buildSteps.push(buildDeb);
+    buildSteps.push(buildRpm);
+}
+
 /**
  * Function for create the deb Package
  */
