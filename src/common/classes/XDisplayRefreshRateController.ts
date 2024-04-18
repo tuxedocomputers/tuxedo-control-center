@@ -21,32 +21,67 @@ import { IDisplayFreqRes, IDisplayMode } from "../models/DisplayFreqRes";
 import * as child_process from "child_process";
 import * as fs from "fs";
 export class XDisplayRefreshRateController {
-    private displayName: string;
-    private isX11: boolean;
-    private displayEnvVariable: string;
-    private xAuthorityFile: string;
+    private displayName: string = "";
+    private isX11: boolean = undefined;
+    private isWayland: boolean = undefined;
+
+    private displayEnvVariable: string = "";
+    private xAuthorityFile: string = "";
     public XDisplayRefreshRateController() {
         this.displayName = "";
         this.setEnvVariables();
     }
 
     private setEnvVariables(): void {
-        const output = child_process
+        const envVariables = child_process
             .execSync(
-                `ps -u $(id -u) -o pid= | xargs -I{} cat /proc/{}/environ 2>/dev/null | tr '\\0' '\\n'`
+                `cat $(printf "/proc/%s/environ " $(pgrep -vu root | tail -n 20)) 2>/dev/null | \
+                tr '\\0' '\\n' | \
+                awk ' /DISPLAY=/ && !countDisplay {print; countDisplay++} \
+                    /XAUTHORITY=/ && !countXAuthority {print; countXAuthority++} \
+                    /XDG_SESSION_TYPE=/ && !countSessionType {print; countSessionType++} \
+                    /USER=/ && !countUser {print; countUser++} \
+                    {if (countDisplay && countXAuthority && countSessionType && countUser) exit} '`
             )
             .toString();
 
-        const displayMatch = output.match(/^DISPLAY=(.*)$/m);
-        const xAuthorityMatch = output.match(/^XAUTHORITY=(.*)$/m);
-        const xdgSessionMatch = output.match(/^XDG_SESSION_TYPE=(.*)$/m);
+        const displayMatch = envVariables.match(/^DISPLAY=(.*)$/m);
+        const xAuthorityMatch = envVariables.match(/^XAUTHORITY=(.*)$/m);
+        const xdgSessionMatch = envVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
+        const userMatch = envVariables.match(/^USER=(.*)$/m);
 
-        this.displayEnvVariable = displayMatch
-            ? displayMatch[1].replace("DISPLAY=", "").trim()
-            : "";
+        // additional checks to make sure env variables are not taken from login screen
+        // they shouldn't be triggered since no collection happens when no users are logged in
+        // sddm XDG_SESSION_TYPE can differ from actual session type
+        if (
+            xAuthorityMatch &&
+            (xAuthorityMatch[1].includes("/var/run/sddm/{") ||
+                xAuthorityMatch[1].includes("/var/lib/lightdm"))
+        ) {
+            return;
+        }
 
         const xAuthorityFile = xAuthorityMatch
             ? xAuthorityMatch[1].replace("XAUTHORITY=", "").trim()
+            : "";
+
+        // gdm XDG_SESSION_TYPE can differ from actual session type
+        // Ubuntu creates xAuthority file with user gdm and that user name is unavailable,
+        // but Tuxedo OS with sddm allows the user name gdm
+        const xAuthorityFileInfo = child_process
+            .execSync(`ls -l ${xAuthorityFile}`)
+            .toString();
+
+        if (
+            xAuthorityFileInfo.includes(" gdm gdm ") &&
+            userMatch &&
+            userMatch[1] === "gdm"
+        ) {
+            return undefined;
+        }
+
+        this.displayEnvVariable = displayMatch
+            ? displayMatch[1].replace("DISPLAY=", "").trim()
             : "";
 
         this.xAuthorityFile = fs.existsSync(xAuthorityFile)
@@ -60,26 +95,40 @@ export class XDisplayRefreshRateController {
                   .toLowerCase()
             : "";
 
-        this.isX11 =
-            sessionType === "x11"
-                ? true
-                : sessionType === "wayland"
-                ? false
-                : undefined;
+        this.isX11 = sessionType === "x11" ? true : false;
+        this.isWayland = sessionType === "wayland" ? true : false;
     }
 
     public getIsX11(): boolean {
-        this.setEnvVariables();
         return this.isX11;
     }
 
-    public getDisplayModes(): IDisplayFreqRes {
-        this.setEnvVariables();
+    public getIsWayland(): boolean {
+        return this.isWayland;
+    }
 
-        if (!this.isX11 || !this.displayEnvVariable || !this.xAuthorityFile) {
-            this.isX11 = false;
-            this.displayEnvVariable = "";
-            this.xAuthorityFile = "";
+    public resetValues(): void {
+        this.isX11 = undefined;
+        this.isWayland = undefined;
+        this.displayEnvVariable = "";
+        this.xAuthorityFile = "";
+    }
+
+    private checkEnvVariablesAvailable(): boolean {
+        return (
+            this.isX11 !== undefined ||
+            this.isWayland !== undefined ||
+            !!this.displayEnvVariable ||
+            !!this.xAuthorityFile
+        );
+    }
+
+    public getDisplayModes(): IDisplayFreqRes {
+        if (!this.checkEnvVariablesAvailable()) {
+            this.setEnvVariables();
+        }
+
+        if (!this.checkEnvVariablesAvailable() || this.isWayland) {
             return undefined;
         }
 
