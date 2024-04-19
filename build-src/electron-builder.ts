@@ -1,22 +1,4 @@
 import * as builder from 'electron-builder';
-import * as util from 'util';
-import * as child_process from 'child_process';
-const execp = util.promisify(child_process.exec);
-
-const tccPackage = require('../package.json');
-
-async function getGitDescribe() {
-    return (await execp("git describe")).stdout.trim();
-}
-
-async function getCurrentBranch() {
-    return (await execp('git branch --show-current')).stdout.trim();
-}
-
-async function setVersion(version: string) {
-    version.replace('"', '');
-    await execp(`npm run ver "${version} --allow-same-version"`);
-}
 
 /**
  * buildSteps is the List with the builds
@@ -28,7 +10,7 @@ const distSrc = './dist/tuxedo-control-center';
 /**
  * Parse command line parameter and set up the build
  */
-let automaticVersion = false;
+let filenameAddition = '';
 
 process.argv.forEach((parameter, index, array) => {
     if (parameter.startsWith('deb')) {
@@ -44,8 +26,11 @@ process.argv.forEach((parameter, index, array) => {
         buildSteps.push(buildRpm);
     }
 
-    if (parameter.startsWith('autoversion')) {
-        automaticVersion = true;
+    if (parameter.startsWith('fnameadd')) {
+        let parts = parameter.split('=');
+        if (parts.length === 2) {
+            filenameAddition = parts[1].trim();
+        }
     }
 });
 
@@ -187,38 +172,16 @@ async function buildRpm(filenameAddition: string): Promise<void> {
  */
 async function startBuild() {
     console.log('Start packaging');
-    const previousVersion = tccPackage.version;
+    console.log(`Filename addition: '${filenameAddition}'`);
     try {
-        let gitDescribe = await getGitDescribe();
-        let gitBranch = await getCurrentBranch();
-        let version = gitDescribe.slice(1);
-        let filenameAddition = '';
-
-        const addBranchNameToFilename = version.includes('-') &&
-                                        gitBranch !== '';
-
-        if (addBranchNameToFilename) {
-            filenameAddition = `_${gitBranch}`;
-        }
-
-        if (automaticVersion) {
-            console.log(`Set build version: '${version}'`);
-            await setVersion(version);
-        }
-
         for (const step of buildSteps) {
             console.log('Build step: ' + step.name);
             await step(filenameAddition);
             console.log('\n');
         }
-
     } catch (err) {
         console.log('Error on build => ' + err);
         process.exit(1);
-    } finally {
-        if (automaticVersion) {
-            await setVersion(previousVersion);
-        }
     }
 }
 
