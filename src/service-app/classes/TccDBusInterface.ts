@@ -26,38 +26,37 @@ import { FnLockController } from '../../common/classes/FnLockController';
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
-    public displayModes: string;
-    public isX11: boolean;
-    public tuxedoWmiAvailable: boolean;
-    public fanHwmonAvailable: boolean;
-    public tccdVersion: string;
-    public fanData: string;
-    public webcamSwitchAvailable: boolean;
-    public webcamSwitchStatus: boolean;
-    public forceYUV420OutputSwitchAvailable: boolean;
-    public dGpuInfoValuesJSON: string;
-    public iGpuInfoValuesJSON: string;
-    public cpuPowerValuesJSON: string;
-    public primeState: string;
+    public displayModesJSON: string = "{}";
+    public isX11: boolean = false;
+    public tuxedoWmiAvailable: boolean = false;
+    public fanHwmonAvailable: boolean = false;
+    public tccdVersion: string = ""
+    public fanData: string = "";
+    public webcamSwitchAvailable: boolean = false;
+    public webcamSwitchStatus: boolean = false;
+    public forceYUV420OutputSwitchAvailable: boolean = false;
+    public dGpuInfoValuesJSON: string = "{}";
+    public iGpuInfoValuesJSON: string = "{}";
+    public cpuPowerValuesJSON: string = "{}";
+    public primeState: string = "";
     public modeReapplyPending: boolean;
-    public tempProfileName: string;
-    public tempProfileId: string;
-    public activeProfileJSON: string;
-    public profilesJSON: string;
-    public customProfilesJSON: string;
-    public defaultProfilesJSON: string;
-    public defaultValuesProfileJSON: string;
-    public settingsJSON: string;
-    public odmProfilesAvailable: string[];
-    public odmPowerLimitsJSON: string;
-    public keyboardBacklightCapabilitiesJSON: string;
-    public keyboardBacklightStatesJSON: string;
+    public tempProfileName: string = "";
+    public tempProfileId: string = "";
+    public activeProfileJSON: string = "{}";
+    public profilesJSON: string = "{}";
+    public customProfilesJSON: string = "{}";
+    public defaultProfilesJSON: string = "{}";
+    public defaultValuesProfileJSON: string = "{}";
+    public settingsJSON: string = "{}";
+    public odmProfilesAvailable: string[] = [""]
+    public odmPowerLimitsJSON: string = "{}";
+    public keyboardBacklightCapabilitiesJSON: string = "{}";
+    public keyboardBacklightStatesJSON: string = "{}";
     public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-    public fansMinSpeed: number;
-    public fansOffAvailable: boolean;
+    public fansMinSpeed: number = -1;
+    public fansOffAvailable: boolean = false;
     public sensorDataCollectionStatus: boolean = false;
     public d0MetricsUsage: boolean = false;
-    
 }
 
 export class TccDBusOptions {
@@ -77,7 +76,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
-    GetDisplayModesJSON() { return this.data.displayModes; }
+
+    GetDisplayModesJSON() { return this.data.displayModesJSON; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
     FanHwmonAvailable() { return this.data.fanHwmonAvailable; }
