@@ -57,7 +57,8 @@ export class CompatibilityService {
                 deviceName !== undefined &&
                 (deviceName === "STELLARIS1XI04" ||
                     deviceName === "STEPOL1XA04" ||
-                    deviceName === "STELLARIS1XI05")
+                    deviceName === "STELLARIS1XI05" ||
+                    deviceName === 'STELLARIS17I06')
             ) {
                 showAquarisMenu = true;
             } else {
