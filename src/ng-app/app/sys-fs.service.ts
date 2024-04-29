@@ -36,7 +36,6 @@ export class SysFsService implements OnDestroy {
 
   constructor() {
     this.generalCpuInfo = new BehaviorSubject(undefined);
-    console.log(this.generalCpuInfo);
     this.logicalCoreInfo = new BehaviorSubject(undefined);
     this.pstateInfo = new BehaviorSubject(undefined);
 

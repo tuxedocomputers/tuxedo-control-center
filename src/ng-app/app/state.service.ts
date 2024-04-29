@@ -39,8 +39,6 @@ export class StateService implements OnDestroy {
   private updateInterval: NodeJS.Timeout;
   private currentSettings: ITccSettings;
   private subscriptions: Subscription = new Subscription();
-
-  private activeState: ProfileStates;
   private stateSubject: Subject<ProfileStates>;
   public stateObserver: Observable<ProfileStates>;
 
@@ -59,11 +57,6 @@ export class StateService implements OnDestroy {
     this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => {
       this.currentSettings = newSettings;
     }));
-
-    this.pollActiveState();
-    this.updateInterval = setInterval(() => {
-      this.pollActiveState();
-    }, 500);
 
     this.stateInputMap
       .set(ProfileStates.AC.toString(), {
@@ -85,10 +78,6 @@ export class StateService implements OnDestroy {
     return this.stateInputArray;
   }
 
-  public getActiveState(): ProfileStates {
-    return this.activeState;
-  }
-
   public getActiveProfile(): ITccProfile {
     return this.activeProfile.getValue();
   }
@@ -101,14 +90,6 @@ export class StateService implements OnDestroy {
     return Object.entries(this.currentSettings.stateMap)
             .filter(entry => entry[1] === profileId)
             .map(entry => entry[0]);
-  }
-
-  private pollActiveState(): void {
-    const newState = window.state.determineState(); 
-    if (newState !== this.activeState) {
-      this.activeState = newState;
-      this.stateSubject.next(newState);
-    }
   }
 
   ngOnDestroy() {
