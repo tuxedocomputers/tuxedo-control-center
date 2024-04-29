@@ -35,30 +35,33 @@ export class SysFsService implements OnDestroy {
   public pstateInfo: BehaviorSubject<IPstateInfo>;
 
   constructor() {
-
+    this.generalCpuInfo = new BehaviorSubject(undefined);
+    console.log(this.generalCpuInfo);
+    this.logicalCoreInfo = new BehaviorSubject(undefined);
+    this.pstateInfo = new BehaviorSubject(undefined);
 
 
     this.periodicUpdate();
-    this.updateInterval = setInterval(() => { this.periodicUpdate(); }, this.updatePeriodMs);
+    this.updateInterval =  setInterval(async () => { await this.periodicUpdate(); }, this.updatePeriodMs);
   }
 
-  private periodicUpdate(): void {
+  private async periodicUpdate(): Promise<void> {
     if (this.generalCpuInfo === undefined) {
-      this.generalCpuInfo = new BehaviorSubject(this.getGeneralCpuInfo());
+      this.generalCpuInfo = new BehaviorSubject(await this.getGeneralCpuInfo());
     } else {
-      this.generalCpuInfo.next(this.getGeneralCpuInfo());
+      this.generalCpuInfo.next(await this.getGeneralCpuInfo());
     }
 
     if (this.logicalCoreInfo === undefined) {
-      this.logicalCoreInfo = new BehaviorSubject(this.getLogicalCoreInfo());
+      this.logicalCoreInfo = new BehaviorSubject(await this.getLogicalCoreInfo());
     } else {
-      this.logicalCoreInfo.next(this.getLogicalCoreInfo());
+      this.logicalCoreInfo.next(await this.getLogicalCoreInfo());
     }
 
     if (this.pstateInfo === undefined) {
-      this.pstateInfo = new BehaviorSubject(this.getPstateInfo());
+      this.pstateInfo = new BehaviorSubject(await this.getPstateInfo());
     } else {
-      this.pstateInfo.next(this.getPstateInfo());
+      this.pstateInfo.next(await this.getPstateInfo());
     }
   }
 
@@ -68,19 +71,25 @@ export class SysFsService implements OnDestroy {
     }
   }
 
-  public getGeneralCpuInfo(): IGeneralCPUInfo {
-    return window.cpu.getGeneralCpuInfoSync();
+  public async getGeneralCpuInfo(): Promise<IGeneralCPUInfo> {
+    return window.cpu.getGeneralCpuInfoAsync();
   }
 
-  public getLogicalCoreInfo(): ILogicalCoreInfo[] {
-    return window.cpu.getLogicalCoreInfoSync();
+  public async getLogicalCoreInfo(): Promise<ILogicalCoreInfo[]> {
+    return window.cpu.getLogicalCoreInfoAsync();
   }
 
-  public getPstateInfo(): IPstateInfo {
-    const pstateInfo: IPstateInfo = {
-      noTurbo: window.cpu.getIntelPstateTurboValueSync()
-    };
-    return pstateInfo;
+  public async getPstateInfo(): Promise<IPstateInfo> {
+    return new Promise<IPstateInfo>(async (resolve, reject) => {
+        try {
+            const pstateInfo: IPstateInfo = {
+                noTurbo: await window.cpu.getIntelPstateTurboValueAsync()
+              };
+              resolve (pstateInfo);
+        } catch (err) {
+          reject(err);
+        }
+      });;
   }
 
   public getDisplayBrightnessInfo(): IDisplayBrightnessInfo[] {

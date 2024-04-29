@@ -142,9 +142,9 @@ export interface STUFF
 
 export interface CPU 
 {
-    getGeneralCpuInfoSync: () => IGeneralCPUInfo,
-    getLogicalCoreInfoSync: () =>  ILogicalCoreInfo[],
-    getIntelPstateTurboValueSync: () => boolean,
+    getGeneralCpuInfoAsync: () => Promise<IGeneralCPUInfo>,
+    getLogicalCoreInfoAsync: () =>  Promise<ILogicalCoreInfo[]>,
+    getIntelPstateTurboValueAsync: () => Promise<boolean>,
 }
 
 export interface BACKLIGHT 

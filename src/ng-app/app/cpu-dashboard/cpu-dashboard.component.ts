@@ -26,7 +26,7 @@ import { SysFsService } from "../sys-fs.service";
 import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { IDBusFanData } from "src/common/models/IFanData"
+import { FanData, IDBusFanData, TimeData } from "src/common/models/IFanData"
 import { ITccProfile } from "src/common/models/TccProfile";
 import { StateService } from "../state.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -46,6 +46,16 @@ import { PowerStateService } from "../power-state.service";
 export class CpuDashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];
     public cpuInfo: IGeneralCPUInfo;
+    // {
+    //     minFreq: -1,
+    //     maxFreq: -1,
+    //     availableCores: -1,
+    //     scalingAvailableFrequencies: [-1],
+    //     scalingAvailableGovernors: [''],
+    //     energyPerformanceAvailablePreferences: [''],
+    //     reducedAvailableFreq: -1,
+    //     boost: false,
+    // };
     public pstateInfo: IPstateInfo;
 
     public activeCores: number;
@@ -59,6 +69,23 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public cpuModelName = "";
     public fanData: IDBusFanData;
+    // {
+    //     cpu:
+    //     {
+    //         speed: new TimeData(Date.now(), -1),
+    //         temp: new TimeData(Date.now(), -1),
+    //     },
+    //     gpu1:
+    //     {
+    //         speed: new TimeData(Date.now(), -1),
+    //         temp: new TimeData(Date.now(), -1)
+    //     },
+    //     gpu2:
+    //     {
+    //         speed: new TimeData(Date.now(), -1),
+    //         temp: new TimeData(Date.now(), -1)
+    //     }
+    // };
 
     // CPU
     public gaugeCPUPower: number = 0;
@@ -316,7 +343,27 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToFanData(): void {
         this.subscriptions.add(
             this.tccdbus.fanData.subscribe((fanData: IDBusFanData) => {
-                if (!fanData) return;
+                if (!fanData)
+                {
+                    this.fanData = {
+                        cpu:
+                        {
+                            speed: new TimeData(Date.now(), -1),
+                            temp: new TimeData(Date.now(), -1),
+                        },
+                        gpu1:
+                        {
+                            speed: new TimeData(Date.now(), -1),
+                            temp: new TimeData(Date.now(), -1)
+                        },
+                        gpu2:
+                        {
+                            speed: new TimeData(Date.now(), -1),
+                            temp: new TimeData(Date.now(), -1)
+                        }
+                    }
+                    return;
+                }
 
                 this.fanData = fanData;
                 const { gpu1, gpu2 } = fanData;

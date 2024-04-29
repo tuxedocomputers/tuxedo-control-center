@@ -512,12 +512,11 @@ async function createWebcamPreview(langId: string, arg: any) {
 ##################################################################
 */
 
-// logging channel name of all ipcRenderer.Send events 
-// https://github.com/ungoldman/electron-ipc-log/blob/master/index.js
+//logging channel name of all ipcRenderer.Send events 
+//https://github.com/ungoldman/electron-ipc-log/blob/master/index.js
 // var oldOn = ipcMain.on;
 // ipcMain.on = function (channel, event, ...data)
 // {
-//     console.log(channel);
 //     if(channel === "log-stuff")
 //     console.log(data);
 //     return oldOn.apply(ipcMain, arguments)
@@ -818,7 +817,9 @@ ipcMain.handle('drive-controller-get-drives', (event) => {
 
   let cpu = new CpuController('/sys/devices/system/cpu');
 
-ipcMain.on('get-general-cpu-info-sync', (event) => {
+ipcMain.handle('get-general-cpu-info-async', (event) => {
+    return new Promise<IGeneralCPUInfo>((resolve, reject) => {
+        try {
     let cpuInfo: IGeneralCPUInfo;
     const scalingDriver = cpu.cores[0].scalingDriver.readValueNT();
     try {
@@ -843,11 +844,17 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
     } catch (err) {
       console.log(err);
     }
-    event.returnValue = cpuInfo;
+    resolve(cpuInfo);
+        } catch (err) {
+          reject(err);
+        }
+      });
   });
 
 
-  ipcMain.on('get-logical-core-info-sync', (event) => {
+  ipcMain.handle('get-logical-core-info-async', (event) => {
+    return new Promise<ILogicalCoreInfo[]>((resolve, reject) => {
+        try {
     const coreInfoList: ILogicalCoreInfo[] = [];
     for (const core of cpu.cores) {
       try {
@@ -878,11 +885,21 @@ ipcMain.on('get-general-cpu-info-sync', (event) => {
         console.log(err);
       }
     }
-    event.returnValue = coreInfoList;
+   resolve(coreInfoList);
+    } catch (err) {
+      reject(err);
+    }
+  });
   });
 
-  ipcMain.on('get-intel-pstate-turbo-value-sync', (event) => {
-    event.returnValue = cpu.intelPstate.noTurbo.readValueNT()
+  ipcMain.handle('get-intel-pstate-turbo-value-async', (event) => {
+    return new Promise<boolean>((resolve, reject) => {
+        try {
+            resolve( cpu.intelPstate.noTurbo.readValueNT());
+        } catch (err) {
+          reject(err);
+        }
+      });
   });
 
   // #####   Backend for sys-fs service backlight stuff ########
@@ -1650,6 +1667,7 @@ ipcMain.on('get-display-brightness-not-supported-sync', (event) => {
 
 ipcMain.on('log-stuff', (event,stuff) =>
 {
+    console.log("logging stuff:");
     console.log(stuff);
 });
 

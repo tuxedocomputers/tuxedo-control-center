@@ -6,6 +6,13 @@
 
 import { AquarisState, AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from '../LCT21001';
+import { UserConfig } from '../UserConfig';
+import * as path from 'path';
+import * as os from 'os';
+
+const tccConfigDir = path.join(os.homedir(), '.tcc');
+const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
+const userConfig = new UserConfig(tccStandardConfigFile);
 
 
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false) {
@@ -185,7 +192,7 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
                 fanOn: true,
                 pumpOn: true
             };
-            const aquarisSavedSerialized = undefined; //await userConfig.get('aquarisSaveState');
+            const aquarisSavedSerialized = await userConfig.get('aquarisSaveState');
             if (aquarisSavedSerialized !== undefined) {
                 aquarisStateExpected = JSON.parse(aquarisSavedSerialized) as AquarisState;
             } else {
@@ -288,6 +295,6 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     
     .set(AquarisAPIFunctions.saveState, async () => {
         if (await aquarisConnectedDemo()) return;
-        //await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
+        await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });
 

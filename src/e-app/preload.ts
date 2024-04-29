@@ -219,9 +219,9 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'cpu',
     {
-        getGeneralCpuInfoSync: () => ipcRenderer.sendSync('get-general-cpu-info-sync'),
-        getLogicalCoreInfoSync: () => ipcRenderer.sendSync('get-logical-core-info-sync'),
-        getIntelPstateTurboValueSync: () => ipcRenderer.sendSync('get-intel-pstate-turbo-value-sync'),
+        getGeneralCpuInfoAsync: () => ipcRenderer.invoke('get-general-cpu-info-async'),
+        getLogicalCoreInfoAsync: () => ipcRenderer.invoke('get-logical-core-info-async'),
+        getIntelPstateTurboValueAsync: () => ipcRenderer.invoke('get-intel-pstate-turbo-value-async'),
     }
 );
 

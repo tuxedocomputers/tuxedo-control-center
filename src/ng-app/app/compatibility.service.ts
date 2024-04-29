@@ -59,6 +59,7 @@ export class CompatibilityService {
         } else {
             showAquarisMenu = true;
         }
+        showAquarisMenu = true;
         this.hasAquarisValue = showAquarisMenu;
     }
 
