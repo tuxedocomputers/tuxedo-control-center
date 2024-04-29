@@ -98,6 +98,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public isX11: boolean;
 
+    public amdGpuCount: number;
+    public dGpuAvailable: boolean;
+    public iGpuAvailable: boolean;
+
     constructor(
         private sysfs: SysFsService,
         private utils: UtilsService,
@@ -116,6 +120,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.dashboardVisibility = document.visibilityState == "visible";
+
+        this.amdGpuCount = window.power.getAmdDGpuCount();
+        this.dGpuAvailable = window.power.isDGpuAvailable();
+        this.iGpuAvailable = window.power.isIGpuAvailable();
 
         // not instantly showing window to give enough time to load window
         setTimeout(async () => {
@@ -200,19 +208,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             })
         );
     }
-
-    public getAmdDGpuCount(): number {
-        return window.power.getAmdDGpuCount();
-    }
-
-    public isDGpuAvailable(): boolean {
-        return window.power.isDGpuAvailable();
-    }
-
-    public isIGpuAvailable(): boolean {
-        return window.power.isIGpuAvailable();
-    }
-
 
     private subscribeToPstate(): void {
         this.subscriptions.add(
