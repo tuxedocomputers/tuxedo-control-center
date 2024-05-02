@@ -286,7 +286,16 @@ export class KeyboardBacklightListener {
                                              updateSettings: boolean = true,
                                              updateTCC: boolean = true): Promise<void> {
         if (updateSysFS) {
-            await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
+            try {
+                await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
+            } catch (error) {
+                if (error.name === "DBusError") {
+                    console.log("Failed to write brightness using UPower: Try restarting upower.service followed by tccd.service using systemctl.")
+                }
+                else {
+                    throw error;
+                }
+            }
 
             if (this.ledsRGBZones.length > 0) {
                 this.setBufferInput(this.ledsRGBZones[0], true)
@@ -300,7 +309,7 @@ export class KeyboardBacklightListener {
                 }
             }
             if (this.ledsRGBZones.length > 0) {
-                this.setBufferInput(this.ledsRGBZones[0], false)
+                this.setBufferInput(this.ledsRGBZones[0], false);
             }
         }
 

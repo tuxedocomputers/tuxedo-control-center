@@ -45,10 +45,27 @@ export function interpolatePointsArray(
     return Array.from({ length: 101 }, (_, i) => interpolatePoints(points, i));
 }
 
-export function formatTemp(value: number | string): string {
-    return `${value} °C`;
+
+export function formatTemp(value: number, usingFahrenheit: boolean): string {
+    if (usingFahrenheit)  {
+        return `${Math.round(((value * 1.8) + 32))} °F`;
+    }
+    else {
+        return `${value} °C`;
+    }   
 }
 
 export function formatSpeed(value: number | string): string {
     return `${value} %`;
+}
+
+/**
+ * Ensure minimum fan speed if temperature is high
+ */
+export function manageCriticalTemperature(temp: number, speed: number): number {
+    return temp >= 90
+        ? Math.max(40, speed)
+        : temp >= 80
+        ? Math.max(30, speed)
+        : speed;
 }

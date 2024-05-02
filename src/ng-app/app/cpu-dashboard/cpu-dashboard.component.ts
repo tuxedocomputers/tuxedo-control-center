@@ -26,7 +26,7 @@ import { SysFsService } from "../sys-fs.service";
 import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { FanData, IDBusFanData, TimeData } from "src/common/models/IFanData"
+import { IDBusFanData, TimeData } from "src/common/models/IFanData"
 import { ITccProfile } from "src/common/models/TccProfile";
 import { StateService } from "../state.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -46,16 +46,6 @@ import { PowerStateService } from "../power-state.service";
 export class CpuDashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];
     public cpuInfo: IGeneralCPUInfo;
-    // {
-    //     minFreq: -1,
-    //     maxFreq: -1,
-    //     availableCores: -1,
-    //     scalingAvailableFrequencies: [-1],
-    //     scalingAvailableGovernors: [''],
-    //     energyPerformanceAvailablePreferences: [''],
-    //     reducedAvailableFreq: -1,
-    //     boost: false,
-    // };
     public pstateInfo: IPstateInfo;
 
     public activeCores: number;
@@ -69,23 +59,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public cpuModelName = "";
     public fanData: IDBusFanData;
-    // {
-    //     cpu:
-    //     {
-    //         speed: new TimeData(Date.now(), -1),
-    //         temp: new TimeData(Date.now(), -1),
-    //     },
-    //     gpu1:
-    //     {
-    //         speed: new TimeData(Date.now(), -1),
-    //         temp: new TimeData(Date.now(), -1)
-    //     },
-    //     gpu2:
-    //     {
-    //         speed: new TimeData(Date.now(), -1),
-    //         temp: new TimeData(Date.now(), -1)
-    //     }
-    // };
 
     // CPU
     public gaugeCPUPower: number = 0;
@@ -128,6 +101,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public amdGpuCount: number;
     public dGpuAvailable: boolean;
     public iGpuAvailable: boolean;
+
+    public usingFahrenheit: boolean;
 
     constructor(
         private sysfs: SysFsService,
@@ -364,7 +339,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                     }
                     return;
                 }
-
+                
                 this.fanData = fanData;
                 const { gpu1, gpu2 } = fanData;
                 const gpu1Temp = gpu1?.temp?.data;
@@ -469,17 +444,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public gaugeCpuTempFormat = this.createFormatter(
         () => this.compat.hasCpuTemp,
-        (val) => Math.round(val).toString()
+        (val) => this.formatTemperature(val).toString()
     );
 
     public gaugeIGpuTempFormat = this.createFormatter(
         () => this.compat.hasIGpuTemp,
-        (val) => Math.round(val).toString()
+        (val) => this.formatTemperature(val).toString()
     );
 
     public gaugeDGpuTempFormat = this.createFormatter(
         () => this.compat.hasDGpuTemp,
-        (val) => Math.round(val).toString()
+        (val) => this.formatTemperature(val).toString()
     );
 
     public gaugeCpuFanSpeedFormat = this.createFormatter(
@@ -509,6 +484,17 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         () => this.compat.hasIGpuPowerDraw,
         (val) => this.roundWattage(val)
     );
+
+    private formatTemperature(val: number) {
+        if (this.usingFahrenheit) {
+            val = this.utils.getFahrenheitFromCelsius(val);
+        }
+        return Math.round(val);
+     }
+     
+    public getUsingFahrenheit(): boolean {
+        return this.usingFahrenheit;
+    }
 
     public goToProfileEdit = (profile: ITccProfile): void => {
         if (profile) {

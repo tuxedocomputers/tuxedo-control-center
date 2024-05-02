@@ -308,6 +308,8 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
 };
 
 export enum TUXEDODevice {
+    IBP17G6,
+    PULSE1403,
     IBP14G6_TUX,
     IBP14G6_TRX,
     IBP14G6_TQF,
@@ -326,7 +328,9 @@ export enum TUXEDODevice {
     STELLARIS1XI04,
     STEPOL1XA04,
     STELLARIS1XI05,
-    STELLARIS1XA05
+    STELLARIS1XA05,
+    STELLARIS16I06,
+    STELLARIS17I06,
 };
 
 /*

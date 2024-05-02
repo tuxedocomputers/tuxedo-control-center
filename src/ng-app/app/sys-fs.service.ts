@@ -20,8 +20,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { IGeneralCPUInfo, ILogicalCoreInfo, IPstateInfo, IDisplayBrightnessInfo } from '../../common/models/ICpuInfos';
 import { BehaviorSubject } from 'rxjs';
 
-
-
 @Injectable({
   providedIn: 'root'
 })

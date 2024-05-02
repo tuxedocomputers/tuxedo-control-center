@@ -493,7 +493,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <hr />
             </div>
             <mat-card-content class="content">
-                
+                <p class="sub-header" *ngIf="hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMTDPLabel" >CPU power limit control</p>                    
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                     *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <!-- ODM Profile -->
@@ -501,34 +501,58 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div formGroupName="odmProfile">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
-                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
-                                <mat-icon
-                                    class="info-icon"
-                                    i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
-                                    matTooltip="The system profiles limit the maximal energy consumption of the processors."
-                                    [matTooltipShowDelay]="infoTooltipShowDelay">
-                                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                                </mat-icon>
+                                <ng-container *ngIf="!hasDeviceSystemProfileInfo">
+                                    <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                    <mat-icon
+                                        class="info-icon"
+                                        i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
+                                        matTooltip="The system profiles limit the maximal energy consumption of the processors."
+                                        [matTooltipShowDelay]="infoTooltipShowDelay">
+                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                    </mat-icon>
+                                </ng-container>
+                                <ng-container *ngIf="hasDeviceSystemProfileInfo" i18n="@@tdpLabelsPL1">Sustained Power Limit (PL1)</ng-container>
                             </header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
-                                <mat-select formControlName="name" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
-                                        {{ odmProfileToName.get(odmProfileName) }}
-                                    </mat-option>
-                                </mat-select>
-                            </content>
-                        </mat-grid-tile>
+                        <ng-container *ngIf="!hasDeviceSystemProfileInfo">
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
+                                <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                    <mat-select formControlName="name" [disableOptionCentering]="true">
+                                        <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                            {{ odmProfileToName.get(odmProfileName) }}
+                                        </mat-option>
+                                    </mat-select>
+                                </content>
+                            </mat-grid-tile>
+                        </ng-container>
+                        <ng-container *ngIf="hasDeviceSystemProfileInfo">
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(viewProfile.odmProfile.name) }}</content>
+                                <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                    <mat-slider
+                                            #odmProfilesPowerLimitSlider
+                                            [min]="0"
+                                            [max]="deviceSystemProfileInfo.pl.length -1"
+                                            [value]="getODMprofilePowerLimitID()"
+                                            step="1"
+                                            (change)="sliderODMProfileChange(odmProfilesPowerLimitSlider.value)"
+                                            color="primary">
+                                    </mat-slider>
+                                </content>
+                            </mat-grid-tile>
+                        </ng-container>
                     </div>
 
                 </mat-grid-list>
 
-                <h4 i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</h4>
+                <p class="sub-header" i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</p>
 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
                     <div formGroupName="odmPowerLimits">
@@ -583,7 +607,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
                     [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage : ''"
                 >
-                    <h4 i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</h4>
+                    <p class="sub-header" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</p>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                         [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"

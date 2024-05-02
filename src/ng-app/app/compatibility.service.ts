@@ -21,21 +21,27 @@ import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { TimeData } from 'src/common/models/IFanData';
+import { SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
 
 @Injectable({
     providedIn: "root",
 })
 export class CompatibilityService {
     private hasAquarisValue: boolean;
+    private deviceName: TUXEDODevice = undefined;
 
   constructor(
         private tccDbus: TccDBusClientService,
         private sysfs: SysFsService
     ) {    
         const deviceName = window.comp.getProductSKU();
+        this.deviceName = deviceName
+
         const boardVendor = window.comp.getBoardVendor();
         const chassisVendor = window.comp.getChassisVendor();
         const sysVendor = window.comp.getSysVendor();
+
         let showAquarisMenu;
         const isTuxedo =
             (boardVendor !== undefined &&
@@ -61,6 +67,14 @@ export class CompatibilityService {
         }
         showAquarisMenu = true;
         this.hasAquarisValue = showAquarisMenu;
+    }
+
+    public getSystemProfileInfo(): SystemProfileInfo {
+        return deviceSystemProfileInfo.get(this.deviceName);
+    }
+
+    public getHasSystemProfileInfo(): boolean {
+        return (deviceSystemProfileInfo.get(this.deviceName) !== undefined);
     }
 
     get hasFanInfo(): boolean {

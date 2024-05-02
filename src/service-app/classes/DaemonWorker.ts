@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ITccSettings } from '../../common/models/TccSettings';
+
 import { ITccProfile } from '../../common/models/TccProfile';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 

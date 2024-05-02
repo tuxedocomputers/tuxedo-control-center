@@ -16,8 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.profile-details-edit {
+ .profile-details-edit {
     margin: 0 10px 10px 10px;
+
+    .sub-header
+    {
+        font-size: 1.15em;
+        font-weight: bold;
+    }
 
     .profile-title {
         position: fixed;
@@ -62,6 +68,7 @@
             text-align: left;
             font-size: 1.10em;
         }
+
 
         content.value {
             width: 100%;
