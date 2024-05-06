@@ -46,8 +46,6 @@ export interface IPC extends EventEmitter {
 
   export interface DBUS
   {
-    init: () => Promise<boolean>,
-    disconnect: () => Promise<boolean>,
     tuxedoWmiAvailable: () => Promise<boolean>,
     tccdVersion: () => Promise<string>,
     getFanData: () => Promise<string>,
@@ -97,6 +95,7 @@ export interface IPC extends EventEmitter {
     setChargeType: (chargeType) => Promise<boolean>,
     fanHwmonAvailable: () => Promise<boolean>,
     getIsX11: () => Promise<boolean>,
+    getDeviceJSON: () => Promise<string>,
   }
 
   export interface VENDOR
@@ -161,17 +160,18 @@ export interface CONFIG
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
-export interface STATE 
-{
-    determineState: () => any,
-}
+// export interface STATE 
+// {
+//     determineState: () => any,
+// }
 
 export interface COMP 
 {
-    getProductSKU: () => any,
-    getBoardVendor: () => any,
-    getChassisVendor: () => any,
-    getSysVendor: () => any,
+    getHasAquaris: () => Promise<boolean>,
+    // getProductSKU: () => any,
+    // getBoardVendor: () => any,
+    // getChassisVendor: () => any,
+    // getSysVendor: () => any,
     getScalingDriverAcpiCpuFreq: () => any,
 }
 
@@ -188,7 +188,7 @@ export interface COMP
       cpu: CPU,
       backlight: BACKLIGHT,
       config: CONFIG,
-      state: STATE,
+      //state: STATE,
       comp: COMP,
       stuff: STUFF,
       vendor: VENDOR,

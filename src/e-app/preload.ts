@@ -75,8 +75,6 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'dbus',
     {
-        init: () => ipcRenderer.invoke('init-dbus'),
-        disconnect: () => ipcRenderer.invoke('disconnect-dbus'),
         tuxedoWmiAvailable: () => ipcRenderer.invoke('tuxedo-wmi-available-dbus'),
         tccdVersion: () => ipcRenderer.invoke('tccd-version-dbus'),
         getFanData: () => ipcRenderer.invoke('get-fan-data-dbus'),
@@ -126,6 +124,7 @@ contextBridge.exposeInMainWorld(
         setChargeType: (chargeType) => ipcRenderer.invoke('set-charge-type-dbus', chargeType),
         fanHwmonAvailable: () => ipcRenderer.invoke('get-fan-hwmon-available-dbus'),
         getIsX11: () => ipcRenderer.invoke('get-is-x11-dbus'),
+        getDeviceJSON: () => ipcRenderer.invoke('get-device-json-dbus')
     }
 );
 
@@ -232,20 +231,22 @@ contextBridge.exposeInMainWorld(
     }
 );
 
-contextBridge.exposeInMainWorld(
-    'state',
-    {
-        determineState: () => ipcRenderer.sendSync("state-determine-state"),
-    }
-);
+// contextBridge.exposeInMainWorld(
+//     'state',
+//     {
+//         // is used nowhere
+//         //determineState: () => ipcRenderer.sendSync("state-determine-state"),
+//     }
+// );
 
 contextBridge.exposeInMainWorld(
     'comp',
     {
-        getProductSKU: () => ipcRenderer.sendSync('comp-get-product-sku'),
-        getBoardVendor: () => ipcRenderer.sendSync('comp-get-board-vendor'),
-        getChassisVendor: () => ipcRenderer.sendSync('comp-get-chassis-vendor'),
-        getSysVendor: () => ipcRenderer.sendSync('comp-get-sys-vendor'),
+        getHasAquaris: () => ipcRenderer.invoke('comp-get-has-aquaris'),
+        // getProductSKU: () => ipcRenderer.sendSync('comp-get-product-sku'),
+        // getBoardVendor: () => ipcRenderer.sendSync('comp-get-board-vendor'),
+        // getChassisVendor: () => ipcRenderer.sendSync('comp-get-chassis-vendor'),
+        // getSysVendor: () => ipcRenderer.sendSync('comp-get-sys-vendor'),
         getScalingDriverAcpiCpuFreq: () => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq'),
     }
 );
@@ -258,4 +259,5 @@ contextBridge.exposeInMainWorld(
 );
 
 
+// TODO rewrite all apis to work like the aquarisapi :)
 contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);

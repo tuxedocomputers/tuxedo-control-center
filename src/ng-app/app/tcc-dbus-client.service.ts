@@ -27,12 +27,13 @@ import { ICpuPower } from 'src/common/models/TccPowerSettings';
 import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 import { DBUS } from './renderer';
+import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TccDBusClientService implements OnDestroy {
-  private isAvailable: boolean;
+  private isAvailable: boolean = true;
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
 
@@ -80,6 +81,8 @@ export class TccDBusClientService implements OnDestroy {
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
   public isX11 = new BehaviorSubject<boolean>(undefined);
+  public device: TUXEDODevice = 0;
+  public hasAquaris: boolean = true;
   private tccDBusInterface: DBUS;
 
   constructor(private utils: UtilsService) {
@@ -101,20 +104,7 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   private async periodicUpdate() {
-    const previousValue = this.isAvailable;
-    // Check if still available
-    if (this.isAvailable) {
-      this.isAvailable = await this.tccDBusInterface.dbusAvailable();
-    } else {
-      // If not available try to init again
-      this.isAvailable = await this.tccDBusInterface.init();
-    }
-    // Publish availability as necessary
-    if (this.isAvailable !== previousValue) { this.available.next(this.isAvailable); }
-
-    if (!this.isAvailable) {
-        return;
-    }
+    // TODO write some new functionality to check if dbus is available... but probably in main.ts?
 
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
@@ -132,6 +122,12 @@ export class TccDBusClientService implements OnDestroy {
     if (dGpuInfoValuesJSON) {
         this.dGpuInfo.next(JSON.parse(dGpuInfoValuesJSON));
     }
+
+    const deviceJSON = await this.tccDBusInterface.getDeviceJSON();
+    if (deviceJSON) {
+        this.device = JSON.parse(deviceJSON);
+    }
+    this.hasAquaris = await window.comp.getHasAquaris();
 
     /*
 

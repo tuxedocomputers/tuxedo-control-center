@@ -20,61 +20,25 @@ import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
-import { TimeData } from 'src/common/models/IFanData';
+import { dbusVariant, TimeData } from 'src/common/models/IFanData';
 import { SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
 
 @Injectable({
     providedIn: "root",
 })
 export class CompatibilityService {
-    private hasAquarisValue: boolean;
-    private deviceName: TUXEDODevice = undefined;
 
   constructor(
         private tccDbus: TccDBusClientService,
         private sysfs: SysFsService
-    ) {    
-        const deviceName = window.comp.getProductSKU();
-        this.deviceName = deviceName
-
-        const boardVendor = window.comp.getBoardVendor();
-        const chassisVendor = window.comp.getChassisVendor();
-        const sysVendor = window.comp.getSysVendor();
-
-        let showAquarisMenu;
-        const isTuxedo =
-            (boardVendor !== undefined &&
-                boardVendor.toLowerCase().includes("tuxedo")) ||
-            (chassisVendor !== undefined &&
-                chassisVendor.toLowerCase().includes("tuxedo")) ||
-            (sysVendor !== undefined &&
-                sysVendor.toLowerCase().includes("tuxedo"));
-
-        if (isTuxedo) {
-            if (
-                deviceName !== undefined &&
-                (deviceName === "STELLARIS1XI04" ||
-                    deviceName === "STEPOL1XA04" ||
-                    deviceName === "STELLARIS1XI05")
-            ) {
-                showAquarisMenu = true;
-            } else {
-                showAquarisMenu = false;
-            }
-        } else {
-            showAquarisMenu = true;
-        }
-        showAquarisMenu = true;
-        this.hasAquarisValue = showAquarisMenu;
-    }
+    ) {}
 
     public getSystemProfileInfo(): SystemProfileInfo {
-        return deviceSystemProfileInfo.get(this.deviceName);
+        return deviceSystemProfileInfo.get(this.tccDbus.device);
     }
 
     public getHasSystemProfileInfo(): boolean {
-        return (deviceSystemProfileInfo.get(this.deviceName) !== undefined);
+        return (deviceSystemProfileInfo.get(this.tccDbus.device) !== undefined);
     }
 
     get hasFanInfo(): boolean {
@@ -225,7 +189,7 @@ export class CompatibilityService {
     }
 
     get hasAquaris() {
-        return this.hasAquarisValue;
+        return this.tccDbus.hasAquaris;
     }
 
     /**

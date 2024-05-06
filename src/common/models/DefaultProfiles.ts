@@ -308,6 +308,7 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
 };
 
 export enum TUXEDODevice {
+    UNKNOWN,
     IBP17G6,
     PULSE1403,
     IBP14G6_TUX,
@@ -337,6 +338,8 @@ export enum TUXEDODevice {
  * Device specific default profiles
  */
 export const deviceProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
+
+// TODO, since they all basically use the same profiles, isn't it possible to set them all somehow?
 
 deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
 deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);

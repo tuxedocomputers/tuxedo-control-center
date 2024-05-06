@@ -43,6 +43,12 @@ import { DisplayBacklightController } from '../common/classes/DisplayBacklightCo
 import { ITccSettings } from '../common/models/TccSettings';
 import { VendorService } from '../common/classes/Vendor.service'
 import { aquarisCleanUp, aquarisHandlers } from './backendAPIs/aquarisBackendAPI';
+import { amdDGpuDeviceIdString } from "../common/classes/DeviceIDs";
+import { TUXEDODevice } from '../common/models/DefaultProfiles';
+import { AvailabilityService } from "../common/classes/availability.service";
+// import { determineState } from '../common/classes/StateUtils';
+// import { DMIController } from '../common/classes/DMIController';
+
 require("./backendAPIs/aquarisBackendAPI");
 
 // Tweak to get correct dirname for resource files outside app.asar
@@ -69,7 +75,6 @@ let tccWindow: Electron.BrowserWindow;
 let aquarisWindow: Electron.BrowserWindow;
 let webcamWindow: Electron.BrowserWindow;
 let primeWindow: Electron.BrowserWindow;
-
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
 let tccDBus: TccDBusController;
 
@@ -78,8 +83,6 @@ const trayOnlyOption = process.argv.includes('--tray');
 const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
 //https://github.com/electron/electron/blob/main/docs/api/app.md#appispackaged-readonly
 let environmentIsProduction = app.isPackaged;
-let profilesHash;
-
 let powersaveBlockerId = undefined;
 
 // Ensure that only one instance of the application is running
@@ -151,6 +154,7 @@ async function initTray() {
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.fnLockSupported = await fnLockSupported(tccDBus);
+    tray.state.hasAquaris = await hasAquaris();
     if (tray.state.fnLockSupported) {
         tray.state.fnLockStatus = await fnLockStatus(tccDBus);
     }
@@ -556,35 +560,66 @@ async function createWebcamPreview(langId: string, arg: any) {
 //     return oldOn.apply(ipcMain, arguments)
 // }
 
-import { determineState } from '../common/classes/StateUtils';
-ipcMain.on("state-determine-state",(event) =>
-{
-    event.returnValue = determineState();
-});
+// unused
 
-import { DMIController } from '../common/classes/DMIController';
-const dmi = new DMIController('/sys/class/dmi/id');
+// ipcMain.on("state-determine-state",(event) =>
+// {
+//     event.returnValue = determineState();
+// });
 
-ipcMain.on("comp-get-product-sku",(event) =>
-{
-    event.returnValue = dmi.productSKU.readValueNT();
-});
-ipcMain.on("comp-get-board-vendor",(event) =>
-{
-    event.returnValue = dmi.boardVendor.readValueNT();
-});
-ipcMain.on("comp-get-chassis-vendor",(event) =>
-{
-    event.returnValue = dmi.chassisVendor.readValueNT();
-});
-ipcMain.on("comp-get-sys-vendor",(event) =>
-{
-    event.returnValue = dmi.sysVendor.readValueNT();
-});
+// replaced by get device
+
+// const dmi = new DMIController('/sys/class/dmi/id');
+
+// ipcMain.on("comp-get-product-sku",(event) =>
+// {
+//     event.returnValue = dmi.productSKU.readValueNT();
+// });
+// ipcMain.on("comp-get-board-vendor",(event) =>
+// {
+//     event.returnValue = dmi.boardVendor.readValueNT();
+// });
+// ipcMain.on("comp-get-chassis-vendor",(event) =>
+// {
+//     event.returnValue = dmi.chassisVendor.readValueNT();
+// });
+// ipcMain.on("comp-get-sys-vendor",(event) =>
+// {
+//     event.returnValue = dmi.sysVendor.readValueNT();
+// });
+
 ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event) =>
 {
     event.returnValue = ScalingDriver.acpi_cpufreq;
 });
+
+async function hasAquaris() {
+    try {
+        var device: TUXEDODevice = JSON.parse(await tccDBus.getDeviceJSON());
+        if (device !== TUXEDODevice.STELLARIS1XI04 && device !== TUXEDODevice.STEPOL1XA04 && device !== TUXEDODevice.STELLARIS1XI05 && device !== TUXEDODevice.UNKNOWN ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    catch (err) {
+        console.log("Couldn't parse Tuxedo device");
+        return true;
+    }
+    
+}
+ 
+ipcMain.handle('comp-get-has-aquaris', async (event, arg) => {
+        return new Promise<boolean>(async (resolve, reject) => {
+            try {
+                resolve( await hasAquaris());
+            } catch (err) {
+              reject(err);
+            }
+          });
+    
+});
+
 
 
 /*
@@ -1223,20 +1258,6 @@ ipcMain.on('trigger-language-change', (event, arg) => {
 ###############   Dbus Communication API ####################
 */
 
-// we don#t need that anymore as ipc communication
-ipcMain.handle('init-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.init());
-    });
-});
-
-// same as init
-ipcMain.handle('disconnect-dbus', async (event, arg) => {
-    return new Promise<void>((resolve, reject) => {
-        resolve(tccDBus.disconnect());
-    });
-});
-
 ipcMain.handle('tuxedo-wmi-available-dbus', async (event, arg) => {
     return new Promise<boolean>((resolve, reject) => {
         resolve(tccDBus.tuxedoWmiAvailable());
@@ -1525,9 +1546,18 @@ ipcMain.handle('get-fan-hwmon-available-dbus', async (event, chargeType) => {
     });
 });
 
+ipcMain.handle('get-device-json-dbus', (event) => {
+    return new Promise<string>((resolve, reject) => {
+        try {
+            resolve( tccDBus.getDeviceJSON());
+        } catch (err) {
+          reject(err);
+        }
+      });
+  });
+
 // #### power state service backend + availablity service backend ####
 
-import { AvailabilityService } from "../common/classes/availability.service";
 let availabilityService = new AvailabilityService();
 
 ipcMain.on('get-nvidia-dgpu-count-power', (event, arg) => {
@@ -1565,7 +1595,7 @@ async function getDGpuPowerState(busPath: string) {
 }
 
 
-import { amdDGpuDeviceIdString } from "../common/classes/DeviceIDs";
+
 ipcMain.on('get-bus-path-power', (event, arg) => {
     event.returnValue = getBusPath(arg);
 });

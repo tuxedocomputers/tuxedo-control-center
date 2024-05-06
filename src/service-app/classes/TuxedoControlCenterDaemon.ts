@@ -252,6 +252,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
+        this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
@@ -540,10 +541,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             return uwidMatch;
         }
 
-        return undefined;
+        return TUXEDODevice.UNKNOWN;
     }
 
     getDefaultProfile(): ITccProfile {
+        // TODO, good reason why this is called all over again? just buffer variable, it doesn't change?
         const dev = this.identifyDevice();
         return this.config.getDefaultProfiles(dev)[0];
     }

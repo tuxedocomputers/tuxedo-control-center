@@ -26,6 +26,7 @@ import { FnLockController } from '../../common/classes/FnLockController';
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public device: string = "";
     public displayModesJSON: string = "{}";
     public isX11: boolean = false;
     public tuxedoWmiAvailable: boolean = false;
@@ -88,6 +89,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }, 10000);
     }
 
+    GetDeviceName() { return this.data.device; }
     GetDisplayModesJSON() { return this.data.displayModesJSON; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -213,6 +215,7 @@ TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        GetDeviceName: {outSignature: 's'},
         GetDisplayModesJSON: {outSignature: 's'},
         GetIsX11: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },

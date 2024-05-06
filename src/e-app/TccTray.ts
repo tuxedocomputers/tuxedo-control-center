@@ -19,7 +19,6 @@
 
 import { Menu, Tray } from "electron";
 import { TccProfile } from "../common/models/TccProfile";
-import { DMIController } from '../common/classes/DMIController';
 
 export class TccTray {
 
@@ -28,7 +27,8 @@ export class TccTray {
     public state = new TrayState();
     public events = new TrayEvents();
 
-    constructor(public trayIcon) {}
+    constructor(public trayIcon) {
+    }
 
     public isActive() {
         return this.tray !== undefined && !this.tray.isDestroyed();
@@ -62,33 +62,9 @@ export class TccTray {
             { type: 'separator' }
         );
 
-        // TODO: Manual read until general device id get merged
-        const dmi = new DMIController('/sys/class/dmi/id');
-        const deviceName = dmi.productSKU.readValueNT();
-        const boardVendor = dmi.boardVendor.readValueNT();
-        const chassisVendor = dmi.chassisVendor.readValueNT();
-        const sysVendor = dmi.sysVendor.readValueNT();
-        let showAquarisMenu;
-        const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
-                         (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
-                         (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
-
-        if (isTuxedo) {
-            if (deviceName !== undefined &&
-                (deviceName === 'STELLARIS1XI04' ||
-                 deviceName === 'STEPOL1XA04' ||
-                 deviceName === 'STELLARIS1XI05')) {
-                showAquarisMenu = true;
-            } else {
-                showAquarisMenu = false;
-            }
-        } else {
-            showAquarisMenu = true;
-        }
-
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
-            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: showAquarisMenu },
+            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: this.state.hasAquaris },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
@@ -157,6 +133,7 @@ export class TrayState {
     powersaveBlockerActive: boolean
     fnLockSupported: boolean;
     fnLockStatus: boolean;
+    hasAquaris: boolean;
 };
 
 export class TrayEvents {
