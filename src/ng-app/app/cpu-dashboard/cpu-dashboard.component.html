@@ -68,7 +68,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="tcc-gauge">
-                        <mwl-gauge [max]="cpuInfo.maxFreq" [min]="0" [value]="avgCpuFreq" [showValue]="false"
+                        <mwl-gauge [max]="100" [min]="0" [value]="gaugeCpuFreq" [showValue]="false"
                             [label]="gaugeCpuFreqFormat" [dialStartAngle]="130" [dialEndAngle]="50"
                             [animated]="animatedGauges" [animationDuration]="animatedGaugesDuration">
                         </mwl-gauge>

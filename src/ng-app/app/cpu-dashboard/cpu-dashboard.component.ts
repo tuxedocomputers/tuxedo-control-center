@@ -26,7 +26,7 @@ import { SysFsService } from "../sys-fs.service";
 import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { IDBusFanData, TimeData } from "src/common/models/IFanData"
+import { IDBusFanData, TimeData } from "src/common/models/IFanData";
 import { ITccProfile } from "src/common/models/TccProfile";
 import { StateService } from "../state.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -55,12 +55,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public activeScalingGovernors: string[];
     public activeEnergyPerformancePreference: string[];
 
-    public avgCpuFreq: number;
-
     public cpuModelName = "";
     public fanData: IDBusFanData;
 
     // CPU
+    public avgCpuFreq: number = -1;
+    public gaugeCpuFreq: number = 0;
     public gaugeCPUPower: number = 0;
     public cpuPower: number = 0;
     public cpuPowerLimit: number = undefined;
@@ -129,7 +129,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
         // not instantly showing window to give enough time to load window
         setTimeout(async () => {
-            window.ipc.send("show-tcc-window",'');
+            window.ipc.send("show-tcc-window", "");
         }, 200);
     }
 
@@ -294,7 +294,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.iGpuFreq = coreFrequency;
         this.cpuVendor = await window.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
-
     }
 
     // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values
@@ -318,28 +317,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private subscribeToFanData(): void {
         this.subscriptions.add(
             this.tccdbus.fanData.subscribe((fanData: IDBusFanData) => {
-                if (!fanData)
-                {
-                    this.fanData = {
-                        cpu:
-                        {
-                            speed: new TimeData(Date.now(), -1),
-                            temp: new TimeData(Date.now(), -1),
-                        },
-                        gpu1:
-                        {
-                            speed: new TimeData(Date.now(), -1),
-                            temp: new TimeData(Date.now(), -1)
-                        },
-                        gpu2:
-                        {
-                            speed: new TimeData(Date.now(), -1),
-                            temp: new TimeData(Date.now(), -1)
-                        }
-                    }
-                    return;
-                }
-                
                 this.fanData = fanData;
                 const { gpu1, gpu2 } = fanData;
                 const gpu1Temp = gpu1?.temp?.data;
@@ -393,10 +370,20 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private updateFrequencyData(): void {
-        const freqSum = this.cpuCoreInfo
-            .map((core) => core.scalingCurFreq ?? 0)
-            .reduce((sum, freq) => sum + freq, 0);
-        this.avgCpuFreq = freqSum / this.cpuCoreInfo.length;
+        const freqSum =
+            this.cpuCoreInfo
+                ?.map((core) => core.scalingCurFreq ?? 0)
+                ?.reduce((sum, freq) => sum + freq, 0) ?? 0;
+        const cpuCores = this.cpuCoreInfo?.length ?? -1;
+
+        if (freqSum > 0 && cpuCores > 0) {
+            this.avgCpuFreq = freqSum / cpuCores;
+        }
+
+        const maxCpuFreq = this.cpuInfo?.maxFreq ?? -1;
+        if (maxCpuFreq > 0) {
+            this.gaugeCpuFreq = (this.avgCpuFreq / maxCpuFreq) * 100;
+        }
     }
 
     public formatValue = (
@@ -476,8 +463,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         () =>
             this.powerState == "D3cold" ||
             (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
-        (val) =>
-            this.powerState == "D3cold" ? "0" : this.roundWattage(val)
+        (val) => (this.powerState == "D3cold" ? "0" : this.roundWattage(val))
     );
 
     public iGpuPowerFormat = this.createFormatter(
@@ -490,8 +476,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             val = this.utils.getFahrenheitFromCelsius(val);
         }
         return Math.round(val);
-     }
-     
+    }
+
     public getUsingFahrenheit(): boolean {
         return this.usingFahrenheit;
     }
@@ -503,17 +489,16 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             });
         }
     };
-    
+
     // Make numbers smaller than 1W not show 0, but <1W
     private roundWattage(val: number): string {
         let num = Math.round(val);
         let ret = "";
         if (num < 1) {
             ret = "<1";
-        }
-        else {
+        } else {
             ret = num.toString();
-         }
+        }
         return ret;
     }
 
