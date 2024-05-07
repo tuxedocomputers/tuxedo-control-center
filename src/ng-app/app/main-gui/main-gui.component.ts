@@ -18,9 +18,8 @@
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ITccProfile } from '../../../common/models/TccProfile';
-import { ITccSettings } from '../../../common/models/TccSettings';
+import { ProfileStates } from '../../../common/models/TccSettings';
 import { CompatibilityService } from '../compatibility.service';
-import { ConfigService } from '../config.service';
 import { IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
 import { ActivatedRoute } from '@angular/router';
@@ -41,7 +40,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public dataLoaded: boolean;
 
     constructor(
-        private config: ConfigService,
         private state: StateService,
         private utils: UtilsService,
         public compat: CompatibilityService,
@@ -56,8 +54,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
 
         this.updateLanguageName();
-        this.getSettings();
-        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
+        this.state.initializeProfileNames()
+
         if (!this.dataLoaded) {
             // We need a blocking dialog box here or everything goes to hell.
             var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`);
@@ -75,14 +73,6 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public buttonMinimize(): void {
         this.utils.minimizeWindow();
-    }
-
-    // TODO this function is called many times a minute, needs to be lightweight!
-    public getSettings(): ITccSettings {
-        if (this.state.getActiveProfile()) {
-            this.activeProfileName = this.state.getActiveProfile().name;
-        }
-        return this.config.getSettings();
     }
 
     public changeLanguage(languageId: string) {
@@ -121,31 +111,23 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         return this.state.getActiveProfile();
     }
     
-    // TODO this function is called many times a minute, needs to be lightweight!
-    // furthermore it's values only change like after saving in profiles-detals-edit??
-    public getStateProfileName(state: IStateInfo) {
-        if (!this.getSettings()) {
-            return undefined
+    public getStateProfileName(state: IStateInfo): string {
+        if (state.value === ProfileStates.AC) {
+            return this.state.getCurrentChargingProfileName()
         }
-
-        const stateProfileId = this.getSettings().stateMap[state.value];
-        const defaultProfileName = this.utils.getDefaultProfileName(stateProfileId);
-        if (defaultProfileName !== undefined) {
-            return defaultProfileName;
-        } else {
-            const profile = this.config.getProfileById(stateProfileId);
-            if (profile !== undefined) {
-                return profile.name;
-            } else {
-                return undefined;
-            }
+        
+        if (state.value === ProfileStates.BAT) {
+            return this.state.getCurrentBatteryProfileName()
         }
     }
 
-    public getProfileLink(state: any) {
-        if (!this.getSettings()) {
-            return 'profile-manager/'
+    public getProfileLink(state: IStateInfo): string {
+        if (state.value === ProfileStates.AC) {
+            return 'profile-manager/' + this.state.getCurrentChargingProfileId()
         }
-        return 'profile-manager/' + this.getSettings()?.stateMap[state.value]
+        
+        if (state.value === ProfileStates.BAT) {
+            return 'profile-manager/' + this.state.getCurrentBatteryProfileId()
+        }
     }
 }

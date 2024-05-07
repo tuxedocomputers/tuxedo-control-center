@@ -22,6 +22,7 @@ import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ConfigService } from './config.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
+import { UtilsService } from './utils.service';
 
 
 export interface IStateInfo {
@@ -47,7 +48,17 @@ export class StateService implements OnDestroy {
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
 
-  constructor(private config: ConfigService, private tccdbus: TccDBusClientService) {
+  private batteryProfileName: string = "";
+  private chargingProfileName: string = "";
+  private batteryProfileId: string = "";
+  private chargingProfileId: string = "";
+
+  constructor(
+    private config: ConfigService,
+    private tccdbus: TccDBusClientService,
+    private utils: UtilsService,
+    private dbus: TccDBusClientService
+  ) {
     this.activeProfile = tccdbus.activeProfile;
 
     this.stateSubject = new Subject<ProfileStates>();
@@ -90,6 +101,48 @@ export class StateService implements OnDestroy {
     return Object.entries(this.currentSettings.stateMap)
             .filter(entry => entry[1] === profileId)
             .map(entry => entry[0]);
+  }
+
+  private getProfileName(profileId: string): string {
+    const defaultProfileName = this.utils.getDefaultProfileName(profileId);
+    if (defaultProfileName !== undefined) {
+        return defaultProfileName;
+    } else {
+        const profile = this.config.getProfileById(profileId);
+        if (profile !== undefined) {
+            return profile.name;
+        } else {
+            return undefined;
+        }
+    }
+  }
+
+  async initializeProfileNames(): Promise<void> {
+    await this.dbus.triggerUpdate();
+
+    const settings = this.config.getSettings()
+
+    this.chargingProfileId = settings.stateMap[ProfileStates.AC];
+    this.batteryProfileId = settings.stateMap[ProfileStates.BAT];
+
+    this.chargingProfileName = this.getProfileName(this.chargingProfileId)
+    this.batteryProfileName = this.getProfileName(this.batteryProfileId)
+  }
+
+  public getCurrentChargingProfileName(): string {
+    return this.chargingProfileName
+  }
+
+  public getCurrentBatteryProfileName(): string {
+    return this.batteryProfileName
+  }
+
+  public getCurrentChargingProfileId(): string {
+    return this.chargingProfileId
+  }
+
+  public getCurrentBatteryProfileId(): string {
+    return this.batteryProfileId
   }
 
   ngOnDestroy() {

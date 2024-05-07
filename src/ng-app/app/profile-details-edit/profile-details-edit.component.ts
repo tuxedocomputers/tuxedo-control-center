@@ -341,6 +341,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     this.profileFormGroup.markAsPristine();
                     this.selectStateControl.markAsPristine();
                     this.profile = formProfileData;
+                    this.state.initializeProfileNames()
                 }
                 this.profileFormProgress = false;
                 this.utils.pageDisabled = false;
