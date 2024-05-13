@@ -23,11 +23,11 @@ import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
 import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ICpuPower } from 'src/common/models/TccPowerSettings';
-import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
+import { ICpuPower } from '../../common/models/TccPowerSettings';
+import { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
-import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
-import { IDbusClientAPI } from 'src/e-app/preloadAPIs/DbusClientAPI';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
 
 @Injectable({
   providedIn: 'root'

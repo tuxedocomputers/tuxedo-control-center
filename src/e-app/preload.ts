@@ -200,6 +200,13 @@ contextBridge.exposeInMainWorld(
     }
 );
 
+// contextBridge.exposeInMainWorld(
+//     'tomteGUI',
+//     {
+        
+//     }
+// );
+
 contextBridge.exposeInMainWorld(
     'stuff',
     {

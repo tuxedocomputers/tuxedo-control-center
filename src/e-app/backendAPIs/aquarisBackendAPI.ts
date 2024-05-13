@@ -25,14 +25,7 @@
 
 import { AquarisState, AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from '../LCT21001';
-import { UserConfig } from '../UserConfig';
-import * as path from 'path';
-import * as os from 'os';
-
-const tccConfigDir = path.join(os.homedir(), '.tcc');
-const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
-const userConfig = new UserConfig(tccStandardConfigFile);
-
+import { userConfig } from './initMain';
 
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false) {
     if (!aquarisIoProgress) {

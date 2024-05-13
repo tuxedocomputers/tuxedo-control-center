@@ -20,8 +20,6 @@ import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { translate } from '@angular/localize/src/utils';
-import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 
 interface ITomteModule {
     moduleName: string,
@@ -260,8 +258,8 @@ export class TomteGuiComponent implements OnInit {
     */
     private async confirmChangesDialogue()
     {
-        const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
-        if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
+        const tomteGuiNoticeDisable = localStorage.getItem('tomteGuiNoticeDisable');
+        if (tomteGuiNoticeDisable === null || tomteGuiNoticeDisable === 'false') {
             const askToClose = await this.utils.confirmDialog({
                 title: $localize `:@@tomteBreakingChangesTitle:Are you sure you want to issue this command?`,
                 description: $localize `:@@tomteBreakingChangesWarning:Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!`,
@@ -274,7 +272,7 @@ export class TomteGuiComponent implements OnInit {
             });
             if (askToClose.noBother)
             {
-                localStorage.setItem('connectNoticeDisable', 'true');
+                localStorage.setItem('tomteGuiNoticeDisable', 'true');
             }
             if (!askToClose.confirm)
             {

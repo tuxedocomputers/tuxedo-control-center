@@ -2,11 +2,11 @@ import { IAquarisClientAPI } from "../../e-app/preloadAPIs/AquarisClientAPI";
 import { EventEmitter } from 'node:events';
 import { IDrive } from "../../common/models/IDrive"; 
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
-import { ITccProfile } from "src/common/models/TccProfile";
-import { WebcamPreset } from "src/common/models/TccWebcamSettings";
-import { ITccSettings } from "src/common/models/TccSettings";
-import { ITccFanProfile } from "src/common/models/TccFanTable";
-import { IDbusClientAPI } from "src/e-app/preloadAPIs/DbusClientAPI";
+import { ITccProfile } from "../../common/models/TccProfile";
+import { WebcamPreset } from "../../common/models/TccWebcamSettings";
+import { ITccSettings } from "../../common/models/TccSettings";
+import { ITccFanProfile } from "../../common/models/TccFanTable";
+import { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
 
 export interface IPC extends EventEmitter {
     send: (channel: string, args) => Promise<IPCReturnValue>,
