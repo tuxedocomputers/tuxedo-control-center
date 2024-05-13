@@ -2,6 +2,7 @@ import { ITccProfile } from "src/common/models/TccProfile";
 import { ITccSettings } from "src/common/models/TccSettings";
 import { WebcamPreset } from "src/common/models/TccWebcamSettings";
 import { AquarisClientAPI } from "./preloadAPIs/AquarisClientAPI";
+import { DbusClientAPI } from "./preloadAPIs/DbusClientAPI";
 const { contextBridge, ipcRenderer } = require('electron');
 
 let callbacks = [];
@@ -57,7 +58,11 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
+
+    displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
+    setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
   }
+  
 );
 
 contextBridge.exposeInMainWorld(
@@ -69,62 +74,6 @@ contextBridge.exposeInMainWorld(
         getAmdDGpuCount: () => ipcRenderer.sendSync('get-amd-dgpu-count-power'),
         isDGpuAvailable: () => ipcRenderer.sendSync('get-is-dgpu-available-power'),
         isIGpuAvailable: () => ipcRenderer.sendSync('get-is-igpu-available-power'),
-    }
-);
-
-contextBridge.exposeInMainWorld(
-    'dbus',
-    {
-        tuxedoWmiAvailable: () => ipcRenderer.invoke('tuxedo-wmi-available-dbus'),
-        tccdVersion: () => ipcRenderer.invoke('tccd-version-dbus'),
-        getFanData: () => ipcRenderer.invoke('get-fan-data-dbus'),
-        webcamSWAvailable: () => ipcRenderer.invoke('webcam-sw-available-dbus'),
-        getWebcamSWStatus: () => ipcRenderer.invoke('get-webcam-sw-status-dbus'),
-        getForceYUV420OutputSwitchAvailable: () => ipcRenderer.invoke('get-force-yub420-output-switch-available-dbus'),
-        consumeModeReapplyPending: () => ipcRenderer.invoke('consume-mode-reapply-pending-dbus'),
-        getActiveProfileJSON: () => ipcRenderer.invoke('get-active-profile-json-dbus'),
-        setTempProfileByName: (profileName) => ipcRenderer.invoke('set-temp-profile-dbus',profileName),
-        setTempProfileById: (profileId) => ipcRenderer.invoke('set-temp-profile-by-id-dbus',profileId),
-        getProfilesJSON: () => ipcRenderer.invoke('get-profiles-json-dbus'),
-        getCustomProfilesJSON: () => ipcRenderer.invoke('get-custom-profiles-json-dbus'),
-        getDefaultProfilesJSON: () => ipcRenderer.invoke('get-default-profiles-json-dbus'),
-        getDefaultValuesProfileJSON: () => ipcRenderer.invoke('get-default-values-profile-json-dbus'),
-        getSettingsJSON: () => ipcRenderer.invoke('get-json-settings-dbus'),
-        odmProfilesAvailable: () => ipcRenderer.invoke('odm-profiles-available-dbus'),
-        odmPowerLimitsJSON: () => ipcRenderer.invoke('odm-power-limits-json-dbus'),
-        getKeyboardBacklightCapabilitiesJSON: () => ipcRenderer.invoke('get-keyboard-backlight-capabilities-json-dbus'),
-        getKeyboardBacklightStatesJSON: () => ipcRenderer.invoke('get-keyboard-backlight-states-json-dbus'),
-        setKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON) => ipcRenderer.invoke('set-keyboard-backlight-states-json-dbus', keyboardBacklightStatesJSON),
-        getFansMinSpeed: () => ipcRenderer.invoke('get-fans-min-speed-dbus'),
-        getFansOffAvailable: () => ipcRenderer.invoke('get-fans-off-available-dbus'),
-        getChargingProfilesAvailable: () => ipcRenderer.invoke('get-charging-profiles-available-dbus'),
-        getCurrentChargingProfile: () => ipcRenderer.invoke('get-current-charging-profile-dbus'),
-        setChargingProfile: (profileDescriptor) => ipcRenderer.invoke('set-charging-profile-dbus', profileDescriptor),
-        getChargingPrioritiesAvailable: () => ipcRenderer.invoke('get-charging-priorities-available-dbus'),
-        getCurrentChargingPriority: () => ipcRenderer.invoke('get-current-charging-priority-dbus'),
-        setChargingPriority: (priorityDescriptor) => ipcRenderer.invoke('set-charging-priority-dbus', priorityDescriptor),   
-        displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
-        setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
-        getDGpuInfoValuesJSON: () => ipcRenderer.invoke('get-dgpu-info-values-json-dbus'),
-        getIGpuInfoValuesJSON: () => ipcRenderer.invoke('get-igpu-info-values-json-dbus'),
-        getSensorDataCollectionStatus: () => ipcRenderer.invoke('get-sensor-data-collection-status-dbus'),
-        getPrimeState: () => ipcRenderer.invoke('get-prime-state-dbus'),
-        getCpuPowerValuesJSON: () => ipcRenderer.invoke('get-cpu-power-values-json-dbus'),
-        getDisplayModesJSON: () => ipcRenderer.invoke('get-display-modes-json-dbus'),
-        setSensorDataCollectionStatus: (status) => ipcRenderer.invoke('set-sensor-data-collection-status-dbus', status),
-        setDGpuD0Metrics: (status) => ipcRenderer.invoke('set-dgpu-do-metrics-dbus', status),
-        dbusAvailable: () => ipcRenderer.invoke('is-available-dbus'),
-        getChargeStartAvailableThresholds: () => ipcRenderer.invoke('get-charge-start-available-thresholds-dbus'),
-        getChargeEndAvailableThresholds: () => ipcRenderer.invoke('get-charge-end-available-thresholds-dbus'),
-        getChargeStartThreshold: () => ipcRenderer.invoke('get-charge-start-threshold-dbus'),
-        getChargeEndThreshold: () => ipcRenderer.invoke('get-charge-end-threshold-dbus'),
-        getChargeType: () => ipcRenderer.invoke('get-charge-type-dbus'),
-        setChargeStartThreshold: (newValue) => ipcRenderer.invoke('set-charge-start-threshold-dbus', newValue),
-        setChargeEndThreshold: (newValue) => ipcRenderer.invoke('set-charge-end-threshold-dbus', newValue),
-        setChargeType: (chargeType) => ipcRenderer.invoke('set-charge-type-dbus', chargeType),
-        fanHwmonAvailable: () => ipcRenderer.invoke('get-fan-hwmon-available-dbus'),
-        getIsX11: () => ipcRenderer.invoke('get-is-x11-dbus'),
-        getDeviceJSON: () => ipcRenderer.invoke('get-device-json-dbus')
     }
 );
 
@@ -261,3 +210,4 @@ contextBridge.exposeInMainWorld(
 
 // TODO rewrite all apis to work like the aquarisapi :)
 contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);
+contextBridge.exposeInMainWorld('dbusAPI', DbusClientAPI);

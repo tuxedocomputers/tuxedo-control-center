@@ -26,8 +26,8 @@ import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ICpuPower } from 'src/common/models/TccPowerSettings';
 import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
-import { DBUS } from './renderer';
 import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
+import { IDbusClientAPI } from 'src/e-app/preloadAPIs/DbusClientAPI';
 
 @Injectable({
   providedIn: 'root'
@@ -83,10 +83,9 @@ export class TccDBusClientService implements OnDestroy {
   public isX11 = new BehaviorSubject<boolean>(undefined);
   public device: TUXEDODevice = 0;
   public hasAquaris: boolean = true;
-  private tccDBusInterface: DBUS;
+  private tccDBusInterface = window.dbusAPI;
 
   constructor(private utils: UtilsService) {
-    this.tccDBusInterface = window.dbus;
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
   }
@@ -95,12 +94,12 @@ export class TccDBusClientService implements OnDestroy {
 
   displayBrightnessNotSupportedGnome()
   {
-    return this.tccDBusInterface.displayBrightnessNotSupportedGnome()
+    return window.ipc.displayBrightnessNotSupportedGnome()
   }
 
   async setDisplayBrightnessGnome(valuePercent: number): Promise<void>
   {
-     return this.tccDBusInterface.setDisplayBrightnessGnome(valuePercent)
+     return window.ipc.setDisplayBrightnessGnome(valuePercent)
   }
 
   private async periodicUpdate() {
@@ -280,10 +279,6 @@ export class TccDBusClientService implements OnDestroy {
       clearInterval(this.timeout);
     }
   }
-  public async setTempProfile(profileName: string) {
-    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileByName(profileName);
-    return result;
-  }
 
   public async setTempProfileById(profileId: string) {
     const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
@@ -298,7 +293,7 @@ export class TccDBusClientService implements OnDestroy {
     await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuD0Metrics(status)
   }
 
-  public getInterface(): DBUS | undefined {
+  public getInterface(): IDbusClientAPI | undefined {
     if (this.isAvailable) {
         return this.tccDBusInterface;
     } else {

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,11 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+/* 
+########################################################
+############## DBUS Backend #########################
+########################################################
+*/
+
+import  { DbusAPIFunctions } from '../../common/models/IDbusAPI'
 import * as dbus from 'dbus-next';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ChargeType } from './PowerSupplyController';
+import { ChargeType } from '../../common/classes/PowerSupplyController';
 
-export class TccDBusController {
+class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
     private path = '/com/tuxedocomputers/tccd';
     private interfaceName = 'com.tuxedocomputers.tccd';
@@ -176,14 +184,6 @@ export class TccDBusController {
             return await this.interface.GetActiveProfileJSON();
         } catch (err) {
             return undefined;
-        }
-    }
-
-    async setTempProfileName(profileName: string): Promise<boolean> {
-        try {
-            return await this.interface.SetTempProfile(profileName);
-        } catch (err) {
-            return false;
         }
     }
 
@@ -467,3 +467,295 @@ export class TccDBusController {
         this.bus.disconnect();
     }
 }
+
+// TODO how do we solve this problem?
+// because now main.ts and this file here use sepparate dbuscontrollers
+// maybe export the variable? does that work? it's a single process anyway??
+export const tccDBus = new TccDBusController();
+tccDBus.init();
+
+export const dbusHandlers = new Map<string, (...args: any[]) => any>()
+    .set(DbusAPIFunctions.getVersion, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.tccdVersion());
+        });
+    })
+
+    .set(DbusAPIFunctions.tuxedoWmiAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.tuxedoWmiAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getFanData, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getFanDataJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.webcamSWAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.webcamSWAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getForceYUV420OutputSwitchAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getForceYUV420OutputSwitchAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.consumeModeReapplyPending, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.consumeModeReapplyPending());
+        });
+    })
+
+    .set(DbusAPIFunctions.getActiveProfileJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getActiveProfileJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.setTempProfileById, async (profileId) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setTempProfileById(profileId));
+        });
+    })
+
+    .set(DbusAPIFunctions.getProfilesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getProfilesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getCustomProfilesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getCustomProfilesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getDefaultProfilesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getDefaultProfilesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getDefaultValuesProfileJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getDefaultValuesProfileJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getSettingsJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getSettingsJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.odmProfilesAvailable, async () => { 
+        return new Promise<string[]>((resolve, reject) => {
+            resolve(tccDBus.odmProfilesAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.odmPowerLimitsJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.odmPowerLimitsJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getKeyboardBacklightStatesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getKeyboardBacklightStatesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.setKeyboardBacklightStatesJSON, async (keyboardBacklightStatesJSON) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
+        });
+    })
+
+    .set(DbusAPIFunctions.getFansMinSpeed, async () => { 
+        return new Promise<number>((resolve, reject) => {
+            resolve(tccDBus.getFansMinSpeed());
+        });
+    })
+
+    .set(DbusAPIFunctions.getFansOffAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getFansOffAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargingProfilesAvailable, async () => { 
+        return new Promise<string[]>((resolve, reject) => {
+            resolve(tccDBus.getChargingProfilesAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getCurrentChargingProfile, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getCurrentChargingProfile());
+        });
+    })
+
+    .set(DbusAPIFunctions.setChargingProfile, async (profileDescriptor) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setChargingProfile(profileDescriptor));
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargingPrioritiesAvailable, async () => { 
+        return new Promise<string[]>((resolve, reject) => {
+            resolve(tccDBus.getChargingPrioritiesAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getCurrentChargingPriority, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getCurrentChargingPriority());
+        });
+    })
+
+    .set(DbusAPIFunctions.setChargingPriority, async (priorityDescriptor) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setChargingPriority(priorityDescriptor));
+        });
+    })
+
+    .set(DbusAPIFunctions.getDGpuInfoValuesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getDGpuInfoValuesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getIGpuInfoValuesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getIGpuInfoValuesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getSensorDataCollectionStatus, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getSensorDataCollectionStatus());
+        });
+    })
+
+    .set(DbusAPIFunctions.getPrimeState, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getPrimeState());
+        });
+    })
+
+    .set(DbusAPIFunctions.getCpuPowerValuesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getCpuPowerValuesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getDisplayModesJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getDisplayModesJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getIsX11, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getIsX11());
+        });
+    })
+
+    .set(DbusAPIFunctions.setSensorDataCollectionStatus, async (status) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setSensorDataCollectionStatus(status));
+        });
+    })
+
+    .set(DbusAPIFunctions.setDGpuD0Metrics, async (status) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setDGpuD0Metrics(status));
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargeStartAvailableThresholds, async () => { 
+        return new Promise<number[]>((resolve, reject) => {
+            resolve(tccDBus.getChargeStartAvailableThresholds());
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargeEndAvailableThresholds, async () => { 
+        return new Promise<number[]>((resolve, reject) => {
+            resolve(tccDBus.getChargeEndAvailableThresholds());
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargeStartThreshold, async () => { 
+        return new Promise<number>((resolve, reject) => {
+            resolve(tccDBus.getChargeStartThreshold());
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargeEndThreshold, async () => { 
+        return new Promise<number>((resolve, reject) => {
+            resolve(tccDBus.getChargeEndThreshold());
+        });
+    })
+
+    .set(DbusAPIFunctions.getChargeType, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getChargeType());
+        });
+    })
+
+    .set(DbusAPIFunctions.setChargeStartThreshold, async (newValue) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setChargeStartThreshold(newValue));
+        });
+    })
+
+    .set(DbusAPIFunctions.setChargeEndThreshold, async (newValue) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setChargeEndThreshold(newValue));
+        });
+    })
+
+
+    .set(DbusAPIFunctions.setChargeType, async (chargeType) => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.setChargeType(chargeType));
+        });
+    })
+
+
+    .set(DbusAPIFunctions.dbusAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.dbusAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.fanHwmonAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.fanHwmonAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getWebcamSWStatus, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getWebcamSWStatus());
+        });
+    })
+
+    .set(DbusAPIFunctions.getDeviceJSON, async () => { 
+        return new Promise<string>((resolve, reject) => {
+            resolve(tccDBus.getDeviceJSON());
+        });
+    });
+

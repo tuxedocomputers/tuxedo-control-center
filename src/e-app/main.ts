@@ -22,11 +22,13 @@ import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as https from 'https';
-import { TccDBusController } from '../common/classes/TccDBusController';
 import { ITccProfile, TccProfile } from '../common/models/TccProfile';
 import { TccTray } from './TccTray';
 import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle,} from '../common/models/IAquarisAPI';
+import { dbusAPIHandle } from '../common/models/IDbusAPI';
+import { aquarisCleanUp, aquarisHandlers } from './backendAPIs/aquarisBackendAPI';
+import { tccDBus, dbusHandlers } from './backendAPIs/dbusBackendAPI';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 import { Observable, Subject } from 'rxjs';
@@ -42,7 +44,6 @@ import { ScalingDriver } from '../common/classes/LogicalCpuController';
 import { DisplayBacklightController } from '../common/classes/DisplayBacklightController';
 import { ITccSettings } from '../common/models/TccSettings';
 import { VendorService } from '../common/classes/Vendor.service'
-import { aquarisCleanUp, aquarisHandlers } from './backendAPIs/aquarisBackendAPI';
 import { amdDGpuDeviceIdString } from "../common/classes/DeviceIDs";
 import { TUXEDODevice } from '../common/models/DefaultProfiles';
 import { AvailabilityService } from "../common/classes/availability.service";
@@ -50,6 +51,7 @@ import { AvailabilityService } from "../common/classes/availability.service";
 // import { DMIController } from '../common/classes/DMIController';
 
 require("./backendAPIs/aquarisBackendAPI");
+require("./backendAPIs/dbusBackendAPI");
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -76,7 +78,6 @@ let aquarisWindow: Electron.BrowserWindow;
 let webcamWindow: Electron.BrowserWindow;
 let primeWindow: Electron.BrowserWindow;
 const tray: TccTray = new TccTray(path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'));
-let tccDBus: TccDBusController;
 
 const watchOption = process.argv.includes('--watch');
 const trayOnlyOption = process.argv.includes('--tray');
@@ -109,7 +110,10 @@ if (!userConfigDirExists()) {
 // ############### Initilization ##################
 globalThis.setImmediate = ((fn, ...args) => global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
 
+// register AquarisAPI
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
+// register DbusAPI
+registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);
 
 app.whenReady().then( async () => {
     try {
@@ -134,7 +138,6 @@ app.whenReady().then( async () => {
         if (!success) { console.log('Failed to register global shortcut'); }
     }
 
-    tccDBus = new TccDBusController();
     startDbusAndInit();
 });
 
@@ -153,14 +156,14 @@ async function startDbusAndInit() {
 async function initTray() {
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
-    tray.state.fnLockSupported = await fnLockSupported(tccDBus);
+    tray.state.fnLockSupported = await fnLockSupported();
     tray.state.hasAquaris = await hasAquaris();
     if (tray.state.fnLockSupported) {
-        tray.state.fnLockStatus = await fnLockStatus(tccDBus);
+        tray.state.fnLockStatus = await fnLockStatus();
     }
     [tray.state.isPrimeSupported, tray.state.primeQuery] = await checkPrimeAvailabilityStatus();
 
-    await updateTrayProfiles(tccDBus);
+    await updateTrayProfiles();
     tray.events.startTCCClick = () => activateTccGui();
     tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
     tray.events.exitClick = () => quitCurrentTccSession();
@@ -191,7 +194,7 @@ async function initTray() {
         const langId = await userConfig.get("langId");
         createPrimeWindow(langId, "iGPU");
     };
-    tray.events.profileClick = (profileId: string) => { setTempProfileById(tccDBus, profileId); };
+    tray.events.profileClick = (profileId: string) => { setTempProfileById(profileId); };
     tray.create();
 
     tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
@@ -249,7 +252,7 @@ async function initMain() {
     });
 
     const profilesCheckInterval = 4000;
-    setInterval(async () => { updateTrayProfiles(tccDBus); }, profilesCheckInterval);
+    setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
 }
 
 /* 
@@ -288,9 +291,10 @@ app.on('will-quit', async (event) => {
         globalShortcut.unregisterAll();
         displayBrightnessGnome.cleanUp();
         await aquarisCleanUp();
-        unregisterAPI(ipcMain, aquarisAPIHandle)
+        unregisterAPI(ipcMain, aquarisAPIHandle);
         if (tccDBus !== undefined) {
             tccDBus.disconnect();
+            unregisterAPI(ipcMain, dbusAPIHandle)
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
         app.exit(0);
@@ -351,11 +355,11 @@ function quitCurrentTccSession() {
 ########################################################
 */
 
-async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
+async function getProfiles(): Promise<TccProfile[]> {
     let result = [];
-    if (!await dbus.dbusAvailable()) return [];
+    if (!await tccDBus.dbusAvailable()) return [];
     try {
-        const profiles: TccProfile[] = JSON.parse(await dbus.getProfilesJSON());
+        const profiles: TccProfile[] = JSON.parse(await tccDBus.getProfilesJSON());
         result = profiles;
     } catch (err) {
         console.log('Error: ' + err);
@@ -363,21 +367,16 @@ async function getProfiles(dbus: TccDBusController): Promise<TccProfile[]> {
     return result;
 }
 
-async function setTempProfile(dbus: TccDBusController, profileName: string) {
-    const result = await dbus.dbusAvailable() && await dbus.setTempProfileName(profileName);
+async function setTempProfileById(profileId: string) {
+    const result = await tccDBus.dbusAvailable() && await tccDBus.setTempProfileById(profileId);
     return result;
 }
 
-async function setTempProfileById(dbus: TccDBusController, profileId: string) {
-    const result = await dbus.dbusAvailable() && await dbus.setTempProfileById(profileId);
-    return result;
-}
-
-async function getActiveProfile(dbus: TccDBusController): Promise<TccProfile> {
+async function getActiveProfile(): Promise<TccProfile> {
     let result = undefined;
-    if (!await dbus.dbusAvailable()) return undefined;
+    if (!await tccDBus.dbusAvailable()) return undefined;
     try {
-        result = JSON.parse(await dbus.getActiveProfileJSON());
+        result = JSON.parse(await tccDBus.getActiveProfileJSON());
     } catch {
     }
     return result; 
@@ -555,7 +554,8 @@ async function createWebcamPreview(langId: string, arg: any) {
 // var oldOn = ipcMain.on;
 // ipcMain.on = function (channel, event, ...data)
 // {
-//     if(channel === "log-stuff")
+//     console.log(channel);
+//     console.log(event);
 //     console.log(data);
 //     return oldOn.apply(ipcMain, arguments)
 // }
@@ -1254,308 +1254,6 @@ ipcMain.on('trigger-language-change', (event, arg) => {
     changeLanguage(langId);
 });
 
-/*
-###############   Dbus Communication API ####################
-*/
-
-ipcMain.handle('tuxedo-wmi-available-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.tuxedoWmiAvailable());
-    });
-});
-
-ipcMain.handle('tccd-version-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.tccdVersion());
-    });
-});
-
-
-ipcMain.handle('get-fan-data-dbus', async (event) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getFanDataJSON());
-    });
-});
-
-ipcMain.handle('webcam-sw-available-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.webcamSWAvailable());
-    });
-});
-
-ipcMain.handle('get-webcam-sw-status-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.getWebcamSWStatus());
-    });
-});
-
-ipcMain.handle('get-force-yub420-output-switch-available-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.getForceYUV420OutputSwitchAvailable());
-    });
-});
-
-ipcMain.handle('consume-mode-reapply-pending-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.consumeModeReapplyPending());
-    });
-});
-
-ipcMain.handle('get-active-profile-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getActiveProfileJSON());
-    });
-});
-
-ipcMain.handle('set-temp-profile-dbus', async (event, profileName) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setTempProfileName(profileName));
-    });
-});
-
-ipcMain.handle('set-temp-profile-by-id-dbus', async (event, profileId) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setTempProfileById(profileId));
-    });
-});
-
-ipcMain.handle('get-profiles-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getProfilesJSON());
-    });
-});
-
-ipcMain.handle('get-custom-profiles-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getCustomProfilesJSON());
-    });
-});
-
-ipcMain.handle('get-default-profiles-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getDefaultProfilesJSON());
-    });
-});
-
-ipcMain.handle('get-default-values-profile-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getDefaultValuesProfileJSON());
-    });
-});
-
-ipcMain.handle('get-json-settings-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getSettingsJSON());
-    });
-});
-
-ipcMain.handle('odm-profiles-available-dbus', async (event, arg) => {
-    return new Promise<string[]>((resolve, reject) => {
-        resolve(tccDBus.odmProfilesAvailable());
-    });
-});
-
-ipcMain.handle('odm-power-limits-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.odmPowerLimitsJSON());
-    });
-});
-
-ipcMain.handle('get-keyboard-backlight-capabilities-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
-    });
-});
-
-ipcMain.handle('get-keyboard-backlight-states-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getKeyboardBacklightStatesJSON());
-    });
-});
-
-ipcMain.handle('set-keyboard-backlight-states-json-dbus', async (event, keyboardBacklightStatesJSON) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
-    });
-});
-
-ipcMain.handle('get-fans-min-speed-dbus', async (event, arg) => {
-    return new Promise<number>((resolve, reject) => {
-        resolve(tccDBus.getFansMinSpeed());
-    });
-});
-
-ipcMain.handle('get-fans-off-available-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.getFansOffAvailable());
-    });
-});
-
-ipcMain.handle('get-charging-profiles-available-dbus', async (event, arg) => {
-    return new Promise<string[]>((resolve, reject) => {
-        resolve(tccDBus.getChargingProfilesAvailable());
-    });
-});
-
-ipcMain.handle('get-current-charging-profile-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getCurrentChargingProfile());
-    });
-});
-
-ipcMain.handle('set-charging-profile-dbus', async (event, profileDescriptor) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setChargingProfile(profileDescriptor));
-    });
-});
-
-ipcMain.handle('get-charging-priorities-available-dbus', async (event, arg) => {
-    return new Promise<string[]>((resolve, reject) => {
-        resolve(tccDBus.getChargingPrioritiesAvailable());
-    });
-});
-
-ipcMain.handle('get-current-charging-priority-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getCurrentChargingPriority());
-    });
-});
-
-ipcMain.handle('set-charging-priority-dbus', async (event, priorityDescriptor) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setChargingPriority(priorityDescriptor));
-    });
-});
-
-ipcMain.handle('get-dgpu-info-values-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getDGpuInfoValuesJSON());
-    });
-});
-
-ipcMain.handle('get-igpu-info-values-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getIGpuInfoValuesJSON());
-    });
-});
-
-ipcMain.handle('get-sensor-data-collection-status-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.getSensorDataCollectionStatus());
-    });
-});
-
-ipcMain.handle('get-prime-state-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getPrimeState());
-    });
-});
-
-ipcMain.handle('get-cpu-power-values-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getCpuPowerValuesJSON());
-    });
-});
-
-
-ipcMain.handle('get-display-modes-json-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getDisplayModesJSON());
-    });
-});
-
-
-ipcMain.handle('get-is-x11-dbus', async (event, arg) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.getIsX11());
-    });
-});
-
-
-ipcMain.handle('set-sensor-data-collection-status-dbus', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setSensorDataCollectionStatus(status));
-    });
-});
-
-
-ipcMain.handle('set-dgpu-do-metrics-dbus', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setDGpuD0Metrics(status));
-    });
-});
-
-ipcMain.handle('get-charge-start-available-thresholds-dbus', async (event, arg) => {
-    return new Promise<number[]>((resolve, reject) => {
-        resolve(tccDBus.getChargeStartAvailableThresholds());
-    });
-});
-
-ipcMain.handle('get-charge-end-available-thresholds-dbus', async (event, arg) => {
-    return new Promise<number[]>((resolve, reject) => {
-        resolve(tccDBus.getChargeEndAvailableThresholds());
-    });
-});
-
-
-ipcMain.handle('get-charge-start-threshold-dbus', async (event, arg) => {
-    return new Promise<number>((resolve, reject) => {
-        resolve(tccDBus.getChargeStartThreshold());
-    });
-});
-
-ipcMain.handle('get-charge-end-threshold-dbus', async (event, arg) => {
-    return new Promise<number>((resolve, reject) => {
-        resolve(tccDBus.getChargeEndThreshold());
-    });
-});
-
-ipcMain.handle('get-charge-type-dbus', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        resolve(tccDBus.getChargeType());
-    });
-});
-
-ipcMain.handle('set-charge-start-threshold-dbus', async (event, newValue) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setChargeStartThreshold(newValue));
-    });
-});
-
-ipcMain.handle('set-charge-end-threshold-dbus', async (event, newValue) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setChargeEndThreshold(newValue));
-    });
-});
-
-ipcMain.handle('set-charge-type-dbus', async (event, chargeType) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.setChargeType(chargeType));
-    });
-});
-
-ipcMain.handle('is-available-dbus', async (event, chargeType) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.dbusAvailable());
-    });
-});
-
-ipcMain.handle('get-fan-hwmon-available-dbus', async (event, chargeType) => {
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(tccDBus.fanHwmonAvailable());
-    });
-});
-
-ipcMain.handle('get-device-json-dbus', (event) => {
-    return new Promise<string>((resolve, reject) => {
-        try {
-            resolve( tccDBus.getDeviceJSON());
-        } catch (err) {
-          reject(err);
-        }
-      });
-  });
-
 // #### power state service backend + availablity service backend ####
 
 let availabilityService = new AvailabilityService();
@@ -1742,7 +1440,7 @@ async function changeLanguage(newLangId: string) {
     if (newLangId !== await userConfig.get('langId')) {
         await userConfig.set('langId', newLangId);
         await loadTranslation(newLangId);
-        await updateTrayProfiles(tccDBus);
+        await updateTrayProfiles();
         if (tccWindow) {
             const indexPath = path.join(__dirname, '..', '..', 'ng-app', newLangId, 'index.html');
             await tccWindow.loadFile(indexPath);
@@ -1882,18 +1580,18 @@ async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
     return [primeAvailable, primeStatus];
 }
 
-async function fnLockSupported(tccDBus: TccDBusController) {
+async function fnLockSupported() {
     return await tccDBus.getFnLockSupported();
 }
 
-async function fnLockStatus(tccDBus: TccDBusController) {
+async function fnLockStatus() {
     return await tccDBus.getFnLockStatus();
 }
 
-async function updateTrayProfiles(dbus: TccDBusController) {
+async function updateTrayProfiles() {
     try {
-        const updatedActiveProfile = await getActiveProfile(dbus);
-        const updatedProfiles = await getProfiles(dbus);
+        const updatedActiveProfile = await getActiveProfile();
+        const updatedProfiles = await getProfiles();
 
         // Replace default profile names/descriptions with translations
         for (const profile of updatedProfiles) {
@@ -1916,7 +1614,7 @@ async function updateTrayProfiles(dbus: TccDBusController) {
     }
 }
 
-const debugAquarisAPICalls = false;
+const debugAPICalls = false;
 
 function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {
 
@@ -1925,7 +1623,7 @@ function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map
         if (mainsideFunction === undefined) {
             throw Error(apiHandle + ': Undefined API function');
         } else {
-            if (debugAquarisAPICalls && args[0] !== 'isConnected') {
+            if (debugAPICalls) {
                 console.log(`${apiHandle}: ${args[0]}(${args.slice(1)})`);
             }
             try {
