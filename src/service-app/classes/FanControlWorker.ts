@@ -490,7 +490,7 @@ export class FanControlWorker extends DaemonWorker {
     private updateFanSpeed(index: number, input: number, max: number): void {
         this.tccd.dbusData.fans[index].speed.set(
             Date.now(),
-            Math.round((input / max) * 100)
+            Math.round((Math.min(input, max) / max) * 100)
         );
     }
 
