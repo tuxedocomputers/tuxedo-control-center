@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld(
   'ipc',
   {
     send: async (channel: string, args) => ipcRenderer.send(channel, args),
+    // TODO
     sendSync: async (channel: string, args) => ipcRenderer.sendSync(channel, args),
     invoke: async (channel: string, args) => ipcRenderer.invoke(channel, args),
     getAppVersion: async () => ipcRenderer.invoke('get-app-version'),
@@ -18,13 +19,16 @@ contextBridge.exposeInMainWorld(
     closeWindow: () => ipcRenderer.send('close-window'),
     minimizeWindow: () => ipcRenderer.send('minimize-window'),
     getCWD: () => ipcRenderer.invoke('get-cwd'),
+    // TODO
     getCWDSync: () => ipcRenderer.sendSync('get-cwd-sync').data,
     getProcessVersions: () => ipcRenderer.invoke('get-process-versions'),
     getBrightnessMode: () => ipcRenderer.invoke('get-brightness-mode'),
     getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
+    // TODO
     tccdNewSettings: (tccdExec,tmpSettingsPath) => ipcRenderer.sendSync(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
     ),
+    // TODO
     tccdNewProfiles: (tccdExec,tmpProfilesPath) => ipcRenderer.sendSync(
         'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
     ),
@@ -58,7 +62,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-
+    // TODO
     displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
     setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
   }
@@ -68,6 +72,7 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'power',
     {
+        // TODO
         getDGpuPowerState: (driver) => ipcRenderer.invoke('get-dgpu-power-state-power', driver),
         getBusPath: (busPath) => ipcRenderer.sendSync('get-bus-path-power', busPath),
         getNvidiaDGpuCount: () => ipcRenderer.sendSync('get-nvidia-dgpu-count-power'),
@@ -85,6 +90,8 @@ contextBridge.exposeInMainWorld(
     }
 )
 
+
+// TODO move to it's own file like aquaris API and new DBUS API
 contextBridge.exposeInMainWorld(
     'webcam',
     {     
@@ -132,6 +139,7 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'fs',
     {
+        // TODO
         writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => ipcRenderer.invoke('fs-write-text-file',filePath,fileData,writeFileOptions),
         readTextFile: (filePath: string) => ipcRenderer.invoke('fs-read-text-file',filePath),
         existsSync: (filePath: string) => ipcRenderer.sendSync('fs-file-exists-sync', filePath),
@@ -141,6 +149,7 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'https',
     {
+        // TODO
         getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
         getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync'),
     }
@@ -153,6 +162,7 @@ contextBridge.exposeInMainWorld(
         pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => ipcRenderer.send('config-pkexec-write-custom-profiles',customProfiles),
         pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => ipcRenderer.invoke('config-pkexec-write-custom-profiles-async',customProfiles),
         pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[])  => ipcRenderer.invoke('config-pkexec-write-config-async',settings,customProfiles),
+        // TODO
         getDefaultFanProfiles: () => ipcRenderer.sendSync('config-get-default-fan-profiles'),
     }
 );
@@ -176,6 +186,7 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'backlight',
     {
+        // TODO
         getDisplayBrightnessInfo: () => ipcRenderer.sendSync('get-display-brightness-info-sync'),
     }
 );
@@ -196,6 +207,7 @@ contextBridge.exposeInMainWorld(
         // getBoardVendor: () => ipcRenderer.sendSync('comp-get-board-vendor'),
         // getChassisVendor: () => ipcRenderer.sendSync('comp-get-chassis-vendor'),
         // getSysVendor: () => ipcRenderer.sendSync('comp-get-sys-vendor'),
+        // TODO
         getScalingDriverAcpiCpuFreq: () => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq'),
     }
 );

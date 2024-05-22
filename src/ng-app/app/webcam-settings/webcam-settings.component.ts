@@ -313,6 +313,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
         let webcamConfig = this.getCurrentWebcamConstraints();
+        // TODO
         window.ipc.send("create-webcam-preview", webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
@@ -783,6 +784,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             if (this.detachedWebcamWindowActive) {
+                // TODO
                 window.ipc.send(
                     "setting-webcam-with-loading",
                     webcamConfig
@@ -1102,6 +1104,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async loadingPresetData(): Promise<void> {
         await this.reloadConfigValues();
+        // TODO
         if (window.fs.existsSync(TccPaths.WEBCAM_FILE)) {
             this.allPresetData = window.webcam.readWebcamSettings();
             this.filterPresetsForCurrentDevice();

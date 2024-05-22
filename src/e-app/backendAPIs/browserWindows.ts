@@ -107,17 +107,17 @@ export async function activateTccGui(module?: string) {
     }
 }
 
-// TODO function unused? Did I accidentially remove it somewhere?
-function activateAquarisGui() {
-    if (aquarisWindow) {
-        if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
-        aquarisWindow.focus();
-    } else {
-        userConfig.get('langId').then(langId => {
-            createAquarisControl(langId);
-        });
-    }
-}
+// function seems to be unused :)
+// function activateAquarisGui() {
+//     if (aquarisWindow) {
+//         if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
+//         aquarisWindow.focus();
+//     } else {
+//         userConfig.get('langId').then(langId => {
+//             createAquarisControl(langId);
+//         });
+//     }
+// }
 
 export function quitCurrentTccSession() {
     if (tray.isActive()) {

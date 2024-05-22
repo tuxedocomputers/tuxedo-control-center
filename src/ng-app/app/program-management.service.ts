@@ -71,6 +71,12 @@ export class ProgramManagementService {
     });
   }
 
+
+  // TODO I really don't like this, can we change it?
+  // I would suggest only using SPECIFIC programs here for added security
+  // e.g. make a function for runWebFAICreator
+  // explanation: render process should simply not be allowed to have a wildcard for running programs, comands etc.
+  // seems so far to just involve anydesk and webfaicreator anyway
   public run(name: string): void {
     this.utils.spawnExternal(name);
   }

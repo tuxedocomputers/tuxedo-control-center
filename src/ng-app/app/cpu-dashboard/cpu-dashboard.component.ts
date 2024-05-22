@@ -129,6 +129,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
         // not instantly showing window to give enough time to load window
         setTimeout(async () => {
+            // TODO
             window.ipc.send("show-tcc-window", "");
         }, 200);
     }

@@ -35,19 +35,18 @@ import { TccPaths } from '../../common/classes/TccPaths';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { CpuController } from '../../common/classes/CpuController';
 import { AvailabilityService } from "../../common/classes/availability.service";
-import { WebcamPreset } from '../../common/models/TccWebcamSettings';
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile } from "../../common/models/TccProfile";
 import { VendorService } from '../../common/classes/Vendor.service'
 import { amdDGpuDeviceIdString } from "../../common/classes/DeviceIDs";
-import { clearWebcamWindow, tccWindow, webcamWindow, createWebcamPreview, primeWindow } from './browserWindows';
+import { primeWindow } from './browserWindows';
 import { changeLanguage, getBrightnessMode, setBrightnessMode } from "./translationAndTheme";
-import { hasAquaris, userConfig } from "./initMain";
-const cwd: string = process.cwd();
+import { hasAquaris } from "./initMain";
+export const cwd: string = process.cwd();
 //https://github.com/electron/electron/blob/main/docs/api/app.md#appispackaged-readonly
-let environmentIsProduction = app.isPackaged;
+export let environmentIsProduction = app.isPackaged;
 
 ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event) =>
 {
@@ -66,49 +65,6 @@ ipcMain.handle('comp-get-has-aquaris', async (event, arg) => {
     
 });
 
-
-
-/*
-###############   Webcam Settings API ####################
-*/
-
-
-ipcMain.on("setting-webcam-with-loading", (event, arg) => {
-    if (webcamWindow != null) {
-        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
-    }
-});
-
-ipcMain.on("create-webcam-preview", function (evt, arg) {
-    if (webcamWindow) {
-        if (webcamWindow.isMinimized()) {
-            webcamWindow.restore();
-        }
-        webcamWindow.focus();
-    } else {
-        userConfig.get("langId").then((langId) => {
-            createWebcamPreview(langId, arg);
-        });
-    }
-});
-
-ipcMain.on("close-webcam-preview", (event, arg) => {
-    if (webcamWindow) {
-        webcamWindow.close();
-        clearWebcamWindow();
-    }
-});
-
-ipcMain.on("apply-controls", (event) => {
-    tccWindow.webContents.send("apply-controls");
-});
-
-ipcMain.on("video-ended", (event) => {
-    tccWindow.webContents.send("video-ended");
-});
-
-
-
 ipcMain.on("prime-window-close", () => {
     if (primeWindow) {
         primeWindow.close();
@@ -121,56 +77,8 @@ ipcMain.on("prime-window-show", () => {
     }
 });
 
-let webcamConfigHandler: ConfigHandler = new ConfigHandler(
-            TccPaths.SETTINGS_FILE,
-            TccPaths.PROFILES_FILE,
-            TccPaths.WEBCAM_FILE,
-            TccPaths.V4L2_NAMES_FILE,
-            TccPaths.AUTOSAVE_FILE,
-            TccPaths.FANTABLES_FILE
-        );
 
-        
-        ipcMain.on('webcam-read-v4l2-names', (event, path: string) => {
-            if (path)
-            {
-                event.returnValue = webcamConfigHandler.readV4l2Names(path);
-            }
-            else
-            {
-                event.returnValue = webcamConfigHandler.readV4l2Names();
-            }
-        });
-
-        
-        ipcMain.on('webcam-read-settings', (event ) => {
-            event.returnValue = webcamConfigHandler.readWebcamSettings();
-        });
-
-
-        ipcMain.handle('webcam-pkexec-write-config-async', (event, webcamSettings: WebcamPreset[]) => {
-            return new Promise<boolean>(resolve => {
-                const tmpWebcamPath = '/tmp/tmptccwebcam';
-                webcamConfigHandler.writeWebcamSettings(webcamSettings, tmpWebcamPath);
-                let tccdExec: string;
-                if (environmentIsProduction) {
-                    tccdExec = TccPaths.TCCD_EXEC_FILE;
-                } else {
-                    tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
-                }
-                child_process.exec(
-                    'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath,
-                (err, stdout, stderr) => {
-                    if (err) {
-                        resolve(false);
-                    } else {
-                        resolve(true);
-                    }
-                });
-            });
-        });
-
-        
+      
 /* 
 ################ Utils API #######################
 */
@@ -512,40 +420,40 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
 });
 
 // TODO exec cmd has to be replaced completely by specific commands.###########
-ipcMain.on('exec-cmd-sync', (event, arg) => {
-    try {
-        event.returnValue = { data: child_process.execSync(arg), error: undefined };
-    } catch (err) {
-        event.returnValue = { data: undefined, error: err };
-    }
-});
+// ipcMain.on('exec-cmd-sync', (event, arg) => {
+//     try {
+//         event.returnValue = { data: child_process.execSync(arg), error: undefined };
+//     } catch (err) {
+//         event.returnValue = { data: undefined, error: err };
+//     }
+// });
 
-ipcMain.handle('exec-cmd-async', async (event, arg) => {
-    return new Promise((resolve, reject) => {
-        child_process.exec(arg, (err, stdout, stderr) => {
-            if (err) {
-                resolve({ data: stderr, error: err });
-            } else {
-                resolve({ data: stdout, error: err });
-            }
-        });
-    });
-});
+// ipcMain.handle('exec-cmd-async', async (event, arg) => {
+//     return new Promise((resolve, reject) => {
+//         child_process.exec(arg, (err, stdout, stderr) => {
+//             if (err) {
+//                 resolve({ data: stderr, error: err });
+//             } else {
+//                 resolve({ data: stdout, error: err });
+//             }
+//         });
+//     });
+// });
 
-ipcMain.handle('exec-file-async', async (event, arg) => {
-    return new Promise((resolve, reject) => {
-        let strArg: string = arg;
-        let cmdList = strArg.split(' ');
-        let cmd = cmdList.shift();
-        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
-            if (err) {
-                resolve({ data: stderr, error: err });
-            } else {
-                resolve({ data: stdout, error: err });
-            }
-        });
-    });
-});
+// ipcMain.handle('exec-file-async', async (event, arg) => {
+//     return new Promise((resolve, reject) => {
+//         let strArg: string = arg;
+//         let cmdList = strArg.split(' ');
+//         let cmd = cmdList.shift();
+//         child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
+//             if (err) {
+//                 resolve({ data: stderr, error: err });
+//             } else {
+//                 resolve({ data: stdout, error: err });
+//             }
+//         });
+//     });
+// });
 
 ipcMain.on('spawn-external-async', (event, arg) => {
     child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {

@@ -29,6 +29,7 @@ require('./backendAPIs/initMain');
 require('./backendAPIs/browserWindows');
 require('./backendAPIs/ipcBackendAPI');
 require('./backendAPIs/miscBackendStuff');
+require('./backendAPIs/webcamBackendAPI');
 
 
 

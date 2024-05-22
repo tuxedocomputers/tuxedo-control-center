@@ -153,6 +153,7 @@ export class SupportComponent implements OnInit {
       // Write file
       try {
         this.systeminfoOutput('Writing file: ' + this.systeminfoFilePath);
+        // TODO
         await this.utils.writeTextFile(this.systeminfoFilePath, fileData, { mode: 0o755 });
       } catch (err) {
         reject('Failed to write file ' + this.systeminfoFilePath); return;

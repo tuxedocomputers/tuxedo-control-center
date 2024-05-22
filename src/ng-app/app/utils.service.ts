@@ -64,21 +64,23 @@ export class UtilsService {
 
     // if return status code is not zero, it will count as an error
     // and grep returning nothing will count as an error
-    public execCmdSync(command: string): string {
-        const data = window.ipc.sendSync(
-            "exec-cmd-sync",
-            command
-        );
+    // TODO
+    // public execCmdSync(command: string): string {
+    //     const data = window.ipc.sendSync(
+    //         "exec-cmd-sync",
+    //         command
+    //     );
 
-        if (data.error) {
-            console.error("Sync Exec CMD failed: ", data.error);
-        }
+    //     if (data.error) {
+    //         console.error("Sync Exec CMD failed: ", data.error);
+    //     }
 
-        if (data.data) {
-            return Buffer.from(data.data.buffer).toString();
-        }
-    }
+    //     if (data.data) {
+    //         return Buffer.from(data.data.buffer).toString();
+    //     }
+    // }
 
+    // TODO
   public async execCmdAsync(command: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         window.ipc.invoke('exec-cmd-async', command).then((result) => {
@@ -134,6 +136,7 @@ export class UtilsService {
     });
   }
 
+  // TODO
   public async execFile(command: string): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       window.ipc.invoke('exec-file-async', command).then((result) => {
@@ -151,6 +154,7 @@ export class UtilsService {
     window.ipc.openExternal(url);
   }
 
+  // TODO
 public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?): Promise<void> {
     return window.fs.writeTextFile(filePath,fileData,writeFileOptions);
 }
@@ -159,6 +163,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return window.fs.readTextFile(filePath);
   }
 
+  // TODO
   public spawnExternal(command: string): void {
     window.ipc.send('spawn-external-async', command);
   }
@@ -213,6 +218,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
         return window.ipc.getCWDSync();
    }
 
+   // TODO
    public changeLanguage(languageId: string) {
     window.ipc.send('trigger-language-change', languageId);
   }
@@ -233,6 +239,8 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return this.themeClass.value;
   }
 
+  // TODO make brightness mode into an enum and export it from somewhere else, e.g. render.d.ts
+  // TODO remove all "ipc.invoke"
   public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
     return await window.ipc.invoke('set-brightness-mode', mode);
   }
