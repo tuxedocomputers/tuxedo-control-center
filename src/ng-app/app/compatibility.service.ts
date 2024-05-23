@@ -52,12 +52,9 @@ export class CompatibilityService {
                 sysVendor.toLowerCase().includes("tuxedo"));
 
         if (isTuxedo) {
-            if (
-                deviceName !== undefined &&
-                (deviceName === "STELLARIS1XI04" ||
-                    deviceName === "STEPOL1XA04" ||
-                    deviceName === "STELLARIS1XI05")
-            ) {
+            if (isTuxedo) {
+            const validDeviceNames = ["STELLARIS1XI04", "STEPOL1XA04", "STELLARIS1XI05", "STELLARIS17I06"];
+            if (deviceName !== undefined && validDeviceNames.includes(deviceName)) {
                 showAquarisMenu = true;
             } else {
                 showAquarisMenu = false;
