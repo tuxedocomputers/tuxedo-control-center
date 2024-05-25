@@ -1,12 +1,18 @@
 # Changelog
 
 ## [] - UNRELEASED
-## Added
+### Added
 - NVIDIA cTGP (configurable TGP) adjustable per TCC profile for supported models
   with this feature enabled
+- Enable Aquaris menu für Stellaris Gen6
+- Support for new PWM fan control
+
+### Fixed
+- Use device specific defaults for new profile
+- Build script touchups
 
 ## [2.1.8] - 2024-04-03
-## Added
+### Added
 - Support for Stellaris Intel Gen6
 - Alternative view of _profile edit => system profile_ displaying
   power limit info instead of profile name, introduced for
