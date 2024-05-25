@@ -69,9 +69,15 @@ export class CompatibilityService {
         }
         this.hasAquarisValue = showAquarisMenu;
 
-        this.hideCTGPValue = deviceName === "IBP14G6_TQF" ||
-                             deviceName === "IBP14G7_AQF_ARX" ||
-                             deviceName === "IBPG8";
+        // Hide the cTGP settings for the IBP series, because, albeit nvidia-smi tells otherwise,
+        // they don't offically support it and using it results in undefined behaviour.
+        this.hideCTGPValue = deviceName === "IBP14I06" ||
+                             deviceName === "IBP1XI07MK1" ||
+                             deviceName === "IBP1XI07MK2" ||
+                             deviceName === "IBP1XI08MK1" ||
+                             deviceName === "IBP14I08MK2" ||
+                             deviceName === "IBP16I08MK2" ||
+                             deviceName === "IBP14A09MK1 / IBP15A09MK1";
     }
 
     public getSystemProfileInfo(): SystemProfileInfo {
