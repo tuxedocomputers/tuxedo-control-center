@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.9] - 2024-05-25
 ### Added
 - NVIDIA cTGP (configurable TGP) adjustable per TCC profile for supported models
   with this feature enabled
