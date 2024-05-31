@@ -58,6 +58,7 @@ contextBridge.exposeInMainWorld(
     setShutdownTime: (selectedHour, selectedMinute) => ipcRenderer.invoke('ipc-set-shutdown-time', selectedHour, selectedMinute),
     cancelShutdown: () => ipcRenderer.invoke('ipc-cancel-shutdown'),
     getScheduledShutdown: () => ipcRenderer.invoke('ipc-get-scheduled-shutdown'),
+    issueReboot: () => ipcRenderer.invoke('ipc-issue-reboot'),
 }
   
 );

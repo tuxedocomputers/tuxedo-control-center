@@ -486,6 +486,14 @@ ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
     });
 });
 
+ipcMain.handle('ipc-issue-reboot', async (event) => {
+    return new Promise<string>((resolve, reject) => {
+        let results = execCmd("reboot");
+        resolve(results);
+    });
+});
+
+
 
 // TODO
 ipcMain.on('get-cwd-sync', (event) => {

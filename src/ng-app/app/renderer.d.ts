@@ -34,7 +34,7 @@ export interface IPC extends EventEmitter {
     setShutdownTime: (selectedHour: number , selectedMinute: number) => Promise<string>,
     cancelShutdown: () => Promise<string>,
     getScheduledShutdown: () => Promise<string>,
-
+    issueReboot: () => Promise<void>,
   }
 
   export interface POWER 

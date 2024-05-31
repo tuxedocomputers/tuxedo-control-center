@@ -18,6 +18,8 @@
  */
 import { Injectable } from '@angular/core';
 import { UtilsService } from './utils.service';
+//TODO, I think I want to remove this file completely and move functionality into backend
+
 
 @Injectable({
   providedIn: 'root'
