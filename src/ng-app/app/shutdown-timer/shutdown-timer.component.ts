@@ -42,38 +42,32 @@ export class ShutdownTimerComponent implements OnInit {
         this.updateTime();
     }
 
-    public saveTime() {
+    public async saveTime() {
         this.utils.pageDisabled = true;
-        // TODO
-        this.utils.execCmdAsync("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
-            this.updateTime();
-            this.utils.pageDisabled = false;
-        }).catch(() => {
-            this.updateTime();
-            this.utils.pageDisabled = false;
-        });
+        await window.ipc.setShutdownTime(this.selectedHour,this.selectedMinute);
+        await this.updateTime();
+        this.utils.pageDisabled = false;
     }
 
-    public deleteTime() {
+    public async deleteTime() {
         this.utils.pageDisabled = true;
-        // TODO
-        this.utils.execCmdAsync("pkexec shutdown -c").then(() => {
+        window.ipc.cancelShutdown().then
+        (
+            () => {
             this.updateTime();
             this.utils.pageDisabled = false;
-        }).catch(() => {
-            this.updateTime();
-            this.utils.pageDisabled = false;
-        });
+            }
+        );
     }
 
-    public updateTime() {
-        // TODO
-        this.utils.execCmdAsync("cat /run/systemd/shutdown/scheduled").then((result) => {
+    public async updateTime() {
+        let result = await window.ipc.getScheduledShutdown();
+        try {
             let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
             let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
             this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
-        }).catch(() => {
-            this.appliedTime = ""
-        });
+        }catch {
+            this.appliedTime = "";
+        }
     }
 }

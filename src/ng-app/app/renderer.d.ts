@@ -31,6 +31,10 @@ export interface IPC extends EventEmitter {
     onSetPrimeSelectMode: (callback) => void,
     displayBrightnessNotSupportedGnome: () => boolean,
     setDisplayBrightnessGnome: (valuePercent: number) => void,
+    setShutdownTime: (selectedHour: number , selectedMinute: number) => Promise<string>,
+    cancelShutdown: () => Promise<string>,
+    getScheduledShutdown: () => Promise<string>,
+
   }
 
   export interface POWER 

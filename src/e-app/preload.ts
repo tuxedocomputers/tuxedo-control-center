@@ -55,7 +55,10 @@ contextBridge.exposeInMainWorld(
     // TODO
     displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
     setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
-  }
+    setShutdownTime: (selectedHour, selectedMinute) => ipcRenderer.invoke('ipc-set-shutdown-time', selectedHour, selectedMinute),
+    cancelShutdown: () => ipcRenderer.invoke('ipc-cancel-shutdown'),
+    getScheduledShutdown: () => ipcRenderer.invoke('ipc-get-scheduled-shutdown'),
+}
   
 );
 

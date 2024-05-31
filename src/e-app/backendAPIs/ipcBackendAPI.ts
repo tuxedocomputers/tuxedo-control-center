@@ -464,6 +464,30 @@ ipcMain.on('spawn-external-async', (event, arg) => {
 
 // ######################################################################
 
+// Shutdown timer
+ipcMain.handle('ipc-set-shutdown-time', async (event, selectedHour, selectedMinute) => {
+    return new Promise<string>((resolve, reject) => {
+        let results = execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute);
+        resolve(results);
+    });
+});
+
+ipcMain.handle('ipc-cancel-shutdown', async (event) => {
+    return new Promise<string>((resolve, reject) => {
+        let results = execCmd("pkexec shutdown -c");
+        resolve(results);
+    });
+});
+
+ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
+    return new Promise<string>((resolve, reject) => {
+        let results = execCmd("cat /run/systemd/shutdown/scheduled");
+        resolve(results);
+    });
+});
+
+
+// TODO
 ipcMain.on('get-cwd-sync', (event) => {
     event.returnValue = { data: process.cwd() }
 });
