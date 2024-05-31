@@ -144,8 +144,8 @@ export class WebcamSettingsComponent implements OnInit {
 
     private getWebcamPaths(): Promise<WebcamPath> {
         return new Promise<WebcamPath>((resolve) => {
-            this.utils
-                .execFile("python3 " + this.getWebcamCtrlPythonPath() + " -i")
+            window.webcam
+                .getWebcamPaths()
                 .then((data) => {
                     resolve(JSON.parse(data.toString()));
                 })
@@ -221,25 +221,11 @@ export class WebcamSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    private getWebcamCtrlPythonPath(): string {
-        let webcamCtrolsPath: string;
-        if (environment.production) {
-            webcamCtrolsPath = TccPaths.TCCD_PYTHON_CAMERACTRL_FILE;
-        } else {
-            webcamCtrolsPath =
-                this.utils.getCWDSync() + "/src/cameractrls/cameractrls.py";
-        }
-        return webcamCtrolsPath;
-    }
-
     private getWebcamSettings(): Promise<string> {
         return new Promise<string>(async (resolve) => {
             try {
-                let data = await this.utils.execCmdAsync(
-                    "python3 " +
-                        this.getWebcamCtrlPythonPath() +
-                        ` -d ${this.selectedWebcam.path} -j`
-                );
+                // TODO
+                let data = await window.webcam.getSelectedWebcamSettings(this.selectedWebcam.path);
                 resolve(data);
             } catch (error) {
                 console.error(error);
@@ -313,8 +299,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
         let webcamConfig = this.getCurrentWebcamConstraints();
-        // TODO
-        window.ipc.send("create-webcam-preview", webcamConfig);
+        window.webcam.createWebcamPreview(webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
 
@@ -346,11 +331,8 @@ export class WebcamSettingsComponent implements OnInit {
 
         for (let devicePath of webcamPaths) {
             try {
-                await this.utils.execCmdAsync(
-                    "python3 " +
-                        this.getWebcamCtrlPythonPath() +
-                        ` -d ${devicePath} -c ${parameter}=${value}`
-                );
+                // TODO
+                await window.webcam.executeWebcamCtrls(devicePath, parameter, value);
             } catch (error) {
                 console.error(error);
                 this.mutex.release();
@@ -376,9 +358,8 @@ export class WebcamSettingsComponent implements OnInit {
         if (filteredControls) {
             for (const devicePath of webcamPaths) {
                 try {
-                    await this.utils.execCmdAsync(
-                        `python3 ${this.getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`
-                    );
+                    // TODO
+                    await window.webcam.executeFilteredCtrls(devicePath, filteredControls);
                 } catch (error) {
                     console.error(error);
                     this.mutex.release();
@@ -721,12 +702,12 @@ export class WebcamSettingsComponent implements OnInit {
         this.mutex.runExclusive(async () => {
             let unknown_all = [];
 
+            // TODO hacky solution, this should all be handled in main.ts
             if (environment.production) {
                 this.v4l2Renames = window.webcam.readV4l2Names('');
             } else {
-                this.v4l2Renames = window.webcam.readV4l2Names(
-                    this.utils.getCWDSync() +
-                        "/src/cameractrls/v4l2_kernel_names.json"
+                this.v4l2Renames = window.webcam.readV4l2NamesCWD(
+                    "/src/cameractrls/v4l2_kernel_names.json"
                 );
             }
 
@@ -784,11 +765,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             if (this.detachedWebcamWindowActive) {
-                // TODO
-                window.ipc.send(
-                    "setting-webcam-with-loading",
-                    webcamConfig
-                );
+                window.webcam.setWebcamWithLoading(webcamConfig);
             }
             if (setViewWebcam) {
                 this.viewWebcam = config;

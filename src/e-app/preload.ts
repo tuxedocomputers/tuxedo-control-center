@@ -19,19 +19,9 @@ contextBridge.exposeInMainWorld(
     closeWindow: () => ipcRenderer.send('close-window'),
     minimizeWindow: () => ipcRenderer.send('minimize-window'),
     getCWD: () => ipcRenderer.invoke('get-cwd'),
-    // TODO
-    getCWDSync: () => ipcRenderer.sendSync('get-cwd-sync').data,
     getProcessVersions: () => ipcRenderer.invoke('get-process-versions'),
     getBrightnessMode: () => ipcRenderer.invoke('get-brightness-mode'),
     getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
-    // TODO
-    tccdNewSettings: (tccdExec,tmpSettingsPath) => ipcRenderer.sendSync(
-        'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
-    ),
-    // TODO
-    tccdNewProfiles: (tccdExec,tmpProfilesPath) => ipcRenderer.sendSync(
-        'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath
-    ),
     onUpdateBrightnessMode: (callback) => {
         var channelname = 'update-brightness-mode';
         if(callbacks.indexOf(channelname) < 0)
@@ -95,7 +85,9 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'webcam',
     {     
+    createWebcamPreview: (webcamConfig) => ipcRenderer.send("create-webcam-preview", webcamConfig),
     closeWebcamPreview: () => ipcRenderer.send("close-webcam-preview"),
+    setWebcamWithLoading: (webcamConfig) => ipcRenderer.send("setting-webcam-with-loading", webcamConfig),
     // https://github.com/electron/electron/issues/21437
     onApplyControls: (callback) => {
         var channelname = 'apply-controls';
@@ -134,7 +126,12 @@ contextBridge.exposeInMainWorld(
     readWebcamSettings: () => ipcRenderer.sendSync('webcam-read-settings'),
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke('webcam-pkexec-write-config-async', settings),
     readV4l2Names: (path: string) => ipcRenderer.sendSync('webcam-read-v4l2-names',path),
-    }
+    readV4l2NamesCWD: (path: string) => ipcRenderer.sendSync('webcam-read-v4l2-names-cwd',path),
+    getSelectedWebcamSettings: (sWebcamPath) => ipcRenderer.invoke('webcam-get-selected-webcam-settings',sWebcamPath),
+    executeWebcamCtrls: (devicePath, parameter, value) => ipcRenderer.invoke('webcam-execute-ctrls',devicePath, parameter, value),
+    executeFilteredCtrls: (devicePath, filteredControls) => ipcRenderer.invoke('webcam-execute-filtered-ctrls',devicePath, filteredControls),    
+    getWebcamPaths: () => ipcRenderer.invoke('webcam-get-webcam-paths'),
+}
 );
 contextBridge.exposeInMainWorld(
     'fs',

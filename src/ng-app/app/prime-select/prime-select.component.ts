@@ -81,6 +81,7 @@ export class PrimeSelectComponent implements OnInit {
         if (isSuccessful) {
             this.activeState = this.primeState = selectedPrimeStatus;
             if (status === "REBOOT") {
+                // TODO
                 this.utils.execCmdAsync("reboot");
             }
         } else {

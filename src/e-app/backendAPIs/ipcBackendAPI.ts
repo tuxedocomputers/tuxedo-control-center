@@ -599,7 +599,7 @@ function getBusPath(driver: string): string {
     return undefined;
 }
 
-async function execCmd(cmd): Promise<string> {
+export async function execCmd(cmd): Promise<string> {
     return new Promise<string>((resolve, reject) => {
     child_process.exec(cmd, (err, stdout, stderr) => {
         if (err) {
@@ -610,12 +610,27 @@ async function execCmd(cmd): Promise<string> {
     });});
 }
 
-function execCmdSync(cmd):string {
+export function execCmdSync(cmd):string {
         try {
             return child_process.execSync(cmd).toString();
         } catch (err) {
             return err.toString();
         }
+}
+
+export async function execFile(arg): Promise<{ data: string, error: any}> {
+    return new Promise((resolve, reject) => {
+        let strArg: string = arg;
+        let cmdList = strArg.split(' ');
+        let cmd = cmdList.shift();
+        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
+                    if (err) {
+                        resolve({ data: stderr, error: err });
+                    } else {
+                        resolve({ data: stdout, error: err });
+                    }
+        });
+    });
 }
 
 

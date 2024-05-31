@@ -3,7 +3,7 @@ import { EventEmitter } from 'node:events';
 import { IDrive } from "../../common/models/IDrive"; 
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
 import { ITccProfile } from "../../common/models/TccProfile";
-import { WebcamPreset } from "../../common/models/TccWebcamSettings";
+import { WebcamConstraints, WebcamPreset } from "../../common/models/TccWebcamSettings";
 import { ITccSettings } from "../../common/models/TccSettings";
 import { ITccFanProfile } from "../../common/models/TccFanTable";
 import { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
@@ -17,12 +17,9 @@ export interface IPC extends EventEmitter {
     closeWindow: () => void,
     minimizeWindow: () => void,
     getCWD: () => Promise<IPCReturnValue>,
-    getCWDSync: () => string,
     getProcessVersions: () => Promise<IProcessVersions>,
     getBrightnessMode: () => Promise<'light' | 'dark' | 'system'>,
     getShouldUseDarkColors: () => Promise<boolean>,
-    tccdNewSettings: (tccdExec,tmpSettingsPath) => IPCReturnValue,
-    tccdNewProfiles: (tccdExec,tmpProfilesPath) => IPCReturnValue,
     onUpdateBrightnessMode: (callback) => void,
     onWakeupFromSuspend: (callback) => void,
     openExternal: (url: string) => void,
@@ -72,7 +69,9 @@ export interface IPC extends EventEmitter {
   }
 export interface WEBCAM 
 {
+    createWebcamPreview: (webcamConfig: WebcamConstraints) => void,
     closeWebcamPreview: () => void,
+    setWebcamWithLoading: (webcamConfig: WebcamConstraints) => void,
     videoEnded: () => void,
     applyControls: () => void,
     onVideoEnded: (callback) => void,
@@ -81,7 +80,12 @@ export interface WEBCAM
     readWebcamSettings: () => WebcamPreset[],
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
     readV4l2Names: (path: string) => string[][], 
+    readV4l2NamesCWD: (path: string) => string[][], 
     onSettingWebcamWithLoading: (callback) => void,
+    getSelectedWebcamSettings: (sWebcamPath:string) => Promise<string>,
+    executeWebcamCtrls: (devicePath: string, parameter: string, value: number | string) => Promise<string>,
+    executeFilteredCtrls: (devicePath: string, filteredControls: string) => Promise<string>,
+    getWebcamPaths: () => Promise<string>,
 }
 export interface STUFF
 {
@@ -109,18 +113,9 @@ export interface CONFIG
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
-// export interface STATE 
-// {
-//     determineState: () => any,
-// }
-
 export interface COMP 
 {
     getHasAquaris: () => Promise<boolean>,
-    // getProductSKU: () => any,
-    // getBoardVendor: () => any,
-    // getChassisVendor: () => any,
-    // getSysVendor: () => any,
     getScalingDriverAcpiCpuFreq: () => any,
 }
 
@@ -137,7 +132,6 @@ export interface COMP
       cpu: CPU,
       backlight: BACKLIGHT,
       config: CONFIG,
-      //state: STATE,
       comp: COMP,
       stuff: STUFF,
       vendor: VENDOR,

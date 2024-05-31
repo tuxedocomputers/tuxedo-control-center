@@ -44,6 +44,7 @@ export class ShutdownTimerComponent implements OnInit {
 
     public saveTime() {
         this.utils.pageDisabled = true;
+        // TODO
         this.utils.execCmdAsync("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
             this.updateTime();
             this.utils.pageDisabled = false;
@@ -55,6 +56,7 @@ export class ShutdownTimerComponent implements OnInit {
 
     public deleteTime() {
         this.utils.pageDisabled = true;
+        // TODO
         this.utils.execCmdAsync("pkexec shutdown -c").then(() => {
             this.updateTime();
             this.utils.pageDisabled = false;
@@ -65,6 +67,7 @@ export class ShutdownTimerComponent implements OnInit {
     }
 
     public updateTime() {
+        // TODO
         this.utils.execCmdAsync("cat /run/systemd/shutdown/scheduled").then((result) => {
             let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
             let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);

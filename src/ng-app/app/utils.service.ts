@@ -213,11 +213,6 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
       });
    }
 
-   public getCWDSync(): string
-   {
-        return window.ipc.getCWDSync();
-   }
-
    // TODO
    public changeLanguage(languageId: string) {
     window.ipc.send('trigger-language-change', languageId);

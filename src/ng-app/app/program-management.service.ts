@@ -35,6 +35,7 @@ export class ProgramManagementService {
   public async isInstalled(name: string): Promise<boolean> {
     this.isCheckingInstallation.set(name, true);
     return new Promise<boolean>(async (resolve) => {
+        // TODO
       this.utils.execCmdAsync('which ' + name).then((result) => {
         this.isCheckingInstallation.set(name, false);
         resolve(true);
@@ -48,6 +49,7 @@ export class ProgramManagementService {
   public async install(name: string): Promise<boolean> {
     this.isInProgress.set(name, true);
     return new Promise<boolean>(async (resolve) => {
+        // TODO
       this.utils.execCmdAsync('pkexec apt install -y ' + name).then(() => {
         this.isInProgress.set(name, false);
         resolve(true);
@@ -61,6 +63,7 @@ export class ProgramManagementService {
   public async remove(name: string): Promise<boolean> {
     this.isInProgress.set(name, true);
     return new Promise<boolean>(async (resolve) => {
+        // TODO
       this.utils.execCmdAsync('pkexec apt remove -y ' + name).then(() => {
         this.isInProgress.set(name, false);
         resolve(true);

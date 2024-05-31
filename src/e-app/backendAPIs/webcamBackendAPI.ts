@@ -31,7 +31,7 @@ import { ipcMain } from 'electron';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { TccPaths } from '../../common/classes/TccPaths';
 import * as child_process from 'child_process';
-import { environmentIsProduction, cwd } from './ipcBackendAPI';
+import { environmentIsProduction, cwd, execFile, execCmd } from './ipcBackendAPI';
 
 ipcMain.on("setting-webcam-with-loading", (event, arg) => {
     if (webcamWindow != null) {
@@ -81,6 +81,7 @@ let webcamConfigHandler: ConfigHandler = new ConfigHandler(
         );
 
         
+ // TODO functionality from inside render process should be moved here       
 ipcMain.on('webcam-read-v4l2-names', (event, path: string) => {
     if (path)
     {
@@ -92,9 +93,61 @@ ipcMain.on('webcam-read-v4l2-names', (event, path: string) => {
     }
 });
 
+// TODO hacky second function, to be removed when functionality is moved to main.ts
+ipcMain.on('webcam-read-v4l2-names-cwd', (event, path: string) => {
+    if (path)
+    {
+        event.returnValue = webcamConfigHandler.readV4l2Names(cwd + path);
+    }
+    else
+    {
+        event.returnValue = webcamConfigHandler.readV4l2Names();
+    }
+});
+
+
+function getWebcamCtrlPythonPath(): string {
+    let webcamCtrolsPath: string;
+    if (environmentIsProduction) {
+        webcamCtrolsPath = TccPaths.TCCD_PYTHON_CAMERACTRL_FILE;
+    } else {
+        webcamCtrolsPath =
+            cwd + "/src/cameractrls/cameractrls.py";
+    }
+    return webcamCtrolsPath;
+}
 
 ipcMain.on('webcam-read-settings', (event ) => {
     event.returnValue = webcamConfigHandler.readWebcamSettings();
+});
+
+
+ipcMain.handle('webcam-get-selected-webcam-settings', (event, selectedWebcamPath: string) => {
+return new Promise<string>(async resolve => {
+        resolve(await execCmd("python3 " + getWebcamCtrlPythonPath() + ` -d ${selectedWebcamPath} -j`))
+    });
+});
+
+ipcMain.handle('webcam-execute-ctrls', (event, devicePath, parameter, value) => {
+    return new Promise<string>(async resolve => {
+        resolve(await execCmd("python3 " + getWebcamCtrlPythonPath() +
+        ` -d ${devicePath} -c ${parameter}=${value}`))
+    });
+});
+
+ipcMain.handle('webcam-execute-filtered-ctrls', (event, devicePath, filteredControls) => {
+return new Promise<string>(async resolve => {
+        resolve(await execCmd(
+            `python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`
+            ))
+    });
+});
+
+ipcMain.handle('webcam-get-webcam-paths', (event) => {
+    return new Promise(async resolve => {
+        let result = await execFile("python3 " + getWebcamCtrlPythonPath() + " -i");
+        resolve(result.data);
+        });
 });
 
 
