@@ -35,6 +35,7 @@ export interface IPC extends EventEmitter {
     cancelShutdown: () => Promise<string>,
     getScheduledShutdown: () => Promise<string>,
     issueReboot: () => Promise<void>,
+    showTccWindow: () => Promise<void>,
   }
 
   export interface POWER 

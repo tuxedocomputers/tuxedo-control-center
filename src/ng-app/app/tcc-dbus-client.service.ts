@@ -103,7 +103,6 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   private async periodicUpdate() {
-    // TODO write some new functionality to check if dbus is available... but probably in main.ts?
 
     // Read and publish data (note: atm polled)
     const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();

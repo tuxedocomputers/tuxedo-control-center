@@ -59,6 +59,7 @@ contextBridge.exposeInMainWorld(
     cancelShutdown: () => ipcRenderer.invoke('ipc-cancel-shutdown'),
     getScheduledShutdown: () => ipcRenderer.invoke('ipc-get-scheduled-shutdown'),
     issueReboot: () => ipcRenderer.invoke('ipc-issue-reboot'),
+    showTccWindow: () => ipcRenderer.send('show-tcc-window'),
 }
   
 );

@@ -138,6 +138,7 @@ export class SupportComponent implements OnInit {
     });
   }
 
+  // TODO, move this entire function into backend
   public async runSysteminfo(): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       let fileData: string;

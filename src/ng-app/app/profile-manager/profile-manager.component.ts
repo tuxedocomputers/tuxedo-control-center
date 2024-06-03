@@ -224,7 +224,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             let res = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
             let profiles = this.config.getCustomProfiles();
             let txt = JSON.stringify(profiles);
-            // TODO
             await this.utils.writeTextFile("" + res,txt);
         }
         catch(err)

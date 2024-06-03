@@ -224,7 +224,6 @@ export class WebcamSettingsComponent implements OnInit {
     private getWebcamSettings(): Promise<string> {
         return new Promise<string>(async (resolve) => {
             try {
-                // TODO
                 let data = await window.webcam.getSelectedWebcamSettings(this.selectedWebcam.path);
                 resolve(data);
             } catch (error) {
@@ -331,7 +330,6 @@ export class WebcamSettingsComponent implements OnInit {
 
         for (let devicePath of webcamPaths) {
             try {
-                // TODO
                 await window.webcam.executeWebcamCtrls(devicePath, parameter, value);
             } catch (error) {
                 console.error(error);
@@ -358,7 +356,6 @@ export class WebcamSettingsComponent implements OnInit {
         if (filteredControls) {
             for (const devicePath of webcamPaths) {
                 try {
-                    // TODO
                     await window.webcam.executeFilteredCtrls(devicePath, filteredControls);
                 } catch (error) {
                     console.error(error);
