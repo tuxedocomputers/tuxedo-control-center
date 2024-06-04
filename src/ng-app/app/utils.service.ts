@@ -207,9 +207,8 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
       });
    }
 
-   // TODO
    public changeLanguage(languageId: string) {
-    window.ipc.send('trigger-language-change', languageId);
+    window.ipc.triggerLanguageChange(languageId);
   }
 
   public getCurrentLanguageId(): string {
@@ -229,9 +228,8 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   // TODO make brightness mode into an enum and export it from somewhere else, e.g. render.d.ts
-  // TODO remove all "ipc.invoke"
   public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
-    return await window.ipc.invoke('set-brightness-mode', mode);
+    return await window.ipc.setBrightnessMode( mode);
   }
 
   public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {

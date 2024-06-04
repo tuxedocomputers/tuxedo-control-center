@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld(
     getCWD: () => ipcRenderer.invoke('get-cwd'),
     getProcessVersions: () => ipcRenderer.invoke('get-process-versions'),
     getBrightnessMode: () => ipcRenderer.invoke('get-brightness-mode'),
+    setBrightnessMode: (mode: 'light' | 'dark' | 'system') => ipcRenderer.invoke('set-brightness-mode', mode),
     getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
     onUpdateBrightnessMode: (callback) => {
         var channelname = 'update-brightness-mode';
@@ -60,6 +61,7 @@ contextBridge.exposeInMainWorld(
     getScheduledShutdown: () => ipcRenderer.invoke('ipc-get-scheduled-shutdown'),
     issueReboot: () => ipcRenderer.invoke('ipc-issue-reboot'),
     showTccWindow: () => ipcRenderer.send('show-tcc-window'),
+    triggerLanguageChange: (languageId: string) => ipcRenderer.send('trigger-language-change', languageId),
 }
   
 );

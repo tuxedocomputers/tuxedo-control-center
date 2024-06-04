@@ -19,6 +19,7 @@ export interface IPC extends EventEmitter {
     getCWD: () => Promise<IPCReturnValue>,
     getProcessVersions: () => Promise<IProcessVersions>,
     getBrightnessMode: () => Promise<'light' | 'dark' | 'system'>,
+    setBrightnessMode: (mode: 'light' | 'dark' | 'system') => void,
     getShouldUseDarkColors: () => Promise<boolean>,
     onUpdateBrightnessMode: (callback) => void,
     onWakeupFromSuspend: (callback) => void,
@@ -36,6 +37,7 @@ export interface IPC extends EventEmitter {
     getScheduledShutdown: () => Promise<string>,
     issueReboot: () => Promise<void>,
     showTccWindow: () => Promise<void>,
+    triggerLanguageChange: (languageId: string) => void,
   }
 
   export interface POWER 
