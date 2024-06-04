@@ -166,17 +166,6 @@ ipcMain.on('fs-file-exists-sync', (event, filePath) => {
 });
 
 
-ipcMain.handle('drive-controller-get-drives', (event) => {
-    return new Promise<IDrive[]>((resolve, reject) => {
-        try {
-            resolve( DriveController.getDrives());
-        } catch (err) {
-          reject(err);
-        }
-      });
-  });
-
-
   // ####### CPU Backend for sys-fs service ####
 
 
@@ -825,3 +814,36 @@ ipcMain.handle('pgms-start-webfaic', async (event, status) => {
         resolve(pgms.run(webFAICreatorProgramName));
     });
 });
+
+
+// Change Crypt password backend
+
+async function changeCryptPassword(oldPassword: string, newPassword: string, confirmPassword: string) {  
+    let crypt_drives: IDrive[] = await DriveController.getDrives();
+    crypt_drives = crypt_drives.filter(x => x.crypt);
+    let oneliner = "";
+    for (let drive of crypt_drives) {
+        oneliner += `printf '%s\\n' '${oldPassword}' | /usr/sbin/cryptsetup open --type luks -q --test-passphrase ${drive.devPath} && `
+    }
+    for (let drive of crypt_drives) {
+        oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
+    }
+    oneliner = oneliner.slice(0, -4); // remove the tailing " && "  
+    return execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
+}
+
+ipcMain.handle('ipc-change-crypt-password', async (event, opw,npw,cpw) => {
+    return new Promise<string>((resolve, reject) => {
+        resolve(changeCryptPassword(opw,npw,cpw));
+    });
+});
+
+ipcMain.handle('drive-controller-get-drives', (event) => {
+    return new Promise<IDrive[]>((resolve, reject) => {
+        try {
+            resolve( DriveController.getDrives());
+        } catch (err) {
+          reject(err);
+        }
+      });
+  });

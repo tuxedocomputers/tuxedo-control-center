@@ -38,6 +38,7 @@ export interface IPC extends EventEmitter {
     issueReboot: () => Promise<void>,
     showTccWindow: () => Promise<void>,
     triggerLanguageChange: (languageId: string) => void,
+    changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => Promise<string>,
   }
 
   export interface POWER 

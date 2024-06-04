@@ -62,6 +62,8 @@ contextBridge.exposeInMainWorld(
     issueReboot: () => ipcRenderer.invoke('ipc-issue-reboot'),
     showTccWindow: () => ipcRenderer.send('show-tcc-window'),
     triggerLanguageChange: (languageId: string) => ipcRenderer.send('trigger-language-change', languageId),
+    changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => ipcRenderer.invoke('ipc-change-crypt-password', newPassword, oldPassword, confirmPassword),
+
 }
   
 );

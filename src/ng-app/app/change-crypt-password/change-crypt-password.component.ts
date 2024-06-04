@@ -85,18 +85,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
         if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
             return;
         }
-
-        let oneliner = "";
-        for (let drive of this.crypt_drives) {
-            oneliner += `printf '%s\\n' '${oldPassword}' | /usr/sbin/cryptsetup open --type luks -q --test-passphrase ${drive.devPath} && `
-        }
-        for (let drive of this.crypt_drives) {
-            oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
-        }
-        oneliner = oneliner.slice(0, -4); // remove the tailing " && "
-
-        // TODO
-        return this.utils.execCmdAsync(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
+        return window.ipc.changeCryptPassword(oldPassword, newPassword, confirmPassword).then(() => {
             this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
         }).catch(() => {
