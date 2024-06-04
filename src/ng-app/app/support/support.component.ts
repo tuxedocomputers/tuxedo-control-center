@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit } from '@angular/core';
-import { ProgramManagementService } from '../program-management.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
 import { MatStepper } from '@angular/material/stepper';
@@ -36,25 +35,28 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 })
 export class SupportComponent implements OnInit {
 
-  public anydeskProgramName = 'anydesk';
+  
   public anydeskInstalled: boolean;
-  public webFAICreatorProgramName = 'tuxedo-webfai-creator';
   public webFAICreatorInstalled: boolean;
-
   public formTicketNumber: FormGroup;
   public systeminfoRunOutput = '';
   public systeminfoRunProgress = false;
   public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
   public systeminfosCompleted = false;
+  public anydeskProgramName = 'anydesk';
+  public webFAICreatorProgramName = 'tuxedo-webfai-creator';
+  // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
+  private installProgress: Map<string, boolean>;
+  private isCheckingInstallation: Map<string, boolean>;
 
   constructor(
-    private program: ProgramManagementService,
     private utils: UtilsService
   ) { }
 
   ngOnInit() {
     this.updateAnydeskInstallStatus();
     this.updateWebFAICreatorInstallStatus();
+    this.updateProgressStatus();
     this.formTicketNumber = new FormGroup({
       inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
     });
@@ -68,61 +70,75 @@ export class SupportComponent implements OnInit {
     this.utils.openExternal(url);
   }
 
-  public updateAnydeskInstallStatus(): void {
-    if (!this.progress().get(this.anydeskProgramName)) {
-      this.program.isInstalled(this.anydeskProgramName).then((isInstalled) => {
-        this.anydeskInstalled = isInstalled;
-      });
-    }
+  public async updateAnydeskInstallStatus(): Promise<void> { 
+        this.anydeskInstalled = await window.pgms.anydeskIsInstalled();
+        this.isCheckingInstallation.set(this.anydeskProgramName, false);
   }
 
-  public updateWebFAICreatorInstallStatus(): void {
-    if (!this.progress().get(this.webFAICreatorProgramName)) {
-      this.program.isInstalled(this.webFAICreatorProgramName).then((isInstalled) => {
-        this.webFAICreatorInstalled = isInstalled;
-      });
-    }
+  public async updateWebFAICreatorInstallStatus(): Promise<void> {
+    this.webFAICreatorInstalled = await window.pgms.webfaiCreatorIsInstalled();
+    this.isCheckingInstallation.set(this.webFAICreatorProgramName, false);
   }
 
   public buttonInstallRemoveAnydesk(): void {
+    this.installProgress.set(this.anydeskProgramName,true);
+    this.isCheckingInstallation.set(this.anydeskProgramName,true);
     if (this.anydeskInstalled) {
-      this.program.remove(this.anydeskProgramName).then(() => {
+      window.pgms.uninstallAnydesk().then(() => {
         this.updateAnydeskInstallStatus();
+        this.updateProgressStatus();
       });
     } else {
-      this.program.install(this.anydeskProgramName).then(() => {
+      window.pgms.installAnydesk().then(() => {
         this.updateAnydeskInstallStatus();
+        this.updateProgressStatus();
       });
     }
+    this.updateProgressStatus();
+    setTimeout(() => { this.updateProgressStatus() },500);
+    setTimeout(() => { this.updateProgressStatus() },1000);
   }
 
   public buttonInstallRemoveWebFAICreator(): void {
+    this.installProgress.set(this.webFAICreatorProgramName,true);
+    this.isCheckingInstallation.set(this.webFAICreatorProgramName,true);
     if (this.webFAICreatorInstalled) {
-      this.program.remove(this.webFAICreatorProgramName).then(() => {
+      window.pgms.uninstallWebfaicreator().then(() => {
         this.updateWebFAICreatorInstallStatus();
+        this.updateProgressStatus();
       });
     } else {
-      this.program.install(this.webFAICreatorProgramName).then(() => {
+        window.pgms.installWebfaicreator().then(() => {
         this.updateWebFAICreatorInstallStatus();
+        this.updateProgressStatus();
       });
     }
+    this.updateProgressStatus();
+    setTimeout(() => { this.updateProgressStatus() },500);
+    setTimeout(() => { this.updateProgressStatus() },1000);
   }
 
   public buttonStartAnydesk(): void {
-    this.program.run(this.anydeskProgramName);
+    window.pgms.startAnydesk();
   }
 
   public buttonStartWebFAICreator(): void {
-    this.program.run(this.webFAICreatorProgramName);
+    window.pgms.startWebfaicreator();
   }
 
   public progress(): Map<string, boolean> {
-    return this.program.isInProgress;
+    return this.installProgress;
   }
 
   public progressCheck(): Map<string, boolean> {
-    return this.program.isCheckingInstallation;
+    return this.isCheckingInstallation;
   }
+
+  private async updateProgressStatus() {
+    this.installProgress = await window.pgms.isInProgress();
+    this.isCheckingInstallation = await window.pgms.isCheckingInstallation();
+  }
+
 
   public buttonStartSysteminfo(systeminfoStepper: MatStepper): void {
     this.systeminfoRunProgress = true;

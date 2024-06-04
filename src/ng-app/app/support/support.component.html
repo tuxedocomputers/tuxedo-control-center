@@ -129,7 +129,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
                 </button>
                 &nbsp;
-                <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
+                <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled && !(progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName))" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
             </p>
         </div>
     </mat-expansion-panel>
@@ -155,7 +155,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span *ngIf="progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorProgressButton">Checking</span>
                 </button>
                 &nbsp;
-                <button mat-raised-button color="primary" (click)="buttonStartWebFAICreator()" *ngIf="webFAICreatorInstalled" i18n="@@cSupportWebFAICreatorStartButton">Start WebFAI Creator</button>
+                <button mat-raised-button color="primary" (click)="buttonStartWebFAICreator()" *ngIf="webFAICreatorInstalled && !(progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName))" i18n="@@cSupportWebFAICreatorStartButton">Start WebFAI Creator</button>
             </p>
         </div>
     </mat-expansion-panel>

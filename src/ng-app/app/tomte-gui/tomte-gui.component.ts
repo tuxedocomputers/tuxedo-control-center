@@ -18,7 +18,6 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../utils.service';
-import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 interface ITomteModule {
@@ -58,7 +57,6 @@ export class TomteGuiComponent implements OnInit {
     isTuxedoDevice = true;
     constructor(
         private utils: UtilsService,
-        private pmgs: ProgramManagementService
     ) { }
 
 
@@ -86,7 +84,7 @@ export class TomteGuiComponent implements OnInit {
         // only check version once and then store it?
         this.showRetryButton = false;
         this.loadingInformation = true;
-        this.tomteIsInstalled = await this.pmgs.isInstalled("tuxedo-tomte");
+        this.tomteIsInstalled = await window.pgms.tomteIsInstalled();
         if (this.tomteIsInstalled)
             {
                 await this.tomteListJson();
@@ -462,7 +460,7 @@ export class TomteGuiComponent implements OnInit {
     public async installTomteButton()
     {
         this.utils.pageDisabled = true;
-        let gotInstalled = await this.pmgs.install("tuxedo-tomte");
+        let gotInstalled = await window.pgms.installTomte();
         if (!gotInstalled)
         {
             this.throwErrorMessage($localize `:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`);

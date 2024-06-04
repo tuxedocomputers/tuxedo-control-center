@@ -455,13 +455,6 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
 //     });
 // });
 
-ipcMain.on('spawn-external-async', (event, arg) => {
-    child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
-        console.log("\"" + arg + "\" could not be executed.")
-        dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + arg + "\" could not be executed." })
-    });
-});
-
 // ######################################################################
 
 // Shutdown timer
@@ -635,7 +628,7 @@ export async function execCmd(cmd): Promise<string> {
     return new Promise<string>((resolve, reject) => {
     child_process.exec(cmd, (err, stdout, stderr) => {
         if (err) {
-            resolve(stderr);
+            reject(stderr);
         } else {
             resolve(stdout);
         }
@@ -678,3 +671,157 @@ ipcMain.handle('get-cpu-vendor', async (event, status) => {
 });
 
 
+// ###### programm management service backend ###
+
+
+// TODO, I removed the "is in Progress" functionality, do we still need it?
+class ProgramManagementService {
+
+    public isInProgress: Map<string, boolean>;
+    public isCheckingInstallation: Map<string, boolean>;
+  
+    constructor() {
+      this.isInProgress = new Map();
+      this.isCheckingInstallation = new Map();
+    }
+  
+    public async isInstalled(name: string): Promise<boolean> {
+      this.isCheckingInstallation.set(name, true);
+      return new Promise<boolean>(async (resolve) => {
+        execCmd('which ' + name).then((result) => {
+          this.isCheckingInstallation.set(name, false);
+          resolve(true);
+        }).catch(() => {
+          this.isCheckingInstallation.set(name, false);
+          resolve(false);
+        });
+      });
+    }
+  
+    public async install(name: string): Promise<boolean> {
+      this.isInProgress.set(name, true);
+      return new Promise<boolean>(async (resolve) => {
+        execCmd('pkexec apt install -y ' + name).then(() => {
+          this.isInProgress.set(name, false);
+          resolve(true);
+        }).catch(() => {
+          this.isInProgress.set(name, false);
+          resolve(false);
+        });
+      });
+    }
+  
+    public async remove(name: string): Promise<boolean> {
+      this.isInProgress.set(name, true);
+      return new Promise<boolean>(async (resolve) => {
+          // TODO
+        execCmd('pkexec apt remove -y ' + name).then(() => {
+          this.isInProgress.set(name, false);
+          resolve(true);
+        }).catch(() => {
+          this.isInProgress.set(name, false);
+          resolve(false);
+        });
+      });
+    }
+  
+    public run(name: string): void {
+        child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (err) => {
+            console.log("\"" + name + "\" could not be executed.")
+            dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + name + "\" could not be executed." })
+        });
+    }
+  }
+
+// important! the functions in the class may not be exposed to the outside directly and only be used to 
+// check on specific programs, to prevent render service from running arbitrary code
+const pgms = new ProgramManagementService();
+const tomteName = "tuxedo-tomte";
+const anydeskProgramName = 'anydesk';
+const webFAICreatorProgramName = 'tuxedo-webfai-creator';
+
+ipcMain.handle('pgms-is-in-progress', async (event, status) => {
+    return new Promise<Map<string, boolean>>((resolve, reject) => {
+        resolve(pgms.isInProgress);
+    });
+});
+
+ipcMain.handle('pgms-is-checking-installation', async (event, status) => {
+    return new Promise<Map<string, boolean>>((resolve, reject) => {
+        resolve(pgms.isCheckingInstallation);
+    });
+});
+
+ipcMain.handle('pgms-tomte-is-installed', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.isInstalled(tomteName));
+    });
+});
+
+ipcMain.handle('pgms-install-tomte', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.install(tomteName));
+    });
+});
+
+ipcMain.handle('pgms-uninstall-tomte', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.remove(tomteName));
+    });
+});
+
+ipcMain.handle('pgms-start-tomte', async (event, status) => {
+    return new Promise<void>((resolve, reject) => {
+        resolve(pgms.run(tomteName));
+    });
+});
+
+
+ipcMain.handle('pgms-anydesk-is-installed', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.isInstalled(anydeskProgramName));
+    });
+});
+
+ipcMain.handle('pgms-install-anydesk', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.install(anydeskProgramName));
+    });
+});
+
+ipcMain.handle('pgms-uninstall-anydesk', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.remove(anydeskProgramName));
+    });
+});
+
+ipcMain.handle('pgms-start-anydesk', async (event, status) => {
+    return new Promise<void>((resolve, reject) => {
+        resolve(pgms.run(anydeskProgramName));
+    });
+});
+
+
+ipcMain.handle('pgms-webfaic-is-installed', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.isInstalled(webFAICreatorProgramName));
+    });
+});
+
+ipcMain.handle('pgms-install-webfaic', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.install(webFAICreatorProgramName));
+    });
+});
+
+ipcMain.handle('pgms-uninstall-webfaic', async (event, status) => {
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(pgms.remove(webFAICreatorProgramName));
+    });
+});
+
+ipcMain.handle('pgms-start-webfaic', async (event, status) => {
+    return new Promise<void>((resolve, reject) => {
+        resolve(pgms.run(webFAICreatorProgramName));
+    });
+});

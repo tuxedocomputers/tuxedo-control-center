@@ -124,6 +124,23 @@ export interface COMP
     getScalingDriverAcpiCpuFreq: () => any,
 }
 
+export interface PGMS 
+{
+    tomteIsInstalled: () => Promise<boolean>,
+    installTomte: () => Promise<boolean>,
+    uninstallTomte: () => Promise<boolean>,
+    startTomte: () => Promise<void>,
+    anydeskIsInstalled: () => Promise<boolean>,
+    installAnydesk: () => Promise<boolean>,
+    uninstallAnydesk: () => Promise<boolean>,
+    startAnydesk: () => Promise<void>,
+    webfaiCreatorIsInstalled: () => Promise<boolean>,
+    installWebfaicreator: () => Promise<boolean>,
+    uninstallWebfaicreator: () => Promise<boolean>,
+    startWebfaicreator: () => Promise<void>,
+    isInProgress: () => Promise<Map<string, boolean>>,
+    isCheckingInstallation: () => Promise<Map<string, boolean>>,
+}
 
   declare global {
     interface Window {
@@ -141,6 +158,7 @@ export interface COMP
       stuff: STUFF,
       vendor: VENDOR,
       power: POWER,
+      pgms: PGMS,
     }
   }
   

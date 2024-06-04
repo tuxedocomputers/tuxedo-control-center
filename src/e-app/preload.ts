@@ -228,6 +228,28 @@ contextBridge.exposeInMainWorld(
     }
 );
 
+contextBridge.exposeInMainWorld(
+    'pgms',
+    {
+        tomteIsInstalled: () => ipcRenderer.invoke('pgms-tomte-is-installed'),
+        installTomte: () => ipcRenderer.invoke('pgms-install-tomte'),
+        uninstallTomte: () => ipcRenderer.invoke('pgms-uninstall-tomte'),
+        startTomte: () => ipcRenderer.invoke('pgms-start-tomte'),
+        anydeskIsInstalled: () => ipcRenderer.invoke('pgms-anydesk-is-installed'),
+        installAnydesk: () => ipcRenderer.invoke('pgms-install-anydesk'),
+        uninstallAnydesk: () => ipcRenderer.invoke('pgms-uninstall-anydesk'),
+        startAnydesk: () => ipcRenderer.invoke('pgms-start-anydesk'),
+        webfaiCreatorIsInstalled: () => ipcRenderer.invoke('pgms-webfaic-is-installed'),
+        installWebfaicreator: () => ipcRenderer.invoke('pgms-install-webfaic'),
+        uninstallWebfaicreator: () => ipcRenderer.invoke('pgms-uninstall-webfaic'),
+        startWebfaicreator: () => ipcRenderer.invoke('pgms-start-webfaic'),
+        isInProgress: () => ipcRenderer.invoke('pgms-is-in-progress'),
+        isCheckingInstallation: () => ipcRenderer.invoke('pgms-is-checking-installation'),
+    }
+);
+
+
+
 
 // TODO rewrite all apis to work like the aquarisapi :)
 contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);

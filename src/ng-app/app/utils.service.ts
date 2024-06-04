@@ -154,18 +154,12 @@ export class UtilsService {
     window.ipc.openExternal(url);
   }
 
-  // TODO
 public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?): Promise<void> {
     return window.fs.writeTextFile(filePath,fileData,writeFileOptions);
 }
 
   public async readTextFile(filePath: string): Promise<string> {
     return window.fs.readTextFile(filePath);
-  }
-
-  // TODO
-  public spawnExternal(command: string): void {
-    window.ipc.send('spawn-external-async', command);
   }
 
   public getSystemInfosUrl()
