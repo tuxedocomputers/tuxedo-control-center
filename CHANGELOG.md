@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.10] - UNRELEASED
+## [2.1.10] - 2024-06-05
 ### Added
 - Pulse Gen3 & Gen4 dashboard iGPU support
 - Pulse Gen4 power profile changed to TDP value slider view at TCC Profile edit
