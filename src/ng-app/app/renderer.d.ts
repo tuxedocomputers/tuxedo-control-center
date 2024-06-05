@@ -39,7 +39,9 @@ export interface IPC extends EventEmitter {
     showTccWindow: () => Promise<void>,
     triggerLanguageChange: (languageId: string) => void,
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => Promise<string>,
-  }
+    runSysteminfo: (ticketNumber: string) => Promise<void>,
+    onUpdateSysteminfoLabel: (callback) => void,  
+}
 
   export interface POWER 
   {
@@ -58,11 +60,11 @@ export interface IPC extends EventEmitter {
 
   }
 
-  export interface HTTPS 
-  {
-    getSystemInfos: () => Promise<Buffer>,
-    getSystemInfosURL: () => string
-  }
+//   export interface HTTPS 
+//   {
+//     getSystemInfos: () => Promise<Buffer>,
+//     getSystemInfosURL: () => string
+//   }
 
   export interface FS 
   {
@@ -150,7 +152,7 @@ export interface PGMS
       ipc: IPC,
       aquarisAPI: IAquarisClientAPI,
       dbusAPI: IDbusClientAPI,
-      https: HTTPS,
+      //https: HTTPS,
       fs: FS,
       driveController: DRIVECONTROLLER,
       webcam: WEBCAM,

@@ -41,7 +41,6 @@ export class SupportComponent implements OnInit {
   public formTicketNumber: FormGroup;
   public systeminfoRunOutput = '';
   public systeminfoRunProgress = false;
-  public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
   public systeminfosCompleted = false;
   public anydeskProgramName = 'anydesk';
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';
@@ -60,6 +59,10 @@ export class SupportComponent implements OnInit {
     this.formTicketNumber = new FormGroup({
       inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
     });
+    // TODO register callback for onUpdateSysteminfoLabel and update label accordingly
+    window.ipc.onUpdateSysteminfoLabel(async (event, text) => {
+        this.systeminfoOutput(text);
+    }); 
   }
 
   public focusControl(control): void {
@@ -142,7 +145,8 @@ export class SupportComponent implements OnInit {
 
   public buttonStartSysteminfo(systeminfoStepper: MatStepper): void {
     this.systeminfoRunProgress = true;
-    this.runSysteminfo().then(() => {
+    this.utils.pageDisabled = true;
+    window.ipc.runSysteminfo(this.formTicketNumber.controls.inputTicketNumber.value).then(() => {
       this.systeminfoOutput('Done');
       this.systeminfosCompleted = true;
       systeminfoStepper.selected.completed = true;
@@ -151,45 +155,7 @@ export class SupportComponent implements OnInit {
       this.systeminfoRunOutput = err;
     }).finally(() => {
       this.systeminfoRunProgress = false;
-    });
-  }
-
-  // TODO, move this entire function into backend
-  public async runSysteminfo(): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
-      let fileData: string;
-      // Download file
-      try {
-        this.systeminfoOutput('Fetching: ' + this.utils.getSystemInfosUrl());
-        const data = await this.utils.getSystemInfos();
-        fileData = data.toString();
-      } catch (err) {
-        reject('Download failed'); return;
-      }
-
-      // Write file
-      try {
-        this.systeminfoOutput('Writing file: ' + this.systeminfoFilePath);
-        // TODO
-        await this.utils.writeTextFile(this.systeminfoFilePath, fileData, { mode: 0o755 });
-      } catch (err) {
-        reject('Failed to write file ' + this.systeminfoFilePath); return;
-      }
-
-      // Run
-      try {
-        const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
-        this.systeminfoOutput('Running systeminfos.sh');
-        this.utils.pageDisabled = true;
-        // TODO
-        await this.utils.execCmdAsync('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
-      } catch (err) {
-        reject('Failed to execute script');
-      } finally {
-        this.utils.pageDisabled = false;
-      }
-
-      resolve();
+      this.utils.pageDisabled = false;
     });
   }
 
@@ -197,3 +163,5 @@ export class SupportComponent implements OnInit {
     this.systeminfoRunOutput = text;
   }
 }
+
+

@@ -41,7 +41,7 @@ import { ITccSettings } from '../../common/models/TccSettings';
 import { ITccProfile } from "../../common/models/TccProfile";
 import { VendorService } from '../../common/classes/Vendor.service'
 import { amdDGpuDeviceIdString } from "../../common/classes/DeviceIDs";
-import { primeWindow } from './browserWindows';
+import { primeWindow, tccWindow } from './browserWindows';
 import { changeLanguage, getBrightnessMode, setBrightnessMode } from "./translationAndTheme";
 import { hasAquaris } from "./initMain";
 export const cwd: string = process.cwd();
@@ -87,63 +87,34 @@ ipcMain.on("prime-window-show", () => {
 // TODO sepparate all APIs into their own files like explained here:
 // https://stackoverflow.com/questions/56523293/how-do-i-seperate-ipcmain-on-functions-in-different-file-from-main-js
 
-let systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
 
-ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
-    event.returnValue = systeminfosURL;
-});
-
-ipcMain.handle('utils-get-systeminfos', async (event, arg) => {
-    return new Promise<Buffer>((resolve, reject) => {
-        try {
-          const dataArray: Buffer[] = [];
-          const req = https.get(systeminfosURL, response => {
-  
-            response.on('data', (data) => {
-              dataArray.push(data);
-            });
-  
-            response.once('end', () => {
-              resolve(Buffer.concat(dataArray));
-            });
-  
-            response.once('error', (err) => {
-              reject(err);
-            });
-  
-          });
-  
-          req.once('error', (err) => {
-       reject(err);
-          });
-        } catch (err) {
-          reject(err);
-        }
-      });
-});
 
 ipcMain.handle('fs-write-text-file', async (event, filePath: string, fileData: string | Buffer, writeFileOptions?) => {   
-return new Promise<void>((resolve, reject) => {
-    try {
-      if (!fs.existsSync(path.dirname(filePath))) {
-          fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
-      }
-      fs.writeFile(filePath, fileData, writeFileOptions, err => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    } catch (err) {
-      reject(err);
-    }
-  });
+    return writeTextFile(filePath, fileData, writeFileOptions);
 });
 
 ipcMain.handle('fs-read-text-file', async (event, filePath) => {
     return readTextFile(filePath);
 });
+
+async function writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?)  {
+    return new Promise<void>((resolve, reject) => {
+    try {
+        if (!fs.existsSync(path.dirname(filePath))) {
+            fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
+        }
+        fs.writeFile(filePath, fileData, writeFileOptions, err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+}
 
 async function readTextFile(filePath: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
@@ -847,3 +818,79 @@ ipcMain.handle('drive-controller-get-drives', (event) => {
         }
       });
   });
+
+  // systeminfos
+
+  let systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+
+async function getSystemInfos() {
+    return new Promise<Buffer>((resolve, reject) => {
+        try {
+          const dataArray: Buffer[] = [];
+          const req = https.get(systeminfosURL, response => {
+  
+            response.on('data', (data) => {
+              dataArray.push(data);
+            });
+  
+            response.once('end', () => {
+              resolve(Buffer.concat(dataArray));
+            });
+  
+            response.once('error', (err) => {
+              reject(err);
+            });
+  
+          });
+  
+          req.once('error', (err) => {
+       reject(err);
+          });
+        } catch (err) {
+          reject(err);
+        }
+      });
+}
+
+  let systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
+    function updateSystemInfoLabel(text: string)
+    {
+        tccWindow.webContents.send('ipc-update-system-info-label', text);
+    }
+
+    async function runSysteminfo(ticketNumber: string): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
+          let fileData: string;
+          // Download file
+          try {
+            updateSystemInfoLabel('Fetching: ' + systeminfosURL);
+            const data = await getSystemInfos();
+            fileData = data.toString();
+          } catch (err) {
+            reject('Download failed'); return;
+          }
+    
+          // Write file
+          try {
+            updateSystemInfoLabel('Writing file: ' + systeminfoFilePath);
+            await writeTextFile(systeminfoFilePath, fileData, { mode: 0o755 });
+          } catch (err) {
+            reject('Failed to write file ' + systeminfoFilePath); return;
+          }
+    
+          // Run
+          try {
+            updateSystemInfoLabel('Running systeminfos.sh');
+            await execCmd('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + systeminfoFilePath + ' ' + ticketNumber);
+          } catch (err) {
+            reject('Failed to execute script');
+          } 
+          resolve();
+        });
+      }
+
+ipcMain.handle('ipc-run-systeminfos', async (event, ticketNumber) => {
+    return new Promise<void>((resolve, reject) => {
+        resolve(runSysteminfo(ticketNumber));
+    });
+});

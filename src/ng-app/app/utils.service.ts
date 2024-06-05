@@ -162,15 +162,6 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return window.fs.readTextFile(filePath);
   }
 
-  public getSystemInfosUrl()
-  {
-        return window.https.getSystemInfosURL();
-  }
-  public async getSystemInfos(): Promise<Buffer>
-  {
-        return window.https.getSystemInfos();
-  }
-
   public formatCpuFrequency(frequency: number): string {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
   }

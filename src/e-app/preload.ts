@@ -53,6 +53,14 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
+    onUpdateSysteminfoLabel: (callback) => {
+        var channelname = 'ipc-update-system-info-label';
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
+    },
     // TODO
     displayBrightnessNotSupportedGnome: () => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
     setDisplayBrightnessGnome: (valuePercent: number) => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
@@ -63,7 +71,7 @@ contextBridge.exposeInMainWorld(
     showTccWindow: () => ipcRenderer.send('show-tcc-window'),
     triggerLanguageChange: (languageId: string) => ipcRenderer.send('trigger-language-change', languageId),
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => ipcRenderer.invoke('ipc-change-crypt-password', newPassword, oldPassword, confirmPassword),
-
+    runSysteminfo: (ticketNumber: string) => ipcRenderer.invoke('ipc-run-systeminfos',ticketNumber),
 }
   
 );
@@ -152,14 +160,14 @@ contextBridge.exposeInMainWorld(
     }
 );
 
-contextBridge.exposeInMainWorld(
-    'https',
-    {
-        // TODO
-        getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
-        getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync'),
-    }
-);
+// contextBridge.exposeInMainWorld(
+//     'https',
+//     {
+//         // TODO
+//         getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
+//         getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync'),
+//     }
+// );
 
 contextBridge.exposeInMainWorld(
     'config',
