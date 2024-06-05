@@ -63,6 +63,7 @@ export class FanControlWorker extends DaemonWorker {
 
     private hwmonPath: string;
     private pwmPath: string = "/sys/bus/platform/devices/tuxedo_fan_control";
+    private hwmonAvailable: boolean = false;
     private pwmAvailable: boolean = false;
 
     private previousFanProfile: ITccFanProfile;
@@ -92,11 +93,15 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public onWork(): void {
-        if (this.pwmAvailable) {
+        if (this.pwmAvailable && this.hwmonAvailable) {
             this.fanControl(this.hwmonPath);
         }
 
-        if (!this.pwmAvailable) {
+        if (!this.pwmAvailable && this.hwmonAvailable) {
+            this.dashboardHwmonMetrics(this.hwmonPath)
+        }
+
+        if (!this.pwmAvailable && !this.hwmonAvailable) {
             this.fallbackFanControl();
         }
     }
@@ -114,6 +119,7 @@ export class FanControlWorker extends DaemonWorker {
 
     private async setupPwm() {
         this.hwmonPath = await this.getHwmonPath();
+        this.hwmonAvailable = fs.existsSync(this.hwmonPath);
 
         if (this.hwmonPath) {
             this.pwmAvailable = fs.existsSync(this.pwmPath);
@@ -499,6 +505,16 @@ export class FanControlWorker extends DaemonWorker {
             Date.now(),
             Math.round(input / 1000)
         );
+    }
+
+    // todo: refactor code
+    private dashboardHwmonMetrics(hwmonPath: string) {
+        const files = fs.readdirSync(hwmonPath);
+        const fanFiles = this.getFanFiles(files);
+        const tempFiles = this.getTempFiles(files);
+
+        this.handleFanControl(hwmonPath, fanFiles);
+        this.handleTempControl(hwmonPath, tempFiles)
     }
 
     private fanControl(hwmonPath: string): void {
