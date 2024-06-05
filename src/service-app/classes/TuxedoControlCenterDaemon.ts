@@ -522,6 +522,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
         dmiSKUDeviceMap.set('PULSE1403', TUXEDODevice.PULSE1403);
+        dmiSKUDeviceMap.set('PULSE1404', TUXEDODevice.PULSE1404);
         dmiSKUDeviceMap.set('STELLARIS1XI05', TUXEDODevice.STELLARIS1XI05);
         dmiSKUDeviceMap.set('POLARIS1XA05', TUXEDODevice.POLARIS1XA05);
         dmiSKUDeviceMap.set('STELLARIS1XA05', TUXEDODevice.STELLARIS1XA05);
