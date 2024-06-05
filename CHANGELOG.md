@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.10] - UNRELEASED
+### Added
+- Pulse Gen3 & Gen4 dashboard iGPU support
+- Pulse Gen4 power profile changed to TDP value slider view at TCC Profile edit
+
+### Changed
+- Pulse Gen3 & Gen4 power profile TDP values adjusted according to firmware update
+
+### Fixed
+- Show hwmon based dashboard info even if fan control is not available
+
 ## [2.1.9] - 2024-05-25
 ### Added
 - NVIDIA cTGP (configurable TGP) adjustable per TCC profile for supported models
