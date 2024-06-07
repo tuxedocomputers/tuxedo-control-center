@@ -15,7 +15,7 @@
 ### Added
 - NVIDIA cTGP (configurable TGP) adjustable per TCC profile for supported models
   with this feature enabled
-- Enable Aquaris menu für Stellaris Gen6
+- Enable Aquaris menu for Stellaris Gen6
 - Support for new PWM fan control
 
 ### Fixed
