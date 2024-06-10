@@ -7,6 +7,7 @@ import { WebcamConstraints, WebcamPreset } from "../../common/models/TccWebcamSe
 import { ITccSettings } from "../../common/models/TccSettings";
 import { ITccFanProfile } from "../../common/models/TccFanTable";
 import { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
+import { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
 
 export interface IPC extends EventEmitter {
     send: (channel: string, args) => Promise<IPCReturnValue>,
@@ -153,7 +154,7 @@ export interface PGMS
       ipc: IPC,
       aquarisAPI: IAquarisClientAPI,
       dbusAPI: IDbusClientAPI,
-      //https: HTTPS,
+      tomteAPI: ITomteClientAPI,
       fs: FS,
       driveController: DRIVECONTROLLER,
       webcam: WEBCAM,

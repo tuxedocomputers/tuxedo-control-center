@@ -81,17 +81,17 @@ export class UtilsService {
     // }
 
     // TODO
-  public async execCmdAsync(command: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        window.ipc.invoke('exec-cmd-async', command).then((result) => {
-        if (result.error === null) {
-          resolve(result.data.toString());
-        } else {
-          reject(result.error.toString());
-        }
-      });
-    });
-  }
+//   public async execCmdAsync(command: string): Promise<string> {
+//     return new Promise<string>((resolve, reject) => {
+//         window.ipc.invoke('exec-cmd-async', command).then((result) => {
+//         if (result.error === null) {
+//           resolve(result.data.toString());
+//         } else {
+//           reject(result.error.toString());
+//         }
+//       });
+//     });
+//   }
 
   public getFahrenheitFromCelsius(temp: number): number {
     return ((temp * 1.8) + 32);
@@ -137,17 +137,17 @@ export class UtilsService {
   }
 
   // TODO
-  public async execFile(command: string): Promise<Buffer> {
-    return new Promise<Buffer>((resolve, reject) => {
-      window.ipc.invoke('exec-file-async', command).then((result) => {
-        if (result.error === null) {
-          resolve(result.data);
-        } else {
-          reject(result.error);
-        }
-      });
-    });
-  }
+//   public async execFile(command: string): Promise<Buffer> {
+//     return new Promise<Buffer>((resolve, reject) => {
+//       window.ipc.invoke('exec-file-async', command).then((result) => {
+//         if (result.error === null) {
+//           resolve(result.data);
+//         } else {
+//           reject(result.error);
+//         }
+//       });
+//     });
+//   }
 
   public async openExternal(url)
   {

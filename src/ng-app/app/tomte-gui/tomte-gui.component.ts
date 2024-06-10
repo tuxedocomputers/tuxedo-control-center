@@ -19,14 +19,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAPI';
 
-interface ITomteModule {
-    moduleName: string,
-    version: string,
-    installed: boolean,
-    blocked: boolean,
-    prerequisite: string
-}
 
 @Component({
   selector: 'app-tomte-gui',
@@ -87,69 +81,33 @@ export class TomteGuiComponent implements OnInit {
         this.tomteIsInstalled = await window.pgms.tomteIsInstalled();
         if (this.tomteIsInstalled)
             {
-                await this.tomteListJson();
+                let tomteInformation: ITomteInformation;
+                // check for information a few times, if it keeps failing, show retry button
+                for (let i = 0; i < 30; i++)
+                {
+                        tomteInformation = await window.tomteAPI.getTomteInformation();
+                        if (tomteInformation && !tomteInformation.jsonError) {
+                            this.getModuleDescriptions();
+                            break;
+                        }
+                        else {
+                            if(i === 10)
+                            {
+                                this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
+                            }
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            if(i === 29)
+                            {
+                                this.showRetryButton = true;
+                            }
+                            continue;
+                        }
+                } 
+                this.tomteListArray = tomteInformation.modules;
+                this.tomteMode = tomteInformation.tomteMode;
             }
+            this.getModuleDescriptions();
             this.loadingInformation = false;
-    }
-
-    private async tomteListJson()
-    {
-        // retries to list the information a couple of times, this is only triggered if tomte is already running.
-        for (let i = 0; i < 30; i++)
-        {
-            let command = "tuxedo-tomte listjson"
-            let results
-            try
-            {
-                results = await this.utils.execCmdAsync(command + "");
-                results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
-                this.parseTomteListJson(results);
-                this.getModuleDescriptions();
-                break;
-            }
-            catch (e)
-            {
-                if(i === 10)
-                {
-                    this.throwErrorMessage($localize `:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`);
-                }
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                if(i === 29)
-                {
-                    this.showRetryButton = true;
-                }
-                continue;
-            }
-        }
-    }
-
-    private parseTomteListJson(rawTomteListOutput: string | undefined)
-    {
-        if (!rawTomteListOutput)
-        {
-            return;
-        }
-        try
-        {
-            let givenobject = JSON.parse(rawTomteListOutput);
-            this.jsonError = false;
-
-        // now let's get the mode, modules etc out of it
-        this.tomteMode = givenobject.mode;
-        this.tomteListArray = [];
-        this.rebootRequired = givenobject.restart === "yes";
-        for (let i = 0; i < givenobject.modules.length; i++)
-        {
-            let module = givenobject.modules[i];
-            this.tomteListArray.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
-        }
-        }
-        catch (e)
-        {
-            console.error("not valid json");
-            this.jsonError = true;
-        }
-
     }
 
     /*
@@ -162,21 +120,16 @@ export class TomteGuiComponent implements OnInit {
         {
         for (let i = 0; i < this.tomteListArray.length; i++)
             {
-                let modulename = this.tomteListArray[i].moduleName;
-                if(this.moduleToolTips.has(modulename))
+                let moduleName = this.tomteListArray[i].moduleName;
+                if(this.moduleToolTips.has(moduleName))
                 {
                     continue;
                 }
-                let command = "LANGUAGE=" + this.utils.getCurrentLanguageId() + " tuxedo-tomte description " + modulename;
-                try
-                {
-                    let results = await this.utils.execCmdAsync(command);
-                    this.moduleToolTips.set(modulename, results);
+                let results = await window.tomteAPI.getModuleDescription(moduleName, this.utils.getCurrentLanguageId());
+                if(!results) {
+                    continue;
                 }
-                catch (err)
-                {
-                }
-
+                this.moduleToolTips.set(moduleName, results);
             }
         }
     }
@@ -326,27 +279,13 @@ export class TomteGuiComponent implements OnInit {
             this.utils.pageDisabled = false;
             return;
         }
-        let command1 = "pkexec tuxedo-tomte AUTOMATIC";
-        let command2 = "pkexec tuxedo-tomte unblock all";
-        let command3 = "pkexec tuxedo-tomte reconfigure all";
-        let res1;
-        let res2;
-        let res3;
-        try
+        let success = await window.tomteAPI.resetToDefaults();
+        if(success)
         {
-
-            res1 = await this.utils.execFile(command1);
-            res2 = await this.utils.execFile(command2);
-            res3 = await this.utils.execFile(command3);
             this.tomtelist();
         }
-        catch
+        else
         {
-            console.error("One of the reset commands failed, here is their output: Function 1 Command: "
-            + command1 + " Results: " + res1 +
-            " Function 2 Command: " + command2 + " Results: " + res2 +
-            " Function 3 Command: " + command3 + " Results: " + res3
-            );
             this.throwErrorMessage($localize `:@@tomteGuiResetFailedPopup:Reset failed. Maybe Tomte is already running? If that is the case simply try again later.`);
         }
         this.utils.pageDisabled = false;
@@ -374,9 +313,8 @@ export class TomteGuiComponent implements OnInit {
         }
         if (isInstalled)
         {
-            let command = "yes | pkexec tuxedo-tomte remove " + name;
 
-            let results = await this.utils.execCmdAsync(command).catch((err) => {
+            await window.tomteAPI.removeModule(name).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
@@ -386,9 +324,7 @@ export class TomteGuiComponent implements OnInit {
         else
         {
 
-            let command = "pkexec tuxedo-tomte configure " + name;
-
-            let results = await this.utils.execFile(command).catch((err) => {
+            await window.tomteAPI.installModule(name).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
@@ -413,16 +349,22 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        let command = "pkexec tuxedo-tomte block " + name;
-        if (isBlocked)
-        {
-            command = "pkexec tuxedo-tomte unblock " + name ;
+        if (isBlocked) {
+            await window.tomteAPI.unBlockModule(name).catch((err) => {
+                console.error(err);
+                this.utils.pageDisabled = false;
+                return;
+            });
         }
-        let results = await this.utils.execFile(command).catch((err) => {
-            console.error(err);
-            this.utils.pageDisabled = false;
-            return;
-        });
+        else {
+            await window.tomteAPI.blockModule(name).catch((err) => {
+                console.error(err);
+                this.utils.pageDisabled = false;
+                return;
+            });
+
+        }
+
         this.tomtelist();
         this.utils.pageDisabled = false;
     }
@@ -433,7 +375,6 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteModeButton(mode)
     {
-        console.log(mode);
         let dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
@@ -442,8 +383,7 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        let command = "pkexec tuxedo-tomte " + mode.value ;
-        let results = await this.utils.execFile(command).catch((err) => {
+        await window.tomteAPI.setMode(mode.value).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
             return;

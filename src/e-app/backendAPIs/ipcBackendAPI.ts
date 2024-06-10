@@ -600,14 +600,15 @@ function getBusPath(driver: string): string {
 }
 
 export async function execCmd(cmd): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>(async (resolve, reject) => {
     child_process.exec(cmd, (err, stdout, stderr) => {
         if (err) {
             reject(stderr);
         } else {
             resolve(stdout);
         }
-    });});
+    });
+});
 }
 
 export function execCmdSync(cmd):string {

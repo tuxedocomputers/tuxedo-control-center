@@ -22,6 +22,8 @@ import { dbusAPIHandle } from '../common/models/IDbusAPI';
 import { aquarisHandlers } from './backendAPIs/aquarisBackendAPI';
 import { dbusHandlers } from './backendAPIs/dbusBackendAPI';
 import { registerAPI } from './backendAPIs/apiManagement'
+import { tomteAPIHandle } from '../common/models/ITomteAPI';
+import { tomteHandlers } from './backendAPIs/tomteGuiBackendAPI';
 
 
 // require all of the files that I have split off of main.ts
@@ -40,3 +42,5 @@ globalThis.setImmediate = ((fn, ...args) => global.setTimeout(fn, 0, ...args)) a
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
 // register DbusAPI
 registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);
+// register TomteAPI
+registerAPI(ipcMain, tomteAPIHandle, tomteHandlers);

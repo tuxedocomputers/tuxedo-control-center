@@ -3,6 +3,7 @@ import { ITccSettings } from "src/common/models/TccSettings";
 import { WebcamPreset } from "src/common/models/TccWebcamSettings";
 import { AquarisClientAPI } from "./preloadAPIs/AquarisClientAPI";
 import { DbusClientAPI } from "./preloadAPIs/DbusClientAPI";
+import { TomteClientAPI} from "./preloadAPIs/tomteClientAPI"
 const { contextBridge, ipcRenderer } = require('electron');
 
 let callbacks = [];
@@ -267,3 +268,4 @@ contextBridge.exposeInMainWorld(
 // TODO rewrite all apis to work like the aquarisapi :)
 contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);
 contextBridge.exposeInMainWorld('dbusAPI', DbusClientAPI);
+contextBridge.exposeInMainWorld('tomteAPI', TomteClientAPI);
