@@ -286,12 +286,9 @@ private transformPrimeStatus(status: string): string {
         selectedState: string
     ): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
-            this.utils
-                .execFile(
-                    `pkexec prime-select ${this.transformPrimeStatus(
-                        selectedState
-                    )}`
-                )
+            window.ipc.primeSelect(this.transformPrimeStatus(
+                selectedState
+            ))
                 .then(() => {
                     resolve(true);
                 })

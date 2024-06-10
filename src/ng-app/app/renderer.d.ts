@@ -41,6 +41,7 @@ export interface IPC extends EventEmitter {
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => Promise<string>,
     runSysteminfo: (ticketNumber: string) => Promise<void>,
     onUpdateSysteminfoLabel: (callback) => void,  
+    primeSelect: (selectedState: string) => Promise<string>,
 }
 
   export interface POWER 

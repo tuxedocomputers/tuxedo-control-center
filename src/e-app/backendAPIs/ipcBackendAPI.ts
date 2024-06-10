@@ -78,6 +78,21 @@ ipcMain.on("prime-window-show", () => {
 });
 
 
+ipcMain.handle('ipc-prime-select', async (event, selectedState) => {
+    return new Promise<{data:string,error:string}>(async (resolve, reject) => {
+        try {
+            resolve( execFile(
+                `pkexec prime-select ${selectedState}`
+            ));
+        } catch (err) {
+          reject(err);
+        }
+      });
+
+});
+
+
+
       
 /* 
 ################ Utils API #######################
@@ -610,7 +625,7 @@ export async function execFile(arg): Promise<{ data: string, error: any}> {
         let cmd = cmdList.shift();
         child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
                     if (err) {
-                        resolve({ data: stderr, error: err });
+                        reject({ data: stderr, error: err });
                     } else {
                         resolve({ data: stdout, error: err });
                     }

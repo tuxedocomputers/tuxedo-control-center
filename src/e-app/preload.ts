@@ -72,6 +72,7 @@ contextBridge.exposeInMainWorld(
     triggerLanguageChange: (languageId: string) => ipcRenderer.send('trigger-language-change', languageId),
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => ipcRenderer.invoke('ipc-change-crypt-password', newPassword, oldPassword, confirmPassword),
     runSysteminfo: (ticketNumber: string) => ipcRenderer.invoke('ipc-run-systeminfos',ticketNumber),
+    primeSelect: (selectedState: string) => ipcRenderer.invoke('ipc-prime-select', selectedState)
 }
   
 );
