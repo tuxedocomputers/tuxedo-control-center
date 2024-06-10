@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,7 +21,6 @@ import {
     AbstractControl,
     FormBuilder,
     FormGroup,
-    Validators,
 } from "@angular/forms";
 import { Mutex } from "async-mutex";
 import {
@@ -74,19 +73,19 @@ export class FanSliderComponent implements OnInit {
 
     private mutex = new Mutex();
     public tempsLabels: Label[] = Array.from(Array(100).keys())
-    .concat(100)
-    .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));;
+        .concat(100)
+        .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));
     public graphOptions: ChartOptions = graphOptions;
     public fantableDatasets: ChartDataSets[] = fantableDatasets;
     public graphColors: Color[] = graphColors;
     public graphType = "line";
 
     constructor(
-        private fb: FormBuilder,       
-        private config: ConfigService, 
-        private utils: UtilsService,
-        ) {}
-        
+        private fb: FormBuilder,
+        private config: ConfigService,
+        private utils: UtilsService
+    ) {}
+
     public ngOnInit(): void {
         this.initFanFormGroup();
         this.updateFanChartDataset();
@@ -127,13 +126,11 @@ export class FanSliderComponent implements OnInit {
         });
     }
 
-
     formatTemperatureLabel(temp: number) {
-        if(this.config.getSettings().fahrenheit) {
+        if (this.config.getSettings().fahrenheit) {
             temp = Math.round(this.utils.getFahrenheitFromCelsius(temp));
             return temp.toString() + " °F";
-        }   
-        else {
+        } else {
             return temp.toString() + " °C";
         }
     }
@@ -201,11 +198,16 @@ export class FanSliderComponent implements OnInit {
         this.setSliderDirty.emit();
     }
 
-    public updateFanChartDataset() {
+    public async updateFanChartDataset() {
         let { tableCPU, tableGPU } = this.getFanFormGroupValues();
 
-        this.fantableDatasets[0].data = interpolatePointsArray(tableCPU);
-        this.fantableDatasets[1].data = interpolatePointsArray(tableGPU);
+        const [interpolatedTableCpu, interpolatedTableGpu] = await Promise.all([
+            interpolatePointsArray(tableCPU),
+            interpolatePointsArray(tableGPU),
+        ]);
+
+        this.fantableDatasets[0].data = interpolatedTableCpu;
+        this.fantableDatasets[1].data = interpolatedTableGpu;
     }
 
     public toggleFanGraphs() {

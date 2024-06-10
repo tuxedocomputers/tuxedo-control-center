@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,10 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { manageCriticalTemperature } from '../../common/classes/FanUtils';
-import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
+import { manageCriticalTemperature } from "../../common/classes/FanUtils";
+import {
+    ITccFanProfile,
+    ITccFanTableEntry,
+} from "../../common/models/TccFanTable";
 
-export enum FAN_LOGIC { CPU, GPU }
+export enum FAN_LOGIC {
+    CPU,
+    GPU,
+}
 
 class ValueBuffer {
     private bufferData: Array<number>;
@@ -36,26 +42,24 @@ class ValueBuffer {
         }
     }
 
-    public getFilteredValue(): number {
-        // Number of values to reduce to, to take average from
-        // Note (bufferMaxSize - usedSize) / 2 values are ignored on either side
-        const usedSize = 7;
-
-        const copy = Array.from(this.bufferData);
-        copy.sort((a, b) => a - b);
-
-        while (copy.length >= usedSize + 2) {
-            copy.shift();
-            copy.pop();
-        }
-
-        // Calculate average from rest of array
-        const averageValue = Math.round(copy.reduce((accVal, currentValue) => accVal + currentValue) / copy.length);
-        return averageValue;
+    // input is sorted array with maximum of 13 temperature readings, taking the middle 7
+    private getMiddle(numbers: number[]): number[] {
+        const middleIndex = Math.floor(numbers.length / 2);
+        const middleRange = Math.max(0, middleIndex - 3);
+        const endRange = Math.min(numbers.length, middleIndex + 4);
+        return numbers.slice(middleRange, endRange);
     }
 
-    public getBufferCopy(): Array<number> {
-        return Array.from(this.bufferData);
+    private calculateAverage(numbers: number[]): number {
+        return (
+            numbers.reduce((acc, current) => acc + current, 0) / numbers.length
+        );
+    }
+
+    public getFilteredValue() {
+        const middleNumbers = this.getMiddle(this.bufferData);
+        const averageTemp = this.calculateAverage(middleNumbers);
+        return Math.floor(averageTemp);
     }
 }
 
@@ -63,7 +67,6 @@ const MAX_SPEED_JUMP = 2;
 const SPEED_JUMP_THRESHOLD = 20;
 
 export class FanControlLogic {
-
     private latestSpeedPercent;
 
     private tempBuffer = new ValueBuffer();
@@ -73,13 +76,15 @@ export class FanControlLogic {
 
     private lastSpeed = 0;
 
-    private useTable: string
+    private useTable: string;
 
     /**
      * Minimum fan speed hardware is capable of
      */
     private _fansMinSpeedHWLimit: number = 0;
-    get fansMinSpeedHWLimit() { return this._fansMinSpeedHWLimit; }
+    get fansMinSpeedHWLimit() {
+        return this._fansMinSpeedHWLimit;
+    }
     set fansMinSpeedHWLimit(speed: number) {
         if (speed === undefined) {
             this._fansMinSpeedHWLimit = 0;
@@ -96,7 +101,9 @@ export class FanControlLogic {
      * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
      */
     private _fansOffAvailable: boolean = true;
-    get fansOffAvailable() { return this._fansOffAvailable; }
+    get fansOffAvailable() {
+        return this._fansOffAvailable;
+    }
     set fansOffAvailable(fansOffAvailableNew: boolean) {
         if (fansOffAvailableNew === undefined) {
             this._fansOffAvailable = true;
@@ -109,7 +116,9 @@ export class FanControlLogic {
      * Minimum fan speed returned by logic
      */
     private _minimumFanspeed: number = 0;
-    get minimumFanspeed() { return this._minimumFanspeed; }
+    get minimumFanspeed() {
+        return this._minimumFanspeed;
+    }
     set minimumFanspeed(speed: number) {
         if (speed === undefined) {
             this._minimumFanspeed = 0;
@@ -121,9 +130,11 @@ export class FanControlLogic {
             this._minimumFanspeed = speed;
         }
     }
-    
+
     private _maximumFanspeed: number = 100;
-    get maximumFanspeed() { return this._maximumFanspeed; }
+    get maximumFanspeed() {
+        return this._maximumFanspeed;
+    }
     set maximumFanspeed(speed: number) {
         if (speed === undefined) {
             this._maximumFanspeed = 100;
@@ -140,7 +151,9 @@ export class FanControlLogic {
      * Number added to table value providing an offset fan table lookup
      */
     private _offsetFanspeed: number = 0;
-    get offsetFanspeed() { return this._offsetFanspeed; }
+    get offsetFanspeed() {
+        return this._offsetFanspeed;
+    }
     set offsetFanspeed(speed: number) {
         if (speed === undefined) {
             this._offsetFanspeed = 0;
@@ -151,24 +164,27 @@ export class FanControlLogic {
         } else {
             this._offsetFanspeed = speed;
         }
-    } 
+    }
 
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
-            this.useTable = 'tableCPU';
+            this.useTable = "tableCPU";
         } else if (type === FAN_LOGIC.GPU) {
-            this.useTable = 'tableGPU';
+            this.useTable = "tableGPU";
         } else {
-            throw new Error('FanControlLogic: Invalid argument');
+            throw new Error("FanControlLogic: Invalid argument");
         }
         this.setFanProfile(fanProfile);
     }
 
     public setFanProfile(fanProfile: ITccFanProfile) {
-        fanProfile[this.useTable].sort((a, b) => a.temp - b.temp);
-        this.tableMinEntry = fanProfile[this.useTable][0];
-        this.tableMaxEntry = fanProfile[this.useTable][fanProfile[this.useTable].length - 1];
-        this.fanProfile = fanProfile;
+        const fanTable = fanProfile[this.useTable];
+        if (fanTable) {
+            fanTable.sort((a, b) => a.temp - b.temp);
+            this.tableMinEntry = fanTable[0];
+            this.tableMaxEntry = fanTable[fanTable.length - 1];
+            this.fanProfile = fanProfile;
+        }
     }
 
     /**
@@ -181,7 +197,6 @@ export class FanControlLogic {
 
         // Calculate filtered table speed
         let nextSpeedPercent = this.calculateSpeedPercent();
-
         this.latestSpeedPercent = nextSpeedPercent;
     }
 
@@ -237,7 +252,7 @@ export class FanControlLogic {
 
         speed = this.applyHwFanLimitations(speed);
         speed = this.limitFanSpeedChange(speed);
-        speed = manageCriticalTemperature(temp, speed)
+        speed = manageCriticalTemperature(temp, speed);
 
         this.lastSpeed = speed;
         return speed;

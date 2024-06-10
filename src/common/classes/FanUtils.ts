@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function interpolatePoints(
+async function interpolatePoints(
     points: { temp: number; speed: number }[],
     x: number
-): number {
+): Promise<number> {
     const first = points[0];
     const last = points[points.length - 1];
     if (x <= first.temp) {
@@ -39,20 +39,20 @@ function interpolatePoints(
     return Math.round(m * x + b);
 }
 
-export function interpolatePointsArray(
+export async function interpolatePointsArray(
     points: { temp: number; speed: number }[]
-): number[] {
-    return Array.from({ length: 101 }, (_, i) => interpolatePoints(points, i));
+): Promise<number[]> {
+    return Promise.all(
+        Array.from({ length: 101 }, (_, i) => interpolatePoints(points, i))
+    );
 }
 
-
 export function formatTemp(value: number, usingFahrenheit: boolean): string {
-    if (usingFahrenheit)  {
-        return `${Math.round(((value * 1.8) + 32))} °F`;
-    }
-    else {
+    if (usingFahrenheit) {
+        return `${Math.round(value * 1.8 + 32)} °F`;
+    } else {
         return `${value} °C`;
-    }   
+    }
 }
 
 export function formatSpeed(value: number | string): string {

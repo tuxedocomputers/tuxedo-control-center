@@ -1,0 +1,93 @@
+/*!
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
+import { apiBaseClass } from "./FanControlBaseClass";
+
+export class tuxedoIoAPI extends apiBaseClass {
+    public async initFanControl(): Promise<void> {
+        ioAPI.setEnableModeSet(true);
+        this.tccd.dbusData.fansOffAvailable = ioAPI.getFansOffAvailable();
+        this.tccd.dbusData.fansMinSpeed = ioAPI.getFansMinSpeed();
+    }
+
+    public async mapLogicToFans(nrFans: number): Promise<boolean> {
+        this.fans = new Map();
+        const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
+            this.getFanTemperature(0),
+            this.getFanTemperature(1),
+            this.getFanTemperature(2),
+        ]);
+
+        // todo: maybe add change into tuxedo-drivers to return -1 if value not available
+        if (fanTemp0 > 1 && nrFans >= 1) {
+            this.fans.set(1, this.cpuLogic);
+        }
+        if (fanTemp1 > 1 && nrFans >= 2) {
+            this.fans.set(2, this.gpu1Logic);
+        }
+        if (fanTemp2 > 1 && nrFans >= 3) {
+            this.fans.set(3, this.gpu2Logic);
+        }
+
+        if (this.fans.size === 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public async getFanSpeedPercent(fanIndex): Promise<number> {
+        const currentSpeedPercent: ObjWrapper<number> = { value: -1 };
+        const speedReadSuccess = ioAPI.getFanSpeedPercent(
+            fanIndex,
+            currentSpeedPercent
+        );
+        return currentSpeedPercent.value;
+    }
+
+    public async getFanTemperature(fanIndex): Promise<number> {
+        const currentTemperatureCelcius: ObjWrapper<number> = { value: -1 };
+        const tempReadSuccess = ioAPI.getFanTemperature(
+            fanIndex,
+            currentTemperatureCelcius
+        );
+        return currentTemperatureCelcius.value;
+    }
+
+    public async writeFanSpeed(fanIndex, calculatedSpeed): Promise<void> {
+        ioAPI.setFanSpeedPercent(fanIndex, calculatedSpeed);
+    }
+
+    public async getNumberFans(): Promise<number> {
+        return ioAPI.getNumberFans();
+    }
+
+    public async clearTempValues() {}
+
+    public async checkAvailable(): Promise<boolean> {
+        return this.tccd.settings.fanControlEnabled;
+    }
+
+    public async exit(): Promise<void> {
+        if (this.tccd.settings.fanControlEnabled) {
+            ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
+            ioAPI.setEnableModeSet(false);
+        }
+    }
+}
