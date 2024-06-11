@@ -32,7 +32,7 @@
     "copy-changelog": "cp CHANGELOG.md ./src/ng-app/assets/",
     "copy-cameractls": "mkdir -p ./dist/tuxedo-control-center/data/camera && cp ./src/cameractrls/cameractrls.py ./src/cameractrls/v4l2_kernel_names.json ./dist/tuxedo-control-center/data/camera",
     "copy-udev-rule": "cp ./src/udev/99-webcam.rules ./dist/tuxedo-control-center/data/dist-data",
-    "electron-builder": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/electron-builder.ts",
+    "electron-builder": "USE_HARD_LINKS=false TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/electron-builder.ts",
     "pack": "run-s build && npm run electron-builder",
     "build-release": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/build-release.ts",
     "pack-prod": "run-s build-prod && npm run electron-builder",
