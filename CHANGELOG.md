@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.11] - 2024-06-11
+### Fixed
+- Packaging would in some cases produce hard links
+
 ## [2.1.10] - 2024-06-05
 ### Added
 - Pulse Gen3 & Gen4 dashboard iGPU support
