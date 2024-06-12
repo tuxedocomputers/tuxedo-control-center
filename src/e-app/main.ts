@@ -24,6 +24,8 @@ import { dbusHandlers } from './backendAPIs/dbusBackendAPI';
 import { registerAPI } from './backendAPIs/apiManagement'
 import { tomteAPIHandle } from '../common/models/ITomteAPI';
 import { tomteHandlers } from './backendAPIs/tomteGuiBackendAPI';
+import { webcamAPIHandle } from '../common/models/IWebcamAPI';
+import { webcamHandlers } from './backendAPIs/webcamBackendAPI';
 
 
 // require all of the files that I have split off of main.ts
@@ -31,7 +33,7 @@ require('./backendAPIs/initMain');
 require('./backendAPIs/browserWindows');
 require('./backendAPIs/ipcBackendAPI');
 require('./backendAPIs/miscBackendStuff');
-require('./backendAPIs/webcamBackendAPI');
+//require('./backendAPIs/webcamBackendAPI');
 
 
 
@@ -44,3 +46,5 @@ registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
 registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);
 // register TomteAPI
 registerAPI(ipcMain, tomteAPIHandle, tomteHandlers);
+// register WebcamAPI
+registerAPI(ipcMain, webcamAPIHandle, webcamHandlers);

@@ -144,7 +144,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private getWebcamPaths(): Promise<WebcamPath> {
         return new Promise<WebcamPath>((resolve) => {
-            window.webcam
+            window.webcamAPI
                 .getWebcamPaths()
                 .then((data) => {
                     resolve(JSON.parse(data.toString()));
@@ -224,7 +224,7 @@ export class WebcamSettingsComponent implements OnInit {
     private getWebcamSettings(): Promise<string> {
         return new Promise<string>(async (resolve) => {
             try {
-                let data = await window.webcam.getSelectedWebcamSettings(this.selectedWebcam.path);
+                let data = await window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
                 resolve(data);
             } catch (error) {
                 console.error(error);
@@ -298,7 +298,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
         let webcamConfig = this.getCurrentWebcamConstraints();
-        window.webcam.createWebcamPreview(webcamConfig);
+        window.webcamAPI.createWebcamPreview(webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
 
@@ -330,7 +330,7 @@ export class WebcamSettingsComponent implements OnInit {
 
         for (let devicePath of webcamPaths) {
             try {
-                await window.webcam.executeWebcamCtrls(devicePath, parameter, value);
+                await window.webcamAPI.executeWebcamCtrls(devicePath, parameter, value);
             } catch (error) {
                 console.error(error);
                 this.mutex.release();
@@ -356,7 +356,7 @@ export class WebcamSettingsComponent implements OnInit {
         if (filteredControls) {
             for (const devicePath of webcamPaths) {
                 try {
-                    await window.webcam.executeFilteredCtrls(devicePath, filteredControls);
+                    await window.webcamAPI.executeFilteredCtrls(devicePath, filteredControls);
                 } catch (error) {
                     console.error(error);
                     this.mutex.release();
@@ -701,9 +701,9 @@ export class WebcamSettingsComponent implements OnInit {
 
             // TODO hacky solution, this should all be handled in main.ts
             if (environment.production) {
-                this.v4l2Renames = window.webcam.readV4l2Names('');
+                this.v4l2Renames = await window.webcamAPI.readV4l2Names('');
             } else {
-                this.v4l2Renames = window.webcam.readV4l2NamesCWD(
+                this.v4l2Renames = await window.webcamAPI.readV4l2NamesCWD(
                     "/src/cameractrls/v4l2_kernel_names.json"
                 );
             }
@@ -762,7 +762,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             if (this.detachedWebcamWindowActive) {
-                window.webcam.setWebcamWithLoading(webcamConfig);
+                window.webcamAPI.setWebcamWithLoading(webcamConfig);
             }
             if (setViewWebcam) {
                 this.viewWebcam = config;
@@ -867,7 +867,7 @@ export class WebcamSettingsComponent implements OnInit {
             );
         }
 
-        await window.webcam
+        await window.webcamAPI
             .pkexecWriteWebcamConfigAsync(webcamConfigs)
             .then((confirm) => {
                 if (confirm) {
@@ -1080,7 +1080,7 @@ export class WebcamSettingsComponent implements OnInit {
         await this.reloadConfigValues();
         // TODO
         if (window.fs.existsSync(TccPaths.WEBCAM_FILE)) {
-            this.allPresetData = window.webcam.readWebcamSettings();
+            this.allPresetData = await window.webcamAPI.readWebcamSettings();
             this.filterPresetsForCurrentDevice();
 
             await this.checkAllPresetsForCurrentDevice();
@@ -1155,7 +1155,7 @@ export class WebcamSettingsComponent implements OnInit {
                     this.webcamPresetsOtherDevices
                 );
 
-                await window.webcam
+                await window.webcamAPI
                     .pkexecWriteWebcamConfigAsync(webcamConfigs)
                     .then((confirm) => {
                         if (confirm) {
@@ -1334,7 +1334,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.stopWebcam();
 
         if (this.detachedWebcamWindowActive) {
-            window.webcam.closeWebcamPreview()
+            window.webcamAPI.closeWebcamPreview()
         }
     }
 }

@@ -94,7 +94,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public buttonToggleLanguage() {
-        window.webcam.closeWebcamPreview();
+        window.webcamAPI.closeWebcamPreview();
         this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
         this.updateLanguageName();
     }

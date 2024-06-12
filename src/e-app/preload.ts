@@ -3,7 +3,8 @@ import { ITccSettings } from "src/common/models/TccSettings";
 import { WebcamPreset } from "src/common/models/TccWebcamSettings";
 import { AquarisClientAPI } from "./preloadAPIs/AquarisClientAPI";
 import { DbusClientAPI } from "./preloadAPIs/DbusClientAPI";
-import { TomteClientAPI} from "./preloadAPIs/tomteClientAPI"
+import { TomteClientAPI} from "./preloadAPIs/tomteClientAPI";
+import { WebcamClientAPI} from "./preloadAPIs/webcamClientAPI";
 const { contextBridge, ipcRenderer } = require('electron');
 
 let callbacks = [];
@@ -104,9 +105,6 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'webcam',
     {     
-    createWebcamPreview: (webcamConfig) => ipcRenderer.send("create-webcam-preview", webcamConfig),
-    closeWebcamPreview: () => ipcRenderer.send("close-webcam-preview"),
-    setWebcamWithLoading: (webcamConfig) => ipcRenderer.send("setting-webcam-with-loading", webcamConfig),
     // https://github.com/electron/electron/issues/21437
     onApplyControls: (callback) => {
         var channelname = 'apply-controls';
@@ -140,17 +138,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    videoEnded: () => ipcRenderer.send('video-ended'),
-    applyControls: () => ipcRenderer.send('apply-controls'),
-    readWebcamSettings: () => ipcRenderer.sendSync('webcam-read-settings'),
-    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke('webcam-pkexec-write-config-async', settings),
-    readV4l2Names: (path: string) => ipcRenderer.sendSync('webcam-read-v4l2-names',path),
-    readV4l2NamesCWD: (path: string) => ipcRenderer.sendSync('webcam-read-v4l2-names-cwd',path),
-    getSelectedWebcamSettings: (sWebcamPath) => ipcRenderer.invoke('webcam-get-selected-webcam-settings',sWebcamPath),
-    executeWebcamCtrls: (devicePath, parameter, value) => ipcRenderer.invoke('webcam-execute-ctrls',devicePath, parameter, value),
-    executeFilteredCtrls: (devicePath, filteredControls) => ipcRenderer.invoke('webcam-execute-filtered-ctrls',devicePath, filteredControls),    
-    getWebcamPaths: () => ipcRenderer.invoke('webcam-get-webcam-paths'),
-}
+    }
 );
 contextBridge.exposeInMainWorld(
     'fs',
@@ -161,15 +149,6 @@ contextBridge.exposeInMainWorld(
         existsSync: (filePath: string) => ipcRenderer.sendSync('fs-file-exists-sync', filePath),
     }
 );
-
-// contextBridge.exposeInMainWorld(
-//     'https',
-//     {
-//         // TODO
-//         getSystemInfos: () => ipcRenderer.invoke('utils-get-systeminfos'),
-//         getSystemInfosURL: () => ipcRenderer.sendSync('utils-get-systeminfos-url-sync'),
-//     }
-// );
 
 contextBridge.exposeInMainWorld(
     'config',
@@ -207,33 +186,15 @@ contextBridge.exposeInMainWorld(
     }
 );
 
-// contextBridge.exposeInMainWorld(
-//     'state',
-//     {
-//         // is used nowhere
-//         //determineState: () => ipcRenderer.sendSync("state-determine-state"),
-//     }
-// );
 
 contextBridge.exposeInMainWorld(
     'comp',
     {
         getHasAquaris: () => ipcRenderer.invoke('comp-get-has-aquaris'),
-        // getProductSKU: () => ipcRenderer.sendSync('comp-get-product-sku'),
-        // getBoardVendor: () => ipcRenderer.sendSync('comp-get-board-vendor'),
-        // getChassisVendor: () => ipcRenderer.sendSync('comp-get-chassis-vendor'),
-        // getSysVendor: () => ipcRenderer.sendSync('comp-get-sys-vendor'),
         // TODO
         getScalingDriverAcpiCpuFreq: () => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq'),
     }
 );
-
-// contextBridge.exposeInMainWorld(
-//     'tomteGUI',
-//     {
-        
-//     }
-// );
 
 contextBridge.exposeInMainWorld(
     'stuff',
@@ -269,3 +230,4 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld('aquarisAPI', AquarisClientAPI);
 contextBridge.exposeInMainWorld('dbusAPI', DbusClientAPI);
 contextBridge.exposeInMainWorld('tomteAPI', TomteClientAPI);
+contextBridge.exposeInMainWorld('webcamAPI', WebcamClientAPI);

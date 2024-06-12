@@ -3,11 +3,11 @@ import { EventEmitter } from 'node:events';
 import { IDrive } from "../../common/models/IDrive"; 
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
 import { ITccProfile } from "../../common/models/TccProfile";
-import { WebcamConstraints, WebcamPreset } from "../../common/models/TccWebcamSettings";
 import { ITccSettings } from "../../common/models/TccSettings";
 import { ITccFanProfile } from "../../common/models/TccFanTable";
 import { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
 import { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
+import { IWebcamClientAPI } from "src/e-app/preloadAPIs/webcamClientAPI";
 
 export interface IPC extends EventEmitter {
     send: (channel: string, args) => Promise<IPCReturnValue>,
@@ -81,24 +81,11 @@ export interface IPC extends EventEmitter {
   }
 export interface WEBCAM 
 {
-    createWebcamPreview: (webcamConfig: WebcamConstraints) => void,
-    closeWebcamPreview: () => void,
-    setWebcamWithLoading: (webcamConfig: WebcamConstraints) => void,
-    videoEnded: () => void,
-    applyControls: () => void,
     onVideoEnded: (callback) => void,
     onExternalWebcamPreviewClosed: (callback) => void,
     onApplyControls: (callback) => void,
-    readWebcamSettings: () => WebcamPreset[],
-    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
-    readV4l2Names: (path: string) => string[][], 
-    readV4l2NamesCWD: (path: string) => string[][], 
     onSettingWebcamWithLoading: (callback) => void,
-    getSelectedWebcamSettings: (sWebcamPath:string) => Promise<string>,
-    executeWebcamCtrls: (devicePath: string, parameter: string, value: number | string) => Promise<string>,
-    executeFilteredCtrls: (devicePath: string, filteredControls: string) => Promise<string>,
-    getWebcamPaths: () => Promise<string>,
-}
+    }
 export interface STUFF
 {
     logStuff: (stuff : string) => void,
@@ -155,6 +142,7 @@ export interface PGMS
       aquarisAPI: IAquarisClientAPI,
       dbusAPI: IDbusClientAPI,
       tomteAPI: ITomteClientAPI,
+      webcamAPI: IWebcamClientAPI,
       fs: FS,
       driveController: DRIVECONTROLLER,
       webcam: WEBCAM,
