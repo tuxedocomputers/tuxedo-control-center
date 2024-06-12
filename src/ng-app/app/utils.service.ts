@@ -141,19 +141,6 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     window.ipc.minimizeWindow(); 
   }
 
-  public getCWD()
-   {
-    return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        window.ipc.getCWD().then((result) => {
-          if (result) {
-            resolve(result.data);
-          } else {
-            reject(result.data);
-          }
-        });
-      });
-   }
-
    public changeLanguage(languageId: string) {
     window.ipc.triggerLanguageChange(languageId);
   }

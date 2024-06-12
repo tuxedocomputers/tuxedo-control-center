@@ -20,7 +20,6 @@ contextBridge.exposeInMainWorld(
     closeApp: () => ipcRenderer.send('close-app'),
     closeWindow: () => ipcRenderer.send('close-window'),
     minimizeWindow: () => ipcRenderer.send('minimize-window'),
-    getCWD: () => ipcRenderer.invoke('get-cwd'),
     getProcessVersions: () => ipcRenderer.invoke('get-process-versions'),
     getBrightnessMode: () => ipcRenderer.invoke('get-brightness-mode'),
     setBrightnessMode: (mode: 'light' | 'dark' | 'system') => ipcRenderer.invoke('set-brightness-mode', mode),

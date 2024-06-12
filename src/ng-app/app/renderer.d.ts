@@ -17,7 +17,6 @@ export interface IPC extends EventEmitter {
     closeApp: () => void,
     closeWindow: () => void,
     minimizeWindow: () => void,
-    getCWD: () => Promise<IPCReturnValue>,
     getProcessVersions: () => Promise<IProcessVersions>,
     getBrightnessMode: () => Promise<'light' | 'dark' | 'system'>,
     setBrightnessMode: (mode: 'light' | 'dark' | 'system') => void,

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, observable, Observable, Subject } from 'rxjs';
 import { FanData, IDBusFanData } from '../../common/models/IFanData';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
@@ -28,6 +28,7 @@ import { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
+import { parseDn } from 'builder-util-runtime';
 
 @Injectable({
   providedIn: 'root'
@@ -83,11 +84,36 @@ export class TccDBusClientService implements OnDestroy {
   public isX11 = new BehaviorSubject<boolean>(undefined);
   public device: TUXEDODevice = 0;
   public hasAquaris: boolean = true;
-  private tccDBusInterface = window.dbusAPI;
+
+  // put all observables that need to parse json data in here and they will be updated automatically in next
+  // periodicUpdate()
+    private observableUpdateListJSON = new Map<BehaviorSubject<any>,string>()
+    .set(this.fanData, "getFanData")
+    .set(this.iGpuInfo, "getIGpuInfoValuesJSON")
+    .set(this.dGpuInfo, "getDGpuInfoValuesJSON")
+    .set(this.cpuPower, "getCpuPowerValuesJSON")
+    .set(this.displayModes, "getDisplayModesJSON")
+    .set(this.keyboardBacklightCapabilities, "getKeyboardBacklightCapabilitiesJSON")
+    .set(this.keyboardBacklightStates, "getKeyboardBacklightStatesJSON")
 
   constructor(private utils: UtilsService) {
+    this.updateTuxedoDevice();
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
+  }
+
+  // updates an observable that wants parsed JSON input
+  private async updateJSONObservable(observable: BehaviorSubject<any>, updateFunction: string) {
+    // https://stackoverflow.com/questions/1723287/calling-a-javascript-function-named-in-a-variable
+    const data = await window.dbusAPI[updateFunction]();
+    try{
+        let parsedData = JSON.parse(data);
+        observable.next(parsedData);
+    }
+    catch(err) {
+        // TODO, set stuff to default values? Do more error handling? Check if dbus is even up?
+        console.error("Could not update observable through function " + updateFunction +"\n" + err);
+    }
   }
 
   // Display Brightness Gnome Workarounds
@@ -102,86 +128,49 @@ export class TccDBusClientService implements OnDestroy {
      return window.ipc.setDisplayBrightnessGnome(valuePercent)
   }
 
-  private async periodicUpdate() {
-
-    // Read and publish data (note: atm polled)
-    const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
-    this.tuxedoWmiAvailable.next(wmiAvailability);
-    const fanDataJSON = await this.tccDBusInterface.getFanData();
-    if (fanDataJSON) {
-        this.fanData.next(JSON.parse(fanDataJSON));
-    }
-
-    const fanHwmonAvailability = await this.tccDBusInterface.fanHwmonAvailable();
-    this.fanHwmonAvailable.next(fanHwmonAvailability)
-    const dGpuInfoValuesJSON = await this.tccDBusInterface.getDGpuInfoValuesJSON();
-    const iGpuInfoValuesJSON = await this.tccDBusInterface.getIGpuInfoValuesJSON();
-
-    if (dGpuInfoValuesJSON) {
-        this.dGpuInfo.next(JSON.parse(dGpuInfoValuesJSON));
-    }
-
-    const deviceJSON = await this.tccDBusInterface.getDeviceJSON();
+  private async updateTuxedoDevice() {
+    const deviceJSON = await window.dbusAPI.getDeviceJSON();
     if (deviceJSON) {
         this.device = JSON.parse(deviceJSON);
     }
+  }
+
+  private async periodicUpdate() {
+    // TODO, could add check if dbus is even up here, to prevent spam of log files :)
+    // Update all Observables that parse JSON Data
+    for ( const [obs,func] of this.observableUpdateListJSON.entries()) {
+        this.updateJSONObservable(obs,func);
+    }
+    // Read and publish data (note: atm polled)
+    const wmiAvailability = await window.dbusAPI.tuxedoWmiAvailable();
+    this.tuxedoWmiAvailable.next(wmiAvailability);
+
+    const fanHwmonAvailability = await window.dbusAPI.fanHwmonAvailable();
+    this.fanHwmonAvailable.next(fanHwmonAvailability);
     this.hasAquaris = await window.comp.getHasAquaris();
-
-    /*
-
-    Pseudocode, maybe it's possible to rework setting all observables manual somehow like this here?
-    function setObservable(observable, dbusFunction){
-        let jsondata = await dbusFunction();
-        if (jsondata)
-        {
-            let data;
-            try 
-            {
-                data = JSON.parse(jsondata);
-                observable.next(data);
-            }
-            catch(err)
-            {
-                console.log("An error occured, trying to parse JSON data of dbus Function: " + dbusFunction.name + "JSON data: " + jsondata)
-            }
-        }
-    }
-
-    */
-
-    if (iGpuInfoValuesJSON) {
-        this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
-    }
-
-    this.sensorDataCollectionStatus.next(await this.tccDBusInterface.getSensorDataCollectionStatus())
+    this.sensorDataCollectionStatus.next(await window.dbusAPI.getSensorDataCollectionStatus())
 
     this.chargingProfilesAvailable.next(
-        await this.tccDBusInterface.getChargingProfilesAvailable()
+        await window.dbusAPI.getChargingProfilesAvailable()
     );
     
-    this.primeState.next(await this.tccDBusInterface.getPrimeState())
+    this.primeState.next(await window.dbusAPI.getPrimeState())
+    this.webcamSWAvailable.next(await window.dbusAPI.webcamSWAvailable());
+    this.webcamSWStatus.next(await window.dbusAPI.getWebcamSWStatus());
 
+    this.forceYUV420OutputSwitchAvailable.next(await window.dbusAPI.getForceYUV420OutputSwitchAvailable());
 
-    const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();
-    if (cpuPowerValuesJSON) {
-        this.cpuPower.next(JSON.parse(cpuPowerValuesJSON));
-    }
-
-    this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
-    this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
-
-    this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
-
-    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable();
+    const nextODMProfilesAvailable = await window.dbusAPI.odmProfilesAvailable();
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
-    const nextODMPowerLimitsJSON = await this.tccDBusInterface.odmPowerLimitsJSON();
+    // TODO
+    const nextODMPowerLimitsJSON = await window.dbusAPI.odmPowerLimitsJSON();
     if (nextODMPowerLimitsJSON) {
         let nextODMPowerLimits = JSON.parse(nextODMPowerLimitsJSON);
         this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
     }
 
     // Retrieve and parse profiles
-    const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
+    const activeProfileJSON: string = await window.dbusAPI.getActiveProfileJSON();
     if (activeProfileJSON !== undefined) {
         if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
         try {
@@ -195,9 +184,9 @@ export class TccDBusClientService implements OnDestroy {
         } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
     }
 
-    const defaultProfilesJSON: string = await this.tccDBusInterface.getDefaultProfilesJSON();
-    const defaultValuesProfileJSON: string = await this.tccDBusInterface.getDefaultValuesProfileJSON();
-    const customProfilesJSON: string = await this.tccDBusInterface.getCustomProfilesJSON();
+    const defaultProfilesJSON: string = await window.dbusAPI.getDefaultProfilesJSON();
+    const defaultValuesProfileJSON: string = await window.dbusAPI.getDefaultValuesProfileJSON();
+    const customProfilesJSON: string = await window.dbusAPI.getCustomProfilesJSON();
     if (defaultProfilesJSON !== undefined && defaultValuesProfileJSON !== undefined && customProfilesJSON !== undefined) {
         try {
             if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
@@ -218,7 +207,7 @@ export class TccDBusClientService implements OnDestroy {
 
         this.dataLoaded = true;
     }
-    const settingsJSON: string = await this.tccDBusInterface.getSettingsJSON();
+    const settingsJSON: string = await window.dbusAPI.getSettingsJSON();
     if (settingsJSON !== undefined) {
         try {
             if (this.previousSettingsJSON !== settingsJSON) {
@@ -227,45 +216,15 @@ export class TccDBusClientService implements OnDestroy {
             }
         } catch (err) { console.log('tcc-dbus-client.service: unexpected error parsing settings => ' + err); }
     }
-    const displayModesJSON: string = await this.tccDBusInterface.getDisplayModesJSON();
-    if(displayModesJSON !== undefined)
-    {
-        try
-        {
-            this.displayModes.next(JSON.parse(displayModesJSON));
-        } 
-        catch (err)
-        {
-            console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err);
-        }
-    }
-    else
-    {
-        this.displayModes.next(undefined);
-    }
-    const isX11 = await this.tccDBusInterface.getIsX11();
+    const isX11 = await window.dbusAPI.getIsX11();
     this.isX11.next(isX11);
 
-    const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
-    if (keyboardBacklightCapabilitiesJSON !== undefined) {
-        try {
-            this.keyboardBacklightCapabilities.next(JSON.parse(keyboardBacklightCapabilitiesJSON));
-        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight capabilities'); }
-    }
-
-    const keyboardBacklightStatesJSON: string = await this.tccDBusInterface.getKeyboardBacklightStatesJSON();
-    if (keyboardBacklightStatesJSON !== undefined) {
-        try {
-            this.keyboardBacklightStates.next(JSON.parse(keyboardBacklightStatesJSON));
-        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight states'); }
-    }
-
-    this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
-    this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
+    this.fansMinSpeed.next(await window.dbusAPI.getFansMinSpeed());
+    this.fansOffAvailable.next(await window.dbusAPI.getFansOffAvailable());
   }
 
   public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
-    this.tccDBusInterface.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
+    window.dbusAPI.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
   }
 
   public async triggerUpdate() {
@@ -280,21 +239,21 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   public async setTempProfileById(profileId: string) {
-    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
+    const result = await window.dbusAPI.dbusAvailable() && await window.dbusAPI.setTempProfileById(profileId);
     return result;
   }
 
   public async setSensorDataCollectionStatus(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setSensorDataCollectionStatus(status)
+    await window.dbusAPI.dbusAvailable() && await window.dbusAPI.setSensorDataCollectionStatus(status)
   }
 
   public async setDGpuD0Metrics(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuD0Metrics(status)
+    await window.dbusAPI.dbusAvailable() && await window.dbusAPI.setDGpuD0Metrics(status)
   }
 
   public getInterface(): IDbusClientAPI | undefined {
     if (this.isAvailable) {
-        return this.tccDBusInterface;
+        return window.dbusAPI;
     } else {
         return undefined;
     }
