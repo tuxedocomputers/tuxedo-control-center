@@ -47,10 +47,12 @@ tuxedo-control-center
 3. Install service file that points to development build path (or use installed service from packaged version)
    
    Manual instructions:
-   1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
-   2. Edit the `tccd.service` (exec start/stop) to point to `<dev path>/dist/tuxedo-control-center/data/service/tccd`.
-   3. Copy `com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
-   4. Start service `systemctl start tccd`. (And enable for autostart `systemctl enable tccd tccd-sleep`)
+   1. Copy `tccd.service` and `tccd-sleep.service` (from `<main folder>/src/dist-data/`) to `/etc/systemd/system/`
+   2. Execute `npm run build` in `<main folder>`. If you encounter the error `npm run build error:0308010C:digital envelope routines::unsupported` (e.g., on Debian 12), set `export NODE_OPTIONS=--openssl-legacy-provider` and try again (see [this issue](https://github.com/tuxedocomputers/tuxedo-control-center/issues/172)).
+   3. Edit the `tccd.service` (exec start/stop) to point to `<dev path>/dist/tuxedo-control-center/data/service/tccd`. By default, this path is `<main folder>/dist/tuxedo-control-center/data/service/src/dist-data/`.
+   4. Copy `<main folder>/src/dist-data/com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
+   5. Start service `systemctl start tccd`. (And enable for autostart `systemctl enable tccd tccd-sleep`)
+   6. If you had to set the `NODE_OPTIONS` in step 2, you have to `unset NODE_OPTIONS` again for the dashboard to work. After that, you can start the dashboard manually from the `<main folder>` with `npm run start`
 
 ### NPM scripts 
 `npm run <script-name>`
