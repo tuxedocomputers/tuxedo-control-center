@@ -12,10 +12,10 @@ let callbacks = [];
 contextBridge.exposeInMainWorld(
   'ipc',
   {
-    send: async (channel: string, args) => ipcRenderer.send(channel, args),
-    // TODO
-    sendSync: async (channel: string, args) => ipcRenderer.sendSync(channel, args),
-    invoke: async (channel: string, args) => ipcRenderer.invoke(channel, args),
+    // send: async (channel: string, args) => ipcRenderer.send(channel, args),
+    // // TODO
+    // sendSync: async (channel: string, args) => ipcRenderer.sendSync(channel, args),
+    // invoke: async (channel: string, args) => ipcRenderer.invoke(channel, args),
     getAppVersion: async () => ipcRenderer.invoke('get-app-version'),
     closeApp: () => ipcRenderer.send('close-app'),
     closeWindow: () => ipcRenderer.send('close-window'),

@@ -448,9 +448,10 @@ ipcMain.handle('ipc-cancel-shutdown', async (event) => {
 });
 
 ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
-    return new Promise<string>((resolve, reject) => {
-        let results = execCmd("cat /run/systemd/shutdown/scheduled");
-        resolve(results);
+    return new Promise<string>(async (resolve, reject) => {
+        execCmd("cat /run/systemd/shutdown/scheduled")
+        .then((results) => {resolve(results)})
+        .catch(() => {resolve("")});
     });
 });
 
