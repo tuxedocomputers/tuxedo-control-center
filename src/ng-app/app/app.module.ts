@@ -68,6 +68,9 @@ import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
 
+import localeFr from '@angular/common/locales/fr';
+import localeFrExtra from '@angular/common/locales/extra/fr';
+
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { GaugeModule } from 'angular-gauge';
@@ -98,6 +101,7 @@ import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
 import { FanSliderComponent } from './fan-slider/fan-slider.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
+registerLocaleData(localeFr, 'fr', localeFrExtra);
 
 declare const require;
 
