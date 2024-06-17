@@ -48,7 +48,7 @@ class TccDBusController {
             return false;
         }
     }
-
+// TODO
     async dbusAvailable(): Promise<boolean> {
         try {
             // Try one method to check connection
@@ -58,7 +58,7 @@ class TccDBusController {
             return false;
         }
     }
-
+// TODO does the same as other method lol beinahe
     async tuxedoWmiAvailable(): Promise<boolean> {
         try {
             return await this.interface.TuxedoWmiAvailable();

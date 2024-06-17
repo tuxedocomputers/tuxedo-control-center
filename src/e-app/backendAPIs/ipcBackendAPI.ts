@@ -691,7 +691,6 @@ class ProgramManagementService {
     public async remove(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
       return new Promise<boolean>(async (resolve) => {
-          // TODO
         execCmd('pkexec apt remove -y ' + name).then(() => {
           this.isInProgress.set(name, false);
           resolve(true);

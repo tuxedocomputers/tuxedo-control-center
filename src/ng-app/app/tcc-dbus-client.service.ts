@@ -138,9 +138,17 @@ export class TccDBusClientService implements OnDestroy {
   private async periodicUpdate() {
     // TODO, could add check if dbus is even up here, to prevent spam of log files :)
     // Update all Observables that parse JSON Data
+    if(!window.dbusAPI.dbusAvailable()) {
+        console.error("Communication with TCCD interrupted, dbus not available");
+        return;
+    }
     for ( const [obs,func] of this.observableUpdateListJSON.entries()) {
         this.updateJSONObservable(obs,func);
     }
+    this.isX11.next(await window.dbusAPI.getIsX11());
+
+    this.fansMinSpeed.next(await window.dbusAPI.getFansMinSpeed());
+    this.fansOffAvailable.next(await window.dbusAPI.getFansOffAvailable());
     // Read and publish data (note: atm polled)
     const wmiAvailability = await window.dbusAPI.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);
@@ -216,11 +224,6 @@ export class TccDBusClientService implements OnDestroy {
             }
         } catch (err) { console.log('tcc-dbus-client.service: unexpected error parsing settings => ' + err); }
     }
-    const isX11 = await window.dbusAPI.getIsX11();
-    this.isX11.next(isX11);
-
-    this.fansMinSpeed.next(await window.dbusAPI.getFansMinSpeed());
-    this.fansOffAvailable.next(await window.dbusAPI.getFansOffAvailable());
   }
 
   public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {

@@ -10,9 +10,6 @@ import { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
 import { IWebcamClientAPI } from "src/e-app/preloadAPIs/webcamClientAPI";
 
 export interface IPC extends EventEmitter {
-    // send: (channel: string, args) => Promise<IPCReturnValue>,
-    // sendSync: (channel: string, args) => IPCReturnValue,
-    // invoke: (channel: string, args) => Promise<IPCReturnValue>,
     getAppVersion: () => Promise<string>,
     closeApp: () => void,
     closeWindow: () => void,
@@ -61,11 +58,6 @@ export interface IPC extends EventEmitter {
 
   }
 
-//   export interface HTTPS 
-//   {
-//     getSystemInfos: () => Promise<Buffer>,
-//     getSystemInfosURL: () => string
-//   }
 
   export interface FS 
   {
