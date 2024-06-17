@@ -34,7 +34,7 @@ export class FanControlWorker extends DaemonWorker {
     private pwmAvailable: boolean = false;
     private previousFanProfile: ITccFanProfile;
     private previousFanControlEnabled: boolean = undefined;
-    private previousFanSpeeds: { min: number; max: number; offset: number } = {
+    private previousFanConfig: { min: number; max: number; offset: number } = {
         min: -1,
         max: -1,
         offset: -1,
@@ -52,12 +52,17 @@ export class FanControlWorker extends DaemonWorker {
         tableCPU: [],
         tableGPU: [],
     };
+    private previousTempValues: Map<number, number> = new Map();
+    private previousDisable: boolean;
+    private retryFanInitCounter: number = 5;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(1000, tccd);
     }
 
     public async onStart(): Promise<void> {
+        this.retryFanInitCounter = 5;
+
         this.pwm = new pwmAPI(this.tccd);
         this.pwmAvailable = await this.pwm.checkAvailable();
         if (this.pwmAvailable) {
@@ -75,12 +80,66 @@ export class FanControlWorker extends DaemonWorker {
             await this.updateFanLogic();
             return;
         }
+
+        this.fanApi = null;
     }
 
     public async onWork(): Promise<void> {
         const fanControlEnabled = this.tccd.settings.fanControlEnabled;
+        const sensorCollection = this.tccd.dbusData.sensorDataCollectionStatus;
 
-        if (fanControlEnabled) {
+        await this.handleRetryInit();
+        await this.handleFanControl(fanControlEnabled, sensorCollection);
+        await this.handleGlobalFanConfig(fanControlEnabled);
+    }
+
+    public async onExit(): Promise<void> {
+        await this.fanApi.exit();
+    }
+
+    private async setPreviousFans() {
+        const numberFans = await this.fanApi.getNumberFans();
+
+        for (let i = 0; i <= numberFans; i++) {
+            this.previousTempValues.set(i, -1);
+        }
+    }
+
+    private async handleRetryInit() {
+        if (!this.fanApi && this.retryFanInitCounter > 0) {
+            console.log("Fan Control: Fan Api not defined, retrying init");
+            this.retryFanInitCounter = this.retryFanInitCounter - 1;
+            this.onStart();
+            return;
+        }
+
+        if (!this.fanApi && this.retryFanInitCounter === 0) {
+            console.log("Fan Control: Fan Api init failed");
+            this.retryFanInitCounter = this.retryFanInitCounter - 1;
+        }
+    }
+
+    private async handleGlobalFanConfig(fanControlEnabled: boolean) {
+        const previousFanEnabled = this.previousFanControlEnabled;
+        if (fanControlEnabled && !previousFanEnabled && this.fanApi) {
+            console.log("Fan Control: Enabling fans");
+            await this.fanApi.clearTempValues();
+            await this.fanApi.initFanControl();
+        } else if (!fanControlEnabled && previousFanEnabled && this.fanApi) {
+            console.log("Fan Control: Disabling fans");
+            await this.fanApi.exit();
+        }
+
+        if (this.fanApi) {
+            this.previousFanControlEnabled = fanControlEnabled;
+        }
+    }
+
+    private async handleFanControl(
+        fanControlEnabled: boolean,
+        sensorCollection: boolean
+    ): Promise<void> {
+        if ((fanControlEnabled || sensorCollection) && this.fanApi) {
             if (this.mapStatus === false) {
                 await this.initFanControl();
             }
@@ -89,19 +148,6 @@ export class FanControlWorker extends DaemonWorker {
                 await this.fanControl();
             }
         }
-
-        if (fanControlEnabled && !this.previousFanControlEnabled) {
-            await this.fanApi.clearTempValues();
-            await this.fanApi.initFanControl();
-        } else if (!fanControlEnabled && this.previousFanControlEnabled) {
-            await this.fanApi.exit();
-        }
-
-        this.previousFanControlEnabled = fanControlEnabled;
-    }
-
-    public async onExit(): Promise<void> {
-        await this.fanApi.exit();
     }
 
     private async initFanControl(): Promise<void> {
@@ -109,6 +155,7 @@ export class FanControlWorker extends DaemonWorker {
         const numberFans = await this.fanApi.getNumberFans();
 
         this.mapStatus = await this.fanApi.mapLogicToFans(numberFans);
+        await this.setPreviousFans();
     }
 
     private async getCurrentCustomProfile(
@@ -160,7 +207,7 @@ export class FanControlWorker extends DaemonWorker {
             tableGPU: customFanCurve.tableGPU,
         };
 
-        this.previousFanSpeeds = {
+        this.previousFanConfig = {
             min: activeProfile.fan.minimumFanspeed,
             max: activeProfile.fan.maximumFanspeed,
             offset: activeProfile.fan.offsetFanspeed,
@@ -177,11 +224,11 @@ export class FanControlWorker extends DaemonWorker {
 
     private async isMinMaxOffsetChanged(): Promise<boolean> {
         return (
-            this.previousFanSpeeds.min !==
+            this.previousFanConfig.min !==
                 this.activeProfile.fan.minimumFanspeed ||
-            this.previousFanSpeeds.max !==
+            this.previousFanConfig.max !==
                 this.activeProfile.fan.maximumFanspeed ||
-            this.previousFanSpeeds.offset !==
+            this.previousFanConfig.offset !==
                 this.activeProfile.fan.offsetFanspeed
         );
     }
@@ -193,6 +240,13 @@ export class FanControlWorker extends DaemonWorker {
         );
     }
 
+    private async isGlobalDisableChanged() {
+        const globalChanged =
+            this.previousDisable !== this.tccd.settings.fanControlEnabled;
+        this.previousDisable = this.tccd.settings.fanControlEnabled;
+        return globalChanged;
+    }
+
     private async updateFanLogic(): Promise<void> {
         const fanProfile = this.activeProfile.fan.fanProfile;
         const isCustomProfile = fanProfile === "Custom";
@@ -200,16 +254,19 @@ export class FanControlWorker extends DaemonWorker {
             isCustomProfileChanged,
             isMinMaxOffsetChanged,
             isProfileNameChanged,
+            isGlobalDisableChanged,
         ] = await Promise.all([
             this.isCustomProfileChanged(),
             this.isMinMaxOffsetChanged(),
             this.isProfileNameChanged(fanProfile),
+            this.isGlobalDisableChanged(),
         ]);
 
         if (
             isProfileNameChanged ||
             isCustomProfileChanged ||
-            isMinMaxOffsetChanged
+            isMinMaxOffsetChanged ||
+            isGlobalDisableChanged
         ) {
             const currentFanProfile = isCustomProfile
                 ? await this.getCurrentCustomProfile(this.activeProfile)
@@ -245,7 +302,11 @@ export class FanControlWorker extends DaemonWorker {
 
             if (this.tccd.settings.fanControlEnabled) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
-                await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
+
+                if (this.previousTempValues.get(fanIndex) !== calculatedSpeed) {
+                    await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
+                    this.previousTempValues.set(fanIndex, calculatedSpeed);
+                }
             }
 
             if (this.tccd.dbusData.sensorDataCollectionStatus) {

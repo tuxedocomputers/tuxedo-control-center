@@ -105,9 +105,7 @@ export class tuxedoIoAPI extends apiBaseClass {
     }
 
     public async exit(): Promise<void> {
-        if (this.tccd.settings.fanControlEnabled) {
-            ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
-            ioAPI.setEnableModeSet(false);
-        }
+        ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
+        ioAPI.setEnableModeSet(false);
     }
 }
