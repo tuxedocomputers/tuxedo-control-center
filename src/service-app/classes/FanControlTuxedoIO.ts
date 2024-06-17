@@ -52,33 +52,53 @@ export class tuxedoIoAPI extends apiBaseClass {
         return true;
     }
 
-    public async getFanSpeedPercent(fanIndex): Promise<number> {
+    public async getFanSpeedPercent(fanIndex: number): Promise<number> {
         const currentSpeedPercent: ObjWrapper<number> = { value: -1 };
         const speedReadSuccess = ioAPI.getFanSpeedPercent(
             fanIndex,
             currentSpeedPercent
         );
+
+        if (!speedReadSuccess) {
+            console.log("Fan Control: Fan speed read with IO Api failed");
+        }
+
         return currentSpeedPercent.value;
     }
 
-    public async getFanTemperature(fanIndex): Promise<number> {
+    public async getFanTemperature(fanIndex: number): Promise<number> {
         const currentTemperatureCelcius: ObjWrapper<number> = { value: -1 };
         const tempReadSuccess = ioAPI.getFanTemperature(
             fanIndex,
             currentTemperatureCelcius
         );
+
+        if (!tempReadSuccess) {
+            console.log("Fan Control: Fan temp read with IO Api failed");
+        }
+
         return currentTemperatureCelcius.value;
     }
 
-    public async writeFanSpeed(fanIndex, calculatedSpeed): Promise<void> {
-        ioAPI.setFanSpeedPercent(fanIndex, calculatedSpeed);
+    public async writeFanSpeed(
+        fanIndex: number,
+        calculatedSpeed: number
+    ): Promise<void> {
+        const speedWriteSuccess = ioAPI.setFanSpeedPercent(
+            fanIndex,
+            calculatedSpeed
+        );
+
+        if (!speedWriteSuccess) {
+            console.log("Fan Control: Fan speed write with IO Api failed");
+        }
     }
 
     public async getNumberFans(): Promise<number> {
         return ioAPI.getNumberFans();
     }
 
-    public async clearTempValues() {}
+    public async clearTempValues(): Promise<void> {}
 
     public async checkAvailable(): Promise<boolean> {
         return ioAPI.wmiAvailable();

@@ -172,18 +172,29 @@ export class FanControlLogic {
         } else if (type === FAN_LOGIC.GPU) {
             this.useTable = "tableGPU";
         } else {
-            throw new Error("FanControlLogic: Invalid argument");
+            const enumValues = Object.values(FAN_LOGIC);
+            throw new Error(
+                `Fan Control: Invalid fan type, possible values are: ${enumValues.join(
+                    ", "
+                )}`
+            );
         }
         this.setFanProfile(fanProfile);
     }
 
     public setFanProfile(fanProfile: ITccFanProfile) {
         const fanTable = fanProfile[this.useTable];
+
+        if (!fanTable) {
+            console.log(`Fan Control: No fan table with ${this.useTable}`);
+        }
+
         if (fanTable) {
             fanTable.sort((a, b) => a.temp - b.temp);
             this.tableMinEntry = fanTable[0];
             this.tableMaxEntry = fanTable[fanTable.length - 1];
             this.fanProfile = fanProfile;
+            console.log(`Fan Control: Set fan profile for ${this.useTable}`);
         }
     }
 
@@ -259,6 +270,14 @@ export class FanControlLogic {
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
+        if (!this.tableMaxEntry) {
+            console.error("Fan Control: Max Entry not defined");
+        }
+
+        if (!this.tableMinEntry) {
+            console.error("Fan Control: Min Entry not defined");
+        }
+
         if (temperatureValue > this.tableMaxEntry.temp) {
             return this.fanProfile[this.useTable].length - 1;
         } else if (temperatureValue < this.tableMinEntry.temp) {
