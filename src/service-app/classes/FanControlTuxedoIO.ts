@@ -81,7 +81,7 @@ export class tuxedoIoAPI extends apiBaseClass {
     public async clearTempValues() {}
 
     public async checkAvailable(): Promise<boolean> {
-        return this.tccd.settings.fanControlEnabled;
+        return ioAPI.wmiAvailable();
     }
 
     public async exit(): Promise<void> {
