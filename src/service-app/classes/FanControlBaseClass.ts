@@ -34,15 +34,18 @@ export class apiBaseClass {
 
     public cpuLogic = new FanControlLogic(
         this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.CPU
+        FAN_LOGIC.CPU,
+        this.tccd
     );
     public gpu1Logic = new FanControlLogic(
         this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.GPU
+        FAN_LOGIC.GPU,
+        this.tccd
     );
     public gpu2Logic = new FanControlLogic(
         this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.GPU
+        FAN_LOGIC.GPU,
+        this.tccd
     );
 
     public async setFanProfileValues(

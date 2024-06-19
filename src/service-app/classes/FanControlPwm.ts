@@ -162,7 +162,8 @@ export class pwmAPI extends apiBaseClass {
                 i,
                 new FanControlLogic(
                     this.tccd.getCurrentFanProfile(),
-                    FAN_LOGIC.CPU
+                    FAN_LOGIC.CPU,
+                    this.tccd
                 )
             );
         }

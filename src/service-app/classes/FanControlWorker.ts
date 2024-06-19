@@ -19,16 +19,15 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { interpolatePointsArray } from "../../common/classes/FanUtils";
 import {
     ITccFanProfile,
     ITccFanTableEntry,
-    customFanPreset,
 } from "../../common/models/TccFanTable";
 import { ITccProfile } from "../../common/models/TccProfile";
 import { tuxedoIoAPI } from "./FanControlTuxedoIO";
 import { pwmAPI } from "./FanControlPwm";
 import { FanControlLogic } from "./FanControlLogic";
+import { getCurrentCustomProfile, getCustomFanCurve } from "./FanControlUtils";
 
 export class FanControlWorker extends DaemonWorker {
     private pwmAvailable: boolean = false;
@@ -158,37 +157,6 @@ export class FanControlWorker extends DaemonWorker {
         await this.setPreviousFans();
     }
 
-    private async getCurrentCustomProfile(
-        activeProfile: ITccProfile
-    ): Promise<ITccFanProfile> {
-        const customFanCurve = await this.getCustomFanCurve(activeProfile);
-        const [tableCPU, tableGPU] = await Promise.all([
-            interpolatePointsArray(customFanCurve.tableCPU),
-            interpolatePointsArray(customFanCurve.tableGPU),
-        ]);
-
-        const tccFanTable = (temp: number, i: number) => ({
-            temp: i,
-            speed: temp,
-        });
-        const tccFanProfile: ITccFanProfile = {
-            name: "Custom",
-            tableCPU: tableCPU.map(tccFanTable),
-            tableGPU: tableGPU.map(tccFanTable),
-        };
-        return tccFanProfile;
-    }
-
-    public async getCustomFanCurve(
-        profile: ITccProfile
-    ): Promise<ITccFanProfile> {
-        if (profile.fan.customFanCurve === undefined) {
-            return customFanPreset;
-        } else {
-            return profile.fan.customFanCurve;
-        }
-    }
-
     public async isEqual(
         first: ITccFanProfile,
         second: ITccFanProfile
@@ -200,7 +168,7 @@ export class FanControlWorker extends DaemonWorker {
         activeProfile: ITccProfile,
         currentFanProfile: ITccFanProfile
     ): Promise<void> {
-        const customFanCurve = await this.getCustomFanCurve(activeProfile);
+        const customFanCurve = await getCustomFanCurve(activeProfile);
 
         this.previousCustomCurve = {
             tableCPU: customFanCurve.tableCPU,
@@ -269,7 +237,7 @@ export class FanControlWorker extends DaemonWorker {
             isGlobalDisableChanged
         ) {
             const currentFanProfile = isCustomProfile
-                ? await this.getCurrentCustomProfile(this.activeProfile)
+                ? await getCurrentCustomProfile(this.activeProfile)
                 : this.tccd.getCurrentFanProfile(this.activeProfile);
 
             await this.fanApi.setFanProfileValues(
@@ -303,7 +271,10 @@ export class FanControlWorker extends DaemonWorker {
             if (this.tccd.settings.fanControlEnabled) {
                 const calculatedSpeed = fanLogic.getSpeedPercent();
 
-                if (this.previousTempValues.get(fanIndex) !== calculatedSpeed) {
+                if (
+                    this.previousTempValues.get(fanIndex) !== calculatedSpeed &&
+                    calculatedSpeed > -1
+                ) {
                     await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
                     this.previousTempValues.set(fanIndex, calculatedSpeed);
                 }

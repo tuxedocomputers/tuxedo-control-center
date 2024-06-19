@@ -16,11 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { manageCriticalTemperature } from "../../common/classes/FanUtils";
+import {
+    interpolatePointsArray,
+    manageCriticalTemperature,
+} from "../../common/classes/FanUtils";
 import {
     ITccFanProfile,
     ITccFanTableEntry,
 } from "../../common/models/TccFanTable";
+import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import { getCurrentCustomProfile } from "./FanControlUtils";
 
 export enum FAN_LOGIC {
     CPU,
@@ -166,7 +171,11 @@ export class FanControlLogic {
         }
     }
 
-    constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
+    constructor(
+        private fanProfile: ITccFanProfile,
+        type: FAN_LOGIC,
+        public tccd: TuxedoControlCenterDaemon
+    ) {
         if (type === FAN_LOGIC.CPU) {
             this.useTable = "tableCPU";
         } else if (type === FAN_LOGIC.GPU) {
@@ -182,7 +191,11 @@ export class FanControlLogic {
         this.setFanProfile(fanProfile);
     }
 
-    public setFanProfile(fanProfile: ITccFanProfile) {
+    public async setFanProfile(fanProfile: ITccFanProfile) {
+        if (fanProfile?.name === "Custom") {
+            fanProfile = await getCurrentCustomProfile(this.tccd.activeProfile);
+        }
+
         const fanTable = fanProfile[this.useTable];
 
         if (!fanTable) {
@@ -194,7 +207,6 @@ export class FanControlLogic {
             this.tableMinEntry = fanTable[0];
             this.tableMaxEntry = fanTable[fanTable.length - 1];
             this.fanProfile = fanProfile;
-            console.log(`Fan Control: Set fan profile for ${this.useTable}`);
         }
     }
 
@@ -207,8 +219,10 @@ export class FanControlLogic {
         this.tempBuffer.addValue(temperatureValue);
 
         // Calculate filtered table speed
-        let nextSpeedPercent = this.calculateSpeedPercent();
-        this.latestSpeedPercent = nextSpeedPercent;
+        const nextSpeedPercent = this.calculateSpeedPercent();
+        if (nextSpeedPercent > -1) {
+            this.latestSpeedPercent = nextSpeedPercent;
+        }
     }
 
     /**
@@ -242,40 +256,52 @@ export class FanControlLogic {
         return isJumpTooBig ? this.lastSpeed - MAX_SPEED_JUMP : speed;
     }
 
-    private getFanValues() {
+    private getFanValues(): number[] {
         const temp = this.tempBuffer.getFilteredValue();
         const foundEntryIndex = this.findFittingEntryIndex(temp);
-        const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
-        let speed = foundEntry.speed;
-        return [temp, speed];
+
+        if (foundEntryIndex > -1) {
+            const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
+            let speed = foundEntry.speed;
+            return [temp, speed];
+        }
+
+        return [-1, -1];
     }
 
     private calculateSpeedPercent(): number {
         let [temp, speed] = this.getFanValues();
 
-        speed += this.offsetFanspeed;
+        if (temp > -1 && speed > -1) {
+            speed += this.offsetFanspeed;
 
-        speed = Math.max(
-            this.minimumFanspeed,
-            Math.min(this.maximumFanspeed, speed)
-        );
-        speed = Math.max(0, Math.min(100, speed));
+            speed = Math.max(
+                this.minimumFanspeed,
+                Math.min(this.maximumFanspeed, speed)
+            );
+            speed = Math.max(0, Math.min(100, speed));
 
-        speed = this.applyHwFanLimitations(speed);
-        speed = this.limitFanSpeedChange(speed);
-        speed = manageCriticalTemperature(temp, speed);
+            speed = this.applyHwFanLimitations(speed);
+            speed = this.limitFanSpeedChange(speed);
+            speed = manageCriticalTemperature(temp, speed);
 
-        this.lastSpeed = speed;
-        return speed;
+            this.lastSpeed = speed;
+            return speed;
+        }
+
+        console.log("Fan Control: Calculate fan speed failed");
+        return -1;
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
         if (!this.tableMaxEntry) {
             console.error("Fan Control: Max Entry not defined");
+            return -1;
         }
 
         if (!this.tableMinEntry) {
             console.error("Fan Control: Min Entry not defined");
+            return -1;
         }
 
         if (temperatureValue > this.tableMaxEntry.temp) {
