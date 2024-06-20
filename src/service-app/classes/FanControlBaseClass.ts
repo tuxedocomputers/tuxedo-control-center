@@ -67,7 +67,7 @@ export class apiBaseClass {
                 ? 0
                 : activeProfile.fan.offsetFanspeed;
 
-            fan.setFanProfile(currentFanProfile);
+            await fan.setFanProfile(currentFanProfile);
         }
     }
 

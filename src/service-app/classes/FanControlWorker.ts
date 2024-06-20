@@ -31,13 +31,7 @@ import { getCurrentCustomProfile, getCustomFanCurve } from "./FanControlUtils";
 
 export class FanControlWorker extends DaemonWorker {
     private pwmAvailable: boolean = false;
-    private previousFanProfile: ITccFanProfile;
     private previousFanControlEnabled: boolean = undefined;
-    private previousFanConfig: { min: number; max: number; offset: number } = {
-        min: -1,
-        max: -1,
-        offset: -1,
-    };
 
     private pwm: pwmAPI;
     private fanApi: tuxedoIoAPI;
@@ -52,7 +46,6 @@ export class FanControlWorker extends DaemonWorker {
         tableGPU: [],
     };
     private previousTempValues: Map<number, number> = new Map();
-    private previousDisable: boolean;
     private retryFanInitCounter: number = 5;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
@@ -61,13 +54,14 @@ export class FanControlWorker extends DaemonWorker {
 
     public async onStart(): Promise<void> {
         this.retryFanInitCounter = 5;
+        this.mapStatus = false;
 
         this.pwm = new pwmAPI(this.tccd);
         this.pwmAvailable = await this.pwm.checkAvailable();
         if (this.pwmAvailable) {
             this.fanApi = this.pwm;
             await this.initFanControl();
-            await this.updateFanLogic();
+            await this.setFanProfile();
             return;
         }
 
@@ -76,7 +70,7 @@ export class FanControlWorker extends DaemonWorker {
         if (ioAvailable) {
             this.fanApi = this.io;
             await this.initFanControl();
-            await this.updateFanLogic();
+            await this.setFanProfile();
             return;
         }
 
@@ -141,6 +135,7 @@ export class FanControlWorker extends DaemonWorker {
         if ((fanControlEnabled || sensorCollection) && this.fanApi) {
             if (this.mapStatus === false) {
                 await this.initFanControl();
+                await this.setFanProfile();
             }
 
             if (this.mapStatus) {
@@ -164,89 +159,19 @@ export class FanControlWorker extends DaemonWorker {
         return JSON.stringify(first) === JSON.stringify(second);
     }
 
-    public async setPreviousValues(
-        activeProfile: ITccProfile,
-        currentFanProfile: ITccFanProfile
-    ): Promise<void> {
-        const customFanCurve = await getCustomFanCurve(activeProfile);
-
-        this.previousCustomCurve = {
-            tableCPU: customFanCurve.tableCPU,
-            tableGPU: customFanCurve.tableGPU,
-        };
-
-        this.previousFanConfig = {
-            min: activeProfile.fan.minimumFanspeed,
-            max: activeProfile.fan.maximumFanspeed,
-            offset: activeProfile.fan.offsetFanspeed,
-        };
-
-        this.previousFanProfile = currentFanProfile;
-    }
-
-    private async isCustomProfileChanged(): Promise<boolean> {
-        const { customFanCurve } = this.activeProfile.fan;
-
-        return !(await this.isEqual(this.previousCustomCurve, customFanCurve));
-    }
-
-    private async isMinMaxOffsetChanged(): Promise<boolean> {
-        return (
-            this.previousFanConfig.min !==
-                this.activeProfile.fan.minimumFanspeed ||
-            this.previousFanConfig.max !==
-                this.activeProfile.fan.maximumFanspeed ||
-            this.previousFanConfig.offset !==
-                this.activeProfile.fan.offsetFanspeed
-        );
-    }
-
-    private async isProfileNameChanged(fanProfile: string): Promise<boolean> {
-        return (
-            this.previousFanProfile?.name !== fanProfile ||
-            this.previousFanProfile === undefined
-        );
-    }
-
-    private async isGlobalDisableChanged() {
-        const globalChanged =
-            this.previousDisable !== this.tccd.settings.fanControlEnabled;
-        this.previousDisable = this.tccd.settings.fanControlEnabled;
-        return globalChanged;
-    }
-
-    private async updateFanLogic(): Promise<void> {
+    private async setFanProfile(): Promise<void> {
         const fanProfile = this.activeProfile.fan.fanProfile;
         const isCustomProfile = fanProfile === "Custom";
-        const [
-            isCustomProfileChanged,
-            isMinMaxOffsetChanged,
-            isProfileNameChanged,
-            isGlobalDisableChanged,
-        ] = await Promise.all([
-            this.isCustomProfileChanged(),
-            this.isMinMaxOffsetChanged(),
-            this.isProfileNameChanged(fanProfile),
-            this.isGlobalDisableChanged(),
-        ]);
 
-        if (
-            isProfileNameChanged ||
-            isCustomProfileChanged ||
-            isMinMaxOffsetChanged ||
-            isGlobalDisableChanged
-        ) {
-            const currentFanProfile = isCustomProfile
-                ? await getCurrentCustomProfile(this.activeProfile)
-                : this.tccd.getCurrentFanProfile(this.activeProfile);
+        const currentFanProfile = isCustomProfile
+            ? await getCurrentCustomProfile(this.activeProfile)
+            : this.tccd.getCurrentFanProfile(this.activeProfile);
 
-            await this.fanApi.setFanProfileValues(
-                this.activeProfile,
-                currentFanProfile
-            );
-
-            await this.setPreviousValues(this.activeProfile, currentFanProfile);
-        }
+        console.log("Fan Control: Setting fan profile");
+        await this.fanApi.setFanProfileValues(
+            this.activeProfile,
+            currentFanProfile
+        );
     }
 
     private async fanControl(): Promise<void> {

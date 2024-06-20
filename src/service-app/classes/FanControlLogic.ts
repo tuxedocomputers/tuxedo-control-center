@@ -16,10 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {
-    interpolatePointsArray,
-    manageCriticalTemperature,
-} from "../../common/classes/FanUtils";
+import { manageCriticalTemperature } from "../../common/classes/FanUtils";
 import {
     ITccFanProfile,
     ITccFanTableEntry,
@@ -173,7 +170,7 @@ export class FanControlLogic {
 
     constructor(
         private fanProfile: ITccFanProfile,
-        type: FAN_LOGIC,
+        private type: FAN_LOGIC,
         public tccd: TuxedoControlCenterDaemon
     ) {
         if (type === FAN_LOGIC.CPU) {
@@ -188,10 +185,9 @@ export class FanControlLogic {
                 )}`
             );
         }
-        this.setFanProfile(fanProfile);
     }
 
-    public async setFanProfile(fanProfile: ITccFanProfile) {
+    public async setFanProfile(fanProfile: ITccFanProfile): Promise<void> {
         if (fanProfile?.name === "Custom") {
             fanProfile = await getCurrentCustomProfile(this.tccd.activeProfile);
         }
@@ -207,6 +203,7 @@ export class FanControlLogic {
             this.tableMinEntry = fanTable[0];
             this.tableMaxEntry = fanTable[fanTable.length - 1];
             this.fanProfile = fanProfile;
+            console.log(`Fan Control: Setting ${this.useTable}`);
         }
     }
 
@@ -215,7 +212,7 @@ export class FanControlLogic {
      *
      * @param temperatureValue New temperature sensor value in Celsius
      */
-    public reportTemperature(temperatureValue: number) {
+    public reportTemperature(temperatureValue: number): void {
         this.tempBuffer.addValue(temperatureValue);
 
         // Calculate filtered table speed
