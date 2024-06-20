@@ -244,7 +244,7 @@ export class FanControlLogic {
         return speed;
     }
 
-    private limitFanSpeedChange(speed: number): number {
+    private limitFallingFanSpeed(speed: number): number {
         const speedJump = speed - this.lastSpeed;
         const isJumpTooBig =
             this.lastSpeed > SPEED_JUMP_THRESHOLD &&
@@ -279,7 +279,7 @@ export class FanControlLogic {
             speed = Math.max(0, Math.min(100, speed));
 
             speed = this.applyHwFanLimitations(speed);
-            speed = this.limitFanSpeedChange(speed);
+            speed = this.limitFallingFanSpeed(speed);
             speed = manageCriticalTemperature(temp, speed);
 
             this.lastSpeed = speed;
