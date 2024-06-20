@@ -23,11 +23,10 @@ import {
     ITccFanProfile,
     ITccFanTableEntry,
 } from "../../common/models/TccFanTable";
-import { ITccProfile } from "../../common/models/TccProfile";
 import { tuxedoIoAPI } from "./FanControlTuxedoIO";
 import { pwmAPI } from "./FanControlPwm";
 import { FanControlLogic } from "./FanControlLogic";
-import { getCurrentCustomProfile, getCustomFanCurve } from "./FanControlUtils";
+import { getCurrentCustomProfile } from "./FanControlUtils";
 
 export class FanControlWorker extends DaemonWorker {
     private pwmAvailable: boolean = false;
@@ -52,8 +51,11 @@ export class FanControlWorker extends DaemonWorker {
         super(1000, tccd);
     }
 
-    public async onStart(): Promise<void> {
-        this.retryFanInitCounter = 5;
+    public async onStart(retry?: boolean): Promise<void> {
+        if (retry !== true) {
+            this.retryFanInitCounter = 5;
+        }
+
         this.mapStatus = false;
 
         this.pwm = new pwmAPI(this.tccd);
@@ -102,7 +104,7 @@ export class FanControlWorker extends DaemonWorker {
         if (!this.fanApi && this.retryFanInitCounter > 0) {
             console.log("Fan Control: Fan Api not defined, retrying init");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
-            this.onStart();
+            this.onStart(true);
             return;
         }
 
