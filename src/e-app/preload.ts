@@ -36,6 +36,14 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
+    onDbusDead: (callback) => {
+        var channelname = 'dbus-died';
+        if(callbacks.indexOf(channelname) < 0)
+        {
+            callbacks.push(channelname);
+            ipcRenderer.on(channelname, callback);
+        }
+    },
     openExternal: (url: string) => ipcRenderer.send('ipc-open-external', url),
     getPath: (path: string) => ipcRenderer.invoke('ipc-get-path', path),
     openFileDialog: (properties) => ipcRenderer.invoke('show-open-dialog', properties),

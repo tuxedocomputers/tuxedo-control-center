@@ -1726,12 +1726,20 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="msgboxMessageServiceUnavailable" datatype="html">
-        <source>Communication with tccd service is unavailable, please restart service and try again.</source>
-        <target state="translated">Kommunikation mit dem tccd Dienst ist nicht möglich.</target>
+      <trans-unit id="msgboxTitleServiceUnavailable" datatype="html">
+        <source>Service unavailable</source>
+        <target state="translated">tccd Dienst nicht verfügbar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="msgboxMessageServiceUnavailable" datatype="html">
+        <source>Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.</source>
+        <target state="translated">Der Hintergrunddienst tccd funktioniert leider nicht zuverlässig. Bitte prüfen Sie die entsprechenden Systemprotokolle oder starten Sie diesen Dienst manuell erneut.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/main-gui/main-gui.component.ts</context>
+          <context context-type="linenumber">62,66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="menuDashboard" datatype="html">

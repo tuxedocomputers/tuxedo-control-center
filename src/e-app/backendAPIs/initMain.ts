@@ -109,7 +109,7 @@ app.whenReady().then( async () => {
     startDbusAndInit();
 });
 
-async function startDbusAndInit() {
+export async function startDbusAndInit() {
     const dbusInitialized = await tccDBus.init();
     if(!dbusInitialized) {
         setTimeout(() => {

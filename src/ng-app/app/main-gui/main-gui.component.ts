@@ -57,10 +57,15 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.state.initializeProfileNames()
 
         if (!this.dataLoaded) {
+            // TODO edit error message, since this has nothing to do with dbus directly
             // We need a blocking dialog box here or everything goes to hell.
-            var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`);
+            var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
             this.utils.quit();
         }
+        window.ipc.onDbusDead( () => {
+            var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
+            this.utils.quit();
+        });
     }
 
     public ngOnDestroy(): void {

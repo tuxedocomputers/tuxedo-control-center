@@ -137,6 +137,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public async readAvailableSettings(resetControls: boolean = false) {
+        // TODO to check if interface is available should happen elsewhere
+        // also getInterface does nothing anymore anyways lol
         const dbus = this.tccdbus.getInterface();
         if (dbus === undefined) {
             return false;

@@ -20,6 +20,7 @@ export interface IPC extends EventEmitter {
     getShouldUseDarkColors: () => Promise<boolean>,
     onUpdateBrightnessMode: (callback) => void,
     onWakeupFromSuspend: (callback) => void,
+    onDbusDead: (callback) => void,
     openExternal: (url: string) => void,
     getPath: (path: string) => Promise<string>,
     openFileDialog: (properties) => Promise<any>,
