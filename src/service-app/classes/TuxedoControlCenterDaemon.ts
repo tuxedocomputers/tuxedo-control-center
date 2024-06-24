@@ -221,8 +221,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 if (TuxedoIOAPI.wmiAvailable()) {
                     TuxedoIOAPI.getModuleInfo(modInfo);
                     this.logLine('tuxedo-io ver ' + modInfo.version + ' [ interface: ' + modInfo.activeInterface + ' ]');
-                } else {
-                    this.logLine('No tuxedo-io found on start');
                 }
             }
         } else if (process.argv.includes('--stop')) {
@@ -703,7 +701,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
         if (profile.display.yResolution === undefined) {
             profile.display.yResolution = -1;
-        }         
+        }
 
         if (profile.webcam === undefined) {
             profile.webcam = {
@@ -794,7 +792,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (newConfigPath !== '') {
             try {
                 let newConfig: T = this.config.readConfig<T>(newConfigPath);
-                
+
 
                 try {
                     this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
