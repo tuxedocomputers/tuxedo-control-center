@@ -62,6 +62,7 @@ export class FanControlWorker extends DaemonWorker {
             this.pwm = new pwmAPI(this.tccd);
             this.pwmAvailable = await this.pwm.checkAvailable();
             if (this.pwmAvailable) {
+                console.log("Fan Control: pwm available");
                 this.fanApi = this.pwm;
                 await this.initFanControl();
                 await this.setFanProfile();
@@ -71,6 +72,7 @@ export class FanControlWorker extends DaemonWorker {
             this.io = new tuxedoIoAPI(this.tccd);
             const ioAvailable = await this.io.checkAvailable();
             if (ioAvailable) {
+                console.log("Fan Control: tuxedo-io available");
                 this.fanApi = this.io;
                 await this.initFanControl();
                 await this.setFanProfile();
