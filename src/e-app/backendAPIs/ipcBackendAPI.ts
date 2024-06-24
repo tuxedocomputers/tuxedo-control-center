@@ -513,6 +513,13 @@ ipcMain.handle('ipc-get-path', async (event, arg) => {
     });
 });
 
+
+ipcMain.on('show-tcc-window', (event,) => {
+    if(!tccWindow.isVisible()) {
+        tccWindow.show();
+    }
+});
+
 ipcMain.on('ipc-open-external', (event, url) => {
     // Explanation: openExternal can theoretically pose a security risk
     // that's why we only let weblinks happen.

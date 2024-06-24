@@ -40,7 +40,7 @@ import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.componen
 import { WebcamSettingsGuard } from "./webcam.service";
 import { TomteGuiComponent } from "./tomte-gui/tomte-gui.component";
 import { PrimeDialogComponent } from "./prime-dialog/prime-dialog.component";
-import { PowerStateStatusResolver } from "./dashboard.resolver";
+import { AmdGpuCountResolver, CpuVendorResolver, DGpuStatusResolver, IGpuStatusResolver, PowerStateStatusResolver } from "./dashboard.resolver";
 import { X11StatusResolver } from "./x11.resolver";
 
 const routes: Routes = [
@@ -63,6 +63,11 @@ const routes: Routes = [
                 resolve: {
                     powerStateStatus: PowerStateStatusResolver,
                     x11Status: X11StatusResolver,
+                    dGpuAvailable: DGpuStatusResolver,
+                    iGpuAvailable: IGpuStatusResolver,
+                    primeStatus: PrimeSelectAvailableResolver,
+                    amdGpuCount: AmdGpuCountResolver,
+                    cpuVendor: CpuVendorResolver,
                 },
             },
             { path: "tools", component: ToolsComponent },

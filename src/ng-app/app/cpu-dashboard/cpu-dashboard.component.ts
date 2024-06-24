@@ -124,17 +124,24 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.amdGpuCount = window.power.getAmdDGpuCount();
         this.dGpuAvailable = window.power.isDGpuAvailable();
         this.iGpuAvailable = window.power.isIGpuAvailable();
+    }
 
-        // not instantly showing window to give enough time to load window
+    // prevents black window being shown for a moment before view has loaded. maybe greater timeout is needed on some devices
+    public async ngAfterViewInit(): Promise<void> {
         setTimeout(async () => {
-            window.ipc.showTccWindow();
-        }, 200);
+        window.ipc.showTccWindow();
+        }, 30);
     }
 
     private setValuesFromRoute() {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;
         this.isX11 = data.x11Status;
+        this.dGpuAvailable = data.dGpuAvailable;
+        this.iGpuAvailable = data.iGpuAvailable;
+        this.primeState = data.primeStatus;
+        this.amdGpuCount = data.amdGpuCount;
+        this.cpuVendor = data.cpuVendor;
     }
 
     private initializeEventListeners(): void {

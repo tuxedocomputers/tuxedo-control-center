@@ -251,7 +251,6 @@ async function createTccWindow(langId: string, module?: string) {
     } else {
         await tccWindow.loadFile(indexPath);
     }
-    tccWindow.show();
 }
 
 function createAquarisControl(langId: string) {
