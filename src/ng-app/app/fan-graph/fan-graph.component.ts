@@ -102,7 +102,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(private cdref: ChangeDetectorRef,
         private config: ConfigService,
         ) {}
-        
+                
     ngOnInit() {}
 
     ngAfterViewInit(): void {

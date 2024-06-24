@@ -66,6 +66,7 @@ export class UtilsService {
     return ((temp * 1.8) + 32);
   }
 
+
   // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
   // logic moved to main.ts
   public async getPath(path: string): Promise<string>

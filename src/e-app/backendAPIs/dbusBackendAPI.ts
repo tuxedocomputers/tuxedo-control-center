@@ -28,6 +28,26 @@ import * as dbus from 'dbus-next';
 import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { ChargeType } from '../../common/classes/PowerSupplyController';
 
+// TODO put function in file that makes sense then export it there and import it here
+/*
+    startDbusAndInit();
+});
+
+async function startDbusAndInit() {
+    const dbusInitialized = await tccDBus.init();
+    if(!dbusInitialized) {
+        setTimeout(() => {
+            startDbusAndInit()
+        }, 3000);
+        return;
+    }
+    initTray();
+    initMain();
+}
+
+async function initTray() {
+*/
+
 class TccDBusController {
     private busName = 'com.tuxedocomputers.tccd';
     private path = '/com/tuxedocomputers/tccd';

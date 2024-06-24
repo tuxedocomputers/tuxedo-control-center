@@ -82,11 +82,12 @@ export class FanSliderComponent implements OnInit {
     public graphType = "line";
 
     constructor(
+        
         private fb: FormBuilder,       
         private config: ConfigService, 
-        private utils: UtilsService,
+        private utils: UtilsService,    
         ) {}
-        
+                
     public ngOnInit(): void {
         this.initFanFormGroup();
         this.updateFanChartDataset();
@@ -126,7 +127,6 @@ export class FanSliderComponent implements OnInit {
             [`${temp}c`]: sliderValue,
         });
     }
-
 
     formatTemperatureLabel(temp: number) {
         if(this.config.getSettings().fahrenheit) {

@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 import { DaemonWorker } from "./DaemonWorker";
 import { XDisplayRefreshRateController } from "../../common/classes/XDisplayRefreshRateController";
 import {
@@ -70,8 +71,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                 this.updateDisplayData();
             }
 
-            this.setActiveDisplayMode();
-        }
+                this.setActiveDisplayMode();
+            }
     }
 
     public onExit(): void {}
@@ -103,8 +104,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
         this.tccd.dbusData.isX11 = this.controller.getIsX11();
 
+
         if (this.displayInfo === undefined) {
-            this.tccd.dbusData.displayModesJSON = "{}";
+            this.tccd.dbusData.displayModesJSON = undefined;
         } else {
             this.displayInfoFound = true;
             this.tccd.dbusData.displayModesJSON = JSON.stringify(this.displayInfo);

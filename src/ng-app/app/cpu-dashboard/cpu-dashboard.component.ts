@@ -47,7 +47,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];
     public cpuInfo: IGeneralCPUInfo;
     public pstateInfo: IPstateInfo;
-
+    public usingFahrenheit: boolean;
     public activeCores: number;
     public activeScalingMinFreqs: string[];
     public activeScalingMaxFreqs: string[];
@@ -101,8 +101,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public amdGpuCount: number;
     public dGpuAvailable: boolean;
     public iGpuAvailable: boolean;
-
-    public usingFahrenheit: boolean;
 
     constructor(
         private sysfs: SysFsService,
@@ -193,7 +191,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
                 )
                 .subscribe((state: string) => {
                     this.primeState = state;
-                })
+                }
+            )
         );
     }
 
@@ -501,6 +500,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         }
         return ret;
     }
+
+    private formatFahrenheit(val: number) {
+        if (this.usingFahrenheit) {
+            val = this.utils.getFahrenheitFromCelsius(val);
+        }
+        return Math.round(val);
+     }
 
     public gotoSettings(): void {
         this.router.navigate(["global-settings", true], {
