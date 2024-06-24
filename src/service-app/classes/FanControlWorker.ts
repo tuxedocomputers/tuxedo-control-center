@@ -58,21 +58,27 @@ export class FanControlWorker extends DaemonWorker {
 
         this.mapStatus = false;
 
-        this.pwm = new pwmAPI(this.tccd);
-        this.pwmAvailable = await this.pwm.checkAvailable();
-        if (this.pwmAvailable) {
-            this.fanApi = this.pwm;
-            await this.initFanControl();
-            await this.setFanProfile();
-            return;
+        if (this.fanApi === undefined || this.fanApi === null) {
+            this.pwm = new pwmAPI(this.tccd);
+            this.pwmAvailable = await this.pwm.checkAvailable();
+            if (this.pwmAvailable) {
+                this.fanApi = this.pwm;
+                await this.initFanControl();
+                await this.setFanProfile();
+                return;
+            }
+
+            this.io = new tuxedoIoAPI(this.tccd);
+            const ioAvailable = await this.io.checkAvailable();
+            if (ioAvailable) {
+                this.fanApi = this.io;
+                await this.initFanControl();
+                await this.setFanProfile();
+                return;
+            }
         }
 
-        this.io = new tuxedoIoAPI(this.tccd);
-        const ioAvailable = await this.io.checkAvailable();
-        if (ioAvailable) {
-            this.fanApi = this.io;
-            await this.initFanControl();
-            await this.setFanProfile();
+        if (this.fanApi !== undefined || this.fanApi !== null) {
             return;
         }
 
@@ -101,14 +107,16 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private async handleRetryInit() {
-        if (!this.fanApi && this.retryFanInitCounter > 0) {
+        const fanApiUnavailable =
+            this.fanApi === undefined || this.fanApi === null;
+        if (fanApiUnavailable && this.retryFanInitCounter > 0) {
             console.log("Fan Control: Fan Api not defined, retrying init");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
             this.onStart(true);
             return;
         }
 
-        if (!this.fanApi && this.retryFanInitCounter === 0) {
+        if (fanApiUnavailable && this.retryFanInitCounter === 0) {
             console.log("Fan Control: Fan Api init failed");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
         }
