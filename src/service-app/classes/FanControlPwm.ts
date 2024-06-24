@@ -156,18 +156,21 @@ export class pwmAPI extends apiBaseClass {
 
     // todo: discern between fans, currently no fan mapping available
     public async mapLogicToFans(nrFans: number): Promise<boolean> {
-        this.fans = new Map();
-        for (let i = 1; i <= nrFans; i++) {
-            this.fans.set(
-                i,
-                new FanControlLogic(
-                    this.tccd.getCurrentFanProfile(),
-                    FAN_LOGIC.CPU,
-                    this.tccd
-                )
-            );
+        if (!this.fans) {
+            this.fans = new Map();
+            for (let i = 1; i <= nrFans; i++) {
+                this.fans.set(
+                    i,
+                    new FanControlLogic(
+                        this.tccd.getCurrentFanProfile(),
+                        FAN_LOGIC.CPU,
+                        this.tccd
+                    )
+                );
+            }
+            await this.initPaths();
         }
-        await this.initPaths();
+
         return true;
     }
 
