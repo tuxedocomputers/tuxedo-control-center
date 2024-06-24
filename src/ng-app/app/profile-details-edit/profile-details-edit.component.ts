@@ -115,6 +115,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansMaxSpeedSubscription: Subscription = new Subscription();
 
     private fansOffAvailableSubscription: Subscription = new Subscription();
+
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
     public stateInputArray: IStateInfo[];
@@ -162,11 +163,26 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        // prevents error messages on forced refresh
+        this.cpuInfo =
+        {
+            availableCores: 0,
+            minFreq: 0,
+            maxFreq: 0,
+            scalingAvailableFrequencies: [],
+            scalingAvailableGovernors: [],
+            energyPerformanceAvailablePreferences: [],
+            reducedAvailableFreq: 0,
+            boost: false,
+        };
         this.defaultFanProfiles = this.config.getFanProfiles();
         if (this.viewProfile === undefined) { return; }
         this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => {
-            this.cpuInfo = generalCpuInfo;
-            this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
+            // prevents everything from breaking on forced refresh
+            if (generalCpuInfo) {
+                this.cpuInfo = generalCpuInfo;
+                this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
+            }
         }));
 
         this.stateInputArray = this.state.getStateInputs();
