@@ -17,7 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
-import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { UtilsService } from "../utils.service";
 import { FormControl } from "@angular/forms";
 import { MatSliderChange } from "@angular/material/slider";
@@ -91,7 +90,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingProfilesUrlHref = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
 
     constructor(
-        private tccdbus: TccDBusClientService,
         private utils: UtilsService
     ) {
         this.chargingProfileLabels.set('high_capacity', $localize `:@@chargingProfileHighCapacityLabel:Full capacity`);
@@ -137,24 +135,18 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public async readAvailableSettings(resetControls: boolean = false) {
-        // TODO to check if interface is available should happen elsewhere
-        // also getInterface does nothing anymore anyways lol
-        const dbus = this.tccdbus.getInterface();
-        if (dbus === undefined) {
-            return false;
-        }
 
-        this.chargingProfilesAvailable = await dbus.getChargingProfilesAvailable();
-        this.currentChargingProfile = await dbus.getCurrentChargingProfile();
+        this.chargingProfilesAvailable = await window.dbusAPI.getChargingProfilesAvailable();
+        this.currentChargingProfile = await window.dbusAPI.getCurrentChargingProfile();
 
-        this.chargingPriosAvailable = await dbus.getChargingPrioritiesAvailable();
-        this.currentChargingPriority = await dbus.getCurrentChargingPriority();
+        this.chargingPriosAvailable = await window.dbusAPI.getChargingPrioritiesAvailable();
+        this.currentChargingPriority = await window.dbusAPI.getCurrentChargingPriority();
 
-        this.chargeStartAvailableThresholds = await dbus.getChargeStartAvailableThresholds();
-        this.chargeEndAvailableThresholds = await dbus.getChargeEndAvailableThresholds();
-        this.chargeStartThreshold = await dbus.getChargeStartThreshold();
-        this.chargeEndThreshold = await dbus.getChargeEndThreshold();
-        this.chargeType = await dbus.getChargeType();
+        this.chargeStartAvailableThresholds = await window.dbusAPI.getChargeStartAvailableThresholds();
+        this.chargeEndAvailableThresholds = await window.dbusAPI.getChargeEndAvailableThresholds();
+        this.chargeStartThreshold = await window.dbusAPI.getChargeStartThreshold();
+        this.chargeEndThreshold = await window.dbusAPI.getChargeEndThreshold();
+        this.chargeType = await window.dbusAPI.getChargeType();
         this.chargeThresholdsEnabled = this.chargeType === ChargeType.Custom;
 
         if (this.ctrlEnableThresholds.value === null || resetControls) {
@@ -191,12 +183,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public async setChargingProfile(chargingProfileDescriptor: string) {
-        const dbus = this.tccdbus.getInterface();
-        if (dbus === undefined) {
-            return false;
-        }
         this.chargingProfileProgress = true;
-        const result = await dbus.setChargingProfile(chargingProfileDescriptor);
+        const result = await window.dbusAPI.setChargingProfile(chargingProfileDescriptor);
         await this.readAvailableSettings();
         this.chargingProfileProgress = false;
 
@@ -204,12 +192,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public async setChargingPriority(chargingPriorityDescriptor: string) {
-        const dbus = this.tccdbus.getInterface();
-        if (dbus === undefined) {
-            return false;
-        }
         this.chargingPriorityProgress = true;
-        const result = await dbus.setChargingPriority(chargingPriorityDescriptor);
+        const result = await window.dbusAPI.setChargingPriority(chargingPriorityDescriptor);
         await this.readAvailableSettings();
         this.chargingPriorityProgress = false;
 
@@ -235,7 +219,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public async sliderStartThresholdChange(changeEvent: MatSliderChange) {
-        const dbus = this.tccdbus.getInterface();
 
         let newValue = changeEvent.value;
         let validValues = this.chargeStartAvailableThresholds.filter(
@@ -246,14 +229,13 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
         if (newValue !== this.chargeStartThreshold) {
             this.chargingThresholdsProgress = true;
-            await dbus.setChargeStartThreshold(newValue);
+            await window.dbusAPI.setChargeStartThreshold(newValue);
             await this.readAvailableSettings(true);
             this.chargingThresholdsProgress = false;
         }
     }
 
     public async sliderEndThresholdChange(changeEvent: MatSliderChange) {
-        const dbus = this.tccdbus.getInterface();
 
         let newValue = changeEvent.value;
         let validValues = this.chargeEndAvailableThresholds.filter(
@@ -264,14 +246,13 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
         if (newValue !== this.chargeEndThreshold) {
             this.chargingThresholdsProgress = true;
-            await dbus.setChargeEndThreshold(newValue);
+            await window.dbusAPI.setChargeEndThreshold(newValue);
             await this.readAvailableSettings(true);
             this.chargingThresholdsProgress = false;
         }
     }
 
     public async checkboxEnableThresholdsChange(changeEvent: MatCheckboxChange) {
-        const dbus = this.tccdbus.getInterface();
         this.chargingThresholdsProgress = true;
 
         let nextChargeType;
@@ -281,28 +262,27 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
             nextChargeType = ChargeType.Standard;
         }
 
-        await dbus.setChargeType(nextChargeType);
+        await window.dbusAPI.setChargeType(nextChargeType);
         await this.readAvailableSettings(true);
         this.chargingThresholdsProgress = false;
     }
 
     public async thresholdRadioGroupChange(event: MatRadioChange) {
-        const dbus = this.tccdbus.getInterface();
 
         this.chargingThresholdsProgress = true;
 
         if (event.value === BatteryThresholdOptions.HighCapacity) {
-            await dbus.setChargeType(ChargeType.Standard);
+            await window.dbusAPI.setChargeType(ChargeType.Standard);
         } else if (event.value === BatteryThresholdOptions.Balanced) {
-            await dbus.setChargeType(ChargeType.Custom);
-            await dbus.setChargeEndThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Balanced).end);
-            await dbus.setChargeStartThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Balanced).start);
+            await window.dbusAPI.setChargeType(ChargeType.Custom);
+            await window.dbusAPI.setChargeEndThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Balanced).end);
+            await window.dbusAPI.setChargeStartThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Balanced).start);
         } else if (event.value === BatteryThresholdOptions.Stationary) {
-            await dbus.setChargeType(ChargeType.Custom);
-            await dbus.setChargeEndThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Stationary).end);
-            await dbus.setChargeStartThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Stationary).start);
+            await window.dbusAPI.setChargeType(ChargeType.Custom);
+            await window.dbusAPI.setChargeEndThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Stationary).end);
+            await window.dbusAPI.setChargeStartThreshold(this.thresholdPresets.get(BatteryThresholdOptions.Stationary).start);
         } else if (event.value === BatteryThresholdOptions.Custom) {
-            await dbus.setChargeType(ChargeType.Custom);
+            await window.dbusAPI.setChargeType(ChargeType.Custom);
         }
 
         await this.readAvailableSettings();

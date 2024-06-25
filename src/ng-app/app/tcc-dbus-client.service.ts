@@ -254,6 +254,7 @@ export class TccDBusClientService implements OnDestroy {
     await window.dbusAPI.dbusAvailable() && await window.dbusAPI.setDGpuD0Metrics(status)
   }
 
+  // TODO do we still need this?
   public getInterface(): IDbusClientAPI | undefined {
     if (this.isAvailable) {
         return window.dbusAPI;
