@@ -45,8 +45,8 @@ export class SupportComponent implements OnInit {
   public anydeskProgramName = 'anydesk';
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';
   // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
-  private installProgress: Map<string, boolean>;
-  private isCheckingInstallation: Map<string, boolean>;
+  private installProgress: Map<string, boolean> = new Map();
+  private isCheckingInstallation: Map<string, boolean> = new Map();
 
   constructor(
     private utils: UtilsService
