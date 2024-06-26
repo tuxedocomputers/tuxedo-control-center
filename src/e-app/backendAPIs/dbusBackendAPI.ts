@@ -73,6 +73,11 @@ class TccDBusController {
     // future implementations might try to restart the dbus a couple of times first
     private async dbusErrorHandling() {
         if (!(await this.dbusAvailable())) {
+            // await setTimeout(async () => {
+            //     if(!(await this.dbusAvailable())) {
+            //         tccWindow.webContents.send('dbus-died');
+            //     }
+            // }, 2000);
             tccWindow.webContents.send('dbus-died');
         }
     }

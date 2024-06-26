@@ -36,6 +36,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public activeProfileName: string;
     private subscriptions: Subscription = new Subscription();
     public useTCCTitleBar = false;
+    private dbusDead = false;
 
     public dataLoaded: boolean;
 
@@ -63,9 +64,30 @@ export class MainGuiComponent implements OnInit, OnDestroy {
             this.utils.quit();
         }
         window.ipc.onDbusDead( () => {
-            var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
-            this.utils.quit();
+            // var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
+            // this.utils.quit();
+            // it's possible that because of asynchronicity the dbus Dead message is sent more than once
+            if(!this.dbusDead)
+            {
+                this.dbusDead = true;
+                // TODO which behaviour makes the most sense?
+                this.utils.pageDisabled = true;
+                // TODO add tooltip on disabled page that dbus is unavailable
+                this.checkIfDbusIsBack();
+            }
         });
+    }
+
+    private async checkIfDbusIsBack() {
+        setTimeout(async () => {
+            if(await window.dbusAPI.dbusAvailable()) {
+                this.dbusDead = false;
+                this.utils.pageDisabled = false;
+            }
+            else {
+                this.checkIfDbusIsBack();
+            }
+        }, 100);
     }
 
     public ngOnDestroy(): void {
