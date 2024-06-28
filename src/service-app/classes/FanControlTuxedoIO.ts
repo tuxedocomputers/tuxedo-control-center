@@ -28,27 +28,30 @@ export class tuxedoIoAPI extends apiBaseClass {
     }
 
     public async mapLogicToFans(nrFans: number): Promise<boolean> {
-        this.fans = new Map();
-        const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
-            this.getFanTemperature(0),
-            this.getFanTemperature(1),
-            this.getFanTemperature(2),
-        ]);
+        if (!this.fans) {
+            this.fans = new Map();
+            const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
+                this.getFanTemperature(0),
+                this.getFanTemperature(1),
+                this.getFanTemperature(2),
+            ]);
 
-        // todo: maybe add change into tuxedo-drivers to return -1 if value not available
-        if (fanTemp0 > 1 && nrFans >= 1) {
-            this.fans.set(1, this.cpuLogic);
-        }
-        if (fanTemp1 > 1 && nrFans >= 2) {
-            this.fans.set(2, this.gpu1Logic);
-        }
-        if (fanTemp2 > 1 && nrFans >= 3) {
-            this.fans.set(3, this.gpu2Logic);
+            // todo: maybe add change into tuxedo-drivers to return -1 if value not available
+            if (fanTemp0 > 1 && nrFans >= 1) {
+                this.fans.set(1, this.cpuLogic);
+            }
+            if (fanTemp1 > 1 && nrFans >= 2) {
+                this.fans.set(2, this.gpu1Logic);
+            }
+            if (fanTemp2 > 1 && nrFans >= 3) {
+                this.fans.set(3, this.gpu2Logic);
+            }
+
+            if (this.fans.size === 0) {
+                return false;
+            }
         }
 
-        if (this.fans.size === 0) {
-            return false;
-        }
         return true;
     }
 
