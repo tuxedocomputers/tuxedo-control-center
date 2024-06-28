@@ -19,6 +19,7 @@
 
 import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
 import { apiBaseClass } from "./FanControlBaseClass";
+import { FAN_LOGIC } from "./FanControlLogic";
 
 export class tuxedoIoAPI extends apiBaseClass {
     public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
@@ -41,13 +42,13 @@ export class tuxedoIoAPI extends apiBaseClass {
 
             // todo: maybe add change into tuxedo-drivers to return -1 if value not available
             if (fanTemp0 > 1 && nrFans >= 1) {
-                this.fans.set(1, this.cpuLogic);
+                this.setFan(1, FAN_LOGIC.CPU);
             }
             if (fanTemp1 > 1 && nrFans >= 2) {
-                this.fans.set(2, this.gpu1Logic);
+                this.setFan(2, FAN_LOGIC.GPU);
             }
             if (fanTemp2 > 1 && nrFans >= 3) {
-                this.fans.set(3, this.gpu2Logic);
+                this.setFan(3, FAN_LOGIC.GPU);
             }
 
             if (this.fans.size === 0) {

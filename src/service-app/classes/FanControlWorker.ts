@@ -29,7 +29,6 @@ import { FanControlLogic } from "./FanControlLogic";
 import { getCurrentCustomProfile } from "./FanControlUtils";
 
 export class FanControlWorker extends DaemonWorker {
-    private pwmAvailable: boolean = false;
     private previousFanControlEnabled: boolean = undefined;
 
     private pwm: pwmAPI;

@@ -32,21 +32,14 @@ export class apiBaseClass {
 
     public fans: Map<number, FanControlLogic>;
 
-    public cpuLogic = new FanControlLogic(
-        this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.CPU,
-        this.tccd
-    );
-    public gpu1Logic = new FanControlLogic(
-        this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.GPU,
-        this.tccd
-    );
-    public gpu2Logic = new FanControlLogic(
-        this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.GPU,
-        this.tccd
-    );
+    public async setFan(index: number, logic: FAN_LOGIC) {
+        const cpuLogic = new FanControlLogic(
+            this.tccd.getCurrentFanProfile(),
+            logic,
+            this.tccd
+        );
+        this.fans.set(index, cpuLogic);
+    }
 
     public async setFanProfileValues(
         activeProfile: ITccProfile,

@@ -20,9 +20,9 @@
 import * as fs from "fs";
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { execCommandAsync } from "../../common/classes/Utils";
-import { FanControlLogic, FAN_LOGIC } from "./FanControlLogic";
 import { apiBaseClass } from "./FanControlBaseClass";
 import { IFanDataInputs } from "../../common/models/ITccFans";
+import { FAN_LOGIC } from "./FanControlLogic";
 
 export class pwmAPI extends apiBaseClass {
     private hwmonPath: string = "";
@@ -63,16 +63,18 @@ export class pwmAPI extends apiBaseClass {
 
     // 1 = manual mode, 2 = auto mode
     private async setHwmonPwmEnable(status: number): Promise<void> {
-        const pwmfiles = await fs.promises.readdir(this.fanControlPath);
-        const fanFiles = await this.getFanFiles(pwmfiles);
+        if (this.pwmAvailable) {
+            const pwmfiles = await fs.promises.readdir(this.fanControlPath);
+            const fanFiles = await this.getFanFiles(pwmfiles);
 
-        for (const fanFile of fanFiles) {
-            const fanPwm = await this.getPropertyInteger(
-                this.fanControlPath,
-                fanFile,
-                "_pwm_enable"
-            );
-            await fanPwm.writeValueA(status);
+            for (const fanFile of fanFiles) {
+                const fanPwm = await this.getPropertyInteger(
+                    this.fanControlPath,
+                    fanFile,
+                    "_pwm_enable"
+                );
+                await fanPwm.writeValueA(status);
+            }
         }
     }
 
@@ -160,21 +162,25 @@ export class pwmAPI extends apiBaseClass {
         };
     }
 
-    // todo: discern between fans, currently no fan mapping available
     public async mapLogicToFans(nrFans: number): Promise<boolean> {
         if (!this.fans) {
             this.fans = new Map();
             for (let i = 1; i <= nrFans; i++) {
-                this.fans.set(
-                    i,
-                    new FanControlLogic(
-                        this.tccd.getCurrentFanProfile(),
-                        FAN_LOGIC.CPU,
-                        this.tccd
-                    )
-                );
+                this.fans.set(i, undefined);
             }
+
             await this.initPaths();
+
+            for (let i = 1; i <= nrFans; i++) {
+                const label = this.fanLabelMap.get(i);
+
+                if (label.includes("cpu")) {
+                    this.setFan(i, FAN_LOGIC.CPU);
+                }
+                if (label.includes("gpu0") || label.includes("gpu1")) {
+                    this.setFan(i, FAN_LOGIC.GPU);
+                }
+            }
         }
 
         return true;
