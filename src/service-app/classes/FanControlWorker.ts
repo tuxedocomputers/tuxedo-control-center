@@ -37,6 +37,9 @@ export class FanControlWorker extends DaemonWorker {
     private io: pwmAPI | tuxedoIoAPI;
     private mapStatus: boolean = false;
 
+    private fanReadAvailable: boolean;
+    private fanWriteAvailable: boolean;
+
     public previousCustomCurve: {
         tableCPU: ITccFanTableEntry[];
         tableGPU: ITccFanTableEntry[];
@@ -60,8 +63,9 @@ export class FanControlWorker extends DaemonWorker {
 
         if (this.fanApi === undefined || this.fanApi === null) {
             this.pwm = new pwmAPI(this.tccd);
-            this.pwmAvailable = await this.pwm.checkAvailable();
-            if (this.pwmAvailable) {
+            [this.fanReadAvailable, this.fanWriteAvailable] =
+                await this.pwm.checkAvailable();
+            if (this.fanReadAvailable) {
                 console.log("Fan Control: pwm available");
                 this.fanApi = this.pwm;
                 await this.initFanControl();
@@ -70,8 +74,9 @@ export class FanControlWorker extends DaemonWorker {
             }
 
             this.io = new tuxedoIoAPI(this.tccd);
-            const ioAvailable = await this.io.checkAvailable();
-            if (ioAvailable) {
+            [this.fanReadAvailable, this.fanWriteAvailable] =
+                await this.io.checkAvailable();
+            if (this.fanReadAvailable) {
                 console.log("Fan Control: tuxedo-io available");
                 this.fanApi = this.io;
                 await this.initFanControl();
@@ -88,12 +93,22 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     public async onWork(): Promise<void> {
-        const fanControlEnabled = this.tccd.settings.fanControlEnabled;
-        const sensorCollection = this.tccd.dbusData.sensorDataCollectionStatus;
+        try {
+            const fanControlEnabled = this.tccd.settings.fanControlEnabled;
+            const sensorCollection =
+                this.tccd.dbusData.sensorDataCollectionStatus;
 
-        await this.handleRetryInit();
-        await this.handleFanControl(fanControlEnabled, sensorCollection);
-        await this.handleGlobalFanConfig(fanControlEnabled);
+            await this.handleRetryInit();
+            if (this.fanReadAvailable) {
+                await this.handleFanControl(
+                    fanControlEnabled,
+                    sensorCollection
+                );
+            }
+            await this.handleGlobalFanConfig(fanControlEnabled);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     public async onExit(): Promise<void> {
@@ -129,7 +144,7 @@ export class FanControlWorker extends DaemonWorker {
         if (fanControlEnabled && !previousFanEnabled && this.fanApi) {
             console.log("Fan Control: Enabling fans");
             await this.fanApi.clearTempValues();
-            await this.fanApi.initFanControl();
+            await this.fanApi.initFanControl(this.fanWriteAvailable);
         } else if (!fanControlEnabled && previousFanEnabled && this.fanApi) {
             console.log("Fan Control: Disabling fans");
             await this.fanApi.exit();
@@ -157,7 +172,7 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private async initFanControl(): Promise<void> {
-        await this.fanApi.initFanControl();
+        await this.fanApi.initFanControl(this.fanWriteAvailable);
         const numberFans = await this.fanApi.getNumberFans();
 
         this.mapStatus = await this.fanApi.mapLogicToFans(numberFans);
@@ -196,6 +211,26 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
+    private async writeFanSpeed(
+        fanLogic: FanControlLogic,
+        fanIndex: number,
+        temperature: number
+    ): Promise<void> {
+        fanLogic.reportTemperature(temperature);
+
+        if (this.tccd.settings.fanControlEnabled) {
+            const calculatedSpeed = fanLogic.getSpeedPercent();
+
+            if (
+                this.previousTempValues.get(fanIndex) !== calculatedSpeed &&
+                calculatedSpeed > -1
+            ) {
+                await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
+                this.previousTempValues.set(fanIndex, calculatedSpeed);
+            }
+        }
+    }
+
     private async updateFan(
         fanIndex: number,
         fanLogic: FanControlLogic
@@ -203,18 +238,8 @@ export class FanControlWorker extends DaemonWorker {
         const temperature = await this.getTemperature(fanIndex);
 
         if (temperature > -1) {
-            fanLogic.reportTemperature(temperature);
-
-            if (this.tccd.settings.fanControlEnabled) {
-                const calculatedSpeed = fanLogic.getSpeedPercent();
-
-                if (
-                    this.previousTempValues.get(fanIndex) !== calculatedSpeed &&
-                    calculatedSpeed > -1
-                ) {
-                    await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
-                    this.previousTempValues.set(fanIndex, calculatedSpeed);
-                }
+            if (this.fanWriteAvailable) {
+                await this.writeFanSpeed(fanLogic, fanIndex, temperature);
             }
 
             if (this.tccd.dbusData.sensorDataCollectionStatus) {

@@ -76,11 +76,17 @@ export class pwmAPI extends apiBaseClass {
         }
     }
 
-    public async initFanControl(): Promise<void> {
-        const pwmAvailability = await this.checkPwmAvailability();
-
-        if (pwmAvailability) {
+    public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
+        if (this.pwmAvailable) {
             this.tccd.dbusData.fanHwmonAvailable = true;
+        }
+
+        if (
+            this.pwmAvailable &&
+            fanWriteAvailable &&
+            this.tccd.settings.fanControlEnabled
+        ) {
+            console.log("Fan Control: Enabling manual mode");
             await this.setHwmonPwmEnable(1);
         }
     }
@@ -241,25 +247,28 @@ export class pwmAPI extends apiBaseClass {
     }
 
     public async getNumberFans(): Promise<number> {
-        const pwmfiles = await fs.promises.readdir(this.fanControlPath);
-        const fanFiles = await this.getFanFiles(pwmfiles);
-        return fanFiles.length;
+        try {
+            if (this.hwmonPath) {
+                const hwmonfiles = await fs.promises.readdir(this.hwmonPath);
+                const fanFiles = await this.getFanFiles(hwmonfiles);
+                return fanFiles.length;
+            }
+        } catch (error) {
+            console.error(error);
+            return;
+        }
     }
 
-    private async checkPwmAvailability(): Promise<boolean> {
+    public async checkAvailable(): Promise<[boolean, boolean]> {
         this.hwmonPath = await this.getHwmonPath();
+
         if (this.hwmonPath) {
             this.pwmAvailable = await fs.promises
                 .access(this.fanControlPath)
                 .then(() => true)
                 .catch(() => false);
-            return this.pwmAvailable;
         }
-        return false;
-    }
-
-    public async checkAvailable(): Promise<boolean> {
-        return await this.checkPwmAvailability();
+        return [!!this.hwmonPath, this.pwmAvailable];
     }
 
     public async exit(): Promise<void> {

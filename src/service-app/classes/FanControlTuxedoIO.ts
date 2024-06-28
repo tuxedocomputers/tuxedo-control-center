@@ -21,10 +21,13 @@ import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
 import { apiBaseClass } from "./FanControlBaseClass";
 
 export class tuxedoIoAPI extends apiBaseClass {
-    public async initFanControl(): Promise<void> {
-        ioAPI.setEnableModeSet(true);
-        this.tccd.dbusData.fansOffAvailable = ioAPI.getFansOffAvailable();
-        this.tccd.dbusData.fansMinSpeed = ioAPI.getFansMinSpeed();
+    public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
+        if (fanWriteAvailable) {
+            console.log("Fan Control: Enabling manual mode");
+            ioAPI.setEnableModeSet(true);
+            this.tccd.dbusData.fansOffAvailable = ioAPI.getFansOffAvailable();
+            this.tccd.dbusData.fansMinSpeed = ioAPI.getFansMinSpeed();
+        }
     }
 
     public async mapLogicToFans(nrFans: number): Promise<boolean> {
@@ -103,8 +106,9 @@ export class tuxedoIoAPI extends apiBaseClass {
 
     public async clearTempValues(): Promise<void> {}
 
-    public async checkAvailable(): Promise<boolean> {
-        return ioAPI.wmiAvailable();
+    public async checkAvailable(): Promise<[boolean, boolean]> {
+        const wmiStatus = ioAPI.wmiAvailable();
+        return [wmiStatus, wmiStatus];
     }
 
     public async exit(): Promise<void> {
