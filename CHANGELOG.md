@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.12] - UNRELEASED
+### Fixed
+- TCC GUI with Aquaris does not start when using Aquaris tray menu entry
+
 ## [2.1.11] - 2024-06-11
 ### Fixed
 - Packaging would in some cases produce hard links
