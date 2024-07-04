@@ -97,7 +97,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     ngOnInit() {
-        
+        setTimeout(async () => {
+            this.electron.ipcRenderer.send("show-tcc-window");
+        }, 200);
     }
 
     ngAfterContentInit(): void {
