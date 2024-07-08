@@ -26,7 +26,7 @@ export const deviceSystemProfileInfo: Map<TUXEDODevice, SystemProfileInfo> = new
 deviceSystemProfileInfo.set(TUXEDODevice.IBP17G6,  { 
     pl:[
         { limit: 24, odmName: "quiet", systemProfile: SystemProfile.SILENT},
-        { limit: 26, odmName: "powersaving", systemProfile: SystemProfile.ENERGYSAVE},
+        { limit: 26, odmName: "power_saving", systemProfile: SystemProfile.ENERGYSAVE},
         { limit: 36, odmName: "entertainment", systemProfile: SystemProfile.ENTERTAINMENT},
         { limit: 40, odmName: "performance", systemProfile: SystemProfile.MAXPERFORMACE}                   
     ]
