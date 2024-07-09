@@ -32,7 +32,7 @@ export class tuxedoIoAPI extends apiBaseClass {
     }
 
     public async mapLogicToFans(nrFans: number): Promise<boolean> {
-        if (!this.fans) {
+        if (!this.fans || this.fans.size === 0) {
             this.fans = new Map();
             const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
                 this.getFanTemperature(0),

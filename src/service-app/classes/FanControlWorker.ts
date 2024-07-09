@@ -160,6 +160,7 @@ export class FanControlWorker extends DaemonWorker {
     ): Promise<void> {
         if ((fanControlEnabled || sensorCollection) && this.fanApi) {
             if (this.mapStatus === false) {
+                console.log("Fan Control: Mapping failed, retrying init");
                 await this.initFanControl();
                 await this.setFanProfile();
             }
@@ -174,8 +175,12 @@ export class FanControlWorker extends DaemonWorker {
         await this.fanApi.initFanControl(this.fanWriteAvailable);
         const numberFans = await this.fanApi.getNumberFans();
 
-        this.mapStatus = await this.fanApi.mapLogicToFans(numberFans);
-        await this.setPreviousFans();
+        if (numberFans) {
+            this.mapStatus = await this.fanApi.mapLogicToFans(numberFans);
+            await this.setPreviousFans();
+            return;
+        }
+        console.log("Fan Control: No fans found");
     }
 
     public async isEqual(
@@ -202,6 +207,12 @@ export class FanControlWorker extends DaemonWorker {
 
     private async fanControl(): Promise<void> {
         const fans = await this.fanApi.getFans();
+
+        if (fans.size === 0) {
+            console.log("Fan Control: Trying to set amount of fans");
+            await this.initFanControl();
+            return;
+        }
 
         for (const fanNumber of fans.keys()) {
             const fanIndex = fanNumber - 1;
@@ -253,6 +264,8 @@ export class FanControlWorker extends DaemonWorker {
             } else {
                 await this.setDbusData(fanIndex, temperature, -1);
             }
+        } else {
+            console.log("Fan Control: Invalid temperature");
         }
     }
 
