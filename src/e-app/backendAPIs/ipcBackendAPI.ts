@@ -285,7 +285,7 @@ let config = new ConfigHandler(
 
 async function pkexecWriteCustomProfilesAsync(newProfileList)
 {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>(async resolve => {
         const tmpProfilesPath = '/tmp/tmptccprofiles';
         config.writeProfiles(newProfileList, tmpProfilesPath);
         let tccdExec: string;
@@ -294,13 +294,13 @@ async function pkexecWriteCustomProfilesAsync(newProfileList)
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        child_process.exec('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath, (err, stdout, stderr) => {
-                if (err) {
-                    resolve(false);
-                } else {
-                    resolve(true);
-                }
-            });
+        let data = await execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+        if (data.error) {
+            resolve(false);
+        }
+        else {
+            resolve(true);
+        }
         });
 }
 
@@ -318,7 +318,7 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[])
     // https://stackoverflow.com/questions/57484453/how-to-get-err-stderr-from-execsync
     try
     {
-        child_process.execSync('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+        execFileSync('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
         return true;
     }
     catch(err)
@@ -329,7 +329,7 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[])
 
 async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProfile[])
 {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>(async resolve => {
         const tmpProfilesPath = '/tmp/tmptccprofiles';
         const tmpSettingsPath = '/tmp/tmptccsettings';
         config.writeProfiles(profiles, tmpProfilesPath);
@@ -340,14 +340,14 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        child_process.exec(
-            'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath, (err, stdout, stderr) => {
-            if (err) {
-                resolve(false);
-            } else {
-                resolve(true);
-            }
-        });
+        let data = await execFile(
+            'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath);
+        if(data.error) {
+            resolve(false);
+        }
+        else {
+            resolve(true);
+        }
     });
 }
 
@@ -365,7 +365,7 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
     } else {
         tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
     }
-    child_process.exec('pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath);
+    execFile('pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath);
 });
 
 
@@ -640,6 +640,20 @@ export async function execFile(arg): Promise<{ data: string, error: any}> {
                     }
         });
     });
+}
+
+export async function execFileSync(arg) {
+        let strArg: string = arg;
+        let cmdList = strArg.split(' ');
+        let cmd = cmdList.shift();
+        let data;
+        try {
+            data = child_process.execFileSync(cmd, cmdList);
+            return data.toString();
+        }
+        catch (err) {
+            return err;
+        }
 }
 
 
