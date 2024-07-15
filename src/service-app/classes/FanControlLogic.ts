@@ -59,9 +59,10 @@ class ValueBuffer {
     }
 
     public getFilteredValue() {
-        const middleNumbers = this.getMiddle(this.bufferData);
-        const averageTemp = this.calculateAverage(middleNumbers);
-        return Math.floor(averageTemp);
+        const sortedArray: number[] = [...this.bufferData].sort();
+        const middleNumbers: number[] = this.getMiddle(sortedArray);
+        const averageTemp: number = this.calculateAverage(middleNumbers);
+        return Math.round(averageTemp);
     }
 }
 
