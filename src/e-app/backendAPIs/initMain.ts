@@ -320,18 +320,7 @@ export async function updateTrayProfiles() {
 }
 
 export async function hasAquaris() {
-    try {
-        var device: TUXEDODevice = JSON.parse(await tccDBus.getDeviceJSON());
-        if (device !== TUXEDODevice.STELLARIS1XI04 && device !== TUXEDODevice.STEPOL1XA04 && device !== TUXEDODevice.STELLARIS1XI05 && device !== TUXEDODevice.UNKNOWN ) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    catch (err) {
-        console.log("Couldn't parse Tuxedo device");
-        return true;
-    }
+    return await tccDBus.deviceHasAquaris();
     
 }
 

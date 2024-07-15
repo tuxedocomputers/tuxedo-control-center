@@ -253,6 +253,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
         this.dbusData.device = JSON.stringify(dev);
+        const aq = this.deviceHasAquaris();
+        this.dbusData.deviceHasAquaris = aq;
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
@@ -489,6 +491,33 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.loadConfigsAndProfiles();
             this.triggerStateCheck(true);
         });
+    }
+
+    deviceHasAquaris(): boolean {
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const deviceName = dmi.productSKU.readValueNT();
+        const boardVendor = dmi.boardVendor.readValueNT();
+        const chassisVendor = dmi.chassisVendor.readValueNT();
+        const sysVendor = dmi.sysVendor.readValueNT();
+        let showAquarisMenu;
+        const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
+                         (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
+                         (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+
+        if (isTuxedo) {
+            if (deviceName !== undefined &&
+                (deviceName === 'STELLARIS1XI04' ||
+                 deviceName === 'STEPOL1XA04' ||
+                 deviceName === 'STELLARIS1XI05' ||
+                 deviceName === 'STELLARIS17I06')) {
+                showAquarisMenu = true;
+            } else {
+                showAquarisMenu = false;
+            }
+        } else {
+            showAquarisMenu = true;
+        }
+        return showAquarisMenu;
     }
 
     identifyDevice(): TUXEDODevice {

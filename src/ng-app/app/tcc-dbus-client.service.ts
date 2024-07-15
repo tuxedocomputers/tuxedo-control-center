@@ -112,7 +112,7 @@ export class TccDBusClientService implements OnDestroy {
     }
     catch(err) {
         // TODO, set stuff to default values? Do more error handling? Check if dbus is even up?
-        console.error("Could not update observable through function " + updateFunction +"\n" + err);
+        //console.error("Could not update observable through function " + updateFunction +"\n" + err);
     }
   }
 

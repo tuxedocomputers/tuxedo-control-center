@@ -27,6 +27,7 @@ import { FnLockController } from '../../common/classes/FnLockController';
  */
 export class TccDBusData {
     public device: string = "";
+    public deviceHasAquaris = false;
     public displayModesJSON: string = "{}";
     public isX11: boolean = false;
     public tuxedoWmiAvailable: boolean = false;
@@ -90,6 +91,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     GetDeviceName() { return this.data.device; }
+    DeviceHasAquaris() { return this.data.deviceHasAquaris; }
     GetDisplayModesJSON() { return this.data.displayModesJSON; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -216,6 +218,7 @@ TccDBusInterface.configureMembers({
     },
     methods: {
         GetDeviceName: {outSignature: 's'},
+        DeviceHasAquaris: { outSignature: 'b'},
         GetDisplayModesJSON: {outSignature: 's'},
         GetIsX11: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },

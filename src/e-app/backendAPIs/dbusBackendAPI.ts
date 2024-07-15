@@ -91,6 +91,15 @@ class TccDBusController {
         }
     }
 
+    async deviceHasAquaris(): Promise<boolean> {
+        await this.dbusErrorHandling();
+        try {
+            return await this.interface.DeviceHasAquaris();
+        } catch (err) {
+            return false;
+        }
+    }
+
     async tccdVersion(): Promise<string> {
         await this.dbusErrorHandling();
         try {
