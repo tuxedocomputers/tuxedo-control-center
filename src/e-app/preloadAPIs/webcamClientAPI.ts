@@ -23,11 +23,11 @@ const { ipcRenderer } = require('electron');
 
 // for preload script
 export const WebcamClientAPI = {
-    createWebcamPreview: (webcamConfig) => ipcRenderer.send(webcamAPIHandle, [WebcamAPIFunctions.createWebcamPreview, webcamConfig]),
-    closeWebcamPreview: () => ipcRenderer.send(webcamAPIHandle, [WebcamAPIFunctions.closeWebcamPreview]),
-    setWebcamWithLoading: (webcamConfig) => ipcRenderer.send(webcamAPIHandle, [WebcamAPIFunctions.settingWebcamWithLoading, webcamConfig]),
-    videoEnded: () => ipcRenderer.send(webcamAPIHandle, [WebcamAPIFunctions.videoEnded]),
-    applyControls: () => ipcRenderer.send(webcamAPIHandle, [WebcamAPIFunctions.applyControls]),
+    createWebcamPreview: (webcamConfig) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.createWebcamPreview, webcamConfig]),
+    closeWebcamPreview: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.closeWebcamPreview]),
+    setWebcamWithLoading: (webcamConfig) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.settingWebcamWithLoading, webcamConfig]),
+    videoEnded: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.videoEnded]),
+    applyControls: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.applyControls]),
     readWebcamSettings: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readWebcamSettings]),
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.writeConfig, settings]),
     readV4l2Names: (path: string) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readv4l2Values, path]),
