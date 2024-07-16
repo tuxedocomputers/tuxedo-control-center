@@ -27,13 +27,12 @@ import { tuxedoIoAPI } from "./FanControlTuxedoIO";
 import { pwmAPI } from "./FanControlPwm";
 import { FanControlLogic } from "./FanControlLogic";
 import { getCurrentCustomProfile } from "./FanControlUtils";
+import { apiBaseClass } from "./FanControlBaseClass";
 
 export class FanControlWorker extends DaemonWorker {
     private previousFanControlEnabled: boolean = undefined;
 
-    private pwm: pwmAPI;
-    private fanApi: tuxedoIoAPI;
-    private io: pwmAPI | tuxedoIoAPI;
+    private fanApi: apiBaseClass;
     private mapStatus: boolean = false;
 
     private fanReadAvailable: boolean;
@@ -61,23 +60,21 @@ export class FanControlWorker extends DaemonWorker {
         this.mapStatus = false;
 
         if (this.fanApi === undefined || this.fanApi === null) {
-            this.pwm = new pwmAPI(this.tccd);
+            this.fanApi = new pwmAPI(this.tccd);
             [this.fanReadAvailable, this.fanWriteAvailable] =
-                await this.pwm.checkAvailable();
+                await this.fanApi.checkAvailable();
             if (this.fanReadAvailable) {
                 console.log("Fan Control: pwm available");
-                this.fanApi = this.pwm;
                 await this.initFanControl();
                 await this.setFanProfile();
                 return;
             }
 
-            this.io = new tuxedoIoAPI(this.tccd);
+            this.fanApi = new tuxedoIoAPI(this.tccd);
             [this.fanReadAvailable, this.fanWriteAvailable] =
-                await this.io.checkAvailable();
+                await this.fanApi.checkAvailable();
             if (this.fanReadAvailable) {
                 console.log("Fan Control: tuxedo-io available");
-                this.fanApi = this.io;
                 await this.initFanControl();
                 await this.setFanProfile();
                 return;

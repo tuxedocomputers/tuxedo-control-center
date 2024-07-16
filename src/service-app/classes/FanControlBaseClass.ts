@@ -27,7 +27,7 @@ import {
     SysFsPropertyString,
 } from "../../common/classes/SysFsProperties";
 
-export class apiBaseClass {
+export abstract class apiBaseClass {
     constructor(public tccd: TuxedoControlCenterDaemon) {}
 
     public fans: Map<number, FanControlLogic>;
@@ -86,4 +86,25 @@ export class apiBaseClass {
     ): Promise<SysFsPropertyString> {
         return new SysFsPropertyString(path.join(hwmonPath, fileName + suffix));
     }
+
+    abstract initFanControl(fanWriteAvailable: boolean): Promise<void>;
+
+    abstract mapLogicToFans(nrFans: number): Promise<boolean>;
+
+    abstract getFanSpeedPercent(fanIndex: number): Promise<number>;
+
+    abstract clearTempValues(): Promise<void>;
+
+    abstract getNumberFans(): Promise<number>;
+
+    abstract checkAvailable(): Promise<[boolean, boolean]>;
+
+    abstract getFanTemperature(fanIndex: number): Promise<number>;
+
+    abstract writeFanSpeed(
+        fanIndex: number,
+        calculatedSpeed: number
+    ): Promise<void>;
+
+    abstract exit(): Promise<void>;
 }
