@@ -17,11 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from "path";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { FanControlLogic, FAN_LOGIC } from "./FanControlLogic";
-import { ITccFanProfile } from "../../common/models/TccFanTable";
-import { ITccProfile } from "../../common/models/TccProfile";
+import * as path from "node:path";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import { FanControlLogic } from "./FanControlLogic";
+import type { FAN_LOGIC } from "./FanControlLogic";
+import type { ITccFanProfile } from "../../common/models/TccFanTable";
+import type { ITccProfile } from "../../common/models/TccProfile";
 import {
     SysFsPropertyInteger,
     SysFsPropertyString,

@@ -17,12 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from "fs";
-import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
+import * as fs from "node:fs";
+import type { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { execCommandAsync } from "../../common/classes/Utils";
 import { FanControlBaseClass } from "./FanControlBaseClass";
-import { IFanDataInputs } from "../../common/models/ITccFans";
-import { FAN_LOGIC, FanControlLogic } from "./FanControlLogic";
+import type { IFanDataInputs } from "../../common/models/ITccFans";
+import { FAN_LOGIC } from "./FanControlLogic";
+import type { FanControlLogic } from "./FanControlLogic";
 
 export class FanControlPwm extends FanControlBaseClass {
     private hwmonPath: string = "";

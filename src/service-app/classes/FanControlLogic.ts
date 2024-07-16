@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { manageCriticalTemperature } from "../../common/classes/FanUtils";
-import {
+import type {
     ITccFanProfile,
     ITccFanTableEntry,
 } from "../../common/models/TccFanTable";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import { getCurrentCustomProfile } from "./FanControlUtils";
 
 export enum FAN_LOGIC {

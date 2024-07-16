@@ -17,7 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
+import { TuxedoIOAPI as ioAPI } from "../../native-lib/TuxedoIOAPI";
+import type { ObjWrapper } from "../../native-lib/TuxedoIOAPI";
 import { FanControlBaseClass } from "./FanControlBaseClass";
 import { FAN_LOGIC } from "./FanControlLogic";
 
