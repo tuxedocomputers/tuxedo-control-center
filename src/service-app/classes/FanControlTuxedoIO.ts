@@ -62,7 +62,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
 
     public async getFanSpeedPercent(fanIndex: number): Promise<number> {
         const currentSpeedPercent: ObjWrapper<number> = { value: -1 };
-        const speedReadSuccess = ioAPI.getFanSpeedPercent(
+        const speedReadSuccess: boolean = ioAPI.getFanSpeedPercent(
             fanIndex,
             currentSpeedPercent
         );
@@ -76,7 +76,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
 
     public async getFanTemperature(fanIndex: number): Promise<number> {
         const currentTemperatureCelcius: ObjWrapper<number> = { value: -1 };
-        const tempReadSuccess = ioAPI.getFanTemperature(
+        const tempReadSuccess: boolean = ioAPI.getFanTemperature(
             fanIndex,
             currentTemperatureCelcius
         );
@@ -92,7 +92,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         fanIndex: number,
         calculatedSpeed: number
     ): Promise<void> {
-        const speedWriteSuccess = ioAPI.setFanSpeedPercent(
+        const speedWriteSuccess: boolean = ioAPI.setFanSpeedPercent(
             fanIndex,
             calculatedSpeed
         );
@@ -109,7 +109,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
     public async clearTempValues(): Promise<void> {}
 
     public async checkAvailable(): Promise<[boolean, boolean]> {
-        const wmiStatus = ioAPI.wmiAvailable();
+        const wmiStatus: boolean = ioAPI.wmiAvailable();
         return [wmiStatus, wmiStatus];
     }
 
