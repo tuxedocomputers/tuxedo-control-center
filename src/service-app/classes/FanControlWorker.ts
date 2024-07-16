@@ -93,8 +93,9 @@ export class FanControlWorker extends DaemonWorker {
 
     public async onWork(): Promise<void> {
         try {
-            const fanControlEnabled = this.tccd.settings.fanControlEnabled;
-            const sensorCollection =
+            const fanControlEnabled: boolean =
+                this.tccd.settings.fanControlEnabled;
+            const sensorCollection: boolean =
                 this.tccd.dbusData.sensorDataCollectionStatus;
 
             await this.handleRetryInit();
@@ -114,16 +115,16 @@ export class FanControlWorker extends DaemonWorker {
         await this.fanApi.exit();
     }
 
-    private async setPreviousFans() {
-        const numberFans = await this.fanApi.getNumberFans();
+    private async setPreviousFans(): Promise<void> {
+        const numberFans: number = await this.fanApi.getNumberFans();
 
-        for (let i = 0; i <= numberFans; i++) {
+        for (let i: number = 0; i <= numberFans; i++) {
             this.previousTempValues.set(i, -1);
         }
     }
 
-    private async handleRetryInit() {
-        const fanApiUnavailable =
+    private async handleRetryInit(): Promise<void> {
+        const fanApiUnavailable: boolean =
             this.fanApi === undefined || this.fanApi === null;
         if (fanApiUnavailable && this.retryFanInitCounter > 0) {
             console.log("Fan Control: Fan Api not defined, retrying init");
@@ -138,8 +139,10 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
-    private async handleGlobalFanConfig(fanControlEnabled: boolean) {
-        const previousFanEnabled = this.previousFanControlEnabled;
+    private async handleGlobalFanConfig(
+        fanControlEnabled: boolean
+    ): Promise<void> {
+        const previousFanEnabled: boolean = this.previousFanControlEnabled;
         if (fanControlEnabled && !previousFanEnabled && this.fanApi) {
             console.log("Fan Control: Enabling fans");
             await this.fanApi.clearTempValues();
@@ -173,7 +176,7 @@ export class FanControlWorker extends DaemonWorker {
 
     private async initFanControl(): Promise<void> {
         await this.fanApi.initFanControl(this.fanWriteAvailable);
-        const numberFans = await this.fanApi.getNumberFans();
+        const numberFans: number = await this.fanApi.getNumberFans();
 
         if (numberFans) {
             this.mapStatus = await this.fanApi.mapLogicToFans(numberFans);
@@ -191,10 +194,10 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private async setFanProfile(): Promise<void> {
-        const fanProfile = this.activeProfile.fan.fanProfile;
-        const isCustomProfile = fanProfile === "Custom";
+        const fanProfile: string = this.activeProfile.fan.fanProfile;
+        const isCustomProfile: boolean = fanProfile === "Custom";
 
-        const currentFanProfile = isCustomProfile
+        const currentFanProfile: ITccFanProfile = isCustomProfile
             ? await getCurrentCustomProfile(this.activeProfile)
             : this.tccd.getCurrentFanProfile(this.activeProfile);
 
@@ -206,7 +209,7 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private async fanControl(): Promise<void> {
-        const fans = await this.fanApi.getFans();
+        const fans: Map<number, FanControlLogic> = await this.fanApi.getFans();
 
         if (fans.size === 0) {
             console.log("Fan Control: Trying to set amount of fans");
@@ -215,7 +218,7 @@ export class FanControlWorker extends DaemonWorker {
         }
 
         for (const fanNumber of fans.keys()) {
-            const fanIndex = fanNumber - 1;
+            const fanIndex: number = fanNumber - 1;
 
             await this.updateFan(fanIndex, fans.get(fanNumber));
         }
@@ -229,7 +232,7 @@ export class FanControlWorker extends DaemonWorker {
         fanLogic.reportTemperature(temperature);
 
         if (this.tccd.settings.fanControlEnabled) {
-            const calculatedSpeed = fanLogic.getSpeedPercent();
+            const calculatedSpeed: number = fanLogic.getSpeedPercent();
 
             if (
                 this.previousTempValues.get(fanIndex) !== calculatedSpeed &&
@@ -245,7 +248,7 @@ export class FanControlWorker extends DaemonWorker {
         fanIndex: number,
         fanLogic: FanControlLogic
     ): Promise<void> {
-        const temperature = await this.getTemperature(fanIndex);
+        const temperature: number = await this.getTemperature(fanIndex);
 
         if (temperature > -1) {
             if (this.fanWriteAvailable) {
@@ -253,7 +256,7 @@ export class FanControlWorker extends DaemonWorker {
             }
 
             if (this.tccd.dbusData.sensorDataCollectionStatus) {
-                const currentSpeedPercent =
+                const currentSpeedPercent: number =
                     await this.fanApi.getFanSpeedPercent(fanIndex);
 
                 await this.setDbusData(

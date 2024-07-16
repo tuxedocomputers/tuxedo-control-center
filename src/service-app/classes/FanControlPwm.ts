@@ -22,7 +22,7 @@ import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { execCommandAsync } from "../../common/classes/Utils";
 import { apiBaseClass } from "./FanControlBaseClass";
 import { IFanDataInputs } from "../../common/models/ITccFans";
-import { FAN_LOGIC } from "./FanControlLogic";
+import { FAN_LOGIC, FanControlLogic } from "./FanControlLogic";
 
 export class pwmAPI extends apiBaseClass {
     private hwmonPath: string = "";
@@ -34,9 +34,9 @@ export class pwmAPI extends apiBaseClass {
     private fanMaxInputMap: Map<number, SysFsPropertyInteger>;
     private tempInputMap: Map<number, SysFsPropertyInteger>;
     private pwmInputMap: Map<number, SysFsPropertyInteger>;
-    private sensorValueMap = new Map<number, number>();
-    private fanLabelMap = new Map<number, string>();
-    private tempLabelMap = new Map<number, string>();
+    private sensorValueMap: Map<number, number> = new Map<number, number>();
+    private fanLabelMap: Map<number, string> = new Map<number, string>();
+    private tempLabelMap: Map<number, string> = new Map<number, string>();
 
     private async getHwmonPath(): Promise<string | undefined> {
         return await execCommandAsync(
@@ -51,8 +51,11 @@ export class pwmAPI extends apiBaseClass {
         return Array.from(
             new Set(
                 files
-                    .filter((entry) => entry.match(pattern))
-                    .map((entry) => entry.split("_")[0])
+                    .filter(
+                        (entry: string): RegExpMatchArray =>
+                            entry.match(pattern)
+                    )
+                    .map((entry: string): string => entry.split("_")[0])
             )
         );
     }
@@ -64,15 +67,18 @@ export class pwmAPI extends apiBaseClass {
     // 1 = manual mode, 2 = auto mode
     private async setHwmonPwmEnable(status: number): Promise<void> {
         if (this.pwmAvailable) {
-            const pwmfiles = await fs.promises.readdir(this.fanControlPath);
-            const fanFiles = await this.getFanFiles(pwmfiles);
+            const pwmfiles: string[] = await fs.promises.readdir(
+                this.fanControlPath
+            );
+            const fanFiles: string[] = await this.getFanFiles(pwmfiles);
 
             for (const fanFile of fanFiles) {
-                const fanPwm = await this.getPropertyInteger(
-                    this.fanControlPath,
-                    fanFile,
-                    "_pwm_enable"
-                );
+                const fanPwm: SysFsPropertyInteger =
+                    await this.getPropertyInteger(
+                        this.fanControlPath,
+                        fanFile,
+                        "_pwm_enable"
+                    );
                 await fanPwm.writeValueA(status);
             }
         }
@@ -100,18 +106,22 @@ export class pwmAPI extends apiBaseClass {
         this.pwmInputMap = new Map();
         this.tempLabelMap = new Map();
 
-        const fanNumbers = await this.getFans().then((fans) =>
-            Array.from(fans.keys())
+        const fanNumbers: number[] = await this.getFans().then(
+            (fans: Map<number, FanControlLogic>): number[] =>
+                Array.from(fans.keys())
         );
 
-        const fanDataPromises = fanNumbers.map((fanIndex) =>
-            this.getFanData(fanIndex)
+        const fanDataPromises: Promise<IFanDataInputs>[] = fanNumbers.map(
+            (fanIndex: number): Promise<IFanDataInputs> =>
+                this.getFanData(fanIndex)
         );
-        const fanDataResults = await Promise.all(fanDataPromises);
+        const fanDataResults: IFanDataInputs[] = await Promise.all(
+            fanDataPromises
+        );
 
         for (const fanIndex in fanDataResults) {
-            const fanIndexNumber = parseInt(fanIndex) + 1;
-            const fanData = fanDataResults[fanIndex];
+            const fanIndexNumber: number = parseInt(fanIndex) + 1;
+            const fanData: IFanDataInputs = fanDataResults[fanIndex];
             this.fanSpeedInputMap.set(fanIndexNumber, fanData.speedInput);
             this.fanMaxInputMap.set(fanIndexNumber, fanData.fanMaxInput);
             this.tempInputMap.set(fanIndexNumber, fanData.tempInput);
@@ -165,14 +175,14 @@ export class pwmAPI extends apiBaseClass {
     public async mapLogicToFans(nrFans: number): Promise<boolean> {
         if (!this.fans) {
             this.fans = new Map();
-            for (let i = 1; i <= nrFans; i++) {
+            for (let i: number = 1; i <= nrFans; i++) {
                 this.fans.set(i, undefined);
             }
 
             await this.initPaths();
 
-            for (let i = 1; i <= nrFans; i++) {
-                const label = this.fanLabelMap.get(i);
+            for (let i: number = 1; i <= nrFans; i++) {
+                const label: string = this.fanLabelMap.get(i);
 
                 if (label.includes("cpu")) {
                     this.setFan(i, FAN_LOGIC.CPU);
@@ -187,8 +197,12 @@ export class pwmAPI extends apiBaseClass {
     }
 
     public async getFanSpeedPercent(fanIndex: number): Promise<number> {
-        const speedEntry = this.fanSpeedInputMap.get(fanIndex + 1);
-        const maxEntry = this.fanMaxInputMap.get(fanIndex + 1);
+        const speedEntry: SysFsPropertyInteger = this.fanSpeedInputMap.get(
+            fanIndex + 1
+        );
+        const maxEntry: SysFsPropertyInteger = this.fanMaxInputMap.get(
+            fanIndex + 1
+        );
 
         if (speedEntry === undefined || maxEntry === undefined) {
             return -1;
@@ -227,7 +241,7 @@ export class pwmAPI extends apiBaseClass {
         }
 
         if (tempEntry !== undefined) {
-            const readValue = await tempEntry.readValueNTA();
+            const readValue: number = await tempEntry.readValueNTA();
             if (readValue) {
                 this.sensorValueMap.set(fanIndex + 1, readValue / 1000);
                 return readValue / 1000;
@@ -255,8 +269,10 @@ export class pwmAPI extends apiBaseClass {
     public async getNumberFans(): Promise<number> {
         try {
             if (this.hwmonPath) {
-                const hwmonfiles = await fs.promises.readdir(this.hwmonPath);
-                const fanFiles = await this.getFanFiles(hwmonfiles);
+                const hwmonfiles: string[] = await fs.promises.readdir(
+                    this.hwmonPath
+                );
+                const fanFiles: string[] = await this.getFanFiles(hwmonfiles);
                 return fanFiles.length;
             }
         } catch (error) {
@@ -271,8 +287,8 @@ export class pwmAPI extends apiBaseClass {
         if (this.hwmonPath) {
             this.pwmAvailable = await fs.promises
                 .access(this.fanControlPath)
-                .then(() => true)
-                .catch(() => false);
+                .then((): boolean => true)
+                .catch((): boolean => false);
         }
         return [!!this.hwmonPath, this.pwmAvailable];
     }

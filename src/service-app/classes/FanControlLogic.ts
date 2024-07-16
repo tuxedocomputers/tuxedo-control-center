@@ -31,7 +31,7 @@ export enum FAN_LOGIC {
 
 class ValueBuffer {
     private bufferData: Array<number>;
-    private bufferMaxSize = 13; // Buffer max size
+    private bufferMaxSize: number = 13;
 
     constructor() {
         this.bufferData = new Array();
@@ -44,21 +44,24 @@ class ValueBuffer {
         }
     }
 
-    // input is sorted array with maximum of 13 temperature readings, taking the middle 7
+    // input is a sorted array with maximum of 13 temperature readings, taking the middle 7
     private getMiddle(numbers: number[]): number[] {
-        const middleIndex = Math.floor(numbers.length / 2);
-        const middleRange = Math.max(0, middleIndex - 3);
-        const endRange = Math.min(numbers.length, middleIndex + 4);
+        const middleIndex: number = Math.floor(numbers.length / 2);
+        const middleRange: number = Math.max(0, middleIndex - 3);
+        const endRange: number = Math.min(numbers.length, middleIndex + 4);
         return numbers.slice(middleRange, endRange);
     }
 
     private calculateAverage(numbers: number[]): number {
         return (
-            numbers.reduce((acc, current) => acc + current, 0) / numbers.length
+            numbers.reduce(
+                (acc: number, current: number): number => acc + current,
+                0
+            ) / numbers.length
         );
     }
 
-    public getFilteredValue() {
+    public getFilteredValue(): number {
         const sortedArray: number[] = [...this.bufferData].sort();
         const middleNumbers: number[] = this.getMiddle(sortedArray);
         const averageTemp: number = this.calculateAverage(middleNumbers);
@@ -70,14 +73,14 @@ const MAX_SPEED_JUMP = 2;
 const SPEED_JUMP_THRESHOLD = 20;
 
 export class FanControlLogic {
-    private latestSpeedPercent;
+    private latestSpeedPercent: number;
 
-    private tempBuffer = new ValueBuffer();
+    private tempBuffer: ValueBuffer = new ValueBuffer();
 
     private tableMaxEntry: ITccFanTableEntry;
     private tableMinEntry: ITccFanTableEntry;
 
-    private lastSpeed = 0;
+    private lastSpeed: number = 0;
 
     private useTable: string;
 
@@ -85,7 +88,7 @@ export class FanControlLogic {
      * Minimum fan speed hardware is capable of
      */
     private _fansMinSpeedHWLimit: number = 0;
-    get fansMinSpeedHWLimit() {
+    get fansMinSpeedHWLimit(): number {
         return this._fansMinSpeedHWLimit;
     }
     set fansMinSpeedHWLimit(speed: number) {
@@ -104,7 +107,7 @@ export class FanControlLogic {
      * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
      */
     private _fansOffAvailable: boolean = true;
-    get fansOffAvailable() {
+    get fansOffAvailable(): boolean {
         return this._fansOffAvailable;
     }
     set fansOffAvailable(fansOffAvailableNew: boolean) {
@@ -119,7 +122,7 @@ export class FanControlLogic {
      * Minimum fan speed returned by logic
      */
     private _minimumFanspeed: number = 0;
-    get minimumFanspeed() {
+    get minimumFanspeed(): number {
         return this._minimumFanspeed;
     }
     set minimumFanspeed(speed: number) {
@@ -135,7 +138,7 @@ export class FanControlLogic {
     }
 
     private _maximumFanspeed: number = 100;
-    get maximumFanspeed() {
+    get maximumFanspeed(): number {
         return this._maximumFanspeed;
     }
     set maximumFanspeed(speed: number) {
@@ -154,7 +157,7 @@ export class FanControlLogic {
      * Number added to table value providing an offset fan table lookup
      */
     private _offsetFanspeed: number = 0;
-    get offsetFanspeed() {
+    get offsetFanspeed(): number {
         return this._offsetFanspeed;
     }
     set offsetFanspeed(speed: number) {
@@ -179,7 +182,7 @@ export class FanControlLogic {
         } else if (type === FAN_LOGIC.GPU) {
             this.useTable = "tableGPU";
         } else {
-            const enumValues = Object.values(FAN_LOGIC);
+            const enumValues: (string | FAN_LOGIC)[] = Object.values(FAN_LOGIC);
             throw new Error(
                 `Fan Control: Invalid fan type, possible values are: ${enumValues.join(
                     ", "
@@ -193,14 +196,17 @@ export class FanControlLogic {
             fanProfile = await getCurrentCustomProfile(this.tccd.activeProfile);
         }
 
-        const fanTable = fanProfile[this.useTable];
+        const fanTable: ITccFanTableEntry[] = fanProfile[this.useTable];
 
         if (!fanTable) {
             console.log(`Fan Control: No fan table with ${this.useTable}`);
         }
 
         if (fanTable) {
-            fanTable.sort((a, b) => a.temp - b.temp);
+            fanTable.sort(
+                (a: ITccFanTableEntry, b: ITccFanTableEntry): number =>
+                    a.temp - b.temp
+            );
             this.tableMinEntry = fanTable[0];
             this.tableMaxEntry = fanTable[fanTable.length - 1];
             this.fanProfile = fanProfile;
@@ -217,7 +223,7 @@ export class FanControlLogic {
         this.tempBuffer.addValue(temperatureValue);
 
         // Calculate filtered table speed
-        const nextSpeedPercent = this.calculateSpeedPercent();
+        const nextSpeedPercent: number = this.calculateSpeedPercent();
         if (nextSpeedPercent > -1) {
             this.latestSpeedPercent = nextSpeedPercent;
         }
@@ -231,8 +237,8 @@ export class FanControlLogic {
     }
 
     private applyHwFanLimitations(speed: number): number {
-        const minSpeed = this._fansMinSpeedHWLimit;
-        const halfMinSpeed = minSpeed / 2;
+        const minSpeed: number = this._fansMinSpeedHWLimit;
+        const halfMinSpeed: number = minSpeed / 2;
 
         if (speed < minSpeed) {
             if (this.fansOffAvailable && speed < halfMinSpeed) {
@@ -246,8 +252,8 @@ export class FanControlLogic {
     }
 
     private limitFallingFanSpeed(speed: number): number {
-        const speedJump = speed - this.lastSpeed;
-        const isJumpTooBig =
+        const speedJump: number = speed - this.lastSpeed;
+        const isJumpTooBig: boolean =
             this.lastSpeed > SPEED_JUMP_THRESHOLD &&
             speedJump <= -MAX_SPEED_JUMP;
 
@@ -255,12 +261,13 @@ export class FanControlLogic {
     }
 
     private getFanValues(): number[] {
-        const temp = this.tempBuffer.getFilteredValue();
-        const foundEntryIndex = this.findFittingEntryIndex(temp);
+        const temp: number = this.tempBuffer.getFilteredValue();
+        const foundEntryIndex: number = this.findFittingEntryIndex(temp);
 
         if (foundEntryIndex > -1) {
-            const foundEntry = this.fanProfile[this.useTable][foundEntryIndex];
-            let speed = foundEntry.speed;
+            const foundEntry: ITccFanTableEntry =
+                this.fanProfile[this.useTable][foundEntryIndex];
+            const speed: number = foundEntry.speed;
             return [temp, speed];
         }
 
@@ -308,8 +315,9 @@ export class FanControlLogic {
             return 0;
         }
 
-        const foundIndex = this.fanProfile[this.useTable].findIndex(
-            (entry: { temp: number }) => entry.temp === temperatureValue
+        const foundIndex: number = this.fanProfile[this.useTable].findIndex(
+            (entry: { temp: number }): boolean =>
+                entry.temp === temperatureValue
         );
         if (foundIndex !== -1) {
             return foundIndex;

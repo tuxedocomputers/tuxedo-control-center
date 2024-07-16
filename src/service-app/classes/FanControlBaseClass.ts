@@ -32,7 +32,7 @@ export class apiBaseClass {
 
     public fans: Map<number, FanControlLogic>;
 
-    public async setFan(index: number, logic: FAN_LOGIC) {
+    public async setFan(index: number, logic: FAN_LOGIC): Promise<void> {
         const cpuLogic = new FanControlLogic(
             this.tccd.getCurrentFanProfile(),
             logic,
@@ -45,10 +45,11 @@ export class apiBaseClass {
         activeProfile: ITccProfile,
         currentFanProfile: ITccFanProfile
     ): Promise<void> {
-        const isCustomProfile = activeProfile.fan.fanProfile == "Custom";
+        const isCustomProfile: boolean =
+            activeProfile.fan.fanProfile === "Custom";
 
         for (const fanNumber of this.fans.keys()) {
-            const fan = this.fans.get(fanNumber);
+            const fan: FanControlLogic = this.fans.get(fanNumber);
 
             fan.minimumFanspeed = isCustomProfile
                 ? 0
