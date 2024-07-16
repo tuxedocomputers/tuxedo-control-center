@@ -23,16 +23,16 @@ import {
     ITccFanProfile,
     ITccFanTableEntry,
 } from "../../common/models/TccFanTable";
-import { tuxedoIoAPI } from "./FanControlTuxedoIO";
-import { pwmAPI } from "./FanControlPwm";
+import { FanControlTuxedoIO } from "./FanControlTuxedoIO";
+import { FanControlPwm } from "./FanControlPwm";
 import { FanControlLogic } from "./FanControlLogic";
 import { getCurrentCustomProfile } from "./FanControlUtils";
-import { apiBaseClass } from "./FanControlBaseClass";
+import { FanControlBaseClass } from "./FanControlBaseClass";
 
 export class FanControlWorker extends DaemonWorker {
     private previousFanControlEnabled: boolean = undefined;
 
-    private fanApi: apiBaseClass;
+    private fanApi: FanControlBaseClass;
     private mapStatus: boolean = false;
 
     private fanReadAvailable: boolean;
@@ -60,7 +60,7 @@ export class FanControlWorker extends DaemonWorker {
         this.mapStatus = false;
 
         if (this.fanApi === undefined || this.fanApi === null) {
-            this.fanApi = new pwmAPI(this.tccd);
+            this.fanApi = new FanControlPwm(this.tccd);
             [this.fanReadAvailable, this.fanWriteAvailable] =
                 await this.fanApi.checkAvailable();
             if (this.fanReadAvailable) {
@@ -70,7 +70,7 @@ export class FanControlWorker extends DaemonWorker {
                 return;
             }
 
-            this.fanApi = new tuxedoIoAPI(this.tccd);
+            this.fanApi = new FanControlTuxedoIO(this.tccd);
             [this.fanReadAvailable, this.fanWriteAvailable] =
                 await this.fanApi.checkAvailable();
             if (this.fanReadAvailable) {

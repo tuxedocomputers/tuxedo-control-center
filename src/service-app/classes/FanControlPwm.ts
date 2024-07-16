@@ -20,11 +20,11 @@
 import * as fs from "fs";
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { execCommandAsync } from "../../common/classes/Utils";
-import { apiBaseClass } from "./FanControlBaseClass";
+import { FanControlBaseClass } from "./FanControlBaseClass";
 import { IFanDataInputs } from "../../common/models/ITccFans";
 import { FAN_LOGIC, FanControlLogic } from "./FanControlLogic";
 
-export class pwmAPI extends apiBaseClass {
+export class FanControlPwm extends FanControlBaseClass {
     private hwmonPath: string = "";
     private pwmAvailable: boolean = false;
     private fanControlPath: string =

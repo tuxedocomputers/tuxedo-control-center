@@ -18,10 +18,10 @@
  */
 
 import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
-import { apiBaseClass } from "./FanControlBaseClass";
+import { FanControlBaseClass } from "./FanControlBaseClass";
 import { FAN_LOGIC } from "./FanControlLogic";
 
-export class tuxedoIoAPI extends apiBaseClass {
+export class FanControlTuxedoIO extends FanControlBaseClass {
     public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
         if (fanWriteAvailable) {
             console.log("Fan Control: Enabling manual mode");

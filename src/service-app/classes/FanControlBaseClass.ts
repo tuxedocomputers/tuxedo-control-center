@@ -27,7 +27,7 @@ import {
     SysFsPropertyString,
 } from "../../common/classes/SysFsProperties";
 
-export abstract class apiBaseClass {
+export abstract class FanControlBaseClass {
     constructor(public tccd: TuxedoControlCenterDaemon) {}
 
     public fans: Map<number, FanControlLogic>;
