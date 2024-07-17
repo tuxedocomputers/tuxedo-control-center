@@ -82,7 +82,7 @@ async function removeModule(moduleName: string) {
 async function installModule(moduleName: string) {
     let command = "pkexec tuxedo-tomte configure " + moduleName;
     return new Promise<void>((resolve, reject) => {
-        execCmd(command).then(() => {
+        execFile(command).then(() => {
             resolve();
         }).catch(() => {
             reject();
@@ -93,7 +93,7 @@ async function installModule(moduleName: string) {
 async function unBlockModule(moduleName: string) {
     let command = "pkexec tuxedo-tomte unblock " + moduleName;
     return new Promise<void>((resolve, reject) => {
-        execCmd(command).then(() => {
+        execFile(command).then(() => {
             resolve();
         }).catch(() => {
             reject();
@@ -104,7 +104,7 @@ async function unBlockModule(moduleName: string) {
 async function blockModule(moduleName: string) {
     let command = "pkexec tuxedo-tomte block " + moduleName;
     return new Promise<void>((resolve, reject) => {
-        execCmd(command).then(() => {
+        execFile(command).then(() => {
             resolve();
         }).catch(() => {
             reject();
@@ -115,7 +115,7 @@ async function blockModule(moduleName: string) {
 async function setMode(mode: string) {
     let command = "pkexec tuxedo-tomte " + mode;
     return new Promise<void>((resolve, reject) => {
-        execCmd(command).then(() => {
+        execFile(command).then(() => {
             resolve();
         }).catch(() => {
             reject();
@@ -135,7 +135,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined)
         };
         if (!rawTomteListOutput)
         {
-            return;
+            return tomteInformation;
         }
         try
         {
@@ -166,9 +166,17 @@ async function getTomteInformation() {
     return new Promise<ITomteInformation>(async (resolve, reject) => {
             let command = "tuxedo-tomte listjson"
             let results: string;
-            results = await execCmd(command + "");
-            results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
-            resolve(parseTomteListJson(results));
+            try {
+                results = await execCmd(command + "");
+                results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
+            }
+            catch {
+                results = "";
+            }
+            finally {
+                let tomteInformation: ITomteInformation = parseTomteListJson(results);
+                resolve(tomteInformation);
+            }           
     });
 }
 
