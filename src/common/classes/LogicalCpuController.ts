@@ -87,7 +87,8 @@ export class LogicalCpuController extends SysFsController {
     public getReducedAvailableFreqNT(): number {
         try {
             return this.getReducedAvailableFreq();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("LogicalCpuController: getReducedAvailableFreqNT failed =>", err)
             return undefined;
         }
     }

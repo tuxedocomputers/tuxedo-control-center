@@ -114,7 +114,8 @@ export class TccDBusClientService implements OnDestroy {
         let parsedData = JSON.parse(data);
         observable.next(parsedData);
     }
-    catch(err) {
+    catch(err: unknown) {
+        console.error("tcc-dbus-client: updateJSONObservable failed =>", err)
         // TODO, set stuff to default values? Do more error handling? Check if dbus is even up?
         console.error("Could not update observable through function " + updateFunction +"\n" + err);
     }
@@ -165,7 +166,7 @@ export class TccDBusClientService implements OnDestroy {
     this.chargingProfilesAvailable.next(
         await window.dbusAPI.getChargingProfilesAvailable()
     );
-    
+
     this.primeState.next(await window.dbusAPI.getPrimeState())
     this.webcamSWAvailable.next(await window.dbusAPI.webcamSWAvailable());
     this.webcamSWStatus.next(await window.dbusAPI.getWebcamSWStatus());
@@ -193,7 +194,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.activeProfile.next(activeProfile);
                 this.previousActiveProfileJSON = activeProfileJSON;
             }
-        } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
+        } catch(err: unknown) { console.error("tcc-dbus-client.service: unexpected error parsing profile =>", err); }
     }
 
     const defaultProfilesJSON: string = await window.dbusAPI.getDefaultProfilesJSON();
@@ -213,8 +214,8 @@ export class TccDBusClientService implements OnDestroy {
                 this.defaultValuesProfile.next(JSON.parse(defaultValuesProfileJSON));
                 this.previousDefaultValuesProfileJSON = defaultValuesProfileJSON;
             }
-        } catch (err) {
-            console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
+        } catch (err: unknown) {
+            console.error("tcc-dbus-client.service: unexpected error parsing profile lists =>",  err);
         }
 
         this.dataLoaded = true;
@@ -226,7 +227,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.settings.next(JSON.parse(settingsJSON));
                 this.previousSettingsJSON = settingsJSON;
             }
-        } catch (err) { console.log('tcc-dbus-client.service: unexpected error parsing settings => ' + err); }
+        } catch (err: unknown) { console.error("tcc-dbus-client.service: unexpected error parsing settings =>", err); }
     }
   }
 

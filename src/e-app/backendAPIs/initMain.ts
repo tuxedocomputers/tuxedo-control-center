@@ -87,8 +87,8 @@ app.whenReady().then( async () => {
             }
         }
         await loadTranslation(await userConfig.get('langId'));
-    } catch (err) {
-        console.log('Error determining user language => ' + err);
+    } catch (err: unknown) {
+        console.error("initMain: Error determining user language: ", err);
         quitCurrentTccSession();
     }
 
@@ -144,7 +144,7 @@ async function initTray() {
         tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
         tray.create();
     };
-    
+
     tray.events.fnLockClick = (status: boolean) => {
         tray.state.fnLockStatus = !status
         tccDBus.setFnLockStatus(tray.state.fnLockStatus);
@@ -230,8 +230,8 @@ function installAutostartTray(): boolean {
             path.join(autostartLocation, autostartDesktopFilename)
         );
         return true;
-    } catch (err) {
-        console.log('Failed to install autostart tray -> ' + err);
+    } catch (err: unknown) {
+        console.error("initMain: installAutostartTray failed =>", err)
         return false;
     }
 }
@@ -242,8 +242,8 @@ function removeAutostartTray(): boolean {
             fs.unlinkSync(path.join(autostartLocation, autostartDesktopFilename));
         }
         return true;
-    } catch (err) {
-        console.log('Failed to remove autostart tray -> ' + err);
+    } catch (err: unknown) {
+        console.error("initMain: removeAutostartTray failed =>", err)
         return false;
     }
 }
@@ -251,8 +251,8 @@ function removeAutostartTray(): boolean {
 function isAutostartTrayInstalled(): boolean {
     try {
         return fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
-    } catch (err) {
-        console.log('Failed to check if autostart tray is installed -> ' + err);
+    } catch (err: unknown) {
+        console.error("initMain: isAutostartTrayInstalled failed =>", err)
         return false;
     }
 }
@@ -264,7 +264,8 @@ function isFirstStart(): boolean {
 function userConfigDirExists(): boolean {
     try {
         return fs.existsSync(tccConfigDir);
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("initMain: userConfigDirExists failed =>", err)
         return false;
     }
 }
@@ -273,7 +274,8 @@ function createUserConfigDir(): boolean {
     try {
         fs.mkdirSync(tccConfigDir);
         return true;
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("initMain: createUserConfigDir failed =>", err)
         return false;
     }
 }
@@ -314,21 +316,21 @@ export async function updateTrayProfiles() {
             tray.state.profiles = updatedProfiles;
             await tray.create();
         }
-    } catch (err) {
-        console.log('updateTrayProfiles() exception => ' + err);
+    } catch (err: unknown) {
+        console.error("initMain: updateTrayProfiles failed =>", err)
     }
 }
 
 export async function hasAquaris() {
     return await tccDBus.deviceHasAquaris();
-    
+
 }
 
 export async function hideCTGP() {
     return await tccDBus.getHideCTGP();
 }
 
-/* 
+/*
 ########################################################
 ################ Profile Functions #####################
 ########################################################
@@ -340,8 +342,8 @@ async function getProfiles(): Promise<TccProfile[]> {
     try {
         const profiles: TccProfile[] = JSON.parse(await tccDBus.getProfilesJSON());
         result = profiles;
-    } catch (err) {
-        console.log('Error: ' + err);
+    } catch (err: unknown) {
+        console.error("initMain: getProfiles failed =>", err)
     }
     return result;
 }
@@ -356,7 +358,8 @@ async function getActiveProfile(): Promise<TccProfile> {
     if (!await tccDBus.dbusAvailable()) return undefined;
     try {
         result = JSON.parse(await tccDBus.getActiveProfileJSON());
-    } catch {
+    } catch(err: unknown) {
+        console.error("initMain: getActiveProfile failed =>", err)
     }
-    return result; 
+    return result;
 }

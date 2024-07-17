@@ -41,8 +41,11 @@ export class UserConfig {
         await this.setInProgress();
         try {
             await this.readConfig();
-        } catch (err) {
-            if (err.code === 'ENOENT') {
+        } catch (err: unknown) {
+            console.error("UserConfig: set failed =>", err)
+
+            // todo: error handling
+            if ((err as any).code === 'ENOENT') {
                 console.log('Config file (' + this.configFile + ') does not exist. Will be created.');
             } else {
                 await this.setProgressDone();
@@ -58,8 +61,11 @@ export class UserConfig {
         await this.setInProgress();
         try {
             await this.readConfig();
-        } catch (err) {
-            if (err.code !== 'ENOENT') {
+        } catch (err: unknown) {
+            console.error("UserConfig: get failed =>", err)
+
+            // todo: error handling
+            if ((err as any).code !== 'ENOENT') {
                 await this.setProgressDone();
                 throw err;
             }

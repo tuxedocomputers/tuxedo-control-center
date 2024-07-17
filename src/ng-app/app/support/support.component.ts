@@ -35,7 +35,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 })
 export class SupportComponent implements OnInit {
 
-  
+
   public anydeskInstalled: boolean;
   public webFAICreatorInstalled: boolean;
   public formTicketNumber: FormGroup;
@@ -62,7 +62,7 @@ export class SupportComponent implements OnInit {
     // TODO register callback for onUpdateSysteminfoLabel and update label accordingly
     window.ipc.onUpdateSysteminfoLabel(async (event, text) => {
         this.systeminfoOutput(text);
-    }); 
+    });
   }
 
   public focusControl(control): void {
@@ -73,7 +73,7 @@ export class SupportComponent implements OnInit {
     this.utils.openExternal(url);
   }
 
-  public async updateAnydeskInstallStatus(): Promise<void> { 
+  public async updateAnydeskInstallStatus(): Promise<void> {
         this.anydeskInstalled = await window.pgms.anydeskIsInstalled();
         this.isCheckingInstallation.set(this.anydeskProgramName, false);
   }
@@ -152,6 +152,7 @@ export class SupportComponent implements OnInit {
       systeminfoStepper.selected.completed = true;
       systeminfoStepper.next();
     }).catch(err => {
+      console.error("support: buttonStartSysteminfo failed =>", err)
       this.systeminfoRunOutput = err;
     }).finally(() => {
       this.systeminfoRunProgress = false;

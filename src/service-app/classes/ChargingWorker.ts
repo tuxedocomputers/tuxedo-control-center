@@ -37,8 +37,8 @@ export class ChargingWorker extends DaemonWorker {
                 try {
                     this.tccd.settings.chargingProfile = this.chargingProfile.chargingProfile.readValue();
                     this.tccd.saveSettings();
-                } catch (err) {
-                    this.tccd.logLine('Error init charging profile => ' + err);
+                } catch (err: unknown) {
+                    console.error("ChargingWorker: Error init charging profile =>", err)
                 }
             }
             this.applyChargingProfile();
@@ -49,8 +49,8 @@ export class ChargingWorker extends DaemonWorker {
                 try {
                     this.tccd.settings.chargingPriority = this.chargingPriority.chargingPrio.readValue();
                     this.tccd.saveSettings();
-                } catch (err) {
-                    this.tccd.logLine('Error init charging priority => ' + err);
+                } catch (err: unknown) {
+                    console.error("ChargingWorker: Error init charging priority =>", err)
                 }
             }
             this.applyChargingPriority();
@@ -90,8 +90,8 @@ export class ChargingWorker extends DaemonWorker {
                 }
                 return true;
             }
-        } catch (err) {
-            this.tccd.logLine('Failed applying charging profile => ' + err);
+        } catch (err: unknown) {
+            console.error("ChargingWorker: Failed applying charging profile =>", err)
         }
 
         return false;
@@ -108,7 +108,8 @@ export class ChargingWorker extends DaemonWorker {
     public getChargingProfilesAvailable() {
         try {
             return this.chargingProfile.chargingProfilesAvailable.readValue();
-        } catch (e) {
+        } catch (err: unknown) {
+            console.error("ChargingWorker: getChargingProfilesAvailable failed =>", err)
             return [];
         }
     }
@@ -130,8 +131,8 @@ export class ChargingWorker extends DaemonWorker {
                 }
                 return true;
             }
-        } catch (err) {
-            this.tccd.logLine('Failed applying charging priority => ' + err);
+        } catch (err: unknown) {
+            console.error("ChargingWorker: Failed applying charging priority =>", err)
         }
         return false;
     }
@@ -147,7 +148,8 @@ export class ChargingWorker extends DaemonWorker {
     public getChargingPrioritiesAvailable() {
         try {
             return this.chargingPriority.chargingPriosAvailable.readValue();
-        } catch (e) {
+        } catch (err: unknown) {
+            console.error("ChargingWorker: getChargingPrioritiesAvailable failed =>", err)
             return [];
         }
     }
@@ -163,7 +165,8 @@ export class ChargingWorker extends DaemonWorker {
         try {
             // Read available thresholds if list is available
             return await bat.chargeControlStartAvailableThresholds.readValueA();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ChargingWorker: getChargeStartAvailableThresholds failed =>", err)
             // Default to 0-100 if the unofficial available lists are not there
             return Array.from(Array(101).keys());
         }
@@ -180,7 +183,9 @@ export class ChargingWorker extends DaemonWorker {
         try {
             // Read available thresholds if list is available
             return await bat.chargeControlEndAvailableThresholds.readValueA();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ChargingWorker: getChargeEndAvailableThresholds failed =>", err)
+
             // Default to 0-100 if the unofficial available lists are not there
             return Array.from(Array(101).keys());
         }
@@ -190,7 +195,7 @@ export class ChargingWorker extends DaemonWorker {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
             return await bat.chargeControlStartThreshold.readValueA();
-        } catch (err) {
+        } catch (err: unknown) {
             return undefined;
         }
     }
@@ -199,8 +204,8 @@ export class ChargingWorker extends DaemonWorker {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
             await bat.chargeControlStartThreshold.writeValueA(value);
-        } catch (err) {
-            this.tccd.logLine('Failed writing start threshold => ' + err);
+        } catch (err: unknown) {
+            console.error("ChargingWorker: Failed writing start threshold =>", err)
             return false;
         }
 
@@ -211,7 +216,8 @@ export class ChargingWorker extends DaemonWorker {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
             return await bat.chargeControlEndThreshold.readValueA();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ChargingWorker: getChargeEndThreshold failed =>", err)
             undefined;
         }
     }
@@ -220,8 +226,8 @@ export class ChargingWorker extends DaemonWorker {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
             await bat.chargeControlEndThreshold.writeValueA(value);
-        } catch (err) {
-            this.tccd.logLine('Failed writing end threshold => ' + err);
+        } catch (err: unknown) {
+            console.error("ChargingWorker: Failed writing end threshold =>", err)
             return false;
         }
 
@@ -232,7 +238,8 @@ export class ChargingWorker extends DaemonWorker {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
             return (await bat.chargeType.readValueA()).trim();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ChargingWorker: getChargeType failed =>", err)
             return ChargeType.Unknown.toString();
         }
     }
@@ -241,8 +248,8 @@ export class ChargingWorker extends DaemonWorker {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
             bat.chargeType.writeValueA(chargeType.toString());
-        } catch (err) {
-            this.tccd.logLine('Failed writing charge type => ' + err);
+        } catch (err: unknown) {
+            console.error("ChargingWorker: Failed writing charge type =>", err)
             return false;
         }
 

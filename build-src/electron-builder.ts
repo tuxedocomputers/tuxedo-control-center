@@ -98,9 +98,9 @@ async function buildDeb(filenameAddition: string): Promise<void> {
         console.log('BUILD SUCCESS');
         console.log(result);
     })
-    .catch((error) => {
-        console.log('ERROR at BUILD');
-        console.log(error);
+    .catch((error: unknown): void => {
+        console.error('ERROR at BUILD');
+        console.error(error);
     });
 }
 
@@ -161,9 +161,9 @@ async function buildRpm(filenameAddition: string): Promise<void> {
         console.log('BUILD SUCCESS');
         console.log(result);
     })
-    .catch((error) => {
-        console.log('ERROR at BUILD');
-        console.log(error);
+    .catch((error: unknown): void => {
+        console.error('ERROR at BUILD');
+        console.error(error);
     });
 }
 

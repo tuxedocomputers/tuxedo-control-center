@@ -42,8 +42,8 @@ export class TccDBusService extends DaemonWorker {
         try {
             this.bus = dbus.systemBus();
             this.interface = new TccDBusInterface(dbusData, options);
-        } catch (err) {
-            this.tccd.logLine('TccDBusService: Error initializing DBus service => ' + err);
+        } catch (err: unknown) {
+            console.error("TccDBusService: Error initializing DBus service =>", err)
         }
     }
 
@@ -53,11 +53,12 @@ export class TccDBusService extends DaemonWorker {
                 try {
                     this.bus.export(this.path, this.interface);
                     this.started = true;
-                } catch (err) {
-                    this.tccd.logLine('TccDBusService: Error exporting service => ' + err);
+                } catch (err: unknown) {
+                    console.error("TccDBusService: Error exporting service: ", err)
+
                 }
             }).catch(err => {
-                this.tccd.logLine('TccDBusInterface: Failed to request bus name => ' + err);
+                console.error("TccDBusService: Failed to request bus name =>", err)
             });
         }
     }
@@ -74,8 +75,8 @@ export class TccDBusService extends DaemonWorker {
     public onExit(): void {
         try {
             this.bus.unexport(this.path, this.interface);
-        } catch (err) {
-            this.tccd.logLine('TccDBusService: Error unexporting interface => ' + err);
+        } catch (err: unknown) {
+            console.error("TccDBusService: onExit failed =>", err)
         }
     }
 }

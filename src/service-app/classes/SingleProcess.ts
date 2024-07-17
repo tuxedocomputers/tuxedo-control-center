@@ -48,7 +48,8 @@ export class SingleProcess {
                 if (this.isRunning()) {
                     try {
                         process.kill(pid, 'SIGINT');
-                    } catch (err) {
+                    } catch (err: unknown) {
+                        console.error("SingleProcess: stop failed =>", err)
                         resolve(false);
                     }
                 }
@@ -78,7 +79,8 @@ export class SingleProcess {
         try {
             fs.writeFileSync(this.pidPath, pid.toString());
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SingleProcess: writePid failed =>", err)
             return false;
         }
     }
@@ -93,7 +95,8 @@ export class SingleProcess {
             const strPid = fs.readFileSync(this.pidPath);
             const intPid = parseInt(strPid.toString(), 10);
             return intPid;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SingleProcess: readPid failed =>", err)
             return Number.NaN;
         }
     }
@@ -107,7 +110,8 @@ export class SingleProcess {
         try {
             fs.unlinkSync(this.pidPath);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SingleProcess: removePid failed =>", err)
             return false;
         }
     }
@@ -127,7 +131,8 @@ export class SingleProcess {
             // There is a number in the file, now check if it's really in use
             try {
                 process.kill(intPid, 0);
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("SingleProcess: isRunning failed =>", err)
                 isRunning = false;
             }
         }

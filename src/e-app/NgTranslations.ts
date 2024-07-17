@@ -25,19 +25,19 @@ import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from
  * Loading of angular generated translation files. Workaround
  * to be able to read translatable strings (in render process)
  * from main process.
- * 
+ *
  * Ex:
  * const tr = new NgTranslations();
  * try {
  *    await tr.loadLanguage('de');
  *    console.log('translation example: ' + tr.idToString('profileDescHighPerformance'));
- * } catch (err) {
+ * } catch (err: unknown) {
  *    console.log('Failed loading translation => ' + err);
  *    const fallbackLangId = 'en';
  *    console.log('fallback to \'' + fallbackLangId + '\'');
  *    try {
  *        await tr.loadLanguage('en');
- *    } catch (err) {
+ *    } catch (err: unknown) {
  *        console.log('Failed loading fallback translation => ' + err);
  *    }
  * }
@@ -80,15 +80,18 @@ export class NgTranslations {
             let xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
             fs.readFile(xlfPath, (err, xmlBuffer) => {
                 if (err) {
+                    console.error("NgTranslations: loadFile readFile failed =>", err)
                     reject(err);
                 } else {
                     xliff.xliff12ToJs(xmlBuffer.toString(), (err, jsXlf) => {
                         if (err) {
+                            console.error("NgTranslations: loadFile xliff12ToJs failed =>", err)
                             reject(err);
                         } else {
                             try {
                                 resolve(this.parseJS(jsXlf, target));
-                            } catch (err) {
+                            } catch (err: unknown) {
+                                console.error("NgTranslations: loadFile parseJS failed =>", err)
                                 reject(err);
                             }
                         }

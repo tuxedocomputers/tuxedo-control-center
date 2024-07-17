@@ -173,7 +173,8 @@ export class ConfigHandler {
             const fileData = fs.readFileSync(filename);
             // FIXME for some reason this actually doesn't enforce the type
             config = JSON.parse(fileData.toString());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ConfigHandler: readConfig failed =>", err)
             throw err;
         }
         return config;
@@ -184,7 +185,8 @@ export class ConfigHandler {
         try {
             const fileData = await fs.promises.readFile(filename);
             config = JSON.parse(fileData.toString());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ConfigHandler: readConfigAsync failed =>", err)
             throw err;
         }
         return config;
@@ -198,7 +200,8 @@ export class ConfigHandler {
                 fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
             }
             fs.writeFileSync(filePath, fileData, writeFileOptions);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ConfigHandler: writeConfig failed =>", err)
             throw err;
         }
     }
@@ -211,7 +214,8 @@ export class ConfigHandler {
                 await fs.promises.mkdir(path.dirname(filePath), { mode: 0o755, recursive: true });
             }
             await fs.promises.writeFile(filePath, fileData, writeFileOptions);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ConfigHandler: writeConfigAsync failed =>", err)
             throw err;
         }
     }
@@ -268,7 +272,8 @@ export class ConfigHandler {
     public getSettingsNoThrow(device: TUXEDODevice): ITccSettings {
         try {
             return this.readSettings();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ConfigHandler: getSettingsNoThrow failed =>", err)
             return this.getDefaultSettings(device);
         }
     }

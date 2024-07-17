@@ -81,8 +81,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
                 if (!Number.isNaN(value) && value !== 0) {
                     this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
                 }
-            } catch (err) {
-                this.tccd.logLine('DisplayBacklightWorker => ' + err);
+            } catch (err: unknown) {
+                console.error("DisplayBacklightWorker: onWork failed =>", err)
             }
         }
     }
@@ -96,9 +96,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
             try {
                 value = controller.brightness.readValue();
                 maxBrightness = controller.maxBrightness.readValue();
-            } catch (err) {
-                this.tccd.logLine('DisplayBacklightWorker: Failed to read display brightness on exit from '
-                    + controller.driver + ' => ' + err);
+            } catch (err: unknown) {
+                console.error(`DisplayBacklightWorker: Failed to read display brightness on exit from ${controller.driver}: `, err);
             }
             if (value !== undefined) {
                 if (value === 0) {
@@ -130,12 +129,11 @@ export class DisplayBacklightWorker extends DaemonWorker {
                     this.tccd.logLine('Set display brightness to '
                         + brightnessPercent + '% (' + brightnessRaw + ') on ' + controller.driver);
                 }
-                
+
                 controller.brightness.writeValue(brightnessRaw);
 
-            } catch (err) {
-                this.tccd.logLine('Failed to set display brightness to '
-                    + brightnessPercent + '% (' + brightnessRaw + ') on ' + controller.driver);
+            } catch (err: unknown) {
+                console.error(`DisplayBacklightWorker: Failed to set display brightness to ${brightnessPercent}% ('${brightnessRaw}') on ${controller.driver} =>`, err)
             }
         }
     }

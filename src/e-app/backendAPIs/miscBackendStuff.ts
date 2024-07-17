@@ -48,8 +48,8 @@ observeDisplayBrightness = displayBrightnessSubject.asObservable();
 
 try {
     sessionBus = dbus.sessionBus();
-} catch (err) {
-    console.log('dbus.sessionBus() error: ', err);
+} catch (err: unknown) {
+    console.error("miscBackendStuff: dbus.sessionBus failed =>", err)
     sessionBus = undefined;
 }
 
@@ -81,7 +81,8 @@ return new Promise<void>(async resolve => {
         const result = await displayBrightnessGnome.getBrightness();
         currentDisplayBrightness = result;
         displayBrightnessSubject.next(currentDisplayBrightness);
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("miscBackendStuff: initDusDisplayBrightness failed =>", err)
         displayBrightnessNotSupported = true;
         return;
     }
@@ -98,7 +99,7 @@ return new Promise<void>(async resolve => {
 }
 
 async function setDisplayBrightness(valuePercent: number): Promise<void> {
-return displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
+return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error("miscBackendStuff: setDisplayBrightness failed =>", err)});
 }
 
 ipcMain.handle('set-display-brightness-gnome', async (event, valuePercent) => {

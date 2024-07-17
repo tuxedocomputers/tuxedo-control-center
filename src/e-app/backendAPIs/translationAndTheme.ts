@@ -76,8 +76,8 @@ export async function loadTranslation(langId) {
         try {
             await translation.loadLanguage(langId);
             canLoadTranslation = true;
-        } catch (err) {
-            console.log('Watch mode: Waiting for translation');
+        } catch (err: unknown) {
+            console.error("translationAndTheme: loadTranslation failed =>", err)
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
     }
@@ -85,14 +85,14 @@ export async function loadTranslation(langId) {
 
     try {
         await translation.loadLanguage(langId);
-    } catch (err) {
+    } catch (err: unknown) {
         console.log('Failed loading translation => ' + err);
         const fallbackLangId = 'en';
         console.log('fallback to \'' + fallbackLangId + '\'');
         try {
             await translation.loadLanguage(fallbackLangId);
-        } catch (err) {
-            console.log('Failed loading fallback translation => ' + err);
+        } catch (err: unknown) {
+            console.error("translationAndTheme: loadLanguage failed =>", err)
         }
     }
 }

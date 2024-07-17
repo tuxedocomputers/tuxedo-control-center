@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* 
+/*
 ########################################################
 ############## Aquaris Backend #########################
 ########################################################
@@ -87,8 +87,8 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                 updatedSomething = updateLed || updateFan || updatePump;
             } while (updatedSomething);
             aquarisIoProgress = false;
-        } catch (err) {
-            console.log('updateDeviceState error => ' + err);
+        } catch (err: unknown) {
+            console.error("aquarisBackendAPI: updateDeviceState failed =>", err);
         } finally {
             aquarisIoProgress = false;
         }
@@ -212,8 +212,8 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
             }
             aquarisStateExpected.deviceUUID = deviceUUID;
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
-        } catch (err) {
-            console.log('err => ' + err);
+        } catch (err: unknown) {
+            console.error("aquarisBackendAPI: connect failed =>", err);
         } finally {
             aquarisConnectProgress = false;
         }
@@ -304,7 +304,7 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisStateExpected.pumpOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
-    
+
     .set(AquarisAPIFunctions.saveState, async () => {
         if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));

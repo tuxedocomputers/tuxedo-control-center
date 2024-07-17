@@ -149,8 +149,8 @@ export class WebcamSettingsComponent implements OnInit {
                 .then((data) => {
                     resolve(JSON.parse(data.toString()));
                 })
-                .catch((error) => {
-                    console.error(error);
+                .catch((err: unknown): void => {
+                    console.error("webcam-settings: getWebcamPaths failed =>", err);
                     resolve(null);
                 });
         });
@@ -226,8 +226,8 @@ export class WebcamSettingsComponent implements OnInit {
             try {
                 let data = await window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
                 resolve(data);
-            } catch (error) {
-                console.error(error);
+            } catch (err: unknown) {
+                console.error("webcam-settings: getWebcamSettings failed =>", err);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -331,8 +331,8 @@ export class WebcamSettingsComponent implements OnInit {
         for (let devicePath of webcamPaths) {
             try {
                 await window.webcamAPI.executeWebcamCtrls(devicePath, parameter, value);
-            } catch (error) {
-                console.error(error);
+            } catch (err: unknown) {
+                console.error("webcam-settings: executeWebcamCtrls failed =>", err);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -357,8 +357,8 @@ export class WebcamSettingsComponent implements OnInit {
             for (const devicePath of webcamPaths) {
                 try {
                     await window.webcamAPI.executeFilteredCtrls(devicePath, filteredControls);
-                } catch (error) {
-                    console.error(error);
+                } catch (err: unknown) {
+                    console.error("webcam-settings: executeWebcamCtrlsList failed =>", err);
                     this.mutex.release();
                     this.webcamNotAvailabledDialog();
                     await this.reloadWebcamList(undefined);

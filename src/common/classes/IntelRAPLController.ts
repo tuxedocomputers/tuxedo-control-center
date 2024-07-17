@@ -191,8 +191,8 @@ export class IntelRAPLController {
 
             props.constraint0PowerLimit.writeValue(powerLimit);
             props.enabled.writeValue(true);
-        } catch (err) {
-            console.log("IntelRAPLController: Failed to set power limit.");
+        } catch (err: unknown) {
+            console.error("IntelRAPLController: setPowerPL1Limit failed =>", err);
         }
     }
 }

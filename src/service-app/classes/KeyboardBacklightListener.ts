@@ -46,7 +46,7 @@ export class KeyboardBacklightListener extends DaemonListener {
 
     private async init() {
         this.updateKeyboardBacklightCapabilities();
-        
+
         if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
             console.log("Could not find keyboard backlight. Retrying...");
             --this.onStartRetryCount;
@@ -293,12 +293,14 @@ export class KeyboardBacklightListener extends DaemonListener {
         if (updateSysFS) {
             try {
                 await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
-            } catch (error) {
-                if (error.name === "DBusError") {
+            } catch (err: unknown) {
+                console.error("KeyboardBacklightListener: setKeyboardBacklightStates failed =>", err)
+                // todo: error handling
+                if ((err as any).name === "DBusError") {
                     console.log("Failed to write brightness using UPower: Try restarting upower.service followed by tccd.service using systemctl.")
                 }
                 else {
-                    throw error;
+                    throw err;
                 }
             }
 
@@ -308,8 +310,8 @@ export class KeyboardBacklightListener extends DaemonListener {
             for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
-                                                    keyboardBacklightStatesNew[i].red.toString() + " " + 
-                                                    keyboardBacklightStatesNew[i].green.toString() + " " + 
+                                                    keyboardBacklightStatesNew[i].red.toString() + " " +
+                                                    keyboardBacklightStatesNew[i].green.toString() + " " +
                                                     keyboardBacklightStatesNew[i].blue.toString());
                 }
             }

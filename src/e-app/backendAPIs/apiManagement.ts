@@ -33,8 +33,8 @@ export function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandle
             }
             try {
                 return mainsideFunction.call(this, ...args.slice(1));
-            } catch (err) {
-                console.log(`Error in [${apiHandle}: ${args[0]}(${args.slice(1)})] => ${err}`);
+            } catch (err: unknown) {
+                console.error(`Error in [${apiHandle}: ${args[0]}(${args.slice(1)})] => ${err}`);
             }
         }
     });

@@ -50,8 +50,8 @@ export class CpuWorker extends DaemonWorker {
                 this.tccd.logLine('CpuWorker: Incorrect settings, reapplying profile');
                 this.applyCpuProfile(this.activeProfile);
             }
-        } catch (err) {
-            this.tccd.logLine('CpuWorker: Error validating/reapplying profile => ' + err);
+        } catch (err: unknown) {
+            console.error("CpuWorker: onWork failed =>", err)
         }
     }
 
@@ -86,7 +86,8 @@ export class CpuWorker extends DaemonWorker {
                 }
                 return chosenName;
             }
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("CpuWorker: findDefaultGovernor failed =>", err)
             return chosenName;
         }
     }
@@ -120,7 +121,8 @@ export class CpuWorker extends DaemonWorker {
                 }
                 return chosenName;
             }
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("CpuWorker: findPerformanceGovernor failed =>", err)
             return chosenName;
         }
     }
@@ -181,8 +183,8 @@ export class CpuWorker extends DaemonWorker {
                     this.cpuCtrl.intelPstate.noTurbo.writeValue(profile.cpu.noTurbo);
                 }
             }
-        } catch (err) {
-            this.tccd.logLine('CpuWorker: Failed to apply profile => ' + err);
+        } catch (err: unknown) {
+            console.error("CpuWorker: applyCpuProfile failed =>", err)
         }
     }
 
@@ -196,8 +198,8 @@ export class CpuWorker extends DaemonWorker {
             if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
             }
-        } catch (err) {
-            this.tccd.logLine('CpuWorker: Failed to set default cpu config => ' + err);
+        } catch (err: unknown) {
+            console.error("CpuWorker: setCpuDefaultConfig failed =>", err)
         }
     }
 
@@ -222,8 +224,7 @@ export class CpuWorker extends DaemonWorker {
             if (onlineCoresProfile === undefined) { onlineCoresProfile = this.cpuCtrl.cores.length; }
             if (currentOnlineCores.length !== onlineCoresProfile) {
                 cpuFreqValidConfig = false;
-                this.tccd.logLine('CpuWorker: onlineCores not as expected, '
-                    + currentOnlineCores.length + ' instead of ' + onlineCoresProfile);
+                console.error(`CpuWorker: onlineCores not as expected ${currentOnlineCores.length} instead of ${onlineCoresProfile}`)
             }
         }
 
@@ -252,8 +253,7 @@ export class CpuWorker extends DaemonWorker {
                     }
                     if (minFreq !== minFreqProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' minimum scaling frequency '
-                            + ' => ' + minFreq + ' instead of ' + minFreqProfile);
+                        console.error(`CpuWorker: Unexpected value core ${core.coreIndex} minimum scaling frequency ${minFreq} instead of ${minFreqProfile}`)
                     }
                 }
 

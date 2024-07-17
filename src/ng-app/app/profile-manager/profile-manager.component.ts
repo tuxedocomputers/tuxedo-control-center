@@ -82,7 +82,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private cdref: ChangeDetectorRef,
         private dialogService: ProfileConflictDialogService,
         ) { }
-        
+
 
     ngOnInit() {
         this.defineButtons();
@@ -123,7 +123,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     ngAfterContentChecked() {
         this.cdref.detectChanges();
     }
-    
+
     public isProfileActive(profileId: string): boolean {
         return this.state.getActiveProfile().id === profileId;
     }
@@ -226,19 +226,19 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             let txt = JSON.stringify(profiles);
             await this.utils.writeTextFile("" + res,txt);
         }
-        catch(err)
+        catch(err: unknown)
         {
-            console.log("export canceled");
+            console.error("profile-manager: exportProfiles failed =>", err)
         }
 
     }
 
-    
+
     public async importProfiles()
     {
         this.utils.pageDisabled = true;
         let documentsPath = await this.utils.getPath('documents');
-        let importLabel = $localize `:@@pMgrImportLabelFileDialoge:Import`; 
+        let importLabel = $localize `:@@pMgrImportLabelFileDialoge:Import`;
         let res;
         let txt;
         try
@@ -246,22 +246,22 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             res = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile', 'multiSelections'] });
             txt = await this.utils.readTextFile(res[0] + "");
         }
-        catch (err)
+        catch (err: unknown)
         {
-            console.log("import canceled");
+            console.error("profile-manager: importProfiles readTextFile failed =>", err)
             this.utils.pageDisabled = false;
             return;
         }
 
         let profiles: ITccProfile[];
-        try 
+        try
         {
             profiles = JSON.parse(txt);
             // console.log(profiles);
         }
-        catch
+        catch(err: unknown)
         {
-            console.error("not a valid JSON file");
+            console.error("profile-manager: importProfiles parse failed =>", err)
             this.utils.pageDisabled = false;
             return;
         }
@@ -276,7 +276,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 if(res.action === "keepNew")
                 {
                     newProfiles = newProfiles.concat(profiles[i]);
-                } 
+                }
                 else if (res.action === "keepOld") // basically same thing as cancel
                 {
                     continue;
@@ -305,13 +305,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             let importSuccess = await this.config.importProfiles(newProfiles);
             if (!importSuccess)
             {
-                console.error("importing of Profiles failed");
+                console.error("profile-manager: importing of Profiles failed =>")
             }
         }
         this.utils.pageDisabled = false;
     }
 
-    
+
 
 
 

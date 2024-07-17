@@ -61,7 +61,9 @@ export class CpuController {
                     this.cores.push(newCore);
                 }
             }
-        } catch (err) {}
+        } catch (err: unknown) {
+            console.error("CpuController: getAvailableLogicalCores failed =>", err)
+        }
     }
 
     /**
@@ -176,7 +178,7 @@ export class CpuController {
                 newMinFrequency = coreMaxFrequency;
             } else {
                 newMinFrequency = setMinFrequency;
-                
+
                 // Enforce min/max limits
                 if (newMinFrequency < coreMinFrequency) {
                     newMinFrequency = coreMinFrequency;

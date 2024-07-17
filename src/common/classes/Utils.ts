@@ -26,7 +26,8 @@ export function getDirectories(source: string) {
             .readdirSync(source, { withFileTypes: true })
             .filter((dirent) => dirent.isDirectory())
             .map((dirent) => dirent.name);
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("Utils: getDirectories failed =>", err)
         return [];
     }
 }
@@ -37,7 +38,8 @@ export function getFiles(source) {
             .readdirSync(source, { withFileTypes: true })
             .filter((dirent) => dirent.isFile())
             .map((dirent) => dirent.name);
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("Utils: getFiles failed =>", err)
         return [];
     }
 }
@@ -48,7 +50,8 @@ export function getSymbolicLinks(source: string) {
             .readdirSync(source, { withFileTypes: true })
             .filter((dirent) => dirent.isSymbolicLink())
             .map((dirent) => dirent.name);
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("Utils: getSymbolicLinks failed =>", err)
         return [];
     }
 }
@@ -77,7 +80,8 @@ export function fileOK(path: string): boolean {
             fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
         );
         return true;
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("Utils: fileOK failed =>", err)
         return false;
     }
 }
@@ -89,7 +93,8 @@ export async function fileOKAsync(path: string): Promise<boolean> {
             fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
         );
         return true;
-    } catch (err) {
+    } catch (err: unknown) {
+        console.error("Utils: fileOKAsync failed =>", err)
         return false;
     }
 }
@@ -103,7 +108,7 @@ export async function execCommandAsync(command: string): Promise<string> {
     return new Promise((resolve, reject) => {
         exec(command, (error, stdout, stderr) => {
             if (error) {
-                console.error("Async Exec CMD failed: ", error);
+                console.error("Utils: execCommandAsync failed =>", error);
                 resolve("");
             } else {
                 resolve(stdout.trim());
@@ -115,8 +120,8 @@ export async function execCommandAsync(command: string): Promise<string> {
 export function execCommandSync(command: string): string {
     try {
         return execSync(command).toString();
-    } catch (err) {
-        console.error("Sync Exec CMD failed: ", err);
+    } catch (err: unknown) {
+        console.error("Utils: execCommandSync failed =>", err);
         return undefined;
     }
 }

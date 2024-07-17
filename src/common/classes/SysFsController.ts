@@ -24,7 +24,8 @@ export abstract class SysFsController {
         try {
             return fs.readdirSync(sourceDir, { withFileTypes: true })
                 .map(dirent => dirent.name);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SysFsController: getDeviceList failed =>", err)
             return [];
         }
     }
@@ -32,7 +33,8 @@ export abstract class SysFsController {
     public static getDeviceListDirent(sourceDir: string): fs.Dirent[] {
         try {
             return fs.readdirSync(sourceDir, { withFileTypes: true });
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SysFsController: getDeviceListDirent failed =>", err)
             return [];
         }
     }

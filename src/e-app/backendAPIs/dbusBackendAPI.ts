@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* 
+/*
 ########################################################
 ############## DBUS Backend #########################
 ########################################################
@@ -46,7 +46,8 @@ class TccDBusController {
             const proxyObject = await this.bus.getProxyObject(this.busName, this.path);
             this.interface = proxyObject.getInterface(this.interfaceName);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: init failed =>", err)
             return false;
         }
     }
@@ -56,7 +57,8 @@ class TccDBusController {
             // Try one method to check connection
             await this.interface.TuxedoWmiAvailable();
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: dbusAvailable failed =>", err)
             return false;
         }
     }
@@ -101,7 +103,8 @@ class TccDBusController {
     async tuxedoWmiAvailable(): Promise<boolean> {
         try {
             return await this.interface.TuxedoWmiAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: tuxedoWmiAvailable failed =>", err)
             return false;
         }
     }
@@ -123,7 +126,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.FanHwmonAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: fanHwmonAvailable failed =>", err)
             return false;
         }
     }
@@ -132,7 +136,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.DeviceHasAquaris();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: deviceHasAquaris failed =>", err)
             return false;
         }
     }
@@ -141,7 +146,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.TccdVersion();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: tccdVersion failed =>", err)
             return '';
         }
     }
@@ -150,7 +156,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetDeviceName();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getDeviceJSON failed =>", err)
             return '';
         }
     }
@@ -165,8 +172,9 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetDisplayModesJSON();
-        } catch (err) {
-            return undefined; 
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getDisplayModesJSON failed =>", err)
+            return undefined;
         }
     }
 
@@ -174,8 +182,9 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetIsX11();
-        } catch (err) {
-            return false; 
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getIsX11 failed =>", err)
+            return false;
         }
     }
 
@@ -184,7 +193,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.WebcamSWAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: webcamSWAvailable failed =>", err)
             return false;
         }
     }
@@ -193,7 +203,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetWebcamSWStatus();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getWebcamSWStatus failed =>", err)
             return false;
         }
     }
@@ -202,7 +213,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetForceYUV420OutputSwitchAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getForceYUV420OutputSwitchAvailable failed =>", err)
             return false;
         }
     }
@@ -211,7 +223,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetDGpuInfoValuesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getDGpuInfoValuesJSON failed =>", err)
             return undefined;
         }
     }
@@ -220,7 +233,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetIGpuInfoValuesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getIGpuInfoValuesJSON failed =>", err)
             return undefined;
         }
     }
@@ -229,7 +243,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetCpuPowerValuesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getCpuPowerValuesJSON failed =>", err)
             return undefined;
         }
     }
@@ -238,7 +253,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetPrimeState();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getPrimeState failed =>", err)
             return undefined;
         }
     }
@@ -247,7 +263,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.ConsumeModeReapplyPending();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: consumeModeReapplyPending failed =>", err)
             return false;
         }
     }
@@ -256,7 +273,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetActiveProfileJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getActiveProfileJSON failed =>", err)
             return undefined;
         }
     }
@@ -265,7 +283,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetTempProfileById(profileId);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setTempProfileById failed =>", err)
             return false;
         }
     }
@@ -274,7 +293,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetProfilesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getProfilesJSON failed =>", err)
             return undefined;
         }
     }
@@ -283,7 +303,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetCustomProfilesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getCustomProfilesJSON failed =>", err)
             return undefined;
         }
     }
@@ -292,7 +313,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetDefaultProfilesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getDefaultProfilesJSON failed =>", err)
             return undefined;
         }
     }
@@ -301,7 +323,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetDefaultValuesProfileJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getDefaultValuesProfileJSON failed =>", err)
             return undefined;
         }
     }
@@ -310,7 +333,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetSettingsJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getSettingsJSON failed =>", err)
             return undefined;
         }
     }
@@ -319,7 +343,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.ODMProfilesAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: odmProfilesAvailable failed =>", err)
             return undefined;
         }
     }
@@ -328,7 +353,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return JSON.parse(await this.interface.ODMPowerLimitsJSON());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: odmPowerLimits failed =>", err)
             return undefined;
         }
     }
@@ -337,7 +363,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.ODMPowerLimitsJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: odmPowerLimitsJSON failed =>", err)
             return undefined;
         }
     }
@@ -346,7 +373,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetKeyboardBacklightCapabilitiesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getKeyboardBacklightCapabilitiesJSON failed =>", err)
             return undefined;
         }
     }
@@ -355,7 +383,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetKeyboardBacklightStatesJSON();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getKeyboardBacklightStatesJSON failed =>", err)
             return undefined;
         }
     }
@@ -364,7 +393,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setKeyboardBacklightStatesJSON failed =>", err)
             return undefined;
         }
     }
@@ -373,7 +403,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetFansMinSpeed();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getFansMinSpeed failed =>", err)
             return undefined;
         }
     }
@@ -382,7 +413,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetFansOffAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getFansOffAvailable failed =>", err)
             return undefined;
         }
     }
@@ -391,7 +423,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return JSON.parse(await this.interface.GetChargingProfilesAvailable());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargingProfilesAvailable failed =>", err)
             return [];
         }
     }
@@ -400,7 +433,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetCurrentChargingProfile();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getCurrentChargingProfile failed =>", err)
             return '';
         }
     }
@@ -409,7 +443,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetChargingProfile(profileDescriptor);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setChargingProfile failed =>", err)
             return false;
         }
     }
@@ -418,7 +453,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return JSON.parse(await this.interface.GetChargingPrioritiesAvailable());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargingPrioritiesAvailable failed =>", err)
             return [];
         }
     }
@@ -427,7 +463,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetCurrentChargingPriority();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getCurrentChargingPriority failed =>", err)
             return '';
         }
     }
@@ -436,7 +473,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetChargingPriority(priorityDescriptor);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setChargingPriority failed =>", err)
             return false;
         }
     }
@@ -445,7 +483,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return JSON.parse(await this.interface.GetChargeStartAvailableThresholds());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargeStartAvailableThresholds failed =>", err)
             return [];
         }
     }
@@ -454,7 +493,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return JSON.parse(await this.interface.GetChargeEndAvailableThresholds());
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargeEndAvailableThresholds failed =>", err)
             return [];
         }
     }
@@ -463,7 +503,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetChargeStartThreshold();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargeStartThreshold failed =>", err)
             return undefined;
         }
     }
@@ -472,7 +513,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetChargeStartThreshold(value);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setChargeStartThreshold failed =>", err)
             return false;
         }
     }
@@ -481,7 +523,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetChargeEndThreshold();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargeEndThreshold failed =>", err)
             return undefined;
         }
     }
@@ -490,7 +533,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetChargeEndThreshold(value);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setChargeEndThreshold failed =>", err)
             return false;
         }
     }
@@ -499,7 +543,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetChargeType();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getChargeType failed =>", err)
             return ChargeType.Unknown.toString();
         }
     }
@@ -508,7 +553,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetChargeType(chargeType);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setChargeType failed =>", err)
             return false;
         }
     }
@@ -517,7 +563,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetFnLockSupported();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getFnLockSupported failed =>", err)
             return false;
         }
     }
@@ -526,7 +573,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetFnLockStatus();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getFnLockStatus failed =>", err)
             return false;
         }
     }
@@ -535,7 +583,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetFnLockStatus(status);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setFnLockStatus failed =>", err)
             return false;
         }
     }
@@ -544,7 +593,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetSensorDataCollectionStatus(status);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setSensorDataCollectionStatus failed =>", err)
             return false;
         }
     }
@@ -553,7 +603,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.GetSensorDataCollectionStatus();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: getSensorDataCollectionStatus failed =>", err)
             return false;
         }
     }
@@ -562,7 +613,8 @@ class TccDBusController {
         await this.dbusErrorHandling();
         try {
             return await this.interface.SetDGpuD0Metrics(status);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("dbusBackendAPI: setDGpuD0Metrics failed =>", err)
             return false;
         }
     }
@@ -580,285 +632,285 @@ class TccDBusController {
 export const tccDBus = new TccDBusController();
 
 export const dbusHandlers = new Map<string, (...args: any[]) => any>()
-    .set(DbusAPIFunctions.getVersion, async () => { 
+    .set(DbusAPIFunctions.getVersion, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.tccdVersion());
         });
     })
 
-    .set(DbusAPIFunctions.tuxedoWmiAvailable, async () => { 
+    .set(DbusAPIFunctions.tuxedoWmiAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.tuxedoWmiAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.getFanData, async () => { 
+    .set(DbusAPIFunctions.getFanData, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getFanDataJSON());
         });
     })
 
-    .set(DbusAPIFunctions.webcamSWAvailable, async () => { 
+    .set(DbusAPIFunctions.webcamSWAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.webcamSWAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.getForceYUV420OutputSwitchAvailable, async () => { 
+    .set(DbusAPIFunctions.getForceYUV420OutputSwitchAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.getForceYUV420OutputSwitchAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.consumeModeReapplyPending, async () => { 
+    .set(DbusAPIFunctions.consumeModeReapplyPending, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.consumeModeReapplyPending());
         });
     })
 
-    .set(DbusAPIFunctions.getActiveProfileJSON, async () => { 
+    .set(DbusAPIFunctions.getActiveProfileJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getActiveProfileJSON());
         });
     })
 
-    .set(DbusAPIFunctions.setTempProfileById, async (profileId) => { 
+    .set(DbusAPIFunctions.setTempProfileById, async (profileId) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setTempProfileById(profileId));
         });
     })
 
-    .set(DbusAPIFunctions.getProfilesJSON, async () => { 
+    .set(DbusAPIFunctions.getProfilesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getProfilesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getCustomProfilesJSON, async () => { 
+    .set(DbusAPIFunctions.getCustomProfilesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getCustomProfilesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getDefaultProfilesJSON, async () => { 
+    .set(DbusAPIFunctions.getDefaultProfilesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getDefaultProfilesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getDefaultValuesProfileJSON, async () => { 
+    .set(DbusAPIFunctions.getDefaultValuesProfileJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getDefaultValuesProfileJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getSettingsJSON, async () => { 
+    .set(DbusAPIFunctions.getSettingsJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getSettingsJSON());
         });
     })
 
-    .set(DbusAPIFunctions.odmProfilesAvailable, async () => { 
+    .set(DbusAPIFunctions.odmProfilesAvailable, async () => {
         return new Promise<string[]>((resolve, reject) => {
             resolve(tccDBus.odmProfilesAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.odmPowerLimitsJSON, async () => { 
+    .set(DbusAPIFunctions.odmPowerLimitsJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.odmPowerLimitsJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON, async () => { 
+    .set(DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getKeyboardBacklightStatesJSON, async () => { 
+    .set(DbusAPIFunctions.getKeyboardBacklightStatesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getKeyboardBacklightStatesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.setKeyboardBacklightStatesJSON, async (keyboardBacklightStatesJSON) => { 
+    .set(DbusAPIFunctions.setKeyboardBacklightStatesJSON, async (keyboardBacklightStatesJSON) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
         });
     })
 
-    .set(DbusAPIFunctions.getFansMinSpeed, async () => { 
+    .set(DbusAPIFunctions.getFansMinSpeed, async () => {
         return new Promise<number>((resolve, reject) => {
             resolve(tccDBus.getFansMinSpeed());
         });
     })
 
-    .set(DbusAPIFunctions.getFansOffAvailable, async () => { 
+    .set(DbusAPIFunctions.getFansOffAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.getFansOffAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.getChargingProfilesAvailable, async () => { 
+    .set(DbusAPIFunctions.getChargingProfilesAvailable, async () => {
         return new Promise<string[]>((resolve, reject) => {
             resolve(tccDBus.getChargingProfilesAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.getCurrentChargingProfile, async () => { 
+    .set(DbusAPIFunctions.getCurrentChargingProfile, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getCurrentChargingProfile());
         });
     })
 
-    .set(DbusAPIFunctions.setChargingProfile, async (profileDescriptor) => { 
+    .set(DbusAPIFunctions.setChargingProfile, async (profileDescriptor) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setChargingProfile(profileDescriptor));
         });
     })
 
-    .set(DbusAPIFunctions.getChargingPrioritiesAvailable, async () => { 
+    .set(DbusAPIFunctions.getChargingPrioritiesAvailable, async () => {
         return new Promise<string[]>((resolve, reject) => {
             resolve(tccDBus.getChargingPrioritiesAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.getCurrentChargingPriority, async () => { 
+    .set(DbusAPIFunctions.getCurrentChargingPriority, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getCurrentChargingPriority());
         });
     })
 
-    .set(DbusAPIFunctions.setChargingPriority, async (priorityDescriptor) => { 
+    .set(DbusAPIFunctions.setChargingPriority, async (priorityDescriptor) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setChargingPriority(priorityDescriptor));
         });
     })
 
-    .set(DbusAPIFunctions.getDGpuInfoValuesJSON, async () => { 
+    .set(DbusAPIFunctions.getDGpuInfoValuesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getDGpuInfoValuesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getIGpuInfoValuesJSON, async () => { 
+    .set(DbusAPIFunctions.getIGpuInfoValuesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getIGpuInfoValuesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getSensorDataCollectionStatus, async () => { 
+    .set(DbusAPIFunctions.getSensorDataCollectionStatus, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.getSensorDataCollectionStatus());
         });
     })
 
-    .set(DbusAPIFunctions.getPrimeState, async () => { 
+    .set(DbusAPIFunctions.getPrimeState, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getPrimeState());
         });
     })
 
-    .set(DbusAPIFunctions.getCpuPowerValuesJSON, async () => { 
+    .set(DbusAPIFunctions.getCpuPowerValuesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getCpuPowerValuesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getDisplayModesJSON, async () => { 
+    .set(DbusAPIFunctions.getDisplayModesJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getDisplayModesJSON());
         });
     })
 
-    .set(DbusAPIFunctions.getIsX11, async () => { 
+    .set(DbusAPIFunctions.getIsX11, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.getIsX11());
         });
     })
 
-    .set(DbusAPIFunctions.setSensorDataCollectionStatus, async (status) => { 
+    .set(DbusAPIFunctions.setSensorDataCollectionStatus, async (status) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setSensorDataCollectionStatus(status));
         });
     })
 
-    .set(DbusAPIFunctions.setDGpuD0Metrics, async (status) => { 
+    .set(DbusAPIFunctions.setDGpuD0Metrics, async (status) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setDGpuD0Metrics(status));
         });
     })
 
-    .set(DbusAPIFunctions.getChargeStartAvailableThresholds, async () => { 
+    .set(DbusAPIFunctions.getChargeStartAvailableThresholds, async () => {
         return new Promise<number[]>((resolve, reject) => {
             resolve(tccDBus.getChargeStartAvailableThresholds());
         });
     })
 
-    .set(DbusAPIFunctions.getChargeEndAvailableThresholds, async () => { 
+    .set(DbusAPIFunctions.getChargeEndAvailableThresholds, async () => {
         return new Promise<number[]>((resolve, reject) => {
             resolve(tccDBus.getChargeEndAvailableThresholds());
         });
     })
 
-    .set(DbusAPIFunctions.getChargeStartThreshold, async () => { 
+    .set(DbusAPIFunctions.getChargeStartThreshold, async () => {
         return new Promise<number>((resolve, reject) => {
             resolve(tccDBus.getChargeStartThreshold());
         });
     })
 
-    .set(DbusAPIFunctions.getChargeEndThreshold, async () => { 
+    .set(DbusAPIFunctions.getChargeEndThreshold, async () => {
         return new Promise<number>((resolve, reject) => {
             resolve(tccDBus.getChargeEndThreshold());
         });
     })
 
-    .set(DbusAPIFunctions.getChargeType, async () => { 
+    .set(DbusAPIFunctions.getChargeType, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getChargeType());
         });
     })
 
-    .set(DbusAPIFunctions.setChargeStartThreshold, async (newValue) => { 
+    .set(DbusAPIFunctions.setChargeStartThreshold, async (newValue) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setChargeStartThreshold(newValue));
         });
     })
 
-    .set(DbusAPIFunctions.setChargeEndThreshold, async (newValue) => { 
+    .set(DbusAPIFunctions.setChargeEndThreshold, async (newValue) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setChargeEndThreshold(newValue));
         });
     })
 
 
-    .set(DbusAPIFunctions.setChargeType, async (chargeType) => { 
+    .set(DbusAPIFunctions.setChargeType, async (chargeType) => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.setChargeType(chargeType));
         });
     })
 
 
-    .set(DbusAPIFunctions.dbusAvailable, async () => { 
+    .set(DbusAPIFunctions.dbusAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.dbusAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.fanHwmonAvailable, async () => { 
+    .set(DbusAPIFunctions.fanHwmonAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.fanHwmonAvailable());
         });
     })
 
-    .set(DbusAPIFunctions.getWebcamSWStatus, async () => { 
+    .set(DbusAPIFunctions.getWebcamSWStatus, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.getWebcamSWStatus());
         });
     })
 
-    .set(DbusAPIFunctions.getDeviceJSON, async () => { 
+    .set(DbusAPIFunctions.getDeviceJSON, async () => {
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getDeviceJSON());
         });

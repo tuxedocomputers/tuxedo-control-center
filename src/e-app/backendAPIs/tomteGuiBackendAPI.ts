@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* 
+/*
 ########################################################
 ############## tomte GUI Backend #######################
 ########################################################
@@ -35,13 +35,13 @@ async function resetToDefaults() {
         let res2;
         let res3;
         try
-        {   
+        {
             res1 = await execFile(command1);
             res2 = await execFile(command2);
             res3 = await execFile(command3);
             resolve(true);
         }
-        catch
+        catch(err: unknown)
         {
             console.error("One of the reset commands failed, here is their output: Function 1 Command: "
             + command1 + " Results: " + res1 +
@@ -61,8 +61,9 @@ async function getModuleDescription(moduleName: string, langId: string) {
         let results = await execCmd(command);
         resolve(results);
     }
-    catch (err)
+    catch (err: unknown)
     {
+        console.error("tomteGuiBackendAPI: getModuleDescription failed =>", err)
         resolve("");
     }
     });
@@ -73,7 +74,8 @@ async function removeModule(moduleName: string) {
     return new Promise<void>((resolve, reject) => {
         execCmd(command).then(() => {
             resolve();
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+            console.error("tomteGuiBackendAPI: removeModule failed =>", err)
             reject();
         })
     });
@@ -84,7 +86,8 @@ async function installModule(moduleName: string) {
     return new Promise<void>((resolve, reject) => {
         execFile(command).then(() => {
             resolve();
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+            console.error("tomteGuiBackendAPI: installModule failed =>", err)
             reject();
         })
     });
@@ -95,7 +98,8 @@ async function unBlockModule(moduleName: string) {
     return new Promise<void>((resolve, reject) => {
         execFile(command).then(() => {
             resolve();
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+            console.error("tomteGuiBackendAPI: unBlockModule failed =>", err)
             reject();
         })
     });
@@ -106,7 +110,8 @@ async function blockModule(moduleName: string) {
     return new Promise<void>((resolve, reject) => {
         execFile(command).then(() => {
             resolve();
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+            console.error("tomteGuiBackendAPI: blockModule failed =>", err)
             reject();
         })
     });
@@ -117,7 +122,8 @@ async function setMode(mode: string) {
     return new Promise<void>((resolve, reject) => {
         execFile(command).then(() => {
             resolve();
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+            console.error("tomteGuiBackendAPI: setMode failed =>", err)
             reject();
         })
     });
@@ -152,9 +158,9 @@ function parseTomteListJson(rawTomteListOutput: string | undefined)
             tomteInformation.modules.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
         }
         }
-        catch (e)
+        catch (err: unknown)
         {
-            console.error("Error Parsing tomte-list: not valid json");
+            console.error("tomteGuiBackendAPI: parseTomteListJson failed =>", err)
             tomteInformation.jsonError = true;
         }
         finally {
@@ -181,71 +187,76 @@ async function getTomteInformation() {
 }
 
 export const tomteHandlers = new Map<string, (...args: any[]) => any>()
-    .set(TomteAPIFunctions.resetToDefaults, async () => { 
+    .set(TomteAPIFunctions.resetToDefaults, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(resetToDefaults());
         });
     })
 
 
-    .set(TomteAPIFunctions.getModuleDescription, async (moduleName, langId) => { 
+    .set(TomteAPIFunctions.getModuleDescription, async (moduleName, langId) => {
         return new Promise<string>((resolve, reject) => {
             resolve(getModuleDescription(moduleName, langId));
         });
     })
 
-    .set(TomteAPIFunctions.getTomteInformation, async () => { 
+    .set(TomteAPIFunctions.getTomteInformation, async () => {
         return new Promise<ITomteInformation>((resolve, reject) => {
             resolve(getTomteInformation());
         });
     })
 
-    .set(TomteAPIFunctions.removeModule, async (moduleName: string) => { 
+    .set(TomteAPIFunctions.removeModule, async (moduleName: string) => {
         return new Promise<boolean>((resolve, reject) => {
             removeModule(moduleName).then(() => {
                 resolve(true);
-            }).catch(() => {
+            }).catch((err: unknown): void => {
+                console.error("tomteGuiBackendAPI: removeModule failed =>", err)
                 resolve(false);
             })
         });
     })
 
 
-    .set(TomteAPIFunctions.installModule, async (moduleName: string) => { 
+    .set(TomteAPIFunctions.installModule, async (moduleName: string) => {
         return new Promise<boolean>((resolve, reject) => {
             installModule(moduleName).then(() => {
                 resolve(true);
-            }).catch(() => {
+            }).catch((err: unknown): void => {
+                console.error("tomteGuiBackendAPI: installModule failed =>", err)
                 resolve(false);
             })
         });
     })
 
-    .set(TomteAPIFunctions.unBlockModue, async (moduleName: string) => { 
+    .set(TomteAPIFunctions.unBlockModue, async (moduleName: string) => {
         return new Promise<boolean>((resolve, reject) => {
             unBlockModule(moduleName).then(() => {
                 resolve(true);
-            }).catch(() => {
+            }).catch((err: unknown): void => {
+                console.error("tomteGuiBackendAPI: unBlockModule failed =>", err)
                 resolve(false);
             })
         });
     })
 
-    .set(TomteAPIFunctions.blockModule, async (moduleName: string) => { 
+    .set(TomteAPIFunctions.blockModule, async (moduleName: string) => {
         return new Promise<boolean>((resolve, reject) => {
             blockModule(moduleName).then(() => {
                 resolve(true);
-            }).catch(() => {
+            }).catch((err: unknown): void => {
+                console.error("tomteGuiBackendAPI: blockModule failed =>", err)
                 resolve(false);
             })
         });
     })
 
-    .set(TomteAPIFunctions.setMode, async (mode: string) => { 
+    .set(TomteAPIFunctions.setMode, async (mode: string) => {
         return new Promise<boolean>((resolve, reject) => {
             setMode(mode).then(() => {
                 resolve(true);
-            }).catch(() => {
+            }).catch((err: unknown): void => {
+                console.error("tomteGuiBackendAPI: setMode failed =>", err)
                 resolve(false);
             })
         });

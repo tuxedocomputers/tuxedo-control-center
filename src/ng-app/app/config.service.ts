@@ -45,7 +45,7 @@ export class ConfigService implements OnDestroy {
     public editingProfile: BehaviorSubject<ITccProfile>;
 
     private subscriptions: Subscription = new Subscription();
-    
+
     constructor(private utils: UtilsService, private dbus: TccDBusClientService) {
         this.updateConfigData();
         this.settingsSubject = new Subject<ITccSettings>();
@@ -292,7 +292,8 @@ private transformPrimeStatus(status: string): string {
                 .then(() => {
                     resolve(true);
                 })
-                .catch(() => {
+                .catch((err: unknown): void => {
+                    console.error("config.service: pkexecSetPrimeSelectAsync failed =>", err)
                     resolve(false);
                 });
         });

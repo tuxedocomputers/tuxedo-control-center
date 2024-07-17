@@ -83,7 +83,8 @@ export class SysFsService implements OnDestroy {
                 noTurbo: await window.cpu.getIntelPstateTurboValueAsync()
               };
               resolve (pstateInfo);
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("sys-fs.service: getPstateInfo failed =>", err)
           reject(err);
         }
       });;

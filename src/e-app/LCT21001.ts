@@ -97,14 +97,14 @@ export class LCT21001 {
         this.device = await this.adapter.getDevice(deviceUUID);
 
         let rssi, deviceName: string;
-        try { rssi = await this.device.getRSSI(); } catch (err) {}
+        try { rssi = await this.device.getRSSI(); } catch (err: unknown) {console.error("LCT21001: connect getRSSI failed =>", err)}
         if (rssi === undefined) {
             throw Error('connect(): device appears offline/unavailable');
         }
 
         try {
             deviceName = await this.device.getName();
-        } catch (err) {
+        } catch (err: unknown) {
             throw Error('connect(): failed reading name');
         }
 
@@ -133,8 +133,12 @@ export class LCT21001 {
         if (this.device !== undefined && await this.device.isConnected()) {
             // Data written on disconnect by original control, seems to reset
             // or turn off configured parameters
-            try { await this.writeReset(); } catch(err) {}
-            try { await this.device.disconnect(); } catch (err) {}
+            try { await this.writeReset(); } catch(err: unknown) {
+                console.error("LCT21001: disconnect writeReset failed =>", err)
+            }
+            try { await this.device.disconnect(); } catch (err: unknown) {
+                console.error("LCT21001: disconnect failed =>", err)
+            }
             this.device = undefined;
             this.connectedModel = undefined;
         }
@@ -152,7 +156,8 @@ export class LCT21001 {
             }
 
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("LCT21001: startDiscover failed =>", err)
             return false;
         }
     }
@@ -160,7 +165,7 @@ export class LCT21001 {
     async stopDiscover() {
         // Clean-up other initialized stuff
         if (this.adapter !== undefined && await this.adapter.isDiscovering()) {
-            await this.adapter.stopDiscovery().catch(noop);
+            await this.adapter.stopDiscovery().catch(err => console.error("LCT21001: stopDiscover failed =>", err));
         }
 
         if (this.destroy !== undefined) {
@@ -171,7 +176,8 @@ export class LCT21001 {
     async isDiscovering() {
         try {
             return await this.adapter?.isDiscovering();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("LCT21001: isDiscovering failed =>", err)
             return false;
         }
     }
@@ -183,7 +189,8 @@ export class LCT21001 {
         for (let deviceId of deviceIds) {
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("LCT21001: getDeviceList getDevice failed =>", err)
                 await blDevice.cleanup();
                 continue;
             }
@@ -192,14 +199,16 @@ export class LCT21001 {
 
             try {
                 info.rssi = parseInt(await blDevice.getRSSI());
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("LCT21001: getDeviceList parseInt failed =>", err)
                 await blDevice.cleanup();
                 continue;
             }
 
             try {
                 info.name = await blDevice.getName();
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("LCT21001: getDeviceList getName failed =>", err)
                 info.name = '';
             }
 
@@ -219,7 +228,8 @@ export class LCT21001 {
 
         try {
             result = await this.device?.isConnected();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("LCT21001: isConnected failed =>", err)
             result = false;
         }
 
@@ -232,9 +242,9 @@ export class LCT21001 {
 
     /**
      * Write to the uart tx characteristic
-     * 
+     *
      * @param buffer `Buffer` of data to write
-     * 
+     *
      * Note: Throws error if not connected
      */
     async writeBuffer(buffer: Buffer) {
@@ -247,9 +257,9 @@ export class LCT21001 {
 
     /**
      * Read from the uart rx characteristic
-     * 
+     *
      * @returns A `Buffer` with the data read
-     * 
+     *
      * Note: Throws error if not connected
      */
     async readBuffer() {
@@ -263,10 +273,10 @@ export class LCT21001 {
     /**
      * Write to the uart tx characteristic and wait for a
      * notification on the uart rx characteristic
-     * 
+     *
      * @param inputBuffer `Buffer` to write to device
      * @returns A `Buffer` with the response
-     * 
+     *
      * Note: Throws error if not connected
      */
     async writeReceive(inputBuffer: Buffer): Promise<Buffer> {
@@ -293,7 +303,7 @@ export class LCT21001 {
 
     /**
      * Write RGB color and state to device
-     * 
+     *
      * @param red Red color 0-255
      * @param green Green color 0-255
      * @param blue Blue color 0-255
@@ -316,7 +326,7 @@ export class LCT21001 {
 
     /**
      * Write fan speed to device
-     * 
+     *
      * @param dutyCyclePercent Fan speed in percent 0-100
      */
     async writeFanMode(dutyCyclePercent: number) {
@@ -332,7 +342,7 @@ export class LCT21001 {
 
     /**
      * Write pump parameters to device
-     * 
+     *
      * @param pumpDutyCyclePercent Duty cycle in percent 0-100
      * @param pumpVoltage See `PumpVoltage` for valid settings
      */
@@ -357,7 +367,7 @@ export class LCT21001 {
 
     /**
      * Read firmware version from device
-     * 
+     *
      * @returns A `Buffer` representing a string describing the firmware version
      */
     async readFwVersion() {

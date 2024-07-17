@@ -104,7 +104,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         // Check arguments, start, stop, restart config files etc..
-        await this.handleArgumentProgramFlow().catch((err) => this.catchError(err));
+        // todo: do error handling inside catchError
+        await this.handleArgumentProgramFlow().catch((err: unknown): void => this.catchError(err as Error));
 
         // If program is still running this is the start of the daemon
 
@@ -143,8 +144,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             worker.timer = setInterval(() => {
                 try {
                     worker.work();
-                } catch (err) {
-                    this.logLine('Failed executing onWork() of ' + worker.name + ' => ' + err);
+                } catch (err: unknown) {
+                    console.error(`TuxedoControlCenterDaemon: Failed executing onWork() of ${worker.name} =>`, err)
                 }
             }, worker.timeout);
         }
@@ -156,8 +157,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 worker.updateProfile(this.getCurrentProfile());
                 worker.start();
-            } catch (err) {
-                this.logLine('Failed executing onStart() => ' + err);
+            } catch (err: unknown) {
+                console.error("TuxedoControlCenterDaemon: Failed executing onStart =>", err)
             }
         }
     }
@@ -199,8 +200,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // On exit events for each worker before exiting and saving settings
             try {
                 worker.exit();
-            } catch (err) {
-                this.logLine('Failed executing onExit() => ' + err);
+            } catch (err: unknown) {
+                console.error("TuxedoControlCenterDaemon: Failed executing onExit() =>", err)
             }
         });
         this.config.writeAutosave(this.autosave);
@@ -428,16 +429,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (missingSetting) {
                 throw Error('Missing setting');
             }
-        } catch (err) {
+        } catch (err: unknown) {
             try {
                 if (this.settings === undefined) {
                     this.settings = this.config.getDefaultSettings(device);
                     this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
-                this.logLine('Filled missing settings with default: ' + this.config.pathSettings);
-            } catch (err) {
-                this.logLine('Failed to fill missing settings with default: ' + this.config.pathSettings);
+                console.error(`TuxedoControlCenterDaemon: Filled missing settings with default: ${this.config.pathSettings} =>"`, err)
+            } catch (err: unknown) {
+                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} =>`, err)
             }
         }
 
@@ -448,28 +449,28 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 this.config.writeProfiles(this.customProfiles);
                 this.logLine('Wrote default profiles: ' + this.config.pathProfiles);
-            } catch (err) {
-                this.logLine('Failed to write default profiles: ' + this.config.pathProfiles);
+            } catch (err: unknown) {
+                console.error(`TuxedoControlCenterDaemon: Failed to write default profiles: ${this.config.pathProfiles} =>`, err)
             }
         }
 
         try {
             this.autosave = this.config.readAutosave();
-        } catch (err) {
-            this.logLine('Failed to read autosave: ' + this.config.pathAutosave);
+        } catch (err: unknown) {
+            console.error(`TuxedoControlCenterDaemon: Failed to read autosave ${this.config.pathAutosave} =>`, err)
             // It probably doesn't exist yet so create a structure for saving
             this.autosave = this.config.getDefaultAutosave();
         }
 
         /*try {
             this.fanTables = this.config.readFanTables();
-        } catch (err) {
+        } catch (err: unknown) {
             this.logLine('Failed to read fan tables: ' + this.config.pathFanTables);
             this.fanTables = [ this.config.getDefaultFanTable() ];
             try {
                 this.config.writeFanTables(this.fanTables);
                 this.logLine('Wrote default fan tables: ' + this.config.pathFanTables);
-            } catch (err) {
+            } catch (err: unknown) {
                 this.logLine('Failed to write default fan tables: ' + this.config.pathFanTables);
             }
         }*/
@@ -747,7 +748,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
         if (profile.display.yResolution === undefined) {
             profile.display.yResolution = -1;
-        }         
+        }
 
         if (profile.webcam === undefined) {
             profile.webcam = {
@@ -838,16 +839,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (newConfigPath !== '') {
             try {
                 let newConfig: T = this.config.readConfig<T>(newConfigPath);
-                
+
 
                 try {
                     this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
-                } catch (err) {
-                    this.logLine('Error on write option ' + optionString);
+                } catch (err: unknown) {
+                    console.error(`TuxedoControlCenterDaemon: Error on write option ${optionString} =>`, err)
                     return false;
                 }
-            } catch (err) {
-                this.logLine('Error on read option ' + optionString + ' with path: ' + newConfigPath);
+            } catch (err: unknown) {
+                console.error(`TuxedoControlCenterDaemon: Error on read option ${optionString}: with path ${newConfigPath} =>`, err)
                 return false;
             }
             return true;
@@ -896,7 +897,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             const lineInfo: string = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' (' + process.pid + '): ';
             const strLogLine = lineInfo + text + '\n';
             fs.appendFileSync(logPath, strLogLine, { mode: 0o644 });
-        } catch (err) {
+        } catch (err: unknown) {
             console.log('Can\'t write log');
         }*/
     }

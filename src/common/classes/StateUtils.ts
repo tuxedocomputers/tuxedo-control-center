@@ -36,7 +36,9 @@ export function determineState(): ProfileStates {
             powerSupplies.push(newPowerSupply);
         }
         powerAc = powerSupplies.find(powerSupply => powerSupply.type.readValue() === 'Mains');
-    } catch (err) { }
+    } catch (err: unknown) {
+        console.error("StateUtils: determineState find failed =>", err)
+    }
 
 
     // Attempt to find state depending on 'Mains' online status
@@ -48,7 +50,9 @@ export function determineState(): ProfileStates {
             } else {
                 state = ProfileStates.BAT;
             }
-        } catch (err) { }
+        } catch (err: unknown) {
+            console.error("StateUtils: determineState readValue failed =>", err)
+        }
     }
 
     return state;

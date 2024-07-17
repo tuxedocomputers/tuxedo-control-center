@@ -45,7 +45,8 @@ export class DBusDisplayBrightnessGnome {
                     this.customOnPropertiesChanged(changed.Brightness.value);
                 }
             });
-        }).catch((err) => {
+        }).catch((err: unknown): void => {
+            console.error("DBusDisplayBrightnessGnome: constructor failed =>", err)
         });
     }
 
@@ -62,7 +63,8 @@ export class DBusDisplayBrightnessGnome {
                 } else {
                     resolve(true);
                 }
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("DBusDisplayBrightnessGnome: isAvailable failed =>", err)
                 resolve(false);
             }
         });
@@ -87,7 +89,8 @@ export class DBusDisplayBrightnessGnome {
                     this.interface = proxyObject.getInterface('org.freedesktop.DBus.Properties');
                     resolve(this.interface);
                 }
-            ).catch(() => {
+            ).catch(err => {
+                console.error("DBusDisplayBrightnessGnome: getInterface failed =>", err)
                 this.interface = undefined;
                 resolve(this.interface);
             });
@@ -104,7 +107,8 @@ export class DBusDisplayBrightnessGnome {
                 } else {
                     reject(new Error('Interface not available'));
                 }
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("DBusDisplayBrightnessGnome: getBrightness failed =>", err)
                 reject(err);
             }
         });
@@ -120,7 +124,8 @@ export class DBusDisplayBrightnessGnome {
                 } else {
                     reject(new Error('Interface not available'));
                 }
-            } catch (err) {
+            } catch (err: unknown) {
+                console.error("DBusDisplayBrightnessGnome: setBrightness failed =>", err)
                 reject(err);
             }
         });

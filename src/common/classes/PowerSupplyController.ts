@@ -69,7 +69,9 @@ export class PowerSupplyController extends SysFsController {
                 if ((await ps.type.readValueA()).trim() === 'Battery') {
                     ctrlBatteries.push(ps);
                 }
-            } catch (err) {}
+            } catch (err: unknown) {
+                console.error("PowerSupplyController: getPowerSupplyBatteries failed =>", err)
+            }
         }
         return ctrlBatteries;
     }

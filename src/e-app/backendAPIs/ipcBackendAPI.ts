@@ -53,16 +53,17 @@ ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event) =>
     event.returnValue = ScalingDriver.acpi_cpufreq;
 });
 
- 
+
 ipcMain.handle('comp-get-has-aquaris', async (event, arg) => {
         return new Promise<boolean>(async (resolve, reject) => {
             try {
                 resolve( await hasAquaris());
-            } catch (err) {
+            } catch (err: unknown) {
+              console.error("ipcBackendAPI: comp-get-has-aquaris failed =>", err)
               reject(err);
             }
           });
-    
+
 });
 
 ipcMain.handle('comp-get-hide-ctgp', async (event, arg) => {
@@ -95,7 +96,8 @@ ipcMain.handle('ipc-prime-select', async (event, selectedState) => {
             resolve( execFile(
                 `pkexec prime-select ${selectedState}`
             ));
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("ipcBackendAPI: ipc-prime-select failed =>", err)
           reject(err);
         }
       });
@@ -104,8 +106,8 @@ ipcMain.handle('ipc-prime-select', async (event, selectedState) => {
 
 
 
-      
-/* 
+
+/*
 ################ Utils API #######################
 */
 
@@ -115,7 +117,7 @@ ipcMain.handle('ipc-prime-select', async (event, selectedState) => {
 
 
 
-ipcMain.handle('fs-write-text-file', async (event, filePath: string, fileData: string | Buffer, writeFileOptions?) => {   
+ipcMain.handle('fs-write-text-file', async (event, filePath: string, fileData: string | Buffer, writeFileOptions?) => {
     return writeTextFile(filePath, fileData, writeFileOptions);
 });
 
@@ -136,7 +138,8 @@ async function writeTextFile(filePath: string, fileData: string | Buffer, writeF
             resolve();
           }
         });
-      } catch (err) {
+      } catch (err: unknown) {
+        console.error("ipcBackendAPI: writeTextFile failed =>", err)
         reject(err);
       }
     });
@@ -152,7 +155,8 @@ async function readTextFile(filePath: string): Promise<string> {
               resolve(data + "");
             }
           });
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("ipcBackendAPI: readTextFile failed =>", err)
           reject(err);
         }
       });
@@ -193,11 +197,12 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
         cpuInfo.maxFreq += 1000000;
         cpuInfo.scalingAvailableFrequencies = [cpuInfo.maxFreq].concat(cpuInfo.scalingAvailableFrequencies);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.log(err);
     }
     resolve(cpuInfo);
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("ipcBackendAPI: get-general-cpu-info-async failed =>", err)
           reject(err);
         }
       });
@@ -233,12 +238,13 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
           threadSiblingsList: core.threadSiblingsList.readValueNT()
         };
         coreInfoList.push(coreInfo);
-      } catch (err) {
-        console.log(err);
+      } catch (err: unknown) {
+        console.error("ipcBackendAPI: get-logical-core-info-async loop failed =>", err)
       }
     }
    resolve(coreInfoList);
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error("ipcBackendAPI: get-logical-core-info-async failed =>", err)
       reject(err);
     }
   });
@@ -248,7 +254,8 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
     return new Promise<boolean>((resolve, reject) => {
         try {
             resolve( cpu.intelPstate.noTurbo.readValueNT());
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("ipcBackendAPI: get-intel-pstate-turbo-value-async failed =>", err)
           reject(err);
         }
       });
@@ -264,7 +271,7 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
     displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
   }
 
-  
+
   ipcMain.on('get-display-brightness-info-sync', (event) => {
     const infoArray: IDisplayBrightnessInfo[] = [];
     for (const controller of displayBacklightControllers) {
@@ -275,8 +282,8 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
           maxBrightness: controller.maxBrightness.readValue()
         };
         infoArray.push(info);
-      } catch (err) {
-        console.log(err);
+      } catch (err: unknown) {
+        console.error("ipcBackendAPI: get-display-brightness-info-sync failed =>", err)
       }
     }
     event.returnValue = infoArray;
@@ -328,8 +335,9 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[])
         execFileSync('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
         return true;
     }
-    catch(err)
+    catch(err: unknown)
     {
+        console.error("ipcBackendAPI: pkexecWriteCustomProfiles failed =>", err)
         return false;
     }
 }
@@ -378,7 +386,7 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
 
 ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccProfile[]) => {
     event.returnValue = pkexecWriteCustomProfiles(customProfiles);
-    
+
 });
 
 ipcMain.handle('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
@@ -405,7 +413,7 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
 // ipcMain.on('exec-cmd-sync', (event, arg) => {
 //     try {
 //         event.returnValue = { data: child_process.execSync(arg), error: undefined };
-//     } catch (err) {
+//     } catch (err: unknown) {
 //         event.returnValue = { data: undefined, error: err };
 //     }
 // });
@@ -460,7 +468,7 @@ ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
     return new Promise<string>(async (resolve, reject) => {
         execCmd("cat /run/systemd/shutdown/scheduled")
         .then((results) => {resolve(results)})
-        .catch(() => {resolve("")});
+        .catch((err: unknown) => {console.error("ipcBackendAPI: ipc-get-scheduled-shutdown failed =>", err); resolve("")});
     });
 });
 
@@ -588,8 +596,8 @@ async function getDGpuPowerState(busPath: string) {
             );
 
             return powerState.trim();
-        } catch (err) {
-            console.error("Failed to get power state of GPU: ", err);
+        } catch (err: unknown) {
+            console.error("ipcBackendAPI: getDGpuPowerState failed =>", err);
         }
     }
     return "-1";
@@ -632,7 +640,8 @@ export async function execCmd(cmd): Promise<string> {
 export function execCmdSync(cmd):string {
         try {
             return child_process.execSync(cmd).toString();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("ipcBackendAPI: execCmdSync failed =>", err)
             return err.toString();
         }
 }
@@ -661,7 +670,8 @@ export async function execFileSync(arg) {
             data = child_process.execFileSync(cmd, cmdList);
             return data.toString();
         }
-        catch (err) {
+        catch (err: unknown) {
+            console.error("ipcBackendAPI: execFileSync failed =>", err)
             return err;
         }
 }
@@ -687,51 +697,54 @@ class ProgramManagementService {
 
     public isInProgress: Map<string, boolean>;
     public isCheckingInstallation: Map<string, boolean>;
-  
+
     constructor() {
       this.isInProgress = new Map();
       this.isCheckingInstallation = new Map();
     }
-  
+
     public async isInstalled(name: string): Promise<boolean> {
       this.isCheckingInstallation.set(name, true);
       return new Promise<boolean>(async (resolve) => {
         execCmd('which ' + name).then((result) => {
           this.isCheckingInstallation.set(name, false);
           resolve(true);
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+          console.error("ipcBackendAPI: isInstalled failed =>", err)
           this.isCheckingInstallation.set(name, false);
           resolve(false);
         });
       });
     }
-  
+
     public async install(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
       return new Promise<boolean>(async (resolve) => {
         execCmd('pkexec apt install -y ' + name).then(() => {
           this.isInProgress.set(name, false);
           resolve(true);
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+          console.error("ipcBackendAPI: install failed =>", err)
           this.isInProgress.set(name, false);
           resolve(false);
         });
       });
     }
-  
+
     public async remove(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
       return new Promise<boolean>(async (resolve) => {
         execCmd('pkexec apt remove -y ' + name).then(() => {
           this.isInProgress.set(name, false);
           resolve(true);
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+          console.error("ipcBackendAPI: remove failed =>", err)
           this.isInProgress.set(name, false);
           resolve(false);
         });
       });
     }
-  
+
     public run(name: string): void {
         child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (err) => {
             console.log("\"" + name + "\" could not be executed.")
@@ -740,7 +753,7 @@ class ProgramManagementService {
     }
   }
 
-// important! the functions in the class may not be exposed to the outside directly and only be used to 
+// important! the functions in the class may not be exposed to the outside directly and only be used to
 // check on specific programs, to prevent render service from running arbitrary code
 const pgms = new ProgramManagementService();
 const tomteName = "tuxedo-tomte";
@@ -836,7 +849,7 @@ ipcMain.handle('pgms-start-webfaic', async (event, status) => {
 
 // Change Crypt password backend
 
-async function changeCryptPassword(oldPassword: string, newPassword: string, confirmPassword: string) {  
+async function changeCryptPassword(oldPassword: string, newPassword: string, confirmPassword: string) {
     let crypt_drives: IDrive[] = await DriveController.getDrives();
     crypt_drives = crypt_drives.filter(x => x.crypt);
     let oneliner = "";
@@ -846,7 +859,7 @@ async function changeCryptPassword(oldPassword: string, newPassword: string, con
     for (let drive of crypt_drives) {
         oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
     }
-    oneliner = oneliner.slice(0, -4); // remove the tailing " && "  
+    oneliner = oneliner.slice(0, -4); // remove the tailing " && "
     return execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
 }
 
@@ -860,7 +873,8 @@ ipcMain.handle('drive-controller-get-drives', (event) => {
     return new Promise<IDrive[]>((resolve, reject) => {
         try {
             resolve( DriveController.getDrives());
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("ipcBackendAPI: drive-controller-get-drives failed =>", err)
           reject(err);
         }
       });
@@ -875,25 +889,26 @@ async function getSystemInfos() {
         try {
           const dataArray: Buffer[] = [];
           const req = https.get(systeminfosURL, response => {
-  
+
             response.on('data', (data) => {
               dataArray.push(data);
             });
-  
+
             response.once('end', () => {
               resolve(Buffer.concat(dataArray));
             });
-  
+
             response.once('error', (err) => {
               reject(err);
             });
-  
+
           });
-  
+
           req.once('error', (err) => {
        reject(err);
           });
-        } catch (err) {
+        } catch (err: unknown) {
+          console.error("ipcBackendAPI: getSystemInfos failed =>", err)
           reject(err);
         }
       });
@@ -913,25 +928,28 @@ async function getSystemInfos() {
             updateSystemInfoLabel('Fetching: ' + systeminfosURL);
             const data = await getSystemInfos();
             fileData = data.toString();
-          } catch (err) {
+          } catch (err: unknown) {
+            console.error("ipcBackendAPI: runSysteminfo download failed =>", err)
             reject('Download failed'); return;
           }
-    
+
           // Write file
           try {
             updateSystemInfoLabel('Writing file: ' + systeminfoFilePath);
             await writeTextFile(systeminfoFilePath, fileData, { mode: 0o755 });
-          } catch (err) {
+          } catch (err: unknown) {
+            console.error("ipcBackendAPI: runSysteminfo write failed =>", err)
             reject('Failed to write file ' + systeminfoFilePath); return;
           }
-    
+
           // Run
           try {
             updateSystemInfoLabel('Running systeminfos.sh');
             await execCmd('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + systeminfoFilePath + ' ' + ticketNumber);
-          } catch (err) {
+          } catch (err: unknown) {
+            console.error("ipcBackendAPI: runSysteminfo run failed =>", err)
             reject('Failed to execute script');
-          } 
+          }
           resolve();
         });
       }

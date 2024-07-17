@@ -77,7 +77,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public readonly TAB_ANIMATION = 1;
 
     public hasBluetooth = true;
-    
+
     constructor(
         public dialog: MatDialog,
         private utils: UtilsService) {
@@ -197,7 +197,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlLedGreen.setValue(state.green);
             this.ctrlLedBlue.setValue(state.blue);
             this.chosenColorHex = this.rgbToHex(state.red, state.green, state.blue);
-            
+
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
 
@@ -283,8 +283,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 } else {
                     await this.aquaris.writeRGBOff();
                 }
-            } catch (err) {
-                console.log('failed writing led state => ' + err);
+            } catch (err: unknown) {
+                console.error("aquaris-control: failed writing led state =>", err);
             }
             await this.triggerSave();
         }
@@ -300,8 +300,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 } else {
                     await this.aquaris.writeFanOff();
                 }
-            } catch (err) {
-                console.log('failed writing fan state => ' + err);
+            } catch (err: unknown) {
+                console.error("aquaris-control: failed writing fan state =>", err);
             }
             await this.triggerSave();
         }
@@ -348,8 +348,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 } else {
                     await this.aquaris.writePumpOff();
                 }
-            } catch (err) {
-                console.log('failed writing pump state => ' + err);
+            } catch (err: unknown) {
+                console.error("aquaris-control: writePumpMode failed =>", err)
             }
             await this.triggerSave();
         }
@@ -407,8 +407,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
             localStorage.setItem('aquarisLastConnected', deviceUUID);
-        } catch (err) {
-            console.log('connect failed => ' + err);
+        } catch (err: unknown) {
+            console.error("aquaris-control: buttonConnect failed =>", err)
             await this.aquaris.disconnect();
             this.isConnected = false;
         } finally {
@@ -448,8 +448,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             } else {
                 this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
             }
-        } catch (err) {
-            console.log('disconnect failed => ' + err);
+        } catch (err: unknown) {
+            console.error("aquaris-control: disconnect failed =>", err);
         } finally {
             this.isDisconnecting = false;
         }
@@ -462,7 +462,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public async buttonFanStop() {
         await this.aquaris.writeFanOff();
     }
-    
+
     public async buttonPumpStop() {
         await this.aquaris.writePumpOff();
     }
@@ -503,7 +503,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const repeatDelayMS = 200;
 
         action();
-        
+
         this.buttonRepeatTimer = setInterval(() => {
             action();
         }, repeatDelayMS);
@@ -538,7 +538,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         } else {
             deviceNames = new Map(JSON.parse(deviceNamesSerialized));
         }
-        
+
         return deviceNames;
     }
 
@@ -565,7 +565,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 const deviceNames = await this.getUserDeviceNames();
                 if (chosenName.trim() === '') {
                     deviceNames.delete(this.selectedDeviceUUID);
-                } else {                    
+                } else {
                     deviceNames.set(this.selectedDeviceUUID, chosenName);
                 }
                 await this.setUserDeviceNames(deviceNames);

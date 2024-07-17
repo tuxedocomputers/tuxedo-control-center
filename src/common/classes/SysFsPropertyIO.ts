@@ -51,7 +51,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
-        } catch (err) {
+        } catch (err: unknown) {
             throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
         }
     }
@@ -63,7 +63,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = (await fsp.readFile(this.readPath, { flag: 'r' })).toString();
             return this.convertStringToType(readValue);
-        } catch (err) {
+        } catch (err: unknown) {
             throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
         }
     }
@@ -78,7 +78,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
-        } catch (err) {
+        } catch (err: unknown) {
+            console.log(`SysFsPropertyIO: Could not read value from path ${this.readPath} =>`, err)
             return undefined;
         }
     }
@@ -89,7 +90,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     public async readValueNTA(): Promise<T> {
         try {
             return await this.readValueA();
-        } catch (err) {
+        } catch (err: unknown) {
+            console.log(`SysFsPropertyIO: Could not read value from path ${this.readPath} =>`, err)
             return undefined;
         }
     }
@@ -108,7 +110,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             } else {
                 fs.writeFileSync(this.writePath, stringValue, { flag: 'w' });
             }
-        } catch (err) {
+        } catch (err: unknown) {
             throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
         }
     }
@@ -120,7 +122,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         const stringValue = this.convertTypeToString(value);
         try {
             return await fsp.writeFile(this.writePath, stringValue, { flag: 'w' });
-        } catch (err) {
+        } catch (err: unknown) {
             throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
         }
     }
@@ -136,7 +138,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             } else {
                 return false;
             }
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SysFsPropertyIO: isAvailable failed =>", err)
             return false;
         }
     }
@@ -148,7 +151,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             fs.accessSync(this.writePath, fs.constants.W_OK);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SysFsPropertyIO: isWritable failed =>", err)
             return false;
         }
     }
@@ -160,7 +164,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             fs.accessSync(this.readPath, fs.constants.R_OK);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error("SysFsPropertyIO: isReadable failed =>", err)
             return false;
         }
     }

@@ -88,7 +88,8 @@ export class ChangeCryptPasswordComponent implements OnInit {
         return window.ipc.changeCryptPassword(oldPassword, newPassword, confirmPassword).then(() => {
             this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
-        }).catch(() => {
+        }).catch((err: unknown): void => {
+            console.error("change-crypt-password: changeCryptPassword failed =>", err)
             this.successtext_cryptsetup = '';
             this.errortext_cryptsetup = $localize `:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
         });
