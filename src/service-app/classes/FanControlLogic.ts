@@ -21,7 +21,7 @@ import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTab
 
 export enum FAN_LOGIC { CPU, GPU }
 
-class ValueBuffer {
+export class ValueBuffer {
     private bufferData: Array<number>;
     private bufferMaxSize = 13; // Buffer max size
 

@@ -388,6 +388,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 this.utils.pageDisabled = false;
             });
         } else {
+            console.error("Form Input invalid");
             this.profileFormProgress = false;
             this.utils.pageDisabled = false;
         }
@@ -615,7 +616,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 tdpValues.controls[i].setValue(newValue);
             }
         }
-
+        
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 
@@ -641,6 +642,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     profileNameControl.setValue(this.odmProfileNames[2]);
                 }
             }
+        }
+        // to fix bug of not updated validity of middle slider
+        for (let i = 0; i < tdpValues.controls.length; i++) {
+            tdpValues.controls[i].updateValueAndValidity();
         }
 
     }

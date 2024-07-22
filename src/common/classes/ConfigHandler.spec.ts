@@ -26,6 +26,7 @@ import { ITccSettings, defaultSettings} from '../models/TccSettings';
 import { ITccProfile } from '../models/TccProfile';
 import { defaultProfiles } from '../models/profiles/LegacyProfiles';
 import { TccPaths } from './TccPaths';
+import { TUXEDODevice } from '../models/DefaultProfiles';
 
 describe('ConfigHandler file IO', () => {
 
@@ -36,6 +37,8 @@ describe('ConfigHandler file IO', () => {
         '/etc/test1/test2/v4l2names.conf',
         '/etc/test1/test2/autosave.conf',
         '/etc/test1/test2/fantables.conf');
+
+    const dev: TUXEDODevice = TUXEDODevice.IBPG8;
 
     // Mock file structure in memory
     beforeEach(() => {
@@ -108,7 +111,7 @@ describe('ConfigHandler file IO', () => {
         expect(fs.existsSync(config.pathProfiles)).toBe(true);
 
         let readProfiles: ITccProfile[];
-        expect(() => { readProfiles = config.readProfiles(); }).not.toThrow();
+        expect(() => { readProfiles = config.readProfiles(dev); }).not.toThrow();
         expect(readProfiles.length).toEqual(2);
         for (const profile of readProfiles) {
             expect(['some profile', 'some other profile'].includes(profile.name)).toBe(true);
