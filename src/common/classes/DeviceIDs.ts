@@ -591,6 +591,17 @@ export const amdIGpuDeviceIds = [
     // CYAN_SKILLFISH
     "13FE",
     "143F",
+
+    // Aqua Vanjaram
+    "74A0",
+
+    // Van Gogh
+    "1435",
+    "163f",
+
+    // Hawk Point
+    "1900",
+    "1901",
 ];
 
 const amdVendorId = "1002";

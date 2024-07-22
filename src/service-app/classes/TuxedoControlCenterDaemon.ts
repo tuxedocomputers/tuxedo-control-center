@@ -24,6 +24,7 @@ import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
+import { DaemonListener } from './DaemonListener';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
@@ -48,6 +49,7 @@ import { GpuInfoWorker } from "./GpuInfoWorker";
 import { CpuPowerWorker } from './CpuPowerWorker';
 import { PrimeWorker } from './PrimeWorker';
 import { KeyboardBacklightListener } from './KeyboardBacklightListener';
+import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
 import { AvailabilityService } from "../../common/classes/availability.service";
 
 const tccPackage = require('../../package.json');
@@ -70,7 +72,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
-    private listeners = [];
+    private listeners: DaemonListener[] = [];
 
     protected started = false;
 
@@ -129,6 +131,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(this.displayWorker);
 
         this.listeners.push(new KeyboardBacklightListener(this));
+        this.listeners.push(new NVIDIAPowerCTRLListener(this));
 
         this.startWorkers();
 
@@ -255,13 +258,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.device = JSON.stringify(dev);
         const aq = this.deviceHasAquaris();
         this.dbusData.deviceHasAquaris = aq;
+        const hideCTGP = this.deviceHideCTGP();
+        this.dbusData.deviceHideCTGP = hideCTGP;
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
         let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
-        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
+        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(this.config.getDefaultCustomProfiles(dev)[0])));
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged = false;
@@ -437,7 +442,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         try {
-            this.customProfiles = this.config.readProfiles();
+            this.customProfiles = this.config.readProfiles(device);
         } catch (err) {
             this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
@@ -493,6 +498,21 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
+    deviceHideCTGP() : boolean {
+        // Hide the cTGP settings for the IBP series, because, albeit nvidia-smi tells otherwise,
+        // they don't offically support it and using it results in undefined behaviour.
+        const dmi = new DMIController('/sys/class/dmi/id');
+        const deviceName = dmi.productSKU.readValueNT();
+        let hideCTGPValue = deviceName === "IBP14I06" ||
+                             deviceName === "IBP1XI07MK1" ||
+                             deviceName === "IBP1XI07MK2" ||
+                             deviceName === "IBP1XI08MK1" ||
+                             deviceName === "IBP14I08MK2" ||
+                             deviceName === "IBP16I08MK2" ||
+                             deviceName === "IBP14A09MK1 / IBP15A09MK1";
+        return hideCTGPValue
+    }
+
     deviceHasAquaris(): boolean {
         const dmi = new DMIController('/sys/class/dmi/id');
         const deviceName = dmi.productSKU.readValueNT();
@@ -545,6 +565,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
         dmiSKUDeviceMap.set('PULSE1403', TUXEDODevice.PULSE1403);
+        dmiSKUDeviceMap.set('PULSE1404', TUXEDODevice.PULSE1404);
         dmiSKUDeviceMap.set('STELLARIS1XI05', TUXEDODevice.STELLARIS1XI05);
         dmiSKUDeviceMap.set('POLARIS1XA05', TUXEDODevice.POLARIS1XA05);
         dmiSKUDeviceMap.set('STELLARIS1XA05', TUXEDODevice.STELLARIS1XA05);
@@ -590,22 +611,28 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     setCurrentProfileByName(profileName: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     setCurrentProfileById(id: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
@@ -784,6 +811,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
         if (nrMissingValues > 0) {
             profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
+        }
+
+        if (profile.nvidiaPowerCTRLProfile === undefined) {
+            profile.nvidiaPowerCTRLProfile = { cTGPOffset: 0 };
+        }
+
+        if (profile.nvidiaPowerCTRLProfile.cTGPOffset === undefined) {
+            profile.nvidiaPowerCTRLProfile.cTGPOffset = 0;
         }
 
         return profile;

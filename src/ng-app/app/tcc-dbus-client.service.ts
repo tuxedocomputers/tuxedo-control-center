@@ -81,6 +81,10 @@ export class TccDBusClientService implements OnDestroy {
 
   public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
   public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
+  public nvidiaPowerCTRLDefaultPowerLimit = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
+
   public isX11 = new BehaviorSubject<boolean>(undefined);
   public device: TUXEDODevice = 0;
   public hasAquaris: boolean = true;

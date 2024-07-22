@@ -43,7 +43,7 @@ import { VendorService } from '../../common/classes/Vendor.service'
 import { amdDGpuDeviceIdString } from "../../common/classes/DeviceIDs";
 import { primeWindow, tccWindow } from './browserWindows';
 import { changeLanguage, getBrightnessMode, setBrightnessMode } from "./translationAndTheme";
-import { hasAquaris } from "./initMain";
+import { hasAquaris, hideCTGP } from "./initMain";
 export const cwd: string = process.cwd();
 //https://github.com/electron/electron/blob/main/docs/api/app.md#appispackaged-readonly
 export let environmentIsProduction = app.isPackaged;
@@ -63,6 +63,17 @@ ipcMain.handle('comp-get-has-aquaris', async (event, arg) => {
             }
           });
     
+});
+
+ipcMain.handle('comp-get-hide-ctgp', async (event, arg) => {
+    return new Promise<boolean>(async (resolve, reject) => {
+        try {
+            resolve( await hideCTGP());
+        } catch (err) {
+          reject(err);
+        }
+      });
+
 });
 
 ipcMain.on("prime-window-close", () => {

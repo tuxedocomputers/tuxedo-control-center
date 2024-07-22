@@ -59,6 +59,10 @@ export class TccDBusData {
     public fansOffAvailable: boolean = false;
     public sensorDataCollectionStatus: boolean = false;
     public d0MetricsUsage: boolean = false;
+    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
+    public nvidiaPowerCTRLAvailable: boolean = false;
+    public deviceHideCTGP = true;
 }
 
 export class TccDBusOptions {
@@ -92,6 +96,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
 
     GetDeviceName() { return this.data.device; }
     DeviceHasAquaris() { return this.data.deviceHasAquaris; }
+    DeviceHideCTGP() { return this.data.deviceHideCTGP; }
     GetDisplayModesJSON() { return this.data.displayModesJSON; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -211,6 +216,18 @@ export class TccDBusInterface extends dbus.interface.Interface {
     SetFnLockStatus(status: boolean) {
         this.fnLock.setFnLockStatus(status);
     }
+
+    GetNVIDIAPowerCTRLDefaultPowerLimit() {
+        return this.data.nvidiaPowerCTRLDefaultPowerLimit;
+    }
+
+    GetNVIDIAPowerCTRLMaxPowerLimit() {
+        return this.data.nvidiaPowerCTRLMaxPowerLimit;
+    }
+
+    GetNVIDIAPowerCTRLAvailable() {
+        return this.data.nvidiaPowerCTRLAvailable;
+    }
 }
 
 TccDBusInterface.configureMembers({
@@ -268,6 +285,9 @@ TccDBusInterface.configureMembers({
         SetSensorDataCollectionStatus: { inSignature: 'b' },
         GetSensorDataCollectionStatus: { outSignature: 'b' },
         SetDGpuD0Metrics: { inSignature: 'b' },
+        GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
+        GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
+        GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

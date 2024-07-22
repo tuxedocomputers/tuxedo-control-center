@@ -324,6 +324,10 @@ export async function hasAquaris() {
     
 }
 
+export async function hideCTGP() {
+    return await tccDBus.getHideCTGP();
+}
+
 /* 
 ########################################################
 ################ Profile Functions #####################

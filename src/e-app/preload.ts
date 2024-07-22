@@ -193,6 +193,7 @@ contextBridge.exposeInMainWorld(
     'comp',
     {
         getHasAquaris: () => ipcRenderer.invoke('comp-get-has-aquaris'),
+        getHideCTGP: () => ipcRenderer.invoke('comp-get-hide-ctgp'),
         // TODO
         getScalingDriverAcpiCpuFreq: () => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq'),
     }

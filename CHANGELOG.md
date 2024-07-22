@@ -1,7 +1,37 @@
 # Changelog
 
+## [2.1.12] - 2024-07-04
+### Fixed
+- TCC GUI with Aquaris does not start when using Aquaris tray menu entry
+
+## [2.1.11] - 2024-06-11
+### Fixed
+- Packaging would in some cases produce hard links
+
+## [2.1.10] - 2024-06-05
+### Added
+- Pulse Gen3 & Gen4 dashboard iGPU support
+- Pulse Gen4 power profile changed to TDP value slider view at TCC Profile edit
+
+### Changed
+- Pulse Gen3 & Gen4 power profile TDP values adjusted according to firmware update
+
+### Fixed
+- Show hwmon based dashboard info even if fan control is not available
+
+## [2.1.9] - 2024-05-25
+### Added
+- NVIDIA cTGP (configurable TGP) adjustable per TCC profile for supported models
+  with this feature enabled
+- Enable Aquaris menu for Stellaris Gen6
+- Support for new PWM fan control
+
+### Fixed
+- Use device specific defaults for new profile
+- Build script touchups
+
 ## [2.1.8] - 2024-04-03
-## Added
+### Added
 - Support for Stellaris Intel Gen6
 - Alternative view of _profile edit => system profile_ displaying
   power limit info instead of profile name, introduced for

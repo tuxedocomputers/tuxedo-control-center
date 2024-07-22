@@ -47,8 +47,16 @@ deviceSystemProfileInfo.set(TUXEDODevice.IBP17G6,  {
  */
 deviceSystemProfileInfo.set(TUXEDODevice.PULSE1403,  { 
     pl:[
-        { limit: 35, odmName: "low-power", systemProfile: SystemProfile.SILENT},
-        { limit: 45, odmName: "balanced", systemProfile: SystemProfile.ENERGYSAVE},
+        { limit: 15, odmName: "low-power", systemProfile: SystemProfile.SILENT},
+        { limit: 35, odmName: "balanced", systemProfile: SystemProfile.ENERGYSAVE},
+        { limit: 54, odmName: "performance", systemProfile: SystemProfile.MAXPERFORMACE}
+    ]
+});
+
+deviceSystemProfileInfo.set(TUXEDODevice.PULSE1404,  { 
+    pl:[
+        { limit: 15, odmName: "low-power", systemProfile: SystemProfile.SILENT},
+        { limit: 35, odmName: "balanced", systemProfile: SystemProfile.ENERGYSAVE},
         { limit: 54, odmName: "performance", systemProfile: SystemProfile.MAXPERFORMACE}
     ]
 });

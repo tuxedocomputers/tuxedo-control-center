@@ -67,5 +67,8 @@ export enum DbusAPIFunctions {
     fanHwmonAvailable = 'fanHwmonAvailable',
     getIsX11 = 'getIsX11',
     getDeviceJSON = 'getDeviceJSON',
+    getNVIDIAPowerCTRLDefaultPowerLimit = 'getNVIDIAPowerCTRLDefaultPowerLimit',
+    getNVIDIAPowerCTRLMaxPowerLimit = 'getNVIDIAPowerCTRLMaxPowerLimit',
+    getNVIDIAPowerCTRLAvailable = 'getNVIDIAPowerCTRLAvailable',
 
 }

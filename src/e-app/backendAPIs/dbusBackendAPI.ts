@@ -61,6 +61,43 @@ class TccDBusController {
         }
     }
 
+
+    async getNVIDIAPowerCTRLDefaultPowerLimit(): Promise<number> {
+        await this.dbusErrorHandling();
+        try {
+            return await this.interface.GetNVIDIAPowerCTRLDefaultPowerLimit();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getHideCTGP(): Promise <boolean> {
+        await this.dbusErrorHandling();
+        try {
+            return await this.interface.DeviceHideCTGP();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getNVIDIAPowerCTRLMaxPowerLimit(): Promise<number> {
+        await this.dbusErrorHandling();
+        try {
+            return await this.interface.GetNVIDIAPowerCTRLMaxPowerLimit();
+        } catch (err) {
+            return undefined;
+        }
+    }
+
+    async getNVIDIAPowerCTRLAvailable(): Promise<boolean> {
+        await this.dbusErrorHandling();
+        try {
+            return await this.interface.GetNVIDIAPowerCTRLAvailable();
+        } catch (err) {
+            return false;
+        }
+    }
+
     async tuxedoWmiAvailable(): Promise<boolean> {
         try {
             return await this.interface.TuxedoWmiAvailable();
@@ -824,6 +861,26 @@ export const dbusHandlers = new Map<string, (...args: any[]) => any>()
     .set(DbusAPIFunctions.getDeviceJSON, async () => { 
         return new Promise<string>((resolve, reject) => {
             resolve(tccDBus.getDeviceJSON());
+        });
+    })
+
+    .set(DbusAPIFunctions.getNVIDIAPowerCTRLDefaultPowerLimit, async () => { 
+        return new Promise<number>((resolve, reject) => {
+            resolve(tccDBus.getNVIDIAPowerCTRLDefaultPowerLimit());
+        });
+    })
+
+
+    .set(DbusAPIFunctions.getNVIDIAPowerCTRLMaxPowerLimit, async () => { 
+        return new Promise<number>((resolve, reject) => {
+            resolve(tccDBus.getNVIDIAPowerCTRLMaxPowerLimit());
+        });
+    })
+
+
+    .set(DbusAPIFunctions.getNVIDIAPowerCTRLAvailable, async () => { 
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getNVIDIAPowerCTRLAvailable());
         });
     });
 

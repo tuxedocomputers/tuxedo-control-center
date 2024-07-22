@@ -107,6 +107,7 @@ export interface CONFIG
 export interface COMP 
 {
     getHasAquaris: () => Promise<boolean>,
+    getHideCTGP: () => Promise<boolean>,
     getScalingDriverAcpiCpuFreq: () => any,
 }
 
