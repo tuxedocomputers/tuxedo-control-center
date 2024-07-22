@@ -305,14 +305,10 @@ async function pkexecWriteCustomProfilesAsync(newProfileList)
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        let data = await execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
-        if (data.error) {
-            resolve(false);
-        }
-        else {
-            resolve(true);
-        }
-        });
+        execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath)
+        .then(() => resolve(true))
+        .catch(() => resolve(false));
+    });
 }
 
 
@@ -446,15 +442,17 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
 // Shutdown timer
 ipcMain.handle('ipc-set-shutdown-time', async (event, selectedHour, selectedMinute) => {
     return new Promise<string>((resolve, reject) => {
-        let results = execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute);
-        resolve(results);
+        execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute)
+        .then((results) => {resolve(results)})
+        .catch(() => {resolve("")});
     });
 });
 
 ipcMain.handle('ipc-cancel-shutdown', async (event) => {
     return new Promise<string>((resolve, reject) => {
-        let results = execCmd("pkexec shutdown -c");
-        resolve(results);
+        execCmd("pkexec shutdown -c")
+        .then((results) => {resolve(results)})
+        .catch(() => {resolve("")});
     });
 });
 
@@ -468,8 +466,9 @@ ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
 
 ipcMain.handle('ipc-issue-reboot', async (event) => {
     return new Promise<string>((resolve, reject) => {
-        let results = execCmd("reboot");
-        resolve(results);
+        execCmd("reboot")
+        .then((results) => {resolve(results)})
+        .catch(() => {resolve("")});
     });
 });
 
