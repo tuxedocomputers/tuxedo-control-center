@@ -35,6 +35,7 @@
     "electron-builder": "USE_HARD_LINKS=false TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/electron-builder.ts",
     "pack": "run-s build && npm run electron-builder",
     "build-release": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/build-release.ts",
+    "check-release": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node ./build-src/check-release.ts",
     "pack-prod": "run-s build-prod && npm run electron-builder",
     "clean": "rm -rf ./dist; rm -rf ./build; rm -rf ./usr",
     "tests": "npm run test-common && npm run test-service-app && npm run test-appstream",
