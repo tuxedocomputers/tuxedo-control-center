@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.13] - UNRELEASED
+## [2.1.13] - 2024-08-05
 ### Fixed
 - Various cases of where, sometimes, power limit sliders would
   prevent actually saving TCC-profile even though it looked like it
