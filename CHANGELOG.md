@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.13] - UNRELEASED
+### Fixed
+- Various cases of where, sometimes, power limit sliders would
+  prevent actually saving TCC-profile even though it looked like it
+  had been saved
+
 ## [2.1.12] - 2024-07-04
 ### Fixed
 - TCC GUI with Aquaris does not start when using Aquaris tray menu entry
