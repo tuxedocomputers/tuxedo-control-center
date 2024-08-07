@@ -34,11 +34,12 @@ import { parseDn } from 'builder-util-runtime';
   providedIn: 'root'
 })
 export class TccDBusClientService implements OnDestroy {
-  private isAvailable: boolean = true;
+  private isAvailable: boolean = true; // todo: may not be required
   private timeout: NodeJS.Timeout;
   private updateInterval = 500;
 
-  public available = new Subject<boolean>();
+  public available = new Subject<boolean>(); // todo: may not be required
+  public dbusAvailable = new Subject<boolean>();
   public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
   public fanHwmonAvailable = new BehaviorSubject<boolean>(true);
   public dataLoaded = false;
@@ -111,8 +112,15 @@ export class TccDBusClientService implements OnDestroy {
     // https://stackoverflow.com/questions/1723287/calling-a-javascript-function-named-in-a-variable
     const data = await window.dbusAPI[updateFunction]();
     try{
-        let parsedData = JSON.parse(data);
-        observable.next(parsedData);
+        if (data) {
+            const parsedData: string = JSON.parse(data);
+            observable.next(parsedData);
+        }
+        // todo: maybe only running data to empty once to avoid logging too much
+        if (!data) {
+            observable.next({});
+            console.log(`tcc-dbus-client: updateJSONObservable: window.dbusAPI did not return data for ${updateFunction}`)
+        }
     }
     catch(err: unknown) {
         console.error("tcc-dbus-client: updateJSONObservable failed =>", err)
@@ -141,10 +149,10 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   private async periodicUpdate() {
-    // TODO, could add check if dbus is even up here, to prevent spam of log files :)
-    // Update all Observables that parse JSON Data
-    if(!window.dbusAPI.dbusAvailable()) {
-        console.error("Communication with TCCD interrupted, dbus not available");
+    const dbusAvailable = await window.dbusAPI.dbusAvailable()
+    this.dbusAvailable.next(dbusAvailable)
+    if(!this.dbusAvailable) {
+        console.error("tcc-dbus-client: periodicUpdate: Communication with TCCD interrupted, dbus not available");
         return;
     }
     for ( const [obs,func] of this.observableUpdateListJSON.entries()) {
@@ -163,6 +171,8 @@ export class TccDBusClientService implements OnDestroy {
     this.hasAquaris = await window.comp.getHasAquaris();
     this.sensorDataCollectionStatus.next(await window.dbusAPI.getSensorDataCollectionStatus())
 
+    // todo: i assume that availability shouldn't change during a session and thus periodic checks result in unnecessary file access
+    // probably better to only check if global settings are accessed and also only once
     this.chargingProfilesAvailable.next(
         await window.dbusAPI.getChargingProfilesAvailable()
     );

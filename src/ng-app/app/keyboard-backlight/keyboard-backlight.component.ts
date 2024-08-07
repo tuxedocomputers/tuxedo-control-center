@@ -105,7 +105,7 @@ export class KeyboardBacklightComponent implements OnInit {
 
         const validColors = this.chosenColorHex?.slice(0, zones) ?? [];
         const defaultColors = Array.from(
-            { length: zones - validColors.length },
+            { length: zones - validColors?.length },
             () => "#ffffff"
         );
         this.chosenColorHex = [...validColors, ...defaultColors].map(
@@ -113,26 +113,32 @@ export class KeyboardBacklightComponent implements OnInit {
         );
     }
 
+    // todo: reduce indents by splitting into more fucntions
     private subscribeKeyboardBacklightStates(): void {
         this.tccdbus.keyboardBacklightStates.subscribe(
             (keyboardBacklightStates) => {
                 const hasChosenColor = keyboardBacklightStates?.length > 0;
                 const hasNoPickerInUsage = !this.isPickerInUsage();
-                const { brightness, red, green, blue } =
-                    keyboardBacklightStates[0];
 
-                if (hasChosenColor && hasNoPickerInUsage) {
-                    this.chosenBrightness = brightness;
-                    this.chosenColorHex = this.createColorHexArray(
-                        keyboardBacklightStates
-                    );
+                // todo: maybe adjusting error handling
+                if (keyboardBacklightStates[0]) {
+                    const { brightness, red, green, blue } =
+                        keyboardBacklightStates[0];
+
+                    if (hasChosenColor && hasNoPickerInUsage) {
+                        this.chosenBrightness = brightness;
+                        this.chosenColorHex = this.createColorHexArray(
+                            keyboardBacklightStates
+                        );
+                    }
+                    else {
+                        this.chosenBrightnessPending = brightness;
+                        this.chosenColorHexPending = this.createColorHexArray(
+                            keyboardBacklightStates
+                        );
+                    }
                 }
-                else {
-                    this.chosenBrightnessPending = brightness;
-                    this.chosenColorHexPending = this.createColorHexArray(
-                        keyboardBacklightStates
-                    );
-                }
+
             }
         );
     }

@@ -155,7 +155,7 @@ export class CompatibilityService {
     if (boardName === "GMxRGxx") {
       return false;
     }*/
-        return this.tccDbus.fanData.value.cpu.temp.data > 1;
+        return this.tccDbus?.fanData?.value?.cpu?.temp?.data > 1;
     }
 
     get compatibilityMessage(): string {
@@ -169,14 +169,14 @@ export class CompatibilityService {
     get hasODMProfileControl(): boolean {
         return (
             this.tccDbus.odmProfilesAvailable.value !== undefined &&
-            this.tccDbus.odmProfilesAvailable.value.length > 0
+            this.tccDbus.odmProfilesAvailable.value?.length > 0
         );
     }
 
     get hasODMPowerLimitControl(): boolean {
         return (
             this.tccDbus.odmPowerLimits.value !== undefined &&
-            this.tccDbus.odmPowerLimits.value.length > 0
+            this.tccDbus.odmPowerLimits.value?.length > 0
         );
     }
 
@@ -185,7 +185,7 @@ export class CompatibilityService {
     }
 
     get tccDbusAvailable() {
-        return this.tccDbus.available;
+        return this.tccDbus.dbusAvailable;
     }
 
     get hasAquaris() {

@@ -211,11 +211,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </content>
                         </mat-grid-tile>
                     </mat-grid-list>
-                    
+
                     <!-- Refresh Rate and Resolution -->
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
-                        [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !displayModes}" 
-                        *ngIf="(displayModes && (getCurrentResolutionRefreshRates().length > 1))">
+                        [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !displayModes}"
+                        *ngIf="(displayModes && (getCurrentResolutionRefreshRates()?.length > 1))">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header i18n="@@cProfMgrDetailsRefRateOnProfileActivationHeader">Set refresh rate on profile
                                 activation</header>
@@ -441,8 +441,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
             </mat-card-content>
         </div>
-                            
-        
+
+
         <!-- Webcam settings -->
         <div class="tcc-options-group"
             [hidden]="!compat.hasWebcamControl"
@@ -493,7 +493,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <hr />
             </div>
             <mat-card-content class="content">
-                <p class="sub-header" *ngIf="hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMTDPLabel" >CPU power limit control</p>                    
+                <p class="sub-header" *ngIf="hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMTDPLabel" >CPU power limit control</p>
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                     *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <!-- ODM Profile -->
@@ -539,7 +539,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-slider
                                             #odmProfilesPowerLimitSlider
                                             [min]="0"
-                                            [max]="deviceSystemProfileInfo.pl.length -1"
+                                            [max]="deviceSystemProfileInfo.pl?.length -1"
                                             [value]="getODMprofilePowerLimitID()"
                                             step="1"
                                             (change)="sliderODMProfileChange(odmProfilesPowerLimitSlider.value)"

@@ -12,7 +12,7 @@ process.on('SIGINT', () => {
     const data = dataList.join('');
     const lines: string[] = data.split('\n');
     let pairs = lines.map(line => line.split(RegExp('[ \t]+')));
-    pairs = pairs.filter(pair => pair.length === 2);
+    pairs = pairs.filter(pair => pair?.length === 2);
     const stringEntries = pairs.map(pair => ({ temp: pair[0].trim(), speed: pair[1].trim() }));
     for (const entry of stringEntries) {
         if (entry.speed === '') { entry.speed = '0'; }

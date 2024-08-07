@@ -149,7 +149,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      */
     public isWritable(): boolean {
         try {
-            fs.accessSync(this.writePath, fs.constants.W_OK);
+            // file access implementation requires an error to be thrown if check resulted in flag mismatch
+            fs.accessSync(this.writePath, fs.constants.W_OK)
             return true;
         } catch (err: unknown) {
             console.error("SysFsPropertyIO: isWritable failed =>", err)
@@ -162,6 +163,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      */
     public isReadable(): boolean {
         try {
+            // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.readPath, fs.constants.R_OK);
             return true;
         } catch (err: unknown) {

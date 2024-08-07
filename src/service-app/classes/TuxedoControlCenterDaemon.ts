@@ -338,14 +338,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         let outputPorts = TuxedoIOAPI.getOutputPorts();
         // Delete additional cards from settings
-        if (this.settings.ycbcr420Workaround.length > outputPorts.length) {
+        if (this.settings.ycbcr420Workaround?.length > outputPorts?.length) {
             this.logLine('Additional ycbcr420Workaround card in settings');
-            this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts.length)
+            this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts?.length)
             missingSetting = true;
         }
-        for (let card = 0; card < outputPorts.length; card++) {
+        for (let card = 0; card < outputPorts?.length; card++) {
             // Add card to settings if missing
-            if (this.settings.ycbcr420Workaround.length <= card) {
+            if (this.settings.ycbcr420Workaround?.length <= card) {
                 this.logLine('Missing ycbcr420Workaround card in settings');
                 this.settings.ycbcr420Workaround[card] = {};
                 missingSetting = true;
@@ -430,6 +430,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 throw Error('Missing setting');
             }
         } catch (err: unknown) {
+            // todo: doing proper variable checks instead of expecting access errors
             try {
                 if (this.settings === undefined) {
                     this.settings = this.config.getDefaultSettings(device);
@@ -670,6 +671,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.activeProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(this.getCurrentProfile()));
     }
 
+    // todo: function too long, could be splitted with cpu, display, webcam, fan, odm subfunctions
     fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
 
@@ -684,28 +686,49 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
         if (profile.cpu.onlineCores === undefined) {
-            profile.cpu.onlineCores = cpu.cores.length;
+            profile.cpu.onlineCores = cpu.cores?.length;
         }
 
         if (profile.cpu.useMaxPerfGov === undefined) {
             profile.cpu.useMaxPerfGov = false;
         }
 
-        const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        const minFreq: number = cpu.cores[0].cpuinfoMinFreq.readValueNT();
         if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
             profile.cpu.scalingMinFrequency = minFreq;
         }
 
-        const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
-        const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
-        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
-        const boost = cpu.boost.readValueNT();
+        const scalingAvailable: boolean = cpu.cores[0].scalingAvailableFrequencies.isAvailable()
+        let scalingAvailableFrequencies: number[]
+        if (scalingAvailable) {
+            scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
+        }
+
+        const scalingDriverAvailable: boolean = cpu.cores[0].scalingDriver.isAvailable()
+        let scalingdriver: string
+        if (scalingDriverAvailable) {
+            scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
+        }
+
+        const cpuinfoMaxFreqAvailable: boolean = cpu.cores[0].cpuinfoMaxFreq.isAvailable()
+        let cpuinfoMaxFreq: number
+        if (cpuinfoMaxFreqAvailable) {
+            cpuinfoMaxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT()
+        }
+        let maxFreq: number = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuinfoMaxFreq;
+
+        const boostAvailable: boolean = cpu.boost.isAvailable()
+        let boost: boolean
+        if (boostAvailable) {
+            boost = cpu.boost.readValueNT();
+        }
         if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;
         }
+
         const reducedAvailableFreq = boost === undefined ?
                                          cpu.cores[0].getReducedAvailableFreqNT() :
-                                         cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+                                         cpuinfoMaxFreq;
         // Handle defaults
         if (profile.cpu.scalingMaxFrequency === undefined) {
             profile.cpu.scalingMaxFrequency = maxFreq;
@@ -809,7 +832,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.odmPowerLimits = { tdpValues: [] };
         }
 
-        const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
+        const nrMissingValues = tdpInfo?.length - profile.odmPowerLimits.tdpValues?.length;
         if (nrMissingValues > 0) {
             profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
         }
@@ -870,7 +893,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      */
     private getPathArgument(optionString: string): string {
         const newConfigIndex = process.argv.indexOf(optionString);
-        const lastIndex = (process.argv.length - 1);
+        const lastIndex = (process.argv?.length - 1);
         // If option is set and there is an argument after the option
         if (newConfigIndex !== -1 && ((newConfigIndex + 1) <= lastIndex)) {
             const newConfigPath = process.argv[newConfigIndex + 1];

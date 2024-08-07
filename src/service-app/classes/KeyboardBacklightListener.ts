@@ -56,7 +56,7 @@ export class KeyboardBacklightListener extends DaemonListener {
 
         if (this.keyboardBacklightCapabilities.zones !== undefined) {
             // Init state in settings if not yet done or anything is wonky
-            if (this.keyboardBacklightCapabilities.zones != this.tccd.settings.keyboardBacklightStates.length) {
+            if (this.keyboardBacklightCapabilities.zones != this.tccd.settings.keyboardBacklightStates?.length) {
                 this.tccd.settings.keyboardBacklightStates = []
                 for (let i: number = 0; i < this.keyboardBacklightCapabilities.zones ; ++i) {
                     this.tccd.settings.keyboardBacklightStates[i] = {
@@ -112,7 +112,7 @@ export class KeyboardBacklightListener extends DaemonListener {
 
     private async initSysFSListener() {
         if (this.keyboardBacklightCapabilities.maxRed != undefined) {
-            for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+            for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     (function(i: number): void {
                         fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
@@ -177,7 +177,7 @@ export class KeyboardBacklightListener extends DaemonListener {
         else {
             this.updateLEDSRGBZonesForPerKeyKBL();
 
-            if (this.ledsRGBZones.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            if (this.ledsRGBZones?.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
                 console.log("Detected RGB zone keyboard backlight");
                 this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
@@ -192,17 +192,17 @@ export class KeyboardBacklightListener extends DaemonListener {
                     this.keyboardBacklightCapabilities.zones++;
                 }
             }
-            else if (this.ledsRGBZones.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            else if (this.ledsRGBZones?.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
                 console.log("Detected per-key RGB keyboard backlight");
                 this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
                 this.keyboardBacklightCapabilities.maxBlue = 0xff;
-                this.keyboardBacklightCapabilities.zones = this.ledsRGBZones.length;
+                this.keyboardBacklightCapabilities.zones = this.ledsRGBZones?.length;
             }
             else {
                 console.log("Detected no keyboard backlight");
-                this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(undefined);
+                this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = "{}"
                 return;
             }
         }
@@ -210,13 +210,19 @@ export class KeyboardBacklightListener extends DaemonListener {
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
+    // todo: contains duplicate code, remove indents and shorten function
     private updateLEDSRGBZonesForPerKeyKBL(): void {
         let ledsPerKey = [];
-        let iteKeyboardDevices: Array<string>;
+        let iteKeyboardDevices: Array<string> = [];
 
-        iteKeyboardDevices =
-            getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
-                .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
+        const keyboardItePath = "/sys/bus/hid/drivers/tuxedo-keyboard-ite"
+        const keyboardIteAvailable: boolean = fs.existsSync(keyboardItePath)
+        if (keyboardIteAvailable) {
+            iteKeyboardDevices =
+                getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
+                    .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
+        }
+
         for (const iteKeyboardDevice of iteKeyboardDevices) {
             let path = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
@@ -228,9 +234,14 @@ export class KeyboardBacklightListener extends DaemonListener {
             }
         }
 
-        iteKeyboardDevices =
-            getSymbolicLinks("/sys/bus/hid/drivers/ite_829x")
-                .filter(name => fileOK("/sys/bus/hid/drivers/ite_829x/" + name + "/leds"));
+        const keyboardIte829xPath = "/sys/bus/hid/drivers/ite_829x"
+        const keyboardIte829Available: boolean = fs.existsSync(keyboardIte829xPath)
+        if (keyboardIte829Available) {
+            iteKeyboardDevices =
+                getSymbolicLinks("/sys/bus/hid/drivers/ite_829x")
+                    .filter(name => fileOK("/sys/bus/hid/drivers/ite_829x/" + name + "/leds"));
+        }
+
         for (const iteKeyboardDevice of iteKeyboardDevices) {
             let path = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
@@ -242,9 +253,14 @@ export class KeyboardBacklightListener extends DaemonListener {
             }
         }
 
-        iteKeyboardDevices =
-            getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
-                .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
+        const keyboardIte8291xPath = "/sys/bus/hid/drivers/ite_8291"
+        const keyboardIte8291Available: boolean = fs.existsSync(keyboardIte8291xPath)
+        if (keyboardIte8291Available) {
+            iteKeyboardDevices =
+                getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
+                    .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
+        }
+
         for (const iteKeyboardDevice of iteKeyboardDevices) {
             let path = "/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
@@ -256,9 +272,17 @@ export class KeyboardBacklightListener extends DaemonListener {
             }
         }
 
-        iteKeyboardDevices =
-            getSymbolicLinks("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight")
-                .filter(name => fileOK("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + name + "/leds"));
+        const keyboardNb04Path = "/sys/bus/hid/drivers/ite_8291"
+        const keyboardNb04SymbolicPath = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/"
+        const keyboardNb04Available: boolean = fs.existsSync(keyboardNb04Path)
+        const keyboardNb04SymbolicAvailable: boolean = fs.existsSync(keyboardNb04SymbolicPath)
+
+        if (keyboardNb04Available && keyboardNb04SymbolicAvailable) {
+            iteKeyboardDevices =
+                getSymbolicLinks("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight")
+                    .filter(name => fileOK("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + name + "/leds"));
+        }
+
         for (const iteKeyboardDevice of iteKeyboardDevices) {
             let path = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
@@ -270,7 +294,7 @@ export class KeyboardBacklightListener extends DaemonListener {
             }
         }
 
-        if (ledsPerKey.length > 0) {
+        if (ledsPerKey?.length > 0) {
             this.ledsRGBZones = ledsPerKey;
         }
     }
@@ -304,10 +328,10 @@ export class KeyboardBacklightListener extends DaemonListener {
                 }
             }
 
-            if (this.ledsRGBZones.length > 0) {
+            if (this.ledsRGBZones?.length > 0) {
                 this.setBufferInput(this.ledsRGBZones[0], true)
             }
-            for (let i: number = 0; i < this.ledsRGBZones.length ; ++i) {
+            for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
                     await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
                                                     keyboardBacklightStatesNew[i].red.toString() + " " +
@@ -315,7 +339,7 @@ export class KeyboardBacklightListener extends DaemonListener {
                                                     keyboardBacklightStatesNew[i].blue.toString());
                 }
             }
-            if (this.ledsRGBZones.length > 0) {
+            if (this.ledsRGBZones?.length > 0) {
                 this.setBufferInput(this.ledsRGBZones[0], false);
             }
         }

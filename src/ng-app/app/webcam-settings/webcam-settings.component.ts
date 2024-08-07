@@ -24,6 +24,7 @@ import { Mutex } from "async-mutex";
 import { environment } from "../../environments/environment";
 import { MatTab } from "@angular/material/tabs";
 
+// todo: move dialog functions into a seperate file
 @Component({
     selector: "app-webcam-settings",
     templateUrl: "./webcam-settings.component.html",
@@ -113,7 +114,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.mutex.runExclusive(async () => {
             let webcamData = await this.setWebcamDeviceInformation();
             this.webcamDropdownData = webcamData;
-            if (webcamData.length == 0) {
+            if (webcamData?.length == 0) {
                 this.stopWebcam();
                 this.webcamInitComplete = false;
                 this.webcamGuard.setLoadingStatus(false);
@@ -192,7 +193,7 @@ export class WebcamSettingsComponent implements OnInit {
         return new Promise<WebcamDevice[]>(async (resolve) => {
             let dropdownData: WebcamDevice[] = [];
             let webcamPaths = await this.getWebcamPaths();
-            if (devices.length !== 0 && webcamPaths != null) {
+            if (devices?.length !== 0 && webcamPaths != null) {
                 for (const [webcamPath, webcamId] of Object.entries(
                     webcamPaths
                 )) {
@@ -272,7 +273,7 @@ export class WebcamSettingsComponent implements OnInit {
                 webcamPreset.active == true
         );
 
-        if (filtered.length > 0) {
+        if (filtered?.length > 0) {
             this.selectedPreset = filtered[0];
             preset = filtered[0].webcamSettings;
         }
@@ -688,7 +689,7 @@ export class WebcamSettingsComponent implements OnInit {
         let unresolvedKeys = configKeys
             .filter((item) => formGroupKeys.indexOf(item) < 0)
             .filter((item) => renamedKeys.indexOf(item) < 0);
-        if (unresolvedKeys.length > 0) {
+        if (unresolvedKeys?.length > 0) {
             unknown = true;
         }
 
@@ -1089,7 +1090,7 @@ export class WebcamSettingsComponent implements OnInit {
                 (webcamPreset) => webcamPreset.active == true
             );
 
-            if (activePresets.length > 0) {
+            if (activePresets?.length > 0) {
                 this.activePreset = this.selectedPreset = activePresets[0];
                 await this.applyPreset(
                     activePresets[0].webcamSettings,
@@ -1097,7 +1098,7 @@ export class WebcamSettingsComponent implements OnInit {
                     true
                 );
             }
-            if (activePresets.length == 0) {
+            if (activePresets?.length == 0) {
                 this.setDefaultPreset(true);
                 this.activePreset = this.defaultPreset;
                 await this.applyPreset(this.defaultSettings, false, true);

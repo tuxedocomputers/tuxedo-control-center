@@ -16,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+import { execCommandSync } from "./Utils";
+
+
 const dbus = require('dbus-next');
 
 export type OnChangedFunction = (value: number) => void;
@@ -35,34 +39,50 @@ export class DBusDisplayBrightnessGnome {
     private eventEmitter: NodeJS.EventEmitter;
 
     constructor(private bus: any) {
-        this.getInterface().then((iface) => {
-            if (iface === undefined) { return; }
-            this.eventEmitter = iface.on('PropertiesChanged', (interfaceString, changed, invalidated) => {
-                const changedValueExists = changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
-                const interfaceMatch = interfaceString === this.propertyInterface;
-                const callbackDefined = this.customOnPropertiesChanged !== undefined;
-                if (interfaceMatch && changedValueExists && callbackDefined) {
-                    this.customOnPropertiesChanged(changed.Brightness.value);
-                }
+        if (this.isGnome()) {
+            this.getInterface().then((iface) => {
+                if (iface === undefined) { return; }
+                this.eventEmitter = iface.on('PropertiesChanged', (interfaceString, changed, invalidated) => {
+                    const changedValueExists = changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
+                    const interfaceMatch = interfaceString === this.propertyInterface;
+                    const callbackDefined = this.customOnPropertiesChanged !== undefined;
+                    if (interfaceMatch && changedValueExists && callbackDefined) {
+                        this.customOnPropertiesChanged(changed.Brightness.value);
+                    }
+                });
+            }).catch((err: unknown): void => {
+                console.error("DBusDisplayBrightnessGnome: constructor failed =>", err)
             });
-        }).catch((err: unknown): void => {
-            console.error("DBusDisplayBrightnessGnome: constructor failed =>", err)
-        });
+        }
     }
 
+    // todo: shouldn't be a function, but a variable instead
     public getDescriptiveString(): string {
         return 'org.gnome.SettingsDaemon';
+    }
+
+    private isGnome() {
+        const xdgDesktop = execCommandSync("echo $XDG_CURRENT_DESKTOP")
+        if (xdgDesktop.includes("GNOME")) {
+            return true
+        }
+        return false
     }
 
     public async isAvailable(): Promise<boolean> {
         return new Promise<boolean>(async resolve => {
             try {
-                const iface = await this.getInterface();
-                if (iface === undefined) {
-                    resolve(false);
-                } else {
-                    resolve(true);
+                const isGnome = this.isGnome()
+
+                if (isGnome) {
+                    const iface = await this.getInterface();
+                    if (iface === undefined) {
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
                 }
+                resolve(false);
             } catch (err: unknown) {
                 console.error("DBusDisplayBrightnessGnome: isAvailable failed =>", err)
                 resolve(false);

@@ -21,7 +21,7 @@ import { CpuController } from '../../common/classes/CpuController';
 
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ITccProfile } from '../../common/models/TccProfile';
-import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { LogicalCpuController, ScalingDriver } from '../../common/classes/LogicalCpuController';
 
 export class CpuWorker extends DaemonWorker {
     private readonly basePath = '/sys/devices/system/cpu';
@@ -203,6 +203,7 @@ export class CpuWorker extends DaemonWorker {
         }
     }
 
+    // todo: function too long
     private validateCpuFreq(): boolean {
         const profile = this.activeProfile;
 
@@ -218,13 +219,13 @@ export class CpuWorker extends DaemonWorker {
 
         // Check number of online cores
         this.cpuCtrl.getAvailableLogicalCores();
-        if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores.length !== 0) {
+        if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
             const currentOnlineCores = this.cpuCtrl.online.readValue();
             let onlineCoresProfile = profile.cpu.onlineCores;
-            if (onlineCoresProfile === undefined) { onlineCoresProfile = this.cpuCtrl.cores.length; }
-            if (currentOnlineCores.length !== onlineCoresProfile) {
+            if (onlineCoresProfile === undefined) { onlineCoresProfile = this.cpuCtrl.cores?.length; }
+            if (currentOnlineCores?.length !== onlineCoresProfile) {
                 cpuFreqValidConfig = false;
-                console.error(`CpuWorker: onlineCores not as expected ${currentOnlineCores.length} instead of ${onlineCoresProfile}`)
+                console.error(`CpuWorker: onlineCores not as expected ${currentOnlineCores?.length} instead of ${onlineCoresProfile}`)
             }
         }
 
@@ -238,9 +239,12 @@ export class CpuWorker extends DaemonWorker {
 
             // Also Skip min/max freq validation on intel_pstate meanwhile bugged
             // ie scaling_max_freq readout does not stay at cpuinfo_max_freq
-            if (profile.cpu.noTurbo !== true && this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate') { // Only attempt to enforce frequencies if noTurbo isn't set
+            if (profile.cpu.noTurbo !== true && this.cpuCtrl.cores[0].scalingDriver.isAvailable() && this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate') {
                 scalingDriver = core.scalingDriver.readValueNT();
-                const coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+                let coreAvailableFrequencies
+                if (core.scalingAvailableFrequencies.isAvailable()) {
+                    coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+                }
                 const coreMinFreq = core.cpuinfoMinFreq.readValue();
                 const coreMaxFreq = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
@@ -317,7 +321,7 @@ export class CpuWorker extends DaemonWorker {
             const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
             const availableFreqs = this.cpuCtrl.cores[0].scalingAvailableFrequencies.readValueNT();
             let maxSelectableFreq;
-            if (availableFreqs !== undefined && availableFreqs.length > 0) {
+            if (availableFreqs !== undefined && availableFreqs?.length > 0) {
                 maxSelectableFreq = Math.max(...availableFreqs);
             }
 

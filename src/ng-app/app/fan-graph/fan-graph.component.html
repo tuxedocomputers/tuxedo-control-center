@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div *ngIf="fantableDatasets.length > 0" style="display: block; height: 200px">
+<div *ngIf="fantableDatasets?.length > 0" style="display: block; height: 200px">
     <canvas baseChart class="tcc-charts" [chartType]="graphType" [datasets]="fantableDatasets" [labels]="tempsLabels"
         [colors]="graphColors" [options]="graphOptions">
     </canvas>

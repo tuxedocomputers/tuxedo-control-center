@@ -26,6 +26,7 @@ import { FnLockController } from '../../common/classes/FnLockController';
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public dbusAvailable: boolean = false;
     public device: string = "";
     public deviceHasAquaris = false;
     public displayModesJSON: string = "{}";
@@ -107,14 +108,14 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
 
-    GetDGpuInfoValuesJSON() { 
+    GetDGpuInfoValuesJSON() {
         this.resetDataCollectionTimeout();
-        return this.data.dGpuInfoValuesJSON; 
+        return this.data.dGpuInfoValuesJSON;
     }
 
-    GetIGpuInfoValuesJSON() { 
+    GetIGpuInfoValuesJSON() {
         this.resetDataCollectionTimeout();
-        return this.data.iGpuInfoValuesJSON; 
+        return this.data.iGpuInfoValuesJSON;
     }
 
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
@@ -123,7 +124,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetSensorDataCollectionStatus() {
         return this.data.sensorDataCollectionStatus;
     }
-    
+
     SetDGpuD0Metrics(status: boolean) { this.data.d0MetricsUsage = status; }
 
     ConsumeModeReapplyPending() {
@@ -228,12 +229,17 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetNVIDIAPowerCTRLAvailable() {
         return this.data.nvidiaPowerCTRLAvailable;
     }
+
+    dbusAvailable(): boolean {
+        return this.data.dbusAvailable
+    }
 }
 
 TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        dbusAvailable: {outSignature: 'b'},
         GetDeviceName: {outSignature: 's'},
         DeviceHasAquaris: { outSignature: 'b'},
         GetDisplayModesJSON: {outSignature: 's'},

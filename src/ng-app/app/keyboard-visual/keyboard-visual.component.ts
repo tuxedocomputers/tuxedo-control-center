@@ -69,8 +69,15 @@ export class KeyboardVisualComponent implements OnInit {
             } else {
                 el = document.getElementById("Svg1+3Zones");
             }
-            const rect = el.getBoundingClientRect();
-            this.divHeight = rect.height;
+
+            if (el) {
+                const rect: DOMRect = el.getBoundingClientRect();
+                this.divHeight = rect.height;
+                return
+            }
+            console.error("keyboard-visual: updateHeight: failed to get document element")
+            // todo: further error handling, if code reaches here it means that tuxed-drivers is properly
+            // installed but there is no backlight hardware to control
         }
     }
 

@@ -152,7 +152,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined)
         tomteInformation.tomteMode = givenobject.mode;
         tomteInformation.modules = [];
         tomteInformation.rebootRequired = givenobject.restart === "yes";
-        for (let i = 0; i < givenobject.modules.length; i++)
+        for (let i = 0; i < givenobject.modules?.length; i++)
         {
             let module = givenobject.modules[i];
             tomteInformation.modules.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});

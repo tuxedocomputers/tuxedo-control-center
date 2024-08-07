@@ -131,16 +131,16 @@ export class ODMProfileWorker extends DaemonWorker {
             this.tuxedoPlatformProfileChoices.isAvailable()
         ) {
             const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
-            if (availableProfiles !== undefined && availableProfiles.length > 0) {
-                return availableProfiles[availableProfiles.length-1];
+            if (availableProfiles !== undefined && availableProfiles?.length > 0) {
+                return availableProfiles[availableProfiles?.length-1];
             }
         } else if (
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
             const availableProfiles = this.platformProfileChoices.readValueNT();
-            if (availableProfiles !== undefined && availableProfiles.length > 0) {
-                return availableProfiles[availableProfiles.length-1];
+            if (availableProfiles !== undefined && availableProfiles?.length > 0) {
+                return availableProfiles[availableProfiles?.length-1];
             }
         } else {
             const defaultODMProfileName: ObjWrapper<string> = { value: '' };

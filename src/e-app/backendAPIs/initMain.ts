@@ -186,22 +186,26 @@ async function initMain() {
     if (!noTccdVersionCheck) {
         // Regularly check if running tccd version is different to running gui version
         const tccdVersionCheckInterval = 5000;
+        // todo: refactor, too many indents
         setInterval(async () => {
-            const tccdVersion = await tccDBus.tccdVersion();
-            if (tccdVersion.length > 0 && tccdVersion !== app.getVersion()) {
-                console.log('Other tccd version detected, restarting..');
-                process.on('exit', function () {
-                    child_process.spawn(
-                        process.argv[0],
-                        process.argv.slice(1).concat(['--tray']),
-                        {
-                            cwd: process.cwd(),
-                            detached : true,
-                            stdio: "inherit"
-                        }
-                    );
-                });
-                process.exit();
+            const dbusAvailable = await tccDBus.dbusAvailable()
+            if (dbusAvailable) {
+                const tccdVersion = await tccDBus.tccdVersion();
+                if (tccdVersion?.length > 0 && tccdVersion !== app.getVersion()) {
+                    console.log('Other tccd version detected, restarting..');
+                    process.on('exit', function () {
+                        child_process.spawn(
+                            process.argv[0],
+                            process.argv.slice(1).concat(['--tray']),
+                            {
+                                cwd: process.cwd(),
+                                detached : true,
+                                stdio: "inherit"
+                            }
+                        );
+                    });
+                    process.exit();
+                }
             }
         }, tccdVersionCheckInterval);
     }
@@ -302,10 +306,16 @@ export async function updateTrayProfiles() {
 
         // Replace default profile names/descriptions with translations
         for (const profile of updatedProfiles) {
-            const profileTranslationId = profileIdToI18nId.get(profile.id);
-            if (profileTranslationId !== undefined) {
-                profile.name = translation.idToString(profileTranslationId.name);
-                profile.description = translation.idToString(profileTranslationId.description);
+            const profileId: string = profile?.id
+            if (profileId) {
+                const profileTranslationId = profileIdToI18nId.get(profile?.id);
+                if (profileTranslationId !== undefined) {
+                    profile.name = translation.idToString(profileTranslationId.name);
+                    profile.description = translation.idToString(profileTranslationId.description);
+                }
+            }
+            if (!profileId) {
+                console.log(`initMain: updateTrayProfiles: profile value not defined, found "${profileId}" instead`)
             }
         }
 

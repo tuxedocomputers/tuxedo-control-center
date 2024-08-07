@@ -102,7 +102,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(private cdref: ChangeDetectorRef,
         private config: ConfigService,
         ) {}
-                
+
     ngOnInit() {}
 
     ngAfterViewInit(): void {
@@ -125,7 +125,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
             gpuData.push(this.applyParameters(tableEntry));
         }
 
-        // const nullDupes = data => data.map((x, i) => (!this.interestingTemps.includes(i) && data[i - 1] === x && ((i + 1) < data.length && data[i + 1] === x)) ? null : x);
+        // const nullDupes = data => data.map((x, i) => (!this.interestingTemps.includes(i) && data[i - 1] === x && ((i + 1) < data?.length && data[i + 1] === x)) ? null : x);
         this.fantableDatasets[0].data = cpuData; //nullDupes(cpuData);
         this.fantableDatasets[1].data = gpuData; //nullDupes(gpuData);
     }

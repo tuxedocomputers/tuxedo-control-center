@@ -42,7 +42,7 @@ export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
     }
 
     convertTypeToString(value: string[]): string {
-        if (value.length === 0) {
+        if (value?.length === 0) {
             return '';
         } else {
             value = value.map((element) => element.trim());
@@ -107,11 +107,11 @@ export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
         const arrayRanges = value.split(this.listSeparator);
         arrayRanges.forEach((strRange) => {
             const rangeSplit = strRange.split('-');
-            if (rangeSplit.length === 1) {
+            if (rangeSplit?.length === 1) {
                 const nr = Number.parseInt(rangeSplit[0], 10);
                 if (Number.isNaN(nr)) { return; }
                 resultArray.push(nr);
-            } else if (rangeSplit.length === 2) {
+            } else if (rangeSplit?.length === 2) {
                 const startNr = Number.parseInt(rangeSplit[0], 10);
                 const endNr = Number.parseInt(rangeSplit[1], 10);
                 if (Number.isNaN(startNr) || Number.isNaN(endNr)) { return; }
@@ -124,21 +124,21 @@ export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
     }
 
     convertTypeToString(value: number[]): string {
-        if (value.length === 0) { return ''; }
+        if (value?.length === 0) { return ''; }
 
         const resultArray: string[] = [];
         value.sort((a, b) => a - b );
 
         let currentStart = value[0];
 
-        for (let i = 0; i < value.length; ++i) {
-            if (i === value.length - 1 || (value[i + 1] - value[i]) > 1) {
+        for (let i = 0; i < value?.length; ++i) {
+            if (i === value?.length - 1 || (value[i + 1] - value[i]) > 1) {
                 if (value[i] === currentStart) {
                     resultArray.push(currentStart.toString());
                 } else {
                     resultArray.push(currentStart + '-' + value[i]);
                 }
-                if (i !== value.length - 1) {
+                if (i !== value?.length - 1) {
                     currentStart = value[i + 1];
                 }
             }
@@ -170,7 +170,7 @@ export class SysFsPropertyNumListExplicit extends SysFsPropertyIO<number[]> {
     }
 
     convertTypeToString(value: number[]): string {
-        if (value.length === 0) {
+        if (value?.length === 0) {
             return '';
         } else {
             return value.join(this.listSeparator);

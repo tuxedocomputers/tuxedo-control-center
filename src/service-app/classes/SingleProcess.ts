@@ -92,9 +92,13 @@ export class SingleProcess {
      */
     protected readPid(): number {
         try {
-            const strPid = fs.readFileSync(this.pidPath);
-            const intPid = parseInt(strPid.toString(), 10);
-            return intPid;
+            const available: boolean = fs.existsSync(this.pidPath)
+            if (available) {
+                const strPid = fs.readFileSync(this.pidPath);
+                const intPid = parseInt(strPid.toString(), 10);
+                return intPid;
+            }
+            return Number.NaN;
         } catch (err: unknown) {
             console.error("SingleProcess: readPid failed =>", err)
             return Number.NaN;
@@ -106,6 +110,7 @@ export class SingleProcess {
      *
      * @returns True if successful, false if not or if the file does not exist
      */
+    /*
     private removePid(): boolean {
         try {
             fs.unlinkSync(this.pidPath);
@@ -115,6 +120,7 @@ export class SingleProcess {
             return false;
         }
     }
+    */
 
     /**
      * Check if process is running
@@ -128,9 +134,8 @@ export class SingleProcess {
         if (isNaN(intPid)) {
             isRunning = false;
         } else {
-            // There is a number in the file, now check if it's really in use
             try {
-                process.kill(intPid, 0);
+                return fs.existsSync(`/proc/${intPid}`)
             } catch (err: unknown) {
                 console.error("SingleProcess: isRunning failed =>", err)
                 isRunning = false;

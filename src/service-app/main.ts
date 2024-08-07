@@ -25,4 +25,4 @@ import { TuxedoControlCenterDaemon } from './classes/TuxedoControlCenterDaemon';
 const tccd = new TuxedoControlCenterDaemon();
 
 // Start program
-tccd.main().catch((err) => tccd.catchError(err));
+tccd.main().catch((err: unknown): void => console.error("main failed => ", err));

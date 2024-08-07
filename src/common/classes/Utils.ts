@@ -73,26 +73,39 @@ export function findClosestValue(value: number, array: number[]): number {
     return closest;
 }
 
+// todo: check if fileOK/fileOKAsync can be put into init to avoid periodic file access
+// if errors appear after file was indeed ok but afterwards isn't, it needs error handling instead of checking status every time
 export function fileOK(path: string): boolean {
     try {
-        fs.accessSync(
-            path,
-            fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
-        );
-        return true;
+        const exists: boolean = fs.existsSync(path)
+
+        if (exists) {
+            fs.accessSync(
+                path,
+                fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
+            );
+            return true;
+        }
+        return false
     } catch (err: unknown) {
         console.error("Utils: fileOK failed =>", err)
         return false;
     }
 }
 
+// async file access implementation requires an error to be thrown, thus no error logging for this special case
 export async function fileOKAsync(path: string): Promise<boolean> {
     try {
-        await fs.promises.access(
-            path,
-            fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
-        );
-        return true;
+        const exists: boolean = await fs.promises.stat(path)
+            .then((): boolean => true)
+            .catch((): boolean => false);
+
+        if (exists) {
+            return await fs.promises.access(path, fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK)
+                .then((): boolean => true)
+                .catch((): boolean => false)
+        }
+        return false
     } catch (err: unknown) {
         console.error("Utils: fileOKAsync failed =>", err)
         return false;
@@ -127,5 +140,5 @@ export function execCommandSync(command: string): string {
 }
 
 export function countLines(input: string): number {
-    return input.split("\n").filter((str) => str !== "").length;
+    return input.split("\n").filter((str) => str !== "")?.length;
 }

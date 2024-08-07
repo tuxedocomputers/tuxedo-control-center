@@ -105,9 +105,14 @@ export class ChargingWorker extends DaemonWorker {
         }
     }
 
+    // todo: function is called available but reads the value
     public getChargingProfilesAvailable() {
         try {
-            return this.chargingProfile.chargingProfilesAvailable.readValue();
+            const available: boolean = this.chargingProfile.chargingProfilesAvailable.isAvailable();
+            if (available) {
+                return this.chargingProfile.chargingProfilesAvailable.readValue();
+            }
+            return [];
         } catch (err: unknown) {
             console.error("ChargingWorker: getChargingProfilesAvailable failed =>", err)
             return [];
@@ -145,9 +150,15 @@ export class ChargingWorker extends DaemonWorker {
         }
     }
 
+    // todo: function called available but reads value
+    // todo: gets called inside global settings menu periodically, status shouldn't change often
     public getChargingPrioritiesAvailable() {
         try {
-            return this.chargingPriority.chargingPriosAvailable.readValue();
+            const chargingPriosAvailable: boolean = this.chargingPriority.chargingPriosAvailable.isAvailable()
+            if (chargingPriosAvailable) {
+                return this.chargingPriority.chargingPriosAvailable.readValue();
+            }
+            return []
         } catch (err: unknown) {
             console.error("ChargingWorker: getChargingPrioritiesAvailable failed =>", err)
             return [];
@@ -191,10 +202,15 @@ export class ChargingWorker extends DaemonWorker {
         }
     }
 
+    // todo: maybe move isAvailable outside of this function, availability should be checked prior to access
     public async getChargeStartThreshold() {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
-            return await bat.chargeControlStartThreshold.readValueA();
+            const available: boolean = bat.chargeControlStartThreshold.isAvailable()
+            if (available) {
+                return await bat.chargeControlStartThreshold.readValueA();
+            }
+            return -1
         } catch (err: unknown) {
             return undefined;
         }
@@ -212,10 +228,15 @@ export class ChargingWorker extends DaemonWorker {
         return true;
     }
 
+    // todo: maybe move isAvailable outside of this function, availability should be checked prior to access
     public async getChargeEndThreshold() {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
-            return await bat.chargeControlEndThreshold.readValueA();
+            const available: boolean = bat.chargeControlEndThreshold.isAvailable()
+            if (available) {
+                return await bat.chargeControlEndThreshold.readValueA();
+            }
+            return -1
         } catch (err: unknown) {
             console.error("ChargingWorker: getChargeEndThreshold failed =>", err)
             undefined;
@@ -234,10 +255,15 @@ export class ChargingWorker extends DaemonWorker {
         return true;
     }
 
+    // todo: maybe move isAvailable outside of this function
     public async getChargeType() {
         const bat = await PowerSupplyController.getFirstBattery();
         try {
-            return (await bat.chargeType.readValueA()).trim();
+            const avaialble: boolean = bat.chargeType.isAvailable()
+            if (avaialble) {
+                return (await bat.chargeType.readValueA()).trim();
+            }
+            return ""
         } catch (err: unknown) {
             console.error("ChargingWorker: getChargeType failed =>", err)
             return ChargeType.Unknown.toString();

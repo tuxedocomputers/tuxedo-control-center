@@ -158,7 +158,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild(FanSliderComponent)
     private sliderComponent: FanSliderComponent;
-    
+
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
@@ -208,7 +208,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             // Update ODM profile name map
             this.odmProfileToName.clear();
             for (const profileName of this.odmProfileNames) {
-                if (profileName.length > 0) {
+                if (profileName?.length > 0) {
                     if (this.compat.uwLEDOnlyMode) {
                         this.odmProfileToName.set(profileName, odmProfileLEDNames.get(profileName));
                     } else {
@@ -289,7 +289,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public getPowerLimitToName(name: string) {
-        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl?.length; i++)
         {
             if (this.deviceSystemProfileInfo.pl[i].odmName === name)
             {
@@ -310,7 +310,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         else  {
             profileName = profile.odmProfile.name;
         }
-        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl?.length; i++)
         {
             if (this.deviceSystemProfileInfo.pl[i].odmName === profileName)
             {
@@ -331,7 +331,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         let displayFormGroupValue = this.profileFormGroup.get("display").value;
 
         if (displayFormGroupValue.refreshRate === -1) {
-            const refreshRate = this.displayModes.activeMode.refreshRates[0];
+            // todo: adding variable checks to avoid access error
+            const refreshRate = this.displayModes.activeMode?.refreshRates[0];
 
             displayFormGroupValue.refreshRate = refreshRate;
             this.profileFormGroup.patchValue({
@@ -444,11 +445,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
-        for (let i = 1; i < odmTDPValuesArray.controls.length; ++i) {
+        for (let i = 1; i < odmTDPValuesArray.controls?.length; ++i) {
             odmTDPValuesArray.controls[i].setValidators([minControlValidator(odmTDPValuesArray.controls[i - 1])]);
         }
 
-        for (let i = 0; i < odmTDPValuesArray.controls.length - 1; ++i) {
+        for (let i = 0; i < odmTDPValuesArray.controls?.length - 1; ++i) {
             odmTDPValuesArray.controls[i].setValidators([maxControlValidator(odmTDPValuesArray.controls[i + 1])]);
         }
 
@@ -545,7 +546,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             });
         }
     }
-      
+
     get getODMTDPControls() {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
@@ -575,7 +576,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         // Find smallest allowed max value
         let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
 
-        /*for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
+        /*for (let i = sliderIndex + 1; i < tdpValues.controls?.length; ++i) {
             if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
                 maxValue = tdpValues.controls[i].value;
             }
@@ -611,7 +612,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         // Adjust higher sliders
-        for (let i = movedSliderIndex + 1; i < tdpValues.controls.length; ++i) {
+        for (let i = movedSliderIndex + 1; i < tdpValues.controls?.length; ++i) {
             if (tdpValues.controls[i].value < newValue) {
                 tdpValues.controls[i].setValue(newValue);
             }
@@ -626,7 +627,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 movedSliderIndex === 0 &&
                 this.compat.uwLEDOnlyMode
                 // Also make sure three profiles are available
-                this.odmProfileNames.length === 3;
+                this.odmProfileNames?.length === 3;
 
             if (updateLEDChoice) {
                 const sliderMax = this.odmPowerLimitInfos[movedSliderIndex].max;
@@ -685,7 +686,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     //         return [undefined];
     //     }
     //     let displayModes = this.getDisplayModes();
-    //     for (let i = 0; i < displayModes.length; i++)
+    //     for (let i = 0; i < displayModes?.length; i++)
     //     {
     //         displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
     //     }
@@ -694,10 +695,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     // public getActiveDisplayModeString(): string
     // {
-    //     if(this.displayModes != undefined)   
+    //     if(this.displayModes != undefined)
     //    {
     //     return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
-    //    } 
+    //    }
     //    else
     //    {
     //     return "";
@@ -748,7 +749,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (!matchingMode) {
             return [-1];
         }
-        return matchingMode.refreshRates.sort((a, b) => b - a);
+        return matchingMode?.refreshRates.sort((a, b) => b - a);
     }
 
     public roundValue(value: number): number {
@@ -766,7 +767,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             );
         });
     }
-    
+
     // returns currently active refresh rate
     public getActiveRefreshRate(): number
     {
@@ -774,7 +775,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         {
             return undefined;
         }
-        return this.displayModes.activeMode.refreshRates[0];
+        return this.displayModes.activeMode?.refreshRates[0];
     }
 
     public governorSelectionChange() {
@@ -798,7 +799,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const repeatDelayMS = 200;
 
         action();
-        
+
         this.buttonRepeatTimer = setInterval(() => {
             action();
         }, repeatDelayMS);

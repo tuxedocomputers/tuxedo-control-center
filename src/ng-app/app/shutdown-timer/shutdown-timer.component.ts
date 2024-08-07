@@ -63,9 +63,14 @@ export class ShutdownTimerComponent implements OnInit {
     public async updateTime() {
         let result = await window.ipc.getScheduledShutdown();
         try {
-            let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
-            let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
-            this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
+            if (result) {
+                let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
+                let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
+                this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
+            }
+            if (!result) {
+                console.log("shutdown-timer: updateTime: getScheduledShutdown() returned: ", result)
+            }
         }catch(err: unknown) {
             console.error("shutdown-timer: updateTime failed =>", err)
             this.appliedTime = "";

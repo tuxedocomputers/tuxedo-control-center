@@ -166,7 +166,7 @@ export class ConfigService implements OnDestroy {
     public async importProfiles(newProfiles: ITccProfile[])
     {
         let newProfileList = this.getCustomProfiles();
-        for (let i = 0; i < newProfiles.length; i++)
+        for (let i = 0; i < newProfiles?.length; i++)
         {
             // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
             let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
@@ -198,7 +198,7 @@ export class ConfigService implements OnDestroy {
 
     public async deleteCustomProfile(profileIdToDelete: string) {
         const newProfileList: ITccProfile[] = this.getCustomProfiles().filter(profile => profile.id !== profileIdToDelete);
-        if (newProfileList.length === this.getCustomProfiles().length) {
+        if (newProfileList?.length === this.getCustomProfiles()?.length) {
             return false;
         }
         const success = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);

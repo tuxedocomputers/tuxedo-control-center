@@ -126,8 +126,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         await this.readAvailableSettings();
 
         const featureAvailable =
-            (this.chargingPriosAvailable.length > 0 || this.chargingProfilesAvailable.length > 0) ||
-            (this.chargeStartAvailableThresholds.length > 0 || this.chargeEndAvailableThresholds.length > 0);
+            (this.chargingPriosAvailable?.length > 0 || this.chargingProfilesAvailable?.length > 0) ||
+            (this.chargeStartAvailableThresholds?.length > 0 || this.chargeEndAvailableThresholds?.length > 0);
 
         if (featureAvailable) {
             this.hasFeature.emit(true);
@@ -205,17 +205,16 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     }
 
     public findClosest(value: number, arr: number[]) {
-        if (arr.length === 0) {
+        if (!arr || arr?.length === 0) {
             return 0;
         }
 
         let closest = arr[0];
-        for (let i = 1; i < arr.length; ++i) {
+        for (let i = 1; i < arr?.length; ++i) {
             if (Math.abs(arr[i] - value) < Math.abs(closest - value)) {
                 closest = arr[i];
             }
-        }
-        return closest;
+        }        return closest;
     }
 
     public async sliderStartThresholdChange(changeEvent: MatSliderChange) {

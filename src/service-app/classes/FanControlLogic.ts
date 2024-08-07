@@ -31,7 +31,7 @@ export class ValueBuffer {
 
     public addValue(value: number): void {
         this.bufferData.push(value);
-        while (this.bufferData.length > this.bufferMaxSize) {
+        while (this.bufferData?.length > this.bufferMaxSize) {
             this.bufferData.shift();
         }
     }
@@ -44,13 +44,13 @@ export class ValueBuffer {
         const copy = Array.from(this.bufferData);
         copy.sort((a, b) => a - b);
 
-        while (copy.length >= usedSize + 2) {
+        while (copy?.length >= usedSize + 2) {
             copy.shift();
             copy.pop();
         }
 
         // Calculate average from rest of array
-        const averageValue = Math.round(copy.reduce((accVal, currentValue) => accVal + currentValue) / copy.length);
+        const averageValue = Math.round(copy.reduce((accVal, currentValue) => accVal + currentValue) / copy?.length);
         return averageValue;
     }
 
@@ -121,7 +121,7 @@ export class FanControlLogic {
             this._minimumFanspeed = speed;
         }
     }
-    
+
     private _maximumFanspeed: number = 100;
     get maximumFanspeed() { return this._maximumFanspeed; }
     set maximumFanspeed(speed: number) {
@@ -151,7 +151,7 @@ export class FanControlLogic {
         } else {
             this._offsetFanspeed = speed;
         }
-    } 
+    }
 
     constructor(private fanProfile: ITccFanProfile, type: FAN_LOGIC) {
         if (type === FAN_LOGIC.CPU) {
@@ -167,7 +167,7 @@ export class FanControlLogic {
     public setFanProfile(fanProfile: ITccFanProfile) {
         fanProfile[this.useTable].sort((a, b) => a.temp - b.temp);
         this.tableMinEntry = fanProfile[this.useTable][0];
-        this.tableMaxEntry = fanProfile[this.useTable][fanProfile[this.useTable].length - 1];
+        this.tableMaxEntry = fanProfile[this.useTable][fanProfile[this.useTable]?.length - 1];
         this.fanProfile = fanProfile;
     }
 
@@ -245,7 +245,7 @@ export class FanControlLogic {
 
     private findFittingEntryIndex(temperatureValue: number): number {
         if (temperatureValue > this.tableMaxEntry.temp) {
-            return this.fanProfile[this.useTable].length - 1;
+            return this.fanProfile[this.useTable]?.length - 1;
         } else if (temperatureValue < this.tableMinEntry.temp) {
             return 0;
         }

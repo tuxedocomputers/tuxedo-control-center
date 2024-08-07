@@ -77,7 +77,7 @@ export class AvailabilityService {
                     })
             ),
         ];
-        return distinctPaths.length || 0;
+        return distinctPaths?.length || 0;
     }
 
     public isIGpuAvailable(): boolean {

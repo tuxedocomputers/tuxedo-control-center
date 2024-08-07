@@ -129,7 +129,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     }
 
     public isProfileUsed(profileId: string): boolean {
-        return this.state.getProfileStates(profileId).length > 0;
+        return this.state.getProfileStates(profileId)?.length > 0;
     }
 
     public getSettings(): ITccSettings {
@@ -267,7 +267,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
         let oldProfiles = this.config.getCustomProfiles();
         let newProfiles: ITccProfile[] = [];
-        for (var i = 0; i < profiles.length; i++)
+        for (var i = 0; i < profiles?.length; i++)
         {
             let conflictProfileIndex = oldProfiles.findIndex(x => x.id === profiles[i].id);
             if (conflictProfileIndex !== -1)
@@ -300,7 +300,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 newProfiles = newProfiles.concat(profiles[i]);
             }
         }
-        if(newProfiles.length > 0)
+        if(newProfiles?.length > 0)
         {
             let importSuccess = await this.config.importProfiles(newProfiles);
             if (!importSuccess)

@@ -34,29 +34,29 @@ export class ODMPowerLimitWorker extends DaemonWorker {
         }
 
         let tdpInfo: TDPInfo[] = [];
-        if (ioAPI.getTDPInfo(tdpInfo) && tdpInfo.length > 0) {
+        if (ioAPI.getTDPInfo(tdpInfo) && tdpInfo?.length > 0) {
             let newTDPValues: number[] = [];
             // If set in profile use these
-            if (odmPowerLimitSettings.tdpValues && odmPowerLimitSettings.tdpValues.length > 0) {
+            if (odmPowerLimitSettings.tdpValues && odmPowerLimitSettings.tdpValues?.length > 0) {
                 newTDPValues = odmPowerLimitSettings.tdpValues;
             }
-    
-            if (newTDPValues.length === 0) {
+
+            if (newTDPValues?.length === 0) {
                 // Default to max values
                 newTDPValues = tdpInfo.map(tdpEntry => tdpEntry.max);
             }
-    
+
             this.tccd.logLine('ODMPowerLimitWorker: Set ODM TDPs '
                 + JSON.stringify(newTDPValues.map(tdpValue => tdpValue + ' W')));
             const writeSuccess = ioAPI.setTDPValues(newTDPValues);
             if (writeSuccess) {
-                for (let i = 0; i < tdpInfo.length && i < newTDPValues.length; ++i) {
+                for (let i = 0; i < tdpInfo?.length && i < newTDPValues?.length; ++i) {
                     tdpInfo[i].current = newTDPValues[i];
                 }
             } else {
                 this.tccd.logLine('ODMPowerLimitWorker: Failed to write TDP values');
             }
-            
+
         }
         this.tccd.dbusData.odmPowerLimitsJSON = JSON.stringify(tdpInfo);
     }

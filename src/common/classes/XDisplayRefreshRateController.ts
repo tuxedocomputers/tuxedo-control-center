@@ -203,8 +203,8 @@ export class XDisplayRefreshRateController {
         };
         for (let rate of refreshrates) {
             const num = parseFloat(rate.replace(/[^0-9.]/g, ""));
-            if (!newMode.refreshRates.includes(num)) {
-                newMode.refreshRates.push(num);
+            if (!newMode?.refreshRates.includes(num)) {
+                newMode?.refreshRates.push(num);
             }
         }
         newDisplayModes.displayModes.push(newMode);
@@ -222,7 +222,7 @@ export class XDisplayRefreshRateController {
         );
         if (activeRateIndex !== -1) {
             newDisplayModes.activeMode.refreshRates = [
-                newMode.refreshRates[activeRateIndex],
+                newMode?.refreshRates[activeRateIndex],
             ];
             newDisplayModes.activeMode.xResolution = newMode.xResolution;
             newDisplayModes.activeMode.yResolution = newMode.yResolution;

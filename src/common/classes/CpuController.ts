@@ -30,6 +30,7 @@ export class CpuController {
     }
 
     public cores: LogicalCpuController[];
+    private unsupportedEnergyPreferenceValues: string[] = []
 
     public readonly kernelMax = new SysFsPropertyInteger(path.join(this.basePath, 'kernel_max'));
     public readonly offline = new SysFsPropertyNumList(path.join(this.basePath, 'offline'));
@@ -72,9 +73,9 @@ export class CpuController {
      * @param numberOfCores Number of logical cpu cores to use, defaults to "use all available"
      */
     public useCores(numberOfCores?: number): void {
-        if (numberOfCores === undefined) { numberOfCores = this.cores.length; }
+        if (numberOfCores === undefined) { numberOfCores = this.cores?.length; }
         if (numberOfCores === 0) { return; }
-        for (let i = 1; i < this.cores.length; ++i) {
+        for (let i = 1; i < this.cores?.length; ++i) {
             if (!this.cores[i].online.isAvailable()) { continue; }
             if (i < numberOfCores) {
                 this.cores[i].online.writeValue(true);
@@ -89,20 +90,28 @@ export class CpuController {
      *
      * @param setMaxFrequency Maximum scaling frequency value to set, defaults to max value for core
      */
+    // todo: function too long
     public setGovernorScalingMaxFrequency(setMaxFrequency?: number): void {
-        let scalingDriver;
+        let scalingDriver: string;
 
         for (const core of this.cores) {
             if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
                 || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
-            const coreMinFrequency = core.cpuinfoMinFreq.readValue();
+            //const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             const scalingMinFrequency = core.scalingMinFreq.readValue();
-            let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
-            scalingDriver = core.scalingDriver.readValueNT();
-            let newMaxFrequency: number;
 
+            const scalingFrequencyAvailable: boolean = this.cores[0].scalingAvailableFrequencies.isAvailable()
+            let availableFrequencies: number[]
+            if (scalingFrequencyAvailable) {
+                availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+            }
+            const scalingDriverAvailable: boolean = this.cores[0].scalingAvailableFrequencies.isAvailable()
+            if (scalingDriverAvailable) {
+                scalingDriver = core.scalingDriver.readValueNT();
+            }
+            let newMaxFrequency: number;
 
             // Default to max available
             if (setMaxFrequency === undefined) {
@@ -128,7 +137,7 @@ export class CpuController {
             // ..if available frequencies are defined
             if (availableFrequencies !== undefined) {
                 availableFrequencies = availableFrequencies.filter(value => value >= scalingMinFrequency);
-                if (availableFrequencies.length === 0) { continue; }
+                if (availableFrequencies?.length === 0) { continue; }
                 newMaxFrequency = findClosestValue(newMaxFrequency, availableFrequencies);
             }
 
@@ -139,11 +148,16 @@ export class CpuController {
         // coreMaxFrequency indicates that the boost switch should be enabled. On Intel this switch doesn't exist
         // and boost is handled via scalingMaxFreq.
         const maxFrequency = this.cores[0].cpuinfoMaxFreq.readValue();
-        const availableFrequencies = this.cores[0].scalingAvailableFrequencies.readValueNT();
         let maximumAvailableFrequency = maxFrequency;
-        if (availableFrequencies !== undefined) {
-            maximumAvailableFrequency = availableFrequencies[0];
+
+        const scalingFrequencyAvailable: boolean = this.cores[0].scalingAvailableFrequencies.isAvailable()
+        if (scalingFrequencyAvailable) {
+            const availableFrequencies: number[] = this.cores[0].scalingAvailableFrequencies.readValueNT();
+            if (availableFrequencies !== undefined) {
+                maximumAvailableFrequency = availableFrequencies[0];
+            }
         }
+
         if (this.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
             if (setMaxFrequency === undefined || setMaxFrequency > maximumAvailableFrequency) {
                 this.boost.writeValue(true);
@@ -167,7 +181,12 @@ export class CpuController {
             const coreMinFrequency = core.cpuinfoMinFreq.readValue();
             const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
             const scalingMaxFrequency = core.scalingMaxFreq.readValue();
-            let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+
+            const scalingAvailable = core.scalingAvailableFrequencies.isAvailable()
+            let availableFrequencies: number[]
+            if (scalingAvailable) {
+                availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+            }
 
             let newMinFrequency: number;
 
@@ -191,7 +210,7 @@ export class CpuController {
             // ..if available frequencies are defined
             if (availableFrequencies !== undefined) {
                 availableFrequencies = availableFrequencies.filter(value => value <= scalingMaxFrequency);
-                if (availableFrequencies.length === 0) { continue; }
+                if (availableFrequencies?.length === 0) { continue; }
                 newMinFrequency = findClosestValue(newMinFrequency, availableFrequencies);
             }
 
@@ -237,11 +256,24 @@ export class CpuController {
             return;
         }
 
+        // core.energyPerformancePreference.isWritable() is not enough to check if file is writable, returns true and write results in "EINVAL: invalid argument"
+        // the path is indeed writable, but does not accept the supplied value and only works with certain values
+        // checking if value can be written, assuming that write is not possible if it failed once, to avoid repeated access errors
+        if (this.unsupportedEnergyPreferenceValues.includes(performancePreference)) {
+            return;
+        }
+
         for (const core of this.cores) {
-            if (!core.energyPerformancePreference.isAvailable() || !core.energyPerformanceAvailablePreferences.isAvailable()) { continue; }
+            if (!core.energyPerformancePreference.isAvailable() || !core.energyPerformanceAvailablePreferences.isAvailable() || !core.energyPerformancePreference.isWritable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
             if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
-                core.energyPerformancePreference.writeValue(performancePreference);
+                try {
+                    core.energyPerformancePreference.writeValue(performancePreference);
+                } catch(err: unknown) {
+                    console.error(`CpuController: setEnergyPerformancePreference: ${performancePreference} is not supported.`)
+                    this.unsupportedEnergyPreferenceValues.push(performancePreference)
+                    break;
+                }
             }
         }
     }

@@ -34,6 +34,7 @@ export class TccDBusService extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon, private dbusData: TccDBusData) {
         super(1500, "TccDbusServiceWorker", tccd);
+        this.dbusData.dbusAvailable = true;
 
         const options: TccDBusOptions = new TccDBusOptions();
         options.triggerStateCheck = async () => { this.tccd.triggerStateCheck(); }
@@ -73,6 +74,8 @@ export class TccDBusService extends DaemonWorker {
     }
 
     public onExit(): void {
+        this.dbusData.dbusAvailable = false;
+
         try {
             this.bus.unexport(this.path, this.interface);
         } catch (err: unknown) {

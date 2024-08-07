@@ -39,13 +39,13 @@ export class TccTray {
     }
 
     public async create() {
-        
+
         if (!this.tray) {
             this.tray = new Tray(this.trayIcon);
             this.tray.setTitle('TUXEDO Control Center');
             this.tray.setToolTip('TUXEDO Control Center');
         }
-    
+
         const profilesSubmenu: Object[] = this.state.profiles.map(profile => {
             // Creation of each profile selection submenu item
             return {
@@ -68,7 +68,7 @@ export class TccTray {
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
-                visible: this.state.profiles.length > 0
+                visible: this.state.profiles?.length > 0
             },
             {
                     label: 'Tray autostart', type: 'checkbox', checked: this.state.isAutostartTrayInstalled,

@@ -173,21 +173,60 @@ ipcMain.on('fs-file-exists-sync', (event, filePath) => {
 
   let cpu = new CpuController('/sys/devices/system/cpu');
 
+// todo: values can most likely be gathered in the cpu worker via onWork() instead to avoid unnecessary duplicated file access
+// there already is core.scalingAvailableFrequencies.readValueNT() and this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT() for example
+// todo: readValueNT() is sync and thus it is an async function which runs sync code
 ipcMain.handle('get-general-cpu-info-async', (event) => {
     return new Promise<IGeneralCPUInfo>((resolve, reject) => {
         try {
     let cpuInfo: IGeneralCPUInfo;
     const scalingDriver = cpu.cores[0].scalingDriver.readValueNT();
     try {
+        const cpuinfoMinFreqAvailable: boolean = cpu.cores[0].cpuinfoMinFreq.isAvailable()
+        let minFreq: number
+        if (cpuinfoMinFreqAvailable) {
+            minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT()
+        }
+
+        const cpuinfoMaxFreqAvailable: boolean = cpu.cores[0].cpuinfoMaxFreq.isAvailable()
+        let maxFreq: number
+        if (cpuinfoMaxFreqAvailable) {
+            maxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT()
+        }
+
+        const scalingAvailableFrequenciesAvailable: boolean = cpu.cores[0].scalingAvailableFrequencies.isAvailable()
+        let scalingAvailableFrequencies: number[]
+        if (scalingAvailableFrequenciesAvailable) {
+            scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT()
+        }
+
+        const scalingAvailableGovernorsAvailable: boolean = cpu.cores[0].scalingAvailableGovernors.isAvailable()
+        let scalingAvailableGovernors: string[]
+        if (scalingAvailableGovernorsAvailable) {
+            scalingAvailableGovernors = cpu.cores[0].scalingAvailableGovernors.readValueNT()
+        }
+
+        const energyPerformanceAvailablePreferencesAvailable: boolean = cpu.cores[0].energyPerformanceAvailablePreferences.isAvailable()
+        let energyPerformanceAvailablePreferences: string[]
+        if (energyPerformanceAvailablePreferencesAvailable) {
+            energyPerformanceAvailablePreferences = cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT()
+        }
+
+        const boostAvailable: boolean = cpu.boost.isAvailable()
+        let boost: boolean
+        if (boostAvailable) {
+            boost = cpu.boost.readValueNT()
+        }
+
       cpuInfo = {
-        availableCores: cpu.cores.length,
-        minFreq: cpu.cores[0].cpuinfoMinFreq.readValueNT(),
-        maxFreq: cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
-        scalingAvailableFrequencies: cpu.cores[0].scalingAvailableFrequencies.readValueNT(),
-        scalingAvailableGovernors: cpu.cores[0].scalingAvailableGovernors.readValueNT(),
-        energyPerformanceAvailablePreferences: cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
+        availableCores: cpu.cores?.length,
+        minFreq: minFreq,
+        maxFreq: maxFreq,
+        scalingAvailableFrequencies: scalingAvailableFrequencies,
+        scalingAvailableGovernors: scalingAvailableGovernors,
+        energyPerformanceAvailablePreferences: energyPerformanceAvailablePreferences,
         reducedAvailableFreq: cpu.cores[0].getReducedAvailableFreqNT(),
-        boost: cpu.boost.readValueNT()
+        boost: boost
       };
       if (cpuInfo.scalingAvailableFrequencies !== undefined) {
         cpuInfo.maxFreq = cpuInfo.scalingAvailableFrequencies[0];
@@ -208,7 +247,7 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
       });
   });
 
-
+// todo: same todos as above
   ipcMain.handle('get-logical-core-info-async', (event) => {
     return new Promise<ILogicalCoreInfo[]>((resolve, reject) => {
         try {
@@ -219,23 +258,109 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
         if (core.coreIndex !== 0) { onlineStatus = core.online.readValue(); }
         // Skip core if offline
         if (!onlineStatus) { continue; }
+
+        const scalingCurFreqAvailable: boolean = core.scalingCurFreq.isAvailable()
+        let scalingCurFreq: number
+        if (scalingCurFreqAvailable) {
+            scalingCurFreq = core.scalingCurFreq.readValueNT()
+        }
+
+        const scalingMinFreqAvailable: boolean = core.scalingMinFreq.isAvailable()
+        let scalingMinFreq: number
+        if (scalingMinFreqAvailable) {
+            scalingMinFreq = core.scalingMinFreq.readValueNT()
+        }
+
+        const scalingMaxFreqAvailable: boolean = core.scalingMaxFreq.isAvailable()
+        let scalingMaxFreq: number
+        if (scalingMaxFreqAvailable) {
+            scalingMaxFreq = core.scalingMaxFreq.readValueNT()
+        }
+
+        const scalingDriverAvailable: boolean = core.scalingDriver.isAvailable()
+        let scalingDriver: string
+        if (scalingDriverAvailable) {
+            // todo: changing type, mismatch with ILogicalCoreInfo
+            scalingDriver = core.scalingDriver.readValueNT().toString()
+        }
+
+        const energyPerformanceAvailablePreferencesAvailable: boolean = core.energyPerformanceAvailablePreferences.isAvailable()
+        let energyPerformanceAvailablePreferences: string[]
+        if (energyPerformanceAvailablePreferencesAvailable) {
+            energyPerformanceAvailablePreferences = core.energyPerformanceAvailablePreferences.readValueNT()
+        }
+
+        const energyPerformancePreferenceAvailable: boolean = core.energyPerformancePreference.isAvailable()
+        let energyPerformancePreference: string
+        if (energyPerformancePreferenceAvailable) {
+            energyPerformancePreference = core.energyPerformancePreference.readValueNT()
+        }
+
+        const scalingAvailableGovernorsAvailable: boolean = core.scalingAvailableGovernors.isAvailable()
+        let scalingAvailableGovernors: string[]
+        if (scalingAvailableGovernorsAvailable) {
+            scalingAvailableGovernors = core.scalingAvailableGovernors.readValueNT()
+        }
+
+        const constscalingGovernorAvailable: boolean = core.scalingGovernor.isAvailable()
+        let scalingGovernor: string
+        if (constscalingGovernorAvailable) {
+            scalingGovernor = core.scalingGovernor.readValueNT()
+        }
+
+        const cpuInfoMaxFreqAvailable: boolean = core.cpuinfoMaxFreq.isAvailable()
+        let cpuInfoMaxFreq: number
+        if (cpuInfoMaxFreqAvailable) {
+            cpuInfoMaxFreq = core.cpuinfoMaxFreq.readValueNT()
+        }
+
+        const cpuInfoMinFreqAvailable: boolean = core.cpuinfoMinFreq.isAvailable()
+        let cpuInfoMinFreq: number
+        if (cpuInfoMinFreqAvailable) {
+            cpuInfoMinFreq = core.cpuinfoMinFreq.readValueNT()
+        }
+
+        const coreIdAvailable: boolean = core.coreId.isAvailable()
+        let coreId: number
+        if (coreIdAvailable) {
+            coreId = core.coreId.readValueNT()
+        }
+
+        const coreSiblingsListAvailable: boolean = core.coreSiblingsList.isAvailable()
+        let coreSiblingsList: number[]
+        if (coreSiblingsListAvailable) {
+            coreSiblingsList = core.coreSiblingsList.readValueNT()
+        }
+
+        const physicalPackageIdAvailable: boolean = core.physicalPackageId.isAvailable()
+        let physicalPackageId: number
+        if (physicalPackageIdAvailable) {
+            physicalPackageId = core.physicalPackageId.readValueNT()
+        }
+
+        const threadSiblingsListAvailable: boolean = core.threadSiblingsList.isAvailable()
+        let threadSiblingsList: number[]
+        if (threadSiblingsListAvailable) {
+            threadSiblingsList = core.threadSiblingsList.readValueNT()
+        }
+
         const coreInfo: ILogicalCoreInfo = {
           index: core.coreIndex,
           online: onlineStatus,
-          scalingCurFreq: core.scalingCurFreq.readValueNT(),
-          scalingMinFreq: core.scalingMinFreq.readValueNT(),
-          scalingMaxFreq: core.scalingMaxFreq.readValueNT(),
-          scalingDriver: core.scalingDriver.readValueNT(),
-          energyPerformanceAvailablePreferences: core.energyPerformanceAvailablePreferences.readValueNT(),
-          energyPerformancePreference: core.energyPerformancePreference.readValueNT(),
-          scalingAvailableGovernors: core.scalingAvailableGovernors.readValueNT(),
-          scalingGovernor: core.scalingGovernor.readValueNT(),
-          cpuInfoMaxFreq: core.cpuinfoMaxFreq.readValueNT(),
-          cpuInfoMinFreq: core.cpuinfoMinFreq.readValueNT(),
-          coreId: core.coreId.readValueNT(),
-          coreSiblingsList: core.coreSiblingsList.readValueNT(),
-          physicalPackageId: core.physicalPackageId.readValueNT(),
-          threadSiblingsList: core.threadSiblingsList.readValueNT()
+          scalingCurFreq: scalingCurFreq,
+          scalingMinFreq: scalingMinFreq,
+          scalingMaxFreq: scalingMaxFreq,
+          scalingDriver: scalingDriver,
+          energyPerformanceAvailablePreferences: energyPerformanceAvailablePreferences,
+          energyPerformancePreference: energyPerformancePreference,
+          scalingAvailableGovernors: scalingAvailableGovernors,
+          scalingGovernor: scalingGovernor,
+          cpuInfoMaxFreq: cpuInfoMaxFreq,
+          cpuInfoMinFreq: cpuInfoMinFreq,
+          coreId: coreId,
+          coreSiblingsList: coreSiblingsList,
+          physicalPackageId: physicalPackageId,
+          threadSiblingsList: threadSiblingsList
         };
         coreInfoList.push(coreInfo);
       } catch (err: unknown) {
@@ -253,7 +378,10 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
   ipcMain.handle('get-intel-pstate-turbo-value-async', (event) => {
     return new Promise<boolean>((resolve, reject) => {
         try {
-            resolve( cpu.intelPstate.noTurbo.readValueNT());
+            if (cpu.intelPstate.noTurbo.isAvailable()) {
+                resolve(cpu.intelPstate.noTurbo.readValueNT());
+            }
+            resolve(false)
         } catch (err: unknown) {
           console.error("ipcBackendAPI: get-intel-pstate-turbo-value-async failed =>", err)
           reject(err);
@@ -466,9 +594,13 @@ ipcMain.handle('ipc-cancel-shutdown', async (event) => {
 
 ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
     return new Promise<string>(async (resolve, reject) => {
-        execCmd("cat /run/systemd/shutdown/scheduled")
-        .then((results) => {resolve(results)})
-        .catch((err: unknown) => {console.error("ipcBackendAPI: ipc-get-scheduled-shutdown failed =>", err); resolve("")});
+        const available: boolean = fs.existsSync("/run/systemd/shutdown/scheduled")
+        if (available) {
+            execCmd("cat /run/systemd/shutdown/scheduled")
+            .then((results) => {resolve(results)})
+            .catch((err: unknown) => {console.error("ipcBackendAPI: ipc-get-scheduled-shutdown failed =>", err); resolve("")});
+        }
+        resolve("")
     });
 });
 
@@ -706,7 +838,8 @@ class ProgramManagementService {
     public async isInstalled(name: string): Promise<boolean> {
       this.isCheckingInstallation.set(name, true);
       return new Promise<boolean>(async (resolve) => {
-        execCmd('which ' + name).then((result) => {
+        // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
+        execCmd(`which ${name} || :`).then((result) => {
           this.isCheckingInstallation.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
@@ -849,7 +982,7 @@ ipcMain.handle('pgms-start-webfaic', async (event, status) => {
 
 // Change Crypt password backend
 
-async function changeCryptPassword(oldPassword: string, newPassword: string, confirmPassword: string) {
+async function changeCryptPassword(newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> {
     let crypt_drives: IDrive[] = await DriveController.getDrives();
     crypt_drives = crypt_drives.filter(x => x.crypt);
     let oneliner = "";
@@ -863,9 +996,9 @@ async function changeCryptPassword(oldPassword: string, newPassword: string, con
     return execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
 }
 
-ipcMain.handle('ipc-change-crypt-password', async (event, opw,npw,cpw) => {
+ipcMain.handle('ipc-change-crypt-password', async (event: any, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
     return new Promise<string>((resolve, reject) => {
-        resolve(changeCryptPassword(opw,npw,cpw));
+        resolve(changeCryptPassword(newPassword, oldPassword, confirmPassword));
     });
 });
 

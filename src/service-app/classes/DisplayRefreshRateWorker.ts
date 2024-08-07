@@ -85,8 +85,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
         if (useRefRate && activeMode) {
             const refreshRate = activeprofile.display.refreshRate;
+            // todo: add variable checks to avoid access error
             const hasDifferentRefreshRate =
-                refreshRate !== activeMode.refreshRates[0];
+                refreshRate !== activeMode?.refreshRates[0];
 
             if (hasDifferentRefreshRate) {
                 this.setDisplayMode(
@@ -106,7 +107,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
 
         if (this.displayInfo === undefined) {
-            this.tccd.dbusData.displayModesJSON = undefined;
+            this.tccd.dbusData.displayModesJSON = "{}";
         } else {
             this.displayInfoFound = true;
             this.tccd.dbusData.displayModesJSON = JSON.stringify(this.displayInfo);

@@ -22,7 +22,7 @@ function interpolatePoints(
     x: number
 ): number {
     const first = points[0];
-    const last = points[points.length - 1];
+    const last = points[points?.length - 1];
     if (x <= first.temp) {
         return first.speed;
     }
@@ -30,7 +30,7 @@ function interpolatePoints(
         return last.speed;
     }
     const i =
-        points.findIndex((p, idx) => p.temp >= x || idx === points.length - 1) -
+        points.findIndex((p, idx) => p.temp >= x || idx === points?.length - 1) -
         1;
     const { temp: x1, speed: y1 } = points[i];
     const { temp: x2, speed: y2 } = points[i + 1];
@@ -52,7 +52,7 @@ export function formatTemp(value: number, usingFahrenheit: boolean): string {
     }
     else {
         return `${value} °C`;
-    }   
+    }
 }
 
 export function formatSpeed(value: number | string): string {

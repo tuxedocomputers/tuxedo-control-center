@@ -117,9 +117,9 @@ export class TomteGuiComponent implements OnInit {
     */
     private async getModuleDescriptions()
     {
-        if (this.moduleToolTips.size < this.tomteListArray.length)
+        if (this.moduleToolTips.size < this.tomteListArray?.length)
         {
-        for (let i = 0; i < this.tomteListArray.length; i++)
+        for (let i = 0; i < this.tomteListArray?.length; i++)
             {
                 let moduleName = this.tomteListArray[i].moduleName;
                 if(this.moduleToolTips.has(moduleName))
@@ -189,12 +189,12 @@ export class TomteGuiComponent implements OnInit {
         Opens Dialogue containing given errormessage
         Also logs the error to the browser console
     */
-    private async throwErrorMessage(errorMessage: string | undefined)
+    private async throwErrorMessage(err: string | undefined)
     {
-        console.error(errorMessage);
+        console.error("tomte-gui: throwErrorMessage =>", err);
         const askToClose = await this.utils.confirmDialog({
             title: $localize `:@@tomteGuiDialogErrorTitle:An Error occured!`,
-            description: errorMessage,
+            description: err,
             linkLabel: ``,
             linkHref: null,
             buttonAbortLabel: ``,

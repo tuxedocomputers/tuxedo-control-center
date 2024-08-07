@@ -25,9 +25,10 @@ import { fileOK } from '../../common/classes/Utils';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
+        // todo: only run worker once, no timeout should be required
         super(100000, "YCbCr420WorkaroundWorker", tccd);
 
-        if (this.tccd.settings.ycbcr420Workaround.length > 0) {
+        if (this.tccd.settings.ycbcr420Workaround?.length > 0) {
             let card: number = 0;
             let port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
             let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
@@ -41,7 +42,7 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
     public onStart(): void {
         let settings_changed: boolean = false;
 
-        for (let card = 0; card < this.tccd.settings.ycbcr420Workaround.length; card++) {
+        for (let card = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
             for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
                 let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
                 if (fileOK(path)) {

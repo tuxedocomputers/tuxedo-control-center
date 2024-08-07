@@ -18,7 +18,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <div *ngIf="customFanPreset?.tableCPU">
-    <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="150px">
+    <mat-grid-list [cols]="customFanPreset.tableCPU?.length" rowHeight="150px">
         <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
             <mat-slider vertical="true" thumbLabel color="primary"
                 [formControl]="fanFormGroup.controls[fanTableEntry.temp+'c']" (change)="dirtyFanFormGroup()"
@@ -27,7 +27,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="15px">
+    <mat-grid-list [cols]="customFanPreset.tableCPU?.length" rowHeight="15px">
         <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
             {{ formatTemperatureLabel(fanTableEntry.temp) }}
         </mat-grid-tile>

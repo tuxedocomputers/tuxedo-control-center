@@ -63,9 +63,10 @@ export class GlobalSettingsComponent implements OnInit {
         private route: ActivatedRoute,
     ) { }
 
+    // todo: move this.config.getSettings() into a variable in every function, too many calls
     ngOnInit() {
         this.setValuesFromResolverRoute();
-    
+
         const routingFromDashboard = this.route.snapshot.paramMap.get("routingFromDashboard");
         if (routingFromDashboard) {
             this.expandPrimeSelect = true;
@@ -79,7 +80,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
-        for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
+        for (let card = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
             this.ycbcr420Workaround[card] = {};
             for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
@@ -101,21 +102,20 @@ export class GlobalSettingsComponent implements OnInit {
 
         this.hasChargingSettings =
             Array.isArray(data.chargingProfilesAvailable) &&
-            data.chargingProfilesAvailable.length > 0;
+            data.chargingProfilesAvailable?.length > 0;
 
         this.primeState = data.primeSelectAvailable;
     }
-    
     onCPUSettingsEnabledChanged(event: any) {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().cpuSettingsEnabled = event.checked;
-        
+
         this.config.saveSettings().then(success => {
             if (!success) {
                 this.config.getSettings().cpuSettingsEnabled = !event.checked;
             }
-            
+
             this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled
 
             this.utils.pageDisabled = false;
@@ -129,7 +129,7 @@ export class GlobalSettingsComponent implements OnInit {
             if (!success) {
                 this.config.getSettings().fahrenheit = !event;
             }
-            
+
             this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit
 
             this.utils.pageDisabled = false;
@@ -140,7 +140,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().fanControlEnabled = event.checked;
-        
+
         this.config.saveSettings().then(success => {
             if (!success) {
                 this.config.getSettings().fanControlEnabled = !event.checked;
@@ -156,7 +156,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
-        
+
         this.config.saveSettings().then(success => {
             if (!success) {
                 this.config.getSettings().keyboardBacklightControlEnabled = !event.checked;
@@ -169,7 +169,7 @@ export class GlobalSettingsComponent implements OnInit {
     }
 
     onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
-        if (this.config.getSettings().ycbcr420Workaround.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
+        if (this.config.getSettings().ycbcr420Workaround?.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
             this.utils.pageDisabled = true;
 
             this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
@@ -205,5 +205,5 @@ export class GlobalSettingsComponent implements OnInit {
 
     public isIGpuAvailable() {
         return window.power.isIGpuAvailable();
-    }  
+    }
 }

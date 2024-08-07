@@ -107,7 +107,7 @@ export class ProfileOverviewTileComponent implements OnInit {
             // Update ODM profile name map
             this.odmProfileToName.clear();
             for (const profileName of this.odmProfileNames) {
-                if (profileName.length > 0) {
+                if (profileName?.length > 0) {
                     this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
                 }
             }
