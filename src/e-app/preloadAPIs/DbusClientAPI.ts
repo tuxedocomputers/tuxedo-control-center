@@ -49,7 +49,7 @@ export const DbusClientAPI =
         setChargingProfile: (profileDescriptor) => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setChargingProfile, profileDescriptor]),
         getChargingPrioritiesAvailable: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getChargingPrioritiesAvailable]),
         getCurrentChargingPriority: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getCurrentChargingPriority]),
-        setChargingPriority: (priorityDescriptor) => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setChargingPriority, priorityDescriptor]),   
+        setChargingPriority: (priorityDescriptor) => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setChargingPriority, priorityDescriptor]),
         getDGpuInfoValuesJSON: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getDGpuInfoValuesJSON]),
         getIGpuInfoValuesJSON: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getIGpuInfoValuesJSON]),
         getSensorDataCollectionStatus: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getSensorDataCollectionStatus]),
@@ -69,7 +69,11 @@ export const DbusClientAPI =
         setChargeType: (chargeType) => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setChargeType, chargeType]),
         fanHwmonAvailable: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.fanHwmonAvailable]),
         getIsX11: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getIsX11]),
-        getDeviceJSON: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getDeviceJSON])
+        getDeviceJSON: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getDeviceJSON]),
+        getNVIDIAPowerCTRLDefaultPowerLimit: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLDefaultPowerLimit]),
+        getNVIDIAPowerCTRLMaxPowerLimit: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLMaxPowerLimit]),
+        getNVIDIAPowerCTRLAvailable: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLAvailable]),
+        getHideCTGP: () => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getHideCTGP])
     }
 
 // for render.d.ts typescript definition
@@ -122,5 +126,9 @@ export interface IDbusClientAPI
     fanHwmonAvailable: () => Promise<boolean>,
     getIsX11: () => Promise<boolean>,
     getDeviceJSON: () => Promise<string>,
- 
+    getNVIDIAPowerCTRLDefaultPowerLimit: () => Promise<any>,
+    getNVIDIAPowerCTRLMaxPowerLimit: () => Promise<any>,
+    getNVIDIAPowerCTRLAvailable: () => Promise<any>,
+    getHideCTGP: () => Promise<any>
+
 }

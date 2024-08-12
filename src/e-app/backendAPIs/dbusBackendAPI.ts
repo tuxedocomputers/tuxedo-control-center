@@ -81,31 +81,62 @@ class TccDBusController {
     async getNVIDIAPowerCTRLDefaultPowerLimit(): Promise<number> {
         try {
             return await this.interface.GetNVIDIAPowerCTRLDefaultPowerLimit();
-        } catch (err) {
-            return undefined;
-        }
-    }
+        } catch (err: unknown) {
+            this.dbusStatus = false
 
-    async getHideCTGP(): Promise <boolean> {
-        try {
-            return await this.interface.DeviceHideCTGP();
-        } catch (err) {
-            return undefined;
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusBackendAPI: getNVIDIAPowerCTRLDefaultPowerLimit failed =>", err.text)
+                return -1
+            }
+
+            console.error("dbusBackendAPI: getNVIDIAPowerCTRLDefaultPowerLimit failed =>", err)
+            return -1;
         }
     }
 
     async getNVIDIAPowerCTRLMaxPowerLimit(): Promise<number> {
         try {
             return await this.interface.GetNVIDIAPowerCTRLMaxPowerLimit();
-        } catch (err) {
-            return undefined;
+        } catch (err: unknown) {
+            this.dbusStatus = false
+
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusBackendAPI: getNVIDIAPowerCTRLMaxPowerLimit failed =>", err.text)
+                return -1
+            }
+
+            console.error("dbusBackendAPI: getNVIDIAPowerCTRLMaxPowerLimit failed =>", err)
+            return -1;
         }
     }
 
     async getNVIDIAPowerCTRLAvailable(): Promise<boolean> {
         try {
             return await this.interface.GetNVIDIAPowerCTRLAvailable();
-        } catch (err) {
+        } catch (err: unknown) {
+            this.dbusStatus = false
+
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusBackendAPI: getNVIDIAPowerCTRLAvailable failed =>", err.text)
+                return false
+            }
+
+            console.error("dbusBackendAPI: getNVIDIAPowerCTRLAvailable failed =>", err)
+            return false;
+        }
+    }
+    async getHideCTGP(): Promise <boolean> {
+        try {
+            return await this.interface.GetHideCTGP();
+        } catch (err: unknown) {
+            this.dbusStatus = false
+
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusBackendAPI: GetHideCTGP failed =>", err.text)
+                return false
+            }
+
+            console.error("dbusBackendAPI: GetHideCTGP failed =>", err)
             return false;
         }
     }
@@ -1558,6 +1589,12 @@ export const dbusHandlers = new Map<string, (...args: any[]) => any>()
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLAvailable, async () => {
         return new Promise<boolean>((resolve, reject) => {
             resolve(tccDBus.getNVIDIAPowerCTRLAvailable());
+        });
+    })
+
+    .set(DbusAPIFunctions.getHideCTGP, async () => {
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(tccDBus.getHideCTGP());
         });
     });
 

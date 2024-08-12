@@ -147,6 +147,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
+    public hideCTGP: boolean = true
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
@@ -271,6 +272,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLAvailable.subscribe(nextNVIDIAPowerCTRLAvailable => {
             if (nextNVIDIAPowerCTRLAvailable !== this.nvidiaPowerCTRLAvailable) {
                 this.nvidiaPowerCTRLAvailable = nextNVIDIAPowerCTRLAvailable;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.hideCTGP.subscribe(nexthideCTGP => {
+            if (nexthideCTGP !== this.hideCTGP) {
+                this.hideCTGP = nexthideCTGP;
             }
         }));
 
@@ -617,7 +624,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 tdpValues.controls[i].setValue(newValue);
             }
         }
-        
+
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 

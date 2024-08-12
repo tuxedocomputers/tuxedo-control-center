@@ -85,6 +85,7 @@ export class TccDBusClientService implements OnDestroy {
   public nvidiaPowerCTRLDefaultPowerLimit = new BehaviorSubject<number>(undefined);
   public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
   public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
+  public hideCTGP = new BehaviorSubject<boolean>(undefined);
 
   public isX11 = new BehaviorSubject<boolean>(undefined);
   public device: TUXEDODevice = 0;
@@ -162,6 +163,12 @@ export class TccDBusClientService implements OnDestroy {
 
     this.fansMinSpeed.next(await window.dbusAPI.getFansMinSpeed());
     this.fansOffAvailable.next(await window.dbusAPI.getFansOffAvailable());
+
+    this.nvidiaPowerCTRLDefaultPowerLimit.next(await window.dbusAPI.getNVIDIAPowerCTRLDefaultPowerLimit());
+    this.nvidiaPowerCTRLMaxPowerLimit.next(await window.dbusAPI.getNVIDIAPowerCTRLMaxPowerLimit());
+    this.nvidiaPowerCTRLAvailable.next(await window.dbusAPI.getNVIDIAPowerCTRLAvailable());
+    this.hideCTGP.next(await window.dbusAPI.getHideCTGP());
+
     // Read and publish data (note: atm polled)
     const wmiAvailability = await window.dbusAPI.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);

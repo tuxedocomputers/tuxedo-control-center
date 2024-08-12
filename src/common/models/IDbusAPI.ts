@@ -70,5 +70,6 @@ export enum DbusAPIFunctions {
     getNVIDIAPowerCTRLDefaultPowerLimit = 'getNVIDIAPowerCTRLDefaultPowerLimit',
     getNVIDIAPowerCTRLMaxPowerLimit = 'getNVIDIAPowerCTRLMaxPowerLimit',
     getNVIDIAPowerCTRLAvailable = 'getNVIDIAPowerCTRLAvailable',
+    getHideCTGP = 'getHideCTGP'
 
 }

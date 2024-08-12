@@ -95,9 +95,9 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }, 10000);
     }
 
+    // todo: functions should start with Get or Set
     GetDeviceName() { return this.data.device; }
     DeviceHasAquaris() { return this.data.deviceHasAquaris; }
-    DeviceHideCTGP() { return this.data.deviceHideCTGP; }
     GetDisplayModesJSON() { return this.data.displayModesJSON; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -230,6 +230,11 @@ export class TccDBusInterface extends dbus.interface.Interface {
         return this.data.nvidiaPowerCTRLAvailable;
     }
 
+    GetHideCTGP() {
+        return this.data.deviceHideCTGP
+    }
+
+    // todo: add Get into function name
     dbusAvailable(): boolean {
         return this.data.dbusAvailable
     }
@@ -293,7 +298,8 @@ TccDBusInterface.configureMembers({
         SetDGpuD0Metrics: { inSignature: 'b' },
         GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
-        GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' }
+        GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' },
+        GetHideCTGP: { outSignature: 'b' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }
