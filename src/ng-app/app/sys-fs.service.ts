@@ -27,7 +27,7 @@ export class SysFsService implements OnDestroy {
 
 
   private updateInterval: NodeJS.Timeout;
-  private updatePeriodMs = 3000;
+  private updatePeriodMs: number = 3000;
   public generalCpuInfo: BehaviorSubject<IGeneralCPUInfo>;
   public logicalCoreInfo: BehaviorSubject<ILogicalCoreInfo[]>;
   public pstateInfo: BehaviorSubject<IPstateInfo>;
@@ -39,7 +39,7 @@ export class SysFsService implements OnDestroy {
 
 
     this.periodicUpdate();
-    this.updateInterval =  setInterval(async () => { await this.periodicUpdate(); }, this.updatePeriodMs);
+    this.updateInterval =  setInterval(async (): Promise<void> => { await this.periodicUpdate(); }, this.updatePeriodMs);
   }
 
   private async periodicUpdate(): Promise<void> {
@@ -62,7 +62,7 @@ export class SysFsService implements OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
@@ -77,7 +77,7 @@ export class SysFsService implements OnDestroy {
   }
 
   public async getPstateInfo(): Promise<IPstateInfo> {
-    return new Promise<IPstateInfo>(async (resolve, reject) => {
+    return new Promise<IPstateInfo>(async (resolve: (value: IPstateInfo | PromiseLike<IPstateInfo>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         try {
             const pstateInfo: IPstateInfo = {
                 noTurbo: await window.cpu.getIntelPstateTurboValueAsync()

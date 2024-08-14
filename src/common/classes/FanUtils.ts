@@ -17,32 +17,35 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { ITccFanTableEntry } from "../models/TccFanTable";
+
 function interpolatePoints(
-    points: { temp: number; speed: number }[],
+    points: ITccFanTableEntry[],
     x: number
 ): number {
-    const first = points[0];
-    const last = points[points?.length - 1];
+    const first: ITccFanTableEntry = points[0];
+    const last: ITccFanTableEntry = points[points?.length - 1];
     if (x <= first.temp) {
         return first.speed;
     }
     if (x >= last.temp) {
         return last.speed;
     }
-    const i =
-        points.findIndex((p, idx) => p.temp >= x || idx === points?.length - 1) -
+    const i: number =
+        points.findIndex((p: ITccFanTableEntry, idx: number): boolean => p.temp >= x || idx === points?.length - 1) -
         1;
+
     const { temp: x1, speed: y1 } = points[i];
     const { temp: x2, speed: y2 } = points[i + 1];
-    const m = (y2 - y1) / (x2 - x1);
-    const b = y1 - m * x1;
+    const m: number = (y2 - y1) / (x2 - x1);
+    const b: number = y1 - m * x1;
     return Math.round(m * x + b);
 }
 
 export function interpolatePointsArray(
-    points: { temp: number; speed: number }[]
+    points: ITccFanTableEntry[]
 ): number[] {
-    return Array.from({ length: 101 }, (_, i) => interpolatePoints(points, i));
+    return Array.from({ length: 101 }, (_: unknown, i: number): number => interpolatePoints(points, i));
 }
 
 

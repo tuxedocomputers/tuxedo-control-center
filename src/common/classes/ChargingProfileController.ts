@@ -26,6 +26,6 @@ export class ChargingProfileController extends SysFsController {
         super();
     }
 
-    readonly chargingProfilesAvailable = new SysFsPropertyStringList(path.join(this.basePath, 'charging_profiles_available'));
-    readonly chargingProfile = new SysFsPropertyString(path.join(this.basePath, 'charging_profile'));
+    readonly chargingProfilesAvailable: SysFsPropertyStringList = new SysFsPropertyStringList(path.join(this.basePath, 'charging_profiles_available'));
+    readonly chargingProfile: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'charging_profile'));
 }

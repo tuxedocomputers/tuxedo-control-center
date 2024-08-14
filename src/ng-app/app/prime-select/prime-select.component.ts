@@ -23,6 +23,7 @@ import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
+import { ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
 
 @Component({
     selector: "app-prime-select",
@@ -41,7 +42,7 @@ export class PrimeSelectComponent implements OnInit {
         private tccdbus: TccDBusClientService
     ) {}
 
-    public async ngOnInit() {
+    public async ngOnInit(): Promise<void> {
         this.subscribePrimeState();
     }
 
@@ -49,8 +50,8 @@ export class PrimeSelectComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    private subscribePrimeState() {
-        this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
+    private subscribePrimeState(): void {
+        this.tccdbus.primeState.pipe(first()).subscribe((state: string): void => {
             if (state) {
                 this.primeState = this.activeState = state;
             }
@@ -58,7 +59,7 @@ export class PrimeSelectComponent implements OnInit {
     }
 
     public async applyGpuProfile(selectedPrimeStatus: string): Promise<void> {
-        const status = await this.askProceedDialog();
+        const status: string = await this.askProceedDialog();
 
         if (status === "CANCEL" || status === undefined) {
             this.activeState = this.primeState;
@@ -70,10 +71,11 @@ export class PrimeSelectComponent implements OnInit {
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
-        const pkexecSetPrimeSelectAsync =
+        const pkexecSetPrimeSelectAsync: Promise<boolean> =
             this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
 
-        const isSuccessful = await this.utils.waitingDialog(
+        // todo: use boolean instead
+        const isSuccessful: Boolean = await this.utils.waitingDialog(
             config,
             pkexecSetPrimeSelectAsync
         );
@@ -107,7 +109,7 @@ export class PrimeSelectComponent implements OnInit {
                 },
             ],
         };
-        const returnValue = await this.utils.choiceDialog(rebootConfig);
+        const returnValue: ConfirmChoiceResult = await this.utils.choiceDialog(rebootConfig);
         return returnValue.value as string;
     }
 }

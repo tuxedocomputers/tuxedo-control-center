@@ -13,7 +13,7 @@ export class PowerStateStatusResolver implements Resolve<string> {
 
     resolve(): Observable<string> {
         return from(this.power.getDGpuPowerState()).pipe(
-            filter((value) => value !== undefined),
+            filter((value: string): boolean => value !== undefined),
             first()
         );
     }
@@ -22,6 +22,7 @@ export class PowerStateStatusResolver implements Resolve<string> {
     providedIn: "root",
 })
 export class DGpuStatusResolver implements Resolve<boolean> {
+    // todo: constructor is unnecessary
     constructor() {}
 
     resolve(): boolean {
@@ -32,6 +33,7 @@ export class DGpuStatusResolver implements Resolve<boolean> {
     providedIn: "root",
 })
 export class IGpuStatusResolver implements Resolve<boolean> {
+    // todo: constructor is unnecessary
     constructor() {}
 
     resolve(): boolean {
@@ -42,6 +44,7 @@ export class IGpuStatusResolver implements Resolve<boolean> {
     providedIn: "root",
 })
 export class AmdGpuCountResolver implements Resolve<number> {
+    // todo: constructor is unnecessary
     constructor() {}
 
     resolve(): number {
@@ -58,7 +61,7 @@ export class CpuVendorResolver implements Resolve<string> {
 
     resolve(): Observable<string> {
         return from(window.vendor.getCpuVendor()).pipe(
-            filter((value) => value !== undefined),
+            filter((value: string): boolean => value !== undefined),
             first()
         );
     }

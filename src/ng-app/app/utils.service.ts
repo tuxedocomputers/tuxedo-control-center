@@ -23,26 +23,34 @@ import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent, WaitingDialogData } from './dialog-choice/dialog-choice.component';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
+import { BrightnessModeString } from 'src/e-app/backendAPIs/translationAndTheme';
+import * as fs from 'fs';
+import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
 
-  private blurNoInput = false;
+  private blurNoInput: boolean = false;
   get pageDisabled(): boolean { return this.blurNoInput; }
   set pageDisabled(value: boolean) { this.blurNoInput = value; }
 
-  private languagesMenuArray = [
+  private languagesMenuArray: { id: string, label: string, img: string }[] = [
     { id: 'en', label: 'English', img: 'english.svg' },
     { id: 'de', label: 'Deutsch', img: 'german.svg' }
   ];
-  private languageMap;
+  private languageMap: Map<string, {
+        id: string;
+        label: string;
+        img: string;
+    }>
 
   public themeClass: BehaviorSubject<string>;
 
@@ -52,9 +60,9 @@ export class UtilsService {
     private decimalPipe: DecimalPipe,
     public overlayContainer: OverlayContainer,
     public dialog: MatDialog,
-    @Inject(LOCALE_ID) localeId) {
+    @Inject(LOCALE_ID) localeId: string) {
       this.localeId = localeId;
-      this.languageMap = {};
+      this.languageMap = new Map()
       for (const lang of this.getLanguagesMenuArray()) {
         this.languageMap[lang.id] = lang;
       }
@@ -70,7 +78,7 @@ export class UtilsService {
   // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
   // logic moved to main.ts
   public async getPath(path: string): Promise<string>
-  { 
+  {
     return window.ipc.getPath(path);
   }
 
@@ -78,9 +86,9 @@ export class UtilsService {
    // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
    // for selecting existing files
    // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
-  public async openFileDialog(properties): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      window.ipc.openFileDialog(properties).then((result) => {
+  public async openFileDialog(properties: Electron.OpenDialogOptions): Promise<string[]> {
+      return new Promise<string[]>((resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
+      window.ipc.openFileDialog(properties).then((result: OpenDialogReturnValue): void => {
         if (result.canceled) {
             reject(result.canceled);
           } else {
@@ -94,9 +102,9 @@ export class UtilsService {
   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
   // for selecting a non existing file (saving)
   // does not save anything, just returns a path
-  public async saveFileDialog(properties): Promise<Buffer> {
-    return new Promise<Buffer>((resolve, reject) => {
-      window.ipc.saveFileDialog(properties).then((result) => {
+  public async saveFileDialog(properties: Electron.OpenDialogOptions): Promise<string> {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+      window.ipc.saveFileDialog(properties).then((result: SaveDialogReturnValue): void => {
         if (result.canceled) {
           reject(result.canceled);
         } else {
@@ -106,12 +114,12 @@ export class UtilsService {
     });
   }
 
-  public async openExternal(url)
+  public async openExternal(url: string): Promise<void>
   {
     window.ipc.openExternal(url);
   }
 
-public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?): Promise<void> {
+public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> {
     return window.fs.writeTextFile(filePath,fileData,writeFileOptions);
 }
 
@@ -127,22 +135,22 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return this.decimalPipe.transform(frequency / 1000, '1.1-1');
   }
 
-  public quit()
+  public quit(): void
   {
-    window.ipc.closeApp(); 
+    window.ipc.closeApp();
   }
 
-  public closeWindow()
+  public closeWindow(): void
   {
-    window.ipc.closeWindow(); 
+    window.ipc.closeWindow();
   }
 
-  public minimizeWindow()
+  public minimizeWindow(): void
   {
-    window.ipc.minimizeWindow(); 
+    window.ipc.minimizeWindow();
   }
 
-   public changeLanguage(languageId: string) {
+   public changeLanguage(languageId: string): void {
     window.ipc.triggerLanguageChange(languageId);
   }
 
@@ -150,11 +158,11 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return this.localeId;
   }
 
-  public getLanguageData(langId: string) {
+  public getLanguageData(langId: string): string {
     return this.languageMap[langId];
   }
 
-  public getLanguagesMenuArray() {
+  public getLanguagesMenuArray(): { id: string, label: string, img: string }[] {
     return this.languagesMenuArray;
   }
 
@@ -163,11 +171,11 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   // TODO make brightness mode into an enum and export it from somewhere else, e.g. render.d.ts
-  public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
+  public async setBrightnessMode(mode: BrightnessModeString): Promise<void> {
     return await window.ipc.setBrightnessMode( mode);
   }
 
-  public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {
+  public async getBrightnessMode(): Promise<BrightnessModeString> {
     return await window.ipc.getBrightnessMode();
   }
 
@@ -178,7 +186,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   /**
    * Note: Only for updating web part, to change behaviour use setBrightnessMode
    */
-  public setThemeClass(className: string) {
+  public setThemeClass(className: string): void {
     if (className == "light-theme") {
         this.overlayContainer.getContainerElement().classList.remove("dark-theme");
     }
@@ -189,15 +197,15 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     this.themeClass.next(className);
   }
 
-  public setThemeLight() {
+  public setThemeLight(): void {
     this.setThemeClass('light-theme');
   }
 
-  public setThemeDark() {
+  public setThemeDark(): void {
     this.setThemeClass('dark-theme');
   }
 
-  public async updateBrightnessMode() {
+  public async updateBrightnessMode(): Promise<void> {
     if (await this.getShouldUseDarkColors()) {
         this.setThemeDark();
     } else {
@@ -206,7 +214,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
 }
 
   public async confirmDialog(config: ConfirmDialogData): Promise<ConfirmDialogResult> {
-    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+    const dialogRef: MatDialogRef<DialogConfirmComponent, ConfirmDialogResult> = this.dialog.open(DialogConfirmComponent, {
       minWidth: 350,
       maxWidth: 550,
       data: config
@@ -222,7 +230,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   public async choiceDialog(config: ChoiceDialogData, disableClose: boolean = false): Promise<ConfirmChoiceResult> {
-    const dialogRef = this.dialog.open(DialogChoiceComponent, {
+    const dialogRef: MatDialogRef<DialogChoiceComponent, ConfirmChoiceResult> = this.dialog.open(DialogChoiceComponent, {
       minWidth: 350,
       maxWidth: 550,
       data: config,
@@ -239,33 +247,34 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     return result;
   }
 
+  // todo: using boolean instead of Boolean
   public async waitingDialog(
     config: WaitingDialogData,
     pkexecSetPrimeSelectAsync: Promise<Boolean>
   ): Promise<Boolean> {
-    const dialogRef = this.dialog.open(DialogWaitingComponent, {
+    const dialogRef: MatDialogRef<DialogWaitingComponent, Boolean> = this.dialog.open(DialogWaitingComponent, {
       minWidth: 350,
       maxWidth: 550,
       data: config,
       autoFocus: false,
       disableClose: true,
     });
-    const status = await pkexecSetPrimeSelectAsync;
+    const status: Boolean = await pkexecSetPrimeSelectAsync;
     dialogRef.close();
     return status;
   }
 
-  public async inputTextDialog(config: any) {
-    const dialogRef = this.dialog.open(DialogInputTextComponent, {
+  public async inputTextDialog(config: any): Promise<string> {
+    const dialogRef: MatDialogRef<DialogInputTextComponent, string> = this.dialog.open(DialogInputTextComponent, {
       minWidth: 350,
       data: config,
     });
     return dialogRef.afterClosed().toPromise();
   }
-  
-  private defaultProfileInfos = new Map<string, IProfileTextMappings>();
 
-  public fillDefaultProfileTexts(profile: ITccProfile) {
+  private defaultProfileInfos: Map<string, IProfileTextMappings> = new Map<string, IProfileTextMappings>();
+
+  public fillDefaultProfileTexts(profile: ITccProfile): void {
 
     this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
         name: $localize `:@@profileNameQuiet:Quiet`,
@@ -303,7 +312,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
         description: $localize `:@@profileDescLegacyPowersaveExtreme:Heavily reduced performance in favor of lowest possible power consumption and silent cooling.`
     });
 
-    const defaultProfileInfo = this.defaultProfileInfos.get(profile.id);
+    const defaultProfileInfo: IProfileTextMappings = this.defaultProfileInfos.get(profile.id);
     if (defaultProfileInfo !== undefined) {
         profile.name = defaultProfileInfo.name;
         profile.description = defaultProfileInfo.description;
@@ -311,7 +320,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   public getDefaultProfileName(profileId: string): string {
-    const info = this.defaultProfileInfos.get(profileId);
+    const info: IProfileTextMappings = this.defaultProfileInfos.get(profileId);
     if (info !== undefined) {
         return info.name;
     } else {
@@ -320,7 +329,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   }
 
   public getDefaultProfileDescription(profileId: string): string {
-    const info = this.defaultProfileInfos.get(profileId);
+    const info: IProfileTextMappings = this.defaultProfileInfos.get(profileId);
     if (info !== undefined) {
         return info.description;
     } else {

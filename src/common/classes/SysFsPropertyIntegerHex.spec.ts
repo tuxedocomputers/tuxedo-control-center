@@ -17,12 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: any = require('mock-fs');
 import * as fs from 'fs';
 
 import { SysFsPropertyIntegerHex } from './SysFsProperties';
 
-describe('SysDevPropertyInteger', () => {
+describe('SysDevPropertyInteger', (): void => {
 
     const dev = new SysFsPropertyIntegerHex(
         '/sys/bus/usb/drivers/usb/1-2/idProduct',
@@ -30,39 +30,39 @@ describe('SysDevPropertyInteger', () => {
     );
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
             '/sys/bus/usb/drivers/usb/1-2/': {}
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('should throw error if file cannot be read', () => {
-        expect(() => { dev.readValue(); }).toThrow();
+    it('should throw error if file cannot be read', (): void => {
+        expect((): void => { dev.readValue(); }).toThrow();
     });
 
-    it('should not throw and return NaN if value is not an integer', () => {
+    it('should not throw and return NaN if value is not an integer', (): void => {
         mock({ '/sys/bus/usb/drivers/usb/1-2/idProduct' : 'no numbers here' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toBeNaN();
     });
 
-    it('should correctly read an integer from file', () => {
+    it('should correctly read an integer from file', (): void => {
         mock({ '/sys/bus/usb/drivers/usb/1-2/idProduct' : '04f2' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toBe(1266);
     });
 
-    it('should throw if file cannot be written', () => {
-        expect(() => { dev.writeValue(1234); }).toThrow();
+    it('should throw if file cannot be written', (): void => {
+        expect((): void => { dev.writeValue(1234); }).toThrow();
     });
 
-    it('should write number as a string if file exists', () => {
+    it('should write number as a string if file exists', (): void => {
         mock({ '/sys/bus/usb/drivers/usb/1-2/idProduct' : '' });
-        expect( () => { dev.writeValue(1234); }).not.toThrow();
+        expect( (): void => { dev.writeValue(1234); }).not.toThrow();
         expect(fs.readFileSync('/sys/bus/usb/drivers/usb/1-2/idProduct').toString()).toBe('4d2');
     });
 });

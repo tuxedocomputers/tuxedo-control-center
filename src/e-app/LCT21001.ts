@@ -19,11 +19,11 @@
 import { createBluetooth } from 'node-ble';
 import * as NodeBle from 'node-ble';
 
-function sleep(ms: number, arg = 'timeout') {
-    return new Promise(resolve => setTimeout(resolve, ms, arg));
+function sleep(ms: number, arg: string = 'timeout'): Promise<string> {
+    return new Promise<string>((resolve: (value: string) => void): NodeJS.Timeout => setTimeout(resolve, ms, arg));
 }
 
-const noop = () => {};
+const noop: () => void = (): void => {};
 
 export enum RGBState {
     Static = 0x00,
@@ -55,17 +55,17 @@ export class DeviceInfo {
  */
 export class LCT21001 {
 
-    private static readonly NORDIC_UART_SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
-    private static readonly NORDIC_UART_CHAR_TX = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
-    private static readonly NORDIC_UART_CHAR_RX = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
+    private static readonly NORDIC_UART_SERVICE_UUID: string = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+    private static readonly NORDIC_UART_CHAR_TX: string = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+    private static readonly NORDIC_UART_CHAR_RX: string = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 
-    private static readonly CMD_RESET = 0x19;
-    private static readonly CMD_FAN = 0x1b;
-    private static readonly CMD_PUMP = 0x1c;
-    private static readonly CMD_RGB = 0x1e;
+    private static readonly CMD_RESET: number = 0x19;
+    private static readonly CMD_FAN: number = 0x1b;
+    private static readonly CMD_PUMP: number = 0x1c;
+    private static readonly CMD_RGB: number = 0x1e;
 
-    public static RGBState = RGBState;
-    public static PumpVoltage = PumpVoltage;
+    public static RGBState: typeof RGBState = RGBState;
+    public static PumpVoltage: typeof PumpVoltage = PumpVoltage;
 
     private adapter: NodeBle.Adapter | undefined;
     private device: NodeBle.Device | undefined;
@@ -93,7 +93,7 @@ export class LCT21001 {
     /**
      * Initialize bluetooth communication and attempt to connect to device
      */
-    async connect(deviceUUID: string) {
+    async connect(deviceUUID: string): Promise<void> {
         this.device = await this.adapter.getDevice(deviceUUID);
 
         let rssi, deviceName: string;
@@ -108,10 +108,10 @@ export class LCT21001 {
             throw Error('connect(): failed reading name');
         }
 
-        const connectionTimeout = sleep(5000, 'timeout');
-        const connect = this.device.connect();
+        const connectionTimeout: Promise<string> = sleep(5000, 'timeout');
+        const connect: Promise<void> = this.device.connect();
 
-        const result = await Promise.race([connect, connectionTimeout]);
+        const result: void | string = await Promise.race([connect, connectionTimeout]);
         if (result === 'timeout') {
             await this.device.disconnect();
             return;
@@ -119,7 +119,7 @@ export class LCT21001 {
 
         const gattServer = await this.device.gatt();
 
-        const uartService = await gattServer.getPrimaryService(LCT21001.NORDIC_UART_SERVICE_UUID);
+        const uartService: NodeBle.GattService = await gattServer.getPrimaryService(LCT21001.NORDIC_UART_SERVICE_UUID);
         this.uartTx = await uartService.getCharacteristic(LCT21001.NORDIC_UART_CHAR_TX);
         this.uartRx = await uartService.getCharacteristic(LCT21001.NORDIC_UART_CHAR_RX);
 
@@ -129,7 +129,7 @@ export class LCT21001 {
     /**
      * Disconnect from device and clean-up bluetooth initializations
      */
-    async disconnect() {
+    async disconnect(): Promise<void> {
         if (this.device !== undefined && await this.device.isConnected()) {
             // Data written on disconnect by original control, seems to reset
             // or turn off configured parameters
@@ -144,7 +144,7 @@ export class LCT21001 {
         }
     }
 
-    async startDiscover() {
+    async startDiscover(): Promise<boolean> {
         try {
             const { bluetooth, destroy } = createBluetooth();
             this.destroy = destroy;
@@ -162,10 +162,10 @@ export class LCT21001 {
         }
     }
 
-    async stopDiscover() {
+    async stopDiscover(): Promise<void> {
         // Clean-up other initialized stuff
         if (this.adapter !== undefined && await this.adapter.isDiscovering()) {
-            await this.adapter.stopDiscovery().catch(err => console.error("LCT21001: stopDiscover failed =>", err));
+            await this.adapter.stopDiscovery().catch((err: unknown): void => console.error("LCT21001: stopDiscover failed =>", err));
         }
 
         if (this.destroy !== undefined) {
@@ -173,7 +173,7 @@ export class LCT21001 {
         }
     }
 
-    async isDiscovering() {
+    async isDiscovering(): Promise<boolean> {
         try {
             return await this.adapter?.isDiscovering();
         } catch (err: unknown) {
@@ -182,10 +182,10 @@ export class LCT21001 {
         }
     }
 
-    async getDeviceList() {
-        const deviceIds = await this.adapter.devices();
-        const deviceInfo = [];
-        let blDevice;
+    async getDeviceList(): Promise<DeviceInfo[]> {
+        const deviceIds: string[] = await this.adapter.devices();
+        const deviceInfo: DeviceInfo[] = [];
+        let blDevice: NodeBle.Device;
         for (let deviceId of deviceIds) {
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
@@ -214,7 +214,7 @@ export class LCT21001 {
 
             await blDevice.cleanup();
 
-            const model = await this.deviceModelFromName(info.name);
+            const model: LCTDeviceModel = await this.deviceModelFromName(info.name);
             if (model !== undefined) {
                 deviceInfo.push(info);
             }
@@ -223,11 +223,12 @@ export class LCT21001 {
         return deviceInfo;
     }
 
-    async isConnected() {
-        let result;
+    async isConnected(): Promise<boolean> {
+        let result: boolean;
 
         try {
-            result = await this.device?.isConnected();
+            // todo: testing
+            result = !!await this.device?.isConnected();
         } catch (err: unknown) {
             console.error("LCT21001: isConnected failed =>", err)
             result = false;
@@ -247,7 +248,7 @@ export class LCT21001 {
      *
      * Note: Throws error if not connected
      */
-    async writeBuffer(buffer: Buffer) {
+    async writeBuffer(buffer: Buffer): Promise<void> {
         if (this.uartTx !== undefined && await this.isConnected()) {
             await this.uartTx.writeValue(buffer, { type: 'request' });
         } else {
@@ -262,7 +263,7 @@ export class LCT21001 {
      *
      * Note: Throws error if not connected
      */
-    async readBuffer() {
+    async readBuffer(): Promise<Buffer> {
         if (this.uartRx !== undefined && await this.isConnected()) {
             return await this.uartRx.readValue();
         } else {
@@ -280,17 +281,17 @@ export class LCT21001 {
      * Note: Throws error if not connected
      */
     async writeReceive(inputBuffer: Buffer): Promise<Buffer> {
-        return new Promise<Buffer>(async (resolve, reject) => {
+        return new Promise<Buffer>(async (resolve: (value: Buffer | PromiseLike<Buffer>) => void, reject: (reason?: unknown) => void): Promise<void> => {
             if (this.uartRx !== undefined && await this.isConnected()) {
                 if (await this.uartRx.isNotifying()) {
                     reject('rx already awaiting notify');
                 }
                 await this.uartRx.startNotifications();
-                this.uartRx.once('valuechanged', async outputBuffer => {
+                this.uartRx.once('valuechanged', async (outputBuffer: any) => {
                     await this.uartRx?.stopNotifications();
                     resolve(outputBuffer);
                 });
-                this.writeBuffer(inputBuffer).catch(async () => {
+                this.writeBuffer(inputBuffer).catch(async (): Promise<void> => {
                     await this.uartRx?.stopNotifications();
                     this.uartRx?.removeAllListeners();
                     reject()
@@ -309,18 +310,18 @@ export class LCT21001 {
      * @param blue Blue color 0-255
      * @param state Behaviour of light display
      */
-    async writeRGB(red: number, green: number, blue: number, state: RGBState | number) {
+    async writeRGB(red: number, green: number, blue: number, state: RGBState | number): Promise<void> {
         if (red < 0 || red > 0xff) throw Error('writeRGB(): param out of range');
         if (green < 0 || green > 0xff) throw Error('writeRGB(): param out of range');
         if (blue < 0 || blue > 0xff) throw Error('writeRGB(): param out of range');
         if (state < 0 || state > 0x03) throw Error('writeRGB(): param out of range');
 
-        const data = Buffer.from([0xfe, LCT21001.CMD_RGB, 0x01, red, green, blue, state, 0xef]);
+        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_RGB, 0x01, red, green, blue, state, 0xef]);
         await this.writeBuffer(data);
     }
 
-    async writeRGBOff() {
-        const data = Buffer.from([0xfe, LCT21001.CMD_RGB, 0x00, 0x00, 0x00, 0x00, 0x00, 0xef]);
+    async writeRGBOff(): Promise<void> {
+        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_RGB, 0x00, 0x00, 0x00, 0x00, 0x00, 0xef]);
         await this.writeBuffer(data);
     }
 
@@ -329,14 +330,14 @@ export class LCT21001 {
      *
      * @param dutyCyclePercent Fan speed in percent 0-100
      */
-    async writeFanMode(dutyCyclePercent: number) {
+    async writeFanMode(dutyCyclePercent: number): Promise<void> {
         if (dutyCyclePercent < 0 || dutyCyclePercent > 0xff) throw Error('writeFanMode(): param out of range');
-        const data = Buffer.from([0xfe, LCT21001.CMD_FAN, 0x01, dutyCyclePercent, 0x00, 0x00, 0x00, 0xef]);
+        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_FAN, 0x01, dutyCyclePercent, 0x00, 0x00, 0x00, 0xef]);
         await this.writeBuffer(data);
     }
 
-    async writeFanOff() {
-        const data = Buffer.from([0xfe, LCT21001.CMD_FAN, 0x00, 0x00, 0x00, 0x00, 0x00, 0xef]);
+    async writeFanOff(): Promise<void> {
+        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_FAN, 0x00, 0x00, 0x00, 0x00, 0x00, 0xef]);
         await this.writeBuffer(data);
     }
 
@@ -346,7 +347,7 @@ export class LCT21001 {
      * @param pumpDutyCyclePercent Duty cycle in percent 0-100
      * @param pumpVoltage See `PumpVoltage` for valid settings
      */
-    async writePumpMode(pumpDutyCyclePercent?: number, pumpVoltage?: PumpVoltage | number) {
+    async writePumpMode(pumpDutyCyclePercent?: number, pumpVoltage?: PumpVoltage | number): Promise<void> {
         if (pumpDutyCyclePercent === undefined) {
             pumpDutyCyclePercent = 60;
         }
@@ -356,12 +357,12 @@ export class LCT21001 {
         }
         if (pumpVoltage < 0 || pumpVoltage > 0x03) throw Error('writePumpMode(): param out of range');
 
-        const data = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x01, pumpDutyCyclePercent, pumpVoltage, 0x00, 0x00, 0xef]);
+        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x01, pumpDutyCyclePercent, pumpVoltage, 0x00, 0x00, 0xef]);
         await this.writeBuffer(data);
     }
 
-    async writePumpOff() {
-        const data = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x00, 0x00, 0x00, 0x00, 0x00, 0xef]);
+    async writePumpOff(): Promise<void> {
+        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x00, 0x00, 0x00, 0x00, 0x00, 0xef]);
         await this.writeBuffer(data);
     }
 
@@ -370,14 +371,14 @@ export class LCT21001 {
      *
      * @returns A `Buffer` representing a string describing the firmware version
      */
-    async readFwVersion() {
+    async readFwVersion(): Promise<Buffer> {
         return await this.writeReceive(Buffer.from([0x73, 0x77]));
     }
 
     /**
      * Write (presumably) reset to device
      */
-    async writeReset() {
+    async writeReset(): Promise<void> {
         await this.writeBuffer(Buffer.from([0xfe, LCT21001.CMD_RESET, 0x00, 0x01, 0x00, 0x00, 0x00, 0xef]));
     }
 }

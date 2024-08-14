@@ -23,20 +23,20 @@ import * as path from 'path';
 import { nativeTheme } from 'electron';
 
 
-export async function changeLanguage(newLangId: string) {
+export async function changeLanguage(newLangId: string): Promise<void> {
     if (newLangId !== await userConfig.get('langId')) {
         await userConfig.set('langId', newLangId);
         await loadTranslation(newLangId);
         await updateTrayProfiles();
         if (tccWindow) {
-            const indexPath = path.join(__dirname, '..', '..', '..', 'ng-app', newLangId, 'index.html');
+            const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', newLangId, 'index.html');
             await tccWindow.loadFile(indexPath);
         }
     }
 }
 
 // Handle nativeTheme updated event, whether system triggered or from tcc
-nativeTheme.on('updated', () => {
+nativeTheme.on('updated', (): void => {
     if (tccWindow) {
         tccWindow.webContents.send('update-brightness-mode');
     }
@@ -48,8 +48,8 @@ nativeTheme.on('updated', () => {
     }
 });
 
-type BrightnessModeString = 'light' | 'dark' | 'system';
-export async function setBrightnessMode(mode: BrightnessModeString) {
+export type BrightnessModeString = 'light' | 'dark' | 'system';
+export async function setBrightnessMode(mode: BrightnessModeString): Promise<void> {
     // Save wish to user config
     await userConfig.set('brightnessMode', mode);
     // Update electron theme source
@@ -57,7 +57,7 @@ export async function setBrightnessMode(mode: BrightnessModeString) {
 }
 
 export async function getBrightnessMode(): Promise<BrightnessModeString> {
-    let mode = await userConfig.get('brightnessMode') as BrightnessModeString | undefined;
+    let mode: BrightnessModeString = await userConfig.get('brightnessMode') as BrightnessModeString | undefined;
     switch (mode) {
         case 'light':
         case 'dark':
@@ -68,17 +68,17 @@ export async function getBrightnessMode(): Promise<BrightnessModeString> {
     return mode;
 }
 
-export async function loadTranslation(langId) {
+export async function loadTranslation(langId: string): Promise<void> {
 
     // Watch mode Workaround: Waiting for translation when starting in watch mode
-    let canLoadTranslation = false;
+    let canLoadTranslation: boolean = false;
     while (watchOption && !canLoadTranslation) {
         try {
             await translation.loadLanguage(langId);
             canLoadTranslation = true;
         } catch (err: unknown) {
             console.error("translationAndTheme: loadTranslation failed =>", err)
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 3000));
         }
     }
     // End watch mode workaround

@@ -22,14 +22,14 @@ const { ipcRenderer } = require('electron');
 
 // for preload script
 export const TomteClientAPI = {
-    resetToDefaults: () => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.resetToDefaults]),
-    getModuleDescription: (moduleName, langId) => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.getModuleDescription, moduleName, langId]),
-    getTomteInformation: () => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.getTomteInformation]),
-    removeModule: (name) => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.removeModule, name]),
-    installModule: (name) => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.installModule, name]),
-    unBlockModule: (name) => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.unBlockModue, name]),
-    blockModule: (name) => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.blockModule, name]),
-    setMode: (mode) => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.setMode, mode]),
+    resetToDefaults: (): Promise<string> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.resetToDefaults]),
+    getModuleDescription: (moduleName: string, langId: string): Promise<string> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.getModuleDescription, moduleName, langId]),
+    getTomteInformation: (): Promise<ITomteInformation> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.getTomteInformation]),
+    removeModule: (name: string): Promise<void> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.removeModule, name]),
+    installModule: (name: string): Promise<void> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.installModule, name]),
+    unBlockModule: (name: string): Promise<void> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.unBlockModue, name]),
+    blockModule: (name: string): Promise<void> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.blockModule, name]),
+    setMode: (mode: string): Promise<void> => ipcRenderer.invoke(tomteAPIHandle, [TomteAPIFunctions.setMode, mode]),
 }
 
 // for render.d.ts typescript definition
@@ -41,5 +41,5 @@ export interface ITomteClientAPI {
     installModule: (name: string) => Promise<boolean>,
     unBlockModule: (name: string) => Promise<boolean>,
     blockModule: (name: string) => Promise<boolean>,
-    setMode: (mode: string) => Promise<boolean>,
+    setMode: (mode: ["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"]) => Promise<boolean>,
 }

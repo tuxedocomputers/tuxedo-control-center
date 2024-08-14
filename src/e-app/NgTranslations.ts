@@ -55,8 +55,8 @@ export class NgTranslations {
         }
 
         let translation: string = undefined;
-        const chosenLangLookup = this.translationMap.get(id);
-        const originalLangLookup = this.translationMapOriginal.get(id);
+        const chosenLangLookup: string = this.translationMap.get(id);
+        const originalLangLookup: string = this.translationMapOriginal.get(id);
 
         if (chosenLangLookup !== undefined) {
             translation = chosenLangLookup;
@@ -67,8 +67,8 @@ export class NgTranslations {
         return translation;
     }
 
-    public async loadLanguage(langId?: string) {
-        const fileName = 'lang.' + langId + '.xlf';
+    public async loadLanguage(langId?: string): Promise<void> {
+        const fileName: string = 'lang.' + langId + '.xlf';
         if (langId !== undefined) {
             this.translationMap = await this.loadFile(fileName);
         }
@@ -76,14 +76,14 @@ export class NgTranslations {
     }
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
-        return new Promise<Map<string, string>>((resolve, reject) => {
-            let xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
-            fs.readFile(xlfPath, (err, xmlBuffer) => {
+        return new Promise<Map<string, string>>(async (resolve: (value: Map<string, string> | PromiseLike<Map<string, string>>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+            let xlfPath: string = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
+            fs.readFile(xlfPath, (err: any, xmlBuffer: Buffer): void => {
                 if (err) {
                     console.error("NgTranslations: loadFile readFile failed =>", err)
                     reject(err);
                 } else {
-                    xliff.xliff12ToJs(xmlBuffer.toString(), (err, jsXlf) => {
+                    xliff.xliff12ToJs(xmlBuffer.toString(), (err: unknown, jsXlf: any): void => {
                         if (err) {
                             console.error("NgTranslations: loadFile xliff12ToJs failed =>", err)
                             reject(err);
@@ -103,7 +103,7 @@ export class NgTranslations {
 
     private parseJS(jsXlfObj: any, property?: string): Map<string, string> {
         const langMap = new Map<string, string>();
-        const entries = jsXlfObj['resources']['ng2.template'];
+        const entries: any = jsXlfObj['resources']['ng2.template'];
         if (property === undefined) {
             property = 'target';
         }
@@ -114,7 +114,7 @@ export class NgTranslations {
     }
 }
 
-export const profileIdToI18nId = new Map<string, IProfileTextMappings>()
+export const profileIdToI18nId: Map<string, IProfileTextMappings> = new Map<string, IProfileTextMappings>()
     .set(DefaultProfileIDs.MaxEnergySave, { name: 'profileNamePowersaveExtreme', description: 'profileDescPowersaveExtreme' })
     .set(DefaultProfileIDs.Quiet, { name: 'profileNameQuiet', description: 'profileDescQuiet' })
     .set(DefaultProfileIDs.Office, { name: 'profileNameOffice', description: 'profileDescOffice' })

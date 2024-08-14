@@ -28,4 +28,4 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule, {
   providers: []
-}).catch(err => console.error("main: bootstrapModule failed =>", err));
+}).catch((err: unknown): void => console.error("main: bootstrapModule failed =>", err));

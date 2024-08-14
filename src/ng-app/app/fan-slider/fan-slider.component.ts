@@ -50,19 +50,19 @@ import { UtilsService } from "../utils.service";
     styleUrls: ["./fan-slider.component.scss"],
 })
 export class FanSliderComponent implements OnInit {
-    public customFanPreset = customFanPreset;
+    public customFanPreset: ITccFanProfile = customFanPreset;
 
     @Input()
     public customFanCurve: ITccFanProfile;
 
     @Output()
-    public setSliderDirty = new EventEmitter<void>();
+    public setSliderDirty: EventEmitter<void> = new EventEmitter<void>();
 
     @Output()
-    public customFanCurveEvent = new EventEmitter<ITccFanProfile>();
+    public customFanCurveEvent: EventEmitter<ITccFanProfile> = new EventEmitter<ITccFanProfile>();
 
     @Output()
-    public chartToggleEvent = new EventEmitter<boolean>();
+    public chartToggleEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @Input()
     public tempCustomFanCurve: ITccFanProfile;
@@ -75,30 +75,30 @@ export class FanSliderComponent implements OnInit {
     private mutex = new Mutex();
     public tempsLabels: Label[] = Array.from(Array(100).keys())
         .concat(100)
-        .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));
+        .map((e: number): string => formatTemp(e, this.config.getSettings().fahrenheit));
     public graphOptions: ChartOptions = graphOptions;
     public fantableDatasets: ChartDataSets[] = fantableDatasets;
     public graphColors: Color[] = graphColors;
-    public graphType = "line";
+    public graphType: string = "line";
 
     constructor(
-        
-        private fb: FormBuilder,       
-        private config: ConfigService, 
-        private utils: UtilsService,    
+
+        private fb: FormBuilder,
+        private config: ConfigService,
+        private utils: UtilsService,
         ) {}
-                
+
     public ngOnInit(): void {
         this.initFanFormGroup();
         this.updateFanChartDataset();
     }
 
     private initFanFormGroup(): void {
-        const fanCurve = this.tempCustomFanCurve || this.customFanCurve;
+        const fanCurve: ITccFanProfile = this.tempCustomFanCurve || this.customFanCurve;
 
         // currently only using cpu values for both gpu and cpu
-        const initialValues = fanCurve.tableCPU.reduce(
-            (acc, { temp, speed }) => {
+        const initialValues: any = fanCurve.tableCPU.reduce(
+            (acc: {}, { temp, speed }: ITccFanTableEntry): {} => {
                 return { ...acc, ...{ [`${temp}c`]: speed } };
             },
             {}
@@ -108,14 +108,14 @@ export class FanSliderComponent implements OnInit {
     }
 
     public patchFanFormGroup(ac: AbstractControl): void {
-        ac.value.tableGPU.forEach(({ temp, speed }) => {
+        ac.value.tableGPU.forEach(({ temp, speed }: ITccFanTableEntry): void => {
             this.fanFormGroup.controls[`${temp}c`].setValue(speed);
         });
         this.updateFanChartDataset();
     }
 
     public getFanFormGroupValues(): ITccFanProfile {
-        const fanTable = customFanPreset.tableCPU.map(({ temp }) => ({
+        const fanTable: ITccFanTableEntry[] = customFanPreset.tableCPU.map(({ temp }: ITccFanTableEntry): ITccFanTableEntry => ({
             temp,
             speed: this.fanFormGroup.get(`${temp}c`).value,
         }));
@@ -128,11 +128,11 @@ export class FanSliderComponent implements OnInit {
         });
     }
 
-    formatTemperatureLabel(temp: number) {
+    formatTemperatureLabel(temp: number): string {
         if(this.config.getSettings().fahrenheit) {
             temp = Math.round(this.utils.getFahrenheitFromCelsius(temp));
             return temp.toString() + " °F";
-        }   
+        }
         else {
             return temp.toString() + " °C";
         }
@@ -142,13 +142,13 @@ export class FanSliderComponent implements OnInit {
         sliderValue: number,
         temp: number
     ): Promise<void> {
-        await this.mutex.runExclusive(async () => {
-            const clampedSliderValue = manageCriticalTemperature(
+        await this.mutex.runExclusive(async (): Promise<void> => {
+            const clampedSliderValue: number = manageCriticalTemperature(
                 temp,
                 sliderValue
             );
-            const leftSliders = this.getSlidersToAdjust(temp, "left");
-            const rightSliders = this.getSlidersToAdjust(temp, "right");
+            const leftSliders: number[] = this.getSlidersToAdjust(temp, "left");
+            const rightSliders: number[] = this.getSlidersToAdjust(temp, "right");
 
             this.adjustSliders(leftSliders, clampedSliderValue, temp, "left");
             this.adjustSliders(rightSliders, clampedSliderValue, temp, "right");
@@ -164,12 +164,12 @@ export class FanSliderComponent implements OnInit {
         temp: number,
         direction: "left" | "right"
     ): number[] {
-        const comparison = direction === "left" ? "<" : ">";
+        const comparison: "<" | ">" = direction === "left" ? "<" : ">";
         return this.customFanPreset.tableCPU
-            .filter((entry: ITccFanTableEntry) =>
+            .filter((entry: ITccFanTableEntry): string =>
                 eval(`${entry.temp} ${comparison} ${temp}`)
             )
-            .map((entry) => entry.temp);
+            .map((entry: ITccFanTableEntry): number => entry.temp);
     }
 
     private adjustSliders(
@@ -178,11 +178,11 @@ export class FanSliderComponent implements OnInit {
         temp: number,
         direction: "left" | "right"
     ): void {
-        const targetValue = manageCriticalTemperature(temp, sliderValue);
+        const targetValue: number = manageCriticalTemperature(temp, sliderValue);
 
         for (const slider of sliders) {
-            const sliderControl = this.fanFormGroup.get(`${slider}c`);
-            const sliderControlValue = sliderControl.value;
+            const sliderControl: AbstractControl = this.fanFormGroup.get(`${slider}c`);
+            const sliderControlValue: any = sliderControl.value;
 
             if (
                 (direction === "left" && sliderControlValue > sliderValue) ||
@@ -193,31 +193,31 @@ export class FanSliderComponent implements OnInit {
         }
     }
 
-    public async updateComponents(sliderValue: number, temp: number) {
+    public async updateComponents(sliderValue: number, temp: number): Promise<void> {
         await this.adjustSliderValues(sliderValue, temp);
     }
 
-    public dirtyFanFormGroup() {
+    public dirtyFanFormGroup(): void {
         this.setSliderDirty.emit();
     }
 
-    public updateFanChartDataset() {
+    public updateFanChartDataset(): void {
         let { tableCPU, tableGPU } = this.getFanFormGroupValues();
 
         this.fantableDatasets[0].data = interpolatePointsArray(tableCPU);
         this.fantableDatasets[1].data = interpolatePointsArray(tableGPU);
     }
 
-    public toggleFanGraphs() {
+    public toggleFanGraphs(): void {
         this.updateFanChartDataset();
-        const canvas = document.getElementById("hidden");
+        const canvas: HTMLElement = document.getElementById("hidden");
         this.showFanGraphs = !this.showFanGraphs;
         if (canvas) {
             canvas.style.display = this.showFanGraphs ? "flex" : "none";
         }
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.customFanCurveEvent.emit(this.getFanFormGroupValues());
         this.chartToggleEvent.emit(this.showFanGraphs);
     }

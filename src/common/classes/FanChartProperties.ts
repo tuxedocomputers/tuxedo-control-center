@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ChartDataSets, ChartOptions } from "chart.js";
+import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from "chart.js";
 import { Color } from "ng2-charts";
 import "@angular/localize/init";
 
@@ -29,7 +29,7 @@ const graphOptions: ChartOptions = {
     maintainAspectRatio: false,
     tooltips: {
         callbacks: {
-            label: (item, data) => {
+            label: (item: ChartTooltipItem, data: ChartData): string => {
                 return (
                     data.datasets[item.datasetIndex].label + " " + item.yLabel
                 );
@@ -42,7 +42,7 @@ const graphOptions: ChartOptions = {
                 ticks: {
                     beginAtZero: true,
                     suggestedMax: 100,
-                    callback: (value: number) => {
+                    callback: (value: number): number => {
                         if (value % 20 === 0) {
                             return value;
                         } else {
@@ -57,7 +57,7 @@ const graphOptions: ChartOptions = {
                 ticks: {
                     beginAtZero: true,
                     autoSkip: false,
-                    callback: (value, index) => {
+                    callback: (value: string | number, index: number): string | number => {
                         if (index % 5 === 0) {
                             return value;
                         } else {

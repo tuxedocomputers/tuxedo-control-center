@@ -23,19 +23,19 @@ const { ipcRenderer } = require('electron');
 
 // for preload script
 export const WebcamClientAPI = {
-    createWebcamPreview: (webcamConfig) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.createWebcamPreview, webcamConfig]),
-    closeWebcamPreview: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.closeWebcamPreview]),
-    setWebcamWithLoading: (webcamConfig) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.settingWebcamWithLoading, webcamConfig]),
-    videoEnded: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.videoEnded]),
-    applyControls: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.applyControls]),
-    readWebcamSettings: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readWebcamSettings]),
-    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[])  => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.writeConfig, settings]),
-    readV4l2Names: (path: string) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readv4l2Values, path]),
-    readV4l2NamesCWD: (path: string) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readv4l2ValuesCwd, path]),
-    getSelectedWebcamSettings: (sWebcamPath) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.getSelectedWebcamSettings, sWebcamPath]),
-    executeWebcamCtrls: (devicePath, parameter, value) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.executeWebcamCtrls, devicePath, parameter, value]),
-    executeFilteredCtrls: (devicePath, filteredControls) => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.executeFilteredWebcamCtrls, devicePath, filteredControls]),    
-    getWebcamPaths: () => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.getWebcamPaths]),
+    createWebcamPreview: (webcamConfig: WebcamConstraints): Promise<void> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.createWebcamPreview, webcamConfig]),
+    closeWebcamPreview: (): Promise<void> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.closeWebcamPreview]),
+    setWebcamWithLoading: (webcamConfig: WebcamConstraints): Promise<void> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.settingWebcamWithLoading, webcamConfig]),
+    videoEnded: (): Promise<void> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.videoEnded]),
+    applyControls: (): Promise<void> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.applyControls]),
+    readWebcamSettings: (): Promise<WebcamPreset[]> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readWebcamSettings]),
+    pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]): Promise<boolean>  => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.writeConfig, settings]),
+    readV4l2Names: (path: string): Promise<string[][]> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readv4l2Values, path]),
+    readV4l2NamesCWD: (path: string): Promise<string[][]> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.readv4l2ValuesCwd, path]),
+    getSelectedWebcamSettings: (sWebcamPath: string): Promise<string> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.getSelectedWebcamSettings, sWebcamPath]),
+    executeWebcamCtrls: (devicePath: string, parameter: string, value: number | string): Promise<string> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.executeWebcamCtrls, devicePath, parameter, value]),
+    executeFilteredCtrls: (devicePath: string, filteredControls: string): Promise<string> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.executeFilteredWebcamCtrls, devicePath, filteredControls]),
+    getWebcamPaths: (): Promise<string> => ipcRenderer.invoke(webcamAPIHandle, [WebcamAPIFunctions.getWebcamPaths]),
 
 }
 
@@ -48,8 +48,8 @@ export interface IWebcamClientAPI {
     applyControls: () => void,
     readWebcamSettings: () => Promise<WebcamPreset[]>,
     pkexecWriteWebcamConfigAsync: (settings: WebcamPreset[]) => Promise<boolean>,
-    readV4l2Names: (path: string) => Promise<string[][]>, 
-    readV4l2NamesCWD: (path: string) => Promise<string[][]>, 
+    readV4l2Names: (path: string) => Promise<string[][]>,
+    readV4l2NamesCWD: (path: string) => Promise<string[][]>,
     getSelectedWebcamSettings: (sWebcamPath:string) => Promise<string>,
     executeWebcamCtrls: (devicePath: string, parameter: string, value: number | string) => Promise<string>,
     executeFilteredCtrls: (devicePath: string, filteredControls: string) => Promise<string>,

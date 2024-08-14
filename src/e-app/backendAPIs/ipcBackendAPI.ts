@@ -22,7 +22,7 @@
 ################# IPC Backend for TCC API ########################
 ##################################################################
 */
-import { ipcMain, app, dialog, nativeTheme, shell } from "electron";
+import { ipcMain, app, dialog, nativeTheme, shell, IpcMainEvent, IpcMainInvokeEvent, IpcMain } from "electron";
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as https from 'https';
@@ -42,22 +42,24 @@ import { ITccProfile } from "../../common/models/TccProfile";
 import { VendorService } from '../../common/classes/Vendor.service'
 import { amdDGpuDeviceIdString } from "../../common/classes/DeviceIDs";
 import { primeWindow, tccWindow } from './browserWindows';
-import { changeLanguage, getBrightnessMode, setBrightnessMode } from "./translationAndTheme";
+import { BrightnessModeString, changeLanguage, getBrightnessMode, setBrightnessMode } from "./translationAndTheme";
+import { ClientRequest, IncomingMessage } from "http";
 import { hasAquaris, hideCTGP } from "./initMain";
+
 export const cwd: string = process.cwd();
 //https://github.com/electron/electron/blob/main/docs/api/app.md#appispackaged-readonly
-export let environmentIsProduction = app.isPackaged;
+export let environmentIsProduction: boolean = app.isPackaged;
 
-ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event) =>
+ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event: IpcMainEvent): void =>
 {
     event.returnValue = ScalingDriver.acpi_cpufreq;
 });
 
 
-ipcMain.handle('comp-get-has-aquaris', async (event, arg) => {
-        return new Promise<boolean>(async (resolve, reject) => {
+ipcMain.handle('comp-get-has-aquaris', (event: IpcMainInvokeEvent): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
             try {
-                resolve( await hasAquaris());
+              resolve(hasAquaris());
             } catch (err: unknown) {
               console.error("ipcBackendAPI: comp-get-has-aquaris failed =>", err)
               reject(err);
@@ -66,10 +68,10 @@ ipcMain.handle('comp-get-has-aquaris', async (event, arg) => {
 
 });
 
-ipcMain.handle('comp-get-hide-ctgp', async (event, arg) => {
-    return new Promise<boolean>(async (resolve, reject) => {
+ipcMain.handle('comp-get-hide-ctgp', async (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         try {
-            resolve( await hideCTGP());
+          resolve( await hideCTGP());
         } catch (err) {
           reject(err);
         }
@@ -77,21 +79,21 @@ ipcMain.handle('comp-get-hide-ctgp', async (event, arg) => {
 
 });
 
-ipcMain.on("prime-window-close", () => {
+ipcMain.on("prime-window-close", (): void => {
     if (primeWindow) {
         primeWindow.close();
     }
 });
 
-ipcMain.on("prime-window-show", () => {
+ipcMain.on("prime-window-show", (): void => {
     if (primeWindow) {
         primeWindow.show();
     }
 });
 
 
-ipcMain.handle('ipc-prime-select', async (event, selectedState) => {
-    return new Promise<{data:string,error:string}>(async (resolve, reject) => {
+ipcMain.handle('ipc-prime-select', async (event: IpcMainInvokeEvent, selectedState: string): Promise<{data: string; error: unknown}> => {
+    return new Promise<{data:string, error:unknown}>((resolve: (value: {data:string, error:unknown} | PromiseLike<{data:string, error:unknown}>) => void, reject: (reason?: unknown) => void): void => {
         try {
             resolve( execFile(
                 `pkexec prime-select ${selectedState}`
@@ -117,21 +119,21 @@ ipcMain.handle('ipc-prime-select', async (event, selectedState) => {
 
 
 
-ipcMain.handle('fs-write-text-file', async (event, filePath: string, fileData: string | Buffer, writeFileOptions?) => {
+ipcMain.handle('fs-write-text-file', async (event: IpcMainInvokeEvent, filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> => {
     return writeTextFile(filePath, fileData, writeFileOptions);
 });
 
-ipcMain.handle('fs-read-text-file', async (event, filePath) => {
+ipcMain.handle('fs-read-text-file', async (event: IpcMainInvokeEvent, filePath: string): Promise<string> => {
     return readTextFile(filePath);
 });
 
-async function writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?)  {
-    return new Promise<void>((resolve, reject) => {
+async function writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void>  {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
     try {
         if (!fs.existsSync(path.dirname(filePath))) {
             fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
         }
-        fs.writeFile(filePath, fileData, writeFileOptions, err => {
+        fs.writeFile(filePath, fileData, writeFileOptions, (err: unknown): void => {
           if (err) {
             reject(err);
           } else {
@@ -146,9 +148,9 @@ async function writeTextFile(filePath: string, fileData: string | Buffer, writeF
 }
 
 async function readTextFile(filePath: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         try {
-          fs.readFile(filePath,(err, data) => {
+          fs.readFile(filePath,(err: unknown, data: Buffer): void => {
             if (err) {
               reject(err);
             } else {
@@ -162,7 +164,7 @@ async function readTextFile(filePath: string): Promise<string> {
       });
 }
 
-ipcMain.on('fs-file-exists-sync', (event, filePath) => {
+ipcMain.on('fs-file-exists-sync', (event: IpcMainEvent, filePath: string): void => {
     event.returnValue = fs.existsSync(filePath);
 });
 
@@ -171,16 +173,16 @@ ipcMain.on('fs-file-exists-sync', (event, filePath) => {
 
 
 
-  let cpu = new CpuController('/sys/devices/system/cpu');
+  let cpu: CpuController = new CpuController('/sys/devices/system/cpu');
 
 // todo: values can most likely be gathered in the cpu worker via onWork() instead to avoid unnecessary duplicated file access
 // there already is core.scalingAvailableFrequencies.readValueNT() and this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT() for example
 // todo: readValueNT() is sync and thus it is an async function which runs sync code
-ipcMain.handle('get-general-cpu-info-async', (event) => {
-    return new Promise<IGeneralCPUInfo>((resolve, reject) => {
+ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promise<IGeneralCPUInfo> => {
+    return new Promise<IGeneralCPUInfo>((resolve: (value: IGeneralCPUInfo | PromiseLike<IGeneralCPUInfo>) => void, reject: (reason?: unknown) => void): void => {
         try {
     let cpuInfo: IGeneralCPUInfo;
-    const scalingDriver = cpu.cores[0].scalingDriver.readValueNT();
+    const scalingDriver: string = cpu.cores[0].scalingDriver.readValueNT();
     try {
         const cpuinfoMinFreqAvailable: boolean = cpu.cores[0].cpuinfoMinFreq.isAvailable()
         let minFreq: number
@@ -248,13 +250,13 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
   });
 
 // todo: same todos as above
-  ipcMain.handle('get-logical-core-info-async', (event) => {
-    return new Promise<ILogicalCoreInfo[]>((resolve, reject) => {
+  ipcMain.handle('get-logical-core-info-async', (event: IpcMainInvokeEvent): Promise<ILogicalCoreInfo[]> => {
+   return new Promise<ILogicalCoreInfo[]>((resolve: (value: ILogicalCoreInfo[] | PromiseLike<ILogicalCoreInfo[]>) => void, reject: (reason?: unknown) => void): void => {
         try {
     const coreInfoList: ILogicalCoreInfo[] = [];
     for (const core of cpu.cores) {
       try {
-        let onlineStatus = true;
+        let onlineStatus: boolean = true;
         if (core.coreIndex !== 0) { onlineStatus = core.online.readValue(); }
         // Skip core if offline
         if (!onlineStatus) { continue; }
@@ -280,8 +282,7 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
         const scalingDriverAvailable: boolean = core.scalingDriver.isAvailable()
         let scalingDriver: string
         if (scalingDriverAvailable) {
-            // todo: changing type, mismatch with ILogicalCoreInfo
-            scalingDriver = core.scalingDriver.readValueNT().toString()
+            scalingDriver = core.scalingDriver.readValueNT()
         }
 
         const energyPerformanceAvailablePreferencesAvailable: boolean = core.energyPerformanceAvailablePreferences.isAvailable()
@@ -375,8 +376,8 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
   });
   });
 
-  ipcMain.handle('get-intel-pstate-turbo-value-async', (event) => {
-    return new Promise<boolean>((resolve, reject) => {
+  ipcMain.handle('get-intel-pstate-turbo-value-async', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         try {
             if (cpu.intelPstate.noTurbo.isAvailable()) {
                 resolve(cpu.intelPstate.noTurbo.readValueNT());
@@ -393,14 +394,14 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
 
   let displayBacklightControllers: DisplayBacklightController[];
   const displayBacklightControllerBasepath = '/sys/class/backlight';
-  const displayBacklightControllerNames = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
+  const displayBacklightControllerNames: string[] = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
   displayBacklightControllers = [];
   for (const driverName of displayBacklightControllerNames) {
     displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
   }
 
 
-  ipcMain.on('get-display-brightness-info-sync', (event) => {
+  ipcMain.on('get-display-brightness-info-sync', (event: IpcMainEvent): void => {
     const infoArray: IDisplayBrightnessInfo[] = [];
     for (const controller of displayBacklightControllers) {
       try {
@@ -420,7 +421,7 @@ ipcMain.handle('get-general-cpu-info-async', (event) => {
 //########################
 // #### Backend for config service ####
 
-let config = new ConfigHandler(
+let config: ConfigHandler = new ConfigHandler(
     TccPaths.SETTINGS_FILE,
     TccPaths.PROFILES_FILE,
     TccPaths.WEBCAM_FILE,
@@ -429,10 +430,10 @@ let config = new ConfigHandler(
     TccPaths.FANTABLES_FILE
 );
 
-async function pkexecWriteCustomProfilesAsync(newProfileList)
+async function pkexecWriteCustomProfilesAsync(newProfileList: ITccProfile[]): Promise<boolean>
 {
-    return new Promise<boolean>(async resolve => {
-        const tmpProfilesPath = '/tmp/tmptccprofiles';
+    return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        const tmpProfilesPath: string = '/tmp/tmptccprofiles';
         config.writeProfiles(newProfileList, tmpProfilesPath);
         let tccdExec: string;
         if (environmentIsProduction) {
@@ -440,14 +441,14 @@ async function pkexecWriteCustomProfilesAsync(newProfileList)
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath)
-        .then(() => resolve(true))
-        .catch(() => resolve(false));
-    });
+        await execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath)
+            .then((): void => resolve(true))
+            .catch((): void => resolve(false));
+        });
 }
 
 
-function pkexecWriteCustomProfiles(profiles: ITccProfile[])
+function pkexecWriteCustomProfiles(profiles: ITccProfile[]): boolean
 {
     const tmpProfilesPath = '/tmp/tmptccprofiles';
     config.writeProfiles(profiles, tmpProfilesPath);
@@ -470,9 +471,9 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[])
     }
 }
 
-async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProfile[])
+async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProfile[]): Promise<boolean>
 {
-    return new Promise<boolean>(async resolve => {
+    return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         const tmpProfilesPath = '/tmp/tmptccprofiles';
         const tmpSettingsPath = '/tmp/tmptccsettings';
         config.writeProfiles(profiles, tmpProfilesPath);
@@ -483,7 +484,8 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        let data = await execFile(
+        // todo: use then() and catch() instead
+        let data: {data: string; error: unknown} = await execFile(
             'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath);
         if(data.error) {
             resolve(false);
@@ -494,7 +496,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
     });
 }
 
-ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: string, settings) => {
+ipcMain.on('config-set-active-profile', (event: IpcMainEvent, profileId: string, stateId: string, settings: ITccSettings): void => {
     // Copy existing current settings and set id of new profile
     const newSettings: ITccSettings = config.copyConfig<ITccSettings>(settings);
 
@@ -508,24 +510,25 @@ ipcMain.on('config-set-active-profile', (event, profileId: string, stateId: stri
     } else {
         tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
     }
+    // todo: error handling
     execFile('pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath);
 });
 
 
-ipcMain.on('config-pkexec-write-custom-profiles', (event, customProfiles: ITccProfile[]) => {
+ipcMain.on('config-pkexec-write-custom-profiles', (event: IpcMainEvent, customProfiles: ITccProfile[]): void => {
     event.returnValue = pkexecWriteCustomProfiles(customProfiles);
 
 });
 
-ipcMain.handle('config-pkexec-write-custom-profiles-async', (event, customProfiles: ITccProfile[]) => {
+ipcMain.handle('config-pkexec-write-custom-profiles-async', (event: IpcMainInvokeEvent, customProfiles: ITccProfile[]): Promise<boolean> => {
    return pkexecWriteCustomProfilesAsync(customProfiles);
 });
 
-ipcMain.handle('config-pkexec-write-config-async', (event, settings: ITccSettings, customProfiles: ITccProfile[]) => {
+ipcMain.handle('config-pkexec-write-config-async', (event: IpcMainInvokeEvent, settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> => {
     return pkexecWriteConfigAsync(settings,customProfiles);
 });
 
-ipcMain.on('config-get-default-fan-profiles', (event) => {
+ipcMain.on('config-get-default-fan-profiles', (event: IpcMainEvent): void => {
 event.returnValue = config.getDefaultFanProfiles();
 });
 
@@ -533,7 +536,7 @@ event.returnValue = config.getDefaultFanProfiles();
 // ########################################################
 
 
-ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
+ipcMain.on('utils-get-systeminfos-url-sync', (event: IpcMainEvent): void => {
     event.returnValue = systeminfosURL;
 });
 
@@ -576,101 +579,100 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event) => {
 // ######################################################################
 
 // Shutdown timer
-ipcMain.handle('ipc-set-shutdown-time', async (event, selectedHour, selectedMinute) => {
-    return new Promise<string>((resolve, reject) => {
+ipcMain.handle('ipc-set-shutdown-time', async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute)
-        .then((results) => {resolve(results)})
-        .catch(() => {resolve("")});
+        .then((results: string) => {resolve(results)})
+        .catch((): void => {resolve("")});
     });
 });
 
-ipcMain.handle('ipc-cancel-shutdown', async (event) => {
-    return new Promise<string>((resolve, reject) => {
+ipcMain.handle('ipc-cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         execCmd("pkexec shutdown -c")
-        .then((results) => {resolve(results)})
-        .catch(() => {resolve("")});
+        .then((results: string): void => {resolve(results)})
+        .catch((): void => {resolve("")});
     });
 });
 
-ipcMain.handle('ipc-get-scheduled-shutdown', async (event) => {
-    return new Promise<string>(async (resolve, reject) => {
+ipcMain.handle('ipc-get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         const available: boolean = fs.existsSync("/run/systemd/shutdown/scheduled")
         if (available) {
             execCmd("cat /run/systemd/shutdown/scheduled")
-            .then((results) => {resolve(results)})
-            .catch((err: unknown) => {console.error("ipcBackendAPI: ipc-get-scheduled-shutdown failed =>", err); resolve("")});
+            .then((results: string): void => {resolve(results)})
+            .catch((err: unknown): void => {console.error("ipcBackendAPI: ipc-get-scheduled-shutdown failed =>", err); resolve("")});
         }
         resolve("")
     });
 });
 
-ipcMain.handle('ipc-issue-reboot', async (event) => {
-    return new Promise<string>((resolve, reject) => {
+ipcMain.handle('ipc-issue-reboot', async (event: IpcMainInvokeEvent): Promise<string> => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         execCmd("reboot")
-        .then((results) => {resolve(results)})
-        .catch(() => {resolve("")});
+        .then((results: string): void => {resolve(results)})
+        .catch((): void => {resolve("")});
     });
 });
 
-
-
-// TODO
-ipcMain.on('get-cwd-sync', (event) => {
+// todo: make async
+ipcMain.on('get-cwd-sync', (event: IpcMainEvent): void => {
     event.returnValue = { data: process.cwd() }
 });
 
 
-ipcMain.handle('get-app-version', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        let requestedInfo = app.getVersion();
+ipcMain.handle('get-app-version', (event: IpcMainInvokeEvent): Promise<string> => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+        let requestedInfo: string = app.getVersion();
         resolve(requestedInfo);
     });
 });
 
-ipcMain.handle('get-cwd', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        let requestedInfo = process.cwd();
+ipcMain.handle('get-cwd', (event: IpcMainInvokeEvent): Promise<string> => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+        let requestedInfo: string = process.cwd();
         resolve(requestedInfo);
     });
 });
 
-ipcMain.handle('get-process-versions', async (event, arg) => {
-    return new Promise<NodeJS.ProcessVersions>((resolve, reject) => {
-        let requestedInfo = process.versions;
+ipcMain.handle('get-process-versions', (event: IpcMainInvokeEvent): Promise<NodeJS.ProcessVersions> => {
+    return new Promise<NodeJS.ProcessVersions>((resolve: (value: NodeJS.ProcessVersions | PromiseLike<NodeJS.ProcessVersions>) => void, reject: (reason?: unknown) => void): void => {
+        let requestedInfo: NodeJS.ProcessVersions = process.versions;
         resolve(requestedInfo);
     });
 });
 
-ipcMain.handle('show-save-dialog', async (event, arg) => {
-    return new Promise<SaveDialogReturnValue>((resolve, reject) => {
-        let results = dialog.showSaveDialog(arg);
+ipcMain.handle('show-save-dialog', async (event: IpcMainInvokeEvent, arg: Electron.SaveDialogOptions): Promise<SaveDialogReturnValue> => {
+    return new Promise<SaveDialogReturnValue>((resolve: (value: SaveDialogReturnValue | PromiseLike<SaveDialogReturnValue>) => void, reject: (reason?: unknown) => void): void => {
+        let results: Promise<SaveDialogReturnValue> = dialog.showSaveDialog(arg);
         resolve(results);
     });
 });
 
 
-ipcMain.handle('show-open-dialog', async (event, arg) => {
-    return new Promise<OpenDialogReturnValue>((resolve, reject) => {
-        let results = dialog.showOpenDialog(arg);
+ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
+    return new Promise<OpenDialogReturnValue>(async (resolve: (value: OpenDialogReturnValue | PromiseLike<OpenDialogReturnValue>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        let results: Promise<OpenDialogReturnValue> = dialog.showOpenDialog(arg);
         resolve(results);
     });
 });
 
-ipcMain.handle('ipc-get-path', async (event, arg) => {
-    return new Promise<string>((resolve, reject) => {
-        let requestedPath = app.getPath(arg);
+// todo: make cleaner
+ipcMain.handle('ipc-get-path', (event: IpcMainInvokeEvent, arg: "home" | "appData" | "userData" | "cache" | "temp" | "exe" | "module" | "desktop" | "documents" | "downloads" | "music" | "pictures" | "videos" | "recent" | "logs" | "crashDumps"): Promise<string>  => {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+        let requestedPath: string = app.getPath(arg);
         resolve(requestedPath);
     });
 });
 
 
-ipcMain.on('show-tcc-window', (event,) => {
+ipcMain.on('show-tcc-window', (event: IpcMainEvent,): void => {
     if(!tccWindow.isVisible()) {
         tccWindow.show();
     }
 });
 
-ipcMain.on('ipc-open-external', (event, url) => {
+ipcMain.on('ipc-open-external', (event: IpcMainEvent, url: string): void => {
     // Explanation: openExternal can theoretically pose a security risk
     // that's why we only let weblinks happen.
     // https://benjamin-altpeter.de/shell-openexternal-dangers/
@@ -685,45 +687,45 @@ ipcMain.on('ipc-open-external', (event, url) => {
 });
 
 // Renderer to main nativeTheme API
-ipcMain.handle('set-brightness-mode', (event, mode) => setBrightnessMode(mode));
-ipcMain.handle('get-brightness-mode', () => getBrightnessMode());
-ipcMain.handle('get-should-use-dark-colors', () => { return nativeTheme.shouldUseDarkColors; });
+ipcMain.handle('set-brightness-mode', (event: IpcMainInvokeEvent, mode: BrightnessModeString): Promise<void> => setBrightnessMode(mode));
+ipcMain.handle('get-brightness-mode', (): Promise<BrightnessModeString> => getBrightnessMode());
+ipcMain.handle('get-should-use-dark-colors', (): boolean => { return nativeTheme.shouldUseDarkColors; });
 
 /**
  * Change user language IPC interface
  */
-ipcMain.on('trigger-language-change', (event, arg) => {
-    const langId = arg;
+ipcMain.on('trigger-language-change', (event: IpcMainEvent, arg: string): void => {
+    const langId: string = arg;
     changeLanguage(langId);
 });
 
 // #### power state service backend + availablity service backend ####
 
-let availabilityService = new AvailabilityService();
+let availabilityService: AvailabilityService = new AvailabilityService();
 
-ipcMain.on('get-nvidia-dgpu-count-power', (event, arg) => {
+ipcMain.on('get-nvidia-dgpu-count-power', (event: IpcMainEvent): void => {
     event.returnValue = availabilityService.getNvidiaDGpuCount();
 });
-ipcMain.on('get-amd-dgpu-count-power', (event, arg) => {
+ipcMain.on('get-amd-dgpu-count-power', (event: IpcMainEvent): void => {
     event.returnValue = availabilityService.getAmdDGpuCount();
 });
 
-ipcMain.on('get-is-dgpu-available-power', (event, arg) => {
+ipcMain.on('get-is-dgpu-available-power', (event: IpcMainEvent): void => {
     event.returnValue = availabilityService.isDGpuAvailable();
 });
-ipcMain.on('get-is-igpu-available-power', (event, arg) => {
+ipcMain.on('get-is-igpu-available-power', (event: IpcMainEvent): void => {
     event.returnValue = availabilityService.isIGpuAvailable();
 });
 
-ipcMain.handle('get-dgpu-power-state-power', async (event, arg) => {
+ipcMain.handle('get-dgpu-power-state-power', async (event: IpcMainEvent, arg: string): Promise<string> => {
     return getDGpuPowerState(arg);
 });
 
-async function getDGpuPowerState(busPath: string) {
+async function getDGpuPowerState(busPath: string): Promise<string> {
     if (busPath) {
         try {
-            const powerStatePath = path.join(busPath, "power_state");
-            const powerState = await readTextFile(
+            const powerStatePath: string = path.join(busPath, "power_state");
+            const powerState: string = await readTextFile(
                 powerStatePath
             );
 
@@ -737,7 +739,7 @@ async function getDGpuPowerState(busPath: string) {
 
 
 
-ipcMain.on('get-bus-path-power', (event, arg) => {
+ipcMain.on('get-bus-path-power', (event: IpcMainEvent, arg: string): void => {
     event.returnValue = getBusPath(arg);
 });
 
@@ -757,9 +759,9 @@ function getBusPath(driver: string): string {
     return undefined;
 }
 
-export async function execCmd(cmd): Promise<string> {
-    return new Promise<string>(async (resolve, reject) => {
-    child_process.exec(cmd, (err, stdout, stderr) => {
+export async function execCmd(cmd: string): Promise<string> {
+    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+    child_process.exec(cmd, (err: unknown, stdout: string, stderr: string): void => {
         if (err) {
             reject(stderr);
         } else {
@@ -769,7 +771,7 @@ export async function execCmd(cmd): Promise<string> {
 });
 }
 
-export function execCmdSync(cmd):string {
+export function execCmdSync(cmd: string):string {
         try {
             return child_process.execSync(cmd).toString();
         } catch (err: unknown) {
@@ -778,12 +780,13 @@ export function execCmdSync(cmd):string {
         }
 }
 
-export async function execFile(arg): Promise<{ data: string, error: any}> {
-    return new Promise((resolve, reject) => {
+// todo: rename into execFileAsync or somehow else indicate that function is async
+export async function execFile(arg: string): Promise<{ data: string, error: unknown}> {
+    return new Promise<{ data: string, error: unknown}>( (resolve: (value: { data: string, error: unknown} | PromiseLike<{ data: string, error: unknown}>) => void, reject: (reason?: unknown) => void): void => {
         let strArg: string = arg;
-        let cmdList = strArg.split(' ');
-        let cmd = cmdList.shift();
-        child_process.execFile(cmd, cmdList, (err, stdout, stderr) => {
+        let cmdList: string[] = strArg.split(' ');
+        let cmd: string = cmdList.shift();
+        child_process.execFile(cmd, cmdList, (err: unknown, stdout: string, stderr: string): void => {
                     if (err) {
                         reject({ data: stderr, error: err });
                     } else {
@@ -793,11 +796,11 @@ export async function execFile(arg): Promise<{ data: string, error: any}> {
     });
 }
 
-export async function execFileSync(arg) {
+export async function execFileSync(arg: string): Promise<unknown | string> {
         let strArg: string = arg;
-        let cmdList = strArg.split(' ');
-        let cmd = cmdList.shift();
-        let data;
+        let cmdList: string[] = strArg.split(' ');
+        let cmd: string = cmdList.shift();
+        let data: Buffer;
         try {
             data = child_process.execFileSync(cmd, cmdList);
             return data.toString();
@@ -812,10 +815,10 @@ export async function execFileSync(arg) {
 
 // ######## vendor service backend ######
 
-let vendorService = new VendorService();
+let vendorService: VendorService = new VendorService();
 
-ipcMain.handle('get-cpu-vendor', async (event, status) => {
-    return new Promise<string>((resolve, reject) => {
+ipcMain.handle('get-cpu-vendor', async (event: IpcMainEvent, status: any): Promise<string> => {
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         resolve(vendorService.getCpuVendor());
     });
 });
@@ -837,9 +840,9 @@ class ProgramManagementService {
 
     public async isInstalled(name: string): Promise<boolean> {
       this.isCheckingInstallation.set(name, true);
-      return new Promise<boolean>(async (resolve) => {
+        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
-        execCmd(`which ${name} || :`).then((result) => {
+        execCmd(`which ${name} || :`).then((result: string): void => {
           this.isCheckingInstallation.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
@@ -852,8 +855,8 @@ class ProgramManagementService {
 
     public async install(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
-      return new Promise<boolean>(async (resolve) => {
-        execCmd('pkexec apt install -y ' + name).then(() => {
+        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd('pkexec apt install -y ' + name).then((): void  => {
           this.isInProgress.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
@@ -866,8 +869,8 @@ class ProgramManagementService {
 
     public async remove(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
-      return new Promise<boolean>(async (resolve) => {
-        execCmd('pkexec apt remove -y ' + name).then(() => {
+        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd('pkexec apt remove -y ' + name).then((): void => {
           this.isInProgress.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
@@ -879,7 +882,7 @@ class ProgramManagementService {
     }
 
     public run(name: string): void {
-        child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (err) => {
+        child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (err: Error): void => {
             console.log("\"" + name + "\" could not be executed.")
             dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + name + "\" could not be executed." })
         });
@@ -893,88 +896,88 @@ const tomteName = "tuxedo-tomte";
 const anydeskProgramName = 'anydesk';
 const webFAICreatorProgramName = 'tuxedo-webfai-creator';
 
-ipcMain.handle('pgms-is-in-progress', async (event, status) => {
-    return new Promise<Map<string, boolean>>((resolve, reject) => {
+ipcMain.handle('pgms-is-in-progress', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
+    return new Promise<Map<string, boolean>>((resolve: (value: Map<string, boolean> | PromiseLike<Map<string, boolean>>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.isInProgress);
     });
 });
 
-ipcMain.handle('pgms-is-checking-installation', async (event, status) => {
-    return new Promise<Map<string, boolean>>((resolve, reject) => {
+ipcMain.handle('pgms-is-checking-installation', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
+    return new Promise<Map<string, boolean>>((resolve: (value: Map<string, boolean> | PromiseLike<Map<string, boolean>>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.isCheckingInstallation);
     });
 });
 
-ipcMain.handle('pgms-tomte-is-installed', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-tomte-is-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.isInstalled(tomteName));
     });
 });
 
-ipcMain.handle('pgms-install-tomte', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-install-tomte', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.install(tomteName));
     });
 });
 
-ipcMain.handle('pgms-uninstall-tomte', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-uninstall-tomte', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.remove(tomteName));
     });
 });
 
-ipcMain.handle('pgms-start-tomte', async (event, status) => {
-    return new Promise<void>((resolve, reject) => {
+ipcMain.handle('pgms-start-tomte', (event: IpcMainInvokeEvent): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.run(tomteName));
     });
 });
 
 
-ipcMain.handle('pgms-anydesk-is-installed', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-anydesk-is-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.isInstalled(anydeskProgramName));
     });
 });
 
-ipcMain.handle('pgms-install-anydesk', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-install-anydesk', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.install(anydeskProgramName));
     });
 });
 
-ipcMain.handle('pgms-uninstall-anydesk', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-uninstall-anydesk', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.remove(anydeskProgramName));
     });
 });
 
-ipcMain.handle('pgms-start-anydesk', async (event, status) => {
-    return new Promise<void>((resolve, reject) => {
+ipcMain.handle('pgms-start-anydesk', (event: IpcMainInvokeEvent): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.run(anydeskProgramName));
     });
 });
 
 
-ipcMain.handle('pgms-webfaic-is-installed', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-webfaic-is-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.isInstalled(webFAICreatorProgramName));
     });
 });
 
-ipcMain.handle('pgms-install-webfaic', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-install-webfaic', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.install(webFAICreatorProgramName));
     });
 });
 
-ipcMain.handle('pgms-uninstall-webfaic', async (event, status) => {
-    return new Promise<boolean>((resolve, reject) => {
+ipcMain.handle('pgms-uninstall-webfaic', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.remove(webFAICreatorProgramName));
     });
 });
 
-ipcMain.handle('pgms-start-webfaic', async (event, status) => {
-    return new Promise<void>((resolve, reject) => {
+ipcMain.handle('pgms-start-webfaic', (event: IpcMainInvokeEvent): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
         resolve(pgms.run(webFAICreatorProgramName));
     });
 });
@@ -984,8 +987,9 @@ ipcMain.handle('pgms-start-webfaic', async (event, status) => {
 
 async function changeCryptPassword(newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> {
     let crypt_drives: IDrive[] = await DriveController.getDrives();
-    crypt_drives = crypt_drives.filter(x => x.crypt);
-    let oneliner = "";
+    crypt_drives = crypt_drives.filter((x: IDrive): boolean => x.crypt);
+    // todo: rename variable
+    let oneliner: string = "";
     for (let drive of crypt_drives) {
         oneliner += `printf '%s\\n' '${oldPassword}' | /usr/sbin/cryptsetup open --type luks -q --test-passphrase ${drive.devPath} && `
     }
@@ -996,14 +1000,14 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
     return execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
 }
 
-ipcMain.handle('ipc-change-crypt-password', async (event: any, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
-    return new Promise<string>((resolve, reject) => {
+ipcMain.handle('ipc-change-crypt-password', async (event: IpcMainInvokeEvent, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         resolve(changeCryptPassword(newPassword, oldPassword, confirmPassword));
     });
 });
 
-ipcMain.handle('drive-controller-get-drives', (event) => {
-    return new Promise<IDrive[]>((resolve, reject) => {
+ipcMain.handle('drive-controller-get-drives', (event: IpcMainInvokeEvent): Promise<IDrive[]> => {
+    return new Promise<IDrive[]>(async (resolve: (value: IDrive[] | PromiseLike<IDrive[]>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         try {
             resolve( DriveController.getDrives());
         } catch (err: unknown) {
@@ -1015,29 +1019,29 @@ ipcMain.handle('drive-controller-get-drives', (event) => {
 
   // systeminfos
 
-  let systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+let systeminfosURL: string = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
 
-async function getSystemInfos() {
-    return new Promise<Buffer>((resolve, reject) => {
+async function getSystemInfos(): Promise<Buffer> {
+    return new Promise<Buffer>(async (resolve: (value: Buffer | PromiseLike<Buffer>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         try {
           const dataArray: Buffer[] = [];
-          const req = https.get(systeminfosURL, response => {
+          const req: ClientRequest = https.get(systeminfosURL, (response: IncomingMessage): void => {
 
-            response.on('data', (data) => {
+            response.on('data', (data: any): void => {
               dataArray.push(data);
             });
 
-            response.once('end', () => {
+            response.once('end', (): void => {
               resolve(Buffer.concat(dataArray));
             });
 
-            response.once('error', (err) => {
+            response.once('error', (err: Error): void => {
               reject(err);
             });
 
           });
 
-          req.once('error', (err) => {
+          req.once('error', (err: Error): void => {
        reject(err);
           });
         } catch (err: unknown) {
@@ -1047,19 +1051,19 @@ async function getSystemInfos() {
       });
 }
 
-  let systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
-    function updateSystemInfoLabel(text: string)
+  let systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
+    function updateSystemInfoLabel(text: string): void
     {
         tccWindow.webContents.send('ipc-update-system-info-label', text);
     }
 
     async function runSysteminfo(ticketNumber: string): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
+        return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
           let fileData: string;
           // Download file
           try {
             updateSystemInfoLabel('Fetching: ' + systeminfosURL);
-            const data = await getSystemInfos();
+            const data: Buffer = await getSystemInfos();
             fileData = data.toString();
           } catch (err: unknown) {
             console.error("ipcBackendAPI: runSysteminfo download failed =>", err)
@@ -1087,8 +1091,8 @@ async function getSystemInfos() {
         });
       }
 
-ipcMain.handle('ipc-run-systeminfos', async (event, ticketNumber) => {
-    return new Promise<void>((resolve, reject) => {
+ipcMain.handle('ipc-run-systeminfos', async (event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         resolve(runSysteminfo(ticketNumber));
     });
 });

@@ -26,6 +26,6 @@ export class ChargingPriorityController extends SysFsController {
         super();
     }
 
-    readonly chargingPriosAvailable = new SysFsPropertyStringList(path.join(this.basePath, 'charging_prios_available'));
-    readonly chargingPrio = new SysFsPropertyString(path.join(this.basePath, 'charging_prio'));
+    readonly chargingPriosAvailable: SysFsPropertyStringList = new SysFsPropertyStringList(path.join(this.basePath, 'charging_prios_available'));
+    readonly chargingPrio: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'charging_prio'));
 }

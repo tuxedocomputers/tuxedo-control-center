@@ -17,9 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
+import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from 'electron';
 
-ipcMain.on('log-stuff', (event,stuff) =>
+// todo: rename or remove
+ipcMain.on('log-stuff', (event: IpcMainEvent,stuff: any): void =>
 {
     console.log("logging stuff:");
     console.log(stuff);
@@ -32,12 +33,12 @@ import { Observable, Subject } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
 
 let sessionBus: any;
-const dbus = require('dbus-next');
+const dbus: any = require('dbus-next');
 
 let observeDisplayBrightness: Observable<number>;
 let displayBrightnessSubject: Subject<number>;
 let currentDisplayBrightness: number;
-let displayBrightnessNotSupported = false;
+let displayBrightnessNotSupported: boolean = false;
 
 let displayBrightnessGnome: DBusDisplayBrightnessGnome;
 
@@ -54,7 +55,7 @@ try {
 }
 
 
-initDusDisplayBrightness().then(() => {
+initDusDisplayBrightness().then((): void => {
     const driversList: string[] = [];
     if (displayBrightnessNotSupported === false) {
     driversList.push(displayBrightnessGnome.getDescriptiveString());
@@ -62,12 +63,12 @@ initDusDisplayBrightness().then(() => {
     dbusDriverNames = driversList;
 });
 
-export async function displayBrightnessGnomeCleanup() {
+export async function displayBrightnessGnomeCleanup(): Promise<void> {
     displayBrightnessGnome.cleanUp();
 }
 
 async function initDusDisplayBrightness(): Promise<void> {
-return new Promise<void>(async resolve => {
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
     if (sessionBus === undefined) {
     displayBrightnessNotSupported = true;
     } else {
@@ -78,7 +79,7 @@ return new Promise<void>(async resolve => {
     }
 
     try {
-        const result = await displayBrightnessGnome.getBrightness();
+        const result: number = await displayBrightnessGnome.getBrightness();
         currentDisplayBrightness = result;
         displayBrightnessSubject.next(currentDisplayBrightness);
     } catch (err: unknown) {
@@ -88,7 +89,7 @@ return new Promise<void>(async resolve => {
     }
 
     displayBrightnessGnome.setOnPropertiesChanged(
-        (value) => {
+        (value: number): void => {
         currentDisplayBrightness = value;
         displayBrightnessSubject.next(currentDisplayBrightness);
         }
@@ -102,13 +103,13 @@ async function setDisplayBrightness(valuePercent: number): Promise<void> {
 return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error("miscBackendStuff: setDisplayBrightness failed =>", err)});
 }
 
-ipcMain.handle('set-display-brightness-gnome', async (event, valuePercent) => {
-    return new Promise<void>((resolve, reject) => {
+ipcMain.handle('set-display-brightness-gnome', (event: IpcMainInvokeEvent, valuePercent: number): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
         resolve(setDisplayBrightness(valuePercent));
     });
 });
 
 
-ipcMain.on('get-display-brightness-not-supported-sync', (event) => {
+ipcMain.on('get-display-brightness-not-supported-sync', (event: IpcMainEvent): void => {
     event.returnValue = displayBrightnessNotSupported;
 });

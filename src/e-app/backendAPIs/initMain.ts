@@ -28,34 +28,34 @@ import * as child_process from 'child_process';
 import * as fs from 'fs';
 import { tccDBus } from './dbusBackendAPI';
 import { NgTranslations, profileIdToI18nId } from '../NgTranslations';
-import { getBrightnessMode, loadTranslation, setBrightnessMode } from './translationAndTheme';
+import { BrightnessModeString, getBrightnessMode, loadTranslation, setBrightnessMode } from './translationAndTheme';
 import { activateTccGui, quitCurrentTccSession, createPrimeWindow } from './browserWindows';
-import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { IProfileTextMappings, TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 
 export const tray: TccTray = new TccTray(path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'));
-const trayOnlyOption = process.argv.includes('--tray');
-const noTccdVersionCheck = process.argv.includes('--no-tccd-version-check');
-export const watchOption = process.argv.includes('--watch');
-const availableLanguages = [
+const trayOnlyOption: boolean = process.argv.includes('--tray');
+const noTccdVersionCheck: boolean = process.argv.includes('--no-tccd-version-check');
+export const watchOption: boolean = process.argv.includes('--watch');
+const availableLanguages: string[] = [
     'en',
     'de'
 ];
-let powersaveBlockerId = undefined;
-let startTCCAccelerator;
+let powersaveBlockerId: number = undefined;
+let startTCCAccelerator: string;
 startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
 if (startTCCAccelerator === '') {
     startTCCAccelerator = 'Super+Alt+F6'
 }
-const tccConfigDir = path.join(os.homedir(), '.tcc');
-const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
+const tccConfigDir: string = path.join(os.homedir(), '.tcc');
+const tccStandardConfigFile: string = path.join(tccConfigDir, 'user.conf');
 // Tweak to get correct dirname for resource files outside app.asar
-const appPath = __dirname.replace('app.asar/', '');
-const autostartLocation = path.join(os.homedir(), '.config/autostart');
+const appPath: string = __dirname.replace('app.asar/', '');
+const autostartLocation: string = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
 export const translation = new NgTranslations();
 // Ensure that only one instance of the application is running
-const applicationLock = app.requestSingleInstanceLock();
+const applicationLock: boolean = app.requestSingleInstanceLock();
 if (!applicationLock) {
     console.log('TUXEDO Control Center is already running');
     app.exit(0);
@@ -76,9 +76,9 @@ if (!userConfigDirExists()) {
 }
 
 
-app.whenReady().then( async () => {
+app.whenReady().then( async (): Promise<void> => {
     try {
-        const systemLanguageId = app.getLocale().substring(0, 2);
+        const systemLanguageId: string = app.getLocale().substring(0, 2);
         if (await userConfig.get('langId') === undefined) {
             if (availableLanguages.includes(systemLanguageId)) {
                 await userConfig.set('langId', systemLanguageId);
@@ -93,14 +93,14 @@ app.whenReady().then( async () => {
     }
 
     if (startTCCAccelerator !== 'none') {
-        const success = globalShortcut.register(startTCCAccelerator, () => {
+        const success: boolean = globalShortcut.register(startTCCAccelerator, (): void => {
             activateTccGui();
         });
         if (!success) { console.log('Failed to register global shortcut'); }
     }
 
-        // Initialize brightness mode from user config
-    getBrightnessMode().then(async (mode) => {
+    // Initialize brightness mode from user config
+    getBrightnessMode().then(async (mode: BrightnessModeString): Promise<void> => {
         await setBrightnessMode(mode);
         // Trigger initial update manually
         nativeTheme.emit('updated');
@@ -109,10 +109,10 @@ app.whenReady().then( async () => {
     startDbusAndInit();
 });
 
-export async function startDbusAndInit() {
-    const dbusInitialized = await tccDBus.init();
+export async function startDbusAndInit(): Promise<void> {
+    const dbusInitialized: boolean = await tccDBus.init();
     if(!dbusInitialized) {
-        setTimeout(() => {
+        setTimeout((): void => {
             startDbusAndInit()
         }, 3000);
         return;
@@ -121,7 +121,7 @@ export async function startDbusAndInit() {
     initMain();
 }
 
-async function initTray() {
+async function initTray(): Promise<void> {
     tray.state.tccGUIVersion = 'v' + app.getVersion();
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.fnLockSupported = await fnLockSupported();
@@ -132,10 +132,10 @@ async function initTray() {
     [tray.state.isPrimeSupported, tray.state.primeQuery] = await checkPrimeAvailabilityStatus();
 
     await updateTrayProfiles();
-    tray.events.startTCCClick = () => activateTccGui();
-    tray.events.startAquarisControl = () => activateTccGui('/main-gui/aquaris-control');
-    tray.events.exitClick = () => quitCurrentTccSession();
-    tray.events.autostartTrayToggle = () => {
+    tray.events.startTCCClick = (): Promise<void> => activateTccGui();
+    tray.events.startAquarisControl = (): Promise<void> => activateTccGui('/main-gui/aquaris-control');
+    tray.events.exitClick = (): void => quitCurrentTccSession();
+    tray.events.autostartTrayToggle = (): void => {
         if (tray.state.isAutostartTrayInstalled) {
             removeAutostartTray();
         } else {
@@ -145,28 +145,28 @@ async function initTray() {
         tray.create();
     };
 
-    tray.events.fnLockClick = (status: boolean) => {
+    tray.events.fnLockClick = (status: boolean): void => {
         tray.state.fnLockStatus = !status
         tccDBus.setFnLockStatus(tray.state.fnLockStatus);
     };
 
-    tray.events.selectNvidiaClick = async () => {
-        const langId = await userConfig.get("langId");
+    tray.events.selectNvidiaClick = async (): Promise<void> => {
+        const langId: string = await userConfig.get("langId");
         createPrimeWindow(langId, "dGPU");
     };
-    tray.events.selectOnDemandClick = async () => {
-        const langId = await userConfig.get("langId");
+    tray.events.selectOnDemandClick = async (): Promise<void> => {
+        const langId: string = await userConfig.get("langId");
         createPrimeWindow(langId, "on-demand");
     };
-    tray.events.selectBuiltInClick = async () => {
-        const langId = await userConfig.get("langId");
+    tray.events.selectBuiltInClick = async (): Promise<void> => {
+        const langId: string = await userConfig.get("langId");
         createPrimeWindow(langId, "iGPU");
     };
-    tray.events.profileClick = (profileId: string) => { setTempProfileById(profileId); };
+    tray.events.profileClick = (profileId: string): void => { setTempProfileById(profileId); };
     tray.create();
 
     tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
-    tray.events.powersaveBlockerClick = () => {
+    tray.events.powersaveBlockerClick = (): void => {
         if (powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId)) {
             powerSaveBlocker.stop(powersaveBlockerId);
         } else {
@@ -177,7 +177,7 @@ async function initTray() {
     }
 }
 
-async function initMain() {
+async function initMain(): Promise<void> {
 
     if (!trayOnlyOption) {
         await activateTccGui();
@@ -187,13 +187,13 @@ async function initMain() {
         // Regularly check if running tccd version is different to running gui version
         const tccdVersionCheckInterval = 5000;
         // todo: refactor, too many indents
-        setInterval(async () => {
-            const dbusAvailable = await tccDBus.dbusAvailable()
+        setInterval(async (): Promise<void> => {
+            const dbusAvailable: boolean = await tccDBus.dbusAvailable()
             if (dbusAvailable) {
-                const tccdVersion = await tccDBus.tccdVersion();
+                const tccdVersion: string = await tccDBus.tccdVersion();
                 if (tccdVersion?.length > 0 && tccdVersion !== app.getVersion()) {
                     console.log('Other tccd version detected, restarting..');
-                    process.on('exit', function () {
+                    process.on('exit', function (): void {
                         child_process.spawn(
                             process.argv[0],
                             process.argv.slice(1).concat(['--tray']),
@@ -209,13 +209,13 @@ async function initMain() {
             }
         }, tccdVersionCheckInterval);
     }
-    tccDBus.consumeModeReapplyPending().then((result) => {
+    tccDBus.consumeModeReapplyPending().then((result: boolean): void => {
         if (result) {
             child_process.exec("xset dpms force off && xset dpms force on");
         }
     });
-    tccDBus.onModeReapplyPendingChanged(() => {
-        tccDBus.consumeModeReapplyPending().then((result) => {
+    tccDBus.onModeReapplyPendingChanged((): void => {
+        tccDBus.consumeModeReapplyPending().then((result: boolean): void => {
             if (result) {
                 child_process.exec("xset dpms force off && xset dpms force on");
             }
@@ -223,7 +223,7 @@ async function initMain() {
     });
 
     const profilesCheckInterval = 4000;
-    setInterval(async () => { updateTrayProfiles(); }, profilesCheckInterval);
+    setInterval(async (): Promise<void> => { updateTrayProfiles(); }, profilesCheckInterval);
 }
 
 function installAutostartTray(): boolean {
@@ -285,30 +285,30 @@ function createUserConfigDir(): boolean {
 }
 
 async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
-    const primeStatus = await tccDBus.getPrimeState();
-    const primeAvailable =
+    const primeStatus: string = await tccDBus.getPrimeState();
+    const primeAvailable: boolean =
         primeStatus !== undefined && ["off", "-1"].indexOf(primeStatus) === -1;
     return [primeAvailable, primeStatus];
 }
 
-async function fnLockSupported() {
+async function fnLockSupported(): Promise<boolean> {
     return await tccDBus.getFnLockSupported();
 }
 
-async function fnLockStatus() {
+async function fnLockStatus(): Promise<boolean> {
     return await tccDBus.getFnLockStatus();
 }
 
-export async function updateTrayProfiles() {
+export async function updateTrayProfiles(): Promise<void> {
     try {
-        const updatedActiveProfile = await getActiveProfile();
-        const updatedProfiles = await getProfiles();
+        const updatedActiveProfile: TccProfile = await getActiveProfile();
+        const updatedProfiles: TccProfile[] = await getProfiles();
 
         // Replace default profile names/descriptions with translations
         for (const profile of updatedProfiles) {
             const profileId: string = profile?.id
             if (profileId) {
-                const profileTranslationId = profileIdToI18nId.get(profile?.id);
+                const profileTranslationId: IProfileTextMappings = profileIdToI18nId.get(profile?.id);
                 if (profileTranslationId !== undefined) {
                     profile.name = translation.idToString(profileTranslationId.name);
                     profile.description = translation.idToString(profileTranslationId.description);
@@ -331,12 +331,11 @@ export async function updateTrayProfiles() {
     }
 }
 
-export async function hasAquaris() {
+export async function hasAquaris(): Promise<boolean> {
     return await tccDBus.deviceHasAquaris();
-
 }
 
-export async function hideCTGP() {
+export async function hideCTGP(): Promise<boolean> {
     return await tccDBus.getHideCTGP();
 }
 
@@ -347,7 +346,7 @@ export async function hideCTGP() {
 */
 
 async function getProfiles(): Promise<TccProfile[]> {
-    let result = [];
+    let result: TccProfile[] = [];
     if (!await tccDBus.dbusAvailable()) return [];
     try {
         const profiles: TccProfile[] = JSON.parse(await tccDBus.getProfilesJSON());
@@ -358,13 +357,13 @@ async function getProfiles(): Promise<TccProfile[]> {
     return result;
 }
 
-async function setTempProfileById(profileId: string) {
-    const result = await tccDBus.dbusAvailable() && await tccDBus.setTempProfileById(profileId);
+async function setTempProfileById(profileId: string): Promise<boolean> {
+    const result: boolean = await tccDBus.dbusAvailable() && await tccDBus.setTempProfileById(profileId);
     return result;
 }
 
 async function getActiveProfile(): Promise<TccProfile> {
-    let result = undefined;
+    let result: TccProfile = undefined;
     if (!await tccDBus.dbusAvailable()) return undefined;
     try {
         result = JSON.parse(await tccDBus.getActiveProfileJSON());

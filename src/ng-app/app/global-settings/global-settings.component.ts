@@ -24,6 +24,8 @@ import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BrightnessModeString } from 'src/e-app/backendAPIs/translationAndTheme';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
     selector: 'app-global-settings',
@@ -31,9 +33,9 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./global-settings.component.scss']
 })
 export class GlobalSettingsComponent implements OnInit {
-    Object = Object;
+    Object: ObjectConstructor = Object;
 
-    public gridParams = {
+    public gridParams: { cols: number; headerSpan: number, valueSpan: number; inputSpan: number} = {
         cols: 9,
         headerSpan: 4,
         valueSpan: 2,
@@ -46,9 +48,9 @@ export class GlobalSettingsComponent implements OnInit {
     public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
     public temperatureDisplayFahrenheit: boolean;
-    public ctrlBrightnessMode = new FormControl();
+    public ctrlBrightnessMode: FormControl = new FormControl();
 
-    public hasChargingSettings = false;
+    public hasChargingSettings: boolean = false;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -64,37 +66,37 @@ export class GlobalSettingsComponent implements OnInit {
     ) { }
 
     // todo: move this.config.getSettings() into a variable in every function, too many calls
-    ngOnInit() {
+    ngOnInit(): void {
         this.setValuesFromResolverRoute();
 
-        const routingFromDashboard = this.route.snapshot.paramMap.get("routingFromDashboard");
+        const routingFromDashboard: string = this.route.snapshot.paramMap.get("routingFromDashboard");
         if (routingFromDashboard) {
             this.expandPrimeSelect = true;
         }
 
         this.subscriptions.add(this.tccdbus.forceYUV420OutputSwitchAvailable.subscribe(
-            forceYUV420OutputSwitchAvailable => { this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable; }
+            (forceYUV420OutputSwitchAvailable: boolean): void => { this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable; }
         ));
 
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
         this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
-        for (let card = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
+        for (let card: number = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
             this.ycbcr420Workaround[card] = {};
             for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
             }
         }
 
-        this.utils.getBrightnessMode().then((mode) => { this.ctrlBrightnessMode.setValue(mode) });
+        this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => { this.ctrlBrightnessMode.setValue(mode) });
     }
 
-    setValuesFromResolverRoute() {
+    setValuesFromResolverRoute(): void {
         const paramMap = this.route.snapshot.paramMap;
         const data = this.route.snapshot.data;
 
-        const routingFromDashboard = paramMap.get("routingFromDashboard");
+        const routingFromDashboard: string = paramMap.get("routingFromDashboard");
         this.expandPrimeSelect = Boolean(routingFromDashboard);
 
         this.forceYUV420OutputSwitchAvailable =
@@ -106,12 +108,12 @@ export class GlobalSettingsComponent implements OnInit {
 
         this.primeState = data.primeSelectAvailable;
     }
-    onCPUSettingsEnabledChanged(event: any) {
+    onCPUSettingsEnabledChanged(event: any): void {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().cpuSettingsEnabled = event.checked;
 
-        this.config.saveSettings().then(success => {
+        this.config.saveSettings().then((success: boolean): void => {
             if (!success) {
                 this.config.getSettings().cpuSettingsEnabled = !event.checked;
             }
@@ -122,10 +124,10 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onTemperatureDisplayChanged(event: boolean) {
+    onTemperatureDisplayChanged(event: boolean): void {
         this.utils.pageDisabled = true;
         this.config.getSettings().fahrenheit = event;
-        this.config.saveSettings().then(success => {
+        this.config.saveSettings().then((success: boolean): void => {
             if (!success) {
                 this.config.getSettings().fahrenheit = !event;
             }
@@ -136,12 +138,12 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onFanControlEnabledChanged(event: any) {
+    onFanControlEnabledChanged(event: MatCheckboxChange): void {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().fanControlEnabled = event.checked;
 
-        this.config.saveSettings().then(success => {
+        this.config.saveSettings().then((success: boolean): void => {
             if (!success) {
                 this.config.getSettings().fanControlEnabled = !event.checked;
             }
@@ -152,12 +154,12 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onKeyboardBacklightControlEnabledChanged(event: any) {
+    onKeyboardBacklightControlEnabledChanged(event: MatCheckboxChange): void {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
 
-        this.config.saveSettings().then(success => {
+        this.config.saveSettings().then((success: boolean): void => {
             if (!success) {
                 this.config.getSettings().keyboardBacklightControlEnabled = !event.checked;
             }
@@ -168,13 +170,13 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
+    onYCbCr420WorkaroundChanged(event: any, card: number, port: string): void {
         if (this.config.getSettings().ycbcr420Workaround?.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
             this.utils.pageDisabled = true;
 
             this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
 
-            this.config.saveSettings().then(success => {
+            this.config.saveSettings().then((success: boolean): void => {
                 if (!success) {
                     this.config.getSettings().ycbcr420Workaround[card][port] = !event.checked;
                     this.ycbcr420Workaround[card][port] = !event.checked;
@@ -187,23 +189,23 @@ export class GlobalSettingsComponent implements OnInit {
         }
     }
 
-    public async onBrightnessModeCtrlChange() {
+    public async onBrightnessModeCtrlChange(): Promise<void> {
         await this.utils.setBrightnessMode(this.ctrlBrightnessMode.value);
     }
 
-    public gotoComponent(component: string) {
+    public gotoComponent(component: string): void {
         this.router.navigate([component], { relativeTo: this.route.parent });
     }
 
-    public onPrimeStateChanged(newPrimeState: string) {
+    public onPrimeStateChanged(newPrimeState: string): void {
         this.primeState = newPrimeState;
     }
 
-    public isDGpuAvailable() {
+    public isDGpuAvailable(): boolean {
         return window.power.isDGpuAvailable();
     }
 
-    public isIGpuAvailable() {
+    public isIGpuAvailable(): boolean {
         return window.power.isIGpuAvailable();
     }
 }

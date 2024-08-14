@@ -27,11 +27,11 @@ export class SingleProcess {
      * Start process
      */
     protected async start(): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
+        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void): Promise<void> => {
             if (this.isRunning()) {
                 resolve(false);
             } else {
-                const result = this.writePid(process.pid);
+                const result: boolean = this.writePid(process.pid);
                 resolve(result);
             }
         });
@@ -41,8 +41,8 @@ export class SingleProcess {
      * Stop process
      */
     protected async stop(): Promise<boolean> {
-        return new Promise<boolean>(async resolve => {
-            const pid = this.readPid();
+        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void): Promise<void> => {
+            const pid: number = this.readPid();
 
             if (!isNaN(pid)) { // If there is a PID in file
                 if (this.isRunning()) {
@@ -56,9 +56,9 @@ export class SingleProcess {
             }
 
             // Stay a while... and listen, if process quits in time
-            const nrRetries = 50;
-            const retryDelay = 100;
-            let count = 0;
+            const nrRetries: number = 50;
+            const retryDelay: number = 100;
+            let count: number = 0;
             while (this.isRunning() && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
             if (count >= nrRetries) {
                 resolve(false);
@@ -94,8 +94,8 @@ export class SingleProcess {
         try {
             const available: boolean = fs.existsSync(this.pidPath)
             if (available) {
-                const strPid = fs.readFileSync(this.pidPath);
-                const intPid = parseInt(strPid.toString(), 10);
+                const strPid: Buffer = fs.readFileSync(this.pidPath);
+                const intPid: number = parseInt(strPid.toString(), 10);
                 return intPid;
             }
             return Number.NaN;
@@ -128,9 +128,9 @@ export class SingleProcess {
      * @returns True if PID file is found and process is running, false otherwise
      */
     private isRunning(): boolean {
-        let isRunning = true;
+        let isRunning: boolean = true;
 
-        const intPid = this.readPid();
+        const intPid: number = this.readPid();
         if (isNaN(intPid)) {
             isRunning = false;
         } else {

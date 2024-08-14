@@ -43,28 +43,28 @@ export class LogicalCpuController extends SysFsController {
     /**
      * Note: not available for cpu nr 0
      */
-    readonly online = new SysFsPropertyBoolean(path.join(this.cpuPath, 'online'));
+    readonly online: SysFsPropertyBoolean = new SysFsPropertyBoolean(path.join(this.cpuPath, 'online'));
 
     // cpufreq
 
-    readonly scalingCurFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_cur_freq'));
-    readonly scalingMinFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_min_freq'));
-    readonly scalingMaxFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_max_freq'));
-    readonly scalingAvailableFrequencies = new SysFsPropertyNumList(path.join(this.cpufreqPath, 'scaling_available_frequencies'), undefined, ' ');
-    readonly scalingDriver = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_driver'));
-    readonly energyPerformanceAvailablePreferences = new SysFsPropertyStringList(
+    readonly scalingCurFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_cur_freq'));
+    readonly scalingMinFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_min_freq'));
+    readonly scalingMaxFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_max_freq'));
+    readonly scalingAvailableFrequencies: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.cpufreqPath, 'scaling_available_frequencies'), undefined, ' ');
+    readonly scalingDriver: SysFsPropertyString = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_driver'));
+    readonly energyPerformanceAvailablePreferences: SysFsPropertyStringList = new SysFsPropertyStringList(
         path.join(this.cpufreqPath, 'energy_performance_available_preferences'));
-    readonly energyPerformancePreference = new SysFsPropertyString(path.join(this.cpufreqPath, 'energy_performance_preference'));
-    readonly scalingAvailableGovernors = new SysFsPropertyStringList(path.join(this.cpufreqPath, 'scaling_available_governors'));
-    readonly scalingGovernor = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_governor'));
+    readonly energyPerformancePreference: SysFsPropertyString = new SysFsPropertyString(path.join(this.cpufreqPath, 'energy_performance_preference'));
+    readonly scalingAvailableGovernors: SysFsPropertyStringList = new SysFsPropertyStringList(path.join(this.cpufreqPath, 'scaling_available_governors'));
+    readonly scalingGovernor: SysFsPropertyString = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_governor'));
 
-    readonly cpuinfoMinFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_min_freq'));
-    readonly cpuinfoMaxFreq = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_max_freq'));
+    readonly cpuinfoMinFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_min_freq'));
+    readonly cpuinfoMaxFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_max_freq'));
 
-    readonly coreId = new SysFsPropertyInteger(path.join(this.cpuTopologyPath, 'core_id'));
-    readonly coreSiblingsList = new SysFsPropertyNumList(path.join(this.cpuTopologyPath, 'core_siblings_list'));
-    readonly physicalPackageId = new SysFsPropertyInteger(path.join(this.cpuTopologyPath, 'physical_package_id'));
-    readonly threadSiblingsList = new SysFsPropertyNumList(path.join(this.cpuTopologyPath, 'thread_siblings_list'));
+    readonly coreId: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpuTopologyPath, 'core_id'));
+    readonly coreSiblingsList: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.cpuTopologyPath, 'core_siblings_list'));
+    readonly physicalPackageId: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpuTopologyPath, 'physical_package_id'));
+    readonly threadSiblingsList: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.cpuTopologyPath, 'thread_siblings_list'));
 
     constructor(public readonly basePath: string, public readonly coreIndex: number) {
         super();
@@ -72,10 +72,10 @@ export class LogicalCpuController extends SysFsController {
 
     public getReducedAvailableFreq(): number {
         let averageFreq: number;
-        const coreMaxFrequency = this.cpuinfoMaxFreq.readValue();
+        const coreMaxFrequency: number = this.cpuinfoMaxFreq.readValue();
         const scalingAvailable: boolean = this.scalingAvailableFrequencies.isAvailable()
         if (scalingAvailable) {
-            const availableFrequencies = this.scalingAvailableFrequencies.readValueNT();
+            const availableFrequencies: number[] = this.scalingAvailableFrequencies.readValueNT();
             if (availableFrequencies !== undefined && availableFrequencies?.length !== 0) {
                 averageFreq = availableFrequencies[Math.floor(availableFrequencies?.length / 2.0)];
             } else {

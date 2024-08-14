@@ -28,7 +28,7 @@ import { ConfigService } from "../config.service";
 })
 export class PrimeDialogComponent implements OnInit {
     primeSelectMode: string;
-    loadingBar = false;
+    loadingBar: boolean = false;
     langId: string;
 
     dialogStatus: string = "info";
@@ -39,11 +39,11 @@ export class PrimeDialogComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        window.ipc.onSetPrimeSelectMode( async (event, primeSelectMode) => {
+        window.ipc.onSetPrimeSelectMode( async (event: any, primeSelectMode: string): Promise<void> => {
             this.primeSelectMode = primeSelectMode;
 
             // small delay required to avoid flickering ui since html does not instantly update
-            setTimeout(async () => {
+            setTimeout(async (): Promise<void> => {
                 window.ipc.primeWindowShow();
             }, 250);
         }
@@ -51,15 +51,15 @@ export class PrimeDialogComponent implements OnInit {
         this.langId = this.utils.getCurrentLanguageId();
     }
 
-    public setDialogStatus(status: string) {
+    public setDialogStatus(status: string): void {
         this.dialogStatus = status;
     }
 
-    public async applyPrimeConfig(rebootStatus: string) {
+    public async applyPrimeConfig(rebootStatus: string): Promise<void> {
         this.setDialogStatus("loading");
 
         this.loadingBar = true;
-        const status = await this.config.pkexecSetPrimeSelectAsync(
+        const status: boolean = await this.config.pkexecSetPrimeSelectAsync(
             this.primeSelectMode
         );
 
@@ -74,7 +74,7 @@ export class PrimeDialogComponent implements OnInit {
         }
     }
 
-    public closeWindow() {
+    public closeWindow(): void {
         window.ipc.primeWindowClose();
     }
 }

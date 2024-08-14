@@ -25,7 +25,7 @@ export function determineState(): ProfileStates {
     let state: ProfileStates = ProfileStates.AC;
 
     const pathPowerSupplies = '/sys/class/power_supply';
-    const powerSupplyNames = PowerSupplyController.getDeviceList(pathPowerSupplies);
+    const powerSupplyNames: string[] = PowerSupplyController.getDeviceList(pathPowerSupplies);
     const powerSupplies: PowerSupplyController[] = [];
 
     // Attempt to find a 'Mains' type power supply
@@ -35,7 +35,7 @@ export function determineState(): ProfileStates {
             const newPowerSupply = new PowerSupplyController(path.join(pathPowerSupplies, powerSupplyName));
             powerSupplies.push(newPowerSupply);
         }
-        powerAc = powerSupplies.find(powerSupply => powerSupply.type.readValue() === 'Mains');
+        powerAc = powerSupplies.find((powerSupply: PowerSupplyController): boolean => powerSupply.type.readValue() === 'Mains');
     } catch (err: unknown) {
         console.error("StateUtils: determineState find failed =>", err)
     }
@@ -44,7 +44,7 @@ export function determineState(): ProfileStates {
     // Attempt to find state depending on 'Mains' online status
     if (powerAc !== undefined) {
         try {
-            const acOnline = powerAc.online.readValue();
+            const acOnline: boolean = powerAc.online.readValue();
             if (acOnline) {
                 state = ProfileStates.AC;
             } else {

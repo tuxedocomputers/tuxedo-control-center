@@ -17,47 +17,47 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: any = require('mock-fs');
 import * as fs from 'fs';
 
 import { SysFsPropertyNumListExplicit } from './SysFsProperties';
 
-describe('SysDevPropertyNumListExplicit', () => {
+describe('SysDevPropertyNumListExplicit', (): void => {
 
     const dev = new SysFsPropertyNumListExplicit('/sys/something/numlist');
     const devSeparator = new SysFsPropertyNumListExplicit('/sys/something/numlist', '/sys/something/numlist', ',');
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('should read', () => {
+    it('should read', (): void => {
         mock({ '/sys/something/numlist' : '1 2 3 2 1' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toEqual([1, 2, 3, 2, 1]);
     });
 
-    it('should write', () => {
+    it('should write', (): void => {
         mock({ '/sys/something/numlist' : 'something' });
-        expect(() => { dev.writeValue([1, 2, 3, 2, 1]); }).not.toThrow();
+        expect((): void => { dev.writeValue([1, 2, 3, 2, 1]); }).not.toThrow();
         expect(fs.readFileSync('/sys/something/numlist').toString()).toBe('1 2 3 2 1');
     });
 
-    it('should read with configurable list separator', () => {
+    it('should read with configurable list separator', (): void => {
         mock({ '/sys/something/numlist' : '1,2,3,2,1' });
-        expect(() => { devSeparator.readValue(); }).not.toThrow();
+        expect((): void => { devSeparator.readValue(); }).not.toThrow();
         expect(devSeparator.readValue()).toEqual([1, 2, 3, 2, 1]);
     });
 
-    it('should write with configurable list separator', () => {
+    it('should write with configurable list separator', (): void => {
         mock({ '/sys/something/numlist' : 'something' });
-        expect(() => { devSeparator.writeValue([1, 2, 3, 2, 1]); }).not.toThrow();
+        expect((): void => { devSeparator.writeValue([1, 2, 3, 2, 1]); }).not.toThrow();
         expect(fs.readFileSync('/sys/something/numlist').toString()).toBe('1,2,3,2,1');
     });
 });

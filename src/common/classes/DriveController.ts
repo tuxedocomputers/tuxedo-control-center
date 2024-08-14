@@ -26,14 +26,14 @@ import { SysFsPropertyInteger } from './SysFsProperties';
 
 export class DriveController {
 
-    private static _sysBlockDir = "/sys/block/";
+    private static _sysBlockDir: string = "/sys/block/";
 
     public static async getDrives(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         let drives: IDrive[] = [];
 
-        let dirs = fs.readdirSync(this._sysBlockDir);
+        let dirs: string[] = fs.readdirSync(this._sysBlockDir);
         for (let d of dirs) {
-            let dr = await this.getChildDevices(path.join(this._sysBlockDir, d));
+            let dr: IDrive[] = await this.getChildDevices(path.join(this._sysBlockDir, d));
             if (dr !== undefined) {
                 for (let drive of dr) {
                     if (!includeLoopDevices && !drive.name.startsWith("loop")) {
@@ -47,7 +47,7 @@ export class DriveController {
     }
 
     /*
-    // Unused
+    // todo: remove, unused
     public static async getDrivesWorkaround(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         // Workaround for suse. Suse need a first call of blkid with sudo, to create the map for normal users
         child_process.execSync(`pkexec blkid -o value -s TYPE`);
@@ -57,18 +57,18 @@ export class DriveController {
     */
 
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
-        let name = path.basename(devicePath);
-        let size = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
+        let name: string = path.basename(devicePath);
+        let size: number = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
 
-        let isParent = !fs.existsSync(path.join(devicePath, "partition"));
-        let devPath = "";
+        let isParent: boolean = !fs.existsSync(path.join(devicePath, "partition"));
+        let devPath: string = "";
 
         if (fs.existsSync(path.join("/dev/", name))) {
             devPath = path.join("/dev/", name);
         }
 
-        let result = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
-        const isCrpyt = result.toString().trim() == "crypto_LUKS";
+        let result: Buffer = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
+        const isCrpyt: boolean = result.toString().trim() == "crypto_LUKS";
 
         return {
             name: name,
@@ -83,7 +83,7 @@ export class DriveController {
     public static async getChildDevices(devicePath: string): Promise<IDrive[]> {
         let childDevices: IDrive[] = [];
 
-        let name = path.basename(devicePath);
+        let name: string = path.basename(devicePath);
         for (let f of fs.readdirSync(devicePath)) {
             if (f.startsWith(name)) {
                 childDevices.push(await this.getDeviceInfo(path.join(devicePath, f)));

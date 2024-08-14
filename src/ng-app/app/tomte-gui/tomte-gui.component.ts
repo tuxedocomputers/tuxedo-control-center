@@ -20,6 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAPI';
+import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 
 
 @Component({
@@ -34,21 +35,21 @@ import { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAP
   ]
 })
 export class TomteGuiComponent implements OnInit {
-    tomteIsInstalled = false;
-    jsonError = false;
-    rebootRequired = false;
+    tomteIsInstalled: boolean = false;
+    jsonError: boolean = false;
+    rebootRequired: boolean = false;
     tomteListArray: ITomteModule[] = [];
-    moduleToolTips = new Map();
-    columnsToDisplay = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
+    moduleToolTips: Map<string, string> = new Map();
+    columnsToDisplay: string[] = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
     // TODO maybe there is a better way to handle this too :)
-    tomteMode = "";
-    tomteModes =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
+    tomteMode: string = "";
+    tomteModes: string[] =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
     // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
-    showRetryButton = false;
-    loadingInformation = false;
+    showRetryButton: boolean = false;
+    loadingInformation: boolean = false;
     // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and
     // set this variable to false to output the correct error message in the control center
-    isTuxedoDevice = true;
+    isTuxedoDevice: boolean = true;
     constructor(
         private utils: UtilsService,
     ) { }
@@ -56,15 +57,15 @@ export class TomteGuiComponent implements OnInit {
 
 
 
-    ngOnInit() {
+    ngOnInit(): void {
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.tomtelist();
     }
 
-    public focusControl(control): void {
-        setTimeout(() => { control.focus(); }, 0);
+    public focusControl(control: any): void {
+        setTimeout((): void => { control.focus(); }, 0);
     }
 
     public openExternalUrl(url: string): void {
@@ -72,7 +73,7 @@ export class TomteGuiComponent implements OnInit {
     }
 
 
-    private async tomtelist()
+    private async tomtelist(): Promise<void>
     {
         // check for tomte version and then either use oldTomteList or tomteListJSON
         // only check version once and then store it?
@@ -83,7 +84,7 @@ export class TomteGuiComponent implements OnInit {
             {
                 let tomteInformation: ITomteInformation;
                 // check for information a few times, if it keeps failing, show retry button
-                for (let i = 0; i < 30; i++)
+                for (let i: number = 0; i < 30; i++)
                 {
                         tomteInformation = await window.tomteAPI.getTomteInformation();
                         if (tomteInformation && !tomteInformation.jsonError) {
@@ -100,10 +101,10 @@ export class TomteGuiComponent implements OnInit {
                             {
                                 this.showRetryButton = true;
                             }
+                            // todo: unnecessary continue
                             continue;
                         }
                 }
-                this.rebootRequired = tomteInformation.rebootRequired;
                 this.tomteListArray = tomteInformation.modules;
                 this.tomteMode = tomteInformation.tomteMode;
             }
@@ -115,18 +116,18 @@ export class TomteGuiComponent implements OnInit {
         Loads the descriptions for each module in the background and puts it into moduleToolTips Variable that is then
         read in the HTML file
     */
-    private async getModuleDescriptions()
+    private async getModuleDescriptions(): Promise<void>
     {
         if (this.moduleToolTips.size < this.tomteListArray?.length)
         {
-        for (let i = 0; i < this.tomteListArray?.length; i++)
+        for (let i: number = 0; i < this.tomteListArray?.length; i++)
             {
-                let moduleName = this.tomteListArray[i].moduleName;
+                let moduleName: string = this.tomteListArray[i].moduleName;
                 if(this.moduleToolTips.has(moduleName))
                 {
                     continue;
                 }
-                let results = await window.tomteAPI.getModuleDescription(moduleName, this.utils.getCurrentLanguageId());
+                let results: string = await window.tomteAPI.getModuleDescription(moduleName, this.utils.getCurrentLanguageId());
                 if(!results) {
                     continue;
                 }
@@ -145,7 +146,8 @@ export class TomteGuiComponent implements OnInit {
         Returns properly translated tooltip for the sliders in each of their proper conditions
 */
 
-    public getSliderToolTip(whichButton, prerequisite, blocked, installed)
+// todo: maybe refactor
+    public getSliderToolTip(whichButton: string, prerequisite: string, blocked: boolean, installed: boolean): string
     {
         if (whichButton === 'blocked')
         {
@@ -189,12 +191,12 @@ export class TomteGuiComponent implements OnInit {
         Opens Dialogue containing given errormessage
         Also logs the error to the browser console
     */
-    private async throwErrorMessage(err: string | undefined)
+    private async throwErrorMessage(errorMessage: string | undefined): Promise<void>
     {
-        console.error("tomte-gui: throwErrorMessage =>", err);
-        const askToClose = await this.utils.confirmDialog({
+        console.error("tomte-gui: throwErrorMessage =>", errorMessage);
+        const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
             title: $localize `:@@tomteGuiDialogErrorTitle:An Error occured!`,
-            description: err,
+            description: errorMessage,
             linkLabel: ``,
             linkHref: null,
             buttonAbortLabel: ``,
@@ -208,11 +210,11 @@ export class TomteGuiComponent implements OnInit {
     /*
         Opens Dialogue asking the user if they are sure to proceed
     */
-    private async confirmChangesDialogue()
+    private async confirmChangesDialogue(): Promise<boolean>
     {
-        const tomteGuiNoticeDisable = localStorage.getItem('tomteGuiNoticeDisable');
+        const tomteGuiNoticeDisable: string = localStorage.getItem('tomteGuiNoticeDisable');
         if (tomteGuiNoticeDisable === null || tomteGuiNoticeDisable === 'false') {
-            const askToClose = await this.utils.confirmDialog({
+            const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
                 title: $localize `:@@tomteBreakingChangesTitle:Are you sure you want to issue this command?`,
                 description: $localize `:@@tomteBreakingChangesWarning:Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!`,
                 linkLabel: '',
@@ -238,9 +240,9 @@ export class TomteGuiComponent implements OnInit {
     /*
         Opens Dialogue informing the user that everything they have customly configured will be rewoken by issueing this command
     */
-    private async confirmResetDialogue()
+    private async confirmResetDialogue(): Promise<boolean>
     {
-        const askToClose = await this.utils.confirmDialog({
+        const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
             title: $localize `:@@tomteResetDefaultsTitle:Are you sure you want to reset to defaults?`,
             description: $localize `:@@tomteResetDefaultsMessage:This will revert any manual configuration you did, are you sure you want to proceed?`,
             linkLabel: '',
@@ -270,17 +272,17 @@ export class TomteGuiComponent implements OnInit {
         Tries to completely restore tomte to default configuration.
         Throws exhaustive error message if it fails.
     */
-    public async tomteResetToDefaults()
+    public async tomteResetToDefaults(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        let dialogueYes = await this.confirmResetDialogue();
+        let dialogueYes: boolean = await this.confirmResetDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
             return;
         }
-        let success = await window.tomteAPI.resetToDefaults();
+        let success: string = await window.tomteAPI.resetToDefaults();
         if(success)
         {
             this.tomtelist();
@@ -300,7 +302,7 @@ export class TomteGuiComponent implements OnInit {
     public async tomteUn_InstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
     {
         this.utils.pageDisabled = true;
-        let dialogueYes = await this.confirmChangesDialogue();
+        let dialogueYes: boolean = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -315,8 +317,8 @@ export class TomteGuiComponent implements OnInit {
         if (isInstalled)
         {
 
-            await window.tomteAPI.removeModule(name).catch((err) => {
-                console.error(err);
+            await window.tomteAPI.removeModule(name).catch((err: unknown): void => {
+                console.error("tomote-gui: tomteUn_InstallButton removeModule failed =>", err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -325,8 +327,8 @@ export class TomteGuiComponent implements OnInit {
         else
         {
 
-            await window.tomteAPI.installModule(name).catch((err) => {
-                console.error(err);
+            await window.tomteAPI.installModule(name).catch((err: unknown): void => {
+                console.error("tomote-gui: tomteUn_InstallButton installModule failed =>", err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -340,9 +342,9 @@ export class TomteGuiComponent implements OnInit {
     /*
         Tries to either block or unblock a given module, depending on if the module is already blocked or not
     */
-    public async tomteBlockButton(name: string, isBlocked: boolean)
+    public async tomteBlockButton(name: string, isBlocked: boolean): Promise<void>
     {
-        let dialogueYes = await this.confirmChangesDialogue();
+        let dialogueYes: boolean = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -351,15 +353,15 @@ export class TomteGuiComponent implements OnInit {
         }
         this.utils.pageDisabled = true;
         if (isBlocked) {
-            await window.tomteAPI.unBlockModule(name).catch((err) => {
-                console.error(err);
+            await window.tomteAPI.unBlockModule(name).catch((err: unknown): void => {
+                console.error("tomote-gui: tomteBlockButton unBlockModule failed =>", err);
                 this.utils.pageDisabled = false;
                 return;
             });
         }
         else {
-            await window.tomteAPI.blockModule(name).catch((err) => {
-                console.error(err);
+            await window.tomteAPI.blockModule(name).catch((err: unknown): void => {
+                console.error("tomote-gui: tomteBlockButton blockModule failed =>", err);
                 this.utils.pageDisabled = false;
                 return;
             });
@@ -374,9 +376,9 @@ export class TomteGuiComponent implements OnInit {
     /*
         Changes the mode tomte is operating in to the mode given and throws an error message if this doesnt work
     */
-    public async tomteModeButton(mode)
+    public async tomteModeButton(mode: { value: ["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"]} ): Promise<void>
     {
-        let dialogueYes = await this.confirmChangesDialogue();
+        let dialogueYes: boolean = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -384,8 +386,8 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        await window.tomteAPI.setMode(mode.value).catch((err) => {
-            console.error(err);
+        await window.tomteAPI.setMode(mode.value).catch((err: unknown): void => {
+            console.error("tomote-gui: tomteModeButton failed =>", err);
             this.utils.pageDisabled = false;
             return;
           });
@@ -398,10 +400,10 @@ export class TomteGuiComponent implements OnInit {
         Tries to install tomte when button is clicked and throws error message if it fails.
         Not to be confused with the tomteUn_InstallButton() function, which tries to un-/install a given module
     */
-    public async installTomteButton()
+    public async installTomteButton(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        let gotInstalled = await window.pgms.installTomte();
+        let gotInstalled: boolean = await window.pgms.installTomte();
         if (!gotInstalled)
         {
             this.throwErrorMessage($localize `:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`);

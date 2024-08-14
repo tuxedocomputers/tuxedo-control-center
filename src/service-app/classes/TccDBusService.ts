@@ -26,18 +26,18 @@ import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
 export class TccDBusService extends DaemonWorker {
 
     private interface: TccDBusInterface;
-    private readonly path = '/com/tuxedocomputers/tccd';
+    private readonly path: string = '/com/tuxedocomputers/tccd';
 
     private bus: dbus.MessageBus;
 
-    private started = false;
+    private started: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon, private dbusData: TccDBusData) {
         super(1500, "TccDbusServiceWorker", tccd);
         this.dbusData.dbusAvailable = true;
 
         const options: TccDBusOptions = new TccDBusOptions();
-        options.triggerStateCheck = async () => { this.tccd.triggerStateCheck(); }
+        options.triggerStateCheck = async (): Promise<void> => { this.tccd.triggerStateCheck(); }
         options.chargingWorker = this.tccd.getChargingWorker();
 
         try {
@@ -50,7 +50,7 @@ export class TccDBusService extends DaemonWorker {
 
     public onStart(): void {
         if (!this.started) {
-            this.bus.requestName('com.tuxedocomputers.tccd', 0).then(name => {
+            this.bus.requestName('com.tuxedocomputers.tccd', 0).then((name: number): void => {
                 try {
                     this.bus.export(this.path, this.interface);
                     this.started = true;
@@ -58,7 +58,7 @@ export class TccDBusService extends DaemonWorker {
                     console.error("TccDBusService: Error exporting service: ", err)
 
                 }
-            }).catch(err => {
+            }).catch((err: unknown): void => {
                 console.error("TccDBusService: Failed to request bus name =>", err)
             });
         }

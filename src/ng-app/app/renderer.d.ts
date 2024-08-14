@@ -1,6 +1,6 @@
 import { IAquarisClientAPI } from "../../e-app/preloadAPIs/AquarisClientAPI";
 import { EventEmitter } from 'node:events';
-import { IDrive } from "../../common/models/IDrive"; 
+import { IDrive } from "../../common/models/IDrive";
 import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
 import { ITccProfile } from "../../common/models/TccProfile";
 import { ITccSettings } from "../../common/models/TccSettings";
@@ -8,26 +8,30 @@ import { ITccFanProfile } from "../../common/models/TccFanTable";
 import { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
 import { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
 import { IWebcamClientAPI } from "src/e-app/preloadAPIs/webcamClientAPI";
+import { BrightnessModeString } from "src/e-app/backendAPIs/translationAndTheme";
+import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
+import { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
 
+// todo: variables shouldn't be uppercase in every letter
 export interface IPC extends EventEmitter {
     getAppVersion: () => Promise<string>,
     closeApp: () => void,
     closeWindow: () => void,
     minimizeWindow: () => void,
     getProcessVersions: () => Promise<IProcessVersions>,
-    getBrightnessMode: () => Promise<'light' | 'dark' | 'system'>,
-    setBrightnessMode: (mode: 'light' | 'dark' | 'system') => void,
+    getBrightnessMode: () => Promise<BrightnessModeString>,
+    setBrightnessMode: (mode: BrightnessModeString) => void,
     getShouldUseDarkColors: () => Promise<boolean>,
-    onUpdateBrightnessMode: (callback) => void,
-    onWakeupFromSuspend: (callback) => void,
-    onDbusDead: (callback) => void,
+    onUpdateBrightnessMode: (callback: () => void) => void,
+    onWakeupFromSuspend: (callback: () => void) => void,
+    onDbusDead: (callback: () => void) => void,
     openExternal: (url: string) => void,
     getPath: (path: string) => Promise<string>,
-    openFileDialog: (properties) => Promise<any>,
-    saveFileDialog: (properties) => Promise<any>,
+    openFileDialog: (properties: Electron.OpenDialogOptions) => Promise<OpenDialogReturnValue>,
+    saveFileDialog: (properties: Electron.OpenDialogOptions) => Promise<SaveDialogReturnValue>,
     primeWindowShow: () => void,
     primeWindowClose: () => void,
-    onSetPrimeSelectMode: (callback) => void,
+    onSetPrimeSelectMode: (callback: (event: any, primeSelectMode: string) => Promise<void>) => void,
     displayBrightnessNotSupportedGnome: () => boolean,
     setDisplayBrightnessGnome: (valuePercent: number) => void,
     setShutdownTime: (selectedHour: number , selectedMinute: number) => Promise<string>,
@@ -38,11 +42,11 @@ export interface IPC extends EventEmitter {
     triggerLanguageChange: (languageId: string) => void,
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => Promise<string>,
     runSysteminfo: (ticketNumber: string) => Promise<void>,
-    onUpdateSysteminfoLabel: (callback) => void,  
+    onUpdateSysteminfoLabel: (callback: (event: any, text: string) => void) => void,
     primeSelect: (selectedState: string) => Promise<string>,
 }
 
-  export interface POWER 
+  export interface POWER
   {
     getDGpuPowerState: (driver: string) => Promise<string>,
     getBusPath: (busPath: string) => string,
@@ -51,7 +55,7 @@ export interface IPC extends EventEmitter {
     isDGpuAvailable: () => boolean,
     isIGpuAvailable: () => boolean,
   }
-  
+
 
   export interface VENDOR
   {
@@ -60,7 +64,7 @@ export interface IPC extends EventEmitter {
   }
 
 
-  export interface FS 
+  export interface FS
   {
      writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => Promise<void>,
      readTextFile: (filePath: string) => Promise<string>,
@@ -71,47 +75,48 @@ export interface IPC extends EventEmitter {
   {
     getDrives: () => IDrive[]
   }
-export interface WEBCAM 
+export interface WEBCAM
 {
-    onVideoEnded: (callback) => void,
-    onExternalWebcamPreviewClosed: (callback) => void,
-    onApplyControls: (callback) => void,
-    onSettingWebcamWithLoading: (callback) => void,
+    onVideoEnded: (callback: () => void) => void,
+    onExternalWebcamPreviewClosed: (callback: () => void) => void,
+    onApplyControls: (callback: () => void) => void,
+    onSettingWebcamWithLoading: (callback: (event: any, config: WebcamConstraints) => void) => void,
     }
+
+// todo: remove or rename
 export interface STUFF
 {
     logStuff: (stuff : string) => void,
 }
 
-export interface CPU 
+export interface CPU
 {
     getGeneralCpuInfoAsync: () => Promise<IGeneralCPUInfo>,
     getLogicalCoreInfoAsync: () =>  Promise<ILogicalCoreInfo[]>,
     getIntelPstateTurboValueAsync: () => Promise<boolean>,
 }
 
-export interface BACKLIGHT 
+export interface BACKLIGHT
 {
     getDisplayBrightnessInfo: () => IDisplayBrightnessInfo[]
 }
 
-export interface CONFIG 
-{ 
+export interface CONFIG
+{
     pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
-    getDefaultFanProfiles: () => ITccFanProfile[],     
-    setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,    
-    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => Promise<boolean>,
+    getDefaultFanProfiles: () => ITccFanProfile[],
+    setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,
+    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
-export interface COMP 
+export interface COMP
 {
     getHasAquaris: () => Promise<boolean>,
-    getHideCTGP: () => Promise<boolean>,
-    getScalingDriverAcpiCpuFreq: () => any,
+    getScalingDriverAcpiCpuFreq: () => string,
 }
 
-export interface PGMS 
+export interface PGMS
 {
     tomteIsInstalled: () => Promise<boolean>,
     installTomte: () => Promise<boolean>,
@@ -149,7 +154,7 @@ export interface PGMS
       pgms: PGMS,
     }
   }
-  
+
 
   export interface IPCReturnValue
   {

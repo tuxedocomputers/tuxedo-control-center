@@ -20,6 +20,7 @@ import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 import { TuxedoIOAPI, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { ITccProfile } from 'src/common/models/TccProfile';
 
 export class WebcamWorker extends DaemonWorker {
 
@@ -30,22 +31,24 @@ export class WebcamWorker extends DaemonWorker {
     public onStart(): void {
         this.updateWebcamStatuses();
 
-        const activeProfile = this.activeProfile;
-        const settingsDefined = activeProfile.webcam !== undefined
+        const activeProfile: ITccProfile = this.activeProfile;
+        const settingsDefined: boolean = activeProfile.webcam !== undefined
             && activeProfile.webcam.useStatus !== undefined
             && activeProfile.webcam.status !== undefined;
 
         if (settingsDefined && this.tccd.dbusData.webcamSwitchAvailable) {
-            if (true || activeProfile.webcam.useStatus) { // Always force webcam to selected setting, option to not set is removed for now
+            // Always force webcam to selected setting, option to not set is removed for now
+            // todo: remove true from if
+            if (true || activeProfile.webcam.useStatus) {
                 if (activeProfile.webcam.status) {
                     this.tccd.logLine('Set webcam status ON');
-                    const success = TuxedoIOAPI.setWebcamStatus(true);
+                    const success: boolean = TuxedoIOAPI.setWebcamStatus(true);
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to activate webcam');
                     }
                 } else {
                     this.tccd.logLine('Set webcam status OFF');
-                    const success = TuxedoIOAPI.setWebcamStatus(false);
+                    const success: boolean = TuxedoIOAPI.setWebcamStatus(false);
                     if (!success) {
                         this.tccd.logLine('WebcamWorker: Failed to deactivate webcam');
                     }

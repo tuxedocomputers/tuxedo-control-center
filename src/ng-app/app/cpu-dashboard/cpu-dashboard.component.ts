@@ -55,7 +55,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public activeScalingGovernors: string[];
     public activeEnergyPerformancePreference: string[];
 
-    public cpuModelName = "";
+    public cpuModelName: string = "";
     public fanData: IDBusFanData;
 
     // CPU
@@ -72,7 +72,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public gaugeDGPUFanSpeed: number = 0;
     public dGpuPower: number = 0;
     public dGpuFreq: number = 0;
-    public hasGPUTemp = false;
+    public hasGPUTemp: boolean = false;
     public powerState: string;
 
     // iGPU
@@ -128,12 +128,12 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     // prevents black window being shown for a moment before view has loaded. maybe greater timeout is needed on some devices
     public async ngAfterViewInit(): Promise<void> {
-        setTimeout(async () => {
+        setTimeout(async (): Promise<void> => {
         window.ipc.showTccWindow();
         }, 30);
     }
 
-    private setValuesFromRoute() {
+    private setValuesFromRoute(): void {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;
         this.isX11 = data.x11Status;
@@ -151,7 +151,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    private visibilityChangeListener = () => {
+    private visibilityChangeListener: () => void = (): void => {
         if (document.visibilityState == "hidden") {
             this.dashboardVisibility = false;
             this.tccdbus.setSensorDataCollectionStatus(false);
@@ -168,7 +168,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private async updateDgpuPowerState(): Promise<void> {
-        const powerState = await this.power.getDGpuPowerState();
+        const powerState: string = await this.power.getDGpuPowerState();
 
         if (powerState == "D0") {
             this.tccdbus.setDGpuD0Metrics(true);
@@ -193,10 +193,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.primeState
                 .pipe(
-                    filter((value) => value !== undefined),
+                    filter((value: string): boolean => value !== undefined),
                     first()
                 )
-                .subscribe((state: string) => {
+                .subscribe((state: string): void => {
                     this.primeState = state;
                 }
             )
@@ -205,8 +205,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeODMInfo(): void {
         this.subscriptions.add(
-            this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]) => {
-                const maxPowerLimit = tdpInfoArray.reduce((max, info) => {
+            this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]): void => {
+                const maxPowerLimit: number = tdpInfoArray.reduce((max: number, info: TDPInfo): number => {
                     if (["pl1", "pl2", "pl4"].includes(info.descriptor)) {
                         return Math.max(max, info.max);
                     }
@@ -219,7 +219,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToPstate(): void {
         this.subscriptions.add(
-            this.sysfs.pstateInfo.subscribe((pstateInfo) => {
+            this.sysfs.pstateInfo.subscribe((pstateInfo: IPstateInfo): void => {
                 this.pstateInfo = pstateInfo;
             })
         );
@@ -242,10 +242,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToDGpuInfo(): void {
         this.subscriptions.add(
-            this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo) => {
+            this.tccdbus.dGpuInfo.subscribe(async (dGpuInfo?: IdGpuInfo): Promise<void> => {
                 this.ensureSensorDataCollectionEnabled();
 
-                const powerState = await this.power.getDGpuPowerState();
+                const powerState: string = await this.power.getDGpuPowerState();
                 this.powerState = powerState;
                 this.d0MetricsUsage = dGpuInfo?.d0MetricsUsage;
 
@@ -261,8 +261,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private setCpuPowerValues(cpuPower?: ICpuPower): void {
         this.ensureSensorDataCollectionEnabled();
 
-        const powerDraw = cpuPower?.powerDraw ?? -1;
-        const maxPowerLimit =
+        const powerDraw: number = cpuPower?.powerDraw ?? -1;
+        const maxPowerLimit: number =
             cpuPower?.maxPowerLimit ?? this.cpuPowerLimit ?? -1;
         this.gaugeCPUPower =
             maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
@@ -271,18 +271,18 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToCpuInfo(): void {
         this.subscriptions.add(
-            this.tccdbus.cpuPower.subscribe((cpuPower?: ICpuPower) => {
+            this.tccdbus.cpuPower.subscribe((cpuPower?: ICpuPower): void => {
                 this.setCpuPowerValues(cpuPower);
             })
         );
         this.subscriptions.add(
-            this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo) => {
+            this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo): void => {
                 this.cpuInfo = cpuInfo;
             })
         );
         this.subscriptions.add(
             this.sysfs.logicalCoreInfo.subscribe(
-                (coreInfo: ILogicalCoreInfo[]) => {
+                (coreInfo: ILogicalCoreInfo[]): void => {
                     this.cpuCoreInfo = coreInfo;
                     this.updateFrequencyData();
                 }
@@ -303,7 +303,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values
-    private ensureSensorDataCollectionEnabled() {
+    private ensureSensorDataCollectionEnabled(): void {
         if (
             !this.tccdbus.sensorDataCollectionStatus?.value &&
             this.dashboardVisibility
@@ -314,7 +314,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToIGpuInfo(): void {
         this.subscriptions.add(
-            this.tccdbus.iGpuInfo.subscribe((iGpuInfo?: IiGpuInfo) => {
+            this.tccdbus.iGpuInfo.subscribe((iGpuInfo?: IiGpuInfo): void => {
                 this.setIGpuValues(iGpuInfo);
             })
         );
@@ -322,16 +322,16 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     private subscribeToFanData(): void {
         this.subscriptions.add(
-            this.tccdbus.fanData.subscribe((fanData: IDBusFanData) => {
+            this.tccdbus.fanData.subscribe((fanData: IDBusFanData): void => {
                 this.fanData = fanData;
                 const { gpu1, gpu2 } = fanData;
-                const gpu1Temp = gpu1?.temp?.data;
-                const gpu2Temp = gpu2?.temp?.data;
-                const gpu1Speed = gpu1?.speed?.data;
-                const gpu2Speed = gpu2?.speed?.data;
+                const gpu1Temp: number = gpu1?.temp?.data;
+                const gpu2Temp: number = gpu2?.temp?.data;
+                const gpu1Speed: number = gpu1?.speed?.data;
+                const gpu2Speed: number = gpu2?.speed?.data;
 
-                const validGPUTemp1 = gpu1Temp > 1;
-                const validGPUTemp2 = gpu2Temp > 1;
+                const validGPUTemp1: boolean = gpu1Temp > 1;
+                const validGPUTemp2: boolean = gpu2Temp > 1;
 
                 this.gaugeDGPUTemp =
                     validGPUTemp1 && validGPUTemp2
@@ -361,9 +361,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
             this.state.activeProfile
                 .pipe(
                     filter(
-                        (profile) => profile !== null && profile !== undefined
+                        (profile: ITccProfile): boolean => profile !== null && profile !== undefined
                     ),
-                    tap((profile) => {
+                    tap((profile: ITccProfile): void => {
                         this.activeProfile = profile;
                         this.isCustomProfile =
                             this.config.getCustomProfileById(
@@ -376,23 +376,23 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private updateFrequencyData(): void {
-        const freqSum =
+        const freqSum: number =
             this.cpuCoreInfo
-                ?.map((core) => core.scalingCurFreq ?? 0)
-                ?.reduce((sum, freq) => sum + freq, 0) ?? 0;
-        const cpuCores = this.cpuCoreInfo?.length ?? -1;
+                ?.map((core: ILogicalCoreInfo): number => core.scalingCurFreq ?? 0)
+                ?.reduce((sum: number, freq: number): number => sum + freq, 0) ?? 0;
+        const cpuCores: number = this.cpuCoreInfo?.length ?? -1;
 
         if (freqSum > 0 && cpuCores > 0) {
             this.avgCpuFreq = freqSum / cpuCores;
         }
 
-        const maxCpuFreq = this.cpuInfo?.maxFreq ?? -1;
+        const maxCpuFreq: number = this.cpuInfo?.maxFreq ?? -1;
         if (maxCpuFreq > 0) {
             this.gaugeCpuFreq = (this.avgCpuFreq / maxCpuFreq) * 100;
         }
     }
 
-    public formatValue = (
+    public formatValue: (value: number, compatible: boolean, formatter: (val: number) => string) => string = (
         value: number,
         compatible: boolean,
         formatter: (val: number) => string
@@ -406,7 +406,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         compatibleFlag: (val: number) => boolean,
         formatterFunc: (val: number) => string
     ): (value: number) => string {
-        return (value) => {
+        return (value: number): string => {
             return this.formatValue(
                 value,
                 compatibleFlag(value),
@@ -415,69 +415,69 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         };
     }
 
-    public formatCpuFrequency = (frequency: number): string => {
+    public formatCpuFrequency: (frequency: number) => string = (frequency: number): string => {
         return this.utils.formatCpuFrequency(frequency);
     };
 
-    public formatIGpuFrequency = this.createFormatter(
-        (val) => val >= 0,
-        (val) => this.utils.formatGpuFrequency(val)
+    public formatIGpuFrequency: (value: number) => string = this.createFormatter(
+        (val: number): boolean => val >= 0,
+        (val: number): string => this.utils.formatGpuFrequency(val)
     );
 
-    public formatDGpuFrequency = this.createFormatter(
-        (val) =>
+    public formatDGpuFrequency: (value: number) => string = this.createFormatter(
+        (val: number): boolean =>
             val >= 0 && (this.powerState == "D3cold" || this.d0MetricsUsage),
-        (val) => this.utils.formatGpuFrequency(val)
+        (val: number): string => this.utils.formatGpuFrequency(val)
     );
 
-    public gaugeCpuFreqFormat = this.createFormatter(
-        () => true,
-        (val) => this.utils.formatCpuFrequency(val)
+    public gaugeCpuFreqFormat: (value: number) => string = this.createFormatter(
+        (): true => true,
+        (val: number): string => this.utils.formatCpuFrequency(val)
     );
 
-    public gaugeCpuTempFormat = this.createFormatter(
-        () => this.compat.hasCpuTemp,
-        (val) => this.formatTemperature(val).toString()
+    public gaugeCpuTempFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasCpuTemp,
+        (val: number): string => this.formatTemperature(val).toString()
     );
 
-    public gaugeIGpuTempFormat = this.createFormatter(
-        () => this.compat.hasIGpuTemp,
-        (val) => this.formatTemperature(val).toString()
+    public gaugeIGpuTempFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasIGpuTemp,
+        (val: number): string => this.formatTemperature(val).toString()
     );
 
-    public gaugeDGpuTempFormat = this.createFormatter(
-        () => this.compat.hasDGpuTemp,
-        (val) => this.formatTemperature(val).toString()
+    public gaugeDGpuTempFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasDGpuTemp,
+        (val: number): string => this.formatTemperature(val).toString()
     );
 
-    public gaugeCpuFanSpeedFormat = this.createFormatter(
-        () => this.compat.hasCpuFan,
-        (val) => Math.round(val).toString()
+    public gaugeCpuFanSpeedFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasCpuFan,
+        (val: number): string => Math.round(val).toString()
     );
 
-    public gaugeDGpuFanSpeedFormat = this.createFormatter(
-        () => this.compat.hasDGpuFan,
-        (val) => Math.round(val).toString()
+    public gaugeDGpuFanSpeedFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasDGpuFan,
+        (val: number): string => Math.round(val).toString()
     );
 
-    public cpuPowerFormat = this.createFormatter(
-        () => this.compat.hasCpuPower,
-        (val) => this.roundWattage(val)
+    public cpuPowerFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasCpuPower,
+        (val: number): string => this.roundWattage(val)
     );
 
-    public dGpuPowerFormat = this.createFormatter(
-        () =>
+    public dGpuPowerFormat: (value: number) => string = this.createFormatter(
+        (): boolean =>
             this.powerState == "D3cold" ||
             (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
-        (val) => (this.powerState == "D3cold" ? "0" : this.roundWattage(val))
+        (val: number): string => (this.powerState == "D3cold" ? "0" : this.roundWattage(val))
     );
 
-    public iGpuPowerFormat = this.createFormatter(
-        () => this.compat.hasIGpuPowerDraw,
-        (val) => this.roundWattage(val)
+    public iGpuPowerFormat: (value: number) => string = this.createFormatter(
+        (): boolean => this.compat.hasIGpuPowerDraw,
+        (val: number): string => this.roundWattage(val)
     );
 
-    private formatTemperature(val: number) {
+    private formatTemperature(val: number): number {
         if (this.usingFahrenheit) {
             val = this.utils.getFahrenheitFromCelsius(val);
         }
@@ -488,7 +488,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         return this.usingFahrenheit;
     }
 
-    public goToProfileEdit = (profile: ITccProfile): void => {
+    public goToProfileEdit: (profile: ITccProfile) => void = (profile: ITccProfile): void => {
         if (profile) {
             this.router.navigate(["profile-manager", profile.id], {
                 relativeTo: this.route.parent,
@@ -498,8 +498,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     // Make numbers smaller than 1W not show 0, but <1W
     private roundWattage(val: number): string {
-        let num = Math.round(val);
-        let ret = "";
+        let num: number = Math.round(val);
+        let ret: string = "";
         if (num < 1) {
             ret = "<1";
         } else {
@@ -508,7 +508,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         return ret;
     }
 
-    private formatFahrenheit(val: number) {
+    // todo: is this function used?
+    private formatFahrenheit(val: number): number {
         if (this.usingFahrenheit) {
             val = this.utils.getFahrenheitFromCelsius(val);
         }
@@ -544,7 +545,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         );
     }
 
-    public getPrimeStateLabel(primeState: string) {
+    public getPrimeStateLabel(primeState: string): string {
         if (primeState == "iGPU") {
             return $localize`:@@primeSelectIGpu:Power-saving CPU graphics processor (iGPU)`;
         }

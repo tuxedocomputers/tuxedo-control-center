@@ -39,11 +39,11 @@ import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 export class ProfileOverviewTileComponent implements OnInit {
 
     @Input() profile: ITccProfile;
-    @Input() hoverEffect = false;
-    @Input() isSelected = false;
-    @Input() visible = true;
-    @Input() active = false;
-    @Input() used = false;
+    @Input() hoverEffect: boolean = false;
+    @Input() isSelected: boolean = false;
+    @Input() visible: boolean = true;
+    @Input() active: boolean = false;
+    @Input() used: boolean = false;
 
     /**
      * Special input to signal that it shouldn't display a profile and just
@@ -51,16 +51,16 @@ export class ProfileOverviewTileComponent implements OnInit {
      *
      * If set to true it overrules the profile input. Defaults to false.
      */
-    @Input() addProfileTile = false;
+    @Input() addProfileTile: boolean = false;
 
-    @Input() showDetails = false;
+    @Input() showDetails: boolean = false;
 
-    @Output() copyClick = new EventEmitter<string>();
+    @Output() copyClick: EventEmitter<string> = new EventEmitter<string>();
 
     public selectStateControl: FormControl;
     public stateInputArray: IStateInfo[];
 
-    public isCustomProfile = true;
+    public isCustomProfile: boolean = true;
 
     public cpuInfo: IGeneralCPUInfo;
 
@@ -72,7 +72,7 @@ export class ProfileOverviewTileComponent implements OnInit {
     public odmPowerLimitInfos: TDPInfo[];
     public selectedCPUTabIndex: number;
 
-    public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+    public get hasMaxFreqWorkaround(): boolean { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
     constructor(
         private utils: UtilsService,
@@ -85,8 +85,8 @@ export class ProfileOverviewTileComponent implements OnInit {
         private tccDBus: TccDBusClientService
     ) { }
 
-    ngOnInit() {
-        this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
+    ngOnInit(): void {
+        this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo): void => { this.cpuInfo = cpuInfo; }));
 
         if (!this.addProfileTile) {
             if (this.selectStateControl === undefined) {
@@ -101,7 +101,7 @@ export class ProfileOverviewTileComponent implements OnInit {
             this.isCustomProfile = this.config.getCustomProfileById(this.profile.id) !== undefined;
         }
 
-        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
+        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
             this.odmProfileNames = nextAvailableODMProfiles;
 
             // Update ODM profile name map
@@ -113,7 +113,7 @@ export class ProfileOverviewTileComponent implements OnInit {
             }
         }));
 
-        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
+        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe((nextODMPowerLimits: TDPInfo[]): void => {
             if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
                 this.odmPowerLimitInfos = nextODMPowerLimits;
                 if (this.profile) {
@@ -146,14 +146,14 @@ export class ProfileOverviewTileComponent implements OnInit {
     }
 
     public selectProfile(): void {
-        setTimeout(() => {
+        setTimeout((): void => {
             this.router.navigate(['profile-manager', this.profile.id], { relativeTo: this.route.parent });
         }, 0);
     }
 
     public deleteProfile(): void {
         this.utils.pageDisabled = true;
-        this.config.deleteCustomProfile(this.profile.id).then(success => {
+        this.config.deleteCustomProfile(this.profile.id).then((success: boolean): void => {
             this.utils.pageDisabled = false;
         });
     }
@@ -161,7 +161,7 @@ export class ProfileOverviewTileComponent implements OnInit {
     public saveStateSelection(): void {
         this.utils.pageDisabled = true;
         const profileStateAssignments: string[] = this.selectStateControl.value;
-        this.config.writeProfile(this.profile.id, this.profile, profileStateAssignments).then(success => {
+        this.config.writeProfile(this.profile.id, this.profile, profileStateAssignments).then((success: boolean): void => {
             if (success) {
                 this.selectStateControl.markAsPristine();
             }
@@ -177,20 +177,20 @@ export class ProfileOverviewTileComponent implements OnInit {
         }
     }
 
-    public copyProfile() {
+    public copyProfile(): void {
         this.copyClick.emit(this.profile.id);
     }
 
     public selectCPUCtlShown(): number {
-        const defaultProfile = this.config.getDefaultProfiles()[0];
-        const powerNotDefault = JSON.stringify(this.profile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
-        const cpufreqNotDefault = JSON.stringify(this.profile.cpu) !== JSON.stringify(defaultProfile.cpu);
-        const cpuFreqOnly = !this.compat.hasODMPowerLimitControl;
+        const defaultProfile: ITccProfile = this.config.getDefaultProfiles()[0];
+        const powerNotDefault: boolean = JSON.stringify(this.profile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+        const cpufreqNotDefault: boolean = JSON.stringify(this.profile.cpu) !== JSON.stringify(defaultProfile.cpu);
+        const cpuFreqOnly: boolean = !this.compat.hasODMPowerLimitControl;
 
         const INDEX_ODMCPUTDP = 0;
         const INDEX_CPUFREQ = 1;
 
-        let selectedCPUTabIndex;
+        let selectedCPUTabIndex: number;
 
         if (cpuFreqOnly) {
             selectedCPUTabIndex = INDEX_CPUFREQ;

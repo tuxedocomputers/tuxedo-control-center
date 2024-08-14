@@ -39,7 +39,7 @@ export interface WebcamPresetValues {
     white_balance_automatic?: boolean;
     white_balance_temperature?: number;
     white_balance_temperature_auto?: boolean;
-    [key: string]: any;
+    [key: string]: boolean | number | string;
 }
 
 export interface WebcamDevice {

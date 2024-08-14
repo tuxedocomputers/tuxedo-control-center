@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import { ipcMain } from 'electron';
 import { aquarisAPIHandle,} from '../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../common/models/IDbusAPI';
@@ -28,23 +29,17 @@ import { webcamAPIHandle } from '../common/models/IWebcamAPI';
 import { webcamHandlers } from './backendAPIs/webcamBackendAPI';
 
 
-// require all of the files that I have split off of main.ts
 require('./backendAPIs/initMain');
 require('./backendAPIs/browserWindows');
 require('./backendAPIs/ipcBackendAPI');
 require('./backendAPIs/miscBackendStuff');
+// todo: utilize backend
 //require('./backendAPIs/webcamBackendAPI');
 
-
-
 // replace setImmediate since it seems to cause problems/not exist anymore
-globalThis.setImmediate = ((fn, ...args) => global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
+globalThis.setImmediate = ((fn: any, ...args: any[]): NodeJS.Timeout => global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
 
-// register AquarisAPI
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
-// register DbusAPI
 registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);
-// register TomteAPI
 registerAPI(ipcMain, tomteAPIHandle, tomteHandlers);
-// register WebcamAPI
 registerAPI(ipcMain, webcamAPIHandle, webcamHandlers);

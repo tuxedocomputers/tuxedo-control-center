@@ -36,65 +36,66 @@ import { parseDn } from 'builder-util-runtime';
 export class TccDBusClientService implements OnDestroy {
   private isAvailable: boolean = true; // todo: may not be required
   private timeout: NodeJS.Timeout;
-  private updateInterval = 500;
+  private updateInterval: number = 500;
 
-  public available = new Subject<boolean>(); // todo: may not be required
-  public dbusAvailable = new Subject<boolean>();
-  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
-  public fanHwmonAvailable = new BehaviorSubject<boolean>(true);
-  public dataLoaded = false;
-  public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
+  public available: Subject<boolean> = new Subject<boolean>(); // todo: may not be required
+  public dbusAvailable: Subject<boolean> = new Subject<boolean>();
+  public tuxedoWmiAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public fanHwmonAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public dataLoaded: boolean = false;
+  public fanData: BehaviorSubject<IDBusFanData> = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
 
-  public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
-  public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
+  public webcamSWAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+  public webcamSWStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
-  public chargingProfilesAvailable = new BehaviorSubject<string[]>([]);
+  public forceYUV420OutputSwitchAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public chargingProfilesAvailable: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
-  public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
-  public odmPowerLimits = new BehaviorSubject<TDPInfo[]>([]);
+  public odmProfilesAvailable: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  public odmPowerLimits: BehaviorSubject<TDPInfo[]> = new BehaviorSubject<TDPInfo[]>([]);
 
-  public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
-  public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
-  public defaultValuesProfile = new BehaviorSubject<ITccProfile>(undefined);
-  private previousCustomProfilesJSON = '';
-  private previousDefaultProfilesJSON = '';
-  private previousDefaultValuesProfileJSON = '';
+  public customProfiles: BehaviorSubject<ITccProfile[]> = new BehaviorSubject<ITccProfile[]>([]);
+  public defaultProfiles: BehaviorSubject<ITccProfile[]> = new BehaviorSubject<ITccProfile[]>([]);
+  public defaultValuesProfile: BehaviorSubject<ITccProfile> = new BehaviorSubject<ITccProfile>(undefined);
+  private previousCustomProfilesJSON: string = '';
+  private previousDefaultProfilesJSON: string = '';
+  private previousDefaultValuesProfileJSON: string = '';
 
-  public activeProfile = new BehaviorSubject<TccProfile>(undefined);
-  private previousActiveProfileJSON = '';
+  public activeProfile: BehaviorSubject<TccProfile> = new BehaviorSubject<TccProfile>(undefined);
+  private previousActiveProfileJSON: string = '';
 
-  public settings = new BehaviorSubject<ITccSettings>(undefined);
-  private previousSettingsJSON = '';
+  public settings: BehaviorSubject<ITccSettings> = new BehaviorSubject<ITccSettings>(undefined);
+  private previousSettingsJSON: string = '';
 
-  public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
-  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
+  public keyboardBacklightCapabilities: BehaviorSubject<KeyboardBacklightCapabilitiesInterface> = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
+  public keyboardBacklightStates: BehaviorSubject<Array<KeyboardBacklightStateInterface>> = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
 
-  public fansMinSpeed = new BehaviorSubject<number>(undefined);
-  public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
+  public fansMinSpeed: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+  public fansOffAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public dGpuInfo = new BehaviorSubject<IdGpuInfo>(undefined);
-  public iGpuInfo = new BehaviorSubject<IiGpuInfo>(undefined);
-  public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
-  public sensorDataCollectionStatus = new BehaviorSubject<boolean>(undefined);
+  public dGpuInfo: BehaviorSubject<IdGpuInfo> = new BehaviorSubject<IdGpuInfo>(undefined);
+  public iGpuInfo: BehaviorSubject<IiGpuInfo> = new BehaviorSubject<IiGpuInfo>(undefined);
+  public cpuPower: BehaviorSubject<ICpuPower> = new BehaviorSubject<ICpuPower>(undefined);
+  public sensorDataCollectionStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public primeState = new BehaviorSubject<string>(undefined);
+  public primeState: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
-  public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
-  public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
-  public nvidiaPowerCTRLDefaultPowerLimit = new BehaviorSubject<number>(undefined);
-  public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
-  public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
-  public hideCTGP = new BehaviorSubject<boolean>(undefined);
+  public displayModes: BehaviorSubject<IDisplayFreqRes> = new BehaviorSubject<IDisplayFreqRes>(undefined);
+  public refreshRateSupported: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+  public nvidiaPowerCTRLDefaultPowerLimit: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLMaxPowerLimit: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+  public nvidiaPowerCTRLAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+  public hideCTGP: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public isX11 = new BehaviorSubject<boolean>(undefined);
+  public isX11: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
   public device: TUXEDODevice = 0;
   public hasAquaris: boolean = true;
 
-  // put all observables that need to parse json data in here and they will be updated automatically in next
-  // periodicUpdate()
-    private observableUpdateListJSON = new Map<BehaviorSubject<any>,string>()
-    .set(this.fanData, "getFanData")
+
+// todo: refactor, put types into a seperate place
+private observableUpdateListJSON: Map<TccDBusClientService["fanData"] | TccDBusClientService["iGpuInfo"] | TccDBusClientService["dGpuInfo"] |
+    TccDBusClientService["cpuPower"] | TccDBusClientService["displayModes"] | TccDBusClientService["keyboardBacklightCapabilities"] |
+    TccDBusClientService["keyboardBacklightStates"], string> = new Map().set(this.fanData, "getFanData")
     .set(this.iGpuInfo, "getIGpuInfoValuesJSON")
     .set(this.dGpuInfo, "getDGpuInfoValuesJSON")
     .set(this.cpuPower, "getCpuPowerValuesJSON")
@@ -105,13 +106,13 @@ export class TccDBusClientService implements OnDestroy {
   constructor(private utils: UtilsService) {
     this.updateTuxedoDevice();
     this.periodicUpdate();
-    this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
+    this.timeout = setInterval((): void => { this.periodicUpdate(); }, this.updateInterval);
   }
 
   // updates an observable that wants parsed JSON input
-  private async updateJSONObservable(observable: BehaviorSubject<any>, updateFunction: string) {
+  private async updateJSONObservable(observable: BehaviorSubject<any>, updateFunction: string): Promise<void> {
     // https://stackoverflow.com/questions/1723287/calling-a-javascript-function-named-in-a-variable
-    const data = await window.dbusAPI[updateFunction]();
+    const data: any = await window.dbusAPI[updateFunction]();
     try{
         if (data) {
             const parsedData: string = JSON.parse(data);
@@ -126,13 +127,13 @@ export class TccDBusClientService implements OnDestroy {
     catch(err: unknown) {
         console.error("tcc-dbus-client: updateJSONObservable failed =>", err)
         // TODO, set stuff to default values? Do more error handling? Check if dbus is even up?
-        console.error("Could not update observable through function " + updateFunction +"\n" + err);
+        //console.error("Could not update observable through function " + updateFunction +"\n" + err);
     }
   }
 
   // Display Brightness Gnome Workarounds
 
-  displayBrightnessNotSupportedGnome()
+  displayBrightnessNotSupportedGnome(): boolean
   {
     return window.ipc.displayBrightnessNotSupportedGnome()
   }
@@ -142,15 +143,15 @@ export class TccDBusClientService implements OnDestroy {
      return window.ipc.setDisplayBrightnessGnome(valuePercent)
   }
 
-  private async updateTuxedoDevice() {
-    const deviceJSON = await window.dbusAPI.getDeviceJSON();
+  private async updateTuxedoDevice(): Promise<void> {
+    const deviceJSON: string = await window.dbusAPI.getDeviceJSON();
     if (deviceJSON) {
         this.device = JSON.parse(deviceJSON);
     }
   }
 
-  private async periodicUpdate() {
-    const dbusAvailable = await window.dbusAPI.dbusAvailable()
+  private async periodicUpdate(): Promise<void> {
+    const dbusAvailable: boolean = await window.dbusAPI.dbusAvailable()
     this.dbusAvailable.next(dbusAvailable)
     if(!this.dbusAvailable) {
         console.error("tcc-dbus-client: periodicUpdate: Communication with TCCD interrupted, dbus not available");
@@ -170,10 +171,10 @@ export class TccDBusClientService implements OnDestroy {
     this.hideCTGP.next(await window.dbusAPI.getHideCTGP());
 
     // Read and publish data (note: atm polled)
-    const wmiAvailability = await window.dbusAPI.tuxedoWmiAvailable();
+    const wmiAvailability: boolean = await window.dbusAPI.tuxedoWmiAvailable();
     this.tuxedoWmiAvailable.next(wmiAvailability);
 
-    const fanHwmonAvailability = await window.dbusAPI.fanHwmonAvailable();
+    const fanHwmonAvailability: boolean = await window.dbusAPI.fanHwmonAvailable();
     this.fanHwmonAvailable.next(fanHwmonAvailability);
     this.hasAquaris = await window.comp.getHasAquaris();
     this.sensorDataCollectionStatus.next(await window.dbusAPI.getSensorDataCollectionStatus())
@@ -190,12 +191,12 @@ export class TccDBusClientService implements OnDestroy {
 
     this.forceYUV420OutputSwitchAvailable.next(await window.dbusAPI.getForceYUV420OutputSwitchAvailable());
 
-    const nextODMProfilesAvailable = await window.dbusAPI.odmProfilesAvailable();
+    const nextODMProfilesAvailable: string[] = await window.dbusAPI.odmProfilesAvailable();
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
     // TODO
-    const nextODMPowerLimitsJSON = await window.dbusAPI.odmPowerLimitsJSON();
+    const nextODMPowerLimitsJSON: string = await window.dbusAPI.odmPowerLimitsJSON();
     if (nextODMPowerLimitsJSON) {
-        let nextODMPowerLimits = JSON.parse(nextODMPowerLimitsJSON);
+        let nextODMPowerLimits: TDPInfo[] = JSON.parse(nextODMPowerLimitsJSON);
         this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
     }
 
@@ -248,23 +249,23 @@ export class TccDBusClientService implements OnDestroy {
     }
   }
 
-  public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
+  public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>): void {
     window.dbusAPI.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
   }
 
-  public async triggerUpdate() {
+  public async triggerUpdate(): Promise<void> {
     await this.periodicUpdate();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // Cleanup
     if (this.timeout !== undefined) {
       clearInterval(this.timeout);
     }
   }
 
-  public async setTempProfileById(profileId: string) {
-    const result = await window.dbusAPI.dbusAvailable() && await window.dbusAPI.setTempProfileById(profileId);
+  public async setTempProfileById(profileId: string): Promise<boolean> {
+    const result: boolean = await window.dbusAPI.dbusAvailable() && await window.dbusAPI.setTempProfileById(profileId);
     return result;
   }
 

@@ -45,7 +45,7 @@ export class StateService implements OnDestroy {
 
   public activeProfile: BehaviorSubject<ITccProfile>;
 
-  public stateInputMap = new Map<string, IStateInfo>();
+  public stateInputMap: Map<string, IStateInfo> = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
 
   private batteryProfileName: string = "";
@@ -65,7 +65,7 @@ export class StateService implements OnDestroy {
     this.stateObserver = this.stateSubject.asObservable();
 
     this.currentSettings = this.config.getSettings();
-    this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => {
+    this.subscriptions.add(this.config.observeSettings.subscribe((newSettings: ITccSettings): void => {
       this.currentSettings = newSettings;
     }));
 
@@ -99,16 +99,16 @@ export class StateService implements OnDestroy {
   public getProfileStates(profileId: string): string[] {
     // Filter on value (profile id) and map on key (state)
     return Object.entries(this.currentSettings.stateMap)
-            .filter(entry => entry[1] === profileId)
-            .map(entry => entry[0]);
+            .filter((entry: [string, unknown]): boolean => entry[1] === profileId)
+            .map((entry: [string, unknown]): string => entry[0]);
   }
 
   private getProfileName(profileId: string): string {
-    const defaultProfileName = this.utils.getDefaultProfileName(profileId);
+    const defaultProfileName: string = this.utils.getDefaultProfileName(profileId);
     if (defaultProfileName !== undefined) {
         return defaultProfileName;
     } else {
-        const profile = this.config.getProfileById(profileId);
+        const profile: ITccProfile = this.config.getProfileById(profileId);
         if (profile !== undefined) {
             return profile.name;
         } else {
@@ -120,7 +120,7 @@ export class StateService implements OnDestroy {
   async initializeProfileNames(): Promise<void> {
     await this.dbus.triggerUpdate();
 
-    const settings = this.config.getSettings()
+    const settings: ITccSettings = this.config.getSettings()
 
     this.chargingProfileId = settings.stateMap[ProfileStates.AC];
     this.batteryProfileId = settings.stateMap[ProfileStates.BAT];
@@ -145,7 +145,7 @@ export class StateService implements OnDestroy {
     return this.batteryProfileId
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     if (this.updateInterval) {
       clearInterval(this.updateInterval);

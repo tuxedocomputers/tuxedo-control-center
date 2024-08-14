@@ -25,19 +25,20 @@ import {
     SysFsPropertyString,
     SysFsPropertyStringList,
 } from "../../common/classes/SysFsProperties";
+import { ITccODMPowerLimits, ITccODMProfile } from "src/common/models/TccProfile";
 
 export class ODMProfileWorker extends DaemonWorker {
-    private static tuxedoPlatformProfile = new SysFsPropertyString(
+    private static tuxedoPlatformProfile: SysFsPropertyString = new SysFsPropertyString(
         "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile"
     );
-    private static tuxedoPlatformProfileChoices = new SysFsPropertyStringList(
+    private static tuxedoPlatformProfileChoices: SysFsPropertyStringList = new SysFsPropertyStringList(
         "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices"
     );
 
-    private static platformProfile = new SysFsPropertyString(
+    private static platformProfile: SysFsPropertyString = new SysFsPropertyString(
         "/sys/firmware/acpi/platform_profile"
     );
-    private static platformProfileChoices = new SysFsPropertyStringList(
+    private static platformProfileChoices: SysFsPropertyStringList = new SysFsPropertyStringList(
         "/sys/firmware/acpi/platform_profile_choices"
     );
 
@@ -70,10 +71,10 @@ export class ODMProfileWorker extends DaemonWorker {
         platformProfile: SysFsPropertyString,
         platformProfileChoices: SysFsPropertyStringList
     ): void {
-        const availableProfiles = platformProfileChoices.readValueNT();
+        const availableProfiles: string[] = platformProfileChoices.readValueNT();
         this.tccd.dbusData.odmProfilesAvailable = availableProfiles;
 
-        let chosenODMProfileName = this.getODMProfileName();
+        let chosenODMProfileName: string = this.getODMProfileName();
         if (availableProfiles.includes(chosenODMProfileName)) {
             platformProfile.writeValue(chosenODMProfileName);
         }
@@ -81,10 +82,10 @@ export class ODMProfileWorker extends DaemonWorker {
 
     private fallbackODM(): void {
         const availableProfiles: ObjWrapper<string[]> = { value: [] };
-        const odmProfilesAvailable =
+        const odmProfilesAvailable: boolean =
             ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
         if (odmProfilesAvailable) {
-            let chosenODMProfileName = this.getODMProfileName();
+            let chosenODMProfileName: string = this.getODMProfileName();
 
             // If saved profile name does not match available ones
             // attempt to get the default profile name
@@ -117,7 +118,7 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     private getODMProfileName(): string {
-        const odmProfileSettings = this.activeProfile.odmProfile;
+        const odmProfileSettings: ITccODMProfile = this.activeProfile.odmProfile;
         let chosenODMProfileName: string;
         if (odmProfileSettings !== undefined) {
             chosenODMProfileName = odmProfileSettings.name;
@@ -130,7 +131,7 @@ export class ODMProfileWorker extends DaemonWorker {
             this.tuxedoPlatformProfile.isAvailable() &&
             this.tuxedoPlatformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
+            const availableProfiles: string[] = this.tuxedoPlatformProfileChoices.readValueNT();
             if (availableProfiles !== undefined && availableProfiles?.length > 0) {
                 return availableProfiles[availableProfiles?.length-1];
             }
@@ -138,7 +139,7 @@ export class ODMProfileWorker extends DaemonWorker {
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.platformProfileChoices.readValueNT();
+            const availableProfiles: string[] = this.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined && availableProfiles?.length > 0) {
                 return availableProfiles[availableProfiles?.length-1];
             }
@@ -155,7 +156,7 @@ export class ODMProfileWorker extends DaemonWorker {
             this.tuxedoPlatformProfile.isAvailable() &&
             this.tuxedoPlatformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
+            const availableProfiles: string[] = this.tuxedoPlatformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
                 return availableProfiles;
             }
@@ -163,7 +164,7 @@ export class ODMProfileWorker extends DaemonWorker {
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.platformProfileChoices.readValueNT();
+            const availableProfiles: string[] = this.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
                 return availableProfiles;
             }

@@ -54,7 +54,7 @@ export class KeyboardBacklightComponent implements OnInit {
         private tccdbus: TccDBusClientService
     ) {}
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.subscribeKeyboardBacklightCapabilities();
         this.subscribeKeyboardBacklightStates();
         this.setColorPickerInUsageDefault();
@@ -68,7 +68,7 @@ export class KeyboardBacklightComponent implements OnInit {
 
     // Converts a string value: "#RRGGBB" to an integer value: 0xRRGGBBAA
     private RGBSharpStringToInt(input: string, alpha = "00"): number {
-        const hex = input.replace("#", "") + alpha;
+        const hex: string = input.replace("#", "") + alpha;
         return parseInt(hex, 16);
     }
 
@@ -77,8 +77,8 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     private setColorPickerInUsageDefault(): void {
-        const zones = this.keyboardBacklightCapabilities.zones;
-        for (let i = 0; i < zones; i++) {
+        const zones: number = this.keyboardBacklightCapabilities.zones;
+        for (let i: number = 0; i < zones; i++) {
             this.colorPickerInUsage.push(false);
         }
     }
@@ -86,14 +86,14 @@ export class KeyboardBacklightComponent implements OnInit {
     private subscribeKeyboardBacklightCapabilities(): void {
         this.tccdbus.keyboardBacklightCapabilities
             .pipe(filter(Boolean), take(1))
-            .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface) =>
+            .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface): void =>
                 this.applyBacklightCapabilities(capabilities)
             );
     }
 
     private applyBacklightCapabilities(
         keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface
-    ) {
+    ): void {
         const { maxBrightness, zones } = keyboardBacklightCapabilities;
 
         this.keyboardBacklightCapabilities = keyboardBacklightCapabilities;
@@ -103,22 +103,22 @@ export class KeyboardBacklightComponent implements OnInit {
             maxBrightness
         );
 
-        const validColors = this.chosenColorHex?.slice(0, zones) ?? [];
-        const defaultColors = Array.from(
+        const validColors: string[] = this.chosenColorHex?.slice(0, zones) ?? [];
+        const defaultColors: string[] = Array.from(
             { length: zones - validColors?.length },
-            () => "#ffffff"
+            (): string => "#ffffff"
         );
         this.chosenColorHex = [...validColors, ...defaultColors].map(
-            (color) => color ?? "#ffffff"
+            (color: string): string => color ?? "#ffffff"
         );
     }
 
     // todo: reduce indents by splitting into more fucntions
     private subscribeKeyboardBacklightStates(): void {
         this.tccdbus.keyboardBacklightStates.subscribe(
-            (keyboardBacklightStates) => {
-                const hasChosenColor = keyboardBacklightStates?.length > 0;
-                const hasNoPickerInUsage = !this.isPickerInUsage();
+            (keyboardBacklightStates: KeyboardBacklightStateInterface[]): void => {
+                const hasChosenColor: boolean = keyboardBacklightStates?.length > 0;
+                const hasNoPickerInUsage: boolean = !this.isPickerInUsage();
 
                 // todo: maybe adjusting error handling
                 if (keyboardBacklightStates[0]) {
@@ -145,9 +145,9 @@ export class KeyboardBacklightComponent implements OnInit {
 
     private createColorHexArray(
         keyboardBacklightStates: KeyboardBacklightStateInterface[]
-    ) {
+    ): string[] {
         return keyboardBacklightStates
-            .map(({ red, green, blue }) => {
+            .map(({ red, green, blue }: KeyboardBacklightStateInterface): number => {
                 return (red << 16) + (green << 8) + blue;
             })
             .map(this.intToRGBSharpString);
@@ -155,7 +155,7 @@ export class KeyboardBacklightComponent implements OnInit {
 
     public isPickerInUsage(): boolean {
         return (
-            this.colorPickerInUsage.some((inUse) => inUse) ||
+            this.colorPickerInUsage.some((inUse: boolean): boolean => inUse) ||
             this.brightnessSliderInUsage
         );
     }
@@ -165,8 +165,8 @@ export class KeyboardBacklightComponent implements OnInit {
         colorHex: string[] = []
     ): KeyboardBacklightStateInterface[] {
         return colorHex
-            ? colorHex.map((hex) => {
-                  const rgbaInt = this.RGBSharpStringToInt(hex);
+            ? colorHex.map((hex: string): KeyboardBacklightStateInterface => {
+                  const rgbaInt: number = this.RGBSharpStringToInt(hex);
                   return {
                       mode: KeyboardBacklightColorModes.static,
                       brightness,
@@ -188,7 +188,7 @@ export class KeyboardBacklightComponent implements OnInit {
 
     public onBrightnessSliderInput(brightness: number): void {
         this.triggerBrightnessSliderTimeout();
-        const colorHex = this.chosenColorHex?.length
+        const colorHex: string[] = this.chosenColorHex?.length
             ? this.chosenColorHex
             : undefined;
 
@@ -203,12 +203,12 @@ export class KeyboardBacklightComponent implements OnInit {
     public onColorPickerInput(color: string, selectedZones: number[]): void {
         this.triggerColorPickerTimeout(selectedZones);
 
-        let colorHex = this.chosenColorHex;
+        let colorHex: string[] = this.chosenColorHex;
         for (let zone of selectedZones) {
             colorHex[zone] = color;
         }
 
-        const backlightStates = this.fillKeyboardBacklightStatesFromValues(
+        const backlightStates: KeyboardBacklightStateInterface[] = this.fillKeyboardBacklightStatesFromValues(
             this.chosenBrightness,
             colorHex
         );
@@ -232,7 +232,7 @@ export class KeyboardBacklightComponent implements OnInit {
             clearTimeout(this.brightnessSliderTimeout);
         }
         this.brightnessSliderInUsage = true;
-        this.brightnessSliderTimeout = window.setTimeout(() => {
+        this.brightnessSliderTimeout = window.setTimeout((): void => {
             this.brightnessSliderInUsage = false;
             this.applyPendingChanges();
         }, this.timeoutDuration);
@@ -242,12 +242,12 @@ export class KeyboardBacklightComponent implements OnInit {
         if (this.colorPickerTimeout) {
             clearTimeout(this.colorPickerTimeout);
         }
-        selectedZones.forEach((zone) => {
+        selectedZones.forEach((zone: number): void => {
             this.colorPickerInUsage[zone] = true;
         });
 
-        this.colorPickerTimeout = setTimeout(() => {
-            selectedZones.forEach((zone) => {
+        this.colorPickerTimeout = setTimeout((): void => {
+            selectedZones.forEach((zone: number): void => {
                 this.colorPickerInUsage[zone] = false;
             });
             this.applyPendingChanges();
@@ -273,8 +273,8 @@ export class KeyboardBacklightComponent implements OnInit {
         min: number,
         max: number
     ): void {
-        this.pressTimer = setTimeout(() => {
-            this.pressInterval = interval(200).subscribe(() => {
+        this.pressTimer = setTimeout((): void => {
+            this.pressInterval = interval(200).subscribe((): void => {
                 this.modifySliderInput(slider, offset, min, max);
             });
         }, 500);

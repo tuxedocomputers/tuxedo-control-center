@@ -28,11 +28,11 @@ import { IDrive } from "../../../common/models/IDrive";
     styleUrls: ['./change-crypt-password.component.scss']
 })
 export class ChangeCryptPasswordComponent implements OnInit {
-    matcher = new FormErrorStateMatcher();
-    buttonType = 'password';
-    show_password_button_text = '';
-    successtext_cryptsetup = '';
-    errortext_cryptsetup = '';
+    matcher: FormErrorStateMatcher = new FormErrorStateMatcher();
+    buttonType: string = 'password';
+    show_password_button_text: string = '';
+    successtext_cryptsetup: string = '';
+    errortext_cryptsetup: string = '';
     crypt_drives: IDrive[] = [];
 
     passwordFormGroup: FormGroup = new FormGroup({
@@ -45,14 +45,14 @@ export class ChangeCryptPasswordComponent implements OnInit {
         private utils: UtilsService
     ) { }
 
-    async ngOnInit() {
+    async ngOnInit(): Promise<void> {
         this.crypt_drives = (await window.driveController.getDrives()).filter(x => x.crypt);
 
         this.buttonType = "password";
         this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;
     }
 
-    showPassword() {
+    showPassword(): void {
         if (this.buttonType == "password") {
             this.buttonType = "text";
             this.show_password_button_text = $localize `:@@cryptButtonHidePassword:Hide Passwords`;
@@ -63,10 +63,10 @@ export class ChangeCryptPasswordComponent implements OnInit {
         }
     }
 
-    async changePassword() {
+    async changePassword(): Promise<void> {
         this.utils.pageDisabled = true;
 
-        this.changeCryptPassword().then(() => {
+        this.changeCryptPassword().then((): void => {
             this.passwordFormGroup.setValue({
                 cryptPassword: "",
                 newPassword: "",
@@ -76,10 +76,10 @@ export class ChangeCryptPasswordComponent implements OnInit {
         });
     }
 
-    private async changeCryptPassword() {
-        let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
-        let newPassword = this.passwordFormGroup.get("newPassword").value;
-        let confirmPassword = this.passwordFormGroup.get("confirmPassword").value;
+    private async changeCryptPassword(): Promise<void> {
+        let oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
+        let newPassword: string = this.passwordFormGroup.get("newPassword").value;
+        let confirmPassword: string = this.passwordFormGroup.get("confirmPassword").value;
 
         // Just to be sure that sane values are read to not brick the encryption when gui logic failed
         if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
@@ -95,9 +95,9 @@ export class ChangeCryptPasswordComponent implements OnInit {
         });
     }
 
-    confirmValidation(group: FormGroup) {
-        let pass = group.get("newPassword").value;
-        let confirmPass = group.get("confirmPassword").value;
+    confirmValidation(group: FormGroup): { notSame: boolean } {
+        let pass: string = group.get("newPassword").value;
+        let confirmPass: string = group.get("confirmPassword").value;
 
         return pass === confirmPass ? null : { notSame: true }
     }

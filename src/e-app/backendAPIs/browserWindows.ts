@@ -17,12 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* 
-#############################################################
-############## Window and Session Management ################
-#############################################################
-*/
-
 import { aquarisCleanUp } from './aquarisBackendAPI';
 import * as path from 'path';
 import { tccDBus } from './dbusBackendAPI';
@@ -33,25 +27,26 @@ import { unregisterAPI } from './apiManagement';
 import { aquarisAPIHandle } from '../../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../../common/models/IDbusAPI';
 import { loadTranslation } from './translationAndTheme';
+import { WebcamConstraints } from 'src/common/models/TccWebcamSettings';
 export let tccWindow: Electron.BrowserWindow;
 export let aquarisWindow: Electron.BrowserWindow;
 export let webcamWindow: Electron.BrowserWindow;
 export let primeWindow: Electron.BrowserWindow;
 
-app.on('second-instance', (event, cmdLine, workingDir) => {
+app.on('second-instance', (event: Event, cmdLine: string[], workingDir: string): void => {
     // If triggered by a second instance, find/show/start GUI
     activateTccGui();
 });
 
-app.on("ready", () => {
-    powerMonitor.on("resume", () => {
+app.on("ready", (): void => {
+    powerMonitor.on("resume", (): void => {
         if (tccWindow) {
             tccWindow.webContents.send("wakeup-from-suspend");
         }
     });
 });
 
-app.on('will-quit', async (event) => {
+app.on('will-quit', async (event: Event): Promise<void> => {
     // Prevent default quit action
     event.preventDefault();
     // Close window but do not quit application unless tray is gone
@@ -73,13 +68,14 @@ app.on('will-quit', async (event) => {
             tccDBus.disconnect();
             unregisterAPI(ipcMain, dbusAPIHandle)
         }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 1000));
+
         app.exit(0);
         return;
     }
 });
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', (): void => {
     if (!tray.isActive()) {
         quitCurrentTccSession();
     }
@@ -87,27 +83,28 @@ app.on('window-all-closed', () => {
 
 
 
-let tccWindowLoading = false;
+let tccWindowLoading: boolean = false;
 
-export async function activateTccGui(module?: string) {
+export async function activateTccGui(module?: string): Promise<void> {
     if (tccWindow) {
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
-        const baseURL = tccWindow.webContents.getURL().split("#")[0];
+        const baseURL: string = tccWindow.webContents.getURL().split("#")[0];
         if (module !== undefined) {
             tccWindow.loadURL(baseURL + '#' + module);
         }
     } else {
         if (!tccWindowLoading) {
             tccWindowLoading = true;
-            const langId = await userConfig.get('langId');
+            const langId: string = await userConfig.get('langId');
             await createTccWindow(langId, module);
             tccWindowLoading = false;
         }
     }
 }
 
-// function seems to be unused :)
+// todo: removing function if it is unused
+
 // function activateAquarisGui() {
 //     if (aquarisWindow) {
 //         if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
@@ -119,7 +116,7 @@ export async function activateTccGui(module?: string) {
 //     }
 // }
 
-export function quitCurrentTccSession() {
+export function quitCurrentTccSession(): void {
     if (tray.isActive()) {
         tray.destroy();
     }
@@ -127,20 +124,20 @@ export function quitCurrentTccSession() {
     app.quit();
 }
 
-/* 
+/*
 ########################################################
 ################ Browser Windows #######################
 ########################################################
 */
 
-export async function createPrimeWindow(langId: string, primeSelectMode: string) {
+export async function createPrimeWindow(langId: string, primeSelectMode: string): Promise<void> {
     if (primeWindow && !primeWindow.isDestroyed()) {
         primeWindow.focus();
         return;
     }
 
-    let windowWidth = 740;
-    let windowHeight = 230;
+    let windowWidth: number = 740;
+    let windowHeight: number = 230;
 
     primeWindow = new BrowserWindow({
         title: "Prime Select Configuration",
@@ -163,18 +160,18 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
     });
 
     // Workaround to set window title
-    primeWindow.on("page-title-updated", function (e) {
+    primeWindow.on("page-title-updated", function (e: Event): void {
         e.preventDefault();
     });
 
     primeWindow.setMenuBarVisibility(false);
 
     // Workaround to menu bar appearing after full screen state
-    primeWindow.on("leave-full-screen", () => {
+    primeWindow.on("leave-full-screen", (): void => {
         primeWindow.setMenuBarVisibility(false);
     });
 
-    const indexPath = path.join(
+    const indexPath: string = path.join(
         __dirname,
         "..",
         "..",
@@ -185,18 +182,18 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
     );
     primeWindow.loadFile(indexPath, { hash: "/prime-dialog" });
 
-    primeWindow.webContents.once("dom-ready", () => {
+    primeWindow.webContents.once("dom-ready", (): void => {
         primeWindow.webContents.send("set-prime-select-mode", primeSelectMode);
     });
 
-    primeWindow.on("close", async function () {
+    primeWindow.on("close", async function (): Promise<void> {
         primeWindow = null;
     });
 }
 
-async function createTccWindow(langId: string, module?: string) {
-    let windowWidth = 1250;
-    let windowHeight = 770;
+async function createTccWindow(langId: string, module?: string): Promise<void> {
+    let windowWidth: number = 1250;
+    let windowHeight: number = 770;
     if (windowWidth > screen.getPrimaryDisplay().workAreaSize.width) {
         windowWidth = screen.getPrimaryDisplay().workAreaSize.width;
     }
@@ -223,29 +220,29 @@ async function createTccWindow(langId: string, module?: string) {
     // Hide menu bar
     tccWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
-    tccWindow.on('leave-full-screen', () => { tccWindow.setMenuBarVisibility(false); });
+    tccWindow.on('leave-full-screen', (): void => { tccWindow.setMenuBarVisibility(false); });
 
-    tccWindow.on('closed', () => {
+    tccWindow.on('closed', (): void => {
         tccWindow = null;
     });
 
-    tccWindow.on('close', async function (e) {
+    tccWindow.on('close', async function (e: Event): Promise<void> {
         await tccDBus.setSensorDataCollectionStatus(false)
-    
-        let collectionStatus = undefined
-        let retryCount = 0
+
+        let collectionStatus: boolean = undefined
+        let retryCount: number = 0
         const maxRetries = 5
-        
+
         while (collectionStatus !== false && retryCount < maxRetries) {
             collectionStatus = await tccDBus.getSensorDataCollectionStatus()
             retryCount++
         }
-    
+
         if (collectionStatus !== false) {
             console.error('Failed to set sensor data collection status after multiple attempts')
         }
     });
-    const indexPath = path.join(__dirname, '..', '..', '..', 'ng-app', langId, 'index.html');
+    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', langId, 'index.html');
     if (module !== undefined) {
         await tccWindow.loadFile(indexPath, { hash: '/' + module });
     } else {
@@ -253,9 +250,9 @@ async function createTccWindow(langId: string, module?: string) {
     }
 }
 
-function createAquarisControl(langId: string) {
-    let windowWidth = 700;
-    let windowHeight = 400;
+function createAquarisControl(langId: string): void {
+    let windowWidth: number = 700;
+    let windowHeight: number = 400;
 
     aquarisWindow = new BrowserWindow({
         title: 'Aquaris control',
@@ -276,24 +273,24 @@ function createAquarisControl(langId: string) {
     // Hide menu bar
     aquarisWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
-    aquarisWindow.on('leave-full-screen', () => { aquarisWindow.setMenuBarVisibility(false); });
+    aquarisWindow.on('leave-full-screen', (): void => { aquarisWindow.setMenuBarVisibility(false); });
 
-    aquarisWindow.on('closed', () => {
+    aquarisWindow.on('closed', (): void => {
         aquarisWindow = null;
     });
 
-    const indexPath = path.join(__dirname, '..', '..', '..', 'ng-app', langId, 'index.html');
+    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', langId, 'index.html');
     aquarisWindow.loadFile(indexPath, { hash: '/main-gui/aquaris-control' });
 }
 
-export function clearWebcamWindow()
+export function clearWebcamWindow(): void
 {
-    webcamWindow = null;
+    webcamWindow: Electron.BrowserWindow = null;
 }
 
-export async function createWebcamPreview(langId: string, arg: any) {
-    let windowWidth = 640;
-    let windowHeight = 480;
+export async function createWebcamPreview(langId: string, arg: WebcamConstraints): Promise<void> {
+    let windowWidth: number = 640;
+    let windowHeight: number = 480;
 
     webcamWindow = new BrowserWindow({
         title: "Webcam",
@@ -316,17 +313,17 @@ export async function createWebcamPreview(langId: string, arg: any) {
     });
 
     // Workaround to set window title
-    webcamWindow.on("page-title-updated", function (e) {
+    webcamWindow.on("page-title-updated", function (e: Event): void {
         e.preventDefault();
     });
 
     // Hide menu bar
     webcamWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
-    webcamWindow.on("leave-full-screen", () => {
+    webcamWindow.on("leave-full-screen", (): void => {
         webcamWindow.setMenuBarVisibility(false);
     });
-    const indexPath = path.join(
+    const indexPath: string = path.join(
         __dirname,
         "..",
         "..",
@@ -337,29 +334,29 @@ export async function createWebcamPreview(langId: string, arg: any) {
     );
     webcamWindow.loadFile(indexPath, { hash: "/webcam-preview" });
 
-    webcamWindow.webContents.once("dom-ready", () => {
+    webcamWindow.webContents.once("dom-ready", (): void => {
         webcamWindow.webContents.send("setting-webcam-with-loading", arg);
     });
 
-    webcamWindow.on("close", async function () {
+    webcamWindow.on("close", function (): void {
         tccWindow.webContents.send("external-webcam-preview-closed");
         webcamWindow = null;
     });
 
-    webcamWindow.once('ready-to-show', () => {
+    webcamWindow.once('ready-to-show', (): void => {
         webcamWindow.webContents.send("setting-webcam-with-loading", arg);
         webcamWindow.show()
     })
 }
 
-ipcMain.on('close-app', () => {
+ipcMain.on('close-app', (): void => {
     app.exit();
 })
 
-ipcMain.on('close-window', () => {
+ipcMain.on('close-window', (): void => {
     tccWindow.close();
 })
 
-ipcMain.on('minimize-window', () => {
+ipcMain.on('minimize-window', (): void => {
     tccWindow.minimize();
 })

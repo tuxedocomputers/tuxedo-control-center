@@ -29,20 +29,20 @@ export class PrimeWorker extends DaemonWorker {
         super(10000, "PrimeWorker", tccd);
     }
 
-    public async onStart() {
+    public async onStart(): Promise<void> {
         // not instantly setting prime status in onStart() because requires_offloading only gets updated after some delay
         // checking it directly in onStart() will result in getting a wrong state
         await delay(2000);
         this.setPrimeStatus();
     }
 
-    public async onWork() {
+    public async onWork(): Promise<void> {
         // checking in case someone changes state externally, otherwise could be removed to avoid periodic checking
         this.setPrimeStatus();
     }
 
-    private async setPrimeStatus() {
-        const primeSupported = await this.checkPrimeSupported();
+    private async setPrimeStatus(): Promise<void> {
+        const primeSupported: boolean = await this.checkPrimeSupported();
 
         if (primeSupported) {
             this.tccd.dbusData.primeState = await this.checkPrimeStatus();
@@ -53,17 +53,17 @@ export class PrimeWorker extends DaemonWorker {
         }
     }
 
-    public onExit() {}
+    public onExit(): void {}
 
     // only supporting gpu switch on systems which can use prime-select since primary focus is Tuxdeo OS and Ubuntu
     // other operating systems may handle this differently and thus can't easily be supported
     private async checkPrimeSupported(): Promise<boolean> {
-        const offloadingStatus =
+        const offloadingStatus: boolean =
             fs.existsSync(
                 "/var/lib/ubuntu-drivers-common/requires_offloading"
             ) == true;
 
-        const primeAvailable = (
+        const primeAvailable: string = (
             await execCommandAsync("which prime-select | cat")
         )
             .toString()

@@ -17,17 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: any = require('mock-fs');
 import * as fs from 'fs';
 
 import { UsbController } from './UsbController';
 
-describe('UsbController', () => {
+describe('UsbController', (): void => {
 
     let dev: UsbController;
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
             '/realpath': {
                 '1-11': {},
@@ -65,12 +65,12 @@ describe('UsbController', () => {
         dev = new UsbController('/sys/bus/usb/devices/1-2');
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         dev = undefined;
         mock.restore();
     });
 
-    it('should get device list for devices and ignore interfaces', () => {
+    it('should get device list for devices and ignore interfaces', (): void => {
         // Test avoided for now due to mock-fs not supported option 'withFileTypes' with readdirSync
         /* const deviceList = UsbController.getUsbDeviceList();
         expect(deviceList.includes('1-11')).toBe(true);
@@ -84,24 +84,24 @@ describe('UsbController', () => {
         expect(deviceList.includes('1-2:1.1')).toBe(false);*/
     });
 
-    it('should read device properties', () => {
-        expect(() => { dev.idProduct.readValue(); }).not.toThrow();
+    it('should read device properties', (): void => {
+        expect((): void => { dev.idProduct.readValue(); }).not.toThrow();
         expect(dev.idProduct.readValue()).toBe(46494);
-        expect(() => { dev.idVendor.readValue(); }).not.toThrow();
+        expect((): void => { dev.idVendor.readValue(); }).not.toThrow();
         expect(dev.idVendor.readValue()).toBe(1266);
-        expect(() => { dev.product.readValue(); }).not.toThrow();
+        expect((): void => { dev.product.readValue(); }).not.toThrow();
         expect(dev.product.readValue()).toBe('Chicony USB2.0 Camera');
-        expect(() => { dev.manufacturer.readValue(); }).not.toThrow();
+        expect((): void => { dev.manufacturer.readValue(); }).not.toThrow();
         expect(dev.manufacturer.readValue()).toBe('Chicony Electronics Co.,Ltd.');
     });
 
-    it('should write to bind to enable device', () => {
+    it('should write to bind to enable device', (): void => {
         expect(fs.readFileSync('/sys/bus/usb/drivers/usb/bind').toString()).toBe('');
         dev.enableDevice();
         expect(fs.readFileSync('/sys/bus/usb/drivers/usb/bind').toString()).toBe('1-2');
     });
 
-    it('should write to unbind to disable device', () => {
+    it('should write to unbind to disable device', (): void => {
         expect(fs.readFileSync('/sys/bus/usb/drivers/usb/unbind').toString()).toBe('');
         dev.disableDevice();
         expect(fs.readFileSync('/sys/bus/usb/drivers/usb/unbind').toString()).toBe('1-2');

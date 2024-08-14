@@ -48,7 +48,10 @@ export interface KeyboardBacklightStateInterface {
 
 export interface ITccSettings {
     fahrenheit: boolean;
-    stateMap: any;
+    stateMap: {
+        power_ac: string,
+        power_bat: string
+    },
     shutdownTime: string | null;
     cpuSettingsEnabled: boolean;
     fanControlEnabled: boolean;

@@ -38,38 +38,38 @@ export class ShutdownTimerComponent implements OnInit {
         private utils: UtilsService
     ) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.updateTime();
     }
 
-    public async saveTime() {
+    public async saveTime(): Promise<void> {
         this.utils.pageDisabled = true;
         await window.ipc.setShutdownTime(this.selectedHour,this.selectedMinute);
         await this.updateTime();
         this.utils.pageDisabled = false;
     }
 
-    public async deleteTime() {
+    public async deleteTime(): Promise<void> {
         this.utils.pageDisabled = true;
         window.ipc.cancelShutdown().then
         (
-            () => {
+            (): void => {
             this.updateTime();
             this.utils.pageDisabled = false;
             }
         );
     }
 
-    public async updateTime() {
-        let result = await window.ipc.getScheduledShutdown();
+    public async updateTime(): Promise<void> {
+        let result: string = await window.ipc.getScheduledShutdown();
         try {
             if (result) {
-                let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
-                let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
+                let resultJSON: string = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
+                let resultDate: Date = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
                 this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
             }
             if (!result) {
-                console.log("shutdown-timer: updateTime: getScheduledShutdown() returned: ", result)
+                console.log("shutdown-timer: updateTime: getScheduledShutdown() did not return data")
             }
         }catch(err: unknown) {
             console.error("shutdown-timer: updateTime failed =>", err)

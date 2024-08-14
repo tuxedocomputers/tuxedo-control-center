@@ -20,12 +20,13 @@ import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { ITccProfile } from 'src/common/models/TccProfile';
 
 export class DisplayBacklightWorker extends DaemonWorker {
 
     private controllers: DisplayBacklightController[];
-    private basePath = '/sys/class/backlight';
-    private useAutosave = false;
+    private basePath: string = '/sys/class/backlight';
+    private useAutosave: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(3000, "DisplayBacklightWorker", tccd);
@@ -35,9 +36,9 @@ export class DisplayBacklightWorker extends DaemonWorker {
      * Looks for and updates the list of available sysfs backlight drivers
      */
     private findDrivers(): void {
-        const displayDrivers = DisplayBacklightController.getDeviceList(this.basePath);
+        const displayDrivers: string[] = DisplayBacklightController.getDeviceList(this.basePath);
         this.controllers = [];
-        displayDrivers.forEach((driverName) => {
+        displayDrivers.forEach((driverName: string): void => {
             this.controllers.push(new DisplayBacklightController(this.basePath, driverName));
         });
     }
@@ -45,7 +46,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
     public onStart(): void {
 
         // Figure out which brightness percentage to set
-        const currentProfile = this.activeProfile;
+        const currentProfile: ITccProfile = this.activeProfile;
         let brightnessPercent;
         if (!currentProfile.display.useBrightness || currentProfile.display.brightness === undefined) {
             if (this.tccd.autosave.displayBrightness === undefined) {
@@ -63,7 +64,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
 
             // Recheck workaround for late loaded drivers and drivers that are not ready although
             // already presenting an interface
-            setTimeout(() => { this.writeBrightness(brightnessPercent, true) }, 2000);
+            setTimeout((): void => { this.writeBrightness(brightnessPercent, true) }, 2000);
         }
     }
 
@@ -90,7 +91,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
     public onExit(): void {
         this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
 
-        this.controllers.forEach((controller) => {
+        this.controllers.forEach((controller: DisplayBacklightController): void => {
             let value: number;
             let maxBrightness: number;
             try {
@@ -117,8 +118,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
         for (const controller of this.controllers) {
             let brightnessRaw: number;
             try {
-                const maxBrightness = controller.maxBrightness.readValue();
-                const currentBrightnessRaw = controller.brightness.readValue();
+                const maxBrightness: number = controller.maxBrightness.readValue();
+                const currentBrightnessRaw: number = controller.brightness.readValue();
                 brightnessRaw = Math.round((brightnessPercent * maxBrightness) / 100);
 
                 if (recheck && (currentBrightnessRaw !== brightnessRaw)) {

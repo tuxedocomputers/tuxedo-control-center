@@ -35,8 +35,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public profileSelect: string;
     public activeProfileName: string;
     private subscriptions: Subscription = new Subscription();
-    public useTCCTitleBar = false;
-    private dbusDead = false;
+    public useTCCTitleBar: boolean = false;
+    private dbusDead: boolean = false;
 
     public dataLoaded: boolean;
 
@@ -60,10 +60,10 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         if (!this.dataLoaded) {
             // TODO edit error message, since this has nothing to do with dbus directly
             // We need a blocking dialog box here or everything goes to hell.
-            var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
+            var result: boolean = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
             this.utils.quit();
         }
-        window.ipc.onDbusDead( () => {
+        window.ipc.onDbusDead( (): void => {
             // var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
             // this.utils.quit();
             // it's possible that because of asynchronicity the dbus Dead message is sent more than once
@@ -78,8 +78,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         });
     }
 
-    private async checkIfDbusIsBack() {
-        setTimeout(async () => {
+    private async checkIfDbusIsBack(): Promise<void> {
+        setTimeout(async (): Promise<void> => {
             if(await window.dbusAPI.dbusAvailable()) {
                 this.dbusDead = false;
                 this.utils.pageDisabled = false;
@@ -102,7 +102,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.utils.minimizeWindow();
     }
 
-    public changeLanguage(languageId: string) {
+    public changeLanguage(languageId: string): void {
         if (languageId !== this.getCurrentLanguageId()) {
             this.utils.changeLanguage(languageId);
         }
@@ -112,22 +112,30 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         return this.utils.getCurrentLanguageId();
     }
 
-    public getLanguagesMenuArray() {
+    public getLanguagesMenuArray(): { id: string, label: string, img: string }[] {
         return this.utils.getLanguagesMenuArray();
     }
 
-    public getLanguageData(langId: string) {
+    public getLanguageData(langId: string): string {
         return this.utils.getLanguageData(langId);
     }
 
-    public buttonToggleLanguage() {
+    public buttonToggleLanguage(): void {
         window.webcamAPI.closeWebcamPreview();
-        this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
+        this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find((lang: {
+            id: string;
+            label: string;
+            img: string;
+        }): boolean => lang.id !== this.utils.getCurrentLanguageId()).id);
         this.updateLanguageName();
     }
 
     public updateLanguageName(): void {
-        this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).label;
+        this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find((lang: {
+            id: string;
+            label: string;
+            img: string;
+        }): boolean => lang.id !== this.utils.getCurrentLanguageId()).label;
     }
 
     public getStateInputs(): IStateInfo[] {
@@ -137,12 +145,12 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     public getActiveProfile(): ITccProfile {
         return this.state.getActiveProfile();
     }
-    
+
     public getStateProfileName(state: IStateInfo): string {
         if (state.value === ProfileStates.AC) {
             return this.state.getCurrentChargingProfileName()
         }
-        
+
         if (state.value === ProfileStates.BAT) {
             return this.state.getCurrentBatteryProfileName()
         }
@@ -152,7 +160,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         if (state.value === ProfileStates.AC) {
             return 'profile-manager/' + this.state.getCurrentChargingProfileId()
         }
-        
+
         if (state.value === ProfileStates.BAT) {
             return 'profile-manager/' + this.state.getCurrentBatteryProfileId()
         }

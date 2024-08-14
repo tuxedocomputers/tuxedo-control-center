@@ -47,26 +47,27 @@ import { ConfigService } from "../config.service";
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     // Graph data
+    // todo: why is variable called e
     public tempsLabels: Label[] = Array.from(Array(100).keys())
         .concat(100)
-        .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));
+        .map((e: number): string => formatTemp(e, this.config.getSettings().fahrenheit));
     public graphOptions: ChartOptions = graphOptions;
     public fantableDatasets: ChartDataSets[] = fantableDatasets;
     public graphColors: Color[] = graphColors;
-    public graphType = "line";
+    public graphType: string = "line";
 
     // Inputs
     private _fanProfile: ITccFanProfile;
     @Input() set fanProfile(nextProfile: string) {
-        const nextProfileIndex = defaultFanProfiles.findIndex(
-            (profile) => profile.name === nextProfile
+        const nextProfileIndex: number = defaultFanProfiles.findIndex(
+            (profile: ITccFanProfile): boolean => profile.name === nextProfile
         );
         if (nextProfileIndex !== -1) {
             this._fanProfile = defaultFanProfiles[nextProfileIndex];
             this.updateDatasets();
         }
     }
-    get fanProfile() {
+    get fanProfile(): string {
         return this._fanProfile.name;
     }
 
@@ -75,7 +76,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         this._minFanspeed = value;
         this.updateDatasets();
     }
-    get minFanspeed() {
+    get minFanspeed(): number {
         return this._minFanspeed;
     }
 
@@ -84,7 +85,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         this._maxFanspeed = value;
         this.updateDatasets();
     }
-    get maxFanspeed() {
+    get maxFanspeed(): number {
         return this._maxFanspeed;
     }
 
@@ -93,17 +94,17 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         this._offsetFanspeed = value;
         this.updateDatasets();
     }
-    get offsetFanspeed() {
+    get offsetFanspeed(): number {
         return this._offsetFanspeed;
     }
 
-    initDone = false;
+    initDone: boolean = false;
 
     constructor(private cdref: ChangeDetectorRef,
         private config: ConfigService,
         ) {}
 
-    ngOnInit() {}
+    ngOnInit(): void {}
 
     ngAfterViewInit(): void {
         this.initDone = true;

@@ -59,7 +59,7 @@ export class DialogConfirmComponent {
             this.ctrlCheckboxNoBother = new FormControl(false);
         }
 
-    closeDialog(result?: boolean) {
+    closeDialog(result?: boolean): void {
         let dialogResult: ConfirmDialogResult;
         const noBotherValue = this.ctrlCheckboxNoBother.value as boolean;
         if (result === true) {
@@ -76,7 +76,7 @@ export class DialogConfirmComponent {
         this.dialogRef.close(dialogResult);
     }
 
-    public async openExternalUrl(url: string) {
+    public async openExternalUrl(url: string): Promise<void> {
         window.ipc.openExternal(url);
     }
 }

@@ -21,6 +21,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
 import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-support',
@@ -39,10 +40,10 @@ export class SupportComponent implements OnInit {
   public anydeskInstalled: boolean;
   public webFAICreatorInstalled: boolean;
   public formTicketNumber: FormGroup;
-  public systeminfoRunOutput = '';
-  public systeminfoRunProgress = false;
-  public systeminfosCompleted = false;
-  public anydeskProgramName = 'anydesk';
+  public systeminfoRunOutput: string = '';
+  public systeminfoRunProgress: boolean = false;
+  public systeminfosCompleted: boolean = false;
+  public anydeskProgramName: string = 'anydesk';
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';
   // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
   private installProgress: Map<string, boolean> = new Map();
@@ -52,7 +53,7 @@ export class SupportComponent implements OnInit {
     private utils: UtilsService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateAnydeskInstallStatus();
     this.updateWebFAICreatorInstallStatus();
     this.updateProgressStatus();
@@ -60,13 +61,13 @@ export class SupportComponent implements OnInit {
       inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
     });
     // TODO register callback for onUpdateSysteminfoLabel and update label accordingly
-    window.ipc.onUpdateSysteminfoLabel(async (event, text) => {
+    window.ipc.onUpdateSysteminfoLabel((event: any, text: string): void => {
         this.systeminfoOutput(text);
     });
   }
 
-  public focusControl(control): void {
-    setTimeout(() => { control.focus(); }, 0);
+  public focusControl(control: MatInput): void  {
+    setTimeout((): void => { control.focus(); }, 0);
   }
 
   public openExternalUrl(url: string): void {
@@ -87,38 +88,38 @@ export class SupportComponent implements OnInit {
     this.installProgress.set(this.anydeskProgramName,true);
     this.isCheckingInstallation.set(this.anydeskProgramName,true);
     if (this.anydeskInstalled) {
-      window.pgms.uninstallAnydesk().then(() => {
+      window.pgms.uninstallAnydesk().then((): void => {
         this.updateAnydeskInstallStatus();
         this.updateProgressStatus();
       });
     } else {
-      window.pgms.installAnydesk().then(() => {
+      window.pgms.installAnydesk().then((): void => {
         this.updateAnydeskInstallStatus();
         this.updateProgressStatus();
       });
     }
     this.updateProgressStatus();
-    setTimeout(() => { this.updateProgressStatus() },500);
-    setTimeout(() => { this.updateProgressStatus() },1000);
+    setTimeout((): void => { this.updateProgressStatus() },500);
+    setTimeout((): void => { this.updateProgressStatus() },1000);
   }
 
   public buttonInstallRemoveWebFAICreator(): void {
     this.installProgress.set(this.webFAICreatorProgramName,true);
     this.isCheckingInstallation.set(this.webFAICreatorProgramName,true);
     if (this.webFAICreatorInstalled) {
-      window.pgms.uninstallWebfaicreator().then(() => {
+      window.pgms.uninstallWebfaicreator().then((): void => {
         this.updateWebFAICreatorInstallStatus();
         this.updateProgressStatus();
       });
     } else {
-        window.pgms.installWebfaicreator().then(() => {
+        window.pgms.installWebfaicreator().then((): void => {
         this.updateWebFAICreatorInstallStatus();
         this.updateProgressStatus();
       });
     }
     this.updateProgressStatus();
-    setTimeout(() => { this.updateProgressStatus() },500);
-    setTimeout(() => { this.updateProgressStatus() },1000);
+    setTimeout((): void => { this.updateProgressStatus() },500);
+    setTimeout((): void => { this.updateProgressStatus() },1000);
   }
 
   public buttonStartAnydesk(): void {
@@ -137,7 +138,7 @@ export class SupportComponent implements OnInit {
     return this.isCheckingInstallation;
   }
 
-  private async updateProgressStatus() {
+  private async updateProgressStatus(): Promise<void> {
     this.installProgress = await window.pgms.isInProgress();
     this.isCheckingInstallation = await window.pgms.isCheckingInstallation();
   }
@@ -151,10 +152,10 @@ export class SupportComponent implements OnInit {
       this.systeminfosCompleted = true;
       systeminfoStepper.selected.completed = true;
       systeminfoStepper.next();
-    }).catch(err => {
+    }).catch((err: unknown): void => {
       console.error("support: buttonStartSysteminfo failed =>", err)
-      this.systeminfoRunOutput = err;
-    }).finally(() => {
+      this.systeminfoRunOutput = err.toString();
+    }).finally((): void => {
       this.systeminfoRunProgress = false;
       this.utils.pageDisabled = false;
     });

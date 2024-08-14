@@ -23,8 +23,8 @@ import {
     SysFsPropertyBoolean,
 } from "./SysFsProperties";
 
-export class IntelRAPLController {
-    private properties: {
+// todo: move into a different file
+interface IRAPLProperties {
         name: SysFsPropertyString;
 
         constraint0Name: SysFsPropertyString;
@@ -41,7 +41,10 @@ export class IntelRAPLController {
 
         enabled: SysFsPropertyBoolean;
         energyUJ: SysFsPropertyInteger;
-    };
+}
+
+export class IntelRAPLController {
+    private properties: IRAPLProperties
 
     constructor(private readonly basePath: string) {
         this.properties = {
@@ -90,7 +93,7 @@ export class IntelRAPLController {
      * @returns Boolean indicating wether or not this Intel RAPL controller can be used
      */
     public getIntelRAPLPowerAvailable(): boolean {
-        const props = this.properties;
+        const props: IRAPLProperties = this.properties;
         return (
             props.name.isAvailable() &&
             props.enabled.isAvailable() &&
@@ -105,7 +108,7 @@ export class IntelRAPLController {
      * @returns Boolean indicating if constraints are available
      */
     public getIntelRAPLConstraint0Available(): boolean {
-        const props = this.properties;
+        const props: IRAPLProperties = this.properties;
 
         return (
             props.constraint0Name.isAvailable() &&
@@ -116,7 +119,7 @@ export class IntelRAPLController {
     }
 
     public getIntelRAPLConstraint1Available(): boolean {
-        const props = this.properties;
+        const props: IntelRAPLController["properties"] = this.properties;
 
         return (
             props.constraint1Name.isAvailable() &&
@@ -127,7 +130,7 @@ export class IntelRAPLController {
     }
 
     public getIntelRAPLConstraint2Available(): boolean {
-        const props = this.properties;
+        const props: IntelRAPLController["properties"] = this.properties;
 
         return (
             props.constraint2Name.isAvailable() &&
@@ -143,7 +146,7 @@ export class IntelRAPLController {
      * @returns Boolean indicating if it is available
      */
     public getIntelRAPLEnergyAvailable(): boolean {
-        const props = this.properties;
+        const props: IntelRAPLController["properties"] = this.properties;
         return props.energyUJ.isAvailable();
     }
 
@@ -180,11 +183,11 @@ export class IntelRAPLController {
      * Automatically clamped to range [maxPower/2, maxPower].
      */
     public setPowerPL1Limit(setPowerLimit?: number): void {
-        const props = this.properties;
-        const maxPower = this.getConstraint0MaxPower();
+        const props: IntelRAPLController["properties"] = this.properties;
+        const maxPower: number = this.getConstraint0MaxPower();
 
         try {
-            let powerLimit =
+            let powerLimit: number =
                 setPowerLimit === undefined
                     ? maxPower
                     : Math.max(maxPower / 2, Math.min(setPowerLimit, maxPower));

@@ -20,7 +20,7 @@ import * as fs from 'fs';
 
 export class UserConfig {
     private data: object;
-    private inProgress = false;
+    private inProgress: boolean = false;
 
     constructor(private configFile: string) {
         if (configFile === undefined) { throw Error('No config path defined'); }
@@ -28,16 +28,16 @@ export class UserConfig {
         this.validateValues();
     }
 
-    private async setInProgress() {
-        while (this.inProgress) await new Promise(resolve => setTimeout(resolve, 10));
+    private async setInProgress(): Promise<void> {
+        while (this.inProgress) await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 10));
         this.inProgress = true;
     }
 
-    private async setProgressDone() {
+    private async setProgressDone(): Promise<void> {
         this.inProgress = false;
     }
 
-    public async set(property: string, value: string) {
+    public async set(property: string, value: string): Promise<void> {
         await this.setInProgress();
         try {
             await this.readConfig();
@@ -75,8 +75,8 @@ export class UserConfig {
     }
 
     private async writeConfig(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            fs.writeFile(this.configFile, JSON.stringify(this.data), (err) => {
+        return new Promise<void>( (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+            fs.writeFile(this.configFile, JSON.stringify(this.data), (err: unknown): void => {
                 if (err) {
                     reject(err)
                 } else {
@@ -87,8 +87,8 @@ export class UserConfig {
     }
 
     private async readConfig(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            fs.readFile(this.configFile, (err, data) => {
+        return new Promise<void>( (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+            fs.readFile(this.configFile, (err: unknown, data: Buffer): void => {
                 if (err) {
                     reject(err);
                 } else {

@@ -18,17 +18,18 @@
  */
 
 import 'jasmine';
-const mockfs = require('mock-fs');
+const mockfs: any = require('mock-fs');
 
 import { DriveController } from "./DriveController";
 import * as child_process from 'child_process';
+import { IDrive } from '../models/IDrive';
 
 const sizeDriveSda: number = 488397168;
 const sizeDriveSda1: number = 162799056;
 const sizeDriveSda2: number = 162799056;
 
-describe('DriveController', async () => {
-    beforeEach(() => {
+describe('DriveController', async (): Promise<void> => {
+    beforeEach((): void => {
         mockfs({
             '/sys/class/block/': {
                 'sda': {
@@ -67,7 +68,7 @@ describe('DriveController', async () => {
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mockfs.restore();
     });
 
@@ -87,20 +88,20 @@ describe('DriveController', async () => {
         expect(parent.isParent).toBe(true);
     });*/
 
-    it('get child info', async () => {
+    it('get child info', async (): Promise<void> => {
         spyOn(child_process, "execSync").and.returnValue(Buffer.from("ext4"));
 
-        const drive = await DriveController.getDeviceInfo("/sys/class/block/sda1");
+        const drive: IDrive = await DriveController.getDeviceInfo("/sys/class/block/sda1");
         //console.log(drive);
         expect(drive.isParent).toBe(false);
         expect(drive.crypt).toBe(false);
         expect(drive.size).toBe(sizeDriveSda1);
     });
 
-    it('get child info - crypt', async () => {
+    it('get child info - crypt', async (): Promise<void> => {
         spyOn(child_process, "execSync").and.returnValue(Buffer.from("crypto_LUKS"));
 
-        const drive = await DriveController.getDeviceInfo("/sys/class/block/sda2");
+        const drive: IDrive = await DriveController.getDeviceInfo("/sys/class/block/sda2");
         //console.log(drive);
         expect(drive.isParent).toBe(false);
         expect(drive.crypt).toBe(true);

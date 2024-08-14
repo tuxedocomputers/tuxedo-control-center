@@ -1,11 +1,11 @@
 import { SysFsPropertyBoolean } from "./SysFsProperties";
 
 export class FnLockController {
-    fnLock = new SysFsPropertyBoolean("/sys/devices/platform/tuxedo_keyboard/fn_lock");
+    fnLock: SysFsPropertyBoolean = new SysFsPropertyBoolean("/sys/devices/platform/tuxedo_keyboard/fn_lock");
 
-    getFnLockSupported = () => this.fnLock.isAvailable();
+    getFnLockSupported: () => boolean = (): boolean => this.fnLock.isAvailable();
 
-    getFnLockStatus = () => this.fnLock.readValueNT();
+    getFnLockStatus: () => boolean  = (): boolean => this.fnLock.readValueNT();
 
-    setFnLockStatus = (status: boolean) => this.fnLock.writeValue(status);
+    setFnLockStatus: (status: boolean) => void = (status: boolean): void => this.fnLock.writeValue(status);
 }

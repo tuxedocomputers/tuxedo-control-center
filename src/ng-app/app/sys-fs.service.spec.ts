@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, TestBedStatic } from '@angular/core/testing';
 
 import { SysFsService } from './sys-fs.service';
 
-describe('SysFsService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe('SysFsService', (): void => {
+  beforeEach((): TestBedStatic => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it('should be created', (): void => {
     const service: SysFsService = TestBed.get(SysFsService);
     expect(service).toBeTruthy();
   });

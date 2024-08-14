@@ -17,23 +17,27 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
-########################################################
-############## tomte GUI Backend #######################
-########################################################
-*/
-
 import  { TomteAPIFunctions, ITomteModule, ITomteInformation } from '../../common/models/ITomteAPI';
 import { execCmd, execFile } from './ipcBackendAPI'
 
-async function resetToDefaults() {
-    return new Promise<boolean>(async (resolve, reject) => {
-        let command1 = "pkexec tuxedo-tomte AUTOMATIC";
-        let command2 = "pkexec tuxedo-tomte unblock all";
-        let command3 = "pkexec tuxedo-tomte reconfigure all";
-        let res1;
-        let res2;
-        let res3;
+// todo: refactor
+async function resetToDefaults(): Promise<boolean> {
+    return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        let command1: string = "pkexec tuxedo-tomte AUTOMATIC";
+        let command2: string = "pkexec tuxedo-tomte unblock all";
+        let command3: string = "pkexec tuxedo-tomte reconfigure all";
+        let res1: {
+            data: string;
+            error: unknown;
+        }
+        let res2: {
+            data: string;
+            error: unknown;
+        };
+        let res3: {
+            data: string;
+            error: unknown;
+        };
         try
         {
             res1 = await execFile(command1);
@@ -53,12 +57,12 @@ async function resetToDefaults() {
     });
 }
 
-async function getModuleDescription(moduleName: string, langId: string) {
-    return new Promise<string>(async (resolve, reject) => {
-    let command = "LANGUAGE=" + langId + " tuxedo-tomte description " + moduleName;
+async function getModuleDescription(moduleName: string, langId: string): Promise<string> {
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+    let command: string = "LANGUAGE=" + langId + " tuxedo-tomte description " + moduleName;
     try
     {
-        let results = await execCmd(command);
+        let results: string = await execCmd(command);
         resolve(results);
     }
     catch (err: unknown)
@@ -69,10 +73,10 @@ async function getModuleDescription(moduleName: string, langId: string) {
     });
 }
 
-async function removeModule(moduleName: string) {
-    let command = "yes | pkexec tuxedo-tomte remove " + moduleName;
-    return new Promise<void>((resolve, reject) => {
-        execCmd(command).then(() => {
+async function removeModule(moduleName: string): Promise<void> {
+    let command: string = "yes | pkexec tuxedo-tomte remove " + moduleName;
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteGuiBackendAPI: removeModule failed =>", err)
@@ -81,10 +85,10 @@ async function removeModule(moduleName: string) {
     });
 }
 
-async function installModule(moduleName: string) {
-    let command = "pkexec tuxedo-tomte configure " + moduleName;
-    return new Promise<void>((resolve, reject) => {
-        execFile(command).then(() => {
+async function installModule(moduleName: string): Promise<void> {
+    let command: string = "pkexec tuxedo-tomte configure " + moduleName;
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteGuiBackendAPI: installModule failed =>", err)
@@ -93,10 +97,10 @@ async function installModule(moduleName: string) {
     });
 }
 
-async function unBlockModule(moduleName: string) {
-    let command = "pkexec tuxedo-tomte unblock " + moduleName;
-    return new Promise<void>((resolve, reject) => {
-        execFile(command).then(() => {
+async function unBlockModule(moduleName: string): Promise<void> {
+    let command: string = "pkexec tuxedo-tomte unblock " + moduleName;
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteGuiBackendAPI: unBlockModule failed =>", err)
@@ -105,10 +109,10 @@ async function unBlockModule(moduleName: string) {
     });
 }
 
-async function blockModule(moduleName: string) {
-    let command = "pkexec tuxedo-tomte block " + moduleName;
-    return new Promise<void>((resolve, reject) => {
-        execFile(command).then(() => {
+async function blockModule(moduleName: string): Promise<void> {
+    let command: string = "pkexec tuxedo-tomte block " + moduleName;
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteGuiBackendAPI: blockModule failed =>", err)
@@ -117,10 +121,10 @@ async function blockModule(moduleName: string) {
     });
 }
 
-async function setMode(mode: string) {
-    let command = "pkexec tuxedo-tomte " + mode;
-    return new Promise<void>((resolve, reject) => {
-        execFile(command).then(() => {
+async function setMode(mode: string): Promise<void> {
+    let command: string = "pkexec tuxedo-tomte " + mode;
+    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        execCmd(command).then(() => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteGuiBackendAPI: setMode failed =>", err)
@@ -130,7 +134,7 @@ async function setMode(mode: string) {
 }
 
 
-function parseTomteListJson(rawTomteListOutput: string | undefined)
+function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInformation
     {
         let tomteInformation: ITomteInformation = {
             modules: [],
@@ -141,20 +145,20 @@ function parseTomteListJson(rawTomteListOutput: string | undefined)
         };
         if (!rawTomteListOutput)
         {
-            return tomteInformation;
+            return;
         }
         try
         {
-            let givenobject = JSON.parse(rawTomteListOutput);
+            let givenobject: any = JSON.parse(rawTomteListOutput);
             tomteInformation.jsonError = false;
 
         // now let's get the mode, modules etc out of it
         tomteInformation.tomteMode = givenobject.mode;
         tomteInformation.modules = [];
         tomteInformation.rebootRequired = givenobject.restart === "yes";
-        for (let i = 0; i < givenobject.modules?.length; i++)
+        for (let i: number = 0; i < givenobject.modules?.length; i++)
         {
-            let module = givenobject.modules[i];
+            let module: any = givenobject.modules[i];
             tomteInformation.modules.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
         }
         }
@@ -168,9 +172,9 @@ function parseTomteListJson(rawTomteListOutput: string | undefined)
         }
     }
 
-async function getTomteInformation() {
-    return new Promise<ITomteInformation>(async (resolve, reject) => {
-            let command = "tuxedo-tomte listjson"
+async function getTomteInformation(): Promise<ITomteInformation> {
+        return new Promise<ITomteInformation>(async (resolve: (value: ITomteInformation | PromiseLike<ITomteInformation>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+            let command: string = "tuxedo-tomte listjson"
             let results: string;
             try {
                 results = await execCmd(command + "");
@@ -182,33 +186,32 @@ async function getTomteInformation() {
             finally {
                 let tomteInformation: ITomteInformation = parseTomteListJson(results);
                 resolve(tomteInformation);
-            }           
+            }
     });
 }
-
-export const tomteHandlers = new Map<string, (...args: any[]) => any>()
-    .set(TomteAPIFunctions.resetToDefaults, async () => {
-        return new Promise<boolean>((resolve, reject) => {
+export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
+    .set(TomteAPIFunctions.resetToDefaults, (): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
             resolve(resetToDefaults());
         });
     })
 
 
-    .set(TomteAPIFunctions.getModuleDescription, async (moduleName, langId) => {
-        return new Promise<string>((resolve, reject) => {
+    .set(TomteAPIFunctions.getModuleDescription, (moduleName: string, langId: string): Promise<string> => {
+        return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
             resolve(getModuleDescription(moduleName, langId));
         });
     })
 
-    .set(TomteAPIFunctions.getTomteInformation, async () => {
-        return new Promise<ITomteInformation>((resolve, reject) => {
+    .set(TomteAPIFunctions.getTomteInformation, (): Promise<ITomteInformation> => {
+        return new Promise<ITomteInformation>((resolve: (value: ITomteInformation | PromiseLike<ITomteInformation>) => void, reject: (reason?: unknown) => void): void => {
             resolve(getTomteInformation());
         });
     })
 
-    .set(TomteAPIFunctions.removeModule, async (moduleName: string) => {
-        return new Promise<boolean>((resolve, reject) => {
-            removeModule(moduleName).then(() => {
+    .set(TomteAPIFunctions.removeModule, (moduleName: string): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            removeModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
                 console.error("tomteGuiBackendAPI: removeModule failed =>", err)
@@ -218,9 +221,9 @@ export const tomteHandlers = new Map<string, (...args: any[]) => any>()
     })
 
 
-    .set(TomteAPIFunctions.installModule, async (moduleName: string) => {
-        return new Promise<boolean>((resolve, reject) => {
-            installModule(moduleName).then(() => {
+    .set(TomteAPIFunctions.installModule, (moduleName: string): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            installModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
                 console.error("tomteGuiBackendAPI: installModule failed =>", err)
@@ -229,9 +232,9 @@ export const tomteHandlers = new Map<string, (...args: any[]) => any>()
         });
     })
 
-    .set(TomteAPIFunctions.unBlockModue, async (moduleName: string) => {
-        return new Promise<boolean>((resolve, reject) => {
-            unBlockModule(moduleName).then(() => {
+    .set(TomteAPIFunctions.unBlockModue, (moduleName: string): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            unBlockModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
                 console.error("tomteGuiBackendAPI: unBlockModule failed =>", err)
@@ -240,9 +243,9 @@ export const tomteHandlers = new Map<string, (...args: any[]) => any>()
         });
     })
 
-    .set(TomteAPIFunctions.blockModule, async (moduleName: string) => {
-        return new Promise<boolean>((resolve, reject) => {
-            blockModule(moduleName).then(() => {
+    .set(TomteAPIFunctions.blockModule, (moduleName: string): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            blockModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
                 console.error("tomteGuiBackendAPI: blockModule failed =>", err)
@@ -251,9 +254,9 @@ export const tomteHandlers = new Map<string, (...args: any[]) => any>()
         });
     })
 
-    .set(TomteAPIFunctions.setMode, async (mode: string) => {
-        return new Promise<boolean>((resolve, reject) => {
-            setMode(mode).then(() => {
+    .set(TomteAPIFunctions.setMode, (mode: string): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            setMode(mode).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
                 console.error("tomteGuiBackendAPI: setMode failed =>", err)

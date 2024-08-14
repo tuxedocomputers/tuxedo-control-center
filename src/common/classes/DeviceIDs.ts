@@ -1,5 +1,5 @@
 // https://dgpu-docs.intel.com/devices/hardware-table.html
-export const intelIGpuDeviceIds = [
+export const intelIGpuDeviceIds: string[] = [
     // Xe Raptor Lake-P (Intel Iris Xe Graphics)
     "A7A9",
     "A7A8",
@@ -484,14 +484,14 @@ export const intelIGpuDeviceIds = [
     "0046",
 ];
 
-const intelVendorId = "8086";
-export const intelIGpuDeviceIdString = intelIGpuDeviceIds
-    .map((id) => `${intelVendorId}:${id}`)
+const intelVendorId: string = "8086";
+export const intelIGpuDeviceIdString: string = intelIGpuDeviceIds
+    .map((id: string): string => `${intelVendorId}:${id}`)
     .join("|");
 
 // https://github.com/openbsd/src/blob/master/sys/dev/pci/drm/amd/amdgpu/amdgpu_devlist.h
 // https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-export const amdIGpuDeviceIds = [
+export const amdIGpuDeviceIds: string[] = [
     // Raphael
     "164E",
 
@@ -605,15 +605,15 @@ export const amdIGpuDeviceIds = [
 ];
 
 const amdVendorId = "1002";
-export const amdIGpuDeviceIdString = amdIGpuDeviceIds
-    .map((id) => `${amdVendorId}:${id}`)
+export const amdIGpuDeviceIdString: string = amdIGpuDeviceIds
+    .map((id: string): string => `${amdVendorId}:${id}`)
     .join("|");
 
-const amdDGpuDeviceIds = [
+const amdDGpuDeviceIds: string[] = [
     // 7600M XT
     "7480",
 ];
 
-export const amdDGpuDeviceIdString = amdDGpuDeviceIds
-    .map((id) => `${amdVendorId}:${id}`)
+export const amdDGpuDeviceIdString: string = amdDGpuDeviceIds
+    .map((id: string): string => `${amdVendorId}:${id}`)
     .join("|");

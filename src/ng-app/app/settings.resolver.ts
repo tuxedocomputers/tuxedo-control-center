@@ -14,7 +14,7 @@ export class ForceYUV420OutputSwitchResolver implements Resolve<boolean> {
         return this.tccdbus.forceYUV420OutputSwitchAvailable
             .asObservable()
             .pipe(
-                filter((value) => value !== undefined),
+                filter((value: boolean): boolean => value !== undefined),
                 first()
             );
     }
@@ -28,7 +28,7 @@ export class ChargingProfilesAvailableResolver implements Resolve<string[]> {
 
     resolve(): Observable<string[]> {
         return this.tccdbus.chargingProfilesAvailable.asObservable().pipe(
-            filter((value) => value !== undefined),
+            filter((value: string[]): boolean => value !== undefined),
             first()
         );
     }
@@ -42,7 +42,7 @@ export class PrimeSelectAvailableResolver implements Resolve<string> {
 
     resolve(): Observable<string> {
         return this.tccdbus.primeState.asObservable().pipe(
-            filter((value) => value !== undefined),
+            filter((value: string): boolean => value !== undefined),
             first()
         );
     }

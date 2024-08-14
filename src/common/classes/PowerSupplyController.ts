@@ -48,20 +48,20 @@ export class PowerSupplyController extends SysFsController {
         super();
     }
 
-    public readonly online = new SysFsPropertyBoolean(path.join(this.basePath, 'online'));
-    public readonly type = new SysFsPropertyString(path.join(this.basePath, 'type'));
+    public readonly online: SysFsPropertyBoolean = new SysFsPropertyBoolean(path.join(this.basePath, 'online'));
+    public readonly type: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'type'));
 
     // Charge control official
-    public readonly chargeControlStartThreshold = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_start_threshold'));
-    public readonly chargeControlEndThreshold = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_end_threshold'));
-    public readonly chargeType = new SysFsPropertyString(path.join(this.basePath, 'charge_type'));
+    public readonly chargeControlStartThreshold: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_start_threshold'));
+    public readonly chargeControlEndThreshold: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_end_threshold'));
+    public readonly chargeType: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'charge_type'));
 
     // Charge control unofficial
-    public readonly chargeControlStartAvailableThresholds = new SysFsPropertyNumListExplicit(path.join(this.basePath, 'charge_control_start_available_thresholds'));
-    public readonly chargeControlEndAvailableThresholds = new SysFsPropertyNumListExplicit(path.join(this.basePath, 'charge_control_end_available_thresholds'));
+    public readonly chargeControlStartAvailableThresholds: SysFsPropertyNumListExplicit = new SysFsPropertyNumListExplicit(path.join(this.basePath, 'charge_control_start_available_thresholds'));
+    public readonly chargeControlEndAvailableThresholds: SysFsPropertyNumListExplicit = new SysFsPropertyNumListExplicit(path.join(this.basePath, 'charge_control_end_available_thresholds'));
 
-    public static async getPowerSupplyBatteries() {
-        const psDevices = SysFsController.getDeviceList('/sys/class/power_supply');
+    public static async getPowerSupplyBatteries(): Promise<PowerSupplyController[]> {
+        const psDevices: string[] = SysFsController.getDeviceList('/sys/class/power_supply');
         const ctrlBatteries: PowerSupplyController[] = [];
         for (const devString of psDevices) {
             const ps = new PowerSupplyController('/sys/class/power_supply/' + devString);
@@ -76,8 +76,8 @@ export class PowerSupplyController extends SysFsController {
         return ctrlBatteries;
     }
 
-    public static async getFirstBattery() {
-        const batteries = await this.getPowerSupplyBatteries();
+    public static async getFirstBattery(): Promise<PowerSupplyController> {
+        const batteries: PowerSupplyController[] = await this.getPowerSupplyBatteries();
         if (batteries?.length > 0) {
             return batteries[0];
         } else {

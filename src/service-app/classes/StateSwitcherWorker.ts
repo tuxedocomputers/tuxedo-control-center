@@ -18,7 +18,7 @@
  */
 import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ProfileStates } from '../../common/models/TccSettings';
+import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
 import { determineState } from '../../common/classes/StateUtils';
 
 export class StateSwitcherWorker extends DaemonWorker {
@@ -26,29 +26,29 @@ export class StateSwitcherWorker extends DaemonWorker {
     private currentState: ProfileStates;
     private currentStateProfileId: string;
 
-    private refreshProfile = false;
+    private refreshProfile: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(2000, "StateSwitcherWorker", tccd);
     }
 
     /** Reset state */
-    public reset() {
+    public reset(): void {
         this.currentState = undefined;
     }
 
     /** Refresh profile application */
-    public reapplyProfile() {
+    public reapplyProfile(): void {
         this.refreshProfile = true;
     }
 
     public onStart(): void {
         // Check state and switch profile if appropriate
-        const newState = determineState();
+        const newState: ProfileStates = determineState();
 
         if (newState !== this.currentState) {
             this.currentState = newState;
-            const newActiveProfileId = this.tccd.settings.stateMap[newState.toString()];
+            const newActiveProfileId: string = this.tccd.settings.stateMap[newState.toString()];
             this.currentStateProfileId = newActiveProfileId;
             if (newActiveProfileId !== undefined) {
                 this.tccd.setCurrentProfileById(newActiveProfileId);
@@ -64,11 +64,11 @@ export class StateSwitcherWorker extends DaemonWorker {
 
     public onWork(): void {
         // Check state and switch profile if appropriate
-        const newState = determineState();
-        const oldActiveProfileId = this.tccd.activeProfile.id;
-        const oldActiveProfileName = this.tccd.activeProfile.name;
+        const newState: ProfileStates = determineState();
+        const oldActiveProfileId: string = this.tccd.activeProfile.id;
+        const oldActiveProfileName: string = this.tccd.activeProfile.name;
 
-        const newStateProfileId = this.tccd.settings.stateMap[newState.toString()];
+        const newStateProfileId: string = this.tccd.settings.stateMap[newState.toString()];
 
         if (newState !== this.currentState || newStateProfileId !== this.currentStateProfileId) {
             /*

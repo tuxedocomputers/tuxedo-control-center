@@ -45,37 +45,37 @@ enum BatteryThresholdOptions {
 })
 export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
-    @Output() hasFeature = new EventEmitter<boolean>();
+    @Output() hasFeature: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public chargingPriosAvailable: string[] = [];
     public chargingProfilesAvailable: string[] = [];
 
-    public currentChargingProfile = '';
-    public currentChargingPriority = '';
+    public currentChargingProfile: string = '';
+    public currentChargingPriority: string = '';
 
-    public chargingProfileProgress = false;
-    public chargingPriorityProgress = false;
+    public chargingProfileProgress: boolean = false;
+    public chargingPriorityProgress: boolean = false;
 
     public chargeStartAvailableThresholds: number[] = [];
     public chargeEndAvailableThresholds: number[] = [];
     public chargeStartThreshold: number;
     public chargeEndThreshold: number;
     public chargeType: string;
-    public chargeThresholdsEnabled = false;
+    public chargeThresholdsEnabled: boolean = false;
 
-    public ctrlChargeStartThreshold = new FormControl(null);
-    public ctrlChargeEndThreshold = new FormControl(null);
-    public ctrlEnableThresholds = new FormControl(null);
-    public ctrlChargingThresholdGroup = new FormControl(null);
-    public chargingThresholdsProgress = false;
+    public ctrlChargeStartThreshold: FormControl = new FormControl(null);
+    public ctrlChargeEndThreshold: FormControl = new FormControl(null);
+    public ctrlEnableThresholds: FormControl = new FormControl(null);
+    public ctrlChargingThresholdGroup: FormControl = new FormControl(null);
+    public chargingThresholdsProgress: boolean = false;
+    // todo: remove, unused
+    public chargingThresholdGroupValue: any = null;
+    public thresholdPresets: Map<String, ThresholdPresets> = new Map<String, ThresholdPresets>();
 
-    public chargingThresholdGroupValue = null;
-    public thresholdPresets = new Map<String, ThresholdPresets>();
-
-    private updateInterval = 1000;
+    private updateInterval: number = 1000;
     private timeout;
 
-    public gridParams = {
+    public gridParams: any = {
         cols: 9,
         headerSpan: 4,
         valueSpan: 2,
@@ -87,7 +87,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingPriorityLabels: Map<string, string> = new Map();
     public chargingPriorityDescriptions: Map<string, string> = new Map();
 
-    public chargingProfilesUrlHref = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
+    public chargingProfilesUrlHref: string = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
 
     constructor(
         private utils: UtilsService
@@ -110,22 +110,22 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.thresholdPresets.set(BatteryThresholdOptions.Stationary, new ThresholdPresets(40, 80));
     }
 
-    ngOnInit() {
-        this.periodicUpdate().then(() => {
-            this.timeout = setInterval(async () => { await this.periodicUpdate(); }, this.updateInterval);
+    ngOnInit(): void {
+        this.periodicUpdate().then((): void => {
+            this.timeout = setInterval(async (): Promise<void> => { await this.periodicUpdate(); }, this.updateInterval);
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         if (this.timeout !== undefined) {
             clearInterval(this.timeout);
         }
     }
 
-    private async periodicUpdate() {
+    private async periodicUpdate(): Promise<void> {
         await this.readAvailableSettings();
 
-        const featureAvailable =
+        const featureAvailable: boolean =
             (this.chargingPriosAvailable?.length > 0 || this.chargingProfilesAvailable?.length > 0) ||
             (this.chargeStartAvailableThresholds?.length > 0 || this.chargeEndAvailableThresholds?.length > 0);
 
@@ -134,7 +134,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async readAvailableSettings(resetControls: boolean = false) {
+    public async readAvailableSettings(resetControls: boolean = false): Promise<boolean> {
 
         this.chargingProfilesAvailable = await window.dbusAPI.getChargingProfilesAvailable();
         this.currentChargingProfile = await window.dbusAPI.getCurrentChargingProfile();
@@ -165,8 +165,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         return true;
     }
 
-    private getThresholdOptionFromData() {
-        let thresholdOption;
+    private getThresholdOptionFromData(): BatteryThresholdOptions {
+        let thresholdOption: BatteryThresholdOptions;
         if (!this.chargeThresholdsEnabled) {
             thresholdOption = BatteryThresholdOptions.HighCapacity;
         } else if (this.chargeStartThreshold === this.thresholdPresets.get(BatteryThresholdOptions.Balanced).start &&
@@ -182,46 +182,46 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         return thresholdOption;
     }
 
-    public async setChargingProfile(chargingProfileDescriptor: string) {
+    public async setChargingProfile(chargingProfileDescriptor: string): Promise<boolean> {
         this.chargingProfileProgress = true;
-        const result = await window.dbusAPI.setChargingProfile(chargingProfileDescriptor);
+        const result: boolean = await window.dbusAPI.setChargingProfile(chargingProfileDescriptor);
         await this.readAvailableSettings();
         this.chargingProfileProgress = false;
 
         return result;
     }
 
-    public async setChargingPriority(chargingPriorityDescriptor: string) {
+    public async setChargingPriority(chargingPriorityDescriptor: string): Promise<boolean> {
         this.chargingPriorityProgress = true;
-        const result = await window.dbusAPI.setChargingPriority(chargingPriorityDescriptor);
+        const result: boolean = await window.dbusAPI.setChargingPriority(chargingPriorityDescriptor);
         await this.readAvailableSettings();
         this.chargingPriorityProgress = false;
 
         return result;
     }
 
-    public async openExternalUrl(url: string) {
+    public async openExternalUrl(url: string): Promise<void> {
         await this.utils.openExternal(url);
     }
 
-    public findClosest(value: number, arr: number[]) {
+    public findClosest(value: number, arr: number[]): number {
         if (!arr || arr?.length === 0) {
             return 0;
         }
 
-        let closest = arr[0];
-        for (let i = 1; i < arr?.length; ++i) {
+        let closest: number = arr[0];
+        for (let i: number = 1; i < arr?.length; ++i) {
             if (Math.abs(arr[i] - value) < Math.abs(closest - value)) {
                 closest = arr[i];
             }
         }        return closest;
     }
 
-    public async sliderStartThresholdChange(changeEvent: MatSliderChange) {
+    public async sliderStartThresholdChange(changeEvent: MatSliderChange): Promise<void> {
 
-        let newValue = changeEvent.value;
-        let validValues = this.chargeStartAvailableThresholds.filter(
-            value => value < this.ctrlChargeEndThreshold.value
+        let newValue: number = changeEvent.value;
+        let validValues: number[] = this.chargeStartAvailableThresholds.filter(
+            (value: number): boolean => value < this.ctrlChargeEndThreshold.value
         );
         newValue = this.findClosest(newValue, validValues);
         this.ctrlChargeStartThreshold.setValue(newValue);
@@ -234,11 +234,11 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async sliderEndThresholdChange(changeEvent: MatSliderChange) {
+    public async sliderEndThresholdChange(changeEvent: MatSliderChange): Promise<void> {
 
-        let newValue = changeEvent.value;
-        let validValues = this.chargeEndAvailableThresholds.filter(
-            value => value > this.ctrlChargeStartThreshold.value
+        let newValue: number = changeEvent.value;
+        let validValues: number[] = this.chargeEndAvailableThresholds.filter(
+            (value: number): boolean => value > this.ctrlChargeStartThreshold.value
         );
         newValue = this.findClosest(newValue, validValues);
         this.ctrlChargeEndThreshold.setValue(newValue);
@@ -251,10 +251,10 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async checkboxEnableThresholdsChange(changeEvent: MatCheckboxChange) {
+    public async checkboxEnableThresholdsChange(changeEvent: MatCheckboxChange): Promise<void> {
         this.chargingThresholdsProgress = true;
 
-        let nextChargeType;
+        let nextChargeType: ChargeType;
         if (changeEvent.checked) {
             nextChargeType = ChargeType.Custom;
         } else {
@@ -266,7 +266,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.chargingThresholdsProgress = false;
     }
 
-    public async thresholdRadioGroupChange(event: MatRadioChange) {
+    public async thresholdRadioGroupChange(event: MatRadioChange): Promise<void> {
 
         this.chargingThresholdsProgress = true;
 

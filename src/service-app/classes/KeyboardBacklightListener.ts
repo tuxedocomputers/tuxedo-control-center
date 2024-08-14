@@ -20,12 +20,11 @@
 import * as fs from 'fs';
 import * as dbus from 'dbus-next';
 
-import { DaemonListener } from "./DaemonListener";
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../common/classes/Utils';
 
-export class KeyboardBacklightListener extends DaemonListener {
+export class KeyboardBacklightListener {
     protected ledsWhiteOnly: string = "/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight";
     protected ledsWhiteOnlyNB05: string = "/sys/bus/platform/devices/tuxedo_nb05_kbd_backlight/leds/white:kbd_backlight";
     protected ledsRGBZones: Array<string> = ["/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight",
@@ -36,21 +35,17 @@ export class KeyboardBacklightListener extends DaemonListener {
     protected sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = {} as dbus.ClientInterface;
     protected onStartRetryCount: number = 5;
 
-    constructor(tccd: TuxedoControlCenterDaemon) {
-        super(tccd);
-
+    constructor(private tccd: TuxedoControlCenterDaemon) {
         this.init();
     }
 
-    public onActiveProfileChanged(): void {}
-
-    private async init() {
+    private async init(): Promise<void> {
         this.updateKeyboardBacklightCapabilities();
 
         if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
             console.log("Could not find keyboard backlight. Retrying...");
             --this.onStartRetryCount;
-            setTimeout(() => { this.init() }, 1000);
+            setTimeout((): void => { this.init() }, 1000);
             return;
         }
 
@@ -85,11 +80,11 @@ export class KeyboardBacklightListener extends DaemonListener {
         }
     }
 
-
+    public onActiveProfileChanged(): void {}
 
     // Input from SysFS
 
-    private async initUPower() {
+    private async initUPower(): Promise<void> {
         let sysDBus: dbus.MessageBus = dbus.systemBus();
 
         // Props to poll LidIsClosed status when required
@@ -110,7 +105,7 @@ export class KeyboardBacklightListener extends DaemonListener {
         }).bind(this));
     }
 
-    private async initSysFSListener() {
+    private async initSysFSListener(): Promise<void> {
         if (this.keyboardBacklightCapabilities.maxRed != undefined) {
             for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
                 if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
@@ -118,7 +113,7 @@ export class KeyboardBacklightListener extends DaemonListener {
                         fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
                             if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
                                 let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-                                let colors = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                                let colors: number[] = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
                                 keyboardBacklightStatesNew[i].red = colors[0];
                                 keyboardBacklightStatesNew[i].green = colors[1];
                                 keyboardBacklightStatesNew[i].blue = colors[2];
@@ -144,7 +139,7 @@ export class KeyboardBacklightListener extends DaemonListener {
             if (this.keyboardBacklightStatesWritingNew == false) {
                 this.keyboardBacklightStatesWritingNew = true;
                 while(this.keyboardBacklightStatesPendingNewJSON !== undefined) {
-                    let keyboardBacklightStatesNew = JSON.parse(this.keyboardBacklightStatesPendingNewJSON);
+                    let keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = JSON.parse(this.keyboardBacklightStatesPendingNewJSON);
                     this.keyboardBacklightStatesPendingNewJSON = undefined;
                     await this.setKeyboardBacklightStates(keyboardBacklightStatesNew, true, true, false);
                 }
@@ -212,85 +207,94 @@ export class KeyboardBacklightListener extends DaemonListener {
 
     // todo: contains duplicate code, remove indents and shorten function
     private updateLEDSRGBZonesForPerKeyKBL(): void {
-        let ledsPerKey = [];
+        let ledsPerKey: string[] = [];
         let iteKeyboardDevices: Array<string> = [];
 
-        const keyboardItePath = "/sys/bus/hid/drivers/tuxedo-keyboard-ite"
+        const keyboardItePath: string = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/"
+        const keyboardIteSymbolicPath: string = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/"
         const keyboardIteAvailable: boolean = fs.existsSync(keyboardItePath)
-        if (keyboardIteAvailable) {
+        const keyboardIteSymbolicAvailable: boolean = fs.existsSync(keyboardIteSymbolicPath)
+
+        if (keyboardIteAvailable && keyboardIteSymbolicAvailable) {
             iteKeyboardDevices =
-                getSymbolicLinks("/sys/bus/hid/drivers/tuxedo-keyboard-ite")
-                    .filter(name => fileOK("/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + name + "/leds"));
+                getSymbolicLinks(keyboardIteSymbolicPath)
+                    .filter((name: string): boolean => fileOK(keyboardIteSymbolicPath + name + "/leds"));
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/" + iteKeyboardDevice + "/leds"
+            let path: string = keyboardIteSymbolicPath + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
-                        .filter(name => name.includes("rgb:kbd_backlight"))
-                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map(name => path + "/" + name));
+                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
+                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map((name: string): string => path + "/" + name));
             }
         }
 
-        const keyboardIte829xPath = "/sys/bus/hid/drivers/ite_829x"
+        const keyboardIte829xPath: string = "/sys/bus/hid/drivers/ite_829x/"
+        const keyboardIte829xSymbolicPath: string = "/sys/bus/hid/drivers/ite_829x/"
         const keyboardIte829Available: boolean = fs.existsSync(keyboardIte829xPath)
-        if (keyboardIte829Available) {
+        const keyboardIte829SybolicAvailable: boolean = fs.existsSync(keyboardIte829xSymbolicPath)
+
+        if (keyboardIte829Available && keyboardIte829SybolicAvailable) {
             iteKeyboardDevices =
-                getSymbolicLinks("/sys/bus/hid/drivers/ite_829x")
-                    .filter(name => fileOK("/sys/bus/hid/drivers/ite_829x/" + name + "/leds"));
+                getSymbolicLinks(keyboardIte829xSymbolicPath)
+                    .filter((name: string): boolean => fileOK(keyboardIte829xSymbolicPath + name + "/leds"));
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
+            let path: string = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
-                        .filter(name => name.includes("rgb:kbd_backlight"))
-                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map(name => path + "/" + name));
+                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
+                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map((name: string): string => path + "/" + name));
             }
         }
 
-        const keyboardIte8291xPath = "/sys/bus/hid/drivers/ite_8291"
+        const keyboardIte8291xPath: string = "/sys/bus/hid/drivers/ite_8291/"
+        const keyboardIte8291xSymbolicPath = "/sys/bus/hid/drivers/ite_8291/"
         const keyboardIte8291Available: boolean = fs.existsSync(keyboardIte8291xPath)
-        if (keyboardIte8291Available) {
+        const keyboardIte8291SymbolicAvailable: boolean = fs.existsSync(keyboardIte8291xSymbolicPath)
+
+        if (keyboardIte8291Available && keyboardIte8291SymbolicAvailable) {
             iteKeyboardDevices =
-                getSymbolicLinks("/sys/bus/hid/drivers/ite_8291")
-                    .filter(name => fileOK("/sys/bus/hid/drivers/ite_8291/" + name + "/leds"));
+                getSymbolicLinks(keyboardIte8291xSymbolicPath)
+                    .filter((name: string): boolean => fileOK(keyboardIte8291xSymbolicPath + name + "/leds"));
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path = "/sys/bus/hid/drivers/ite_8291/" + iteKeyboardDevice + "/leds"
+            let path: string = keyboardIte8291xSymbolicPath + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
-                        .filter(name => name.includes("rgb:kbd_backlight"))
-                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map(name => path + "/" + name));
+                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
+                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map((name: string): string => path + "/" + name));
             }
         }
 
-        const keyboardNb04Path = "/sys/bus/hid/drivers/ite_8291"
-        const keyboardNb04SymbolicPath = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/"
+        const keyboardNb04Path: string = "/sys/bus/hid/drivers/ite_8291/"
+        const keyboardNb04SymbolicPath: string = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/"
         const keyboardNb04Available: boolean = fs.existsSync(keyboardNb04Path)
         const keyboardNb04SymbolicAvailable: boolean = fs.existsSync(keyboardNb04SymbolicPath)
 
         if (keyboardNb04Available && keyboardNb04SymbolicAvailable) {
             iteKeyboardDevices =
-                getSymbolicLinks("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight")
-                    .filter(name => fileOK("/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + name + "/leds"));
+                getSymbolicLinks(keyboardNb04SymbolicPath)
+                    .filter((name: string): boolean => fileOK(keyboardNb04SymbolicPath + name + "/leds"));
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/" + iteKeyboardDevice + "/leds"
+            let path: string = keyboardNb04SymbolicPath + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
-                        .filter(name => name.includes("rgb:kbd_backlight"))
-                        .sort((a, b) => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map(name => path + "/" + name));
+                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
+                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
+                        .map((name: string): string => path + "/" + name));
             }
         }
 
@@ -299,8 +303,8 @@ export class KeyboardBacklightListener extends DaemonListener {
         }
     }
 
-    private async setBufferInput(ledPath: string, bufferOn: boolean) {
-        const bufferedInputPath = ledPath + '/device/controls/buffer_input';
+    private async setBufferInput(ledPath: string, bufferOn: boolean): Promise<void> {
+        const bufferedInputPath: string = ledPath + '/device/controls/buffer_input';
         if (await fileOKAsync(bufferedInputPath)) {
             if (bufferOn) {
                 await fs.promises.appendFile(bufferedInputPath, '1');

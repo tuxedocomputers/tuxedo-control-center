@@ -20,6 +20,7 @@ import { DaemonWorker } from './DaemonWorker';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 import { TuxedoIOAPI as ioAPI, TDPInfo} from '../../native-lib/TuxedoIOAPI';
+import { ITccODMPowerLimits } from 'src/common/models/TccProfile';
 
 export class ODMPowerLimitWorker extends DaemonWorker {
 
@@ -28,7 +29,7 @@ export class ODMPowerLimitWorker extends DaemonWorker {
     }
 
     public onStart(): void {
-        let odmPowerLimitSettings = this.activeProfile.odmPowerLimits;
+        let odmPowerLimitSettings: ITccODMPowerLimits = this.activeProfile.odmPowerLimits;
         if (odmPowerLimitSettings === undefined) {
             odmPowerLimitSettings = { tdpValues: [] }
         }
@@ -43,14 +44,14 @@ export class ODMPowerLimitWorker extends DaemonWorker {
 
             if (newTDPValues?.length === 0) {
                 // Default to max values
-                newTDPValues = tdpInfo.map(tdpEntry => tdpEntry.max);
+                newTDPValues = tdpInfo.map((tdpEntry: TDPInfo): number => tdpEntry.max);
             }
 
             this.tccd.logLine('ODMPowerLimitWorker: Set ODM TDPs '
                 + JSON.stringify(newTDPValues.map(tdpValue => tdpValue + ' W')));
-            const writeSuccess = ioAPI.setTDPValues(newTDPValues);
+            const writeSuccess: boolean = ioAPI.setTDPValues(newTDPValues);
             if (writeSuccess) {
-                for (let i = 0; i < tdpInfo?.length && i < newTDPValues?.length; ++i) {
+                for (let i: number = 0; i < tdpInfo?.length && i < newTDPValues?.length; ++i) {
                     tdpInfo[i].current = newTDPValues[i];
                 }
             } else {

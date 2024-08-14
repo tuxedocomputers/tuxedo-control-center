@@ -26,6 +26,7 @@ import {
 } from "../../common/models/DisplayFreqRes";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import * as child_process from "child_process";
+import { ITccProfile } from "src/common/models/TccProfile";
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
@@ -42,11 +43,11 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     // user is able to switch XDG_SESSION_TYPE in login screen and thus a new check needs to be done
     // not checking XDG_SESSION_TYPE during login screen, checking again on user change
-    private checkUsers() {
-        const loggedInUsers = child_process.execSync(`users`).toString().trim();
+    private checkUsers(): boolean[] {
+        const loggedInUsers: string = child_process.execSync(`users`).toString().trim();
 
-        const usersAvailable = Boolean(loggedInUsers);
-        const usersChanged = loggedInUsers !== this.previousUsers;
+        const usersAvailable: boolean = Boolean(loggedInUsers);
+        const usersChanged: boolean = loggedInUsers !== this.previousUsers;
 
         this.previousUsers = loggedInUsers;
 
@@ -78,15 +79,15 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     public onExit(): void {}
 
     private setActiveDisplayMode(): void {
-        const activeprofile = this.tccd.getCurrentProfile();
+        const activeprofile: ITccProfile = this.tccd.getCurrentProfile();
 
-        const useRefRate = activeprofile?.display?.useRefRate;
-        const activeMode = this.displayInfo?.activeMode;
+        const useRefRate: boolean = activeprofile?.display?.useRefRate;
+        const activeMode: IDisplayMode = this.displayInfo?.activeMode;
 
         if (useRefRate && activeMode) {
-            const refreshRate = activeprofile.display.refreshRate;
+            const refreshRate: number = activeprofile.display.refreshRate;
             // todo: add variable checks to avoid access error
-            const hasDifferentRefreshRate =
+            const hasDifferentRefreshRate: boolean =
                 refreshRate !== activeMode?.refreshRates[0];
 
             if (hasDifferentRefreshRate) {
@@ -125,7 +126,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
     }
 
-    private setDisplayMode(xRes: number, yRes: number, refRate: number) {
+    private setDisplayMode(xRes: number, yRes: number, refRate: number): void {
         this.controller.setRefreshResolution(xRes, yRes, refRate);
     }
 }

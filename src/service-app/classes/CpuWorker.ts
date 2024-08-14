@@ -24,24 +24,24 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { LogicalCpuController, ScalingDriver } from '../../common/classes/LogicalCpuController';
 
 export class CpuWorker extends DaemonWorker {
-    private readonly basePath = '/sys/devices/system/cpu';
+    private readonly basePath: string = '/sys/devices/system/cpu';
     private readonly cpuCtrl: CpuController;
 
-    private readonly preferredAcpiFreqGovernors = [ 'ondemand', 'schedutil', 'conservative' ];
-    private readonly preferredPerformanceAcpiFreqGovernors = [ 'performance' ];
+    private readonly preferredAcpiFreqGovernors: string[] = [ 'ondemand', 'schedutil', 'conservative' ];
+    private readonly preferredPerformanceAcpiFreqGovernors: string[] = [ 'performance' ];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, "CpuWorker", tccd);
         this.cpuCtrl = new CpuController(this.basePath);
     }
 
-    public onStart() {
+    public onStart(): void {
         if (this.tccd.settings.cpuSettingsEnabled) {
             this.applyCpuProfile(this.activeProfile);
         }
     }
 
-    public onWork() {
+    public onWork(): void {
         // Check if current profile CPU values are actually set. If not
         // apply profile again
 
@@ -55,7 +55,7 @@ export class CpuWorker extends DaemonWorker {
         }
     }
 
-    public onExit() {}
+    public onExit(): void {}
 
     /**
      * Choose the default governor for the current system
@@ -77,7 +77,7 @@ export class CpuWorker extends DaemonWorker {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
                 // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
                 // behaves as the acpi-cpufreq governors.
-                const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
+                const availableGovernors: string[] = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
                 for (const governorName of this.preferredAcpiFreqGovernors) {
                     if (availableGovernors.includes(governorName)) {
                         chosenName = governorName;
@@ -133,7 +133,7 @@ export class CpuWorker extends DaemonWorker {
      * @param profile   Profile that contains a 'cpu' key of type ITccProfileCpu.
      *                  Undefined values are interpreted as "use default".
      */
-    private applyCpuProfile(profile: ITccProfile) {
+    private applyCpuProfile(profile: ITccProfile): void {
         try {
             // Reset everything to default on all cores before applying settings
             // Set online status last so that all cores get the same settings
@@ -142,8 +142,8 @@ export class CpuWorker extends DaemonWorker {
             // To use amd-pstate-epp min/max freq settings 'passive' mode is required.
             // Set active if no limit is changed in profile, otherwise set passive.
             if (this.cpuCtrl.amdPstateStatus.isAvailable() && this.cpuCtrl.amdPstateStatus.isWritable()) {
-                const cpuinfoMinFreq = this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT();
-                const cpuinfoMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValueNT();
+                const cpuinfoMinFreq: number = this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT();
+                const cpuinfoMaxFreq: number = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValueNT();
                 if ((profile.cpu.scalingMinFrequency === undefined ||
                     profile.cpu.scalingMinFrequency == cpuinfoMinFreq)
                     &&
@@ -205,7 +205,7 @@ export class CpuWorker extends DaemonWorker {
 
     // todo: function too long
     private validateCpuFreq(): boolean {
-        const profile = this.activeProfile;
+        const profile: ITccProfile = this.activeProfile;
 
         if (!profile.cpu.useMaxPerfGov) {
             // Note: Hard set governor to default (not included in profiles atm)
@@ -215,13 +215,13 @@ export class CpuWorker extends DaemonWorker {
             profile.cpu.governor = this.findPerformanceGovernor();
         }
 
-        let cpuFreqValidConfig = true;
+        let cpuFreqValidConfig: boolean = true;
 
         // Check number of online cores
         this.cpuCtrl.getAvailableLogicalCores();
         if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
-            const currentOnlineCores = this.cpuCtrl.online.readValue();
-            let onlineCoresProfile = profile.cpu.onlineCores;
+            const currentOnlineCores: number[] = this.cpuCtrl.online.readValue();
+            let onlineCoresProfile: number = profile.cpu.onlineCores;
             if (onlineCoresProfile === undefined) { onlineCoresProfile = this.cpuCtrl.cores?.length; }
             if (currentOnlineCores?.length !== onlineCoresProfile) {
                 cpuFreqValidConfig = false;
@@ -245,11 +245,11 @@ export class CpuWorker extends DaemonWorker {
                 if (core.scalingAvailableFrequencies.isAvailable()) {
                     coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 }
-                const coreMinFreq = core.cpuinfoMinFreq.readValue();
-                const coreMaxFreq = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
+                const coreMinFreq: number = core.cpuinfoMinFreq.readValue();
+                const coreMaxFreq: number = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
-                    const minFreq = core.scalingMinFreq.readValue();
-                    let minFreqProfile = profile.cpu.scalingMinFrequency;
+                    const minFreq: number = core.scalingMinFreq.readValue();
+                    let minFreqProfile: number = profile.cpu.scalingMinFrequency;
                     if (minFreqProfile === undefined || minFreqProfile < coreMinFreq) {
                         minFreqProfile = coreMinFreq;
                     } else if (minFreqProfile > coreMaxFreq || profile.cpu.useMaxPerfGov) {
@@ -262,8 +262,8 @@ export class CpuWorker extends DaemonWorker {
                 }
 
                 if (core.scalingMaxFreq.isAvailable() && core.cpuinfoMaxFreq.isAvailable()) {
-                    const maxFreq = core.scalingMaxFreq.readValue();
-                    let maxFreqProfile = profile.cpu.scalingMaxFrequency;
+                    const maxFreq: number = core.scalingMaxFreq.readValue();
+                    let maxFreqProfile: number = profile.cpu.scalingMaxFrequency;
                     if (maxFreqProfile === -1) {
                         if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
                             maxFreqProfile = coreMaxFreq;
@@ -284,8 +284,8 @@ export class CpuWorker extends DaemonWorker {
             }
 
             if (core.scalingGovernor.isAvailable() && core.scalingAvailableGovernors.isAvailable()) {
-                const currentGovernor = core.scalingGovernor.readValue();
-                const governorProfile = profile.cpu.governor;
+                const currentGovernor: string = core.scalingGovernor.readValue();
+                const governorProfile: string = profile.cpu.governor;
                 // Skip check if not set in profile
                 if (governorProfile !== undefined) {
                     if (currentGovernor !== governorProfile) {
@@ -297,7 +297,7 @@ export class CpuWorker extends DaemonWorker {
             }
 
             if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
-                const currentPerformancePreference = core.energyPerformancePreference.readValue();
+                const currentPerformancePreference: string = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
                 if (!profile.cpu.useMaxPerfGov) {
                     performancePreferenceProfile = profile.cpu.energyPerformancePreference
@@ -317,15 +317,15 @@ export class CpuWorker extends DaemonWorker {
         }
 
         if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
-            const currentBoost = this.cpuCtrl.boost.readValue()
-            const coreMaxFreq = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
-            const availableFreqs = this.cpuCtrl.cores[0].scalingAvailableFrequencies.readValueNT();
-            let maxSelectableFreq;
+            const currentBoost: boolean = this.cpuCtrl.boost.readValue()
+            //const coreMaxFreq: number = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
+            const availableFreqs: number[] = this.cpuCtrl.cores[0].scalingAvailableFrequencies.readValueNT();
+            let maxSelectableFreq: number;
             if (availableFreqs !== undefined && availableFreqs?.length > 0) {
                 maxSelectableFreq = Math.max(...availableFreqs);
             }
 
-            const maxFreqProfile = profile.cpu.scalingMaxFrequency;
+            const maxFreqProfile: number = profile.cpu.scalingMaxFrequency;
             if (profile.cpu.useMaxPerfGov) {
                 if (!currentBoost) {
                     cpuFreqValidConfig = false;
@@ -345,8 +345,8 @@ export class CpuWorker extends DaemonWorker {
         }
 
         if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
-            const currentNoTurbo = this.cpuCtrl.intelPstate.noTurbo.readValue();
-            const profileNoTurbo = profile.cpu.noTurbo;
+            const currentNoTurbo: boolean = this.cpuCtrl.intelPstate.noTurbo.readValue();
+            const profileNoTurbo: boolean = profile.cpu.noTurbo;
 
             if (profileNoTurbo !== undefined) {
                 if (currentNoTurbo !== profileNoTurbo) {

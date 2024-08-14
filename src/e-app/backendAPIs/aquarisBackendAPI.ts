@@ -27,15 +27,15 @@ import { AquarisState, AquarisAPIFunctions } from '../../common/models/IAquarisA
 import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from '../LCT21001';
 import { userConfig } from './initMain';
 
-async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false) {
+async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false): Promise<void> {
     if (!aquarisIoProgress) {
         try {
             aquarisIoProgress = true;
             let updatedSomething;
             do {
-                let updateLed = false;
-                let updateFan = false;
-                let updatePump = false;
+                let updateLed: boolean = false;
+                let updateFan: boolean = false;
+                let updatePump: boolean = false;
 
                 updateLed = overrideCheck ||
                             current.red !== next.red || current.green !== next.green || current.blue !== next.blue ||
@@ -98,21 +98,21 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
 let aquarisStateExpected: AquarisState;
 let aquarisStateCurrent: AquarisState;
 
-let aquarisIoProgress = false;
-let aquarisSearchProgress = false;
-let aquarisConnectProgress = false;
+let aquarisIoProgress: boolean = false;
+let aquarisSearchProgress: boolean = false;
+let aquarisConnectProgress: boolean = false;
 
-let aquarisHasBluetooth = true;
+let aquarisHasBluetooth: boolean = true;
 
 let searchingTimeout: NodeJS.Timeout;
-let searchingDelayMs = 1000;
-let discoverTries = 0;
-const discoverMaxTries = 5;
-let interestTries = 0;
+let searchingDelayMs: number = 1000;
+let discoverTries: number = 0;
+const discoverMaxTries: number = 5;
+let interestTries: number = 0;
 const interestMaxTries = 8;
-let isSearching = false;
+let isSearching: boolean = false;
 
-async function doSearch() {
+async function doSearch(): Promise<void> {
     aquarisSearchProgress = true;
     try {
         isSearching = true;
@@ -127,7 +127,7 @@ async function doSearch() {
                 return;
             }
             // Wait a moment after reconnect for initial discovery to have a chance
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 500));
         } else {
             discoverTries += 1;
         }
@@ -148,15 +148,15 @@ async function doSearch() {
     }
 }
 
-async function startSearch() {
+async function startSearch(): Promise<void> {
     if (!isSearching) {
         await doSearch();
     }
     interestTries = 0;
 }
 
-async function stopSearch() {
-    while (aquarisSearchProgress) await new Promise(resolve => setTimeout(resolve, 100));
+async function stopSearch(): Promise<void> {
+    while (aquarisSearchProgress) await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 100));
     devicesList = [];
     isSearching = false;
     clearTimeout(searchingTimeout);
@@ -165,7 +165,7 @@ async function stopSearch() {
     discoverTries = discoverMaxTries;
 }
 
-export async function aquarisCleanUp() {
+export async function aquarisCleanUp(): Promise<void> {
     if (aquaris !== undefined) {
         await aquaris.disconnect();
         await stopSearch();
@@ -173,20 +173,21 @@ export async function aquarisCleanUp() {
     }
 }
 
-async function aquarisConnectedDemo() {
+async function aquarisConnectedDemo(): Promise<boolean> {
     return aquarisStateCurrent !== undefined && aquarisStateCurrent.deviceUUID === 'demo';
 }
 
 let devicesList: DeviceInfo[] = [];
 const aquaris = new LCT21001();
-export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
-    .set(AquarisAPIFunctions.connect, async (deviceUUID) => {
+
+export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
+    .set(AquarisAPIFunctions.connect, async (deviceUUID: string): Promise<void> => {
         aquarisConnectProgress = true;
         try {
             await stopSearch();
 
             if (deviceUUID === 'demo') {
-                await new Promise(resolve => setTimeout(resolve, 600));
+                await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 600));
             } else {
                 await aquaris.connect(deviceUUID);
             }
@@ -204,7 +205,7 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
                 fanOn: true,
                 pumpOn: true
             };
-            const aquarisSavedSerialized = await userConfig.get('aquarisSaveState');
+            const aquarisSavedSerialized: string = await userConfig.get('aquarisSaveState');
             if (aquarisSavedSerialized !== undefined) {
                 aquarisStateExpected = JSON.parse(aquarisSavedSerialized) as AquarisState;
             } else {
@@ -219,9 +220,9 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         }
     })
 
-    .set(AquarisAPIFunctions.disconnect, async () => {
+    .set(AquarisAPIFunctions.disconnect, async (): Promise<void> => {
         if (await aquarisConnectedDemo()) {
-            await new Promise(resolve => setTimeout(resolve, 600));
+            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 600));
         } else {
             await aquaris.disconnect();
         }
@@ -229,13 +230,13 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         aquarisStateCurrent.deviceUUID = undefined;
     })
 
-    .set(AquarisAPIFunctions.isConnected, async () => {
+    .set(AquarisAPIFunctions.isConnected, async (): Promise<boolean> => {
         if (await aquarisConnectedDemo()) return true;
 
         if (aquarisIoProgress) {
             return true;
         } else {
-            const isConnected = await aquaris.isConnected();
+            const isConnected: boolean = await aquaris.isConnected();
             if (!isConnected && aquarisStateExpected !== undefined) {
                 aquarisStateExpected.deviceUUID = undefined;
             }
@@ -243,32 +244,32 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         }
     })
 
-    .set(AquarisAPIFunctions.hasBluetooth, async () => {
+    .set(AquarisAPIFunctions.hasBluetooth, async (): Promise<boolean> => {
         return aquarisHasBluetooth || await aquarisConnectedDemo();
     })
 
-    .set(AquarisAPIFunctions.startDiscover, async () => {
+    .set(AquarisAPIFunctions.startDiscover, async (): Promise<void> => {
 
     })
 
-    .set(AquarisAPIFunctions.stopDiscover, async () => {
+    .set(AquarisAPIFunctions.stopDiscover, async (): Promise<void> => {
 
     })
 
-    .set(AquarisAPIFunctions.getDevices, async () => {
+    .set(AquarisAPIFunctions.getDevices, async (): Promise<DeviceInfo[]> => {
         await startSearch();
         return devicesList;
     })
 
-    .set(AquarisAPIFunctions.getState, async () => {
+    .set(AquarisAPIFunctions.getState, async (): Promise<AquarisState> => {
         return aquarisStateExpected;
     })
 
-    .set(AquarisAPIFunctions.readFwVersion, async () => {
+    .set(AquarisAPIFunctions.readFwVersion, async (): Promise<string> => {
         return (await aquaris.readFwVersion()).toString();
     })
 
-    .set(AquarisAPIFunctions.updateLED, async (red, green, blue, state) => {
+    .set(AquarisAPIFunctions.updateLED, async (red: number, green: number, blue: number, state: RGBState | number): Promise<void> => {
         aquarisStateExpected.red = red;
         aquarisStateExpected.green = green;
         aquarisStateExpected.blue = blue;
@@ -277,35 +278,35 @@ export const aquarisHandlers = new Map<string, (...args: any[]) => any>()
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.writeRGBOff, async () => {
+    .set(AquarisAPIFunctions.writeRGBOff, async (): Promise<void> => {
         aquarisStateExpected.ledOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.writeFanMode, async (dutyCyclePercent) => {
+    .set(AquarisAPIFunctions.writeFanMode, async (dutyCyclePercent: number): Promise<void> => {
         aquarisStateExpected.fanDutyCycle = dutyCyclePercent;
         aquarisStateExpected.fanOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.writeFanOff, async () => {
+    .set(AquarisAPIFunctions.writeFanOff, async (): Promise<void> => {
         aquarisStateExpected.fanOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.writePumpMode, async (dutyCyclePercent, voltage) => {
+    .set(AquarisAPIFunctions.writePumpMode, async (dutyCyclePercent: number, voltage: PumpVoltage | number): Promise<void> => {
         aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
         aquarisStateExpected.pumpVoltage = voltage;
         aquarisStateExpected.pumpOn = true;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.writePumpOff, async () => {
+    .set(AquarisAPIFunctions.writePumpOff, async (): Promise<void> => {
         aquarisStateExpected.pumpOn = false;
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.saveState, async () => {
+    .set(AquarisAPIFunctions.saveState, async (): Promise<void> => {
         if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });

@@ -19,18 +19,18 @@ export class WebcamPreviewComponent implements OnInit {
 
     @ViewChild("video", { static: true })
     public video: ElementRef;
-    mediaDeviceStream: any;
+    mediaDeviceStream: MediaStream;
     spinnerActive: boolean = false;
 
     ngOnInit(): void {
-        window.webcam.onSettingWebcamWithLoading(async (event, config) => {
+        window.webcam.onSettingWebcamWithLoading(async (event: any, config: WebcamConstraints): Promise<void> => {
             document.getElementById("video").style.visibility = "hidden";
                 this.spinnerActive = true;
                 this.cdref.detectChanges();
                 this.stopWebcam();
                 await this.setWebcamWithConfig(config);
                 window.webcamAPI.applyControls();
-                setTimeout(async () => {
+                setTimeout(async (): Promise<void> => {
                     document.getElementById("video").style.visibility =
                         "visible";
                     this.spinnerActive = false;
@@ -47,16 +47,16 @@ export class WebcamPreviewComponent implements OnInit {
             .getUserMedia({
                 video: config,
             })
-            .then(async (stream) => {
+            .then(async (stream: MediaStream): Promise<void> => {
                 this.video.nativeElement.srcObject = stream;
                 this.mediaDeviceStream = stream;
             });
-        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
+        this.mediaDeviceStream.getVideoTracks()[0].onended = (): void => {
             window.webcamAPI.videoEnded();
         };
     }
 
-    private stopWebcam() {
+    private stopWebcam(): void {
         this.video.nativeElement.pause();
         if (this.mediaDeviceStream != undefined) {
             for (const track of this.mediaDeviceStream.getTracks()) {
@@ -66,7 +66,7 @@ export class WebcamPreviewComponent implements OnInit {
         this.video.nativeElement.srcObject = null;
     }
 
-    async ngOnDestroy() {
+    async ngOnDestroy(): Promise<void> {
         this.stopWebcam();
     }
 }

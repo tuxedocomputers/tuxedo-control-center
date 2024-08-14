@@ -42,7 +42,7 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
     public onStart(): void {
         let settings_changed: boolean = false;
 
-        for (let card = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
+        for (let card: number = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
             for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
                 let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
                 if (fileOK(path)) {

@@ -27,13 +27,13 @@ export class XDisplayRefreshRateController {
 
     private displayEnvVariable: string = "";
     private xAuthorityFile: string = "";
-    public XDisplayRefreshRateController() {
+    public XDisplayRefreshRateController(): void {
         this.displayName = "";
         this.setEnvVariables();
     }
 
     private setEnvVariables(): void {
-        const envVariables = child_process
+        const envVariables: string = child_process
             .execSync(
                 `cat $(printf "/proc/%s/environ " $(pgrep -vu root | tail -n 20)) 2>/dev/null | \
                 tr '\\0' '\\n' | \
@@ -45,10 +45,10 @@ export class XDisplayRefreshRateController {
             )
             .toString();
 
-        const displayMatch = envVariables.match(/^DISPLAY=(.*)$/m);
-        const xAuthorityMatch = envVariables.match(/^XAUTHORITY=(.*)$/m);
-        const xdgSessionMatch = envVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
-        const userMatch = envVariables.match(/^USER=(.*)$/m);
+        const displayMatch: RegExpMatchArray = envVariables.match(/^DISPLAY=(.*)$/m);
+        const xAuthorityMatch: RegExpMatchArray = envVariables.match(/^XAUTHORITY=(.*)$/m);
+        const xdgSessionMatch: RegExpMatchArray = envVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
+        const userMatch: RegExpMatchArray = envVariables.match(/^USER=(.*)$/m);
 
         // additional checks to make sure env variables are not taken from login screen
         // they shouldn't be triggered since no collection happens when no users are logged in
@@ -61,14 +61,14 @@ export class XDisplayRefreshRateController {
             return;
         }
 
-        const xAuthorityFile = xAuthorityMatch
+        const xAuthorityFile: string = xAuthorityMatch
             ? xAuthorityMatch[1].replace("XAUTHORITY=", "").trim()
             : "";
 
         // gdm XDG_SESSION_TYPE can differ from actual session type
         // Ubuntu creates xAuthority file with user gdm and that user name is unavailable,
         // but Tuxedo OS with sddm allows the user name gdm
-        const xAuthorityFileInfo = child_process
+        const xAuthorityFileInfo: string = child_process
             .execSync(`ls -l ${xAuthorityFile}`)
             .toString();
 
@@ -88,7 +88,7 @@ export class XDisplayRefreshRateController {
             ? xAuthorityFile
             : "";
 
-        const sessionType = xdgSessionMatch
+        const sessionType: string = xdgSessionMatch
             ? xdgSessionMatch[1]
                   .replace("XDG_SESSION_TYPE=", "")
                   .trim()
@@ -132,7 +132,7 @@ export class XDisplayRefreshRateController {
             return undefined;
         }
 
-        const result = child_process
+        const result: string = child_process
             .execSync(
                 `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable} --current`
             )
@@ -141,13 +141,13 @@ export class XDisplayRefreshRateController {
         const displayNameRegex = /(eDP\S*|LVDS\S*)/;
 
         // for example "1920x1080" and "1920x1080i"
-        var resolutionRegex = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?/;
+        var resolutionRegex: RegExp = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?/;
 
         // for example "60.00*+", "50.00", "59.94" and 59.99"
-        var freqRegex = /[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?/g;
+        var freqRegex: RegExp = /[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?/g;
 
         // matches currently active config, for example "2560x1440 165.00*+ 40.00 +"
-        var fullLineRegex =
+        var fullLineRegex: RegExp =
             /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?(\s+[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?)+/;
 
         let newDisplayModes: IDisplayFreqRes = {
@@ -160,13 +160,13 @@ export class XDisplayRefreshRateController {
             displayModes: [],
         };
 
-        const lines = result.split("\n");
-        const lineIter = lines[Symbol.iterator]();
-        let foundDisplayName = false;
-        let currLine = lineIter.next().value;
+        const lines: string[] = result.split("\n");
+        const lineIter: IterableIterator<string> = lines[Symbol.iterator]();
+        let foundDisplayName: boolean = false;
+        let currLine: string = lineIter.next().value;
 
         while (currLine && !foundDisplayName) {
-            const displayNameMatch = currLine.match(displayNameRegex);
+            const displayNameMatch: any = currLine.match(displayNameRegex);
             if (displayNameMatch) {
                 newDisplayModes.displayName = this.displayName =
                     displayNameMatch[0];
@@ -194,15 +194,15 @@ export class XDisplayRefreshRateController {
         freqRegex: RegExp,
         newDisplayModes: IDisplayFreqRes
     ): void {
-        const resolution = line.match(resolutionRegex)[0].split("x");
-        const refreshrates = line.match(freqRegex);
+        const resolution: string[] = line.match(resolutionRegex)[0].split("x");
+        const refreshrates: RegExpMatchArray = line.match(freqRegex);
         const newMode: IDisplayMode = {
             refreshRates: [],
             xResolution: parseInt(resolution[0]),
             yResolution: parseInt(resolution[1]),
         };
         for (let rate of refreshrates) {
-            const num = parseFloat(rate.replace(/[^0-9.]/g, ""));
+            const num: number = parseFloat(rate.replace(/[^0-9.]/g, ""));
             if (!newMode?.refreshRates.includes(num)) {
                 newMode?.refreshRates.push(num);
             }
@@ -217,7 +217,7 @@ export class XDisplayRefreshRateController {
         newDisplayModes: IDisplayFreqRes,
         newMode: IDisplayMode
     ): void {
-        const activeRateIndex = refreshrates.findIndex((rate) =>
+        const activeRateIndex: number = refreshrates.findIndex((rate: string): boolean =>
             rate.includes("*")
         );
         if (activeRateIndex !== -1) {

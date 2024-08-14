@@ -58,7 +58,7 @@ export class TccProfile implements ITccProfile {
     }
 }
 
-interface ITccProfileDisplay {
+export interface ITccProfileDisplay {
     brightness: number;
     useBrightness: boolean;
     refreshRate: number;
@@ -92,11 +92,11 @@ interface ITccProfileFanControl {
     customFanCurve: ITccFanProfile;
 }
 
-interface ITccODMProfile {
+export interface ITccODMProfile {
     name: string;
 }
 
-interface ITccODMPowerLimits {
+export interface ITccODMPowerLimits {
     tdpValues: number[];
 }
 

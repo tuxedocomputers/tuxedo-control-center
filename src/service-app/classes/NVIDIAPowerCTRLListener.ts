@@ -29,7 +29,6 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(tccd);
-
         this.init();
     }
 

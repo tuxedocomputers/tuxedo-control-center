@@ -38,17 +38,17 @@ export class AppComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
+        this.subscriptions.add(this.utils.themeClass.subscribe((themeClassName: string): void => { this.componentThemeCssClass = themeClassName; }));
 
         // Register light/dark update from main process
-        window.ipc.onUpdateBrightnessMode(async () => {
+        window.ipc.onUpdateBrightnessMode(async (): Promise<void> => {
             this.utils.updateBrightnessMode();
           });
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
     }
 
-    ngAfterContentChecked() {
+    ngAfterContentChecked(): void {
         this.cdref.detectChanges();
     }
 

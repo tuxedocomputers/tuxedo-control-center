@@ -24,21 +24,21 @@ export class TccTray {
 
     private tray: Electron.Tray;
 
-    public state = new TrayState();
-    public events = new TrayEvents();
+    public state: TrayState = new TrayState();
+    public events: TrayEvents = new TrayEvents();
 
-    constructor(public trayIcon) {
+    constructor(public trayIcon: Electron.NativeImage | string) {
     }
 
-    public isActive() {
+    public isActive(): boolean {
         return this.tray !== undefined && !this.tray.isDestroyed();
     }
 
-    public destroy() {
+    public destroy(): void {
         this.tray.destroy();
     }
 
-    public async create() {
+    public async create(): Promise<void> {
 
         if (!this.tray) {
             this.tray = new Tray(this.trayIcon);
@@ -46,11 +46,12 @@ export class TccTray {
             this.tray.setToolTip('TUXEDO Control Center');
         }
 
-        const profilesSubmenu: Object[] = this.state.profiles.map(profile => {
+        // todo: add type, don't use Object as type
+        const profilesSubmenu: Object[] = this.state.profiles.map((profile: TccProfile): { label: string, click: () => void, type: string, checked: boolean} => {
             // Creation of each profile selection submenu item
             return {
                 label: profile.name,
-                click: () => this.events.profileClick(profile.id),
+                click: (): void => this.events.profileClick(profile.id),
                 type: 'radio',
                 checked: profile.id === this.state.activeProfile.id
             };
@@ -62,9 +63,9 @@ export class TccTray {
             { type: 'separator' }
         );
 
-        const contextMenu = Menu.buildFromTemplate([
-            { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
-            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: this.state.hasAquaris },
+        const contextMenu: Menu = Menu.buildFromTemplate([
+            { label: 'TUXEDO Control Center', type: 'normal', click: (): void => this.events.startTCCClick() },
+            { label: 'Aquaris control', type: 'normal', click: (): void => this.events.startAquarisControl(), visible: this.state.hasAquaris },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
@@ -72,18 +73,18 @@ export class TccTray {
             },
             {
                     label: 'Tray autostart', type: 'checkbox', checked: this.state.isAutostartTrayInstalled,
-                    click: () => this.events.autostartTrayToggle()
+                    click: (): void => this.events.autostartTrayToggle()
             },
             {
                 label: 'Power save blocker',
                 type: 'checkbox',
-                click: () => { this.events.powersaveBlockerClick(); },
+                click: (): void => { this.events.powersaveBlockerClick(); },
                 checked: this.state.powersaveBlockerActive
             },
             {
                 label: "Fn-Lock",
                 type: "checkbox",
-                click: () => {
+                click: (): void => {
                     this.events.fnLockClick(this.state.fnLockStatus);
                 },
                 checked: this.state.fnLockStatus,
@@ -97,19 +98,19 @@ export class TccTray {
                     {
                         label: 'Select dGPU',
                         type: 'normal',
-                        click: () => this.events.selectNvidiaClick(),
+                        click: (): void => this.events.selectNvidiaClick(),
                         visible: this.state.primeQuery !== 'dGPU',
                     },
                     {
                         label: 'Apply on-demand mode',
                         type: 'normal',
-                        click: () => this.events.selectOnDemandClick(),
+                        click: (): void => this.events.selectOnDemandClick(),
                         visible: this.state.primeQuery !== 'on-demand'
                     },
                     {
                         label: 'Select iGPU',
                         type: 'normal',
-                        click: () => this.events.selectBuiltInClick(),
+                        click: (): void => this.events.selectBuiltInClick(),
                         visible: this.state.primeQuery !== 'iGPU'
                     }
                 ],
@@ -117,7 +118,7 @@ export class TccTray {
             { type: 'separator' },
             { label: this.state.tccGUIVersion, type: 'normal', enabled: false },
             { type: 'separator' },
-            { label: 'Exit', type: 'normal', click: () => this.events.exitClick() }
+            { label: 'Exit', type: 'normal', click: (): void => this.events.exitClick() }
         ]);
         this.tray.setContextMenu(contextMenu);
     }

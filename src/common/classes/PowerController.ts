@@ -15,9 +15,9 @@ export class PowerController {
 
     public getCurrentPower(): number {
         if (!this.RAPLPowerStatus) return -1;
-        const energyIncrement = this.intelRAPL.getEnergy() - this.currentEnergy;
-        const delay = this.getDelay();
-        const powerDraw =
+        const energyIncrement: number = this.intelRAPL.getEnergy() - this.currentEnergy;
+        const delay: number = this.getDelay();
+        const powerDraw: number =
             delay && this.currentEnergy > 0
                 ? energyIncrement / delay / 1000000
                 : -1;
@@ -26,8 +26,8 @@ export class PowerController {
     }
 
     private getDelay(): number {
-        const currentTime = Date.now();
-        const timeDifference =
+        const currentTime: number = Date.now();
+        const timeDifference: number =
             this.lastUpdateTime > 0
                 ? (currentTime - this.lastUpdateTime) / 1000
                 : -1;

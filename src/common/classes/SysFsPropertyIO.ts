@@ -102,8 +102,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      *
      * @param value Value in the appropriate type to write
      */
-    public writeValue(value: T) {
-        const stringValue = this.convertTypeToString(value);
+    public writeValue(value: T): void {
+        const stringValue: string = this.convertTypeToString(value);
         try {
             if (!fs.existsSync(this.writePath)) {
                 throw Error('Could not write value, no file found: ' + this.writePath);
@@ -118,8 +118,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     /**
      * Async version of writeValue
      */
-    public async writeValueA(value: T) {
-        const stringValue = this.convertTypeToString(value);
+    public async writeValueA(value: T): Promise<void> {
+        const stringValue: string = this.convertTypeToString(value);
         try {
             return await fsp.writeFile(this.writePath, stringValue, { flag: 'w' });
         } catch (err: unknown) {
@@ -175,7 +175,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     /**
      * Set a callback on changes to value
      */
-    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => any): Array<fs.FSWatcher> {
+    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => Array<fs.FSWatcher>): Array<fs.FSWatcher> {
         if (this.readPath == this.writePath) {
             return [fs.watch(this.readPath, listener)];
         }

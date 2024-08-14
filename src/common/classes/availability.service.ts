@@ -19,7 +19,7 @@ export class AvailabilityService {
     private nvidiaDevices: number;
 
     constructor() {
-        const devices = this.getDevices();
+        const devices: IDeviceCounts = this.getDevices();
         this.iGpuAvailable =
             devices.intelIGpuDevices === 1 || devices.amdIGpuDevices === 1;
         this.dGpuAvailable =
@@ -56,23 +56,23 @@ export class AvailabilityService {
     // using || to return a success code to avoid throwing an error in execCmdSync and : means no-op
     private countDevicesMatchingPattern(pattern: string): number {
         const grepCmd = `grep -lP '${pattern}' /sys/bus/pci/devices/*/uevent || :`;
-        const output = execCommandSync(grepCmd);
+        const output: string = execCommandSync(grepCmd);
         return countLines(output);
     }
 
     private countNvidiaDevices(): number {
         const nvidiaVendorId = "10DE";
         const grepCmd = `grep -lx '0x${nvidiaVendorId.toLowerCase()}' /sys/bus/pci/devices/*/vendor || :`;
-        const output = execCommandSync(grepCmd);
+        const output: string = execCommandSync(grepCmd);
 
         // count multiple paths as one
         // example: "0000:01:00.1" and "0000:01:00.2" belong to the device "0000:01:00"
-        const distinctPaths = [
+        const distinctPaths: string[] = [
             ...new Set(
                 output
                     .match(/\/sys\/bus\/pci\/devices\/([^\s]+)/g)
-                    ?.map((path) => {
-                        const prefix = path.split("/")[5];
+                    ?.map((path: string): string => {
+                        const prefix: string = path.split("/")[5];
                         return prefix.substring(0, prefix.lastIndexOf("."));
                     })
             ),

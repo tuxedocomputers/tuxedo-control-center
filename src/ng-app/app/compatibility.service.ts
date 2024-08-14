@@ -20,14 +20,15 @@ import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
-import { dbusVariant, TimeData } from 'src/common/models/IFanData';
+import { dbusVariant, IDBusFanData, TimeData } from 'src/common/models/IFanData';
 import { SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+import { Subject } from 'rxjs';
+import { ICpuPower } from 'src/common/models/TccPowerSettings';
 
 @Injectable({
     providedIn: "root",
 })
 export class CompatibilityService {
-
   constructor(
         private tccDbus: TccDBusClientService,
         private sysfs: SysFsService
@@ -45,7 +46,7 @@ export class CompatibilityService {
         return this.hasFanControl;
     }
 
-    private hasPowerDrawWithValue(powerData: any): boolean {
+    private hasPowerDrawWithValue(powerData: ICpuPower): boolean {
         return (
             typeof powerData?.powerDraw !== "undefined" &&
             powerData.powerDraw > -1
@@ -68,23 +69,23 @@ export class CompatibilityService {
     }
 
     get hasCpuTemp(): boolean {
-        const fanData = this.tccDbus.fanData?.value;
+        const fanData: IDBusFanData = this.tccDbus.fanData?.value;
         const { cpu } = fanData;
-        const cpuTemp = cpu?.temp;
+        const cpuTemp: TimeData = cpu?.temp;
         return this.hasDataWithValue(cpuTemp);
     }
 
     get hasIGpuTemp(): boolean {
-        const temp = this.tccDbus.iGpuInfo?.value?.temp ?? -1;
+        const temp: number = this.tccDbus.iGpuInfo?.value?.temp ?? -1;
 
         return temp > 0;
     }
 
     get hasDGpuTemp(): boolean {
-        const fanData = this.tccDbus.fanData?.value;
+        const fanData: IDBusFanData = this.tccDbus.fanData?.value;
         const { gpu1, gpu2 } = fanData;
-        const gpu1Temp = gpu1?.temp;
-        const gpu2Temp = gpu2?.temp;
+        const gpu1Temp: TimeData = gpu1?.temp;
+        const gpu2Temp: TimeData = gpu2?.temp;
 
         return (
             this.hasDataWithValue(gpu1Temp) || this.hasDataWithValue(gpu2Temp)
@@ -104,18 +105,18 @@ export class CompatibilityService {
     }
 
     get hasCpuFan(): boolean {
-        const fanData = this.tccDbus.fanData?.value;
+        const fanData: IDBusFanData = this.tccDbus.fanData?.value;
         const { cpu } = fanData;
-        const cpuSpeed = cpu?.speed;
+        const cpuSpeed: TimeData = cpu?.speed;
 
         return this.hasDataWithValue(cpuSpeed);
     }
 
     get hasDGpuFan(): boolean {
-        const fanData = this.tccDbus.fanData?.value;
+        const fanData: IDBusFanData = this.tccDbus.fanData?.value;
         const { gpu1, gpu2 } = fanData;
-        const gpu1Speed = gpu1?.speed;
-        const gpu2Speed = gpu2?.speed;
+        const gpu1Speed: TimeData = gpu1?.speed;
+        const gpu2Speed: TimeData = gpu2?.speed;
 
         return (
             this.hasDataWithValue(gpu1Speed) || this.hasDataWithValue(gpu2Speed)
@@ -130,7 +131,7 @@ export class CompatibilityService {
     }
 
     get hasIGpuPowerDraw(): boolean {
-        const iGpuPowerDraw = this.tccDbus.iGpuInfo?.value?.powerDraw;
+        const iGpuPowerDraw: number = this.tccDbus.iGpuInfo?.value?.powerDraw;
 
         return (
             iGpuPowerDraw !== undefined &&
@@ -139,7 +140,7 @@ export class CompatibilityService {
     }
 
     get hasDGpuPowerDraw(): boolean {
-        const dGpuPowerDraw = this.tccDbus.dGpuInfo?.value?.powerDraw;
+        const dGpuPowerDraw: number = this.tccDbus.dGpuInfo?.value?.powerDraw;
 
         return (
             dGpuPowerDraw !== undefined &&
@@ -184,11 +185,12 @@ export class CompatibilityService {
         return this.hasODMPowerLimitControl && this.hasODMProfileControl;
     }
 
-    get tccDbusAvailable() {
+    // todo: check if Subject is correct
+    get tccDbusAvailable(): Subject<boolean> {
         return this.tccDbus.dbusAvailable;
     }
 
-    get hasAquaris() {
+    get hasAquaris(): boolean {
         return this.tccDbus.hasAquaris;
     }
 
@@ -196,13 +198,13 @@ export class CompatibilityService {
      * Condition where max freq workaround is applicable
      * (aka max freq missing regulated through boost flag)
      */
-    get hasMissingMaxFreqBoostWorkaround() {
+    get hasMissingMaxFreqBoostWorkaround(): boolean {
         if (
             this.sysfs.generalCpuInfo.value !== undefined &&
             this.sysfs.logicalCoreInfo.value !== undefined
         ) {
-            const boost = this.sysfs.generalCpuInfo.value.boost;
-            const scalingDriver =
+            const boost: boolean = this.sysfs.generalCpuInfo.value.boost;
+            const scalingDriver: string =
                 this.sysfs.logicalCoreInfo.value[0].scalingDriver;
             return (
                 boost !== undefined &&

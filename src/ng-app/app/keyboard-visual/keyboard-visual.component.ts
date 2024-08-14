@@ -36,32 +36,33 @@ export class KeyboardVisualComponent implements OnInit {
     @Input()
     keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
     @Input() chosenColorHex: Array<string>;
-    @Output() selectedZonesChange = new EventEmitter<number[]>();
+    @Output() selectedZonesChange: EventEmitter<number[]> = new EventEmitter<number[]>();
     public selectedZones: Array<number> = [];
     public divHeight: number;
-    private viewInitialized = false;
+    private viewInitialized: boolean = false;
 
+    // todo: constructor is unnecessary
     constructor() {}
 
     ngOnInit(): void {
         this.selectedZones = Array.from(
             { length: this.keyboardBacklightCapabilities.zones },
-            (_, i) => i
+            (_: unknown, i: number): number => i
         );
         this.selectedZonesChange.emit(this.selectedZones);
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.viewInitialized = true;
         this.updateHeight();
     }
 
     @HostListener("window:resize")
-    onResize() {
+    onResize(): void {
         this.updateHeight();
     }
 
-    updateHeight() {
+    updateHeight(): void {
         if (this.viewInitialized) {
             let el: HTMLElement;
             if (this.keyboardBacklightCapabilities.zones === 4) {
@@ -82,7 +83,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     private addOrRemoveSelectedZones(num: number): number[] {
-        const index = this.selectedZones.indexOf(num);
+        const index: number = this.selectedZones.indexOf(num);
 
         if (index !== -1) {
             this.selectedZones.splice(index, 1);
@@ -93,7 +94,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public getSvgHeight(): number {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 1 || zones > 4) {
             return 205;
@@ -102,7 +103,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public getSvgWidth(): number {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 1 || zones > 4) {
             return 728;
@@ -111,7 +112,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public calculateTranslateValue(zone: number): string {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 3) {
             return `${832.61151 + zone * 16}, 535.06891`;
@@ -121,7 +122,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public updateZoneOpacity(event: MouseEvent, zone: number): void {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 1 || zones > 4) {
             return;
@@ -132,9 +133,9 @@ export class KeyboardVisualComponent implements OnInit {
         }
 
         this.selectedZonesChange.emit(this.addOrRemoveSelectedZones(zone));
-        const gElements = document.querySelectorAll("g.key-group");
-        gElements.forEach((g: SVGGraphicsElement) => {
-            const isSelected = this.selectedZones.includes(
+        const gElements: NodeListOf<Element> = document.querySelectorAll("g.key-group");
+        gElements.forEach((g: SVGGraphicsElement): void => {
+            const isSelected: boolean = this.selectedZones.includes(
                 parseInt(g.dataset.zone)
             );
             if (isSelected) {

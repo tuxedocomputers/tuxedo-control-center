@@ -17,63 +17,63 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: any = require('mock-fs');
 import * as fs from 'fs';
 
 import { SysFsPropertyStringList } from './SysFsProperties';
 
-describe('SysDevPropertyStringList', () => {
+describe('SysDevPropertyStringList', (): void => {
 
     const dev = new SysFsPropertyStringList('/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors');
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
             '/sys/devices/system': {}
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('should throw error if file cannot be read', () => {
-        expect(() => { dev.readValue(); }).toThrow();
+    it('should throw error if file cannot be read', (): void => {
+        expect((): void => { dev.readValue(); }).toThrow();
     });
 
-    it('should return empty list if file is empty', () => {
+    it('should return empty list if file is empty', (): void => {
         mock({ '/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors' : '' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toEqual([]);
     });
 
-    it('should corrently read lists of strings from file', () => {
+    it('should corrently read lists of strings from file', (): void => {
         mock({ '/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors' : 'prop1' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toEqual(['prop1']);
 
         mock({ '/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors' : 'prop1 prop2 prop3' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toEqual(['prop1', 'prop2', 'prop3']);
     });
 
-    it('should throw if file cannot be written', () => {
-        expect(() => { dev.writeValue(['prop1', 'prop2', 'prop3']); }).toThrow();
+    it('should throw if file cannot be written', (): void => {
+        expect((): void => { dev.writeValue(['prop1', 'prop2', 'prop3']); }).toThrow();
     });
 
-    it('should write empty file for an empty input list', () => {
+    it('should write empty file for an empty input list', (): void => {
         mock({ '/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors' : 'something' });
-        expect(() => { dev.writeValue([]); }).not.toThrow();
+        expect((): void => { dev.writeValue([]); }).not.toThrow();
         expect(fs.readFileSync('/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors').toString()).toBe('');
     });
 
-    it('should write list of strings properly', () => {
+    it('should write list of strings properly', (): void => {
         mock({ '/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors' : 'something' });
-        expect(() => { dev.writeValue(['prop1']); }).not.toThrow();
+        expect((): void => { dev.writeValue(['prop1']); }).not.toThrow();
         expect(fs.readFileSync('/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors').toString()).toBe('prop1');
 
         mock({ '/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors' : 'something' });
-        expect(() => { dev.writeValue(['prop1', 'prop2', 'prop3']); }).not.toThrow();
+        expect((): void => { dev.writeValue(['prop1', 'prop2', 'prop3']); }).not.toThrow();
         expect(fs.readFileSync('/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors').toString()).toBe('prop1 prop2 prop3');
     });
 });

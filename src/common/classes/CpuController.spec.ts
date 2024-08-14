@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: any = require('mock-fs');
 
 import { CpuController } from './CpuController';
 
-describe('CpuController', () => {
+describe('CpuController', (): void => {
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
             '/sys/devices/system/cpu': {
                 'possible': '0-1',
@@ -41,11 +41,11 @@ describe('CpuController', () => {
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('should add paths to properties correctly', () => {
+    it('should add paths to properties correctly', (): void => {
         const cpu = new CpuController('/sys/devices/system/cpu');
         expect(cpu.basePath).toBe('/sys/devices/system/cpu');
         expect(cpu.online.readPath).toBe('/sys/devices/system/cpu/online');

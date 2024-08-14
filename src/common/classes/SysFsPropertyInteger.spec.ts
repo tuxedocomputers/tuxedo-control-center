@@ -17,12 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: any = require('mock-fs');
 import * as fs from 'fs';
 
 import { SysFsPropertyInteger } from './SysFsProperties';
 
-describe('SysDevPropertyInteger', () => {
+describe('SysDevPropertyInteger', (): void => {
 
     const dev = new SysFsPropertyInteger(
         '/sys/class/backlight/intel_backlight/actual_brightness',
@@ -30,43 +30,43 @@ describe('SysDevPropertyInteger', () => {
     );
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
             '/sys/class/backlight/': {}
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('should throw error if file cannot be read', () => {
-        expect(() => { dev.readValue(); }).toThrow();
+    it('should throw error if file cannot be read', (): void => {
+        expect((): void => { dev.readValue(); }).toThrow();
     });
 
-    it('should not throw and return NaN if value is not an integer', () => {
+    it('should not throw and return NaN if value is not an integer', (): void => {
         mock({ '/sys/class/backlight/intel_backlight/actual_brightness' : 'no numbers here' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toBeNaN();
     });
 
-    it('should correctly read an integer from file', () => {
+    it('should correctly read an integer from file', (): void => {
         mock({ '/sys/class/backlight/intel_backlight/actual_brightness' : '1234' });
-        expect(() => { dev.readValue(); }).not.toThrow();
+        expect((): void => { dev.readValue(); }).not.toThrow();
         expect(dev.readValue()).toBe(1234);
     });
 
-    it('should throw if file cannot be written', () => {
-        expect(() => { dev.writeValue(1234); }).toThrow();
+    it('should throw if file cannot be written', (): void => {
+        expect((): void => { dev.writeValue(1234); }).toThrow();
     });
 
-    it('should write number as a string if file exists', () => {
+    it('should write number as a string if file exists', (): void => {
         mock({ '/sys/class/backlight/intel_backlight/brightness' : '' });
-        expect( () => { dev.writeValue(1234); }).not.toThrow();
+        expect( (): void => { dev.writeValue(1234); }).not.toThrow();
         expect(fs.readFileSync('/sys/class/backlight/intel_backlight/brightness').toString()).toBe('1234');
     });
 
-    it('should correctly identify readable properties', () => {
+    it('should correctly identify readable properties', (): void => {
         mock({ '/sys/class/backlight/intel_backlight/actual_brightness': mock.file({ content: '1234', mode: 0o444}) });
         expect(dev.isReadable()).toBeTruthy();
 
@@ -74,7 +74,7 @@ describe('SysDevPropertyInteger', () => {
         expect(dev.isReadable()).toBeFalsy();
     });
 
-    it('should correctly identify writable properties', () => {
+    it('should correctly identify writable properties', (): void => {
         mock({ '/sys/class/backlight/intel_backlight/brightness': mock.file({ content: '1234', mode: 0o444}) });
         expect(dev.isWritable()).toBeFalsy();
 

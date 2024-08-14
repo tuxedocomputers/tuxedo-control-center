@@ -28,7 +28,7 @@ export class CpuPowerWorker extends DaemonWorker {
     private RAPLConstraint1Status: boolean = false;
     private RAPLConstraint2Status: boolean = false;
 
-    private intelRAPL = new IntelRAPLController(
+    private intelRAPL: IntelRAPLController = new IntelRAPLController(
         "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/"
     );
     private powerWorker: PowerController;
@@ -90,14 +90,14 @@ export class CpuPowerWorker extends DaemonWorker {
         let maxPowerLimit: number = -1;
 
         if (this.RAPLConstraint0Status) {
-            const constraint0MaxPower = this.intelRAPL.getConstraint0MaxPower();
+            const constraint0MaxPower: number = this.intelRAPL.getConstraint0MaxPower();
             if (constraint0MaxPower > 0) {
                 maxPowerLimit = constraint0MaxPower;
             }
         }
 
         if (this.RAPLConstraint1Status) {
-            const constraint1MaxPower = this.intelRAPL.getConstraint1MaxPower();
+            const constraint1MaxPower: number = this.intelRAPL.getConstraint1MaxPower();
             if (
                 constraint1MaxPower > 0 &&
                 constraint1MaxPower > maxPowerLimit
@@ -107,7 +107,7 @@ export class CpuPowerWorker extends DaemonWorker {
         }
 
         if (this.RAPLConstraint2Status) {
-            const constraint2MaxPower = this.intelRAPL.getConstraint2MaxPower();
+            const constraint2MaxPower: number = this.intelRAPL.getConstraint2MaxPower();
             if (
                 constraint2MaxPower > 0 &&
                 constraint2MaxPower > maxPowerLimit

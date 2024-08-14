@@ -18,6 +18,7 @@
  */
 import { Component, OnInit, VERSION } from '@angular/core';
 import { UtilsService } from '../utils.service';
+import { IProcessVersions } from '../renderer';
 
 @Component({
   selector: 'app-info',
@@ -26,31 +27,31 @@ import { UtilsService } from '../utils.service';
 })
 export class InfoComponent implements OnInit {
 
-  public appVersion;
-  public nodeVersion;
-  public electronVersion;
-  public chromeVersion;
-  public angularVersion;
+  public appVersion: string;
+  public nodeVersion: string;
+  public electronVersion: string;
+  public chromeVersion: string;
+  public angularVersion: string;
 
   constructor(
     private utils: UtilsService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.init();
   }
 
-  private async init()
+  private async init(): Promise<void>
   {
     this.appVersion = await window.ipc.getAppVersion();
-    let processVersions = await window.ipc.getProcessVersions();
+    let processVersions: IProcessVersions = await window.ipc.getProcessVersions();
     this.nodeVersion = processVersions.node;
     this.electronVersion = processVersions.electron;
     this.chromeVersion = processVersions.chrome;
     this.angularVersion = VERSION.full;
   }
 
-  public changeLanguage(languageId: string) {
+  public changeLanguage(languageId: string): void {
     if (languageId !== this.getCurrentLanguageId()) {
       this.utils.changeLanguage(languageId);
     }
@@ -60,11 +61,11 @@ export class InfoComponent implements OnInit {
     return this.utils.getCurrentLanguageId();
   }
 
-  public getLanguagesMenuArray() {
+  public getLanguagesMenuArray(): { id: string; label: string; img: string }[] {
     return this.utils.getLanguagesMenuArray();
   }
 
-  public getLanguageData(langId: string) {
+  public getLanguageData(langId: string): string {
     return this.utils.getLanguageData(langId);
   }
 }
