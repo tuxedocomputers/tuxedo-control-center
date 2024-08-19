@@ -1,0 +1,113 @@
+/*!
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { ipcMain } from "electron";
+import type { IpcMainInvokeEvent } from "electron";
+import { ProgramManagementService } from "./pgmsService"
+
+const pgms = new ProgramManagementService();
+const tomteName = "tuxedo-tomte";
+const anydeskProgramName = 'anydesk';
+const webFAICreatorProgramName = 'tuxedo-webfai-creator';
+
+ipcMain.handle('pgms-is-in-progress', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
+    return new Promise<Map<string, boolean>>((resolve: (value: Map<string, boolean> | PromiseLike<Map<string, boolean>>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.isInProgress);
+    });
+});
+
+ipcMain.handle('pgms-is-checking-installation', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
+    return new Promise<Map<string, boolean>>((resolve: (value: Map<string, boolean> | PromiseLike<Map<string, boolean>>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.isCheckingInstallation);
+    });
+});
+
+ipcMain.handle('pgms-tomte-is-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.isInstalled(tomteName));
+    });
+});
+
+ipcMain.handle('pgms-install-tomte', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.install(tomteName));
+    });
+});
+
+ipcMain.handle('pgms-uninstall-tomte', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.remove(tomteName));
+    });
+});
+
+ipcMain.handle('pgms-start-tomte', (event: IpcMainInvokeEvent): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.run(tomteName));
+    });
+});
+
+
+ipcMain.handle('pgms-anydesk-is-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.isInstalled(anydeskProgramName));
+    });
+});
+
+ipcMain.handle('pgms-install-anydesk', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.install(anydeskProgramName));
+    });
+});
+
+ipcMain.handle('pgms-uninstall-anydesk', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.remove(anydeskProgramName));
+    });
+});
+
+ipcMain.handle('pgms-start-anydesk', (event: IpcMainInvokeEvent): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.run(anydeskProgramName));
+    });
+});
+
+
+ipcMain.handle('pgms-webfaic-is-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.isInstalled(webFAICreatorProgramName));
+    });
+});
+
+ipcMain.handle('pgms-install-webfaic', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.install(webFAICreatorProgramName));
+    });
+});
+
+ipcMain.handle('pgms-uninstall-webfaic', (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.remove(webFAICreatorProgramName));
+    });
+});
+
+ipcMain.handle('pgms-start-webfaic', (event: IpcMainInvokeEvent): Promise<void> => {
+    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+        resolve(pgms.run(webFAICreatorProgramName));
+    });
+});

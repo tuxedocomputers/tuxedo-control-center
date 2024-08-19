@@ -17,14 +17,18 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-require("./utilsAPI");
-require("./cpuAPI");
-require("./ctgpAPI")
-require("./sysFsAPI");
-require("./configAPI");
-require("./systemInfosAPI");
-require("./powerAPI");
-require("./cryptAPI");
-require("./pgmsAPI");
-require("./vendorAPI");
-require("./shutdownAPI");
+import { ipcMain } from "electron";
+import type { IpcMainInvokeEvent } from "electron";
+import { hideCTGP } from "./initMain";
+
+// todo: add error handling
+ipcMain.handle('comp-get-hide-ctgp', async (event: IpcMainInvokeEvent): Promise<boolean> => {
+    return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        try {
+          resolve( await hideCTGP());
+        } catch (err) {
+          reject(err);
+        }
+      });
+
+});

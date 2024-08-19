@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,15 +17,30 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
-########################################################
-############## Aquaris Backend #########################
-########################################################
-*/
+import { ipcMain } from "electron";
+import type { IpcMainInvokeEvent } from "electron";
+import { AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
+import type { AquarisState } from '../../common/models/IAquarisAPI';
+import { LCT21001, PumpVoltage, RGBState } from '../LCT21001';
+import type { DeviceInfo } from '../LCT21001';
+import { userConfig, hasAquaris } from "./initMain";
 
-import { AquarisState, AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
-import { DeviceInfo, LCT21001, PumpVoltage, RGBState } from '../LCT21001';
-import { userConfig } from './initMain';
+let aquarisStateExpected: AquarisState;
+let aquarisStateCurrent: AquarisState;
+
+let aquarisIoProgress: boolean = false;
+let aquarisSearchProgress: boolean = false;
+let aquarisConnectProgress: boolean = false;
+
+let aquarisHasBluetooth: boolean = true;
+
+let searchingTimeout: NodeJS.Timeout;
+let searchingDelayMs: number = 1000;
+let discoverTries: number = 0;
+const discoverMaxTries: number = 5;
+let interestTries: number = 0;
+const interestMaxTries = 8;
+let isSearching: boolean = false;
 
 async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false): Promise<void> {
     if (!aquarisIoProgress) {
@@ -88,30 +103,12 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
             } while (updatedSomething);
             aquarisIoProgress = false;
         } catch (err: unknown) {
-            console.error("aquarisBackendAPI: updateDeviceState failed =>", err);
+            console.error("aquarisAPI: updateDeviceState failed =>", err);
         } finally {
             aquarisIoProgress = false;
         }
     }
 }
-
-let aquarisStateExpected: AquarisState;
-let aquarisStateCurrent: AquarisState;
-
-let aquarisIoProgress: boolean = false;
-let aquarisSearchProgress: boolean = false;
-let aquarisConnectProgress: boolean = false;
-
-let aquarisHasBluetooth: boolean = true;
-
-let searchingTimeout: NodeJS.Timeout;
-let searchingDelayMs: number = 1000;
-let discoverTries: number = 0;
-const discoverMaxTries: number = 5;
-let interestTries: number = 0;
-const interestMaxTries = 8;
-let isSearching: boolean = false;
-
 async function doSearch(): Promise<void> {
     aquarisSearchProgress = true;
     try {
@@ -214,7 +211,7 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
             aquarisStateExpected.deviceUUID = deviceUUID;
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
         } catch (err: unknown) {
-            console.error("aquarisBackendAPI: connect failed =>", err);
+            console.error("aquarisAPI: connect failed =>", err);
         } finally {
             aquarisConnectProgress = false;
         }
@@ -311,3 +308,14 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });
 
+ipcMain.handle('comp-get-has-aquaris', (event: IpcMainInvokeEvent): Promise<boolean> => {
+        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            try {
+              resolve(hasAquaris());
+            } catch (err: unknown) {
+              console.error("aquarisAPI: comp-get-has-aquaris failed =>", err)
+              reject(err);
+            }
+          });
+
+});

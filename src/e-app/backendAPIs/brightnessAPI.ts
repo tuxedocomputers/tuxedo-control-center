@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,20 +17,15 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { ipcMain, nativeTheme } from "electron";
+import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
+import type { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { DBusDisplayBrightnessGnome } from "../../common/classes/DBusDisplayBrightnessGnome";
+import { userConfig } from "./initMain";
+'../../common/classes/DBusDisplayBrightnessGnome';
 
-// todo: rename or remove
-ipcMain.on('log-stuff', (event: IpcMainEvent,stuff: any): void =>
-{
-    console.log("logging stuff:");
-    console.log(stuff);
-});
-
-// ######## Gnome Brightness Workaround Functions ########
-
-
-import { Observable, Subject } from 'rxjs';
-import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
+export type BrightnessModeString = 'light' | 'dark' | 'system';
 
 let sessionBus: any;
 const dbus: any = require('dbus-next');
@@ -50,7 +45,7 @@ observeDisplayBrightness = displayBrightnessSubject.asObservable();
 try {
     sessionBus = dbus.sessionBus();
 } catch (err: unknown) {
-    console.error("miscBackendStuff: dbus.sessionBus failed =>", err)
+    console.error("brightnessAPI: dbus.sessionBus failed =>", err)
     sessionBus = undefined;
 }
 
@@ -83,7 +78,7 @@ async function initDusDisplayBrightness(): Promise<void> {
         currentDisplayBrightness = result;
         displayBrightnessSubject.next(currentDisplayBrightness);
     } catch (err: unknown) {
-        console.error("miscBackendStuff: initDusDisplayBrightness failed =>", err)
+        console.error("brightnessAPI: initDusDisplayBrightness failed =>", err)
         displayBrightnessNotSupported = true;
         return;
     }
@@ -100,7 +95,7 @@ async function initDusDisplayBrightness(): Promise<void> {
 }
 
 async function setDisplayBrightness(valuePercent: number): Promise<void> {
-return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error("miscBackendStuff: setDisplayBrightness failed =>", err)});
+return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error("brightnessAPI: setDisplayBrightness failed =>", err)});
 }
 
 ipcMain.handle('set-display-brightness-gnome', (event: IpcMainInvokeEvent, valuePercent: number): Promise<void> => {
@@ -113,3 +108,25 @@ ipcMain.handle('set-display-brightness-gnome', (event: IpcMainInvokeEvent, value
 ipcMain.on('get-display-brightness-not-supported-sync', (event: IpcMainEvent): void => {
     event.returnValue = displayBrightnessNotSupported;
 });
+
+ipcMain.handle('set-brightness-mode', (event: IpcMainInvokeEvent, mode: BrightnessModeString): Promise<void> => setBrightnessMode(mode));
+ipcMain.handle('get-brightness-mode', (): Promise<BrightnessModeString> => getBrightnessMode());
+ipcMain.handle('get-should-use-dark-colors', (): boolean => { return nativeTheme.shouldUseDarkColors; });
+
+export async function setBrightnessMode(mode: BrightnessModeString): Promise<void> {
+    // Save wish to user config
+    await userConfig.set('brightnessMode', mode);
+    // Update electron theme source
+    nativeTheme.themeSource = mode;
+}
+export async function getBrightnessMode(): Promise<BrightnessModeString> {
+    let mode: BrightnessModeString = await userConfig.get('brightnessMode') as BrightnessModeString | undefined;
+    switch (mode) {
+        case 'light':
+        case 'dark':
+            break;
+        default:
+            mode = 'system';
+    }
+    return mode;
+}

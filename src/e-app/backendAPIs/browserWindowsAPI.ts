@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,17 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { aquarisCleanUp } from './aquarisBackendAPI';
-import * as path from 'path';
-import { tccDBus } from './dbusBackendAPI';
+import { aquarisCleanUp } from './aquarisAPI';
+import * as path from 'node:path';
+import { tccDBus } from './dbusAPI';
 import { app, BrowserWindow, globalShortcut, ipcMain, powerMonitor, screen } from 'electron'
 import { tray, userConfig } from './initMain';
-import { displayBrightnessGnomeCleanup } from './miscBackendStuff';
+import { displayBrightnessGnomeCleanup } from './brightnessAPI';
 import { unregisterAPI } from './apiManagement';
 import { aquarisAPIHandle } from '../../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../../common/models/IDbusAPI';
-import { loadTranslation } from './translationAndTheme';
-import { WebcamConstraints } from 'src/common/models/TccWebcamSettings';
+import type { WebcamConstraints } from '../../common/models/TccWebcamSettings';
 export let tccWindow: Electron.BrowserWindow;
 export let aquarisWindow: Electron.BrowserWindow;
 export let webcamWindow: Electron.BrowserWindow;
@@ -123,13 +122,6 @@ export function quitCurrentTccSession(): void {
 
     app.quit();
 }
-
-/*
-########################################################
-################ Browser Windows #######################
-########################################################
-*/
-
 export async function createPrimeWindow(langId: string, primeSelectMode: string): Promise<void> {
     if (primeWindow && !primeWindow.isDestroyed()) {
         primeWindow.focus();
@@ -152,6 +144,7 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
             "../../../data/dist-data/tuxedo-control-center_256.png"
         ),
         webPreferences: {
+            sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, '../preload.js')
@@ -211,6 +204,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         minHeight: windowHeight,
         icon: path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
+            sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, '../preload.js')
@@ -264,6 +258,7 @@ function createAquarisControl(langId: string): void {
         minHeight: windowHeight,
         icon: path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
+            sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, '../preload.js')
@@ -305,6 +300,7 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
             "../../../data/dist-data/tuxedo-control-center_256.png"
         ),
         webPreferences: {
+            sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, '../preload.js')
@@ -360,3 +356,15 @@ ipcMain.on('close-window', (): void => {
 ipcMain.on('minimize-window', (): void => {
     tccWindow.minimize();
 })
+
+ipcMain.on("prime-window-close", (): void => {
+    if (primeWindow) {
+        primeWindow.close();
+    }
+});
+
+ipcMain.on("prime-window-show", (): void => {
+    if (primeWindow) {
+        primeWindow.show();
+    }
+});

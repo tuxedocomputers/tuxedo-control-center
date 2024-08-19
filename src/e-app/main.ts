@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,27 +17,25 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
-import { aquarisAPIHandle,} from '../common/models/IAquarisAPI';
-import { dbusAPIHandle } from '../common/models/IDbusAPI';
-import { aquarisHandlers } from './backendAPIs/aquarisBackendAPI';
-import { dbusHandlers } from './backendAPIs/dbusBackendAPI';
-import { registerAPI } from './backendAPIs/apiManagement'
-import { tomteAPIHandle } from '../common/models/ITomteAPI';
-import { tomteHandlers } from './backendAPIs/tomteGuiBackendAPI';
-import { webcamAPIHandle } from '../common/models/IWebcamAPI';
-import { webcamHandlers } from './backendAPIs/webcamBackendAPI';
+import { ipcMain } from "electron";
+import { aquarisAPIHandle } from "../common/models/IAquarisAPI";
+import { dbusAPIHandle } from "../common/models/IDbusAPI";
+import { aquarisHandlers } from "./backendAPIs/aquarisAPI";
+import { dbusHandlers } from "./backendAPIs/dbusAPI";
+import { registerAPI } from "./backendAPIs/apiManagement";
+import { tomteAPIHandle } from "../common/models/ITomteAPI";
+import { webcamAPIHandle } from "../common/models/IWebcamAPI";
+import { webcamHandlers } from "./backendAPIs/webcamAPI";
+import { tomteHandlers } from "./backendAPIs/tomteAPI";
 
-
-require('./backendAPIs/initMain');
-require('./backendAPIs/browserWindows');
-require('./backendAPIs/ipcBackendAPI');
-require('./backendAPIs/miscBackendStuff');
-// todo: utilize backend
-//require('./backendAPIs/webcamBackendAPI');
+require("./backendAPIs/initMain");
+require("./backendAPIs/browserWindowsAPI");
+require("./backendAPIs/ipcBackendAPI");
+require("./backendAPIs/webcamAPI");
 
 // replace setImmediate since it seems to cause problems/not exist anymore
-globalThis.setImmediate = ((fn: any, ...args: any[]): NodeJS.Timeout => global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
+globalThis.setImmediate = ((fn: any, ...args: any[]): NodeJS.Timeout =>
+    global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
 registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);

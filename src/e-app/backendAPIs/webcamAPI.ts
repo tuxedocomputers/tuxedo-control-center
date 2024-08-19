@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,15 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WebcamConstraints, WebcamPreset } from '../../common/models/TccWebcamSettings';
-import { clearWebcamWindow, tccWindow, webcamWindow, createWebcamPreview } from './browserWindows';
+import type { WebcamConstraints, WebcamPreset } from '../../common/models/TccWebcamSettings';
+import { clearWebcamWindow, tccWindow, webcamWindow, createWebcamPreview } from './browserWindowsAPI';
 import { userConfig } from "./initMain";
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { TccPaths } from '../../common/classes/TccPaths';
-import * as child_process from 'child_process';
-import { environmentIsProduction, cwd, execFile, execCmd } from './ipcBackendAPI';
+import * as child_process from 'node:child_process';
 import { WebcamAPIFunctions } from '../../common/models/IWebcamAPI';
-
+import { cwd, environmentIsProduction, execCmd, execFile } from './utilsAPI';
 
 let webcamConfigHandler: ConfigHandler = new ConfigHandler(
     TccPaths.SETTINGS_FILE,
@@ -142,7 +141,7 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
 
     .set(WebcamAPIFunctions.getWebcamPaths, async (): Promise<string> => {
         return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            let result: { data: string; error: any } = await execFile("python3 " + getWebcamCtrlPythonPath() + " -i");
+            let result: { data: string; error: unknown } = await execFile("python3 " + getWebcamCtrlPythonPath() + " -i");
             resolve(result.data);
             });
     })

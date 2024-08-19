@@ -17,14 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-require("./utilsAPI");
-require("./cpuAPI");
-require("./ctgpAPI")
-require("./sysFsAPI");
-require("./configAPI");
-require("./systemInfosAPI");
-require("./powerAPI");
-require("./cryptAPI");
-require("./pgmsAPI");
-require("./vendorAPI");
-require("./shutdownAPI");
+import { ipcMain } from 'electron';
+import type { IpcMainEvent } from 'electron';
+
+// todo: rename or remove
+ipcMain.on('log-stuff', (event: IpcMainEvent, stuff: any): void =>
+{
+    console.log("logging stuff:");
+    console.log(stuff);
+});

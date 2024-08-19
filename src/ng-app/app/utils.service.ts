@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -28,10 +29,9 @@ import { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
-import { BrightnessModeString } from 'src/e-app/backendAPIs/translationAndTheme';
 import * as fs from 'fs';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-
+import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
 
 @Injectable({
   providedIn: 'root'

@@ -1,16 +1,35 @@
-import { IAquarisClientAPI } from "../../e-app/preloadAPIs/AquarisClientAPI";
-import { EventEmitter } from 'node:events';
-import { IDrive } from "../../common/models/IDrive";
-import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
-import { ITccProfile } from "../../common/models/TccProfile";
-import { ITccSettings } from "../../common/models/TccSettings";
-import { ITccFanProfile } from "../../common/models/TccFanTable";
-import { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
-import { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
-import { IWebcamClientAPI } from "src/e-app/preloadAPIs/webcamClientAPI";
-import { BrightnessModeString } from "src/e-app/backendAPIs/translationAndTheme";
-import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
-import { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
+/*!
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import type { IAquarisClientAPI } from "../../e-app/preloadAPIs/AquarisClientAPI";
+import type { EventEmitter } from 'node:events';
+import type { IDrive } from "../../common/models/IDrive";
+import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
+import type { ITccProfile } from "../../common/models/TccProfile";
+import type { ITccSettings } from "../../common/models/TccSettings";
+import type { ITccFanProfile } from "../../common/models/TccFanTable";
+import type { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
+import type { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
+import type { IWebcamClientAPI } from "src/e-app/preloadAPIs/webcamClientAPI";
+import type { WebcamConstraints } from "../../common/models/TccWebcamSettings";
+import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
+import type { BrightnessModeString } from "src/e-app/backendAPIs/brightnessAPI";
 
 // todo: variables shouldn't be uppercase in every letter
 export interface IPC extends EventEmitter {

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,21 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 import { TccTray } from '../TccTray';
-import * as path from 'path';
-import * as os from 'os';
+import * as path from 'node:path';
+import * as os from 'node:os';
+import * as fs from 'node:fs';
 import { app, globalShortcut, nativeTheme, powerSaveBlocker } from 'electron';
 import { UserConfig } from '../UserConfig';
-import { TccProfile } from '../../common/models/TccProfile';
-import * as child_process from 'child_process';
-import * as fs from 'fs';
-import { tccDBus } from './dbusBackendAPI';
+import type { TccProfile } from '../../common/models/TccProfile';
+import * as child_process from 'node:child_process';
 import { NgTranslations, profileIdToI18nId } from '../NgTranslations';
-import { BrightnessModeString, getBrightnessMode, loadTranslation, setBrightnessMode } from './translationAndTheme';
-import { activateTccGui, quitCurrentTccSession, createPrimeWindow } from './browserWindows';
-import { IProfileTextMappings, TUXEDODevice } from '../../common/models/DefaultProfiles';
-
+import { loadTranslation } from './utilsAPI';
+import { activateTccGui, createPrimeWindow, quitCurrentTccSession } from './browserWindowsAPI';
+import { getBrightnessMode, setBrightnessMode } from './brightnessAPI';
+import type { BrightnessModeString } from './brightnessAPI';
+import { tccDBus } from "./dbusAPI";
+import type { IProfileTextMappings } from 'src/common/models/DefaultProfiles';
 
 export const tray: TccTray = new TccTray(path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'));
 const trayOnlyOption: boolean = process.argv.includes('--tray');

@@ -1,17 +1,35 @@
-import { ITccProfile } from "src/common/models/TccProfile";
-import { ITccSettings } from "src/common/models/TccSettings";
-import { WebcamConstraints, WebcamPreset } from "src/common/models/TccWebcamSettings";
+/*!
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import type { ITccProfile } from "../common/models/TccProfile";
+import type { ITccSettings } from "../common/models/TccSettings";
+import type { WebcamConstraints } from "../common/models/TccWebcamSettings";
 import { AquarisClientAPI } from "./preloadAPIs/AquarisClientAPI";
 import { DbusClientAPI } from "./preloadAPIs/DbusClientAPI";
 import { TomteClientAPI} from "./preloadAPIs/tomteClientAPI";
 import { WebcamClientAPI} from "./preloadAPIs/webcamClientAPI";
-import { BrightnessModeString } from "./backendAPIs/translationAndTheme";
-import * as fs from 'fs';
-import { ITccFanProfile } from "src/common/models/TccFanTable";
-import { IDrive } from "src/common/models/IDrive";
-import { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from "src/common/models/ICpuInfos";
-import { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
-
+import type * as fs from 'node:fs';
+import type { ITccFanProfile } from "../common/models/TccFanTable";
+import type { IDrive } from "../common/models/IDrive";
+import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
+import type { BrightnessModeString } from "./backendAPIs/brightnessAPI";
+import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from "../common/models/ICpuInfos";
 const { contextBridge, ipcRenderer } = require('electron');
 
 let callbacks: string[] = [];

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,8 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import  { TomteAPIFunctions, ITomteModule, ITomteInformation } from '../../common/models/ITomteAPI';
-import { execCmd, execFile } from './ipcBackendAPI'
+import { TomteAPIFunctions } from '../../common/models/ITomteAPI';
+import type { ITomteInformation } from '../../common/models/ITomteAPI';
+import { execCmd, execFile } from './utilsAPI';
 
 // todo: refactor
 async function resetToDefaults(): Promise<boolean> {
@@ -67,7 +68,7 @@ async function getModuleDescription(moduleName: string, langId: string): Promise
     }
     catch (err: unknown)
     {
-        console.error("tomteGuiBackendAPI: getModuleDescription failed =>", err)
+        console.error("tomteAPI: getModuleDescription failed =>", err)
         resolve("");
     }
     });
@@ -79,7 +80,7 @@ async function removeModule(moduleName: string): Promise<void> {
         execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteGuiBackendAPI: removeModule failed =>", err)
+            console.error("tomteAPI: removeModule failed =>", err)
             reject();
         })
     });
@@ -91,7 +92,7 @@ async function installModule(moduleName: string): Promise<void> {
         execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteGuiBackendAPI: installModule failed =>", err)
+            console.error("tomteAPI: installModule failed =>", err)
             reject();
         })
     });
@@ -103,7 +104,7 @@ async function unBlockModule(moduleName: string): Promise<void> {
         execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteGuiBackendAPI: unBlockModule failed =>", err)
+            console.error("tomteAPI: unBlockModule failed =>", err)
             reject();
         })
     });
@@ -115,7 +116,7 @@ async function blockModule(moduleName: string): Promise<void> {
         execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteGuiBackendAPI: blockModule failed =>", err)
+            console.error("tomteAPI: blockModule failed =>", err)
             reject();
         })
     });
@@ -127,7 +128,7 @@ async function setMode(mode: string): Promise<void> {
         execCmd(command).then(() => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteGuiBackendAPI: setMode failed =>", err)
+            console.error("tomteAPI: setMode failed =>", err)
             reject();
         })
     });
@@ -164,7 +165,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
         }
         catch (err: unknown)
         {
-            console.error("tomteGuiBackendAPI: parseTomteListJson failed =>", err)
+            console.error("tomteAPI: parseTomteListJson failed =>", err)
             tomteInformation.jsonError = true;
         }
         finally {
@@ -214,7 +215,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             removeModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteGuiBackendAPI: removeModule failed =>", err)
+                console.error("tomteAPI: removeModule failed =>", err)
                 resolve(false);
             })
         });
@@ -226,7 +227,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             installModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteGuiBackendAPI: installModule failed =>", err)
+                console.error("tomteAPI: installModule failed =>", err)
                 resolve(false);
             })
         });
@@ -237,7 +238,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             unBlockModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteGuiBackendAPI: unBlockModule failed =>", err)
+                console.error("tomteAPI: unBlockModule failed =>", err)
                 resolve(false);
             })
         });
@@ -248,7 +249,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             blockModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteGuiBackendAPI: blockModule failed =>", err)
+                console.error("tomteAPI: blockModule failed =>", err)
                 resolve(false);
             })
         });
@@ -259,7 +260,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             setMode(mode).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteGuiBackendAPI: setMode failed =>", err)
+                console.error("tomteAPI: setMode failed =>", err)
                 resolve(false);
             })
         });

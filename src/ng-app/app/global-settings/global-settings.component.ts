@@ -24,8 +24,8 @@ import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BrightnessModeString } from 'src/e-app/backendAPIs/translationAndTheme';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
 
 @Component({
     selector: 'app-global-settings',
