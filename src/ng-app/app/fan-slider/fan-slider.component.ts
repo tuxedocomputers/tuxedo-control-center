@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -21,7 +21,6 @@ import {
     AbstractControl,
     FormBuilder,
     FormGroup,
-    Validators,
 } from "@angular/forms";
 import { Mutex } from "async-mutex";
 import {
@@ -72,7 +71,7 @@ export class FanSliderComponent implements OnInit {
     @Input()
     public showFanGraphs: boolean = false;
 
-    private mutex = new Mutex();
+    private mutex: any = new Mutex();
     public tempsLabels: Label[] = Array.from(Array(100).keys())
         .concat(100)
         .map((e: number): string => formatTemp(e, this.config.getSettings().fahrenheit));
@@ -82,11 +81,10 @@ export class FanSliderComponent implements OnInit {
     public graphType: string = "line";
 
     constructor(
-
         private fb: FormBuilder,
         private config: ConfigService,
-        private utils: UtilsService,
-        ) {}
+        private utils: UtilsService
+    ) {}
 
     public ngOnInit(): void {
         this.initFanFormGroup();
@@ -201,11 +199,16 @@ export class FanSliderComponent implements OnInit {
         this.setSliderDirty.emit();
     }
 
-    public updateFanChartDataset(): void {
+    public async updateFanChartDataset(): Promise<void> {
         let { tableCPU, tableGPU } = this.getFanFormGroupValues();
 
-        this.fantableDatasets[0].data = interpolatePointsArray(tableCPU);
-        this.fantableDatasets[1].data = interpolatePointsArray(tableGPU);
+        const [interpolatedTableCpu, interpolatedTableGpu] = await Promise.all([
+            interpolatePointsArray(tableCPU),
+            interpolatePointsArray(tableGPU),
+        ]);
+
+        this.fantableDatasets[0].data = interpolatedTableCpu;
+        this.fantableDatasets[1].data = interpolatedTableGpu;
     }
 
     public toggleFanGraphs(): void {

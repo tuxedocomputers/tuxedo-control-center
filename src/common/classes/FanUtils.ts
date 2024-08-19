@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ITccFanTableEntry } from "../models/TccFanTable";
+import type { ITccFanTableEntry } from "../models/TccFanTable";
 
-function interpolatePoints(
+async function interpolatePoints(
     points: ITccFanTableEntry[],
     x: number
-): number {
+): Promise<number> {
     const first: ITccFanTableEntry = points[0];
-    const last: ITccFanTableEntry = points[points?.length - 1];
+    const last: ITccFanTableEntry = points[points.length - 1];
     if (x <= first.temp) {
         return first.speed;
     }
@@ -32,9 +32,10 @@ function interpolatePoints(
         return last.speed;
     }
     const i: number =
-        points.findIndex((p: ITccFanTableEntry, idx: number): boolean => p.temp >= x || idx === points?.length - 1) -
-        1;
-
+        points.findIndex(
+            (p: ITccFanTableEntry, idx: number): boolean =>
+                p.temp >= x || idx === points.length - 1
+        ) - 1;
     const { temp: x1, speed: y1 } = points[i];
     const { temp: x2, speed: y2 } = points[i + 1];
     const m: number = (y2 - y1) / (x2 - x1);
@@ -42,18 +43,22 @@ function interpolatePoints(
     return Math.round(m * x + b);
 }
 
-export function interpolatePointsArray(
+export async function interpolatePointsArray(
     points: ITccFanTableEntry[]
-): number[] {
-    return Array.from({ length: 101 }, (_: unknown, i: number): number => interpolatePoints(points, i));
+): Promise<number[]> {
+    return Promise.all(
+        Array.from(
+            { length: 101 },
+            (_: unknown, i: number): Promise<number> =>
+                interpolatePoints(points, i)
+        )
+    );
 }
 
-
 export function formatTemp(value: number, usingFahrenheit: boolean): string {
-    if (usingFahrenheit)  {
-        return `${Math.round(((value * 1.8) + 32))} °F`;
-    }
-    else {
+    if (usingFahrenheit) {
+        return `${Math.round(value * 1.8 + 32)} °F`;
+    } else {
         return `${value} °C`;
     }
 }
