@@ -19,6 +19,12 @@
 .profile-details-edit {
     margin: 0 10px 10px 10px;
 
+    .sub-header
+    {
+        font-size: 1.15em;
+        font-weight: bold;
+    }
+
     .profile-title {
         position: fixed;
         top: 10px;
@@ -48,7 +54,6 @@
     }
 
     .profile-details-edit-grid {
-
         .inactive {
             opacity: 0.2;
             pointer-events: none;
@@ -63,6 +68,7 @@
             font-size: 1.10em;
         }
 
+        text.value,
         content.value {
             width: 100%;
             text-align: left;
@@ -109,6 +115,7 @@
         }
     }
 
+    .tgp-chart-container,
     .fan-graph-container {
         display: flex;
         flex-direction: column;
@@ -118,11 +125,13 @@
         margin-top: 20px;
         width: 100%;
 
-
-
         app-fan-graph {
             width: 100%;
             margin-top: 20px;
+        }
+
+        .tgp-chart {
+            width: 100%;
         }
     }
 }
@@ -133,4 +142,4 @@ mat-grid-tile {
 
 .hide-element {
     display: none;
-  }
+}

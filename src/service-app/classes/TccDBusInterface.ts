@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -70,6 +70,7 @@ export class FanData {
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
+    public device: string;
     public displayModes: string;
     public isX11: boolean;
     public tuxedoWmiAvailable: boolean;
@@ -101,6 +102,9 @@ export class TccDBusData {
     public fansOffAvailable: boolean;
     public sensorDataCollectionStatus: boolean = false;
     public d0MetricsUsage: boolean = false;
+    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
+    public nvidiaPowerCTRLAvailable: boolean = false;
     constructor(numberFans: number) { this.fans = new Array<FanData>(numberFans).fill(undefined).map(fan => new FanData()); }
     // export() { return this.fans.map(fan => fan.export()); }
 }
@@ -113,6 +117,7 @@ export class TccDBusOptions {
 export class TccDBusInterface extends dbus.interface.Interface {
     private interfaceOptions: TccDBusOptions;
     private fnLock: FnLockController = new FnLockController();
+    private dataCollectionTimeout: NodeJS.Timeout | null = null;
 
     constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
         super('com.tuxedocomputers.tccd');
@@ -122,6 +127,18 @@ export class TccDBusInterface extends dbus.interface.Interface {
             this.interfaceOptions.triggerStateCheck = async () => {};
         }
     }
+
+    private resetDataCollectionTimeout() {
+        if(this.dataCollectionTimeout) {
+            clearTimeout(this.dataCollectionTimeout);
+        }
+
+        this.dataCollectionTimeout = setTimeout(() => {
+            this.data.sensorDataCollectionStatus = false;
+        }, 10000);
+    }
+
+    GetDeviceName() { return this.data.device; }
     GetDisplayModesJSON() { return this.data.displayModes; }
     GetIsX11() { return this.data.isX11; }
     TuxedoWmiAvailable() { return this.data.tuxedoWmiAvailable; }
@@ -133,8 +150,17 @@ export class TccDBusInterface extends dbus.interface.Interface {
     WebcamSWAvailable() { return this.data.webcamSwitchAvailable; }
     GetWebcamSWStatus() { return this.data.webcamSwitchStatus; }
     GetForceYUV420OutputSwitchAvailable() { return this.data.forceYUV420OutputSwitchAvailable; }
-    GetDGpuInfoValuesJSON() { return this.data.dGpuInfoValuesJSON; }
-    GetIGpuInfoValuesJSON() { return this.data.iGpuInfoValuesJSON; }
+
+    GetDGpuInfoValuesJSON() { 
+        this.resetDataCollectionTimeout();
+        return this.data.dGpuInfoValuesJSON; 
+    }
+
+    GetIGpuInfoValuesJSON() { 
+        this.resetDataCollectionTimeout();
+        return this.data.iGpuInfoValuesJSON; 
+    }
+
     GetCpuPowerValuesJSON() { return this.data.cpuPowerValuesJSON; }
     GetPrimeState() { return this.data.primeState; }
     SetSensorDataCollectionStatus(status: boolean) {this.data.sensorDataCollectionStatus = status}
@@ -234,12 +260,25 @@ export class TccDBusInterface extends dbus.interface.Interface {
     SetFnLockStatus(status: boolean) {
         this.fnLock.setFnLockStatus(status);
     }
+
+    GetNVIDIAPowerCTRLDefaultPowerLimit() {
+        return this.data.nvidiaPowerCTRLDefaultPowerLimit;
+    }
+
+    GetNVIDIAPowerCTRLMaxPowerLimit() {
+        return this.data.nvidiaPowerCTRLMaxPowerLimit;
+    }
+
+    GetNVIDIAPowerCTRLAvailable() {
+        return this.data.nvidiaPowerCTRLAvailable;
+    }
 }
 
 TccDBusInterface.configureMembers({
     properties: {
     },
     methods: {
+        GetDeviceName: {outSignature: 's'},
         GetDisplayModesJSON: {outSignature: 's'},
         GetIsX11: { outSignature: 'b'},
         TuxedoWmiAvailable: { outSignature: 'b' },
@@ -291,6 +330,9 @@ TccDBusInterface.configureMembers({
         SetSensorDataCollectionStatus: { inSignature: 'b' },
         GetSensorDataCollectionStatus: { outSignature: 'b' },
         SetDGpuD0Metrics: { inSignature: 'b' },
+        GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
+        GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
+        GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

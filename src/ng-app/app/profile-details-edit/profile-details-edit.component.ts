@@ -34,6 +34,7 @@ import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes'
 import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { ElectronService } from 'ngx-electron';
+import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -114,6 +115,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansMaxSpeedSubscription: Subscription = new Subscription();
 
     private fansOffAvailableSubscription: Subscription = new Subscription();
+
     public cpuInfo: IGeneralCPUInfo;
     public editProfile: boolean;
     public stateInputArray: IStateInfo[];
@@ -122,6 +124,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmProfileNames: string[] = [];
     public odmProfileToName: Map<string, string> = new Map();
+    public hasDeviceSystemProfileInfo: boolean;
+    public deviceSystemProfileInfo: SystemProfileInfo;
 
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
@@ -131,6 +135,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private tdpLabels: Map<string, string>;
 
     public showFanGraphs = false;
+    public showTGPChart = false;
 
     public infoTooltipShowDelay = 700;
 
@@ -139,9 +144,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public fansOffAvailable = true;
 
+    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
+    public nvidiaPowerCTRLAvailable: boolean = false;
+
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+
+    public min = Math.min;
 
     @ViewChild('inputName') inputName: MatInput;
 
@@ -173,6 +184,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         odmProfileLEDNames.set('power_save', $localize `:@@odmLEDNone:all LEDs off`);
         odmProfileLEDNames.set('enthusiast', $localize `:@@odmLEDOne:one LED on`);
         odmProfileLEDNames.set('overboost', $localize `:@@odmLEDTwo:two LEDs on`);
+
+        this.hasDeviceSystemProfileInfo = this.compat.getHasSystemProfileInfo();
+        this.deviceSystemProfileInfo = this.compat.getSystemProfileInfo();
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
             this.odmProfileNames = nextAvailableODMProfiles;
@@ -228,6 +242,24 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }));
 
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLDefaultPowerLimit.subscribe(nextNVIDIAPowerCTRLDefaultPowerLimit => {
+            if (nextNVIDIAPowerCTRLDefaultPowerLimit !== undefined && nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit) {
+                this.nvidiaPowerCTRLDefaultPowerLimit = nextNVIDIAPowerCTRLDefaultPowerLimit;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
+            if (nextNVIDIAPowerCTRLMaxPowerLimit !== undefined && nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
+                this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
+            }
+        }));
+
+        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLAvailable.subscribe(nextNVIDIAPowerCTRLAvailable => {
+            if (nextNVIDIAPowerCTRLAvailable !== this.nvidiaPowerCTRLAvailable) {
+                this.nvidiaPowerCTRLAvailable = nextNVIDIAPowerCTRLAvailable;
+            }
+        }));
+
         this.tdpLabels = new Map();
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
@@ -246,6 +278,45 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             })
         );
+    }
+
+    public getPowerLimitToName(name: string) {
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === name)
+            {
+                return this.deviceSystemProfileInfo.pl[i].limit + " W";
+            }
+        }
+    }
+
+    public getODMprofilePowerLimitID() {
+        let profile = this.profile;
+        let profileName = "";
+        if (!profile) {
+            profile = this.viewProfile;
+        }
+        if (!profile) {
+            profileName = this.profileFormGroup.controls.odmProfile.value;
+        }
+        else  {
+            profileName = profile.odmProfile.name;
+        }
+        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === profileName)
+            {
+                return i;
+            }
+        }
+    }
+
+    public sliderODMProfileChange(index: number) {
+        let profileInfo = this.deviceSystemProfileInfo.pl[index].odmName;
+        this.profileFormGroup.patchValue({
+            odmProfile: { name: profileInfo },
+        });
+        this.profileFormGroup.markAsDirty();
     }
 
     private overwriteDefaultRefreshRateValue() {
@@ -312,6 +383,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     this.utils.pageDisabled = false;
                 });
         } else {
+            console.error("Form Input invalid");
             this.profileFormProgress = false;
             this.utils.pageDisabled = false;
         }
@@ -364,6 +436,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             tdpValues: odmTDPValuesArray
         });
 
+        const nvidiaPowerCTRLProfileGroup: FormGroup = this.fb.group(profile.nvidiaPowerCTRLProfile);
+
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
 
@@ -383,7 +457,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             webcam: webcamGroup,
             fan: fanControlGroup,
             odmProfile: odmProfileGroup,
-            odmPowerLimits: odmPowerLimits
+            odmPowerLimits: odmPowerLimits,
+            nvidiaPowerCTRLProfile: nvidiaPowerCTRLProfileGroup
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
@@ -538,7 +613,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 tdpValues.controls[i].setValue(newValue);
             }
         }
-
+        
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 
@@ -564,6 +639,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     profileNameControl.setValue(this.odmProfileNames[2]);
                 }
             }
+        }
+        // to fix bug of not updated validity of middle slider
+        for (let i = 0; i < tdpValues.controls.length; i++) {
+            tdpValues.controls[i].updateValueAndValidity();
         }
 
     }
@@ -755,6 +834,17 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.scrollTo.emit(this.fancontrolHeaderE.nativeElement.offsetTop - 50);
         } else {
             this.showFanGraphs = false;
+        }
+    }
+
+    @ViewChild('nvidiaPowerCTRLHeader') nvidiaPowerCTRLHeaderE;
+    public toggleTGPChart() {
+        this.showTGPChart = !this.showTGPChart;
+        if (this.showTGPChart) {
+            // The timeout is required here, because this is at the bottom of
+            // the page and the scroll needs to happen after the page already
+            // got rendered and is already bigger.
+            setTimeout(() => this.scrollTo.emit(this.nvidiaPowerCTRLHeaderE.nativeElement.offsetTop - 50), 10);
         }
     }
 

@@ -16,11 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { manageCriticalTemperature } from '../../common/classes/FanUtils';
 import { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
 
 export enum FAN_LOGIC { CPU, GPU }
 
-class ValueBuffer {
+export class ValueBuffer {
     private bufferData: Array<number>;
     private bufferMaxSize = 13; // Buffer max size
 
@@ -173,7 +174,7 @@ export class FanControlLogic {
     /**
      * Used to report temperature to the logic handler.
      *
-     * @param temperatureValue New temperature sensor value in celcius
+     * @param temperatureValue New temperature sensor value in Celsius
      */
     public reportTemperature(temperatureValue: number) {
         this.tempBuffer.addValue(temperatureValue);
@@ -223,19 +224,6 @@ export class FanControlLogic {
         return [temp, speed];
     }
 
-    /**
-     * Ensure minimum fan speed if temperature is high
-     */
-    private manageCriticalTemperature(temp: number, speed: number): number {
-        const minimumCriticalFanSpeed: number = 40;
-        const criticalTemp: number = 75;
-
-        if (temp > criticalTemp && speed < minimumCriticalFanSpeed) {
-            speed = minimumCriticalFanSpeed;
-        }
-        return speed
-    }
-
     private calculateSpeedPercent(): number {
         let [temp, speed] = this.getFanValues();
 
@@ -249,7 +237,7 @@ export class FanControlLogic {
 
         speed = this.applyHwFanLimitations(speed);
         speed = this.limitFanSpeedChange(speed);
-        speed = this.manageCriticalTemperature(temp, speed)
+        speed = manageCriticalTemperature(temp, speed)
 
         this.lastSpeed = speed;
         return speed;

@@ -27,6 +27,7 @@ import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { defaultSettings, ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import { generateProfileId, ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
+import { DaemonListener } from './DaemonListener';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { CpuWorker } from './CpuWorker';
@@ -51,6 +52,7 @@ import { GpuInfoWorker } from "./GpuInfoWorker";
 import { CpuPowerWorker } from './CpuPowerWorker';
 import { PrimeWorker } from './PrimeWorker';
 import { KeyboardBacklightListener } from './KeyboardBacklightListener';
+import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
 import { AvailabilityService } from "../../common/classes/availability.service";
 
 const tccPackage = require('../../package.json');
@@ -73,7 +75,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
-    private listeners = [];
+    private listeners: DaemonListener[] = [];
 
     protected started = false;
 
@@ -132,6 +134,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(this.displayWorker);
 
         this.listeners.push(new KeyboardBacklightListener(this));
+        this.listeners.push(new NVIDIAPowerCTRLListener(this));
 
         this.startWorkers();
 
@@ -255,14 +258,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public loadConfigsAndProfiles() {
         const dev = this.identifyDevice();
-
+        this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
         let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
-        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
+        const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(this.config.getDefaultCustomProfiles(dev)[0])));
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged = false;
@@ -438,7 +441,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         try {
-            this.customProfiles = this.config.readProfiles();
+            this.customProfiles = this.config.readProfiles(device);
         } catch (err) {
             this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
@@ -503,6 +506,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         TuxedoIOAPI.getModuleInfo(modInfo);
 
         const dmiSKUDeviceMap = new Map<string, TUXEDODevice>();
+        dmiSKUDeviceMap.set('IBS1706', TUXEDODevice.IBP17G6);
         dmiSKUDeviceMap.set('IBP1XI08MK1', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP1XI08MK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP14I08MK2', TUXEDODevice.IBPG8);
@@ -517,9 +521,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
+        dmiSKUDeviceMap.set('PULSE1403', TUXEDODevice.PULSE1403);
+        dmiSKUDeviceMap.set('PULSE1404', TUXEDODevice.PULSE1404);
         dmiSKUDeviceMap.set('STELLARIS1XI05', TUXEDODevice.STELLARIS1XI05);
         dmiSKUDeviceMap.set('POLARIS1XA05', TUXEDODevice.POLARIS1XA05);
         dmiSKUDeviceMap.set('STELLARIS1XA05', TUXEDODevice.STELLARIS1XA05);
+        dmiSKUDeviceMap.set('STELLARIS16I06', TUXEDODevice.STELLARIS16I06);
+        dmiSKUDeviceMap.set('STELLARIS17I06', TUXEDODevice.STELLARIS17I06);
         dmiSKUDeviceMap.set('AURA14GEN3', TUXEDODevice.AURA14G3);
         dmiSKUDeviceMap.set('AURA15GEN3', TUXEDODevice.AURA15G3);
 
@@ -559,22 +567,28 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     setCurrentProfileByName(profileName: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.name === profileName);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     setCurrentProfileById(id: string): boolean {
         this.activeProfile = this.getAllProfiles().find(profile => profile.id === id);
+        let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
-            return false;
-        } else {
-            return true;
+            result = false;
         }
+        this.listeners.forEach((listener) => {
+            listener.onActiveProfileChanged();
+        })
+        return result;
     }
 
     getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
@@ -680,32 +694,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         {
             profile.display.useResolution = false;
         }
-        let activeDisplayMode;
-        try
-        {
-            activeDisplayMode = this.displayWorker.getActiveDisplayMode();
+
+        if (profile.display.refreshRate === undefined) {
+            profile.display.refreshRate = -1;
         }
-        catch(err)
-        {
-            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
+        if (profile.display.xResolution === undefined) {
+            profile.display.xResolution = -1;
         }
-        if (!activeDisplayMode)
-        {
-            activeDisplayMode = {refreshRates: [-1], xResolution: -1, yResolution: -1};
-        }       
-        if(profile.display.refreshRate === undefined)
-        {
-            profile.display.refreshRate = activeDisplayMode.refreshRates[0];
-        }
-        if(profile.display.xResolution === undefined)
-        {
-            profile.display.xResolution = activeDisplayMode.xResolution;
-        }
-        if(profile.display.yResolution === undefined)
-        {
-            profile.display.yResolution = activeDisplayMode.yResolution;
-        }
-         
+        if (profile.display.yResolution === undefined) {
+            profile.display.yResolution = -1;
+        }         
 
         if (profile.webcam === undefined) {
             profile.webcam = {
@@ -769,6 +767,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const nrMissingValues = tdpInfo.length - profile.odmPowerLimits.tdpValues.length;
         if (nrMissingValues > 0) {
             profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map(e => e.max));
+        }
+
+        if (profile.nvidiaPowerCTRLProfile === undefined) {
+            profile.nvidiaPowerCTRLProfile = { cTGPOffset: 0 };
+        }
+
+        if (profile.nvidiaPowerCTRLProfile.cTGPOffset === undefined) {
+            profile.nvidiaPowerCTRLProfile.cTGPOffset = 0;
         }
 
         return profile;

@@ -29,7 +29,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="15px">
         <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
-            {{ fanTableEntry.temp }} °C
+            {{ formatTemperatureLabel(fanTableEntry.temp) }}
         </mat-grid-tile>
     </mat-grid-list>
 

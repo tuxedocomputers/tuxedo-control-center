@@ -265,7 +265,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <!-- Fan control settings -->
         <!-- todo: currently only showing fan controls for wmi, should be adjusted for hwmon later -->
-        <div #fancontrolHeader class="tcc-options-group" *ngIf="this.tccDBus.tuxedoWmiAvailable?.value && !this.tccDBus.fanHwmonAvailable?.value"
+        <div #fancontrolHeader class="tcc-options-group" *ngIf="this.tccDBus.tuxedoWmiAvailable?.value || this.tccDBus.fanHwmonAvailable?.value"
             [ngClass]="{'not-available': !compat.hasFanControl || !this.config.getSettings().fanControlEnabled }"
             [matTooltip]="!compat.hasFanControl ? compat.fanControlCompatibilityMessage: !this.config.getSettings().fanControlEnabled ? this.config.fanControlDisabledMessage: ''">
 
@@ -493,7 +493,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <hr />
             </div>
             <mat-card-content class="content">
-                
+                <p class="sub-header" *ngIf="hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMTDPLabel" >CPU power limit control</p>                    
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                     *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                     <!-- ODM Profile -->
@@ -501,34 +501,58 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div formGroupName="odmProfile">
                         <mat-grid-tile [colspan]="gridParams.headerSpan">
                             <header [ngClass]="{'inactive': false}">
-                                <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
-                                <mat-icon
-                                    class="info-icon"
-                                    i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
-                                    matTooltip="The system profiles limit the maximal energy consumption of the processors."
-                                    [matTooltipShowDelay]="infoTooltipShowDelay">
-                                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                                </mat-icon>
+                                <ng-container *ngIf="!hasDeviceSystemProfileInfo">
+                                    <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
+                                    <mat-icon
+                                        class="info-icon"
+                                        i18n-matTooltip="@@cProfMgrDetailsSystemProfileiInfoTooltip"
+                                        matTooltip="The system profiles limit the maximal energy consumption of the processors."
+                                        [matTooltipShowDelay]="infoTooltipShowDelay">
+                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                    </mat-icon>
+                                </ng-container>
+                                <ng-container *ngIf="hasDeviceSystemProfileInfo" i18n="@@tdpLabelsPL1">Sustained Power Limit (PL1)</ng-container>
                             </header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
-                            <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
-                        </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
-                            <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
-                                <mat-select formControlName="name" [disableOptionCentering]="true">
-                                    <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
-                                        {{ odmProfileToName.get(odmProfileName) }}
-                                    </mat-option>
-                                </mat-select>
-                            </content>
-                        </mat-grid-tile>
+                        <ng-container *ngIf="!hasDeviceSystemProfileInfo">
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
+                                <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                    <mat-select formControlName="name" [disableOptionCentering]="true">
+                                        <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
+                                            {{ odmProfileToName.get(odmProfileName) }}
+                                        </mat-option>
+                                    </mat-select>
+                                </content>
+                            </mat-grid-tile>
+                        </ng-container>
+                        <ng-container *ngIf="hasDeviceSystemProfileInfo">
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(viewProfile.odmProfile.name) }}</content>
+                                <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
+                                    <mat-slider
+                                            #odmProfilesPowerLimitSlider
+                                            [min]="0"
+                                            [max]="deviceSystemProfileInfo.pl.length -1"
+                                            [value]="getODMprofilePowerLimitID()"
+                                            step="1"
+                                            (change)="sliderODMProfileChange(odmProfilesPowerLimitSlider.value)"
+                                            color="primary">
+                                    </mat-slider>
+                                </content>
+                            </mat-grid-tile>
+                        </ng-container>
                     </div>
 
                 </mat-grid-list>
 
-                <h4 i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</h4>
+                <p class="sub-header" i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</p>
 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
                     <div formGroupName="odmPowerLimits">
@@ -583,7 +607,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
                     [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage : ''"
                 >
-                    <h4 i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</h4>
+                    <p class="sub-header" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</p>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                         [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
@@ -743,6 +767,93 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                         </div>
                     </mat-grid-list>
+                </div>
+
+                <div *ngIf="!compat.hideCTGP && nvidiaPowerCTRLAvailable && nvidiaPowerCTRLMaxPowerLimit > 0">
+                    <p class="sub-header" #nvidiaPowerCTRLHeader i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA power control</p>
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                        <div formGroupName="nvidiaPowerCTRLProfile">
+                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <header i18n="@@cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel">Configurable graphics power (cTGP)</header>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <content class="value" [hidden]="editProfile">{{ nvidiaPowerCTRLDefaultPowerLimit + viewProfile.nvidiaPowerCTRLProfile.cTGPOffset }} W</content>
+                                <content class="value" [hidden]="!editProfile">{{ nvidiaPowerCTRLDefaultPowerLimit + inputCTGPOffset.value }} W</content>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), -1, 0, 25));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary"
+                                    [hidden]="!editProfile"
+                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset'), +1, 0, 25));"
+                                    (mouseup)="buttonRepeatUp()"
+                                    (mouseleave)="buttonRepeatUp()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <content class="input" [hidden]="!editProfile">
+                                    <mat-slider #inputCTGPOffset
+                                        formControlName="cTGPOffset"
+                                        min="0"
+                                        [max]="nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit"
+                                        step="1"
+                                        color="primary">
+                                    </mat-slider>
+                                    <button mat-icon-button
+                                        color="primary"
+                                        (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(viewProfile.nvidiaPowerCTRLProfile.cTGPOffset)"
+                                        [hidden]="!profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').dirty">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </content>
+                            </mat-grid-tile>
+                        </div>
+                    </mat-grid-list>
+
+                    <div class="tgp-chart-container">
+                        <button mat-stroked-button (click)="toggleTGPChart()">
+                            <ng-container i18n="@@cProfMgrDetailsToggleTGPChartLabel">Toggle TGP chart</ng-container>
+                            <mat-icon>bar_chart</mat-icon>
+                        </button>
+
+                        <mat-grid-list *ngIf="showTGPChart" cols=1 rowHeight="1004:145" class="profile-details-edit-grid tgp-chart">
+                            <mat-grid-tile colspan=1>
+                                <svg viewBox="0 0 1004 55">
+                                    <rect y="30" height="20" style="fill:rgba(227, 0, 22, 0.5);stroke:rgba(227, 0, 22, 0.3);stroke-width:1"
+                                        x="1"
+                                        [attr.width]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
+                                    <rect y="30" height="20" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1"
+                                        [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit"
+                                        [attr.width]="min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)*1000/nvidiaPowerCTRLMaxPowerLimit" />
+                                    <path style="stroke:dimgrey;stroke-width:4" d="m 1002,25 0,30" />
+                                    <text class="value" text-anchor="middle" [style]="nvidiaPowerCTRLDefaultPowerLimit < 4 ? 'fill-opacity: 0;' : ''">
+                                        <tspan style="fill: #444444;" y="45"
+                                            [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)/2*1000/nvidiaPowerCTRLMaxPowerLimit"
+                                            >{{ nvidiaPowerCTRLDefaultPowerLimit + inputCTGPOffset.value }} W</tspan>
+                                    </text>
+                                    <text class="value" text-anchor="middle" [style]="min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) < 4 ? 'fill-opacity: 0;' : ''">
+                                        <tspan style="fill: #444444;" y="45"
+                                            [attr.x]="(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value+min(25, nvidiaPowerCTRLMaxPowerLimit-nvidiaPowerCTRLDefaultPowerLimit-inputCTGPOffset.value)/2)*1000/nvidiaPowerCTRLMaxPowerLimit"
+                                            >{{ min(25, nvidiaPowerCTRLMaxPowerLimit-(nvidiaPowerCTRLDefaultPowerLimit+inputCTGPOffset.value)) }} W</tspan>
+                                    </text>
+                                    <svg viewBox="0 0 668 55">
+                                        <rect x="0" y="5" width="24" height="10" style="fill:rgba(227, 0, 22, 0.5);stroke:rgba(227, 0, 22, 0.3);stroke-width:1" />
+                                        <rect x="270" y="5" width="24" height="10" style="fill:rgba(10, 10, 10, 0.4);stroke:rgba(120, 120, 120, 0.4);stroke-width:1" />
+                                        <path style="stroke:dimgrey;stroke-width:2" d="m 462,0 0,20" />
+                                        <text>
+                                            <tspan style="fill: dimgrey;" x="34" y="14" i18n="@@cProfMgrDetailsTGPChartCTGPLabel">Configurable graphics power (cTGP)</tspan>
+                                            <tspan style="fill: dimgrey;" x="304" y="14" i18n="@@cProfMgrDetailsTGPChartDBLabel">Dynamic Boost range</tspan>
+                                            <tspan style="fill: dimgrey;" x="484" y="14" i18n="@@cProfMgrDetailsTGPChartMaxLimitLabel">Maximum power limit ({{ nvidiaPowerCTRLMaxPowerLimit }} W)</tspan>
+                                        </text>
+                                    </svg>
+                                </svg>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </div>
                 </div>
             </mat-card-content>
         </div>

@@ -23,16 +23,19 @@ import { SysFsService } from "./sys-fs.service";
 import { TccDBusClientService } from "./tcc-dbus-client.service";
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { TimeData } from "src/service-app/classes/TccDBusInterface";
+import { deviceSystemProfileInfo, SystemProfileInfo } from "src/common/models/ISystemProfileInfo";
+import { TUXEDODevice } from "src/common/models/DefaultProfiles";
 
 @Injectable({
     providedIn: "root",
 })
 export class CompatibilityService {
     private hasAquarisValue: boolean;
+    private hideCTGPValue: boolean;
 
     constructor(
         private tccDbus: TccDBusClientService,
-        private sysfs: SysFsService
+        private sysfs: SysFsService,
     ) {
         // TODO: Manual read until general device id get merged
         const dmi = new DMIController("/sys/class/dmi/id");
@@ -54,7 +57,8 @@ export class CompatibilityService {
                 deviceName !== undefined &&
                 (deviceName === "STELLARIS1XI04" ||
                     deviceName === "STEPOL1XA04" ||
-                    deviceName === "STELLARIS1XI05")
+                    deviceName === "STELLARIS1XI05" ||
+                    deviceName === 'STELLARIS17I06')
             ) {
                 showAquarisMenu = true;
             } else {
@@ -64,6 +68,28 @@ export class CompatibilityService {
             showAquarisMenu = true;
         }
         this.hasAquarisValue = showAquarisMenu;
+
+        // Hide the cTGP settings for the IBP series, because, albeit nvidia-smi tells otherwise,
+        // they don't offically support it and using it results in undefined behaviour.
+        this.hideCTGPValue = deviceName === "IBP14I06" ||
+                             deviceName === "IBP1XI07MK1" ||
+                             deviceName === "IBP1XI07MK2" ||
+                             deviceName === "IBP1XI08MK1" ||
+                             deviceName === "IBP14I08MK2" ||
+                             deviceName === "IBP16I08MK2" ||
+                             deviceName === "IBP14A09MK1 / IBP15A09MK1";
+    }
+
+    public getSystemProfileInfo(): SystemProfileInfo {
+        return deviceSystemProfileInfo.get(this.tccDbus.device);
+    }
+
+    public getCurrentDevice(): TUXEDODevice {
+        return this.tccDbus.device;
+    }
+
+    public getHasSystemProfileInfo(): boolean {
+        return (deviceSystemProfileInfo.get(this.tccDbus.device) !== undefined);
     }
 
     get hasFanInfo(): boolean {
@@ -215,6 +241,10 @@ export class CompatibilityService {
 
     get hasAquaris() {
         return this.hasAquarisValue;
+    }
+
+    get hideCTGP() {
+        return this.hideCTGPValue;
     }
 
     /**
