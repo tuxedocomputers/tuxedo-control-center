@@ -68,13 +68,20 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     async changePassword() {
         this.utils.pageDisabled = true;
+        this.changeCryptPassword().then((execStatus) => {
+            if (execStatus) {
+                this.passwordFormGroup.setValue({
+                    cryptPassword: "",
+                    newPassword: "",
+                    confirmPassword: ""
+                });
 
-        this.changeCryptPassword().then(() => {
-            this.passwordFormGroup.setValue({
-                cryptPassword: "",
-                newPassword: "",
-                confirmPassword: ""
-            });
+                // clearing error status, otherwise input fields are marked as errors after success
+                this.passwordFormGroup.get("cryptPassword").setErrors(null);
+                this.passwordFormGroup.get("newPassword").setErrors(null);
+                this.passwordFormGroup.get("confirmPassword").setErrors(null);
+            }
+
             this.utils.pageDisabled = false;
         });
     }
@@ -101,9 +108,11 @@ export class ChangeCryptPasswordComponent implements OnInit {
         return this.utils.execCmdAsync(`pkexec /bin/sh -c "` + oneliner + `"`).then(() => {
             this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
+            return true;
         }).catch(() => {
             this.successtext_cryptsetup = '';
             this.errortext_cryptsetup = $localize `:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
+            return false;
         });
     }
 
