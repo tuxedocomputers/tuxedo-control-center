@@ -33,18 +33,22 @@ export class ChangeCryptPasswordComponent implements OnInit {
     successtext_cryptsetup = '';
     errortext_cryptsetup = '';
     crypt_drives = [];
+    minLength = 1;
+    maxLength = 50;
 
-    passwordFormGroup: FormGroup = new FormGroup({
-        cryptPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
-        newPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
-        confirmPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)])
-    }, { validators: [this.confirmValidation] })
+    passwordFormGroup: FormGroup;
 
     constructor(
         private utils: UtilsService
     ) { }
 
-    async ngOnInit() {
+    async ngOnInit(): Promise<void> {
+        this.passwordFormGroup = new FormGroup({
+            cryptPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
+            newPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
+            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)])
+        }, { validators: [this.confirmValidation] })
+
         this.crypt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
 
         this.buttonType = "password";
