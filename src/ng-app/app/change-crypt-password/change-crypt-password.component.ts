@@ -34,7 +34,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     errortext_cryptsetup = '';
     crypt_drives = [];
     minLength = 1;
-    maxLength = 50;
+    maxLength = 512;
 
     passwordFormGroup: FormGroup;
 
