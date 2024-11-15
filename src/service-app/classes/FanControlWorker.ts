@@ -38,6 +38,7 @@ import { exec } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
 import { ITccProfile } from "../../common/models/TccProfile";
+import { TUXEDODevice } from "../../common/models/DefaultProfiles";
 
 export class FanControlWorker extends DaemonWorker {
     private fans: Map<number, FanControlLogic>;
@@ -72,7 +73,6 @@ export class FanControlWorker extends DaemonWorker {
 
     private hwmonTuxiAvailable: boolean;
     private hwmonTuxiPath: string;
-
 
     private previousFanProfile: ITccFanProfile;
     private previousFanSpeeds: { min: number; max: number; offset: number } = {
@@ -161,7 +161,10 @@ export class FanControlWorker extends DaemonWorker {
         this.hwmonPwmAvailable = fs.existsSync(this.hwmonPwmPath);
 
         if (this.hwmonPwmAvailable) {
-            this.platformAvailable = fs.existsSync(this.platformPath);
+            const dev = this.tccd.identifyDevice();
+            if (dev !== TUXEDODevice.SIRIUS1601 && dev !== TUXEDODevice.SIRIUS1602) {
+                this.platformAvailable = fs.existsSync(this.platformPath);
+            }
 
             if (this.platformAvailable) {
                 this.setHwmonPwmEnable(1);
