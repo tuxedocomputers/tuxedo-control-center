@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.14] - 2024-11-18
 ### Added
 - Temperature readout from alternative Sirius interface (prep for fan control support)
 
