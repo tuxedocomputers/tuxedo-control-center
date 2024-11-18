@@ -1,5 +1,12 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Temperature readout from alternative Sirius interface (prep for fan control support)
+
+### Changed
+- Crypt password change adjustments, now allows up to 512 characters
+
 ## [2.1.13] - 2024-08-05
 ### Fixed
 - Various cases of where, sometimes, power limit sliders would
