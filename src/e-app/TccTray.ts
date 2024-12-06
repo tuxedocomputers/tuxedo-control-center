@@ -78,6 +78,7 @@ export class TccTray {
                 (deviceName === 'STELLARIS1XI04' ||
                  deviceName === 'STEPOL1XA04' ||
                  deviceName === 'STELLARIS1XI05' ||
+                 deviceName === 'STELLARIS16I06' ||
                  deviceName === 'STELLARIS17I06')) {
                 showAquarisMenu = true;
             } else {
