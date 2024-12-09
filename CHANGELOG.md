@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.15] - 2024-12-09
+### Added
+- Aquaris support for missing Stellaris 16 Gen6 variants
+
 ## [2.1.14] - 2024-11-18
 ### Added
 - Temperature readout from alternative Sirius interface (prep for fan control support)
