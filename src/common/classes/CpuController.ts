@@ -235,6 +235,11 @@ export class CpuController {
             return;
         }
 
+        if (this.cores[0].scalingDriver.isReadable() && this.cores[0].scalingDriver.readValueNT() === ScalingDriver.amd_pstate_epp) {
+            // Skip writing energy performance preference if amd_pstate_epp driver is used
+            return;
+        }
+
         for (const core of this.cores) {
             if (!core.energyPerformancePreference.isAvailable() || !core.energyPerformanceAvailablePreferences.isAvailable()) { continue; }
             if (core.coreIndex !== 0 && !core.online.readValue()) { return; }

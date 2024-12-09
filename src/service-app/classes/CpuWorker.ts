@@ -277,6 +277,10 @@ export class CpuWorker extends DaemonWorker {
             }
 
             if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
+                if (core.scalingDriver.isReadable() && core.scalingDriver.readValueNT() === ScalingDriver.amd_pstate_epp) {
+                    // Skip validate energy performance preference if amd_pstate_epp driver is used
+                    continue;
+                }
                 const currentPerformancePreference = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
                 if (!profile.cpu.useMaxPerfGov) {
