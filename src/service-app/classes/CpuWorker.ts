@@ -22,6 +22,7 @@ import { CpuController } from '../../common/classes/CpuController';
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ITccProfile } from '../../common/models/TccProfile';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 export class CpuWorker extends DaemonWorker {
     private readonly basePath = '/sys/devices/system/cpu';
@@ -30,9 +31,21 @@ export class CpuWorker extends DaemonWorker {
     private readonly preferredAcpiFreqGovernors = [ 'ondemand', 'schedutil', 'conservative' ];
     private readonly preferredPerformanceAcpiFreqGovernors = [ 'performance' ];
 
+    /**
+     * Skip writing energy performance preference if flag is set
+     */
+    private noEPPWriteQuirk: boolean;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, tccd);
         this.cpuCtrl = new CpuController(this.basePath);
+
+        const dev = this.tccd.identifyDevice();
+        if ([TUXEDODevice.SIRIUS1602, TUXEDODevice.STELLSL15A06].includes(dev)) {
+            this.noEPPWriteQuirk = true;
+        } else {
+            this.noEPPWriteQuirk = false;
+        }
     }
 
     public onStart() {
@@ -142,7 +155,9 @@ export class CpuWorker extends DaemonWorker {
                 profile.cpu.governor = this.findDefaultGovernor();
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
-                this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+                if (!this.noEPPWriteQuirk) {
+                    this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+                }
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
                 this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
@@ -151,7 +166,9 @@ export class CpuWorker extends DaemonWorker {
                 profile.cpu.governor = this.findPerformanceGovernor();
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
-                this.cpuCtrl.setEnergyPerformancePreference("performance");
+                if (!this.noEPPWriteQuirk) {
+                    this.cpuCtrl.setEnergyPerformancePreference("performance");
+                }
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(-2);
                 this.cpuCtrl.setGovernorScalingMaxFrequency(undefined);
@@ -176,7 +193,9 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.setGovernorScalingMinFrequency();
             this.cpuCtrl.setGovernorScalingMaxFrequency();
             this.cpuCtrl.setGovernor(this.findDefaultGovernor());
-            this.cpuCtrl.setEnergyPerformancePreference('default');
+            if (!this.noEPPWriteQuirk) {
+                this.cpuCtrl.setEnergyPerformancePreference('default');
+            }
             if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
             }
@@ -277,10 +296,10 @@ export class CpuWorker extends DaemonWorker {
             }
 
             if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
-                if (core.scalingDriver.isReadable() && core.scalingDriver.readValueNT() === ScalingDriver.amd_pstate_epp) {
-                    // Skip validate energy performance preference if amd_pstate_epp driver is used
+                if (this.noEPPWriteQuirk) {
                     continue;
                 }
+
                 const currentPerformancePreference = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
                 if (!profile.cpu.useMaxPerfGov) {
