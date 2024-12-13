@@ -83,8 +83,12 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            if (scalingDriver === 'intel_pstate') {
-                // Fixed 'powersave' governor for intel_pstate
+            const fixedPowersaveDrivers = [
+                ScalingDriver.intel_pstate,
+                ScalingDriver.amd_pstate_epp].map(d => d.toString());
+
+            if (fixedPowersaveDrivers.includes(scalingDriver)) {
+                // Fixed 'powersave' governor for intel_pstate and amd-pstate-epp
                 return 'powersave';
             } else {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
@@ -117,8 +121,12 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            if (scalingDriver === 'intel_pstate') {
-                // Fixed 'performance' governor for intel_pstate
+            const fixedPerformanceDrivers = [
+                ScalingDriver.intel_pstate,
+                ScalingDriver.amd_pstate_epp].map(d => d.toString());
+
+            if (fixedPerformanceDrivers.includes(scalingDriver)) {
+                // Fixed 'performance' governor for intel_pstate and amd-pstate-epp
                 return 'performance';
             } else {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
