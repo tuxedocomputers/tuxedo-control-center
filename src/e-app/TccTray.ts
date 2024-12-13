@@ -91,11 +91,14 @@ export class TccTray {
         const contextMenu = Menu.buildFromTemplate([
             { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
             { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: showAquarisMenu },
+            { type: 'separator' },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
                 visible: this.state.profiles.length > 0
             },
+            { label: this.state.activeProfile.name, type: 'normal', enabled: false },
+            { type: 'separator' },
             {
                     label: 'Tray autostart', type: 'checkbox', checked: this.state.isAutostartTrayInstalled,
                     click: () => this.events.autostartTrayToggle()
