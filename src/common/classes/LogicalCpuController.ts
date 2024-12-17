@@ -30,6 +30,7 @@ export enum ScalingDriver {
     acpi_cpufreq = 'acpi-cpufreq',
     intel_pstate = 'intel_pstate',
     amd_pstate = 'amd-pstate',
+    amd_pstate_epp = 'amd-pstate-epp',
 }
 
 export class LogicalCpuController extends SysFsController {
