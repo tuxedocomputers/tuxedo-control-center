@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.16] - 2024-12-18
 ### Changed
 - Descriptive text when no keyboard backlight control is found updated to reflect current
   expectation on driver and kernel versions
