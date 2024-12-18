@@ -1,5 +1,15 @@
 # Changelog
 
+## [] - UNRELEASED
+### Changed
+- Descriptive text when no keyboard backlight control is found updated to reflect current
+  expectation on driver and kernel versions
+
+### Fixed
+- Various amd-pstate related issues known to happen when limiting CPU frequency in different
+  ways, modified to comply with current kernel feature behaviour
+  and to workaround current kernel bugs
+
 ## [2.1.15] - 2024-12-09
 ### Added
 - Aquaris support for missing Stellaris 16 Gen6 variants

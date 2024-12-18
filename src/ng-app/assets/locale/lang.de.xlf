@@ -1516,8 +1516,8 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cKeyboardBacklightNotSupported" datatype="html">
-        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-keyboard 3.2.0 or tuxedo-keyboard-ite 0.3.0 respectively and Linux kernel 5.9 are required for most devices (some devices need newer versions). If you are using Ubuntu 20.04 or earlier or an old version of TUXEDO OS based on it, these driver versions do not get installed automatically.</source>
-        <target phase-name="approval-1" state="translated">Dein Gerät hat keine Tastaturbeleuchtung, ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel oder der Treiber ist zu alt. Mindestens tuxedo-keyboard 3.2.0 bzw. tuxedo-keyboard-ite 0.3.0 und Linux Kernel 5.9 werden benötigt (manche Geräte brauchen neuere Versionen). Wenn Sie Ubuntu 20.04 oder früher oder eine alte Version von TUXEDO OS verwenden die darauf basiert, werden diese Treiberversionen nicht automatisch installiert.</target>
+        <source>Your device has no keyboard backlight, is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-drivers 4.0.0 and Linux kernel 5.15 are required for most devices (some devices need newer versions).</source>
+        <target phase-name="approval-1" state="translated">Dein Gerät hat keine Tastaturbeleuchtung, ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel oder der Treiber ist zu alt. Mindestens tuxedo-drivers 4.0.0 und Linux Kernel 5.15 werden benötigt (manche Geräte brauchen neuere Versionen).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
           <context context-type="linenumber">47,51</context>
