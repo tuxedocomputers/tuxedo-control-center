@@ -1,9 +1,6 @@
-import { Injectable } from "@angular/core";
 import { execCommandAsync } from "./Utils";
 
-@Injectable({
-    providedIn: "root",
-})
+
 export class VendorService {
     private cpuVendor: string | null = null;
 

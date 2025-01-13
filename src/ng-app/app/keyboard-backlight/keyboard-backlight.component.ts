@@ -33,6 +33,7 @@ import { interval, Subscription } from "rxjs";
     selector: "app-keyboard-backlight",
     templateUrl: "./keyboard-backlight.component.html",
     styleUrls: ["./keyboard-backlight.component.scss"],
+    standalone: false
 })
 export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
@@ -294,9 +295,12 @@ export class KeyboardBacklightComponent implements OnInit {
         min: number,
         max: number
     ): void {
+        // todo: fix
+        /*
         this.onBrightnessSliderInput(
             this.clamp(slider.value + offset, min, max)
         );
+        */
     }
 
     public getSelectedColor(): string {

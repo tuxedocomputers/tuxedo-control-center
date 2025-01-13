@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as fs from 'fs';
-import { promises as fsp} from 'fs';
+const fs: any = require("fs");
+const fsp: any = require("fs").promises;
 import { ISysFsProperty } from '../models/IDeviceProperty';
 
 /**
@@ -175,7 +175,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     /**
      * Set a callback on changes to value
      */
-    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => Array<fs.FSWatcher>): Array<fs.FSWatcher> {
+    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => Array<any>): Array<any> {
         if (this.readPath == this.writePath) {
             return [fs.watch(this.readPath, listener)];
         }

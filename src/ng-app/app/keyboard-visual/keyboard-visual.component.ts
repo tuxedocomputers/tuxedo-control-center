@@ -31,6 +31,7 @@ import { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSet
     selector: "app-keyboard-visual",
     templateUrl: "./keyboard-visual.component.html",
     styleUrls: ["./keyboard-visual.component.scss"],
+    standalone: false
 })
 export class KeyboardVisualComponent implements OnInit {
     @Input()

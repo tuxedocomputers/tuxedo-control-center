@@ -32,6 +32,7 @@ import { InputDialogData } from "../dialog-input-text/dialog-input-text.componen
     selector: "app-webcam-settings",
     templateUrl: "./webcam-settings.component.html",
     styleUrls: ["./webcam-settings.component.scss"],
+    standalone: false
 })
 export class WebcamSettingsComponent implements OnInit {
     gridParams: { cols: number, headerSpan: number, valueSpan: number, inputSpan: number } = {

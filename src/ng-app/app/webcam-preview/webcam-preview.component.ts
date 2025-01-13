@@ -11,6 +11,7 @@ import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
     selector: "app-webcam-preview",
     templateUrl: "./webcam-preview.component.html",
     styleUrls: ["./webcam-preview.component.scss"],
+    standalone: false
 })
 export class WebcamPreviewComponent implements OnInit {
     constructor(

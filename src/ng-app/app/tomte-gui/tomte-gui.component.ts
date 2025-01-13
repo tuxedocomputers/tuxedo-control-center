@@ -32,7 +32,8 @@ import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component'
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false }
     }
-  ]
+  ],
+  standalone: false
 })
 export class TomteGuiComponent implements OnInit {
     tomteIsInstalled: boolean = false;

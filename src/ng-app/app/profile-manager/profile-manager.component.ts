@@ -48,7 +48,8 @@ class ProfileManagerButton {
 @Component({
     selector: 'app-profile-manager',
     templateUrl: './profile-manager.component.html',
-    styleUrls: ['./profile-manager.component.scss']
+    styleUrls: ['./profile-manager.component.scss'],
+    standalone: false
 })
 export class ProfileManagerComponent implements OnInit, OnDestroy {
 

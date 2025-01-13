@@ -41,7 +41,8 @@ enum BatteryThresholdOptions {
 @Component({
     selector: 'app-charging-settings',
     templateUrl: './charging-settings.component.html',
-    styleUrls: ['./charging-settings.component.scss']
+    styleUrls: ['./charging-settings.component.scss'],
+    standalone: false
 })
 export class ChargingSettingsComponent implements OnInit, OnDestroy {
 

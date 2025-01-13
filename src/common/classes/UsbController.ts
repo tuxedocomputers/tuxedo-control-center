@@ -41,8 +41,8 @@ export class UsbController extends SysFsController {
 
     public static getUsbDriverDeviceList(): string[] {
         return SysFsController.getDeviceListDirent(UsbController.USB_DRIVER_PATH)
-            .filter((dirent: fs.Dirent): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
-            .map((dirent: fs.Dirent): string => dirent.name);
+        .filter((dirent: any): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
+        .map((dirent: any): string => dirent.name);
     }
     // End static stuff
 

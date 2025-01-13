@@ -1,4 +1,3 @@
-import { Injectable } from "@angular/core";
 import {
     amdDGpuDeviceIdString,
     amdIGpuDeviceIdString,
@@ -7,9 +6,7 @@ import {
 import { countLines, execCommandSync } from "./Utils";
 import { IDeviceCounts } from "src/common/models/TccGpuValues";
 
-@Injectable({
-    providedIn: "root",
-})
+
 export class AvailabilityService {
     private iGpuAvailable: boolean = false;
     private dGpuAvailable: boolean = false;

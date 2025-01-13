@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
+const path: any = require("path");
 import { SysFsController } from './SysFsController';
 import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyNumListExplicit, SysFsPropertyString } from './SysFsProperties';
 

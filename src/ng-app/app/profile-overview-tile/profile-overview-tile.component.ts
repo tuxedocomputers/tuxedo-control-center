@@ -34,7 +34,8 @@ import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 @Component({
     selector: 'app-profile-overview-tile',
     templateUrl: './profile-overview-tile.component.html',
-    styleUrls: ['./profile-overview-tile.component.scss']
+    styleUrls: ['./profile-overview-tile.component.scss'],
+    standalone: false
 })
 export class ProfileOverviewTileComponent implements OnInit {
 

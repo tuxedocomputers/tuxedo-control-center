@@ -17,15 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec, ExecException, execSync } from "child_process";
-import * as fs from "fs";
+const fs: typeof import("fs") = require("fs");
+const child_process: any = require("child_process");
+
 
 export function getDirectories(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent: fs.Dirent): boolean => dirent.isDirectory())
-            .map((dirent: fs.Dirent): string => dirent.name);
+            .filter((dirent: any): boolean => dirent.isDirectory())
+            .map((dirent: any): string => dirent.name);
     } catch (err: unknown) {
         console.error("Utils: getDirectories failed =>", err)
         return [];
@@ -36,8 +37,8 @@ export function getFiles(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent: fs.Dirent): boolean => dirent.isFile())
-            .map((dirent: fs.Dirent): string => dirent.name);
+            .filter((dirent: any): boolean => dirent.isFile())
+            .map((dirent: any): string => dirent.name);
     } catch (err: unknown) {
         console.error("Utils: getFiles failed =>", err)
         return [];
@@ -48,8 +49,8 @@ export function getSymbolicLinks(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent: fs.Dirent): boolean => dirent.isSymbolicLink())
-            .map((dirent: fs.Dirent): string => dirent.name);
+            .filter((dirent: any): boolean => dirent.isSymbolicLink())
+            .map((dirent: any): string => dirent.name);
     } catch (err: unknown) {
         console.error("Utils: getSymbolicLinks failed =>", err)
         return [];
@@ -119,7 +120,7 @@ export function delay(ms: number): Promise<void> {
 // seperate exec cmd functionality because tccd can not access electron
 export async function execCommandAsync(command: string): Promise<string> {
     return new Promise((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        exec(command, (error: ExecException, stdout: string, stderr: string): void => {
+        child_process.exec(command, (error: any, stdout: string, stderr: string): void => {
             if (error) {
                 console.error("Utils: execCommandAsync failed =>", error);
                 resolve("");
@@ -132,7 +133,7 @@ export async function execCommandAsync(command: string): Promise<string> {
 
 export function execCommandSync(command: string): string {
     try {
-        return execSync(command).toString();
+        return child_process.execSync(command).toString();
     } catch (err: unknown) {
         console.error("Utils: execCommandSync failed =>", err);
         return undefined;

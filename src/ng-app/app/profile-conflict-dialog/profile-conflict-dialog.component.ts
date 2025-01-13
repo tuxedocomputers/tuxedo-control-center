@@ -32,7 +32,8 @@ export interface IProfileConflictDialogResult {
 @Component({
     selector: 'profile-conflict-dialog',
     templateUrl: './profile-conflict-dialog.component.html',
-    styleUrls: ['./profile-conflict-dialog.component.scss']
+    styleUrls: ['./profile-conflict-dialog.component.scss'],
+    standalone: false
 })
 
 

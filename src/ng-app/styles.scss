@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '~@angular/material/theming';
-@include mat-core();
+// todo: fix theme
+@use '@angular/material' as mat;
+@include mat.core();
 
+/*
 @import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
 @import './app/profile-details-edit/profile-details-edit.component-theme.scss';
 @import './tcc-general-defs-theme.scss';
@@ -42,6 +44,7 @@
 
 @import './themes/tuxedo-light-theme.scss';
 @import './themes/tuxedo-dark-theme.scss';
+*/
 
 [hidden] {
     visibility: hidden !important;
@@ -124,8 +127,3 @@ body {
     src: local('Titillium Web SemiBold'), local('TitilliumWeb-SemiBold'), url('./assets/fonts/TitilliumWeb-SemiBold.ttf') format('truetype');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-  
-$custom-typography: mat-typography-config(
-    $font-family: 'Titillium Web'
-);
-@include angular-material-typography($custom-typography);

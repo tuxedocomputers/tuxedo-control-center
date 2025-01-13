@@ -17,6 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/*
+// todo: update to chart.js 4
+
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from "chart.js";
 import { Color } from "ng2-charts";
 import "@angular/localize/init";
@@ -102,3 +105,4 @@ const graphColors: Color[] = [
     },
 ];
 export { graphOptions, fantableDatasets, graphColors };
+*/

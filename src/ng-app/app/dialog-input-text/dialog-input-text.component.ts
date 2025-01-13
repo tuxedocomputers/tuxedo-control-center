@@ -31,7 +31,8 @@ export interface InputDialogData {
 @Component({
     selector: 'app-dialog-input-text',
     templateUrl: './dialog-input-text.component.html',
-    styleUrls: ['./dialog-input-text.component.scss']
+    styleUrls: ['./dialog-input-text.component.scss'],
+    standalone: false
 })
 export class DialogInputTextComponent {
 

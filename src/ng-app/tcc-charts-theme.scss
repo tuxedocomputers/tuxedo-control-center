@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '~@angular/material/theming';
+
+// todo: fix theme
+//@import '~@angular/material/theming';
 
 @mixin tcc-charts-theme($theme) {
     $primary: map-get($theme, primary);

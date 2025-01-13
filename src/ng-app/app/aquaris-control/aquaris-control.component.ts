@@ -35,7 +35,8 @@ interface FanPreset {
 @Component({
     selector: 'app-aquaris-control',
     templateUrl: './aquaris-control.component.html',
-    styleUrls: ['./aquaris-control.component.scss']
+    styleUrls: ['./aquaris-control.component.scss'],
+    standalone: false
 })
 export class AquarisControlComponent implements OnInit, AfterContentInit, OnDestroy {
 

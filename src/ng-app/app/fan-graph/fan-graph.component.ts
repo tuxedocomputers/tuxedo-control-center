@@ -24,6 +24,10 @@ import {
     OnDestroy,
     OnInit,
 } from "@angular/core";
+
+/*
+// todo: update to chart.js 4
+
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { Color, Label } from "ng2-charts";
 import {
@@ -39,13 +43,22 @@ import {
 import { manageCriticalTemperature } from "src/common/classes/FanUtils";
 import { formatTemp } from "../../../common/classes/FanUtils";
 import { ConfigService } from "../config.service";
+*/
 
 @Component({
     selector: "app-fan-graph",
     templateUrl: "./fan-graph.component.html",
     styleUrls: ["./fan-graph.component.scss"],
+    standalone: false
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
+    ngOnInit(): void {}
+    ngAfterViewInit(): void {}
+    ngOnDestroy(): void {}
+
+    /*
+    // todo: update to chart.js 4
+    
     // Graph data
     // todo: why is variable called e
     public tempsLabels: Label[] = Array.from(Array(100).keys())
@@ -130,6 +143,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         this.fantableDatasets[0].data = cpuData; //nullDupes(cpuData);
         this.fantableDatasets[1].data = gpuData; //nullDupes(gpuData);
     }
+    */
 
     /**
      * Applies min, max and offset parameters and returns the resulting speed
@@ -138,6 +152,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param entry Fan table entry to be evaluated
      * @returns Resulting speed
      */
+    /*
     private applyParameters(entry: ITccFanTableEntry): number {
         let { temp, speed } = entry;
 
@@ -150,4 +165,5 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
         return speed;
     }
+    */
 }

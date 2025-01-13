@@ -29,6 +29,7 @@ import { ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
     selector: "app-prime-select",
     templateUrl: "./prime-select.component.html",
     styleUrls: ["./prime-select.component.scss"],
+    standalone: false
 })
 export class PrimeSelectComponent implements OnInit {
     public primeState: string;

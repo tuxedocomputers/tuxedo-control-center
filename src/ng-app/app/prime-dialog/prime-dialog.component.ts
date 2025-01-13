@@ -25,6 +25,7 @@ import { ConfigService } from "../config.service";
     selector: "app-prime-dialog",
     templateUrl: "./prime-dialog.component.html",
     styleUrls: ["./prime-dialog.component.scss"],
+    standalone: false
 })
 export class PrimeDialogComponent implements OnInit {
     primeSelectMode: string;

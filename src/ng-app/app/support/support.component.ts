@@ -32,7 +32,8 @@ import { MatInput } from '@angular/material/input';
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false }
     }
-  ]
+  ],
+  standalone: false
 })
 export class SupportComponent implements OnInit {
 

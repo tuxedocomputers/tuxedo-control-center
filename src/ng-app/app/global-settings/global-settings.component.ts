@@ -30,7 +30,8 @@ import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
 @Component({
     selector: 'app-global-settings',
     templateUrl: './global-settings.component.html',
-    styleUrls: ['./global-settings.component.scss']
+    styleUrls: ['./global-settings.component.scss'],
+    standalone: false
 })
 export class GlobalSettingsComponent implements OnInit {
     Object: ObjectConstructor = Object;

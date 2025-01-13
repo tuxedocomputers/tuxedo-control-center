@@ -51,6 +51,7 @@ export interface ConfirmChoiceResult {
     selector: "app-dialog-choice",
     templateUrl: "./dialog-choice.component.html",
     styleUrls: ["./dialog-choice.component.scss"],
+    standalone: false
 })
 export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: FormControl;

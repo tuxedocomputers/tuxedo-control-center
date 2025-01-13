@@ -28,7 +28,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-main-gui',
   templateUrl: './main-gui.component.html',
-  styleUrls: ['./main-gui.component.scss']
+  styleUrls: ['./main-gui.component.scss'],
+  standalone: false
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
 

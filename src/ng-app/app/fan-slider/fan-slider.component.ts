@@ -17,6 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+
+/*
+// todo: update to chart.js 4
+
 import {
     AbstractControl,
     FormBuilder,
@@ -43,12 +47,20 @@ import { delay } from "src/common/classes/Utils";
 import { formatTemp } from "../../../common/classes/FanUtils";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
+*/
+
 @Component({
     selector: "app-fan-slider",
     templateUrl: "./fan-slider.component.html",
     styleUrls: ["./fan-slider.component.scss"],
+    standalone: false
 })
 export class FanSliderComponent implements OnInit {
+    public ngOnInit(): void {}
+
+    /*
+    // todo: update to chart.js 4
+    
     public customFanPreset: ITccFanProfile = customFanPreset;
 
     @Input()
@@ -224,4 +236,5 @@ export class FanSliderComponent implements OnInit {
         this.customFanCurveEvent.emit(this.getFanFormGroupValues());
         this.chartToggleEvent.emit(this.showFanGraphs);
     }
+    */
 }

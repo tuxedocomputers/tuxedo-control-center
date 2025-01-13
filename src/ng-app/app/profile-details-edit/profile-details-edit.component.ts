@@ -58,7 +58,8 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 @Component({
     selector: 'app-profile-details-edit',
     templateUrl: './profile-details-edit.component.html',
-    styleUrls: ['./profile-details-edit.component.scss']
+    styleUrls: ['./profile-details-edit.component.scss'],
+    standalone: false
 })
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
@@ -290,9 +291,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         window.ipc.onWakeupFromSuspend((): void => {
                 // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
                 this.showFanGraphs = false;
+                /*
+                // todo: fix
                 if (this.sliderComponent) {
                     this.sliderComponent.showFanGraphs = false;
                 }
+                */
             });
     }
 
@@ -368,6 +372,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput(): void {
+        /*
+        // todo: fix
         if (this.sliderComponent) {
             const customFanCurveValues: ITccFanProfile =
                 this.sliderComponent.getFanFormGroupValues();
@@ -376,6 +382,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 .get("customFanCurve")
                 .patchValue(customFanCurveValues);
         }
+        */
 
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
@@ -415,13 +422,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 this.tccDBus.setDisplayBrightnessGnome(activeProfile.display.brightness);
             }
         }
-
+        
+        /*
+        // todo: fix
         if (this.sliderComponent) {
             const customFanCurveValues: AbstractControl = this.profileFormGroup
                 .get("fan")
                 .get("customFanCurve");
             this.sliderComponent.patchFanFormGroup(customFanCurveValues);
         }
+        */
 
         this.overwriteDefaultRefreshRateValue();
         this.tempCustomFanCurve = undefined;

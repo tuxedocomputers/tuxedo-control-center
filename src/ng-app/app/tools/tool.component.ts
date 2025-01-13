@@ -24,7 +24,8 @@ import { CompatibilityService } from '../compatibility.service';
 @Component({
     selector: 'app-tools',
     templateUrl: './tools.component.html',
-    styleUrls: ['./tools.component.scss']
+    styleUrls: ['./tools.component.scss'],
+    standalone: false
 })
 export class ToolsComponent implements OnInit {
     constructor(

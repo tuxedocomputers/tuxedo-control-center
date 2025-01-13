@@ -25,7 +25,8 @@ import { IDrive } from "../../../common/models/IDrive";
 @Component({
     selector: 'app-change-crypt-password',
     templateUrl: './change-crypt-password.component.html',
-    styleUrls: ['./change-crypt-password.component.scss']
+    styleUrls: ['./change-crypt-password.component.scss'],
+    standalone: false
 })
 export class ChangeCryptPasswordComponent implements OnInit {
     matcher: FormErrorStateMatcher = new FormErrorStateMatcher();

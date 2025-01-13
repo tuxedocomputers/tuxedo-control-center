@@ -23,7 +23,8 @@ import { UtilsService } from '../utils.service';
 @Component({
     selector: 'app-shutdown-timer',
     templateUrl: './shutdown-timer.component.html',
-    styleUrls: ['./shutdown-timer.component.scss']
+    styleUrls: ['./shutdown-timer.component.scss'],
+    standalone: false
 })
 export class ShutdownTimerComponent implements OnInit {
     public hours: Array<number> = [...Array(24).keys()];

@@ -42,6 +42,7 @@ import { PowerStateService } from "../power-state.service";
     selector: "app-cpu-dashboard",
     templateUrl: "./cpu-dashboard.component.html",
     styleUrls: ["./cpu-dashboard.component.scss"],
+    standalone: false
 })
 export class CpuDashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];

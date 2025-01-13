@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as fs from 'fs';
+const fs: typeof import("fs") = require("fs");
 
 export abstract class SysFsController {
 
@@ -30,7 +30,7 @@ export abstract class SysFsController {
         }
     }
 
-    public static getDeviceListDirent(sourceDir: string): fs.Dirent[] {
+    public static getDeviceListDirent(sourceDir: string): any[] {
         try {
             return fs.readdirSync(sourceDir, { withFileTypes: true });
         } catch (err: unknown) {

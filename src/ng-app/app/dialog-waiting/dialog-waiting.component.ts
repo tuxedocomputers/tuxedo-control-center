@@ -29,6 +29,7 @@ import {
     selector: "app-dialog-waiting",
     templateUrl: "./dialog-waiting.component.html",
     styleUrls: ["./dialog-waiting.component.scss"],
+    standalone: false
 })
 export class DialogWaitingComponent {
     public ctrlCheckboxNoBother: FormControl;

@@ -26,7 +26,7 @@
             "outputPath": "dist/tuxedo-control-center/ng-app",
             "index": "src/ng-app/index.html",
             "main": "src/ng-app/main.ts",
-            "polyfills": "src/ng-app/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "localize": true,
@@ -38,7 +38,7 @@
               "src/ng-app/styles.scss"
             ],
             "scripts": [
-              "node_modules/marked/lib/marked.js"
+              "node_modules/marked/lib/marked.umd.js"
             ],
             "allowedCommonJsDependencies": [
               "dbus-next",
@@ -56,7 +56,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -96,7 +95,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/ng-app/test.ts",
-            "polyfills": "src/ng-app/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
