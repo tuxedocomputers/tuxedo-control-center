@@ -17,9 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// todo: fix theme
-//@import '~@angular/material/theming';
-
 @mixin tcc-color-picker-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
@@ -29,7 +26,7 @@
 
     .tcc-color-picker+color-picker>.color-picker {
         box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-        background-color: mat-color($background, card);
+        background-color: mat.m2-get-color-from-palette($background, card);
 
         &.open {
             margin: 0 auto;
@@ -52,19 +49,19 @@
             }
 
             .hex-text * {
-                color: mat-color($foreground, text);
+                color: mat.m2-get-color-from-palette($foreground, text);
             }
 
             .hsla-text * {
-                color: mat-color($foreground, text);
+                color: mat.m2-get-color-from-palette($foreground, text);
             }
 
             .rgba-text * {
-                color: mat-color($foreground, text);
+                color: mat.m2-get-color-from-palette($foreground, text);
             }
 
             .box div {
-                color: mat-color($foreground, text-disabled);
+                color: mat.m2-get-color-from-palette($foreground, text-disabled);
             }
         }
     }

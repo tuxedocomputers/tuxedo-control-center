@@ -17,9 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// todo: fix theme
-//@import '~@angular/material/theming';
-
 @mixin tcc-changelog-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
@@ -28,6 +25,6 @@
     $background: map-get($theme, background);
 
     .changelog {
-        background-color: mat-color($background, background);
+        background-color: mat.m2-get-color-from-palette($background, background) !important;
     }
 }

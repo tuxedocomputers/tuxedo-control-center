@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-.mat-dialog-container
+.mat-mdc-dialog-container
 {
     min-height: 600px !important;
     min-width: 520px !important;
@@ -36,7 +36,7 @@
 // don't want to deactivate scrollbar completely, since the content might get longer and need it.
 // never mind, the scrollbar magically vanished...
 // kind of convinced CSS is cursed at this point.
-.mat-dialog-container
+.mat-mdc-dialog-container
 {
     // https://github.com/twbs/bootstrap/issues/13608
     overflow-y: auto;

@@ -16,11 +16,11 @@
     box-sizing: border-box;
 }
 
-.mat-dialog-title {
+.mat-mdc-dialog-title {
     margin-top: 0;
 }
 
-.mat-dialog-content {
+.mat-mdc-dialog-content {
     flex-grow: 1;
 }
 
@@ -39,7 +39,7 @@ button {
     margin-left: 8px;
 }
 
-.mat-progress-bar {
+.mat-mdc-progress-bar {
     width: 100%;
     height: 2px;
     margin-bottom: -2px;

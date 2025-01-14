@@ -17,7 +17,23 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- .logo {
+ .info {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+
+    .inner-info {
+        margin: 0 10px 10px 10px;
+    }
+ }
+ 
+.logo {
     width: 200px;
 }
 
@@ -65,20 +81,16 @@ table.versions {
 .changelog {
     max-height: 250px;
     overflow-y: scroll;
-}
-
-.language-select {
-    mat-select-trigger {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-
-        mat-icon {
-            margin-right: 16px;
-        }
+    
+    markdown {
+        margin: 25px;
     }
 }
 
 .content-container mat-divider.divider-separator {
     position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;
+}
+
+hr {
+    width: 95%
 }

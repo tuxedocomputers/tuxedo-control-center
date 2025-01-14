@@ -34,6 +34,7 @@
 
         .keyboard-backlight-content {
             align-items: center;
+            margin-bottom: 25px;
         }
     }
 }
@@ -80,6 +81,7 @@ content.value {
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     right: 0;
+    width: 100%;
 }
 
 .align-color-picker {
@@ -87,10 +89,13 @@ content.value {
 	right: 0;
 }
 
-
 input {
-    width: 6.5rem; 
-    outline-width: 0; 
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    outline-width: 0;
     cursor: default !important;
 }
 
@@ -124,4 +129,15 @@ input {
         flex-basis: 100%;
         white-space: normal;
     }
+}
+
+.mat-mdc-slider {
+    width: 100%;
+    overflow: visible;
+    margin: 0;
+}
+
+
+.content {
+    margin-bottom: 25px;
 }

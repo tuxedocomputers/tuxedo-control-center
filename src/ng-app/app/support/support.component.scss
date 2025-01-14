@@ -16,12 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.card-support {
-    .support-info-text {
-        text-align: center;
-        margin-bottom: 20px;
-    }
 
+.support-settings-edit {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+
+    .inner-support-settings-edit {
+        margin: 0 10px 10px 10px;
+    }
+ }
+ 
+.card-support {
     .phone-info, .web-info {
         display: flex;
         flex-flow: column;
@@ -39,4 +51,8 @@
             font-size: 1.3em;
         }
     }
+}
+
+.hr {
+    width: 95%;
 }

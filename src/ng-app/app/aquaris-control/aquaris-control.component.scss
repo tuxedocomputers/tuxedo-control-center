@@ -112,39 +112,6 @@
                 display: inline-flex;
                 width: 80px;
             }
-
-            mat-button-toggle-group {
-                margin: 25px 0px;
-                font-size: 0.7em;
-                height: 24px;
-                align-items: center;
-            }
-
-            mat-tab-group {
-                width: 100%;
-
-                ::ng-deep .mat-tab-body-content {
-                    display: flex;
-                    flex-flow: column nowrap;
-                    align-items: center;
-
-                    height: 230px;
-                    width: 100%;
-
-                    mat-button-toggle-group {
-                        transform: scale(1.4);
-                        transform-origin: center;
-                    }
-
-                    .description {
-                        display: block;
-                        margin: 40px auto;
-                        width: 90%;
-                        font-size: 1.2em;
-                        text-align: center;
-                    }
-                }
-            }
         }
     }
 }
@@ -152,12 +119,6 @@
 .color-visualizer {
     width: 0px;
     height: 0px;
-/*
-    width: 50px;
-    height: 150px;
-
-    border: 3px solid;
-*/
 }
 
 .device-list-wrapper {
@@ -214,4 +175,29 @@
 
 .try-demo-mode-button {
     margin: 0 10px;
+}
+
+.fan-speed-edit {
+    display: flex
+}
+
+mat-tab-group {
+    height: 100%;
+
+    ::ng-deep .mat-mdc-tab-body-wrapper {
+        flex: 1 1 250px;
+
+        ::ng-deep .mat-button-toggle-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        ::ng-deep .mat-mdc-checkbox {
+            display: flex;
+            justify-content: center;
+        }
+    }
 }

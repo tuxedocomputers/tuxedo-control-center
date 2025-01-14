@@ -24,17 +24,6 @@ mat-toolbar {
             margin-right: 10px;
         }
 
-        mat-button-toggle-group, .import-export-buttons {
-            transform: scale(0.7);
-            transform-origin: right;
-
-            svg {
-                width: 40px;
-                height: 40px;
-                --icon-detail: var(--icon-main);
-            }
-        }
-
         form {
             transform: scale(0.8);
             transform-origin: bottom left;
@@ -87,4 +76,8 @@ mat-toolbar {
     &.offset {
         top: 100px;
     }
+}
+
+:host ::ng-deep mat-card-content {
+    font-size: 14px;
 }

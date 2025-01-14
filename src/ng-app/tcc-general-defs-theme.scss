@@ -17,9 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// todo: fix theme
-//@import '~@angular/material/theming';
-
 @mixin tcc-general-defs-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
@@ -32,15 +29,15 @@
      * Definitions for general use of theme colors not warranting their own file
      */
     .color-primary {
-        color: mat-color($primary) !important;
+        color: mat.m2-get-color-from-palette($primary) !important;
     }
 
     .color-accent {
-        color: mat-color($accent) !important;
+        color: mat.m2-get-color-from-palette($accent) !important;
     }
 
     .color-warn {
-        color: mat-color($warn) !important;
+        color: mat.m2-get-color-from-palette($warn) !important;
     }
 }
  

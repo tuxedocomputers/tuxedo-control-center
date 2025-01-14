@@ -16,28 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-$tuxedo-light-theme-primary: mat-palette($mat-grey, 600, 400, 900);
-$tuxedo-light-theme-accent: mat-palette($mat-yellow);
-$tuxedo-light-theme-warn: mat-palette($mat-red);
 
-//$tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn);
-
-$tuxedo-control-center-light-theme: map-merge(mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn), (
-    background: map-merge($mat-light-theme-background, (
-    )),
-
-    foreground: map-merge($mat-light-theme-foreground, (
-        mat-toolbar-text: #F5F5F5
-    )),
-
-    --icon-invert: 0%
-));
-
+$tuxedo-light-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette);
+$tuxedo-light-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
+$tuxedo-light-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
+ 
+$tuxedo-control-center-light-theme: mat.m2-define-light-theme(
+    (
+        color: (
+                primary: $tuxedo-light-theme-primary,
+                accent: $tuxedo-light-theme-accent,
+                warn: $tuxedo-light-theme-warn,
+            ),
+            --icon-invert: 0%
+    )
+);
 
 .light-theme {
-    @include angular-material-theme($tuxedo-control-center-light-theme);
-    @include component-themes($tuxedo-control-center-light-theme);
-
     --icon-main: currentColor;
     --icon-detail: #e30016;
 
@@ -45,4 +40,20 @@ $tuxedo-control-center-light-theme: map-merge(mat-light-theme($tuxedo-light-them
         opacity: 0.7;
         font-weight: 600;
     }
+
+    font-family: 'Titillium Web'
+}
+
+@media (prefers-color-scheme: light) {
+    @include profile-overview-tile-theme($tuxedo-control-center-light-theme);
+    @include profile-details-edit-theme($tuxedo-control-center-light-theme);
+
+    @include tcc-general-defs-theme($tuxedo-control-center-light-theme);
+    @include tcc-gauge-theme($tuxedo-control-center-light-theme);
+    @include tcc-changelog-theme($tuxedo-control-center-light-theme);
+    @include tcc-charts-theme($tuxedo-control-center-light-theme);
+    @include tcc-color-picker-theme($tuxedo-control-center-light-theme);
+
+    @include mat.all-component-themes($tuxedo-control-center-light-theme);
+
 }

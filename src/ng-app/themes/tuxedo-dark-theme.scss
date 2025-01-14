@@ -16,24 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-$tuxedo-dark-theme-primary: mat-palette($mat-grey, 400, 50, 600);
-$tuxedo-dark-theme-accent: mat-palette($mat-yellow);
-$tuxedo-dark-theme-warn: mat-palette($mat-red);
 
-$tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn), (
-    background: map-merge($mat-dark-theme-background, (
-        dialog: #252525,
-        card: #252525,
-        status-bar: #151515,
-    )),
-    
-    --icon-invert: 100%
-));
+$tuxedo-dark-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette);
+$tuxedo-dark-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
+$tuxedo-dark-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
+ 
+$tuxedo-control-center-dark-theme: mat.m2-define-dark-theme(
+    (
+        color: (
+                primary: $tuxedo-dark-theme-primary,
+                accent: $tuxedo-dark-theme-accent,
+                warn: $tuxedo-dark-theme-warn,
+            ),
+            --icon-invert: 0%
+    )
+);
 
 .dark-theme {
-    @include angular-material-theme($tuxedo-control-center-dark-theme);
-    @include component-themes($tuxedo-control-center-dark-theme);
-
     --icon-main: currentColor;
     --icon-detail: #e30016;
 
@@ -42,4 +41,18 @@ $tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-p
         font-weight: 600;
     }
 
+    font-family: 'Titillium Web'
+}
+
+@media (prefers-color-scheme: dark) {
+    @include profile-overview-tile-theme($tuxedo-control-center-dark-theme);
+    @include profile-details-edit-theme($tuxedo-control-center-dark-theme);
+
+    @include tcc-general-defs-theme($tuxedo-control-center-dark-theme);
+    @include tcc-gauge-theme($tuxedo-control-center-dark-theme);
+    @include tcc-changelog-theme($tuxedo-control-center-dark-theme);
+    @include tcc-charts-theme($tuxedo-control-center-dark-theme);
+    @include tcc-color-picker-theme($tuxedo-control-center-dark-theme);
+
+    @include mat.all-component-themes($tuxedo-control-center-dark-theme);
 }

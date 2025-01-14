@@ -18,9 +18,6 @@
  */
 
 // Import library functions for theme creation.
-// todo: fix theme
-//@import '~@angular/material/theming';
-
 @mixin profile-overview-tile-theme($theme) {
   // Extract the palettes you need from the theme definition.
   $primary: map-get($theme, primary);
@@ -32,36 +29,20 @@
   // Define any styles affected by the theme.
     .profile-overview-tile {
         &.tile-active {
-            //color: mat-color($accent);
+            //color: background-color: mat.m2-get-color-from-palette($background, hover);
         }
 
         &.hover-effect:hover {
-            background-color: mat-color($background, hover);
+            background-color: mat.m2-get-color-from-palette($background, hover);
         }
 
         &.selected {
-            background-color: mat-color($primary, lighter);
+            background-color: mat.m2-get-color-from-palette($primary, lighter);
         }
 
         .overlay {
-            color: mat-color($primary, default-contrast);
-            background-color: mat-color($primary, darker);
-
-            mat-button-toggle-group {
-                mat-button-toggle {
-                    color: mat-color($primary, default-contrast);
-                    background-color: mat-color($primary, darker);
-
-                    &.mat-button-toggle-disabled, &.mat-button-toggle-checked {
-                        background-color: mat-color($foreground, text);
-                    }
-
-                    .mat-button-toggle-focus-overlay {
-                        border-width: 0px;
-                        background-color: mat-color($primary, darker-contrast);
-                    }
-                }
-            }
+            color: mat.m2-get-color-from-palette($primary, default-contrast);
+            background-color: mat.m2-get-color-from-palette($primary, darker);
         }
     }
 }

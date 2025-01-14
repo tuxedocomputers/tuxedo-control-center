@@ -29,20 +29,6 @@
     flex-direction: column;
     margin: 15px 0;
     align-items: flex-start;
-
-    mat-radio-button {
-        margin: 5px;
-
-        .inner-label {
-            padding-left: 8px;
-            white-space: normal;
-
-            header {
-                font-size: 1.2em;
-                font-weight: bolder;
-            }
-        }
-    }
 }
 
 .charging-profile-note {
@@ -61,15 +47,6 @@
 .charging-thresholds {
     display: flex;
     flex-flow: column nowrap;
-
-    mat-checkbox {
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
-
-    mat-slider {
-        width: 250px;
-    }
 }
 
 .edit-grid {
@@ -97,14 +74,6 @@
 
     content.input {
         width: 100%;
-
-        mat-slider {
-            width: 200px;
-        }
-
-        mat-select {
-            width: 200px;
-        }
 
         mat-form-field {
             width: 360px;

@@ -16,6 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+ 
+.tomte-settings-edit {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+
+    .inner-tomte-settings-edit {
+        margin: 0 10px 10px 10px;
+    }
+ }
+ 
 .tomte-list-output-table {
 
     th,
@@ -96,4 +113,14 @@
 .tomte-no-button:hover
 {
     background-color: darkred;
+}
+
+hr {
+    width: 95% !important
+}
+
+.reset-button {
+    button {
+        margin: 25px
+    }
 }

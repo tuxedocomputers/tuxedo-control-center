@@ -44,7 +44,6 @@
         justify-content: center;
         align-items: center; 
         width: 100%;
-        height: 100%;
         margin-bottom: 20px;
     }
 
@@ -67,15 +66,9 @@
         justify-content: space-between;
         align-items: center;
         
-
-        mat-button-toggle-group {
-            transform: scale(0.7);
-            transform-origin: right;
-        }
-        
         .save-reset-buttons {
             --icon-detail: var(--icon-main);
-            position: relative;
+            background-color: var(--mat-select-panel-background-color);
         }
     }
 
@@ -103,15 +96,13 @@
 
         content.input {
             width: 100%;
+            align-items: center;
+            display: flex;
 
             mat-slider {
                 width: 200px;
             }
-
-            mat-select {
-                width: 200px;
-            }
-
+            
             mat-form-field {
                 width: 360px;
 
