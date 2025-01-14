@@ -26,24 +26,45 @@ export class CpuController {
 
     constructor(public readonly basePath: string) {
         this.cores = [];
-        this.getAvailableLogicalCores();
+        this.basePath = basePath;
+
+        this.kernelMax = new SysFsPropertyInteger(
+            path.join(basePath, "kernel_max"),
+        );
+        this.offline = new SysFsPropertyNumList(path.join(basePath, "offline"));
+        this.online = new SysFsPropertyNumList(path.join(basePath, "online"));
+        this.possible = new SysFsPropertyNumList(
+            path.join(basePath, "possible"),
+        );
+        this.present = new SysFsPropertyNumList(path.join(basePath, "present"));
+        this.intelPstate = new IntelPstateController(
+            path.join(basePath, "intel_pstate"),
+        );
+        this.boost = new SysFsPropertyBoolean(
+            path.join(basePath, "cpufreq/boost"),
+        );
+        this.amdPstateStatus = new SysFsPropertyString(
+            path.join(basePath, "amd_pstate/status"),
+        );
+
+        this.getAvailableLogicalCores(basePath);
     }
 
     public cores: LogicalCpuController[];
     private unsupportedEnergyPreferenceValues: string[] = []
 
-    public readonly kernelMax: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.basePath, 'kernel_max'));
-    public readonly offline: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.basePath, 'offline'));
-    public readonly online: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.basePath, 'online'));
-    public readonly possible: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.basePath, 'possible'));
-    public readonly present: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
+    public readonly kernelMax: SysFsPropertyInteger;
+    public readonly offline: SysFsPropertyNumList;
+    public readonly online: SysFsPropertyNumList;
+    public readonly possible: SysFsPropertyNumList;
+    public readonly present: SysFsPropertyNumList;
 
-    public readonly intelPstate: IntelPstateController = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
+    public readonly intelPstate: IntelPstateController;
 
-    public readonly boost: SysFsPropertyBoolean = new SysFsPropertyBoolean(path.join(this.basePath, 'cpufreq/boost'));
-    public readonly amdPstateStatus: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'amd_pstate/status'));
+    public readonly boost: SysFsPropertyBoolean;
+    public readonly amdPstateStatus: SysFsPropertyString;
 
-    public getAvailableLogicalCores(): void {
+    public getAvailableLogicalCores(basePath: string): void {
         // Add "possible" and "present" logical cores
         this.cores = [];
         try {
@@ -57,7 +78,7 @@ export class CpuController {
             }
             coreIndexToAdd.sort((a: number, b: number): number => a - b );
             for (const coreIndex of coreIndexToAdd) {
-                const newCore = new LogicalCpuController(this.basePath, coreIndex);
+                const newCore = new LogicalCpuController(basePath, coreIndex);
                 if (coreIndex === 0 || newCore.online.isAvailable()) {
                     this.cores.push(newCore);
                 }

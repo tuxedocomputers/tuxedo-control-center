@@ -34,40 +34,104 @@ export enum ScalingDriver {
 
 export class LogicalCpuController extends SysFsController {
 
-    public readonly cpuPath: string = path.join(this.basePath, 'cpu' + this.coreIndex);
-    private readonly cpufreqPath: string = path.join(this.cpuPath, 'cpufreq');
-    private readonly cpuTopologyPath: string = path.join(this.cpuPath, 'topology');
+    public readonly cpuPath: string;
+    private readonly cpufreqPath: string;
+    private readonly cpuTopologyPath: string;
 
     // cpuX
 
     /**
      * Note: not available for cpu nr 0
      */
-    readonly online: SysFsPropertyBoolean = new SysFsPropertyBoolean(path.join(this.cpuPath, 'online'));
+    readonly online: SysFsPropertyBoolean;
 
     // cpufreq
 
-    readonly scalingCurFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_cur_freq'));
-    readonly scalingMinFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_min_freq'));
-    readonly scalingMaxFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'scaling_max_freq'));
-    readonly scalingAvailableFrequencies: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.cpufreqPath, 'scaling_available_frequencies'), undefined, ' ');
-    readonly scalingDriver: SysFsPropertyString = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_driver'));
-    readonly energyPerformanceAvailablePreferences: SysFsPropertyStringList = new SysFsPropertyStringList(
-        path.join(this.cpufreqPath, 'energy_performance_available_preferences'));
-    readonly energyPerformancePreference: SysFsPropertyString = new SysFsPropertyString(path.join(this.cpufreqPath, 'energy_performance_preference'));
-    readonly scalingAvailableGovernors: SysFsPropertyStringList = new SysFsPropertyStringList(path.join(this.cpufreqPath, 'scaling_available_governors'));
-    readonly scalingGovernor: SysFsPropertyString = new SysFsPropertyString(path.join(this.cpufreqPath, 'scaling_governor'));
+    readonly scalingCurFreq: SysFsPropertyInteger;
+    readonly scalingMinFreq: SysFsPropertyInteger;
+    readonly scalingMaxFreq: SysFsPropertyInteger;
+    readonly scalingAvailableFrequencies: SysFsPropertyNumList;
+    readonly scalingDriver: SysFsPropertyString;
+    readonly energyPerformanceAvailablePreferences: SysFsPropertyStringList;
+    readonly energyPerformancePreference: SysFsPropertyString;
+    readonly scalingAvailableGovernors: SysFsPropertyStringList;
+    readonly scalingGovernor: SysFsPropertyString;
 
-    readonly cpuinfoMinFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_min_freq'));
-    readonly cpuinfoMaxFreq: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpufreqPath, 'cpuinfo_max_freq'));
+    readonly cpuinfoMinFreq: SysFsPropertyInteger;
+    readonly cpuinfoMaxFreq: SysFsPropertyInteger;
 
-    readonly coreId: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpuTopologyPath, 'core_id'));
-    readonly coreSiblingsList: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.cpuTopologyPath, 'core_siblings_list'));
-    readonly physicalPackageId: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.cpuTopologyPath, 'physical_package_id'));
-    readonly threadSiblingsList: SysFsPropertyNumList = new SysFsPropertyNumList(path.join(this.cpuTopologyPath, 'thread_siblings_list'));
+    readonly coreId: SysFsPropertyInteger;
+    readonly coreSiblingsList: SysFsPropertyNumList;
+    readonly physicalPackageId: SysFsPropertyInteger;
+    readonly threadSiblingsList: SysFsPropertyNumList;
 
-    constructor(public readonly basePath: string, public readonly coreIndex: number) {
+    constructor(
+        public readonly basePath: string,
+        public readonly coreIndex: number,
+    ) {
         super();
+
+        this.cpuPath = path.join(basePath, `cpu${coreIndex}`);
+        this.cpufreqPath = path.join(this.cpuPath, "cpufreq");
+        this.cpuTopologyPath = path.join(this.cpuPath, "topology");
+
+        this.online = new SysFsPropertyBoolean(
+            path.join(this.cpuPath, "online"),
+        );
+
+        this.scalingCurFreq = new SysFsPropertyInteger(
+            path.join(this.cpufreqPath, "scaling_cur_freq"),
+        );
+        this.scalingMinFreq = new SysFsPropertyInteger(
+            path.join(this.cpufreqPath, "scaling_min_freq"),
+        );
+        this.scalingMaxFreq = new SysFsPropertyInteger(
+            path.join(this.cpufreqPath, "scaling_max_freq"),
+        );
+        this.scalingAvailableFrequencies = new SysFsPropertyNumList(
+            path.join(this.cpufreqPath, "scaling_available_frequencies"),
+            undefined,
+            " ",
+        );
+        this.scalingDriver = new SysFsPropertyString(
+            path.join(this.cpufreqPath, "scaling_driver"),
+        );
+        this.energyPerformanceAvailablePreferences =
+            new SysFsPropertyStringList(
+                path.join(
+                    this.cpufreqPath,
+                    "energy_performance_available_preferences",
+                ),
+            );
+        this.energyPerformancePreference = new SysFsPropertyString(
+            path.join(this.cpufreqPath, "energy_performance_preference"),
+        );
+        this.scalingAvailableGovernors = new SysFsPropertyStringList(
+            path.join(this.cpufreqPath, "scaling_available_governors"),
+        );
+        this.scalingGovernor = new SysFsPropertyString(
+            path.join(this.cpufreqPath, "scaling_governor"),
+        );
+
+        this.cpuinfoMinFreq = new SysFsPropertyInteger(
+            path.join(this.cpufreqPath, "cpuinfo_min_freq"),
+        );
+        this.cpuinfoMaxFreq = new SysFsPropertyInteger(
+            path.join(this.cpufreqPath, "cpuinfo_max_freq"),
+        );
+
+        this.coreId = new SysFsPropertyInteger(
+            path.join(this.cpuTopologyPath, "core_id"),
+        );
+        this.coreSiblingsList = new SysFsPropertyNumList(
+            path.join(this.cpuTopologyPath, "core_siblings_list"),
+        );
+        this.physicalPackageId = new SysFsPropertyInteger(
+            path.join(this.cpuTopologyPath, "physical_package_id"),
+        );
+        this.threadSiblingsList = new SysFsPropertyNumList(
+            path.join(this.cpuTopologyPath, "thread_siblings_list"),
+        );
     }
 
     public getReducedAvailableFreq(): number {

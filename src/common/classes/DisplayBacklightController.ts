@@ -44,21 +44,29 @@ class SysFsPropertyAmdgpuBrightness extends SysFsPropertyInteger {
 }
 
 export class DisplayBacklightController extends SysFsController {
-
-    constructor(public readonly basePath: string, public readonly driver: string) {
+    constructor(
+        public readonly basePath: string,
+        public readonly driver: string,
+    ) {
         super();
 
         // Workaround
-        if (driver.includes('amdgpu_bl')) {
+        if (driver.includes("amdgpu_bl")) {
             this.brightness = new SysFsPropertyAmdgpuBrightness(
-                path.join(this.basePath, this.driver, 'actual_brightness'),
-                path.join(this.basePath, this.driver, 'brightness'));
+                path.join(basePath, driver, "actual_brightness"),
+                path.join(basePath, driver, "brightness"),
+            );
         }
+
+        this.brightness = new SysFsPropertyInteger(
+            path.join(basePath, driver, "actual_brightness"),
+            path.join(basePath, driver, "brightness"),
+        );
+        this.maxBrightness = new SysFsPropertyInteger(
+            path.join(basePath, driver, "max_brightness"),
+        );
     }
 
-    readonly brightness = new SysFsPropertyInteger(
-        path.join(this.basePath, this.driver, 'actual_brightness'),
-        path.join(this.basePath, this.driver, 'brightness'));
-
-    readonly maxBrightness = new SysFsPropertyInteger(path.join(this.basePath, this.driver, 'max_brightness'));
+    readonly brightness: SysFsPropertyInteger;
+    readonly maxBrightness: SysFsPropertyInteger;
 }

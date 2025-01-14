@@ -43,22 +43,43 @@ export enum ChargeType {
 }
 
 export class PowerSupplyController extends SysFsController {
-
     constructor(public readonly basePath: string) {
         super();
+        this.online = new SysFsPropertyBoolean(path.join(basePath, "online"));
+        this.type = new SysFsPropertyString(path.join(basePath, "type"));
+        this.chargeControlStartThreshold = new SysFsPropertyInteger(
+            path.join(basePath, "charge_control_start_threshold"),
+        );
+        this.chargeControlEndThreshold = new SysFsPropertyInteger(
+            path.join(basePath, "charge_control_end_threshold"),
+        );
+        this.chargeType = new SysFsPropertyString(
+            path.join(basePath, "charge_type"),
+        );
+        this.chargeControlStartAvailableThresholds =
+            new SysFsPropertyNumListExplicit(
+                path.join(
+                    basePath,
+                    "charge_control_start_available_thresholds",
+                ),
+            );
+        this.chargeControlEndAvailableThresholds =
+            new SysFsPropertyNumListExplicit(
+                path.join(basePath, "charge_control_end_available_thresholds"),
+            );
     }
 
-    public readonly online: SysFsPropertyBoolean = new SysFsPropertyBoolean(path.join(this.basePath, 'online'));
-    public readonly type: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'type'));
+    public readonly online: SysFsPropertyBoolean;
+    public readonly type: SysFsPropertyString;
 
     // Charge control official
-    public readonly chargeControlStartThreshold: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_start_threshold'));
-    public readonly chargeControlEndThreshold: SysFsPropertyInteger = new SysFsPropertyInteger(path.join(this.basePath, 'charge_control_end_threshold'));
-    public readonly chargeType: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'charge_type'));
+    public readonly chargeControlStartThreshold: SysFsPropertyInteger;
+    public readonly chargeControlEndThreshold: SysFsPropertyInteger;
+    public readonly chargeType: SysFsPropertyString;
 
     // Charge control unofficial
-    public readonly chargeControlStartAvailableThresholds: SysFsPropertyNumListExplicit = new SysFsPropertyNumListExplicit(path.join(this.basePath, 'charge_control_start_available_thresholds'));
-    public readonly chargeControlEndAvailableThresholds: SysFsPropertyNumListExplicit = new SysFsPropertyNumListExplicit(path.join(this.basePath, 'charge_control_end_available_thresholds'));
+    public readonly chargeControlStartAvailableThresholds: SysFsPropertyNumListExplicit;
+    public readonly chargeControlEndAvailableThresholds: SysFsPropertyNumListExplicit;
 
     public static async getPowerSupplyBatteries(): Promise<PowerSupplyController[]> {
         const psDevices: string[] = SysFsController.getDeviceList('/sys/class/power_supply');

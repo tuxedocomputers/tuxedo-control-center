@@ -21,11 +21,17 @@ import { SysFsPropertyString, SysFsPropertyStringList } from './SysFsProperties'
 import { SysFsController } from './SysFsController';
 
 export class ChargingProfileController extends SysFsController {
-
     constructor(public readonly basePath: string) {
         super();
+
+        this.chargingProfilesAvailable = new SysFsPropertyStringList(
+            path.join(basePath, "charging_profiles_available"),
+        );
+        this.chargingProfile = new SysFsPropertyString(
+            path.join(basePath, "charging_profile"),
+        );
     }
 
-    readonly chargingProfilesAvailable: SysFsPropertyStringList = new SysFsPropertyStringList(path.join(this.basePath, 'charging_profiles_available'));
-    readonly chargingProfile: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'charging_profile'));
+    readonly chargingProfilesAvailable: SysFsPropertyStringList;
+    readonly chargingProfile: SysFsPropertyString;
 }

@@ -21,11 +21,17 @@ import { SysFsPropertyString, SysFsPropertyStringList } from './SysFsProperties'
 import { SysFsController } from './SysFsController';
 
 export class ChargingPriorityController extends SysFsController {
-
     constructor(public readonly basePath: string) {
         super();
+
+        this.chargingPriosAvailable = new SysFsPropertyStringList(
+            path.join(basePath, "charging_prios_available"),
+        );
+        this.chargingPrio = new SysFsPropertyString(
+            path.join(basePath, "charging_prio"),
+        );
     }
 
-    readonly chargingPriosAvailable: SysFsPropertyStringList = new SysFsPropertyStringList(path.join(this.basePath, 'charging_prios_available'));
-    readonly chargingPrio: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'charging_prio'));
+    readonly chargingPriosAvailable: SysFsPropertyStringList;
+    readonly chargingPrio: SysFsPropertyString;
 }

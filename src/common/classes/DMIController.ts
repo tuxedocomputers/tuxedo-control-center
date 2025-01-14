@@ -21,14 +21,29 @@ import { SysFsPropertyString } from './SysFsProperties';
 import { SysFsController } from './SysFsController';
 
 export class DMIController extends SysFsController {
-
     constructor(public readonly basePath: string) {
         super();
+
+        this.boardName = new SysFsPropertyString(
+            path.join(basePath, "board_name"),
+        );
+        this.productSKU = new SysFsPropertyString(
+            path.join(basePath, "product_sku"),
+        );
+        this.boardVendor = new SysFsPropertyString(
+            path.join(basePath, "board_vendor"),
+        );
+        this.chassisVendor = new SysFsPropertyString(
+            path.join(basePath, "chassis_vendor"),
+        );
+        this.sysVendor = new SysFsPropertyString(
+            path.join(basePath, "sys_vendor"),
+        );
     }
 
-    readonly boardName: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'board_name'));
-    readonly productSKU: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'product_sku'));
-    readonly boardVendor: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'board_vendor'));
-    readonly chassisVendor: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'chassis_vendor'));
-    readonly sysVendor: SysFsPropertyString = new SysFsPropertyString(path.join(this.basePath, 'sys_vendor'));
+    readonly boardName: SysFsPropertyString;
+    readonly productSKU: SysFsPropertyString;
+    readonly boardVendor: SysFsPropertyString;
+    readonly chassisVendor: SysFsPropertyString;
+    readonly sysVendor: SysFsPropertyString;
 }

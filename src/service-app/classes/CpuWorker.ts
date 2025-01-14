@@ -218,7 +218,7 @@ export class CpuWorker extends DaemonWorker {
         let cpuFreqValidConfig: boolean = true;
 
         // Check number of online cores
-        this.cpuCtrl.getAvailableLogicalCores();
+        this.cpuCtrl.getAvailableLogicalCores(this.basePath);
         if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
             const currentOnlineCores: number[] = this.cpuCtrl.online.readValue();
             let onlineCoresProfile: number = profile.cpu.onlineCores;
