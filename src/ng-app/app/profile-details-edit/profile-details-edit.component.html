@@ -175,7 +175,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.valueSpan">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
-                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ inputDisplayBrightness.value }}%</content>
+                            <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ profileFormGroup.get("display").get("brightness").value }}%</content>
                             <button mat-icon-button color="primary"
                                 [hidden]="!editProfile"
                                 (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
@@ -195,13 +195,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.inputSpan">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
-                                <mat-slider #inputDisplayBrightness
-                                    formControlName="brightness"
-                                    (input)="inputDisplayBrightnessChange(inputDisplayBrightness.value)"
+                                <mat-slider
+                                    #inputDisplayBrightness
                                     min="0"
                                     max="100"
                                     step="5"
                                     color="primary">
+                                    <input
+                                        matSliderThumb
+                                        formControlName="brightness"
+                                        (input)="
+                                            inputDisplayBrightnessChange(
+                                                inputDisplayBrightness.value
+                                            )
+                                        "
+                                        #ngSliderThumb="matSliderThumb"/>
                                 </mat-slider>
                                 <button mat-icon-button
                                     color="primary"
@@ -315,7 +323,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <content class="value" [hidden]="editProfile">{{ !fansOffAvailable &&
                                     viewProfile.fan.minimumFanspeed < fansMinSpeed ? fansMinSpeed :
                                         viewProfile.fan.minimumFanspeed }} %</content>
-                                        <content class="value" [hidden]="!editProfile">{{ inputMinimumFanspeed.value }}
+                                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("fan.minimumFanspeed")?.value }}
                                             %</content>
                                         <button mat-icon-button color="primary" [hidden]="!editProfile"
                                             (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
@@ -332,9 +340,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile">
-                                    <mat-slider #inputMinimumFanspeed formControlName="minimumFanspeed"
-                                        [min]="fansOffAvailable ? 0 : fansMinSpeed" [max]="100" step="1" color="primary"
-                                        (change)="sliderMinFanChange()">
+                                    <mat-slider #inputMinimumFanspeed
+                                        [min]="fansOffAvailable ? 0 : fansMinSpeed" [max]="100" step="1" color="primary">
+                                        <input
+                                            matSliderThumb
+                                            formControlName="minimumFanspeed"
+                                            (change)="sliderMinFanChange()"
+                                            #ngSliderThumb="matSliderThumb"/>
                                     </mat-slider>
                                     <button mat-icon-button color="primary"
                                         (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
@@ -352,7 +364,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <content class="value" [hidden]="editProfile">{{ !fansOffAvailable &&
                                     viewProfile.fan.maximumFanspeed < fansMaxSpeed ? fansMinSpeed :
                                         viewProfile.fan.maximumFanspeed }} %</content>
-                                        <content class="value" [hidden]="!editProfile">{{ inputMaximumFanspeed.value }}
+                                        <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("fan.maximumFanspeed")?.value }}
                                             %</content>
                                         <button mat-icon-button color="primary" [hidden]="!editProfile"
                                             (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), -1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
@@ -369,8 +381,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile">
-                                    <mat-slider #inputMaximumFanspeed formControlName="maximumFanspeed" [min]="0"
-                                        [max]="100" step="1" color="primary" (change)="sliderMaxFanChange()">
+                                    <mat-slider #inputMaximumFanspeed [min]="0"
+                                        [max]="100" step="1" color="primary">
+                                        <input
+                                            matSliderThumb
+                                            formControlName="maximumFanspeed"
+                                            (change)="sliderMaxFanChange()"
+                                            #ngSliderThumb="matSliderThumb"/>
                                     </mat-slider>
                                     <button mat-icon-button color="primary"
                                         (click)="profileFormGroup.get('fan').get('maximumFanspeed').reset(viewProfile.fan.maximumFanspeed)"
@@ -385,10 +402,23 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <header i18n="@@cProfMgrDetailsOffsetFanSpeedLabel">Offset fan speed</header>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
-                                <content class="value" [hidden]="editProfile">{{ viewProfile.fan.offsetFanspeed > 0 ?
-                                    '+' + viewProfile.fan.offsetFanspeed : viewProfile.fan.offsetFanspeed }} %</content>
-                                <content class="value" [hidden]="!editProfile">{{ inputOffsetFanspeed.value > 0 ? '+' +
-                                    inputOffsetFanspeed.value : inputOffsetFanspeed.value }} %</content>
+                                <content class="value" [hidden]="editProfile"
+                                    >{{
+                                        viewProfile.fan.offsetFanspeed > 0
+                                            ? "+" +
+                                              viewProfile.fan.offsetFanspeed
+                                            : viewProfile.fan.offsetFanspeed
+                                    }}
+                                    %
+                                </content>
+                                <content class="value" [hidden]="!editProfile"
+                                    >{{
+                                        profileFormGroup.get(
+                                            "fan.offsetFanspeed"
+                                        )?.value
+                                    }}
+                                    %
+                                </content>
                                 <button mat-icon-button color="primary" [hidden]="!editProfile"
                                     (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
                                     (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
@@ -402,8 +432,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile">
-                                    <mat-slider #inputOffsetFanspeed formControlName="offsetFanspeed" [min]="-100"
+                                    <mat-slider #inputOffsetFanspeed [min]="-100"
                                         [max]="100" step="1" color="primary">
+                                        <input
+                                            matSliderThumb
+                                            formControlName="offsetFanspeed"/>
                                     </mat-slider>
                                     <button mat-icon-button color="primary"
                                         (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
@@ -416,7 +449,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                     </mat-grid-list>
                 </div>
-
+                
                 <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value == 'Custom'">
                     <app-fan-slider [customFanCurve]="profileFormGroup.get('fan').get('customFanCurve').value"
                         [showFanGraphs]="showFanGraphs" (setSliderDirty)="setVerticalSliderDirty()"
@@ -538,13 +571,24 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                     <mat-slider
-                                            #odmProfilesPowerLimitSlider
                                             [min]="0"
                                             [max]="deviceSystemProfileInfo.pl?.length -1"
                                             [value]="getODMprofilePowerLimitID()"
                                             step="1"
-                                            (change)="sliderODMProfileChange(odmProfilesPowerLimitSlider.value)"
                                             color="primary">
+                                            <input
+                                                matSliderThumb
+                                                #odmProfilesPowerLimitSlider
+                                                [(value)]="plSliderIndex"
+                                                (input)="
+                                                    sliderODMProfileChange(
+                                                        odmProfilesPowerLimitSlider.value
+                                                    );
+                                                    profileFormGroup
+                                                        .get('odmProfile')
+                                                        .get('name')
+                                                        .markAsDirty()
+                                                "/>
                                     </mat-slider>
                                 </content>
                             </mat-grid-tile>
@@ -552,7 +596,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                 </mat-grid-list>
-
+                
                 <p class="sub-header" i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</p>
 
                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
@@ -583,13 +627,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-grid-tile [colspan]="gridParams.inputSpan">
                                     <content class="input" [hidden]="!editProfile">
                                         <mat-slider
-                                            #inputODMPowerLimit
-                                            [formControlName]="i"
                                             [min]="odmPowerLimitInfos[i].min"
                                             [max]="odmPowerLimitInfos[i].max"
                                             step="1"
-                                            (change)="sliderODMPowerLimitChange(i)"
                                             color="primary">
+                                            <input
+                                                #inputODMPowerLimit
+                                                matSliderThumb
+                                                [formControlName]="i"
+                                                (change)="
+                                                    sliderODMPowerLimitChange(i)
+                                                "
+                                                #ngSliderThumb="matSliderThumb"/>
                                         </mat-slider>
                                         <button mat-icon-button
                                             color="primary"
@@ -621,16 +670,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
-                                <content class="value" [hidden]="!editProfile">{{ inputOnlineCores.value }}</content>
+                                <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("cpu.onlineCores")?.value }}</content>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="!editProfile">
                                     <mat-slider #inputOnlineCores
-                                        formControlName="onlineCores"
                                         min="1"
                                         step="1"
                                         [max]="cpuInfo.availableCores"
                                         color="primary">
+                                        <input
+                                            matSliderThumb
+                                            formControlName="onlineCores"/>
                                     </mat-slider>
                                 </content>
                             </mat-grid-tile>
@@ -660,7 +711,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="gridParams.valueSpan">
                                 <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatCpuFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
-                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatCpuFrequency(findClosestValue(inputScalingMinFrequency.value, selectableFrequencies)) }} GHz</content>
+                                <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatCpuFrequency(findClosestValue(profileFormGroup.get("cpu.scalingMinFrequency")?.value, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatCpuFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
                                 <button mat-icon-button color="primary"
                                     [hidden]="!editProfile"
@@ -680,12 +731,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                                     <mat-slider #inputScalingMinFrequency
-                                        formControlName="scalingMinFrequency"
                                         [min]="cpuInfo.minFreq"
                                         [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                         step="100000"
-                                        (change)="sliderMinFreqChange()"
                                         color="primary">
+                                        <input
+                                            matSliderThumb
+                                            formControlName="scalingMinFrequency"
+                                            (change)="sliderMinFreqChange()"
+                                            #ngSliderThumb="matSliderThumb"/>
                                     </mat-slider>
                                     <button mat-icon-button
                                         color="primary"
@@ -698,10 +752,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-slider #inputScalingMinFrequencyDummy
                                         [min]="cpuInfo.minFreq"
                                         [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
-                                        [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
                                         step="100000"
-                                        (change)="sliderMinFreqChange()"
                                         color="primary">
+                                        <input
+                                            matSliderThumb
+                                            [value]="
+                                                cpuInfo.boost === undefined ||
+                                                selectableFrequencies ===
+                                                    undefined
+                                                    ? cpuInfo.maxFreq
+                                                    : selectableFrequencies[1]
+                                            "
+                                            (change)="sliderMinFreqChange()"
+                                            #ngSliderThumb="matSliderThumb"/>
                                     </mat-slider>
                                 </content>
                             </mat-grid-tile>
@@ -714,7 +777,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
                                     {{ formatCpuFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
-                                    {{ formatCpuFrequency(findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies)) }} GHz</content>
+                                    {{ formatCpuFrequency(findClosestValue(profileFormGroup.get("cpu.scalingMaxFrequency")?.value, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && !hasMaxFreqWorkaround)" [ngClass]="{'inactive': true}">
                                     {{ formatCpuFrequency(findClosestValue(cpuInfo.maxFreq, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency === cpuInfo.maxFreq)">
@@ -741,12 +804,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <mat-grid-tile [colspan]="gridParams.inputSpan">
                                 <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                                     <mat-slider #inputScalingMaxFrequency
-                                        formControlName="scalingMaxFrequency"
                                         [min]="cpuInfo.minFreq"
                                         [max]="cpuInfo.maxFreq"
                                         step="100000"
-                                        (change)="sliderMaxFreqChange()"
                                         color="primary">
+                                        <input
+                                            matSliderThumb
+                                            formControlName="scalingMaxFrequency"
+                                            (change)="sliderMaxFreqChange()"
+                                            #ngSliderThumb="matSliderThumb"/>
                                     </mat-slider>
                                     <button mat-icon-button
                                         color="primary"
@@ -761,8 +827,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         [max]="cpuInfo.maxFreq"
                                         [value]="cpuInfo.maxFreq"
                                         step="100000"
-                                        (change)="sliderMaxFreqChange()"
                                         color="primary">
+                                        <input
+                                            matSliderThumb
+                                            [value]="cpuInfo.maxFreq"
+                                            (change)="sliderMaxFreqChange()"
+                                            #ngSliderThumb="matSliderThumb"/>
                                     </mat-slider>
                                 </content>
                             </mat-grid-tile>
@@ -772,6 +842,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div *ngIf="!hideCTGP && nvidiaPowerCTRLAvailable && nvidiaPowerCTRLMaxPowerLimit > 0">
                     <p class="sub-header" #nvidiaPowerCTRLHeader i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA power control</p>
+                    <!--
+                    // todo: fix
+                    
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
                         <div formGroupName="nvidiaPowerCTRLProfile">
                             <mat-grid-tile [colspan]="gridParams.headerSpan">
@@ -814,6 +887,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                         </div>
                     </mat-grid-list>
+                    -->
 
                     <div class="tgp-chart-container">
                         <button mat-stroked-button (click)="toggleTGPChart()">

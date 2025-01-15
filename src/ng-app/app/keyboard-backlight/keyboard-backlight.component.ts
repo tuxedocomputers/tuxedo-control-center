@@ -269,7 +269,7 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public startPress(
-        slider: MatSlider,
+        slider: any,
         offset: number,
         min: number,
         max: number
@@ -290,17 +290,19 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public modifySliderInput(
-        slider: MatSlider,
+        slider: any,
         offset: number,
         min: number,
         max: number
     ): void {
-        // todo: fix
-        /*
-        this.onBrightnessSliderInput(
-            this.clamp(slider.value + offset, min, max)
-        );
-        */
+        let clampValue: number = +slider.value + offset;
+        if (clampValue < min) {
+            clampValue = min;
+        } else if (clampValue > max) {
+            clampValue = max;
+        }
+
+        this.onBrightnessSliderInput(clampValue);
     }
 
     public getSelectedColor(): string {

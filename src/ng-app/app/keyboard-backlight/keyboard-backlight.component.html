@@ -119,10 +119,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             (mouseup)="stopPress()" (mouseleave)="stopPress()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <mat-slider class="brightness-slider" #brightnessSlider min="0" [(ngModel)]="chosenBrightness"
-                            [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary"
-                            (input)="onBrightnessSliderInput($event.value)"
-                            (onTouched)="onBrightnessSliderTouched($event)" (change)="onBrightnessSliderChange()">
+                        <mat-slider class="brightness-slider" #inputDisplayBrightness min="0"
+                            [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary">
+                            <input
+                                #brightnessSlider
+                                matSliderThumb
+                                [(ngModel)]="chosenBrightness"
+                                (input)="
+                                    onBrightnessSliderInput(
+                                        +brightnessSlider.value
+                                    )
+                                "
+                                #ngSliderThumb="matSliderThumb"/>
                         </mat-slider>
                     </div>
                 </mat-grid-tile>

@@ -173,9 +173,23 @@
                                                         <mat-slider [max]="getOptionValue(webcamConfig, 'max')"
                                                             [min]="getOptionValue(webcamConfig, 'min')"
                                                             [step]="getOptionValue(webcamConfig, 'step')"
-                                                            formControlName="{{webcamConfig}}"
-                                                            (change)="setSliderValue($event.value, webcamConfig)"
                                                             color="primary">
+                                                            <input
+                                                                matSliderThumb
+                                                                formControlName="{{
+                                                                    webcamConfig
+                                                                }}"
+                                                                (change)="
+                                                                    setSliderValue(
+                                                                        {
+                                                                            source: ngSliderThumb,
+                                                                            parent: ngSlider,
+                                                                            value: ngSliderThumb.value,
+                                                                        }.value,
+                                                                        webcamConfig
+                                                                    )
+                                                                "
+                                                                #ngSliderThumb="matSliderThumb"/>
                                                         </mat-slider>
                                                         <button mat-icon-button color="primary"
                                                             (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
@@ -345,9 +359,23 @@
                                                 <mat-slider [max]="getOptionValue(webcamConfig, 'max')"
                                                     [min]="getOptionValue(webcamConfig, 'min')"
                                                     [step]="getOptionValue(webcamConfig, 'step')"
-                                                    formControlName="{{webcamConfig}}"
-                                                    (change)="setSliderValue($event.value, webcamConfig)"
                                                     color="primary">
+                                                    <input
+                                                        matSliderThumb
+                                                        formControlName="{{
+                                                            webcamConfig
+                                                        }}"
+                                                        (change)="
+                                                            setSliderValue(
+                                                                {
+                                                                    source: ngSliderThumb,
+                                                                    parent: ngSlider,
+                                                                    value: ngSliderThumb.value,
+                                                                }.value,
+                                                                webcamConfig
+                                                            )
+                                                        "
+                                                        #ngSliderThumb="matSliderThumb"/>
                                                 </mat-slider>
                                                 <button mat-icon-button color="primary"
                                                     (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 

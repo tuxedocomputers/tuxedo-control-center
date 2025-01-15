@@ -129,14 +129,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="input">
-                <mat-slider #startThreshold
-                    [formControl]="ctrlChargeStartThreshold"
-                    (change)="sliderStartThresholdChange($event)"
-                    [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+                <mat-slider
+                    #startThreshold
+                    [disabled]="
+                        chargingThresholdsProgress || !chargeThresholdsEnabled
+                    "
                     min="0"
                     max="100"
                     step="1"
                     color="primary">
+                    <input
+                        matSliderThumb
+                        [formControl]="ctrlChargeStartThreshold"
+                        (change)="
+                            sliderStartThresholdChange({
+                                source: ngSliderThumb,
+                                parent: ngSlider,
+                                value: ngSliderThumb.value,
+                            })
+                        "
+                        #ngSliderThumb="matSliderThumb"/>
                 </mat-slider>
             </content>
         </mat-grid-tile>
@@ -151,14 +163,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-grid-tile>
         <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="input">
-                <mat-slider #endThreshold
-                    [formControl]="ctrlChargeEndThreshold"
-                    (change)="sliderEndThresholdChange($event)"
-                    [disabled]="chargingThresholdsProgress || !chargeThresholdsEnabled"
+                <mat-slider
+                    #endThreshold
+                    [disabled]="
+                        chargingThresholdsProgress || !chargeThresholdsEnabled
+                    "
                     min="0"
                     max="100"
                     step="1"
                     color="primary">
+                    <input
+                        matSliderThumb
+                        [formControl]="ctrlChargeEndThreshold"
+                        (change)="
+                            sliderEndThresholdChange({
+                                source: ngSliderThumb,
+                                parent: ngSlider,
+                                value: ngSliderThumb.value,
+                            })
+                        "
+                        #ngSliderThumb="matSliderThumb"/>
                 </mat-slider>
             </content>
         </mat-grid-tile>

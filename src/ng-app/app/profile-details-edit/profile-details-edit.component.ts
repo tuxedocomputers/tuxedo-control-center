@@ -223,17 +223,17 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.fansMinSpeedSubscription.add(this.tccDBus.fansMinSpeed.subscribe(
             (fansMinSpeed: number): void => {
-                if (fansMinSpeed !== undefined) {
+                if (fansMinSpeed !== undefined && fansMinSpeed !== -1) {
                     this.fansMinSpeedSubscription.unsubscribe();
                     this.fansMinSpeed = fansMinSpeed;
                     this.clampCurrentMinimumFanSpeedToHWCapabilities()
                 }
             }
-        ));
+        ))
 
         this.fansOffAvailableSubscription.add(this.tccDBus.fansOffAvailable.subscribe(
             (fansOffAvailable: boolean): void => {
-                if (fansOffAvailable != undefined) {
+                if (fansOffAvailable !== undefined) {
                     this.fansOffAvailableSubscription.unsubscribe();
                     this.fansOffAvailable = fansOffAvailable;
                     this.clampCurrentMinimumFanSpeedToHWCapabilities()
@@ -422,7 +422,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 this.tccDBus.setDisplayBrightnessGnome(activeProfile.display.brightness);
             }
         }
-        
+
         /*
         // todo: fix
         if (this.sliderComponent) {
@@ -908,5 +908,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        if (!this.fansMinSpeedSubscription.closed) {
+            this.fansMinSpeedSubscription.unsubscribe();
+        }
+        if (!this.fansOffAvailableSubscription.closed) {
+            this.fansOffAvailableSubscription.unsubscribe();
+        }
     }
 }
