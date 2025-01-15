@@ -34,6 +34,7 @@ import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { min: number; actual: unknown } | null => {
@@ -93,19 +94,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @Output() scrollTo: EventEmitter<number> = new EventEmitter<number>();
 
-    public gridParams: { cols: number, headerSpan: number, valueSpan: number, inputSpan: number } = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 2,
-        inputSpan: 3
-    };
+    public gridParams: IGridParams = GridParamsSettings;
 
-    public gridProfileSettings: { cols: number, headerSpan: number, valueSpan: number, inputSpan: number } = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 0,
-        inputSpan: 5
-    };
 
     public selectStateControl: FormControl;
     public profileFormGroup: FormGroup;

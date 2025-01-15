@@ -63,14 +63,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
 
             <!-- COLOR PICKER -->
-            <mat-grid-list [cols]="18" rowHeight="2rem" class="keyboard-backlight-grid"
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="2rem" class="keyboard-backlight-grid"
                 *ngIf="keyboardBacklightCapabilities.maxRed > 0 && keyboardBacklightCapabilities.maxGreen > 0 && keyboardBacklightCapabilities.maxBlue > 0">
-                <mat-grid-tile [colspan]="2"></mat-grid-tile>
-                <mat-grid-tile [colspan]="4">
+                <mat-grid-tile [colspan]="gridParams.space"></mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.header">
                     <header i18n="@@cKeyboardBacklightColorLabel">Backlight Color:</header>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="4"></mat-grid-tile>
-                <mat-grid-tile [colspan]="6" style="overflow: visible">
+                <mat-grid-tile [colspan]="gridParams.value"></mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.input" style="overflow: visible">
                     <div class="align-color-picker">
                         <input #colorPickerElement id="colorPickerElement" class="looks-like-a-button"
                             [style.background]="getSelectedColor()" readonly class="tcc-color-picker color-visualizer"
@@ -91,23 +91,23 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </button>
                     </div>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="2">
+                <mat-grid-tile [colspan]="gridParams.undo">
                 </mat-grid-tile>
             </mat-grid-list>
 
-            <mat-grid-list [cols]="18" rowHeight="2rem" class="keyboard-backlight-grid"
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="2rem" class="keyboard-backlight-grid"
                 *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
                 <!-- BRIGHTNESS SLIDER -->
-                <mat-grid-tile [colspan]="2"></mat-grid-tile>
-                <mat-grid-tile [colspan]="6">
+                <mat-grid-tile [colspan]="gridParams.space"></mat-grid-tile>
+                <mat-grid-tile [colspan]="gridParams.header">
                     <header i18n="@@cKeyboardBacklightBrightnessLabel">Backlight Brightness</header>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="2">
+                <mat-grid-tile [colspan]="gridParams.value">
                     <content class="value" style="text-align: center">{{ brightnessSlider.percent * 100 | number:
                         '1.1-1'}}%
                     </content>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="6" style="overflow: visible">
+                <mat-grid-tile [colspan]="gridParams.input" style="overflow: visible">
                     <div class="align-slider-components">
                         <button mat-icon-button color="primary"
                             (mousedown)="startPress(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max)"
@@ -134,7 +134,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-slider>
                     </div>
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="2">
+                <mat-grid-tile [colspan]="gridParams.undo">
                 </mat-grid-tile>
             </mat-grid-list>
         </div>

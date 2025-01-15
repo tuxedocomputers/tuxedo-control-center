@@ -48,10 +48,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div class="content">
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header i18n="@@cGlobalSettingsTemperatureDisplayHeader">Temperature Display</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="temperatureDisplayFahrenheit"
                                     i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
@@ -59,7 +59,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-button-toggle #inputTemperatureDisplaySettings color="primary"
                                     (change)="onTemperatureDisplayChanged(!temperatureDisplayFahrenheit)" [value]="!temperatureDisplayFahrenheit">
@@ -75,10 +75,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header i18n="@@cGlobalSettingsCpuFrequencyHeader">CPU Frequency Control</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="!inputCPUSettings.checked"
                                     i18n="@@cGlobalSettingsCpuFrequencyActivated">activated</span>
@@ -86,7 +86,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     i18n="@@cGlobalSettingsCpuFrequencyDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-checkbox #inputCPUSettings color="primary" [(ngModel)]="cpuSettingsEnabled"
                                     (change)="onCPUSettingsEnabledChanged($event)">
@@ -102,10 +102,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header i18n="@@cGlobalSettingsFanControlHeader">Fan Control</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="!inputFanControl.checked"
                                     i18n="@@cGlobalSettingsFanControlActivated">activated</span>
@@ -113,7 +113,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     i18n="@@cGlobalSettingsFanControlDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-checkbox #inputFanControl color="primary" [(ngModel)]="fanControlEnabled"
                                     (change)="onFanControlEnabledChanged($event)">
@@ -127,10 +127,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         directly.</div>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header i18n="@@cGlobalSettingsKeyboardBacklightHeader">Keyboard Backlight Control</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="!inputKeyboardBacklightControl.checked"
                                     i18n="@@cGlobalSettingsKeyboardBacklightActivated">activated</span>
@@ -138,7 +138,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     i18n="@@cGlobalSettingsKeyboardBacklightDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-checkbox #inputKeyboardBacklightControl color="primary"
                                     [(ngModel)]="keyboardBacklightControlEnabled"
@@ -175,13 +175,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index">
                             <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols"
                                 rowHeight="3em" class="global-settings-grid">
-                                <mat-grid-tile class=margin-left [colspan]="gridParams.headerSpan">
+                                <mat-grid-tile class=margin-left [colspan]="gridParams.header">
                                     <header i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel">Port
                                         {{port}} of
                                         Card {{i}}
                                     </header>
                                 </mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <mat-grid-tile [colspan]="gridParams.value">
                                     <content class="value">
                                         <span [hidden]="!inputYCbCr420Workaround.checked"
                                             i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundActivated">activated</span>
@@ -189,7 +189,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundDeactivated">deactivated</span>
                                     </content>
                                 </mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <mat-grid-tile [colspan]="gridParams.input">
                                     <content class="input">
                                         <mat-checkbox #inputYCbCr420Workaround color="primary"
                                             [(ngModel)]="ycbcr420Workaround[i][port]"

@@ -28,6 +28,10 @@ import {
 import { filter, take } from "rxjs/operators";
 import { MatSlider } from "@angular/material/slider";
 import { interval, Subscription } from "rxjs";
+import {
+    GridParamsBacklight,
+    IGridParams,
+} from "src/common/models/IGridParams";
 
 @Component({
     selector: "app-keyboard-backlight",
@@ -49,6 +53,8 @@ export class KeyboardBacklightComponent implements OnInit {
     private brightnessSliderInUsage: boolean;
     private brightnessSliderTimeout: number | null = null;
     private timeoutDuration: number = 1000;
+    public gridParams: IGridParams = GridParamsBacklight;
+
 
     constructor(
         private config: ConfigService,

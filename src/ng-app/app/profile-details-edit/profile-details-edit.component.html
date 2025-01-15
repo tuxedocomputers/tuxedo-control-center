@@ -50,11 +50,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             <div class="content">
                 <div>
-                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="40px" class="profile-details-edit-grid">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="40px" class="profile-details-edit-grid">
 
                         <!-- Profile name -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsNameLabel">Name</header></mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsNameLabel">Name</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-form-field *ngIf="editProfile" appearance="fill">
                                     <input matInput #inputName="matInput"
@@ -70,10 +70,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </content>
                         </mat-grid-tile>
                     </mat-grid-list>
-                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="80px" class="profile-details-edit-grid">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="80px" class="profile-details-edit-grid">
                         <!-- Profile description -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-form-field *ngIf="editProfile" class="input-description" appearance="fill">
                                     <textarea matInput
@@ -91,10 +91,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </content>
                         </mat-grid-tile>
                     </mat-grid-list>
-                    <mat-grid-list [cols]="gridProfileSettings.cols" rowHeight="40px" class="profile-details-edit-grid">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="40px" class="profile-details-edit-grid">
                         <!-- ODM Profile for "led purposes" -->
                         <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
-                            <mat-grid-tile [colspan]="gridProfileSettings.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header [ngClass]="{'inactive': false}">
                                     <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">Profile indicator</ng-container>
                                     <mat-icon
@@ -106,7 +106,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-icon>
                                 </header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" *ngIf="editProfile" [ngClass]="{'inactive': false}">
                                     <mat-select formControlName="name" [disableOptionCentering]="true">
                                         <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
@@ -119,8 +119,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
 
                         <!-- Profile state selection -->
-                        <mat-grid-tile [colspan]="gridProfileSettings.headerSpan"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridProfileSettings.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
                                 <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
                                     <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
@@ -154,14 +154,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <div formGroupName="display">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
-                        <mat-grid-tile [colspan]="gridParams.headerSpan"><header i18n>Set brightness on profile activation</header></mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.header"><header i18n>Set brightness on profile activation</header></mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="!inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
                                 <span [hidden]="inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input" [hidden]="!editProfile">
                                 <mat-checkbox #inputUseBrightness
                                     formControlName="useBrightness"
@@ -170,10 +170,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </content>
                         </mat-grid-tile>
 
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header [ngClass]="{'inactive': !inputUseBrightness.checked}" i18n="@@cProfMgrDetailsBrightnessLabel">Backlight brightness</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
                             <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ profileFormGroup.get("display").get("brightness").value }}%</content>
                             <button mat-icon-button color="primary"
@@ -193,7 +193,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-icon>add</mat-icon>
                             </button>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
                                 <mat-slider
                                     #inputDisplayBrightness
@@ -225,11 +225,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
                         [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !displayModes}"
                         *ngIf="(displayModes && (getCurrentResolutionRefreshRates()?.length > 1))">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header i18n="@@cProfMgrDetailsRefRateOnProfileActivationHeader">Set refresh rate on profile
                                 activation</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="!inputUseRefRate.checked"
                                     i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
@@ -237,25 +237,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     i18n="@@cProfMgrDetailsUseBrightnessNo">no</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input" [hidden]="!editProfile">
                                 <mat-checkbox #inputUseRefRate formControlName="useRefRate" color="primary">
                                 </mat-checkbox>
                             </content>
                         </mat-grid-tile>
 
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header [ngClass]="{'inactive': !inputUseRefRate.checked}"
                                 i18n="@@cProfMgrDetailsRefRateLabelProfile">Refresh rate</header>
                         </mat-grid-tile>
 
-                        <mat-grid-tile [colspan]="gridParams.valueSpan"
+                        <mat-grid-tile [colspan]="gridParams.value"
                             [ngClass]="{'inactive': !inputUseRefRate.checked}">
                             <content class="value">{{ roundValue(profileFormGroup.get('display').value.refreshRate)
                                 }}Hz</content>
                         </mat-grid-tile>
 
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input" [hidden]="!editProfile"
                                 [ngClass]="{'inactive': !inputUseRefRate.checked}">
                                 <mat-select formControlName="refreshRate" [disableOptionCentering]="true">
@@ -293,17 +293,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
 
                         <!-- Fan profile -->
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header [ngClass]="{'inactive': false}" i18n="@@cProfMgrDetailsFanProfileLabel">Fan profile
                             </header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{
                                 viewProfile.fan.fanProfile }}</content>
                             <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{
                                 profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                 <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
                                     <mat-option *ngFor="let fanProfileName of getFanProfileNames()"
@@ -316,10 +316,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'">
                             <!-- Minimum fan speed -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header i18n="@@cProfMgrDetailsMinFanSpeedLabel">Minimum fan speed</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="editProfile">{{ !fansOffAvailable &&
                                     viewProfile.fan.minimumFanspeed < fansMinSpeed ? fansMinSpeed :
                                         viewProfile.fan.minimumFanspeed }} %</content>
@@ -338,7 +338,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>add</mat-icon>
                                         </button>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile">
                                     <mat-slider #inputMinimumFanspeed
                                         [min]="fansOffAvailable ? 0 : fansMinSpeed" [max]="100" step="1" color="primary">
@@ -357,10 +357,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <!-- Maximum fan speed -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header i18n="@@cProfMgrDetailsMaxFanSpeedLabel">Maximum fan speed</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="editProfile">{{ !fansOffAvailable &&
                                     viewProfile.fan.maximumFanspeed < fansMaxSpeed ? fansMinSpeed :
                                         viewProfile.fan.maximumFanspeed }} %</content>
@@ -379,7 +379,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>add</mat-icon>
                                         </button>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile">
                                     <mat-slider #inputMaximumFanspeed [min]="0"
                                         [max]="100" step="1" color="primary">
@@ -398,10 +398,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <!-- Offset fan speed -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header i18n="@@cProfMgrDetailsOffsetFanSpeedLabel">Offset fan speed</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="editProfile"
                                     >{{
                                         viewProfile.fan.offsetFanspeed > 0
@@ -430,7 +430,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-icon>add</mat-icon>
                                 </button>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile">
                                     <mat-slider #inputOffsetFanspeed [min]="-100"
                                         [max]="100" step="1" color="primary">
@@ -493,16 +493,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-content class="content">
                 <div formGroupName="webcam">
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                        <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
                                 <span [hidden]="!inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOn">on</span>
                                 <span [hidden]="inputWebcamStatus.checked" i18n="@@cProfMgrDetailsWebcamStatusOff">off</span>
                             </content>
                         </mat-grid-tile>
-                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                        <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input" [hidden]="!editProfile">
                                 <mat-checkbox #inputWebcamStatus
                                     formControlName="status"
@@ -533,7 +533,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <!-- ODM Profile -->
                     <!-- Note: "Copy" for "led purposes" also located in profile settings -->
                     <div formGroupName="odmProfile">
-                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                        <mat-grid-tile [colspan]="gridParams.header">
                             <header [ngClass]="{'inactive': false}">
                                 <ng-container *ngIf="!hasDeviceSystemProfileInfo">
                                     <ng-container i18n="@@cProfMgrDetailsODMProfileLabel">System profile</ng-container>
@@ -549,11 +549,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </header>
                         </mat-grid-tile>
                         <ng-container *ngIf="!hasDeviceSystemProfileInfo">
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
                                 <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                     <mat-select formControlName="name" [disableOptionCentering]="true">
                                         <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
@@ -564,11 +564,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
                         </ng-container>
                         <ng-container *ngIf="hasDeviceSystemProfileInfo">
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(viewProfile.odmProfile.name) }}</content>
                                 <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ getPowerLimitToName(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                     <mat-slider
                                             [min]="0"
@@ -603,10 +603,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div formGroupName="odmPowerLimits">
                         <div formArrayName="tdpValues">
                             <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
-                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                <mat-grid-tile [colspan]="gridParams.header">
                                     <header (click)="findActiveTab()">{{ odmTDPLabel(odmPowerLimitInfos[i].descriptor) }}</header>
                                 </mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                <mat-grid-tile [colspan]="gridParams.value">
                                     <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>
                                     <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
                                     <button mat-icon-button color="primary"
@@ -624,7 +624,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <mat-icon>add</mat-icon>
                                     </button>
                                 </mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                <mat-grid-tile [colspan]="gridParams.input">
                                     <content class="input" [hidden]="!editProfile">
                                         <mat-slider
                                             [min]="odmPowerLimitInfos[i].min"
@@ -665,14 +665,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     >
                         <div formGroupName="cpu">
                             <!-- Number of logical cores -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header i18n="@@cProfMgrDetailsNrCoresLabel">Number of logical cores</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
                                 <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("cpu.onlineCores")?.value }}</content>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile">
                                     <mat-slider #inputOnlineCores
                                         min="1"
@@ -687,16 +687,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <!-- Maximum performance -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
                             </mat-grid-tile>
-                            <mat-grid-tile class="value" [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile class="value" [colspan]="gridParams.value">
                                 <content class="value">
                                     <span [hidden]="!inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovYes">yes</span>
                                     <span [hidden]="inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovNo">no</span>
                                 </content>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="!editProfile">
                                     <mat-checkbox #inputUseMaxPerfGov
                                         formControlName="useMaxPerfGov"
@@ -706,10 +706,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <!-- Minimum frequency -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatCpuFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
                                 <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatCpuFrequency(findClosestValue(profileFormGroup.get("cpu.scalingMinFrequency")?.value, selectableFrequencies)) }} GHz</content>
                                 <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatCpuFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
@@ -728,7 +728,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-icon>add</mat-icon>
                                 </button>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                                     <mat-slider #inputScalingMinFrequency
                                         [min]="cpuInfo.minFreq"
@@ -770,10 +770,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <!-- Maximum frequency -->
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && !editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && viewProfile.cpu.scalingMaxFrequency !== cpuInfo.maxFreq)))">
                                     {{ formatCpuFrequency(viewProfile.cpu.scalingMaxFrequency) }} GHz</content>
                                 <content class="value" [hidden]="!(!inputUseMaxPerfGov.checked && editProfile && (!hasMaxFreqWorkaround || (hasMaxFreqWorkaround && findClosestValue(inputScalingMaxFrequency.value, selectableFrequencies) !== cpuInfo.maxFreq)))">
@@ -801,7 +801,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-icon>add</mat-icon>
                                 </button>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                                     <mat-slider #inputScalingMaxFrequency
                                         [min]="cpuInfo.minFreq"
@@ -839,7 +839,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </mat-grid-list>
                 </div>
-
+                
                 <div *ngIf="!hideCTGP && nvidiaPowerCTRLAvailable && nvidiaPowerCTRLMaxPowerLimit > 0">
                     <p class="sub-header" #nvidiaPowerCTRLHeader i18n="@@cProfMgrDetailsNVIDIAPowerCTRLLabel">NVIDIA power control</p>
                     <!--

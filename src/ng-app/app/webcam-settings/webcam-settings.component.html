@@ -92,14 +92,14 @@
                                 <!-- WEBCAM -->
                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                     class="profile-details-edit-grid">
-                                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                    <mat-grid-tile [colspan]="gridParams.header">
                                         <header>Webcam</header>
                                     </mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                    <mat-grid-tile [colspan]="gridParams.value">
                                         <content class="input">
                                         </content>
                                     </mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input">
                                             <mat-select name="selectedWebcam" [(value)]="selectedWebcam"
                                                 placeholder="Webcam" (selectionChange)="setWebcam($event.value)">
@@ -121,11 +121,11 @@
                                 <!-- PRESETS -->
                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                     class="profile-details-edit-grid">
-                                    <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                    <mat-grid-tile [colspan]="gridParams.header">
                                         <header i18n="@@webcamPreset">Preset</header>
                                     </mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                    <mat-grid-tile [colspan]="gridParams.value"></mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input">
 
                                             <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
@@ -149,11 +149,11 @@
                                         <div *ngIf="getOptionValue(webcamConfig, 'type')=='slider'">
                                             <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                 class="profile-details-edit-grid">
-                                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                                <mat-grid-tile [colspan]="gridParams.header">
                                                     <header>{{ getConfigTranslation(webcamConfig) }}
                                                     </header>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                                <mat-grid-tile [colspan]="gridParams.value">
                                                     <content class="value">
                                                         {{ getPercentValue(webcamConfig) }} %
                                                     </content>
@@ -168,7 +168,7 @@
                                                         <mat-icon>add</mat-icon>
                                                     </button>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                                <mat-grid-tile [colspan]="gridParams.input">
                                                     <content class="input">
                                                         <mat-slider [max]="getOptionValue(webcamConfig, 'max')"
                                                             [min]="getOptionValue(webcamConfig, 'min')"
@@ -206,11 +206,11 @@
                                         <div *ngIf="getOptionValue(webcamConfig, 'type')=='bool'">
                                             <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                 class="profile-details-edit-grid">
-                                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                                <mat-grid-tile [colspan]="gridParams.header">
                                                     <header>{{ getConfigTranslation(webcamConfig) }}
                                                     </header>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                                <mat-grid-tile [colspan]="gridParams.value">
                                                 </mat-grid-tile>
                                                 <mat-grid-tile>
                                                     <content class="input">
@@ -225,17 +225,17 @@
                                         <div *ngIf="getOptionValue(webcamConfig, 'type')=='menu'">
                                             <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                                 class="profile-details-edit-grid">
-                                                <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                                <mat-grid-tile [colspan]="gridParams.header">
                                                     <header>{{ getConfigTranslation(webcamConfig) }}
                                                     </header>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                                <mat-grid-tile [colspan]="gridParams.value">
                                                     <content class="value">
                                                         {{ getConfigTranslation(webcamFormGroup.get(webcamConfig).value)
                                                         }}
                                                     </content>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                                <mat-grid-tile [colspan]="gridParams.input">
                                                     <content class="input">
                                                         <mat-select formControlName="{{webcamConfig}}">
                                                             <!-- value -->
@@ -272,14 +272,14 @@
                         </mat-expansion-panel-header>
                         <!-- WEBCAM -->
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header>Webcam</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan">
+                            <mat-grid-tile [colspan]="gridParams.value">
                                 <content class="input">
                                 </content>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input">
                                     <mat-select name="selectedWebcam" [(value)]="selectedWebcam" placeholder="Webcam"
                                         (selectionChange)="setWebcam($event.value)">
@@ -299,11 +299,11 @@
                         </mat-grid-list>
                         <!-- PRESETS -->
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
-                            <mat-grid-tile [colspan]="gridParams.headerSpan">
+                            <mat-grid-tile [colspan]="gridParams.header">
                                 <header>Preset</header>
                             </mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.valueSpan"></mat-grid-tile>
-                            <mat-grid-tile [colspan]="gridParams.inputSpan">
+                            <mat-grid-tile [colspan]="gridParams.value"></mat-grid-tile>
+                            <mat-grid-tile [colspan]="gridParams.input">
                                 <content class="input">
                                     <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
                                         [ngModelOptions]="{standalone: true}"
@@ -333,12 +333,12 @@
                                     *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='slider'">
                                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                         class="profile-details-edit-grid">
-                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                        <mat-grid-tile [colspan]="gridParams.header">
                                             <header [ngClass]="{'inactive': !checkValid(webcamConfig)}">
                                                 {{ getConfigTranslation(webcamConfig) }}
                                             </header>
                                         </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                        <mat-grid-tile [colspan]="gridParams.value">
                                             <content class="value" [ngClass]="{'inactive': !checkValid(webcamConfig)}">
                                                 {{ getPercentValue(webcamConfig, webcamConfig.value) }}
                                                 %
@@ -354,7 +354,7 @@
                                                 <mat-icon>add</mat-icon>
                                             </button>
                                         </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                        <mat-grid-tile [colspan]="gridParams.input">
                                             <content class="input">
                                                 <mat-slider [max]="getOptionValue(webcamConfig, 'max')"
                                                     [min]="getOptionValue(webcamConfig, 'min')"
@@ -392,12 +392,12 @@
                                     *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='bool'">
                                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                         class="profile-details-edit-grid">
-                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                        <mat-grid-tile [colspan]="gridParams.header">
                                             <header>
                                                 {{ getConfigTranslation(webcamConfig) }}
                                             </header>
                                         </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                        <mat-grid-tile [colspan]="gridParams.value">
                                         </mat-grid-tile>
                                         <mat-grid-tile>
                                             <content class="input">
@@ -413,17 +413,17 @@
                                     *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='menu'">
                                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                         class="profile-details-edit-grid">
-                                        <mat-grid-tile [colspan]="gridParams.headerSpan">
+                                        <mat-grid-tile [colspan]="gridParams.header">
                                             <header>
                                                 {{ getConfigTranslation(webcamConfig) }}
                                             </header>
                                         </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.valueSpan">
+                                        <mat-grid-tile [colspan]="gridParams.value">
                                             <content class="value">
                                                 {{ getConfigTranslation(webcamFormGroup.get(webcamConfig).value) }}
                                             </content>
                                         </mat-grid-tile>
-                                        <mat-grid-tile [colspan]="gridParams.inputSpan">
+                                        <mat-grid-tile [colspan]="gridParams.input">
                                             <content class="input">
                                                 <mat-select formControlName="{{webcamConfig}}">
                                                     <mat-option

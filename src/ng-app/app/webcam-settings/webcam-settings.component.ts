@@ -26,6 +26,7 @@ import { MatTab } from "@angular/material/tabs";
 import { ConfirmDialogData, ConfirmDialogResult } from "../dialog-confirm/dialog-confirm.component";
 import { ChoiceDialogData, ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
 import { InputDialogData } from "../dialog-input-text/dialog-input-text.component";
+import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
 
 // todo: move dialog functions into a seperate file
 @Component({
@@ -35,12 +36,7 @@ import { InputDialogData } from "../dialog-input-text/dialog-input-text.componen
     standalone: false
 })
 export class WebcamSettingsComponent implements OnInit {
-    gridParams: { cols: number, headerSpan: number, valueSpan: number, inputSpan: number } = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 2,
-        inputSpan: 3,
-    };
+    public gridParams: IGridParams = GridParamsSettings;
 
     @ViewChild("video", { static: true })
     video: ElementRef;

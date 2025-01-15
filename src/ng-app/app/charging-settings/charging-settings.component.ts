@@ -23,6 +23,7 @@ import { MatSliderChange } from "@angular/material/slider";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ChargeType } from "src/common/classes/PowerSupplyController";
 import { MatRadioChange } from "@angular/material/radio";
+import { GridParamsMenu, IGridParams } from "src/common/models/IGridParams";
 
 class ThresholdPresets {
     constructor(
@@ -76,12 +77,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     private updateInterval: number = 1000;
     private timeout;
 
-    public gridParams: any = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 2,
-        inputSpan: 3
-    };
+    public gridParams: IGridParams = GridParamsMenu;
+
 
     public chargingProfileLabels: Map<string, string> = new Map();
     public chargingProfileDescriptions: Map<string, string> = new Map();

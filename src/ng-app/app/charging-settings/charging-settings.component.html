@@ -119,15 +119,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-radio-group>
 
     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="edit-grid">
-        <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.header" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <header i18n="@@chargingThresholdsLabelStartThreshold">Start threshold</header>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.value" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="value">
                 <span>{{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %</span>
             </content>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.input" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="input">
                 <mat-slider
                     #startThreshold
@@ -153,15 +153,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </content>
         </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="gridParams.headerSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.header" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <header i18n="@@chargingThresholdsLabelEndThreshold">End threshold</header>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.valueSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.value" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="value">
                 <span>{{ findClosest(endThreshold.value, chargeEndAvailableThresholds) }} %</span>
             </content>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.inputSpan" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.input" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
             <content class="input">
                 <mat-slider
                     #endThreshold
