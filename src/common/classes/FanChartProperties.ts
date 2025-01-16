@@ -17,92 +17,114 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
-// todo: update to chart.js 4
+import { Tick } from "chart.js";
+import { formatTemp } from "./FanUtils";
 
-import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from "chart.js";
-import { Color } from "ng2-charts";
-import "@angular/localize/init";
 
-const graphOptions: ChartOptions = {
-    animation: {
-        duration: 300,
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    tooltips: {
-        callbacks: {
-            label: (item: ChartTooltipItem, data: ChartData): string => {
-                return (
-                    data.datasets[item.datasetIndex].label + " " + item.yLabel
-                );
-            },
-        },
-    },
-    scales: {
-        yAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    suggestedMax: 100,
-                    callback: (value: number): number => {
-                        if (value % 20 === 0) {
-                            return value;
-                        } else {
-                            return null;
-                        }
-                    },
-                },
-            },
-        ],
-        xAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    autoSkip: false,
-                    callback: (value: string | number, index: number): string | number => {
-                        if (index % 5 === 0) {
-                            return value;
-                        } else {
-                            return null;
-                        }
-                    },
-                },
-            },
-        ],
-    },
+export const chartInteraction = {
+    mode: "index" as any, // todo: use correct type
+    intersect: false,
 };
 
-const fantableDatasets: ChartDataSets[] = [
-    {
-        label: $localize`:@@cProfMgrDetailsFanChartCPULabel:CPU Fan`,
-        data: [],
-        spanGaps: true,
-        lineTension: 0.1,
-        steppedLine: true,
-        showLine: true,
-        pointRadius: 2,
-    },
-    {
-        label: $localize`:@@cProfMgrDetailsFanChartGPULabel:GPU Fan`,
-        data: [],
-        spanGaps: true,
-        lineTension: 0.1,
-        steppedLine: true,
-        showLine: true,
-        pointRadius: 2,
-    },
-];
+export const chartAnimation = {
+    duration: 300,
+};
 
-const graphColors: Color[] = [
-    {
-        borderColor: "rgba(120, 120, 120, 0.4)",
-        backgroundColor: "rgba(10, 10, 10, 0.4)",
-    },
-    {
+export const chartResponsive = true;
+export const chartMaintainAspectRatio = false;
+
+export function createLineChartDataset(
+    primaryLabel: string,
+    primaryData: any,
+    secondaryLabel?: string,
+    secondaryData?: any
+): any {
+    const baseDataset = {
+        spanGaps: true,
+        showLine: true,
+        pointRadius: 2,
+        fill: true,
+    };
+
+    const primaryDataset = {
+        label: primaryLabel,
+        data: primaryData,
         borderColor: "rgba(227, 0, 22, 0.3)",
         backgroundColor: "rgba(227, 0, 22, 0.3)",
-    },
-];
-export { graphOptions, fantableDatasets, graphColors };
-*/
+        ...baseDataset,
+    };
+
+    if (secondaryLabel) {
+        const secondaryDataset = {
+            label: secondaryLabel,
+            data: secondaryData,
+            borderColor: "rgba(120, 120, 120, 0.4)",
+            backgroundColor: "rgba(10, 10, 10, 0.4)",
+            ...baseDataset,
+        };
+
+        return [primaryDataset, secondaryDataset];
+    }
+
+    return [primaryDataset];
+}
+
+export function createBarChartDataset(
+    primaryLabel: string,
+    primaryData: any,
+    secondaryLabel: string,
+    secondaryData: any
+): any {
+    return [
+        {
+            label: primaryLabel,
+            backgroundColor: "rgba(227, 0, 22, 0.3)",
+            data: primaryData,
+        },
+        {
+            label: secondaryLabel,
+            backgroundColor: "rgba(10, 10, 10, 0.4)",
+            data: secondaryData,
+        },
+    ];
+}
+
+export function createLineChartScales(
+    fahrenheit: boolean,
+    textColor: string,
+    max?: number
+): any {
+    return {
+        x: {
+            type: "linear" as any, // todo: use correct type
+            min: 0,
+            max: max ? max : 100,
+            ticks: {
+                color: textColor,
+
+                callback: (
+                    value: number,
+                    index: number,
+                    ticks: Tick[]
+                ): string => {
+                    return formatTemp(value, fahrenheit);
+                },
+            },
+        },
+        y: {
+            min: 0,
+            max: 100,
+            ticks: {
+                color: textColor,
+
+                callback: (
+                    value: number,
+                    index: number,
+                    ticks: Tick[]
+                ): string => {
+                    return `${value} %`;
+                },
+            },
+        },
+    };
+}

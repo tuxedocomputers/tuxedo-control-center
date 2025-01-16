@@ -74,9 +74,9 @@ import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.componen
 import { ToolsComponent } from "./tools/tool.component";
 import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
-import { FanGraphComponent } from './fan-graph/fan-graph.component';
+import { FanChartComponent } from './fan-chart/fan-chart.component';
 
-import { BaseChartDirective, ThemeService } from 'ng2-charts';
+import { BaseChartDirective, ThemeService } from "ng2-charts";
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
@@ -93,7 +93,11 @@ import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.compo
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
 import { PrimeSelectComponent } from './prime-select/prime-select.component';
 import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
-import { FanSliderComponent } from './fan-slider/fan-slider.component';
+import { FanCustomChartComponent } from './fan-custom-chart/fan-custom-chart.component';
+import { TgpChartComponent } from './tgp-chart/tgp-chart.component';
+import { Chart, registerables } from 'chart.js';
+
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
@@ -113,7 +117,8 @@ declare const require;
     ToolsComponent,
     KeyboardBacklightComponent,
     ChangeCryptPasswordComponent,
-    FanGraphComponent,
+    FanChartComponent,
+    TgpChartComponent,
     MainGuiComponent,
     AquarisControlComponent,
     DialogInputTextComponent,
@@ -128,7 +133,7 @@ declare const require;
     DialogWaitingComponent,
     PrimeSelectComponent,
     PrimeDialogComponent,
-    FanSliderComponent,
+    FanCustomChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -165,10 +170,10 @@ declare const require;
     MarkdownModule.forRoot(),
     OverlayModule,
     GaugeModule.forRoot(),
-    BaseChartDirective,
     ColorPickerModule,
     MatMenuModule,
-    MatRadioModule
+    MatRadioModule,
+    BaseChartDirective
   ],
   providers: [
     DecimalPipe,
@@ -177,4 +182,10 @@ declare const require;
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+    constructor() {
+        // https://github.com/chartjs/chartjs-plugin-datalabels/issues/309
+        Chart.register(...registerables);
+        Chart.register(ChartDataLabels);
+    }
+}

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { FanSliderComponent } from "./fan-slider.component";
+import { FanCustomChartComponent } from "./fan-custom-chart.component";
 
-describe("FanSliderComponent", () => {
-    let component: FanSliderComponent;
-    let fixture: ComponentFixture<FanSliderComponent>;
+describe("FanCustomChartComponent", () => {
+    let component: FanCustomChartComponent;
+    let fixture: ComponentFixture<FanCustomChartComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [FanSliderComponent],
+            declarations: [FanCustomChartComponent],
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(FanSliderComponent);
+        fixture = TestBed.createComponent(FanCustomChartComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

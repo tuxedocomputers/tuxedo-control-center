@@ -17,17 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- .fan-slider-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    margin-top: 20px;
-    width: 100%;
-}
-
-canvas {
-    margin-top: 20px;
-    width: 100% !important;
-    height: 100% !important;
+ .fan-chart-container {
+    height: 300px
 }

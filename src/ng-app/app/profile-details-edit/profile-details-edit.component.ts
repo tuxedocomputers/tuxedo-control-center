@@ -30,7 +30,7 @@ import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
-import { FanSliderComponent } from '../fan-slider/fan-slider.component';
+import { FanCustomChartComponent } from '../fan-custom-chart/fan-custom-chart.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
@@ -136,10 +136,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public fansOffAvailable: boolean = true;
 
     public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    private nvidiaPowerCTRLMaxPowerLimitEvent: EventEmitter<number> = new EventEmitter();
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
     public hideCTGP: boolean = true
-
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
@@ -149,8 +149,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild('inputName') inputName: MatInput;
 
-    @ViewChild(FanSliderComponent)
-    private sliderComponent: FanSliderComponent;
+    @ViewChild(FanCustomChartComponent)
+    private sliderComponent: FanCustomChartComponent;
 
     constructor(
         private utils: UtilsService,
@@ -896,6 +896,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
     }
 
+    nvidiaPowerCTRLMaxPowerLimitChange(): void {
+        this.nvidiaPowerCTRLMaxPowerLimitEvent.emit(this.nvidiaPowerCTRLMaxPowerLimit);
+    }
+    
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
         if (!this.fansMinSpeedSubscription.closed) {

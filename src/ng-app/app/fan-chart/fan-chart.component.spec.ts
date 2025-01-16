@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FanGraphComponent } from './fan-graph.component';
+import { FanChartComponent } from './fan-chart.component';
 
-describe('FanGraphComponent', () => {
-  let component: FanGraphComponent;
-  let fixture: ComponentFixture<FanGraphComponent>;
+describe('FanChartComponent', () => {
+  let component: FanChartComponent;
+  let fixture: ComponentFixture<FanChartComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FanGraphComponent ]
+      declarations: [ FanChartComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FanGraphComponent);
+    fixture = TestBed.createComponent(FanChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
