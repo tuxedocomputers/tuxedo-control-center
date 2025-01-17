@@ -1,3 +1,22 @@
+/*!
+ * Copyright (c) 2019-2025 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 // https://dgpu-docs.intel.com/devices/hardware-table.html
 export const intelIGpuDeviceIds: string[] = [
     // Xe Raptor Lake-P (Intel Iris Xe Graphics)
@@ -487,133 +506,4 @@ export const intelIGpuDeviceIds: string[] = [
 const intelVendorId: string = "8086";
 export const intelIGpuDeviceIdString: string = intelIGpuDeviceIds
     .map((id: string): string => `${intelVendorId}:${id}`)
-    .join("|");
-
-// https://github.com/openbsd/src/blob/master/sys/dev/pci/drm/amd/amdgpu/amdgpu_devlist.h
-// https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-export const amdIGpuDeviceIds: string[] = [
-    // Raphael
-    "164E",
-
-    // Mendocino
-    "1506",
-
-    // Picasso / Raven
-    "15DD",
-    "15D8",
-
-    // Renoir
-    "15E7",
-    "1636",
-    "1638",
-    "164C",
-
-    // Rembrandt / Yellow Carp
-    "164D",
-    "1681",
-
-    // Phoenix
-    "15BF",
-
-    // Phoenix 2
-    "15C8",
-
-    // Kaveri
-    "1304",
-    "1305",
-    "1306",
-    "1307",
-    "1309",
-    "130A",
-    "130B",
-    "130C",
-    "130D",
-    "130E",
-    "130F",
-    "1310",
-    "1311",
-    "1312",
-    "1313",
-    "1315",
-    "1316",
-    "1317",
-    "1318",
-    "131B",
-    "131C",
-    "131D",
-
-    // Kabini
-    "9830",
-    "9831",
-    "9832",
-    "9833",
-    "9834",
-    "9835",
-    "9836",
-    "9837",
-    "9838",
-    "9839",
-    "983a",
-    "983b",
-    "983c",
-    "983d",
-    "983e",
-    "983f",
-
-    // mullins
-    "9850",
-    "9851",
-    "9852",
-    "9853",
-    "9854",
-    "9855",
-    "9856",
-    "9857",
-    "9858",
-    "9859",
-    "985A",
-    "985B",
-    "985C",
-    "985D",
-    "985E",
-    "985F",
-
-    // carrizo
-    "9870",
-    "9874",
-    "9875",
-    "9876",
-    "9877",
-
-    // stoney
-    "98E4",
-
-    // CYAN_SKILLFISH
-    "13FE",
-    "143F",
-
-    // Aqua Vanjaram
-    "74A0",
-
-    // Van Gogh
-    "1435",
-    "163f",
-
-    // Hawk Point
-    "1900",
-    "1901",
-];
-
-const amdVendorId = "1002";
-export const amdIGpuDeviceIdString: string = amdIGpuDeviceIds
-    .map((id: string): string => `${amdVendorId}:${id}`)
-    .join("|");
-
-const amdDGpuDeviceIds: string[] = [
-    // 7600M XT
-    "7480",
-];
-
-export const amdDGpuDeviceIdString: string = amdDGpuDeviceIds
-    .map((id: string): string => `${amdVendorId}:${id}`)
     .join("|");

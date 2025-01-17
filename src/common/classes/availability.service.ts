@@ -1,8 +1,8 @@
 import {
     amdDGpuDeviceIdString,
     amdIGpuDeviceIdString,
-    intelIGpuDeviceIdString,
-} from "./DeviceIDs";
+} from "./AmdDeviceIDs";
+import { intelIGpuDeviceIdString } from "./IntelDeviceIDs";
 import { countLines, execCommandSync } from "./Utils";
 import { IDeviceCounts } from "src/common/models/TccGpuValues";
 

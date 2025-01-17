@@ -22,7 +22,7 @@ import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 import { AvailabilityService } from "../../common/classes/availability.service";
 import { execCmdSync, execFile, readTextFile } from "./utilsAPI";
 import * as path from "node:path";
-import { amdDGpuDeviceIdString } from "../../common/classes/DeviceIDs";
+import { amdDGpuDeviceIdString } from "../../common/classes/AmdDeviceIDs";
 
 let availabilityService: AvailabilityService = new AvailabilityService();
 

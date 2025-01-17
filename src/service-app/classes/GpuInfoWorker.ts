@@ -29,9 +29,9 @@ import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 import { PowerController } from "../../common/classes/PowerController";
 import {
     amdDGpuDeviceIdString,
-    amdIGpuDeviceIdString,
-    intelIGpuDeviceIdString,
-} from "../../common/classes/DeviceIDs";
+    amdIGpuDeviceIdString
+} from "../../common/classes/AmdDeviceIDs";
+import { intelIGpuDeviceIdString } from "../../common/classes/IntelDeviceIDs";
 import { execCommandAsync, countLines } from "../../common/classes/Utils";
 import { AvailabilityService } from "../../common/classes/availability.service";
 
