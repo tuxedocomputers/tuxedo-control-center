@@ -11,7 +11,8 @@
   "license": "GPL-3.0",
   "homepage": "https://tuxedocomputers.com",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
+    "nan-electron-workaround": "sed 's/^#include .nan_scriptorigin\\.h./\\/\\/ #include nan_scriptorigin.h/' ./node_modules/nan/nan.h > ./node_modules/nan/nan.h.new && mv ./node_modules/nan/nan.h.new ./node_modules/nan/nan.h",
+    "postinstall": "npm run nan-electron-workaround && electron-builder install-app-deps",
     "ver": "sh build-src/inc-version.sh",
     "inc-version-patch": "npm version patch --no-git-tag-version && cd src && npm version patch --no-git-tag-version",
     "inc-version-minor": "npm version minor --no-git-tag-version && cd src && npm version minor --no-git-tag-version",
