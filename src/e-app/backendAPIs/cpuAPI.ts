@@ -243,7 +243,12 @@ ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promis
       });
   });
 
-ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq",(event: IpcMainEvent): void =>
-{
-    event.returnValue = ScalingDriver.acpi_cpufreq;
+  ipcMain.on("comp-get-scaling-driver-acpi-cpu-freq-sync", (event: IpcMainEvent): string => {
+    try {
+        const scalingDriver: string = ScalingDriver.acpi_cpufreq
+        return scalingDriver; 
+    } catch (error) {
+        console.error("cpuApi: comp-get-scaling-driver-acpi-cpu-freq-sync failed =>", error);
+        throw error;
+    }
 });

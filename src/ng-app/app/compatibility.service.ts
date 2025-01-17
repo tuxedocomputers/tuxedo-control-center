@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
-import { dbusVariant, IDBusFanData, TimeData } from 'src/common/models/IFanData';
+import { IDBusFanData, TimeData } from 'src/common/models/IFanData';
 import { SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
 import { Subject } from 'rxjs';
 import { ICpuPower } from 'src/common/models/TccPowerSettings';
@@ -29,10 +29,14 @@ import { ICpuPower } from 'src/common/models/TccPowerSettings';
     providedIn: "root",
 })
 export class CompatibilityService {
+  private missingMaxFreqBoostWorkaround: boolean = false;
+
   constructor(
         private tccDbus: TccDBusClientService,
         private sysfs: SysFsService
-    ) {}
+    ) {
+        this.checkMissingMaxFreqBoostWorkaround()
+    }
 
     public getSystemProfileInfo(): SystemProfileInfo {
         return deviceSystemProfileInfo.get(this.tccDbus.device);
@@ -193,12 +197,9 @@ export class CompatibilityService {
     get hasAquaris(): boolean {
         return this.tccDbus.hasAquaris;
     }
-
-    /**
-     * Condition where max freq workaround is applicable
-     * (aka max freq missing regulated through boost flag)
-     */
-    get hasMissingMaxFreqBoostWorkaround(): boolean {
+    
+    // todo: test init values
+    public checkMissingMaxFreqBoostWorkaround(): void {
         if (
             this.sysfs.generalCpuInfo.value !== undefined &&
             this.sysfs.logicalCoreInfo.value !== undefined
@@ -206,12 +207,18 @@ export class CompatibilityService {
             const boost: boolean = this.sysfs.generalCpuInfo.value.boost;
             const scalingDriver: string =
                 this.sysfs.logicalCoreInfo.value[0].scalingDriver;
-            return (
+            this.missingMaxFreqBoostWorkaround = (
                 boost !== undefined &&
                 scalingDriver === window.comp.getScalingDriverAcpiCpuFreq()
             );
-        } else {
-            return false;
         }
+    }
+    
+    /**
+     * Condition where max freq workaround is applicable
+     * (aka max freq missing regulated through boost flag)
+     */
+    get hasMissingMaxFreqBoostWorkaround(): boolean {
+        return this.missingMaxFreqBoostWorkaround;
     }
 }

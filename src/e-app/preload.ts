@@ -226,8 +226,8 @@ contextBridge.exposeInMainWorld(
     'comp',
     {
         getHasAquaris: (): Promise<boolean> => ipcRenderer.invoke('comp-get-has-aquaris'),
-        // todo: get does not return value?
-        getScalingDriverAcpiCpuFreq: (): void => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq'),
+        // todo: make async
+        getScalingDriverAcpiCpuFreq: (): string => ipcRenderer.sendSync('comp-get-scaling-driver-acpi-cpu-freq-sync'),
     }
 );
 
