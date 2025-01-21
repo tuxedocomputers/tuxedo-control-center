@@ -188,7 +188,7 @@ export class IntelRAPLController {
         const maxPower: number = this.getConstraint0MaxPower();
 
         try {
-            let powerLimit: number =
+            const powerLimit: number =
                 setPowerLimit === undefined
                     ? maxPower
                     : Math.max(maxPower / 2, Math.min(setPowerLimit, maxPower));

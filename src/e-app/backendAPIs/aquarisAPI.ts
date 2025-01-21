@@ -35,7 +35,7 @@ let aquarisConnectProgress: boolean = false;
 let aquarisHasBluetooth: boolean = true;
 
 let searchingTimeout: NodeJS.Timeout;
-let searchingDelayMs: number = 1000;
+const searchingDelayMs: number = 1000;
 let discoverTries: number = 0;
 const discoverMaxTries: number = 5;
 let interestTries: number = 0;

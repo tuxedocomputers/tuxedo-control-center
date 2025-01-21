@@ -335,7 +335,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private syncOutputPortsSetting(): boolean {
         let missingSetting: boolean = false;
 
-        let outputPorts: string[][] = TuxedoIOAPI.getOutputPorts();
+        const outputPorts: string[][] = TuxedoIOAPI.getOutputPorts();
         // Delete additional cards from settings
         if (this.settings.ycbcr420Workaround?.length > outputPorts?.length) {
             this.logLine('Additional ycbcr420Workaround card in settings');
@@ -350,9 +350,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 missingSetting = true;
             }
             // Delete additional ports from settings
-            for (let settingsPort in this.settings.ycbcr420Workaround[card]) {
+            for (const settingsPort in this.settings.ycbcr420Workaround[card]) {
                 let stillAvailable: boolean = false;
-                for (let port of outputPorts[card]) {
+                for (const port of outputPorts[card]) {
                     if (settingsPort === port) {
                         stillAvailable = true;
                     }
@@ -364,7 +364,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 }
             }
             // Add port to settings if missing
-            for (let port of outputPorts[card]) {
+            for (const port of outputPorts[card]) {
                 if (this.settings.ycbcr420Workaround[card][port] === undefined) {
                     this.logLine('Missing ycbcr420Workaround port in settings');
                     this.settings.ycbcr420Workaround[card][port] = false;
@@ -504,7 +504,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // they don't offically support it and using it results in undefined behaviour.
         const dmi = new DMIController('/sys/class/dmi/id');
         const deviceName: string = dmi.productSKU.readValueNT();
-        let hideCTGPValue: boolean = deviceName === "IBP14I06" ||
+        const hideCTGPValue: boolean = deviceName === "IBP14I06" ||
                              deviceName === "IBP1XI07MK1" ||
                              deviceName === "IBP1XI07MK2" ||
                              deviceName === "IBP1XI08MK1" ||
@@ -824,7 +824,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.odmProfile.name = defaultODMProfileName;
         }
 
-        let tdpInfo: TDPInfo[] = [];
+        const tdpInfo: TDPInfo[] = [];
         TuxedoIOAPI.getTDPInfo(tdpInfo);
         if (profile.odmPowerLimits === undefined
             || profile.odmPowerLimits.tdpValues === undefined) {
@@ -860,7 +860,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const newConfigPath: string = this.getPathArgument(optionString);
         if (newConfigPath !== '') {
             try {
-                let newConfig: T = this.config.readConfig<T>(newConfigPath);
+                const newConfig: T = this.config.readConfig<T>(newConfigPath);
 
 
                 try {

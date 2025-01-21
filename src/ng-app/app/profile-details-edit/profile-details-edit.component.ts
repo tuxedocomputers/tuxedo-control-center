@@ -323,7 +323,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderODMProfileChange(index: number): void {
-        let profileInfo: string = this.deviceSystemProfileInfo.pl[index].odmName;
+        const profileInfo: string = this.deviceSystemProfileInfo.pl[index].odmName;
         this.profileFormGroup.patchValue({
             odmProfile: { name: profileInfo },
         });
@@ -331,7 +331,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     private overwriteDefaultRefreshRateValue(): void {
-        let displayFormGroupValue: ITccProfileDisplay = this.profileFormGroup.get("display").value;
+        const displayFormGroupValue: ITccProfileDisplay = this.profileFormGroup.get("display").value;
 
         if (displayFormGroupValue.refreshRate === -1) {
             // todo: adding variable checks to avoid access error
@@ -348,7 +348,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private clampCurrentMinimumFanSpeedToHWCapabilities(): void {
         if (!this.fansOffAvailable) {
-            let minimumFanspeedValue: number = this.profileFormGroup.get('fan.minimumFanspeed').value
+            const minimumFanspeedValue: number = this.profileFormGroup.get('fan.minimumFanspeed').value
             this.profileFormGroup.patchValue({fan: {minimumFanspeed: minimumFanspeedValue < this.fansMinSpeed ? this.fansMinSpeed : minimumFanspeedValue}});
             this.viewProfile.fan.minimumFanspeed = this.viewProfile.fan.minimumFanspeed < this.fansMinSpeed ? this.fansMinSpeed : this.viewProfile.fan.minimumFanspeed;
         }
@@ -566,7 +566,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
 
         // Find largest allowed min value
-        let minValue: number = this.odmPowerLimitInfos[sliderIndex].min;
+        const minValue: number = this.odmPowerLimitInfos[sliderIndex].min;
 
         /*for (let i = 0; i < sliderIndex; ++i) {
             if (minValue === undefined || tdpValues.controls[i].value > minValue) {
@@ -582,7 +582,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
 
         // Find smallest allowed max value
-        let maxValue: number = this.odmPowerLimitInfos[sliderIndex].max;
+        const maxValue: number = this.odmPowerLimitInfos[sliderIndex].max;
 
         /*for (let i = sliderIndex + 1; i < tdpValues.controls?.length; ++i) {
             if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
@@ -599,8 +599,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         let newValue: number = tdpValues.controls[movedSliderIndex].value;
 
 
-        let minValue: number = this.sliderODMPowerLimitMinValue(movedSliderIndex);
-        let maxValue: number = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
+        const minValue: number = this.sliderODMPowerLimitMinValue(movedSliderIndex);
+        const maxValue: number = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
 
         // Ensure new value is above chosen min value
         if (newValue < minValue) {

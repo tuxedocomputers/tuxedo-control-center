@@ -500,7 +500,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     // Make numbers smaller than 1W not show 0, but <1W
     private roundWattage(val: number): string {
-        let num: number = Math.round(val);
+        const num: number = Math.round(val);
         let ret: string = "";
         if (num < 1) {
             ret = "<1";

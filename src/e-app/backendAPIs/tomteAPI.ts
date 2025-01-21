@@ -24,9 +24,9 @@ import { execCmd, execFile } from './utilsAPI';
 // todo: refactor
 async function resetToDefaults(): Promise<boolean> {
     return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        let command1: string = "pkexec tuxedo-tomte AUTOMATIC";
-        let command2: string = "pkexec tuxedo-tomte unblock all";
-        let command3: string = "pkexec tuxedo-tomte reconfigure all";
+        const command1: string = "pkexec tuxedo-tomte AUTOMATIC";
+        const command2: string = "pkexec tuxedo-tomte unblock all";
+        const command3: string = "pkexec tuxedo-tomte reconfigure all";
         let res1: {
             data: string;
             error: unknown;
@@ -60,10 +60,10 @@ async function resetToDefaults(): Promise<boolean> {
 
 async function getModuleDescription(moduleName: string, langId: string): Promise<string> {
     return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-    let command: string = "LANGUAGE=" + langId + " tuxedo-tomte description " + moduleName;
+        const command: string = "LANGUAGE=" + langId + " tuxedo-tomte description " + moduleName;
     try
     {
-        let results: string = await execCmd(command);
+        const results: string = await execCmd(command);
         resolve(results);
     }
     catch (err: unknown)
@@ -75,7 +75,7 @@ async function getModuleDescription(moduleName: string, langId: string): Promise
 }
 
 async function removeModule(moduleName: string): Promise<void> {
-    let command: string = "yes | pkexec tuxedo-tomte remove " + moduleName;
+    const command: string = "yes | pkexec tuxedo-tomte remove " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         execCmd(command).then((): void => {
             resolve();
@@ -87,7 +87,7 @@ async function removeModule(moduleName: string): Promise<void> {
 }
 
 async function installModule(moduleName: string): Promise<void> {
-    let command: string = "pkexec tuxedo-tomte configure " + moduleName;
+    const command: string = "pkexec tuxedo-tomte configure " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         execCmd(command).then((): void => {
             resolve();
@@ -99,7 +99,7 @@ async function installModule(moduleName: string): Promise<void> {
 }
 
 async function unBlockModule(moduleName: string): Promise<void> {
-    let command: string = "pkexec tuxedo-tomte unblock " + moduleName;
+    const command: string = "pkexec tuxedo-tomte unblock " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         execCmd(command).then((): void => {
             resolve();
@@ -111,7 +111,7 @@ async function unBlockModule(moduleName: string): Promise<void> {
 }
 
 async function blockModule(moduleName: string): Promise<void> {
-    let command: string = "pkexec tuxedo-tomte block " + moduleName;
+    const command: string = "pkexec tuxedo-tomte block " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         execCmd(command).then((): void => {
             resolve();
@@ -123,7 +123,7 @@ async function blockModule(moduleName: string): Promise<void> {
 }
 
 async function setMode(mode: string): Promise<void> {
-    let command: string = "pkexec tuxedo-tomte " + mode;
+    const command: string = "pkexec tuxedo-tomte " + mode;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         execCmd(command).then(() => {
             resolve();
@@ -137,7 +137,7 @@ async function setMode(mode: string): Promise<void> {
 
 function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInformation
     {
-        let tomteInformation: ITomteInformation = {
+        const tomteInformation: ITomteInformation = {
             modules: [],
             tomteMode: "",
             jsonError: true,
@@ -150,7 +150,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
         }
         try
         {
-            let givenobject: any = JSON.parse(rawTomteListOutput);
+            const givenobject: any = JSON.parse(rawTomteListOutput);
             tomteInformation.jsonError = false;
 
         // now let's get the mode, modules etc out of it
@@ -159,7 +159,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
         tomteInformation.rebootRequired = givenobject.restart === "yes";
         for (let i: number = 0; i < givenobject.modules?.length; i++)
         {
-            let module: any = givenobject.modules[i];
+            const module: any = givenobject.modules[i];
             tomteInformation.modules.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
         }
         }
@@ -175,7 +175,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
 
 async function getTomteInformation(): Promise<ITomteInformation> {
         return new Promise<ITomteInformation>(async (resolve: (value: ITomteInformation | PromiseLike<ITomteInformation>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            let command: string = "tuxedo-tomte listjson"
+            const command: string = "tuxedo-tomte listjson"
             let results: string;
             try {
                 results = await execCmd(command + "");
@@ -185,7 +185,7 @@ async function getTomteInformation(): Promise<ITomteInformation> {
                 results = "";
             }
             finally {
-                let tomteInformation: ITomteInformation = parseTomteListJson(results);
+                const tomteInformation: ITomteInformation = parseTomteListJson(results);
                 resolve(tomteInformation);
             }
     });

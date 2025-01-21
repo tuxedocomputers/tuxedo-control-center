@@ -28,10 +28,10 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
     crypt_drives = crypt_drives.filter((x: IDrive): boolean => x.crypt);
     // todo: rename variable
     let oneliner: string = "";
-    for (let drive of crypt_drives) {
+    for (const drive of crypt_drives) {
         oneliner += `printf '%s\\n' '${oldPassword}' | /usr/sbin/cryptsetup open --type luks -q --test-passphrase ${drive.devPath} && `
     }
-    for (let drive of crypt_drives) {
+    for (const drive of crypt_drives) {
         oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
     }
     oneliner = oneliner.slice(0, -4); // remove the tailing " && "

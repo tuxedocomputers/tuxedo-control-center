@@ -46,7 +46,7 @@ export class InfoComponent implements OnInit {
   private async init(): Promise<void>
   {
     this.appVersion = await window.ipc.getAppVersion();
-    let processVersions: IProcessVersions = await window.ipc.getProcessVersions();
+    const processVersions: IProcessVersions = await window.ipc.getProcessVersions();
     this.nodeVersion = processVersions.node;
     this.electronVersion = processVersions.electron;
     this.chromeVersion = processVersions.chrome;

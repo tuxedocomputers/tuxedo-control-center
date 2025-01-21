@@ -197,7 +197,7 @@ private observableUpdateListJSON: Map<TccDBusClientService["fanData"] | TccDBusC
     // TODO
     const nextODMPowerLimitsJSON: string = await window.dbusAPI.odmPowerLimitsJSON();
     if (nextODMPowerLimitsJSON) {
-        let nextODMPowerLimits: TDPInfo[] = JSON.parse(nextODMPowerLimitsJSON);
+        const nextODMPowerLimits: TDPInfo[] = JSON.parse(nextODMPowerLimitsJSON);
         this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
     }
 

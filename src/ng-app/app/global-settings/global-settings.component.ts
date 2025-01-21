@@ -81,7 +81,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
         for (let card: number = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
             this.ycbcr420Workaround[card] = {};
-            for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
+            for (const port in this.config.getSettings().ycbcr420Workaround[card]) {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
             }
         }

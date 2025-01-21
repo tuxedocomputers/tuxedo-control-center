@@ -21,7 +21,7 @@ import { ipcMain } from "electron";
 import type { IpcMainEvent } from "electron";
 import { VendorService } from "../../common/classes/Vendor.service";
 
-let vendorService: VendorService = new VendorService();
+const vendorService: VendorService = new VendorService();
 
 ipcMain.handle('get-cpu-vendor', async (event: IpcMainEvent, status: any): Promise<string> => {
     return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {

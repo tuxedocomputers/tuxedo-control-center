@@ -80,9 +80,9 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     private async changeCryptPassword(): Promise<void> {
-        let oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
-        let newPassword: string = this.passwordFormGroup.get("newPassword").value;
-        let confirmPassword: string = this.passwordFormGroup.get("confirmPassword").value;
+        const oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
+        const newPassword: string = this.passwordFormGroup.get("newPassword").value;
+        const confirmPassword: string = this.passwordFormGroup.get("confirmPassword").value;
 
         // Just to be sure that sane values are read to not brick the encryption when gui logic failed
         if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
@@ -99,8 +99,8 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     confirmValidation(group: FormGroup): { notSame: boolean } {
-        let pass: string = group.get("newPassword").value;
-        let confirmPass: string = group.get("confirmPassword").value;
+        const pass: string = group.get("newPassword").value;
+        const confirmPass: string = group.get("confirmPassword").value;
 
         return pass === confirmPass ? null : { notSame: true }
     }

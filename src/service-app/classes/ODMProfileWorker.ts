@@ -75,7 +75,7 @@ export class ODMProfileWorker extends DaemonWorker {
         const availableProfiles: string[] = platformProfileChoices.readValueNT();
         this.tccd.dbusData.odmProfilesAvailable = availableProfiles;
 
-        let chosenODMProfileName: string = this.getODMProfileName();
+        const chosenODMProfileName: string = this.getODMProfileName();
         if (availableProfiles.includes(chosenODMProfileName)) {
             platformProfile.writeValue(chosenODMProfileName);
         }

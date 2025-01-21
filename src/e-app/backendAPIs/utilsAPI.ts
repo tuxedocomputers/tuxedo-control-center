@@ -33,7 +33,7 @@ import { tccWindow } from "./browserWindowsAPI";
 import { systeminfosURL } from "./systemInfosAPI"
 
 export const cwd: string = process.cwd();
-export let environmentIsProduction: boolean = app.isPackaged;
+export const environmentIsProduction: boolean = app.isPackaged;
 
 ipcMain.handle('fs-write-text-file', async (event: IpcMainInvokeEvent, filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> => {
     return writeTextFile(filePath, fileData, writeFileOptions);
@@ -50,28 +50,28 @@ ipcMain.on('get-cwd-sync', (event: IpcMainEvent): void => {
 
 ipcMain.handle('get-app-version', (event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        let requestedInfo: string = app.getVersion();
+        const requestedInfo: string = app.getVersion();
         resolve(requestedInfo);
     });
 });
 
 ipcMain.handle('get-cwd', (event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        let requestedInfo: string = process.cwd();
+        const requestedInfo: string = process.cwd();
         resolve(requestedInfo);
     });
 });
 
 ipcMain.handle('get-process-versions', (event: IpcMainInvokeEvent): Promise<NodeJS.ProcessVersions> => {
     return new Promise<NodeJS.ProcessVersions>((resolve: (value: NodeJS.ProcessVersions | PromiseLike<NodeJS.ProcessVersions>) => void, reject: (reason?: unknown) => void): void => {
-        let requestedInfo: NodeJS.ProcessVersions = process.versions;
+        const requestedInfo: NodeJS.ProcessVersions = process.versions;
         resolve(requestedInfo);
     });
 });
 
 ipcMain.handle('show-save-dialog', async (event: IpcMainInvokeEvent, arg: Electron.SaveDialogOptions): Promise<SaveDialogReturnValue> => {
     return new Promise<SaveDialogReturnValue>((resolve: (value: SaveDialogReturnValue | PromiseLike<SaveDialogReturnValue>) => void, reject: (reason?: unknown) => void): void => {
-        let results: Promise<SaveDialogReturnValue> = dialog.showSaveDialog(arg);
+        const results: Promise<SaveDialogReturnValue> = dialog.showSaveDialog(arg);
         resolve(results);
     });
 });
@@ -79,7 +79,7 @@ ipcMain.handle('show-save-dialog', async (event: IpcMainInvokeEvent, arg: Electr
 
 ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
     return new Promise<OpenDialogReturnValue>(async (resolve: (value: OpenDialogReturnValue | PromiseLike<OpenDialogReturnValue>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        let results: Promise<OpenDialogReturnValue> = dialog.showOpenDialog(arg);
+        const results: Promise<OpenDialogReturnValue> = dialog.showOpenDialog(arg);
         resolve(results);
     });
 });
@@ -87,7 +87,7 @@ ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electr
 // todo: make cleaner
 ipcMain.handle('ipc-get-path', (event: IpcMainInvokeEvent, arg: any): Promise<string>  => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        let requestedPath: string = app.getPath(arg);
+        const requestedPath: string = app.getPath(arg);
         resolve(requestedPath);
     });
 });
@@ -200,9 +200,9 @@ export function execCmdSync(cmd: string):string {
 // todo: rename into execFileAsync or somehow else indicate that function is async
 export async function execFile(arg: string): Promise<{ data: string, error: unknown}> {
     return new Promise<{ data: string, error: unknown}>( (resolve: (value: { data: string, error: unknown} | PromiseLike<{ data: string, error: unknown}>) => void, reject: (reason?: unknown) => void): void => {
-        let strArg: string = arg;
-        let cmdList: string[] = strArg.split(' ');
-        let cmd: string = cmdList.shift();
+        const strArg: string = arg;
+        const cmdList: string[] = strArg.split(' ');
+        const cmd: string = cmdList.shift();
         child_process.execFile(cmd, cmdList, (err: unknown, stdout: string, stderr: string): void => {
                     if (err) {
                         reject({ data: stderr, error: err });
@@ -214,9 +214,9 @@ export async function execFile(arg: string): Promise<{ data: string, error: unkn
 }
 
 export async function execFileSync(arg: string): Promise<unknown | string> {
-        let strArg: string = arg;
-        let cmdList: string[] = strArg.split(' ');
-        let cmd: string = cmdList.shift();
+        const strArg: string = arg;
+        const cmdList: string[] = strArg.split(' ');
+        const cmd: string = cmdList.shift();
         let data: Buffer;
         try {
             data = child_process.execFileSync(cmd, cmdList);

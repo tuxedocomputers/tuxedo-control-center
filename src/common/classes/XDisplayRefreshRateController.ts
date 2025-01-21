@@ -150,7 +150,7 @@ export class XDisplayRefreshRateController {
         var fullLineRegex: RegExp =
             /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?(\s+[0-9]{1,3}\.[0-9]{2}[\*]?[\+]?)+/;
 
-        let newDisplayModes: IDisplayFreqRes = {
+        const newDisplayModes: IDisplayFreqRes = {
             displayName: "",
             activeMode: {
                 refreshRates: [],
@@ -201,7 +201,7 @@ export class XDisplayRefreshRateController {
             xResolution: parseInt(resolution[0]),
             yResolution: parseInt(resolution[1]),
         };
-        for (let rate of refreshrates) {
+        for (const rate of refreshrates) {
             const num: number = parseFloat(rate.replace(/[^0-9.]/g, ""));
             if (!newMode?.refreshRates.includes(num)) {
                 newMode?.refreshRates.push(num);

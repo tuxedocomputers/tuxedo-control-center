@@ -219,7 +219,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public async sliderStartThresholdChange(changeEvent: MatSliderChange): Promise<void> {
 
         let newValue: number = changeEvent.value;
-        let validValues: number[] = this.chargeStartAvailableThresholds.filter(
+        const validValues: number[] = this.chargeStartAvailableThresholds.filter(
             (value: number): boolean => value < this.ctrlChargeEndThreshold.value
         );
         newValue = this.findClosest(newValue, validValues);
@@ -236,7 +236,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public async sliderEndThresholdChange(changeEvent: MatSliderChange): Promise<void> {
 
         let newValue: number = changeEvent.value;
-        let validValues: number[] = this.chargeEndAvailableThresholds.filter(
+        const validValues: number[] = this.chargeEndAvailableThresholds.filter(
             (value: number): boolean => value > this.ctrlChargeStartThreshold.value
         );
         newValue = this.findClosest(newValue, validValues);

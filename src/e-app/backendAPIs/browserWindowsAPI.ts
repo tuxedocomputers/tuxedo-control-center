@@ -128,8 +128,8 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
         return;
     }
 
-    let windowWidth: number = 740;
-    let windowHeight: number = 230;
+    const windowWidth: number = 740;
+    const windowHeight: number = 230;
 
     primeWindow = new BrowserWindow({
         title: "Prime Select Configuration",
@@ -245,8 +245,8 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
 }
 
 function createAquarisControl(langId: string): void {
-    let windowWidth: number = 700;
-    let windowHeight: number = 400;
+    const windowWidth: number = 700;
+    const windowHeight: number = 400;
 
     aquarisWindow = new BrowserWindow({
         title: 'Aquaris control',
@@ -284,8 +284,8 @@ export function clearWebcamWindow(): void
 }
 
 export async function createWebcamPreview(langId: string, arg: WebcamConstraints): Promise<void> {
-    let windowWidth: number = 640;
-    let windowHeight: number = 480;
+    const windowWidth: number = 640;
+    const windowHeight: number = 480;
 
     webcamWindow = new BrowserWindow({
         title: "Webcam",

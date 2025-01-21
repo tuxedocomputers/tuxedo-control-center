@@ -24,7 +24,7 @@ import { execCmdSync, execFile, readTextFile } from "./utilsAPI";
 import * as path from "node:path";
 import { amdDGpuDeviceIdString } from "../../common/classes/AmdDeviceIDs";
 
-let availabilityService: AvailabilityService = new AvailabilityService();
+const availabilityService: AvailabilityService = new AvailabilityService();
 
 ipcMain.on('get-nvidia-dgpu-count-power', (event: IpcMainEvent): void => {
     event.returnValue = availabilityService.getNvidiaDGpuCount();

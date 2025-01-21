@@ -85,19 +85,19 @@ export class KeyboardBacklightListener {
     // Input from SysFS
 
     private async initUPower(): Promise<void> {
-        let sysDBus: dbus.MessageBus = dbus.systemBus();
+        const sysDBus: dbus.MessageBus = dbus.systemBus();
 
         // Props to poll LidIsClosed status when required
-        let sysDBusUPowerObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower');
+        const sysDBusUPowerObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower');
         this.sysDBusUPowerProps = sysDBusUPowerObject.getInterface('org.freedesktop.DBus.Properties');
 
         // BrightnessChanged handler
-        let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower/KbdBacklight');
+        const sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await sysDBus.getProxyObject('org.freedesktop.UPower', '/org/freedesktop/UPower/KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (async function(brightness: number): Promise<void> {
             if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
-                let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-                for (let i in keyboardBacklightStatesNew) {
+                const keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
+                for (const i in keyboardBacklightStatesNew) {
                     keyboardBacklightStatesNew[i].brightness = brightness;
                 }
                 this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
@@ -112,8 +112,8 @@ export class KeyboardBacklightListener {
                     (function(i: number): void {
                         fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
                             if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
-                                let keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-                                let colors: number[] = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                                const keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
+                                const colors: number[] = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
                                 keyboardBacklightStatesNew[i].red = colors[0];
                                 keyboardBacklightStatesNew[i].green = colors[1];
                                 keyboardBacklightStatesNew[i].blue = colors[2];
@@ -139,7 +139,7 @@ export class KeyboardBacklightListener {
             if (this.keyboardBacklightStatesWritingNew == false) {
                 this.keyboardBacklightStatesWritingNew = true;
                 while(this.keyboardBacklightStatesPendingNewJSON !== undefined) {
-                    let keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = JSON.parse(this.keyboardBacklightStatesPendingNewJSON);
+                    const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = JSON.parse(this.keyboardBacklightStatesPendingNewJSON);
                     this.keyboardBacklightStatesPendingNewJSON = undefined;
                     await this.setKeyboardBacklightStates(keyboardBacklightStatesNew, true, true, false);
                 }
@@ -222,7 +222,7 @@ export class KeyboardBacklightListener {
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path: string = keyboardIteSymbolicPath + iteKeyboardDevice + "/leds"
+            const path: string = keyboardIteSymbolicPath + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
@@ -244,7 +244,7 @@ export class KeyboardBacklightListener {
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path: string = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
+            const path: string = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
@@ -266,7 +266,7 @@ export class KeyboardBacklightListener {
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path: string = keyboardIte8291xSymbolicPath + iteKeyboardDevice + "/leds"
+            const path: string = keyboardIte8291xSymbolicPath + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)
@@ -288,7 +288,7 @@ export class KeyboardBacklightListener {
         }
 
         for (const iteKeyboardDevice of iteKeyboardDevices) {
-            let path: string = keyboardNb04SymbolicPath + iteKeyboardDevice + "/leds"
+            const path: string = keyboardNb04SymbolicPath + iteKeyboardDevice + "/leds"
             if (fileOK(path)) {
                 ledsPerKey = ledsPerKey.concat(
                     getDirectories(path)

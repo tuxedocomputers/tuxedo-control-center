@@ -29,9 +29,9 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         super(100000, "YCbCr420WorkaroundWorker", tccd);
 
         if (this.tccd.settings.ycbcr420Workaround?.length > 0) {
-            let card: number = 0;
-            let port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
-            let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
+            const card: number = 0;
+            const port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
+            const path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
             this.tccd.dbusData.forceYUV420OutputSwitchAvailable = fileOK(path);
         }
         else {
@@ -43,10 +43,10 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         let settings_changed: boolean = false;
 
         for (let card: number = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
-            for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
-                let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
+            for (const port in this.tccd.settings.ycbcr420Workaround[card]) {
+                const path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
                 if (fileOK(path)) {
-                    let oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
+                    const oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
                     if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
                         settings_changed = true;
                         fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");

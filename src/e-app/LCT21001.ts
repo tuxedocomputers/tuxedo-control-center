@@ -187,7 +187,7 @@ export class LCT21001 {
         const deviceIds: string[] = await this.adapter.devices();
         const deviceInfo: DeviceInfo[] = [];
         let blDevice: NodeBle.Device;
-        for (let deviceId of deviceIds) {
+        for (const deviceId of deviceIds) {
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
             } catch (err: unknown) {

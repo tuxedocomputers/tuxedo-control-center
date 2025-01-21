@@ -147,7 +147,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         // First default list selection: first device with an assigned name
         let uuidWithAssignedName: string;
-        for (let device of this.deviceList) {
+        for (const device of this.deviceList) {
             if (this.deviceNameMap.get(device.uuid) !== undefined) {
                 uuidWithAssignedName = device.uuid;
                 break;
@@ -159,9 +159,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         // Second default list selection: last connected device
         if (defaultDeviceUUID === undefined) {
-            let lastConnectedUUID: string = localStorage.getItem('aquarisLastConnected');
+            const lastConnectedUUID: string = localStorage.getItem('aquarisLastConnected');
             if (lastConnectedUUID !== null) {
-                for (let device of this.deviceList) {
+                for (const device of this.deviceList) {
                     if (device.uuid === lastConnectedUUID) {
                         defaultDeviceUUID = lastConnectedUUID;
                         break;
@@ -537,7 +537,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public async getUserDeviceNames(): Promise<Map<string, string>> {
-        let deviceNamesSerialized: string = localStorage.getItem('aquarisUserDeviceNames');
+        const deviceNamesSerialized: string = localStorage.getItem('aquarisUserDeviceNames');
         let deviceNames: Map<string, string>;
         if (deviceNamesSerialized === null) {
             deviceNames = new Map<string, string>();

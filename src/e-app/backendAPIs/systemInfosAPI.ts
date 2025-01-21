@@ -56,7 +56,7 @@ async function getSystemInfos(): Promise<Buffer> {
       });
 }
 
-  let systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
+const systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
     function updateSystemInfoLabel(text: string): void
     {
         tccWindow.webContents.send('ipc-update-system-info-label', text);

@@ -78,7 +78,7 @@ export class NgTranslations {
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
         return new Promise<Map<string, string>>(async (resolve: (value: Map<string, string> | PromiseLike<Map<string, string>>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            let xlfPath: string = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
+            const xlfPath: string = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
             fs.readFile(xlfPath, (err: any, xmlBuffer: Buffer): void => {
                 if (err) {
                     console.error("NgTranslations: loadFile readFile failed =>", err)

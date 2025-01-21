@@ -26,7 +26,7 @@ import * as child_process from 'node:child_process';
 import { WebcamAPIFunctions } from '../../common/models/IWebcamAPI';
 import { cwd, environmentIsProduction, execCmd, execFile } from './utilsAPI';
 
-let webcamConfigHandler: ConfigHandler = new ConfigHandler(
+const webcamConfigHandler: ConfigHandler = new ConfigHandler(
     TccPaths.SETTINGS_FILE,
     TccPaths.PROFILES_FILE,
     TccPaths.WEBCAM_FILE,
@@ -141,7 +141,7 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
 
     .set(WebcamAPIFunctions.getWebcamPaths, async (): Promise<string> => {
         return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            let result: { data: string; error: unknown } = await execFile("python3 " + getWebcamCtrlPythonPath() + " -i");
+            const result: { data: string; error: unknown } = await execFile("python3 " + getWebcamCtrlPythonPath() + " -i");
             resolve(result.data);
             });
     })

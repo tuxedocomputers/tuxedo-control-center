@@ -32,7 +32,7 @@ import type { BrightnessModeString } from "./backendAPIs/brightnessAPI";
 import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from "../common/models/ICpuInfos";
 const { contextBridge, ipcRenderer } = require('electron');
 
-let callbacks: string[] = [];
+const callbacks: string[] = [];
 
 // todo: duplicate code, move into another file
 interface IProcessVersions

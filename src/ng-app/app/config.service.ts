@@ -170,7 +170,7 @@ export class ConfigService implements OnDestroy {
         for (let i: number = 0; i < newProfiles?.length; i++)
         {
             // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
-            let oldProfileIndex: number = newProfileList.findIndex((x: ITccProfile): boolean => x.id === newProfiles[i].id);
+            const oldProfileIndex: number = newProfileList.findIndex((x: ITccProfile): boolean => x.id === newProfiles[i].id);
             if(oldProfileIndex !== -1)
             {
                 newProfileList[oldProfileIndex] = newProfiles[i];
@@ -179,7 +179,7 @@ export class ConfigService implements OnDestroy {
             {
                 // when we want to override the old profile or there is no conflict we want to keep the
                 // original ID
-                let newProfile: ITccProfile = newProfiles[i];
+                const newProfile: ITccProfile = newProfiles[i];
                 if (newProfile.id === "generateNewID")
                 {
                     newProfile.id = generateProfileId();

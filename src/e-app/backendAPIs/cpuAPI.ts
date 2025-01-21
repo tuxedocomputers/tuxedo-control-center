@@ -26,7 +26,7 @@ import type {
 import { CpuController } from "../../common/classes/CpuController";
 import { ScalingDriver } from "../../common/classes/LogicalCpuController";
 
-  let cpu: CpuController = new CpuController('/sys/devices/system/cpu');
+const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
 
 // todo: values can most likely be gathered in the cpu worker via onWork() instead to avoid unnecessary duplicated file access
 // there already is core.scalingAvailableFrequencies.readValueNT() and this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT() for example

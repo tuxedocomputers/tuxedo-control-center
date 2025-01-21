@@ -30,17 +30,13 @@ export type BrightnessModeString = 'light' | 'dark' | 'system';
 let sessionBus: any;
 const dbus: any = require('dbus-next');
 
-let observeDisplayBrightness: Observable<number>;
-let displayBrightnessSubject: Subject<number>;
+const displayBrightnessSubject: Subject<number> = new Subject<number>();
 let currentDisplayBrightness: number;
 let displayBrightnessNotSupported: boolean = false;
 
 let displayBrightnessGnome: DBusDisplayBrightnessGnome;
 
 let dbusDriverNames: string[] = [];
-
-displayBrightnessSubject = new Subject<number>();
-observeDisplayBrightness = displayBrightnessSubject.asObservable();
 
 try {
     sessionBus = dbus.sessionBus();

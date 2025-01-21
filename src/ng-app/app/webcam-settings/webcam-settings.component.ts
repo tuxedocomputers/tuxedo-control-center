@@ -131,7 +131,7 @@ export class WebcamSettingsComponent implements OnInit {
         if (this.mutex.isLocked()) return;
 
         this.mutex.runExclusive(async (): Promise<void> => {
-            let webcamData: WebcamDevice[] = await this.setWebcamDeviceInformation();
+            const webcamData: WebcamDevice[] = await this.setWebcamDeviceInformation();
             this.webcamDropdownData = webcamData;
             if (webcamData?.length == 0) {
                 this.stopWebcam();
@@ -182,7 +182,7 @@ export class WebcamSettingsComponent implements OnInit {
                 .enumerateDevices()
                 .then(
                     async (devices: (InputDeviceInfo | MediaDeviceInfo)[]): Promise<void> => {
-                        let filteredDevices: (InputDeviceInfo | MediaDeviceInfo)[] = devices.filter(
+                        const filteredDevices: (InputDeviceInfo | MediaDeviceInfo)[] = devices.filter(
                             (device: InputDeviceInfo | MediaDeviceInfo): boolean => device.kind == "videoinput"
                         );
                         resolve(filteredDevices);
@@ -196,7 +196,7 @@ export class WebcamSettingsComponent implements OnInit {
         webcamId: string
     ): [string, string] {
         for (const device of devices) {
-            let deviceId: string = device.label.match(/\((.*:.*)\)/)[1];
+            const deviceId: string = device.label.match(/\((.*:.*)\)/)[1];
             if (deviceId == webcamId) {
                 const index: number = devices.indexOf(device, 0);
                 if (index > -1) {
@@ -208,15 +208,15 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async setWebcamDeviceInformation(): Promise<WebcamDevice[]> {
-        let devices: (InputDeviceInfo | MediaDeviceInfo)[] = await this.getWebcamDevices();
+        const devices: (InputDeviceInfo | MediaDeviceInfo)[] = await this.getWebcamDevices();
         return new Promise<WebcamDevice[]>(async (resolve: (value: WebcamDevice[] | PromiseLike<WebcamDevice[]>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            let dropdownData: WebcamDevice[] = [];
-            let webcamPaths: WebcamPath = await this.getWebcamPaths();
+            const dropdownData: WebcamDevice[] = [];
+            const webcamPaths: WebcamPath = await this.getWebcamPaths();
             if (devices?.length !== 0 && webcamPaths != null) {
                 for (const [webcamPath, webcamId] of Object.entries(
                     webcamPaths
                 )) {
-                    let [label, deviceId] = this.getDeviceData(
+                    const [label, deviceId] = this.getDeviceData(
                         devices,
                         webcamId
                     );
@@ -233,7 +233,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async webcamNotAvailabledDialog(): Promise<void> {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogNotAvailableTitle:Access error`,
             description: $localize`:@@webcamDialogNotAvailableDescription:Webcam can not be accessed. Reloading all webcams.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
@@ -244,7 +244,7 @@ export class WebcamSettingsComponent implements OnInit {
     private getWebcamSettings(): Promise<string> {
         return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
             try {
-                let data: string = await window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
+                const data: string = await window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
                 resolve(data);
             } catch (err: unknown) {
                 console.error("webcam-settings: getWebcamSettings failed =>", err);
@@ -286,7 +286,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.selectedWebcam = webcamPreset;
 
         let preset: WebcamPresetValues = this.defaultSettings;
-        let filtered: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
+        const filtered: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
             (webcamPreset: WebcamPreset): boolean =>
                 webcamPreset.presetName != "Default" &&
                 webcamPreset.active == true
@@ -302,10 +302,10 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private getCurrentWebcamConstraints(): WebcamConstraints {
-        let [webcamWidth, webcamHeight]: [string, string] = this.webcamFormGroup
+        const [webcamWidth, webcamHeight]: [string, string] = this.webcamFormGroup
             .getRawValue()
             ["resolution"].split("x");
-        let fps: string = this.webcamFormGroup.getRawValue()["fps"];
+        const fps: string = this.webcamFormGroup.getRawValue()["fps"];
         return {
             deviceId: { exact: this.selectedWebcam.deviceId },
             width: { exact: Number(webcamWidth) },
@@ -317,14 +317,14 @@ export class WebcamSettingsComponent implements OnInit {
     public async openWindow(): Promise<void> {
         this.stopWebcam();
         document.getElementById("hidden").style.display = "none";
-        let webcamConfig: WebcamConstraints = this.getCurrentWebcamConstraints();
+        const webcamConfig: WebcamConstraints = this.getCurrentWebcamConstraints();
         window.webcamAPI.createWebcamPreview(webcamConfig);
         this.detachedWebcamWindowActive = true;
     }
 
     // using list with matching ids instead of one path value in case multiple devices have same id
     private getPathsWithId(id: string): string[] {
-        let webcamPaths: string[] = [];
+        const webcamPaths: string[] = [];
         this.webcamDropdownData.forEach((webcamDevice: WebcamDevice): void => {
             if (webcamDevice.id == id) {
                 webcamPaths.push(webcamDevice.path);
@@ -346,9 +346,9 @@ export class WebcamSettingsComponent implements OnInit {
         parameter: string,
         value: number | string
     ): Promise<void> {
-        let webcamPaths: string[] = this.getPathsWithId(this.selectedWebcam.id);
+        const webcamPaths: string[] = this.getPathsWithId(this.selectedWebcam.id);
 
-        for (let devicePath of webcamPaths) {
+        for (const devicePath of webcamPaths) {
             try {
                 await window.webcamAPI.executeWebcamCtrls(devicePath, parameter, value);
             } catch (err: unknown) {
@@ -491,8 +491,8 @@ export class WebcamSettingsComponent implements OnInit {
         settings: WebcamDeviceInformation[]
     ): FormGroup {
         this.presetSettings = settings;
-        let group: {} = {};
-        let categories: string[] = [];
+        const group: {} = {};
+        const categories: string[] = [];
         settings.forEach((setting: WebcamDeviceInformation): void => {
             group[setting.name] = new FormControl(
                 {
@@ -508,7 +508,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async webcamNotAvailableOtherAccessDialog(): Promise<void> {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogNotAvailableTitle:Access error`,
             description: $localize`:@@webcamDialogNotAvailableOtherAccessDescription:Current Webcam can not be accessed. Another application is most likely accessing your webcam. Resolution and frames per second settings only apply for TCC preview.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
@@ -562,7 +562,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private checkIfPresetNameAvailable(checkPresetName: string): boolean {
-        let presetNames: string[] = [];
+        const presetNames: string[] = [];
         this.webcamPresetsCurrentDevice.forEach((preset: WebcamPreset): void => {
             presetNames.push(preset.presetName);
         });
@@ -640,7 +640,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private notValidPresetDialog(): void {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogNotValidPresetTitle:Webcam preset faulty`,
             description: $localize`:@@webcamDialogNotValidPresetDialog:The webcam preset contains invalid configurations and therefore won't be applied. Reverting to default preset.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
@@ -649,7 +649,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private createWebcamConfig(config: WebcamPresetValues): WebcamConstraints {
-        let [webcamWidth, webcamHeight] = config["resolution"].split("x");
+        const [webcamWidth, webcamHeight] = config["resolution"].split("x");
         return {
             deviceId: { exact: this.selectedWebcam.deviceId },
             width: { exact: Number(webcamWidth) },
@@ -659,7 +659,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async configMismatchDialog(): Promise<boolean> {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogMismatchConfigValuesTitle:Mismatch of config values`,
             description: $localize`:@@webcamDialogMismatchConfigValuesDialog:Unknown values detected. Want to resave all presets with adjusted values for compatibility? This may alter presets. If you decline, they'll be adjusted next time you save. If not a config file issue, ensure latest TCC. Otherwise, contact Tuxedo with kernel and device details.`,
             buttonConfirmLabel: $localize`:@@dialogSaveAdjustedPresets:Save adjusted presets`,
@@ -672,27 +672,25 @@ export class WebcamSettingsComponent implements OnInit {
 
     // config names depend on linux kernel version and this function adjusts in case rename was found
     private async checkConfig(preset: WebcamPreset): Promise<boolean> {
-        let formGroupKeys: string[] = Object.keys(this.webcamFormGroup.getRawValue());
-        let configKeys: string[] = Object.keys(preset.webcamSettings);
+        const formGroupKeys: string[] = Object.keys(this.webcamFormGroup.getRawValue());
+        const configKeys: string[] = Object.keys(preset.webcamSettings);
 
-        let renamed: boolean = false;
         let unknown: boolean = false;
-        let renamedKeys: string[] = [];
+        const renamedKeys: string[] = [];
         this.v4l2Renames.forEach((knownRename: string[]): void => {
-            let includedFormGroupKey: string = knownRename.find((configName: string): boolean =>
+            const includedFormGroupKey: string = knownRename.find((configName: string): boolean =>
                 formGroupKeys.includes(configName)
             );
 
-            let includedConfigKey: string = knownRename.find((configName: string): boolean =>
+            const includedConfigKey: string = knownRename.find((configName: string): boolean =>
                 configKeys.includes(configName)
             );
 
             if (includedFormGroupKey && includedConfigKey) {
                 if (includedFormGroupKey != includedConfigKey) {
-                    let value: string | number | boolean = preset.webcamSettings[includedConfigKey];
+                    const value: string | number | boolean = preset.webcamSettings[includedConfigKey];
                     delete preset.webcamSettings[includedConfigKey];
                     preset.webcamSettings[includedFormGroupKey] = value;
-                    renamed = true;
                     renamedKeys.push(includedConfigKey);
                 }
             }
@@ -705,7 +703,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
         });
 
-        let unresolvedKeys: string[] = configKeys
+        const unresolvedKeys: string[] = configKeys
             .filter((item: string): boolean => formGroupKeys.indexOf(item) < 0)
             .filter((item: string): boolean => renamedKeys.indexOf(item) < 0);
         if (unresolvedKeys?.length > 0) {
@@ -717,7 +715,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async checkAllPresetsForCurrentDevice(): Promise<void> {
         this.mutex.runExclusive(async (): Promise<void> => {
-            let unknown_all: boolean[] = [];
+            const unknown_all: boolean[] = [];
 
             // TODO hacky solution, this should all be handled in main.ts
             if (environment.production) {
@@ -729,7 +727,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             for (const profile of this.webcamPresetsCurrentDevice) {
-                let unknown: boolean = await this.checkConfig(profile);
+                const unknown: boolean = await this.checkConfig(profile);
                 unknown_all.push(unknown);
             }
 
@@ -770,7 +768,7 @@ export class WebcamSettingsComponent implements OnInit {
                 return;
             }
 
-            let webcamConfig: WebcamConstraints = this.createWebcamConfig(config);
+            const webcamConfig: WebcamConstraints = this.createWebcamConfig(config);
             this.setSliderEnabledStatus();
 
             if (!this.detachedWebcamWindowActive) {
@@ -833,7 +831,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private askOverwritePreset(presetName: string): void {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogAskOverwriteTitle:Webcam preset not avaiable`,
             description: $localize`:@@webcamDialogAskOverwriteDescription:Do you want to overwrite the webcam preset?`,
             buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
@@ -853,7 +851,7 @@ export class WebcamSettingsComponent implements OnInit {
     ): Promise<boolean> {
         let saveComplete: boolean = false;
         this.utils.pageDisabled = true;
-        let currentPreset: WebcamPreset = this.getWebcamPreset(presetName);
+        const currentPreset: WebcamPreset = this.getWebcamPreset(presetName);
 
         let webcamConfigs: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
             (webcamPreset: WebcamPreset): boolean => webcamPreset.presetName !== "Default"
@@ -926,7 +924,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private noPresetNameWarningDialog(): void {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogPresetNameUnsetTitle:The webcam preset was not saved`,
             description: $localize`:@@webcamDialogPresetNameUnsetDescription:The webcam preset name was no set and thus the preset was not saved.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
@@ -935,7 +933,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private defaultOverwriteNotAllowed(): void {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogDefaultCanNotOverwriteTitle:Overwriting default settings failed`,
             description: $localize`:@@webcamDialogDefaultCanNotOverwriteDescription:Please select a different name for your webcam preset.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
@@ -944,7 +942,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async askOverwriteOrNewPreset(): Promise<string | undefined> {
-        let config: ChoiceDialogData = {
+        const config: ChoiceDialogData = {
             title: $localize`:@@webcamDialogAskPresetOverwriteTitle:Overwrite webcam preset?`,
             description: $localize`:@@webcamDialogAskPresetOverwriteDescription:Do you want to overwrite the current webcam preset or create a new one?`,
             labelData: [
@@ -964,7 +962,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async askPresetNameDialog(): Promise<string> {
-        let config: InputDialogData = {
+        const config: InputDialogData = {
             title: $localize`:@@webcamDialogAskPresetNameTitle:Saving webcam preset`,
             description: $localize`:@@webcamDialogAskPresetNameDescription:Set name for webcam preset.`,
             prefill: "",
@@ -977,7 +975,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public async handlePresetName(): Promise<void> {
-        let presetName: string = await this.askPresetNameDialog();
+        const presetName: string = await this.askPresetNameDialog();
         if (presetName == undefined) {
             this.noPresetNameWarningDialog();
             return;
@@ -994,12 +992,11 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public async savingWebcamPreset(): Promise<void> {
-        let selection: string | undefined;
         if (this.selectedPreset.presetName == "Default") {
             await this.handlePresetName();
             return;
         }
-        selection = await this.askOverwriteOrNewPreset();
+        const selection: string | undefined = await this.askOverwriteOrNewPreset();
         if (selection == undefined) {
             return;
         }
@@ -1025,8 +1022,8 @@ export class WebcamSettingsComponent implements OnInit {
     ): Promise<void> {
         this.webcamFormGroup.get(configParameter).markAsDirty();
 
-        let min: string | number = this.getOptionValue(configParameter, "min");
-        let max: string | number = this.getOptionValue(configParameter, "max");
+        const min: string | number = this.getOptionValue(configParameter, "min");
+        const max: string | number = this.getOptionValue(configParameter, "max");
         let newValue: string | number =
             this.webcamFormGroup.controls[configParameter].value + offset;
         if (newValue < min) {
@@ -1105,7 +1102,7 @@ export class WebcamSettingsComponent implements OnInit {
 
             await this.checkAllPresetsForCurrentDevice();
 
-            let activePresets: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
+            const activePresets: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
                 (webcamPreset: WebcamPreset): boolean => webcamPreset.active == true
             );
 
@@ -1130,7 +1127,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private defaultPresetWarningDialog(): void {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogDefaultCanNotDeleteTitle:Deleting default webcam preset failed`,
             description: $localize`:@@webcamDialogDefaultCanNotDeleteDescription:The default preset cannot be deleted.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
@@ -1139,7 +1136,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private async presetDeleteConfirmDialog(): Promise<boolean> {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogDeletePresetConfirmTitle:Deleting webcam preset`,
             description: $localize`:@@webcamDialogDeletePresetConfirmDescription:Are you sure that you want to delete this webcam preset?`,
             buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
@@ -1156,7 +1153,7 @@ export class WebcamSettingsComponent implements OnInit {
                 this.defaultPresetWarningDialog();
                 return;
             }
-            let confirmed: boolean = await this.presetDeleteConfirmDialog();
+            const confirmed: boolean = await this.presetDeleteConfirmDialog();
             if (confirmed) {
                 if (this.selectedPreset.presetName == "Default") {
                     this.defaultPresetWarningDialog();
@@ -1165,13 +1162,13 @@ export class WebcamSettingsComponent implements OnInit {
 
                 this.utils.pageDisabled = true;
 
-                let currentConfigs: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
+                const currentConfigs: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
                     (webcamPreset: WebcamPreset): boolean =>
                         webcamPreset.presetName !=
                             this.selectedPreset.presetName &&
                         webcamPreset.presetName != "Default"
                 );
-                let webcamConfigs: WebcamPreset[] = currentConfigs.concat(
+                const webcamConfigs: WebcamPreset[] = currentConfigs.concat(
                     this.webcamPresetsOtherDevices
                 );
 

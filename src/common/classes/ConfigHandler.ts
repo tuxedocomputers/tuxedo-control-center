@@ -120,9 +120,8 @@ export class ConfigHandler {
         });
 
         let valueFilledFromDefault: boolean = false;
-        let defaultCustomProfiles: ITccProfile[] = this.getDefaultCustomProfiles(device);
-        let defaultCustomProfilesIDs: string[];
-        defaultCustomProfilesIDs = defaultCustomProfiles.map((profile) => {
+        const defaultCustomProfiles: ITccProfile[] = this.getDefaultCustomProfiles(device);
+        const defaultCustomProfilesIDs: string[] = defaultCustomProfiles.map((profile) => {
             return profile.id;
         });
 
@@ -209,7 +208,7 @@ export class ConfigHandler {
     public async writeConfigAsync<T>(config: T, filePath: string, writeFileOptions: fs.WriteFileOptions): Promise<void> {
         const fileData: string = JSON.stringify(config);
         try {
-            let dirStat: fs.Stats = await fs.promises.stat(path.dirname(filePath));
+            const dirStat: fs.Stats = await fs.promises.stat(path.dirname(filePath));
             if (!dirStat.isDirectory()) {
                 await fs.promises.mkdir(path.dirname(filePath), { mode: 0o755, recursive: true });
             }

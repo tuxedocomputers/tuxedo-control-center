@@ -29,13 +29,13 @@ export class DriveController {
     private static _sysBlockDir: string = "/sys/block/";
 
     public static async getDrives(includeLoopDevices: boolean = false): Promise<IDrive[]> {
-        let drives: IDrive[] = [];
+        const drives: IDrive[] = [];
 
-        let dirs: string[] = fs.readdirSync(this._sysBlockDir);
-        for (let d of dirs) {
-            let dr: IDrive[] = await this.getChildDevices(path.join(this._sysBlockDir, d));
+        const dirs: string[] = fs.readdirSync(this._sysBlockDir);
+        for (const d of dirs) {
+            const dr: IDrive[] = await this.getChildDevices(path.join(this._sysBlockDir, d));
             if (dr !== undefined) {
-                for (let drive of dr) {
+                for (const drive of dr) {
                     if (!includeLoopDevices && !drive.name.startsWith("loop")) {
                         drives.push(drive);
                     }
@@ -57,17 +57,17 @@ export class DriveController {
     */
 
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
-        let name: string = path.basename(devicePath);
-        let size: number = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
+        const name: string = path.basename(devicePath);
+        const size: number = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
 
-        let isParent: boolean = !fs.existsSync(path.join(devicePath, "partition"));
+        const isParent: boolean = !fs.existsSync(path.join(devicePath, "partition"));
         let devPath: string = "";
 
         if (fs.existsSync(path.join("/dev/", name))) {
             devPath = path.join("/dev/", name);
         }
 
-        let result: Buffer = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
+        const result: Buffer = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
         const isCrpyt: boolean = result.toString().trim() == "crypto_LUKS";
 
         return {
@@ -81,10 +81,10 @@ export class DriveController {
     }
 
     public static async getChildDevices(devicePath: string): Promise<IDrive[]> {
-        let childDevices: IDrive[] = [];
+        const childDevices: IDrive[] = [];
 
-        let name: string = path.basename(devicePath);
-        for (let f of fs.readdirSync(devicePath)) {
+        const name: string = path.basename(devicePath);
+        for (const f of fs.readdirSync(devicePath)) {
             if (f.startsWith(name)) {
                 childDevices.push(await this.getDeviceInfo(path.join(devicePath, f)));
             }

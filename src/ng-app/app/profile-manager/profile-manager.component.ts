@@ -97,7 +97,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 this.currentProfile = this.config.getProfileById(params.profileId);
 
                 // If not yet available, attempt to wait shortly to see if it appears
-                let nrTries: number = 0;
+                const nrTries: number = 0;
                 while (this.currentProfile === undefined && nrTries < 10) {
                     await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 100));
                     this.currentProfile = this.config.getProfileById(params.profileId);
@@ -224,10 +224,10 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public async exportProfiles(): Promise<void>
     {
         try{
-            let documentsPath: string = await this.utils.getPath('documents');
-            let res: string = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
-            let profiles: ITccProfile[] = this.config.getCustomProfiles();
-            let txt: string = JSON.stringify(profiles);
+            const documentsPath: string = await this.utils.getPath('documents');
+            const res: string = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
+            const profiles: ITccProfile[] = this.config.getCustomProfiles();
+            const txt: string = JSON.stringify(profiles);
             await this.utils.writeTextFile("" + res, txt);
         }
         catch(err: unknown)
@@ -241,8 +241,8 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public async importProfiles(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        let documentsPath: string = await this.utils.getPath('documents');
-        let importLabel: string = $localize `:@@pMgrImportLabelFileDialoge:Import`;
+        const documentsPath: string = await this.utils.getPath('documents');
+        const importLabel: string = $localize `:@@pMgrImportLabelFileDialoge:Import`;
         let res: string[];
         let txt: string;
         try
@@ -268,14 +268,14 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             this.utils.pageDisabled = false;
             return;
         }
-        let oldProfiles: ITccProfile[] = this.config.getCustomProfiles();
+        const oldProfiles: ITccProfile[] = this.config.getCustomProfiles();
         let newProfiles: ITccProfile[] = [];
         for (var i: number = 0; i < profiles?.length; i++)
         {
-            let conflictProfileIndex:number = oldProfiles.findIndex((x: ITccProfile): boolean => x.id === profiles[i].id);
+            const conflictProfileIndex:number = oldProfiles.findIndex((x: ITccProfile): boolean => x.id === profiles[i].id);
             if (conflictProfileIndex !== -1)
             {
-                let res: IProfileConflictDialogResult = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
+                const res: IProfileConflictDialogResult = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
                 if(res.action === "keepNew")
                 {
                     newProfiles = newProfiles.concat(profiles[i]);
@@ -286,13 +286,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 }
                 else if (res.action === "keepBoth")
                 {
-                    let newProfile: ITccProfile = profiles[i];
+                    const newProfile: ITccProfile = profiles[i];
                     newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
                 }
                 else if (res.action === "newName")
                 {
-                    let newProfile: ITccProfile = profiles[i];
+                    const newProfile: ITccProfile = profiles[i];
                     newProfile.name = res.newName;
                     newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
@@ -305,7 +305,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
         if(newProfiles?.length > 0)
         {
-            let importSuccess: boolean = await this.config.importProfiles(newProfiles);
+            const importSuccess: boolean = await this.config.importProfiles(newProfiles);
             if (!importSuccess)
             {
                 console.error("profile-manager: importing of Profiles failed =>")

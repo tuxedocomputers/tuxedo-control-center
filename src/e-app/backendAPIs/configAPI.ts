@@ -26,7 +26,7 @@ import { ConfigHandler } from "../../common/classes/ConfigHandler";
 import { cwd, environmentIsProduction } from "./utilsAPI";
 import { execFile, execFileSync } from "./utilsAPI"
 
-let config: ConfigHandler = new ConfigHandler(
+const config: ConfigHandler = new ConfigHandler(
     TccPaths.SETTINGS_FILE,
     TccPaths.PROFILES_FILE,
     TccPaths.WEBCAM_FILE,
@@ -90,7 +90,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
         // todo: use then() and catch() instead
-        let data: {data: string; error: unknown} = await execFile(
+        const data: {data: string; error: unknown} = await execFile(
             'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath);
         if(data.error) {
             resolve(false);

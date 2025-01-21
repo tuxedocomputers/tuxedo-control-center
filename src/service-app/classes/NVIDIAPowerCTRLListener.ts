@@ -46,7 +46,7 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
         }
 
         this.ctgpOffsetSysfsProp.setFSWatchListener((async function(event: "rename" | "change", filename: string): Promise<void> {
-            let ctgpOffset: number =
+            const ctgpOffset: number =
                 this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
                 this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined?
                     this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset : 0;
@@ -69,7 +69,7 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
     }
 
     private applyActiveProfile(): void {
-        let ctgpOffset: number =
+        const ctgpOffset: number =
             this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
             this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined?
                 this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset : 0;

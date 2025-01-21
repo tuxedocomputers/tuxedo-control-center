@@ -37,7 +37,7 @@ export class WebcamSettingsGuard
     loading: boolean = false;
 
     askUnsavedPreset(): Promise<ConfirmDialogResult> {
-        let config: ConfirmDialogData = {
+        const config: ConfirmDialogData = {
             title: $localize`:@@webcamDialogUnsavedChangesTitle:Unsaved changes`,
             description: $localize`:@@webcamDialogUnsavedChangesDescription:Changes were not saved. Are you sure that you want to leave before saving?`,
             buttonAbortLabel: $localize`:@@dialogReturn:Go back`,

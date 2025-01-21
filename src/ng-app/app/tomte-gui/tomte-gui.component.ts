@@ -124,12 +124,12 @@ export class TomteGuiComponent implements OnInit {
         {
         for (let i: number = 0; i < this.tomteListArray?.length; i++)
             {
-                let moduleName: string = this.tomteListArray[i].moduleName;
+                const moduleName: string = this.tomteListArray[i].moduleName;
                 if(this.moduleToolTips.has(moduleName))
                 {
                     continue;
                 }
-                let results: string = await window.tomteAPI.getModuleDescription(moduleName, this.utils.getCurrentLanguageId());
+                const results: string = await window.tomteAPI.getModuleDescription(moduleName, this.utils.getCurrentLanguageId());
                 if(!results) {
                     continue;
                 }
@@ -277,14 +277,14 @@ export class TomteGuiComponent implements OnInit {
     public async tomteResetToDefaults(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        let dialogueYes: boolean = await this.confirmResetDialogue();
+        const dialogueYes: boolean = await this.confirmResetDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
             return;
         }
-        let success: string = await window.tomteAPI.resetToDefaults();
+        const success: string = await window.tomteAPI.resetToDefaults();
         if(success)
         {
             this.tomtelist();
@@ -304,7 +304,7 @@ export class TomteGuiComponent implements OnInit {
     public async tomteUn_InstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
     {
         this.utils.pageDisabled = true;
-        let dialogueYes: boolean = await this.confirmChangesDialogue();
+        const dialogueYes: boolean = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -346,7 +346,7 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteBlockButton(name: string, isBlocked: boolean): Promise<void>
     {
-        let dialogueYes: boolean = await this.confirmChangesDialogue();
+        const dialogueYes: boolean = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -380,7 +380,7 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteModeButton(mode: { value: ["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"]} ): Promise<void>
     {
-        let dialogueYes: boolean = await this.confirmChangesDialogue();
+        const dialogueYes: boolean = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -405,7 +405,7 @@ export class TomteGuiComponent implements OnInit {
     public async installTomteButton(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        let gotInstalled: boolean = await window.pgms.installTomte();
+        const gotInstalled: boolean = await window.pgms.installTomte();
         if (!gotInstalled)
         {
             this.throwErrorMessage($localize `:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`);

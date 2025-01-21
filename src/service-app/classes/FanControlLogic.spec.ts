@@ -29,7 +29,7 @@ describe('FanLogic ValueBuffer', () => {
 
     let buffer: ValueBuffer;
 
-    let testData: TestValues[] = [];
+    const testData: TestValues[] = [];
     testData.push({
         testValues: [
             63, 39, 34, 92, 93, 85,
@@ -65,9 +65,9 @@ describe('FanLogic ValueBuffer', () => {
     });
 
     it('should handle sample test data cases', () => {
-        for (let data of testData) {
+        for (const data of testData) {
             buffer = new ValueBuffer();
-            for (let value of data.testValues) {
+            for (const value of data.testValues) {
                 buffer.addValue(value);
             }
             expect(buffer.getFilteredValue()).toBe(data.result);
