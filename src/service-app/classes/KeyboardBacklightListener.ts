@@ -205,96 +205,49 @@ export class KeyboardBacklightListener {
         this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = JSON.stringify(this.keyboardBacklightCapabilities);
     }
 
-    // todo: contains duplicate code, remove indents and shorten function
     private updateLEDSRGBZonesForPerKeyKBL(): void {
         let ledsPerKey: string[] = [];
-        let iteKeyboardDevices: Array<string> = [];
 
-        const keyboardItePath: string = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/"
-        const keyboardIteSymbolicPath: string = "/sys/bus/hid/drivers/tuxedo-keyboard-ite/"
-        const keyboardIteAvailable: boolean = fs.existsSync(keyboardItePath)
-        const keyboardIteSymbolicAvailable: boolean = fs.existsSync(keyboardIteSymbolicPath)
+        const keyboardPaths: string[] = [
+            "/sys/bus/hid/drivers/tuxedo-keyboard-ite/",
+            "/sys/bus/hid/drivers/ite_829x/",
+            "/sys/bus/hid/drivers/ite_8291/",
+            "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/",
+        ];
 
-        if (keyboardIteAvailable && keyboardIteSymbolicAvailable) {
-            iteKeyboardDevices =
-                getSymbolicLinks(keyboardIteSymbolicPath)
-                    .filter((name: string): boolean => fileOK(keyboardIteSymbolicPath + name + "/leds"));
-        }
+        for (const keyboardPath of keyboardPaths) {
+            if (fs.existsSync(keyboardPath)) {
+                const iteKeyboardDevices: string[] = getSymbolicLinks(
+                    keyboardPath
+                ).filter((name: string): boolean =>
+                    fileOK(`${keyboardPath + name}/leds`)
+                );
 
-        for (const iteKeyboardDevice of iteKeyboardDevices) {
-            const path: string = keyboardIteSymbolicPath + iteKeyboardDevice + "/leds"
-            if (fileOK(path)) {
-                ledsPerKey = ledsPerKey.concat(
-                    getDirectories(path)
-                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
-                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map((name: string): string => path + "/" + name));
-            }
-        }
-
-        const keyboardIte829xPath: string = "/sys/bus/hid/drivers/ite_829x/"
-        const keyboardIte829xSymbolicPath: string = "/sys/bus/hid/drivers/ite_829x/"
-        const keyboardIte829Available: boolean = fs.existsSync(keyboardIte829xPath)
-        const keyboardIte829SybolicAvailable: boolean = fs.existsSync(keyboardIte829xSymbolicPath)
-
-        if (keyboardIte829Available && keyboardIte829SybolicAvailable) {
-            iteKeyboardDevices =
-                getSymbolicLinks(keyboardIte829xSymbolicPath)
-                    .filter((name: string): boolean => fileOK(keyboardIte829xSymbolicPath + name + "/leds"));
-        }
-
-        for (const iteKeyboardDevice of iteKeyboardDevices) {
-            const path: string = "/sys/bus/hid/drivers/ite_829x/" + iteKeyboardDevice + "/leds"
-            if (fileOK(path)) {
-                ledsPerKey = ledsPerKey.concat(
-                    getDirectories(path)
-                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
-                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map((name: string): string => path + "/" + name));
-            }
-        }
-
-        const keyboardIte8291xPath: string = "/sys/bus/hid/drivers/ite_8291/"
-        const keyboardIte8291xSymbolicPath = "/sys/bus/hid/drivers/ite_8291/"
-        const keyboardIte8291Available: boolean = fs.existsSync(keyboardIte8291xPath)
-        const keyboardIte8291SymbolicAvailable: boolean = fs.existsSync(keyboardIte8291xSymbolicPath)
-
-        if (keyboardIte8291Available && keyboardIte8291SymbolicAvailable) {
-            iteKeyboardDevices =
-                getSymbolicLinks(keyboardIte8291xSymbolicPath)
-                    .filter((name: string): boolean => fileOK(keyboardIte8291xSymbolicPath + name + "/leds"));
-        }
-
-        for (const iteKeyboardDevice of iteKeyboardDevices) {
-            const path: string = keyboardIte8291xSymbolicPath + iteKeyboardDevice + "/leds"
-            if (fileOK(path)) {
-                ledsPerKey = ledsPerKey.concat(
-                    getDirectories(path)
-                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
-                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map((name: string): string => path + "/" + name));
-            }
-        }
-
-        const keyboardNb04Path: string = "/sys/bus/hid/drivers/ite_8291/"
-        const keyboardNb04SymbolicPath: string = "/sys/bus/platform/drivers/tuxedo_nb04_kbd_backlight/"
-        const keyboardNb04Available: boolean = fs.existsSync(keyboardNb04Path)
-        const keyboardNb04SymbolicAvailable: boolean = fs.existsSync(keyboardNb04SymbolicPath)
-
-        if (keyboardNb04Available && keyboardNb04SymbolicAvailable) {
-            iteKeyboardDevices =
-                getSymbolicLinks(keyboardNb04SymbolicPath)
-                    .filter((name: string): boolean => fileOK(keyboardNb04SymbolicPath + name + "/leds"));
-        }
-
-        for (const iteKeyboardDevice of iteKeyboardDevices) {
-            const path: string = keyboardNb04SymbolicPath + iteKeyboardDevice + "/leds"
-            if (fileOK(path)) {
-                ledsPerKey = ledsPerKey.concat(
-                    getDirectories(path)
-                        .filter((name: string): boolean => name.includes("rgb:kbd_backlight"))
-                        .sort((a: string, b: string): number => +a.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0") - +b.replace("rgb:kbd_backlight_", "").replace("rgb:kbd_backlight", "0"))
-                        .map((name: string): string => path + "/" + name));
+                for (const iteKeyboardDevice of iteKeyboardDevices) {
+                    const path: string = `${
+                        keyboardPath + iteKeyboardDevice
+                    }/leds`;
+                    if (fileOK(path)) {
+                        ledsPerKey = ledsPerKey.concat(
+                            getDirectories(path)
+                                .filter((name: string): boolean =>
+                                    name.includes("rgb:kbd_backlight")
+                                )
+                                .sort(
+                                    (a: string, b: string): number =>
+                                        +a
+                                            .replace("rgb:kbd_backlight_", "")
+                                            .replace("rgb:kbd_backlight", "0") -
+                                        +b
+                                            .replace("rgb:kbd_backlight_", "")
+                                            .replace("rgb:kbd_backlight", "0")
+                                )
+                                .map(
+                                    (name: string): string => `${path}/${name}`
+                                )
+                        );
+                    }
+                }
             }
         }
 
