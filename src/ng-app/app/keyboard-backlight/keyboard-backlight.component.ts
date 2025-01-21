@@ -55,6 +55,8 @@ export class KeyboardBacklightComponent implements OnInit {
     private timeoutDuration: number = 1000;
     public gridParams: IGridParams = GridParamsBacklight;
 
+    private keyboardBacklightCapabilitiesSubscription: Subscription = new Subscription();
+    private keyboardBacklightStatesSubscription: Subscription = new Subscription();
 
     constructor(
         private config: ConfigService,
@@ -91,11 +93,13 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     private subscribeKeyboardBacklightCapabilities(): void {
-        this.tccdbus.keyboardBacklightCapabilities
-            .pipe(filter(Boolean), take(1))
-            .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface): void =>
-                this.applyBacklightCapabilities(capabilities)
-            );
+        this.keyboardBacklightCapabilitiesSubscription.add(
+            this.tccdbus.keyboardBacklightCapabilities
+                .pipe(filter(Boolean), take(1))
+                .subscribe((capabilities: KeyboardBacklightCapabilitiesInterface): void =>
+                    this.applyBacklightCapabilities(capabilities)
+                )
+        )
     }
 
     private applyBacklightCapabilities(
@@ -122,32 +126,34 @@ export class KeyboardBacklightComponent implements OnInit {
 
     // todo: reduce indents by splitting into more fucntions
     private subscribeKeyboardBacklightStates(): void {
-        this.tccdbus.keyboardBacklightStates.subscribe(
-            (keyboardBacklightStates: KeyboardBacklightStateInterface[]): void => {
-                const hasChosenColor: boolean = keyboardBacklightStates?.length > 0;
-                const hasNoPickerInUsage: boolean = !this.isPickerInUsage();
+        this.keyboardBacklightStatesSubscription.add(
+            this.tccdbus.keyboardBacklightStates.subscribe(
+                (keyboardBacklightStates: KeyboardBacklightStateInterface[]): void => {
+                    const hasChosenColor: boolean = keyboardBacklightStates?.length > 0;
+                    const hasNoPickerInUsage: boolean = !this.isPickerInUsage();
 
-                // todo: maybe adjusting error handling
-                if (keyboardBacklightStates[0]) {
-                    const { brightness, red, green, blue } =
-                        keyboardBacklightStates[0];
+                    // todo: maybe adjusting error handling
+                    if (keyboardBacklightStates[0]) {
+                        const { brightness, red, green, blue } =
+                            keyboardBacklightStates[0];
 
-                    if (hasChosenColor && hasNoPickerInUsage) {
-                        this.chosenBrightness = brightness;
-                        this.chosenColorHex = this.createColorHexArray(
-                            keyboardBacklightStates
-                        );
+                        if (hasChosenColor && hasNoPickerInUsage) {
+                            this.chosenBrightness = brightness;
+                            this.chosenColorHex = this.createColorHexArray(
+                                keyboardBacklightStates
+                            );
+                        }
+                        else {
+                            this.chosenBrightnessPending = brightness;
+                            this.chosenColorHexPending = this.createColorHexArray(
+                                keyboardBacklightStates
+                            );
+                        }
                     }
-                    else {
-                        this.chosenBrightnessPending = brightness;
-                        this.chosenColorHexPending = this.createColorHexArray(
-                            keyboardBacklightStates
-                        );
-                    }
+
                 }
-
-            }
-        );
+            )
+        )
     }
 
     private createColorHexArray(
@@ -210,8 +216,8 @@ export class KeyboardBacklightComponent implements OnInit {
     public onColorPickerInput(color: string, selectedZones: number[]): void {
         this.triggerColorPickerTimeout(selectedZones);
 
-        const colorHex: string[] = this.chosenColorHex;
-        for (const zone of selectedZones) {
+        let colorHex: string[] = this.chosenColorHex;
+        for (let zone of selectedZones) {
             colorHex[zone] = color;
         }
 
@@ -313,5 +319,15 @@ export class KeyboardBacklightComponent implements OnInit {
 
     public getSelectedColor(): string {
         return this.chosenColorHex[this.selectedZones[0]];
+    }
+    
+    public ngOnDestroy(): void {
+        if (!this.keyboardBacklightCapabilitiesSubscription.closed) {
+            this.keyboardBacklightCapabilitiesSubscription.unsubscribe();
+        }
+        
+        if (!this.keyboardBacklightStatesSubscription.closed) {
+            this.keyboardBacklightStatesSubscription.unsubscribe();
+        }
     }
 }
