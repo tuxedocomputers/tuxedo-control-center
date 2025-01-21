@@ -24,6 +24,7 @@ import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
 import { ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
+import { Mutex } from "async-mutex";
 
 @Component({
     selector: "app-prime-select",
@@ -36,6 +37,7 @@ export class PrimeSelectComponent implements OnInit {
     public activeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
     private subscriptions: Subscription = new Subscription();
+    private mutex = new Mutex();
 
     constructor(
         private utils: UtilsService,
@@ -60,10 +62,18 @@ export class PrimeSelectComponent implements OnInit {
     }
 
     public async applyGpuProfile(selectedPrimeStatus: string): Promise<void> {
+        if (this.primeState === selectedPrimeStatus) return;
+
+        // https://github.com/angular/components/issues/27680
+        if (this.mutex.isLocked()) return;
+
+        this.mutex.acquire();
+        
         const status: string = await this.askProceedDialog();
 
         if (status === "CANCEL" || status === undefined) {
             this.activeState = this.primeState;
+            this.mutex.release();
             return;
         }
 
@@ -89,6 +99,8 @@ export class PrimeSelectComponent implements OnInit {
         } else {
             this.activeState = this.primeState;
         }
+        
+        this.mutex.release();
     }
 
     private async askProceedDialog(): Promise<string> {
