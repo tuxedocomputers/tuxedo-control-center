@@ -20,10 +20,10 @@
 import { execCommandAsync } from "../../common/classes/Utils";
 import { FanControlHwmon } from "./FanControlHwmon";
 
-export class FanControlPwm extends FanControlHwmon {
+export class FanControlTuxi extends FanControlHwmon {
     public async getHwmonPath(): Promise<string | undefined> {
         return await execCommandAsync(
-            "grep -rl '^tuxedo$' /sys/class/hwmon/*/name | sed 's|/name$||'",
+            "grep -rl '^tuxedo_tuxi_sensors$' /sys/class/hwmon/*/name | sed 's|/name$||'",
         );
     }
 }

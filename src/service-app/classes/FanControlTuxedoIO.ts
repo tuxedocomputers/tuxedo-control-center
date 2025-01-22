@@ -25,7 +25,7 @@ import { FAN_LOGIC } from "./FanControlLogic";
 export class FanControlTuxedoIO extends FanControlBaseClass {
     public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
         if (fanWriteAvailable) {
-            console.log("Fan Control: Enabling manual mode");
+            console.log("FanControlTuxedoIO: Enabling manual mode");
             ioAPI.setEnableModeSet(true);
             this.tccd.dbusData.fansOffAvailable = ioAPI.getFansOffAvailable();
             this.tccd.dbusData.fansMinSpeed = ioAPI.getFansMinSpeed();
@@ -68,7 +68,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!speedReadSuccess) {
-            console.log("Fan Control: Fan speed read with IO Api failed");
+            console.log("FanControlTuxedoIO: Fan speed read with IO Api failed");
         }
 
         return currentSpeedPercent.value;
@@ -82,7 +82,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!tempReadSuccess) {
-            console.log("Fan Control: Fan temp read with IO Api failed");
+            console.log("FanControlTuxedoIO: Fan temp read with IO Api failed");
         }
 
         return currentTemperatureCelcius.value;
@@ -98,7 +98,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!speedWriteSuccess) {
-            console.log("Fan Control: Fan speed write with IO Api failed");
+            console.log("FanControlTuxedoIO: Fan speed write with IO Api failed");
         }
     }
 

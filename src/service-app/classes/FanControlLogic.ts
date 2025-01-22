@@ -185,7 +185,7 @@ export class FanControlLogic {
         } else {
             const enumValues: (string | FAN_LOGIC)[] = Object.values(FAN_LOGIC);
             throw new Error(
-                `Fan Control: Invalid fan type, possible values are: ${enumValues.join(
+                `FanControlLogic: Invalid fan type, possible values are: ${enumValues.join(
                     ", "
                 )}`
             );
@@ -200,7 +200,7 @@ export class FanControlLogic {
         const fanTable: ITccFanTableEntry[] = fanProfile[this.useTable];
 
         if (!fanTable) {
-            console.log(`Fan Control: No fan table with ${this.useTable}`);
+            console.log(`FanControlLogic: No fan table with ${this.useTable}`);
         }
 
         if (fanTable) {
@@ -211,7 +211,7 @@ export class FanControlLogic {
             this.tableMinEntry = fanTable[0];
             this.tableMaxEntry = fanTable[fanTable.length - 1];
             this.fanProfile = fanProfile;
-            console.log(`Fan Control: Setting ${this.useTable}`);
+            console.log(`FanControlLogic: Setting ${this.useTable}`);
         }
     }
 
@@ -295,18 +295,18 @@ export class FanControlLogic {
             return speed;
         }
 
-        console.log("Fan Control: Calculate fan speed failed");
+        console.log("FanControlLogic: Calculate fan speed failed");
         return -1;
     }
 
     private findFittingEntryIndex(temperatureValue: number): number {
         if (!this.tableMaxEntry) {
-            console.error("Fan Control: Max Entry not defined");
+            console.error("FanControlLogic: Max Entry not defined");
             return -1;
         }
 
         if (!this.tableMinEntry) {
-            console.error("Fan Control: Min Entry not defined");
+            console.error("FanControlLogic: Min Entry not defined");
             return -1;
         }
 
