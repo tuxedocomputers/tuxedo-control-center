@@ -63,7 +63,7 @@ export class GlobalSettingsComponent implements OnInit {
     ) { }
 
     // todo: move this.config.getSettings() into a variable in every function, too many calls
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.setValuesFromResolverRoute();
 
         const routingFromDashboard: string = this.route.snapshot.paramMap.get("routingFromDashboard");
@@ -89,7 +89,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => { this.ctrlBrightnessMode.setValue(mode) });
     }
 
-    setValuesFromResolverRoute(): void {
+    private setValuesFromResolverRoute(): void {
         const paramMap = this.route.snapshot.paramMap;
         const data = this.route.snapshot.data;
 
@@ -105,7 +105,7 @@ export class GlobalSettingsComponent implements OnInit {
 
         this.primeState = data.primeSelectAvailable;
     }
-    onCPUSettingsEnabledChanged(event: any): void {
+    public onCPUSettingsEnabledChanged(event: any): void {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().cpuSettingsEnabled = event.checked;
@@ -121,7 +121,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onTemperatureDisplayChanged(event: boolean): void {
+    public onTemperatureDisplayChanged(event: boolean): void {
         this.utils.pageDisabled = true;
         this.config.getSettings().fahrenheit = event;
         this.config.saveSettings().then((success: boolean): void => {
@@ -135,7 +135,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onFanControlEnabledChanged(event: MatCheckboxChange): void {
+    public onFanControlEnabledChanged(event: MatCheckboxChange): void {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().fanControlEnabled = event.checked;
@@ -151,7 +151,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onKeyboardBacklightControlEnabledChanged(event: MatCheckboxChange): void {
+    public onKeyboardBacklightControlEnabledChanged(event: MatCheckboxChange): void {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
@@ -167,7 +167,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onYCbCr420WorkaroundChanged(event: any, card: number, port: string): void {
+    public onYCbCr420WorkaroundChanged(event: any, card: number, port: string): void {
         if (this.config.getSettings().ycbcr420Workaround?.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
             this.utils.pageDisabled = true;
 
