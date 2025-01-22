@@ -220,7 +220,12 @@ export class ChargingWorker extends DaemonWorker {
     public async setChargeStartThreshold(value: number): Promise<boolean> {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
-            await bat.chargeControlStartThreshold.writeValueA(value);
+            // todo: make fully async
+            const writable: boolean = bat.chargeControlStartThreshold.isWritable()
+            if (writable) {
+                await bat.chargeControlStartThreshold.writeValueA(value);
+                return true;
+            }
         } catch (err: unknown) {
             console.error("ChargingWorker: Failed writing start threshold =>", err)
             return false;
@@ -247,7 +252,12 @@ export class ChargingWorker extends DaemonWorker {
     public async setChargeEndThreshold(value: number): Promise<boolean> {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
-            await bat.chargeControlEndThreshold.writeValueA(value);
+            // todo: make fully async
+            const writable: boolean = bat.chargeControlEndThreshold.isWritable()
+            if (writable) {
+                await bat.chargeControlEndThreshold.writeValueA(value);
+                return true;
+            }
         } catch (err: unknown) {
             console.error("ChargingWorker: Failed writing end threshold =>", err)
             return false;
@@ -260,8 +270,9 @@ export class ChargingWorker extends DaemonWorker {
     public async getChargeType(): Promise<string> {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
-            const avaialble: boolean = bat.chargeType.isAvailable()
-            if (avaialble) {
+            // todo: make fully async
+            const available: boolean = bat.chargeType.isAvailable()
+            if (available) {
                 return (await bat.chargeType.readValueA()).trim();
             }
             return ""
@@ -274,7 +285,12 @@ export class ChargingWorker extends DaemonWorker {
     public async setChargeType(chargeType: ChargeType): Promise<boolean> {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
-            bat.chargeType.writeValueA(chargeType.toString());
+            // todo: make fully async
+            const writable: boolean = bat.chargeType.isWritable()
+            if (writable) {
+                await bat.chargeType.writeValueA(chargeType.toString());
+                return true;
+            }
         } catch (err: unknown) {
             console.error("ChargingWorker: Failed writing charge type =>", err)
             return false;
