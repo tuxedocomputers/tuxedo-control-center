@@ -53,6 +53,7 @@ export class GlobalSettingsComponent implements OnInit {
 
     public primeState: string = "iGPU";
     public expandPrimeSelect: Boolean = false;
+    public isX11: boolean = false;
 
     constructor(
         private config: ConfigService,
@@ -104,7 +105,9 @@ export class GlobalSettingsComponent implements OnInit {
             data.chargingProfilesAvailable?.length > 0;
 
         this.primeState = data.primeSelectAvailable;
+        this.isX11 = data.x11Status;
     }
+    
     public onCPUSettingsEnabledChanged(event: any): void {
         this.utils.pageDisabled = true;
 

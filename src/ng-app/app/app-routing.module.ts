@@ -89,6 +89,7 @@ const routes: Routes = [
                     chargingProfilesAvailable:
                         ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
+                    x11Status: X11StatusResolver,
                 },
                 component: GlobalSettingsComponent,
             },
