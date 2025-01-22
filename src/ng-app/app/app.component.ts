@@ -36,7 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     constructor(
         private utils: UtilsService,
-        private cdref: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
@@ -48,10 +47,6 @@ export class AppComponent implements OnInit, OnDestroy {
           });
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
-    }
-
-    ngAfterContentChecked(): void {
-        this.cdref.detectChanges();
     }
 
     ngOnDestroy(): void {

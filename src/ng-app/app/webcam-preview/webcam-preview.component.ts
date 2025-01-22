@@ -33,9 +33,7 @@ import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
     standalone: false
 })
 export class WebcamPreviewComponent implements OnInit {
-    constructor(
-        private cdref: ChangeDetectorRef
-    ) {}
+    constructor() {}
 
     @ViewChild("video", { static: true })
     public video: ElementRef;
@@ -46,7 +44,6 @@ export class WebcamPreviewComponent implements OnInit {
         window.webcam.onSettingWebcamWithLoading(async (event: any, config: WebcamConstraints): Promise<void> => {
             document.getElementById("video").style.visibility = "hidden";
                 this.spinnerActive = true;
-                this.cdref.detectChanges();
                 this.stopWebcam();
                 await this.setWebcamWithConfig(config);
                 window.webcamAPI.applyControls();
@@ -54,7 +51,6 @@ export class WebcamPreviewComponent implements OnInit {
                     document.getElementById("video").style.visibility =
                         "visible";
                     this.spinnerActive = false;
-                    this.cdref.detectChanges();
                 }, 500);
             }
         );

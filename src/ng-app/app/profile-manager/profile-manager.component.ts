@@ -83,7 +83,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private state: StateService,
         private utils: UtilsService,
         private router: Router,
-        private cdref: ChangeDetectorRef,
         private dialogService: ProfileConflictDialogService,
         ) { }
 
@@ -122,10 +121,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    ngAfterContentChecked(): void {
-        this.cdref.detectChanges();
     }
 
     public isProfileActive(profileId: string): boolean {

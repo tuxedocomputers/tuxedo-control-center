@@ -98,7 +98,6 @@ export class WebcamSettingsComponent implements OnInit {
 
     constructor(
         private utils: UtilsService,
-        private cdref: ChangeDetectorRef,
         private webcamGuard: WebcamSettingsGuard,
     ) {}
 
@@ -137,7 +136,6 @@ export class WebcamSettingsComponent implements OnInit {
                 this.stopWebcam();
                 this.webcamInitComplete = false;
                 this.webcamGuard.setLoadingStatus(false);
-                this.cdref.detectChanges();
                 this.noWebcams = true;
                 return;
             } else {
@@ -157,11 +155,7 @@ export class WebcamSettingsComponent implements OnInit {
             }
         });
     }
-
-    public ngAfterContentChecked(): void {
-        this.cdref.detectChanges();
-    }
-
+    
     private getWebcamPaths(): Promise<WebcamPath> {
         return new Promise<WebcamPath>((resolve: (value: WebcamPath | PromiseLike<WebcamPath>) => void, reject: (reason?: unknown) => void): void => {
             window.webcamAPI
@@ -273,7 +267,6 @@ export class WebcamSettingsComponent implements OnInit {
     private setLoading(): void {
         this.spinnerActive = true;
         this.webcamGuard.setLoadingStatus(true);
-        this.cdref.detectChanges();
     }
 
     public async setWebcam(webcamPreset: WebcamDevice): Promise<void> {
@@ -554,7 +547,6 @@ export class WebcamSettingsComponent implements OnInit {
         this.spinnerActive = false;
         this.webcamGuard.setLoadingStatus(false);
         this.utils.pageDisabled = false;
-        this.cdref.detectChanges();
     }
 
     public getWebcamSettingNames(): string[] {
@@ -1034,7 +1026,6 @@ export class WebcamSettingsComponent implements OnInit {
 
         this.webcamFormGroup.controls[configParameter].setValue(newValue);
         await this.executeWebcamCtrls(configParameter, newValue);
-        this.cdref.detectChanges();
     }
 
     public mousedown(configParameter: string, offset: number): void {
