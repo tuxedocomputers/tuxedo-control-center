@@ -17,42 +17,198 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-$tuxedo-dark-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette);
-$tuxedo-dark-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
-$tuxedo-dark-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
- 
-$tuxedo-control-center-dark-theme: mat.m2-define-dark-theme(
+$palettes: (
+    primary: (
+        0: #000000,
+        10: #1b1c1c,
+        20: #303030,
+        25: #3b3b3b,
+        30: #474747,
+        35: #535252,
+        40: #5f5e5e,
+        50: #787777,
+        60: #929090,
+        70: #acabaa,
+        80: #c8c6c6,
+        90: #e4e2e1,
+        95: #f3f0f0,
+        98: #fbf9f8,
+        99: #fefcfb,
+        100: #ffffff,
+    ),
+    secondary: (
+        0: #000000,
+        10: #1c1b1b,
+        20: #313030,
+        25: #3c3b3b,
+        30: #474646,
+        35: #535252,
+        40: #5f5e5e,
+        50: #787776,
+        60: #929090,
+        70: #adabaa,
+        80: #c9c6c5,
+        90: #e5e2e1,
+        95: #f3f0ef,
+        98: #fcf8f8,
+        99: #f6feff,
+        100: #ffffff,
+    ),
+    tertiary: (
+        0: #000000,
+        10: #1d1b1b,
+        20: #323030,
+        25: #3d3b3b,
+        30: #494646,
+        35: #545252,
+        40: #615e5e,
+        50: #7a7676,
+        60: #949090,
+        70: #aeaaaa,
+        80: #cac5c5,
+        90: #e7e1e1,
+        95: #f5efef,
+        98: #fef8f7,
+        99: #fffbff,
+        100: #ffffff,
+    ),
+    neutral: (
+        0: #000000,
+        10: #1c1b1b,
+        20: #313030,
+        25: #3c3b3b,
+        30: #484646,
+        35: #535252,
+        40: #605e5e,
+        50: #797776,
+        60: #939090,
+        70: #adaaaa,
+        80: #c9c6c5,
+        90: #e5e2e1,
+        95: #f4f0ef,
+        98: #fdf8f8,
+        99: #f6feff,
+        100: #ffffff,
+        4: #0e0e0e,
+        6: #141313,
+        12: #201f1f,
+        17: #2b2a2a,
+        22: #353434,
+        24: #3a3939,
+        87: #ddd9d8,
+        92: #ebe7e7,
+        94: #f1edec,
+        96: #f7f3f2,
+    ),
+    neutral-variant: (
+        0: #000000,
+        10: #191c1d,
+        20: #2d3132,
+        25: #383c3d,
+        30: #444748,
+        35: #4f5354,
+        40: #5b5f60,
+        50: #747878,
+        60: #8e9192,
+        70: #a9acac,
+        80: #c4c7c7,
+        90: #e0e3e3,
+        95: #eff1f1,
+        98: #f7fafa,
+        99: #fafdfd,
+        100: #ffffff,
+    ),
+    error: (
+        0: #000000,
+        10: #410002,
+        20: #690005,
+        25: #7e0007,
+        30: #93000a,
+        35: #a80710,
+        40: #ba1a1a,
+        50: #de3730,
+        60: #ff5449,
+        70: #ff897d,
+        80: #ffb4ab,
+        90: #ffdad6,
+        95: #ffedea,
+        98: #fff8f7,
+        99: #fffbff,
+        100: #ffffff,
+    ),
+);
+
+$colorSet: (
+    secondary: map.get($palettes, secondary),
+    neutral: map.get($palettes, neutral),
+    neutral-variant: map.get($palettes, neutral-variant),
+    error: map.get($palettes, error),
+);
+
+$primary-palette: map.merge(map.get($palettes, primary), $colorSet);
+
+$tuxedo-control-center-dark-theme: mat.define-theme(
     (
         color: (
-                primary: $tuxedo-dark-theme-primary,
-                accent: $tuxedo-dark-theme-accent,
-                warn: $tuxedo-dark-theme-warn,
-            ),
-            --icon-invert: 0%
+            theme-type: dark,
+            primary: $primary-palette,
+        ),
+        typography: (
+            brand-family: "Titillium Web",
+            plain-family: "Titillium Web",
+        ),
     )
 );
 
-.dark-theme {
+:root {
     --icon-main: currentColor;
     --icon-detail: #e30016;
+    --gauge-red: #e22131;
+    
+    --mat-sidenav-container-background-color: var(--foreground-color);
+    --mdc-elevated-card-container-color: var(--foreground-color);
+    --mdc-outlined-card-container-color: var(--foreground-color);
+    --mat-expansion-container-background-color: var(--foreground-color);
+    --mat-sidenav-content-background-color: var(--background-color);
 
-    .theme-page-title {
-        opacity: 0.7;
-        font-weight: 600;
-    }
+    --mat-divider-color: var(--mdc-outlined-card-outline-color);
 
-    font-family: 'Titillium Web'
+    --mat-sidenav-container-divider-color: var(
+        --mdc-outlined-card-outline-color
+    );
+
+    --mdc-plain-tooltip-supporting-text-color: var(--text-color);
+    
+    // font with typography does not apply everywhere, changing globally
+    font-family: "Titillium Web";
+
+    // mat.tooltip-overrides didn't change the color, using css directly
+    --mdc-plain-tooltip-container-color: var(--tooltip-container-color);
 }
 
-@media (prefers-color-scheme: dark) {
-    @include profile-overview-tile-theme($tuxedo-control-center-dark-theme);
-    @include profile-details-edit-theme($tuxedo-control-center-dark-theme);
+html {
+    @media (prefers-color-scheme: dark) {
+        --foreground-color: #252525;
+        --background-color: #303030;
 
-    @include tcc-general-defs-theme($tuxedo-control-center-dark-theme);
-    @include tcc-gauge-theme($tuxedo-control-center-dark-theme);
-    @include tcc-changelog-theme($tuxedo-control-center-dark-theme);
-    @include tcc-charts-theme($tuxedo-control-center-dark-theme);
-    @include tcc-color-picker-theme($tuxedo-control-center-dark-theme);
+        --text-color: #e5e2e1;
+        --gauge-legend-text-color: #ffffff80;
+        --gauge-metric-text-color: #ffffff80;
 
-    @include mat.all-component-themes($tuxedo-control-center-dark-theme);
+        --tooltip-container-color: #616161e6;
+        --gauge-icon-color: #ffffff80;
+        --gauge-legend-color: #151515;
+
+        @include profile-overview-tile-theme($tuxedo-control-center-dark-theme);
+        @include profile-details-edit-theme($tuxedo-control-center-dark-theme);
+
+        @include tcc-gauge-theme($tuxedo-control-center-dark-theme);
+        @include tcc-changelog-theme($tuxedo-control-center-dark-theme);
+        @include tcc-charts-theme($tuxedo-control-center-dark-theme);
+        @include tcc-color-picker-theme($tuxedo-control-center-dark-theme);
+
+        @include mat.all-component-themes($tuxedo-control-center-dark-theme);
+
+        @include mat.typography-hierarchy($tuxedo-control-center-dark-theme);
+    }
 }

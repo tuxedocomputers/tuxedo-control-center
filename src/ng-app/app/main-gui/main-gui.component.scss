@@ -29,7 +29,7 @@
     flex-flow: nowrap;
     align-items: center;
 
-    background-color: #252525;
+    background-color: var(--foreground-color);
     
     #title-left {
         display: flex;
@@ -43,7 +43,7 @@
         #title-text {
             font-size: 16px;
             margin-left:16px;
-            color:#F5F5F5;
+            color: var(--text-color);
         }
     }
 

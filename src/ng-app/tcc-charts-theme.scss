@@ -24,11 +24,7 @@
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
 
-    canvas.tcc-charts {
-        background-color: mat.m2-get-color-from-palette($background, card);
-    }
-
     .tcc-charts-text {
-        color: mat.m2-get-color-from-palette($primary);
+        color: var(--text-color);
     }
 }

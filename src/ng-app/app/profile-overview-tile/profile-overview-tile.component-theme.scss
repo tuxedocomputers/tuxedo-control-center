@@ -17,42 +17,31 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Import library functions for theme creation.
 @mixin profile-overview-tile-theme($theme) {
-  // Extract the palettes you need from the theme definition.
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
-
-  // Define any styles affected by the theme.
     .profile-overview-tile {
-        &.tile-active {
-            //color: background-color: mat.m2-get-color-from-palette($background, hover);
-        }
-
         &.hover-effect:hover {
-            background-color: mat.m2-get-color-from-palette($background, hover);
+            // todo
+            //background-color: mat.get-theme-color($theme, primary, 50);
         }
 
         &.selected {
-            background-color: mat.m2-get-color-from-palette($primary, lighter);
+            // todo
+            //background-color: mat.get-theme-color($theme, primary, 50);
         }
 
         .overlay {
-            color: mat.m2-get-color-from-palette($primary, default-contrast);
-            background-color: mat.m2-get-color-from-palette($primary, darker);
+            color: mat.get-theme-color($theme, primary, 50);
+            background-color: mat.get-theme-color($theme, primary, 50);
         }
     }
 }
 
 @mixin profile-overview-tile-typography($config) {
-  .profile-overview-tile {
-      font: {
-          family: mat-font-family($config, body-1);
-          size: mat-font-size($config, body-1);
-          weight: mat-font-weight($config, body-1);
-      }
-  }
+    .profile-overview-tile {
+        font: {
+            family: mat-font-family($config, body-1);
+            size: mat-font-size($config, body-1);
+            weight: mat-font-weight($config, body-1);
+        }
+    }
 }

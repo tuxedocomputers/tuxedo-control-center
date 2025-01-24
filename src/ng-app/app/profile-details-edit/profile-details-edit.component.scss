@@ -20,8 +20,7 @@
  .profile-details-edit {
     margin: 0 10px 10px 10px;
 
-    .sub-header
-    {
+    .sub-header {
         font-size: 1.15em;
         font-weight: bold;
     }
@@ -46,7 +45,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-size:20px;
+            font-size: 20px;
 
             input {
                 width: 400px;
@@ -66,7 +65,7 @@
 
             width: 100%;
             text-align: left;
-            font-size: 1.10em;
+            font-size: 1.1em;
         }
 
         text.value,
@@ -79,17 +78,22 @@
 
         content.input {
             width: 100%;
+
+            mat-slider {
+                width: 100%;
+                overflow: visible;
+                margin: 0%;
+            }
+            
             mat-form-field {
-                width: 360px;
+                width: 100%;
 
                 &.input-description {
-
                     textarea {
                         resize: none;
                     }
                 }
             }
-
         }
     }
 
@@ -112,7 +116,6 @@
             margin-top: 20px;
             height: 150px;
         }
-
     }
 }
 
@@ -123,7 +126,6 @@ mat-grid-tile {
 .hide-element {
     display: none;
 }
-
 
 mat-card-title {
     top: auto !important;

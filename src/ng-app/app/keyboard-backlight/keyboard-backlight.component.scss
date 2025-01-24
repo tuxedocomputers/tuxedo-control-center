@@ -18,6 +18,8 @@
  */
 
 .backlight-settings-edit {
+    overflow-x: hidden;
+
     display: block;
     position: absolute;
     top: 10px;
@@ -40,7 +42,7 @@
 }
 
 .title-row-margin {
-    margin-bottom: 10px !important;
+    margin-bottom: 16px !important;
 }
 
 header {
@@ -70,7 +72,7 @@ content.value {
 }
 
 .keyboard-visual {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
     margin-top: 10px;
 }
 
@@ -85,8 +87,8 @@ content.value {
 }
 
 .align-color-picker {
-	position: absolute;
-	right: 0;
+    position: absolute;
+    right: 0;
 }
 
 input {
@@ -112,8 +114,8 @@ input {
     align-items: center;
     text-align: center;
 }
-    
-.keyboardBacklightDescription1, 
+
+.keyboardBacklightDescription1,
 .keyboardBacklightDescription2 {
     display: inline-block;
     margin: 0 0.1rem;
@@ -124,7 +126,7 @@ input {
         flex-wrap: wrap;
     }
 
-    .keyboardBacklightDescription1, 
+    .keyboardBacklightDescription1,
     .keyboardBacklightDescription2 {
         flex-basis: 100%;
         white-space: normal;
@@ -137,7 +139,6 @@ input {
     margin: 0;
 }
 
-
 .content {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }

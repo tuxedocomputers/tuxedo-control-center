@@ -79,7 +79,7 @@ table.versions {
 }
 
 .changelog {
-    max-height: 250px;
+    max-height: 400px;
     overflow-y: scroll;
     
     markdown {
@@ -89,8 +89,4 @@ table.versions {
 
 .content-container mat-divider.divider-separator {
     position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;
-}
-
-hr {
-    width: 95%
 }

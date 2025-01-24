@@ -24,13 +24,6 @@
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
 
-    $gauge-value-text-color: mat.m2-get-color-from-palette($foreground, text);
-    $gauge-unit-text-color: mat.m2-get-color-from-palette($foreground, disabled-text);
-    $gauge-legend-text-color: mat.m2-get-color-from-palette($foreground, disabled-text);
-
-    $gauge-icon-color: mat.m2-get-color-from-palette($foreground, disabled-text);
-    $gauge-background-color: mat.m2-get-color-from-palette($background, status-bar);
-
     .tcc-gauge {
         position: relative;
         width: 180px;
@@ -46,24 +39,16 @@
 
             .dial {
                 stroke-width: 3px;
-                stroke: $gauge-background-color;
+                stroke: var(--gauge-legend-color);
             }
 
             .value {
                 transform-origin: center;
                 stroke-width: 3px;
-                stroke: #e22131;
+                stroke: var(--gauge-red);
                 opacity: .7;
                 stroke-linecap: round;
             }
-
-            .value-text {
-                fill: $gauge-value-text-color;
-                transform: translateY(0px);
-                font-size: 1.8em;
-                transform-origin: center center;
-            }
-
         }
 
         &.not-available mwl-gauge .value-text {
@@ -77,8 +62,6 @@
             left: 0;
             width: 100%;
             text-align: center;
-
-            fill: $gauge-value-text-color;
             font-size: 3.2em;
         }
 
@@ -96,7 +79,7 @@
 
             text-align: center;
 
-            color: $gauge-unit-text-color;
+            color: var(--gauge-metric-text-color);
             font-weight: bold;
         }
 
@@ -107,7 +90,7 @@
             width: 100%;
             height: 35px;
 
-            color: $gauge-icon-color;
+            color: var(--gauge-icon-color);
             --icon-detail: var(--icon-main);
         }
 
@@ -125,72 +108,28 @@
             height: 30px;
 
             border-radius: 20px;
-            background-color: $gauge-background-color;
-            opacity: 1.0;
+            background-color: var(--gauge-legend-color);
+            opacity: 1;
 
             border-width: 5px;
             border-style: solid;
-            border-color: mat.m2-get-color-from-palette($background, card);
+            border-color: var(--foreground-color);
 
             .text {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                
+
                 margin-left: 10px;
                 margin-right: 10px;
 
-                color: $gauge-legend-text-color;
+                color: var(--gauge-legend-text-color);
                 font-weight: bold;
 
                 &.small {
-                    transform:scale(1.2);
+                    transform: scale(1.2);
                 }
             }
-        }
-    }
-
-    $tcc-info-bar-border-color: $gauge-background-color;
-    $tcc-info-bar-background-color: $gauge-background-color;
-    $tcc-info-bar-color-disabled: mat.m2-get-color-from-palette($foreground, disabled-text);
-    $tcc-info-bar-width: 270px;
-    $tcc-info-bar-height: 30px;
-
-    .tcc-info-bar {
-        width: $tcc-info-bar-width;
-        height: $tcc-info-bar-height;
-
-        border-width: 2px;
-        border-style: solid;
-        border-radius: 20px;
-        border-color: $tcc-info-bar-border-color;
-
-        padding: 2px;
-
-        >* {
-            border-radius: inherit;
-            overflow: hidden;
-        }
-
-        .label {
-            background-color: $tcc-info-bar-background-color;
-        }
-
-        .color-disabled {
-            color: $tcc-info-bar-color-disabled;
-        }
-    }
-
-    $progress-inactive-color: $tcc-info-bar-background-color;
-
-    .tcc-progress {
-        position: relative;
-
-        .label-text {
-            position: absolute;
-            top: 5px;
-            width: 100%;
-            text-align: center;
         }
     }
 }

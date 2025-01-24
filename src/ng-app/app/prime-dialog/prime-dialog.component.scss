@@ -17,14 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-*, *.light {
-    background: #FFFFFF;
-}
-
-@media (prefers-color-scheme: dark) {
-    *, *.dark {
-        background: #252525;
-    }
+* {
+    background: var(--foreground-color);
 }
 
 .container {

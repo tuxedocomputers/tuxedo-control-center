@@ -18,17 +18,9 @@
  */
 
 @mixin profile-details-edit-theme($theme) {
-
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
-  
-  .profile-details-edit {
-
-    .profile-title {
-      // todo: fix
-      //background-color: mat-color($background, card);
+    .profile-details-edit {
+        .profile-title {
+            background-color: var(--foreground-color);
+        }
     }
-  }
 }

@@ -84,7 +84,6 @@
 }
 
 .aquaris-content {
-
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -112,6 +111,43 @@
             .label {
                 display: inline-flex;
                 width: 80px;
+            }
+
+            mat-button-toggle-group {
+                margin: 25px 0px;
+                font-size: 0.7em;
+                height: 24px;
+                align-items: center;
+            }
+
+            mat-tab-group {
+                width: 100%;
+                height: 100% !important;
+                mat-tab {
+                    height: 100% !important;
+                }
+
+                ::ng-deep .mat-tab-body-content {
+                    display: flex;
+                    flex-flow: column nowrap;
+                    align-items: center;
+
+                    height: 100% !important;
+                    width: 100%;
+
+                    mat-button-toggle-group {
+                        transform: scale(1.4);
+                        transform-origin: center;
+                    }
+
+                    .description {
+                        display: block;
+                        margin: 40px auto;
+                        width: 90%;
+                        font-size: 1.2em;
+                        text-align: center;
+                    }
+                }
             }
         }
     }
@@ -179,7 +215,7 @@
 }
 
 .fan-speed-edit {
-    display: flex
+    display: flex;
 }
 
 mat-tab-group {
@@ -187,18 +223,24 @@ mat-tab-group {
 
     ::ng-deep .mat-mdc-tab-body-wrapper {
         flex: 1 1 250px;
+        display: inline-grid;
+        flex-direction: column;
 
-        ::ng-deep .mat-button-toggle-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            flex-direction: column;
-        }
+        ::ng-deep .mat-mdc-tab-body-content {
+            display: grid;
+            justify-content: space-around;
 
-        ::ng-deep .mat-mdc-checkbox {
-            display: flex;
-            justify-content: center;
+            ::ng-deep .mat-button-toggle-group {
+                top: 30px;
+                justify-content: center;
+                align-items: center;
+            }
+
+            ::ng-deep .mat-mdc-checkbox {
+                display: flex;
+                justify-content: center;
+                height: fit-content;
+            }
         }
     }
 }

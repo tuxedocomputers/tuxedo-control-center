@@ -31,10 +31,11 @@
     .inner-support-settings-edit {
         margin: 0 10px 10px 10px;
     }
- }
- 
+}
+
 .card-support {
-    .phone-info, .web-info {
+    .phone-info,
+    .web-info {
         display: flex;
         flex-flow: column;
         justify-content: space-evenly;
@@ -51,8 +52,4 @@
             font-size: 1.3em;
         }
     }
-}
-
-.hr {
-    width: 95%;
 }

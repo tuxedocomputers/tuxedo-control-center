@@ -25,6 +25,6 @@
     $background: map-get($theme, background);
 
     .changelog {
-        background-color: mat.m2-get-color-from-palette($background, background) !important;
+        background-color: var(--background-color);
     }
 }
