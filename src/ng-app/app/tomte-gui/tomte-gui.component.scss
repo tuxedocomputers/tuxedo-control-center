@@ -124,3 +124,11 @@ hr {
         margin: 25px
     }
 }
+
+.globalSpinner {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-left: -4em;
+    margin-top: -4em;
+}

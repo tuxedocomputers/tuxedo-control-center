@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
+<mat-spinner *ngIf="loadingInformation" class="globalSpinner"></mat-spinner>
+
 <mat-card class="tcc-card card-support">
     <mat-card-title class="theme-page-title">
         <ng-container i18n="@@cTomteGuiTomteHeader">TUXEDO Tomte</ng-container>
@@ -66,16 +68,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </ng-container>
 
     <ng-container *ngIf="loadingInformation">
-        <div [ngClass]="{'tomte-local-spinner': true}">
-            <i class="fas fa-cog fa-spin"></i>
-        </div>
-        <div [ngClass]="{'blur-no-input': true}">  
-            <!--
-            <hr />
-            <ng-container i18n="@@cTomteGuiLoadingInformationHeader">
-                Loading Information
-            </ng-container>
-            -->
+        <div [ngClass]="{'blur-no-input': false}">  
             <hr />
         
             <div class="content-container centered">
