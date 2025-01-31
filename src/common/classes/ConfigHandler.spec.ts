@@ -80,12 +80,12 @@ describe('ConfigHandler file IO', (): void => {
     it('should read settings from a written file', (): void => {
         const settings: ITccSettings = JSON.parse(JSON.stringify(defaultSettings));
         // todo: fix type mismatch
-        settings.stateMap.ac_power = 'profile1';
+        settings.stateMap.power_ac = 'profile1';
         expect((): void => { config.writeSettings(settings); }).not.toThrow();
 
         let readSettings: ITccSettings;
         expect((): void => { readSettings = config.readSettings(); }).not.toThrow();
-        expect(readSettings.stateMap.ac_power).toEqual('profile1');
+        expect(readSettings.stateMap.power_ac).toEqual('profile1');
     });
 
     it ('should write to a profiles file with mode 644', (): void => {
