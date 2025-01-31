@@ -428,17 +428,17 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (missingSetting) {
                 throw Error('Missing setting');
             }
-        } catch (err: unknown) {
-            // todo: doing proper variable checks instead of expecting access errors
+        } catch (dummy: unknown) {
+            // No settings available, create default settings
             try {
                 if (this.settings === undefined) {
                     this.settings = this.config.getDefaultSettings(device);
                     this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
-                console.error(`TuxedoControlCenterDaemon: Filled missing settings with default: ${this.config.pathSettings} =>"`, err)
+                this.logLine(`TuxedoControlCenterDaemon: Filled missing settings with default: ${this.config.pathSettings}"`);
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} =>`, err)
+                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} =>`, err);
             }
         }
 
