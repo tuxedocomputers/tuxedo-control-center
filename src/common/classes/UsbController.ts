@@ -27,13 +27,6 @@ export class UsbController extends SysFsController {
     private static readonly USB_DEVICES_PATH: string = '/sys/bus/usb/devices';
     private static readonly USB_DRIVER_PATH: string = '/sys/bus/usb/drivers/usb';
 
-    public readonly idProduct: SysFsPropertyIntegerHex = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idProduct'));
-    public readonly idVendor: SysFsPropertyIntegerHex = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idVendor'));
-    public readonly product: SysFsPropertyString = new SysFsPropertyString(path.join(this.devicePath, 'product'));
-    public readonly manufacturer: SysFsPropertyString = new SysFsPropertyString(path.join(this.devicePath, 'manufacturer'));
-
-    public readonly deviceIdString: string;
-
     // Static stuff
     public static getUsbDeviceList(): string[] {
         const completeDeviceList: string[] = SysFsController.getDeviceList(UsbController.USB_DEVICES_PATH);
@@ -47,9 +40,21 @@ export class UsbController extends SysFsController {
     }
     // End static stuff
 
+    public readonly deviceIdString: string;
+
+    public readonly idProduct: SysFsPropertyIntegerHex;
+    public readonly idVendor: SysFsPropertyIntegerHex;
+    public readonly product: SysFsPropertyString;
+    public readonly manufacturer: SysFsPropertyString;
+
     constructor(public readonly devicePath: string) {
         super();
         this.deviceIdString = path.basename(this.devicePath);
+
+        this.idProduct = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idProduct'));
+        this.idVendor = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idVendor'));
+        this.product = new SysFsPropertyString(path.join(this.devicePath, 'product'));
+        this.manufacturer = new SysFsPropertyString(path.join(this.devicePath, 'manufacturer'));
     }
 
     public enableDevice(): boolean {
