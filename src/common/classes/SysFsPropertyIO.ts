@@ -79,8 +79,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
-        } catch (err: unknown) {
-            console.log(`SysFsPropertyIO: Could not read value from path ${this.readPath} =>`, err)
+        } catch (dummy: unknown) {
             return undefined;
         }
     }
@@ -91,8 +90,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     public async readValueNTA(): Promise<T> {
         try {
             return await this.readValueA();
-        } catch (err: unknown) {
-            console.log(`SysFsPropertyIO: Could not read value from path ${this.readPath} =>`, err)
+        } catch (dummy: unknown) {
             return undefined;
         }
     }
@@ -139,8 +137,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             } else {
                 return false;
             }
-        } catch (err: unknown) {
-            console.error("SysFsPropertyIO: isAvailable failed =>", err)
+        } catch (dummy: unknown) {
             return false;
         }
     }
@@ -153,8 +150,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.writePath, fs.constants.W_OK)
             return true;
-        } catch (err: unknown) {
-            console.error("SysFsPropertyIO: isWritable failed =>", err)
+        } catch (dummy: unknown) {
             return false;
         }
     }
@@ -167,8 +163,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.readPath, fs.constants.R_OK);
             return true;
-        } catch (err: unknown) {
-            console.error("SysFsPropertyIO: isReadable failed =>", err)
+        } catch (dummy: unknown) {
             return false;
         }
     }
