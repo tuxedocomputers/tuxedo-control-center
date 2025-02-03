@@ -22,7 +22,8 @@ import { CpuController } from '../../common/classes/CpuController';
 
 import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ITccProfile } from '../../common/models/TccProfile';
-import { LogicalCpuController, ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 export class CpuWorker extends DaemonWorker {
     private readonly basePath: string = '/sys/devices/system/cpu';
@@ -31,9 +32,21 @@ export class CpuWorker extends DaemonWorker {
     private readonly preferredAcpiFreqGovernors: string[] = [ 'ondemand', 'schedutil', 'conservative' ];
     private readonly preferredPerformanceAcpiFreqGovernors: string[] = [ 'performance' ];
 
+    /**
+     * Skip writing energy performance preference if flag is set
+     */
+    private noEPPWriteQuirk: boolean;
+
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, "CpuWorker", tccd);
         this.cpuCtrl = new CpuController(this.basePath);
+
+        const dev = this.tccd.identifyDevice();
+        if ([TUXEDODevice.SIRIUS1602, TUXEDODevice.STELLSL15A06].includes(dev)) {
+            this.noEPPWriteQuirk = true;
+        } else {
+            this.noEPPWriteQuirk = false;
+        }
     }
 
     public onStart(): void {
@@ -71,8 +84,12 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            if (scalingDriver === 'intel_pstate') {
-                // Fixed 'powersave' governor for intel_pstate
+            const fixedPowersaveDrivers = [
+                ScalingDriver.intel_pstate,
+                ScalingDriver.amd_pstate_epp].map(d => d.toString());
+
+            if (fixedPowersaveDrivers.includes(scalingDriver)) {
+                // Fixed 'powersave' governor for intel_pstate and amd-pstate-epp
                 return 'powersave';
             } else {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
@@ -106,8 +123,12 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            if (scalingDriver === 'intel_pstate') {
-                // Fixed 'performance' governor for intel_pstate
+            const fixedPerformanceDrivers = [
+                ScalingDriver.intel_pstate,
+                ScalingDriver.amd_pstate_epp].map(d => d.toString());
+
+            if (fixedPerformanceDrivers.includes(scalingDriver)) {
+                // Fixed 'performance' governor for intel_pstate and amd-pstate-epp
                 return 'performance';
             } else {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
@@ -140,28 +161,14 @@ export class CpuWorker extends DaemonWorker {
             // Set online status last so that all cores get the same settings
             this.setCpuDefaultConfig();
 
-            // To use amd-pstate-epp min/max freq settings 'passive' mode is required.
-            // Set active if no limit is changed in profile, otherwise set passive.
-            if (this.cpuCtrl.amdPstateStatus.isAvailable() && this.cpuCtrl.amdPstateStatus.isWritable()) {
-                const cpuinfoMinFreq: number = this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT();
-                const cpuinfoMaxFreq: number = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValueNT();
-                if ((profile.cpu.scalingMinFrequency === undefined ||
-                    profile.cpu.scalingMinFrequency == cpuinfoMinFreq)
-                    &&
-                    (profile.cpu.scalingMaxFrequency === undefined ||
-                    profile.cpu.scalingMaxFrequency == cpuinfoMaxFreq)) {
-                    this.cpuCtrl.amdPstateStatus.writeValue('active');
-                } else {
-                    this.cpuCtrl.amdPstateStatus.writeValue('passive');
-                }
-            }
-
             if (!profile.cpu.useMaxPerfGov) {
                 // Note: Hard set governor to default (not included in profiles atm)
                 profile.cpu.governor = this.findDefaultGovernor();
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
-                this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+                if (!this.noEPPWriteQuirk) {
+                    this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+                }
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
                 this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
@@ -170,7 +177,9 @@ export class CpuWorker extends DaemonWorker {
                 profile.cpu.governor = this.findPerformanceGovernor();
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
-                this.cpuCtrl.setEnergyPerformancePreference("performance");
+                if (!this.noEPPWriteQuirk) {
+                    this.cpuCtrl.setEnergyPerformancePreference("performance");
+                }
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(-2);
                 this.cpuCtrl.setGovernorScalingMaxFrequency(undefined);
@@ -195,7 +204,9 @@ export class CpuWorker extends DaemonWorker {
             this.cpuCtrl.setGovernorScalingMinFrequency();
             this.cpuCtrl.setGovernorScalingMaxFrequency();
             this.cpuCtrl.setGovernor(this.findDefaultGovernor());
-            this.cpuCtrl.setEnergyPerformancePreference('default');
+            if (!this.noEPPWriteQuirk) {
+                this.cpuCtrl.setEnergyPerformancePreference('default');
+            }
             if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
             }
@@ -298,6 +309,10 @@ export class CpuWorker extends DaemonWorker {
             }
 
             if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
+                if (this.noEPPWriteQuirk) {
+                    continue;
+                }
+
                 const currentPerformancePreference: string = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
                 if (!profile.cpu.useMaxPerfGov) {

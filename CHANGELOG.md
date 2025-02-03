@@ -1,6 +1,27 @@
 # Changelog
 
-## [2.1.13] - UNRELEASED
+## [2.1.16] - 2024-12-18
+### Changed
+- Descriptive text when no keyboard backlight control is found updated to reflect current
+  expectation on driver and kernel versions
+
+### Fixed
+- Various amd-pstate related issues known to happen when limiting CPU frequency in different
+  ways, modified to comply with current kernel feature behaviour
+  and to workaround current kernel bugs
+
+## [2.1.15] - 2024-12-09
+### Added
+- Aquaris support for missing Stellaris 16 Gen6 variants
+
+## [2.1.14] - 2024-11-18
+### Added
+- Temperature readout from alternative Sirius interface (prep for fan control support)
+
+### Changed
+- Crypt password change adjustments, now allows up to 512 characters
+
+## [2.1.13] - 2024-08-05
 ### Fixed
 - Various cases of where, sometimes, power limit sliders would
   prevent actually saving TCC-profile even though it looked like it

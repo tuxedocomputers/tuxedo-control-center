@@ -37,18 +37,22 @@ export class ChangeCryptPasswordComponent implements OnInit {
     successtext_cryptsetup: string = '';
     errortext_cryptsetup: string = '';
     crypt_drives: IDrive[] = [];
+    minLength: number = 1;
+    maxLength: number = 512;
 
-    passwordFormGroup: FormGroup = new FormGroup({
-        cryptPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
-        newPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
-        confirmPassword: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)])
-    }, { validators: [this.confirmValidation] })
+    passwordFormGroup: FormGroup;
 
     constructor(
         private utils: UtilsService
     ) { }
 
     async ngOnInit(): Promise<void> {
+        this.passwordFormGroup = new FormGroup({
+            cryptPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
+            newPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
+            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)])
+        }, { validators: [this.confirmValidation] })
+
         this.crypt_drives = (await window.driveController.getDrives()).filter(x => x.crypt);
 
         this.buttonType = "password";
@@ -68,18 +72,25 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     async changePassword(): Promise<void> {
         this.utils.pageDisabled = true;
+        this.changeCryptPassword().then((execStatus) => {
+            if (execStatus) {
+                this.passwordFormGroup.setValue({
+                    cryptPassword: "",
+                    newPassword: "",
+                    confirmPassword: ""
+                });
 
-        this.changeCryptPassword().then((): void => {
-            this.passwordFormGroup.setValue({
-                cryptPassword: "",
-                newPassword: "",
-                confirmPassword: ""
-            });
+                // clearing error status, otherwise input fields are marked as errors after success
+                this.passwordFormGroup.get("cryptPassword").setErrors(null);
+                this.passwordFormGroup.get("newPassword").setErrors(null);
+                this.passwordFormGroup.get("confirmPassword").setErrors(null);
+            }
+
             this.utils.pageDisabled = false;
         });
     }
 
-    private async changeCryptPassword(): Promise<void> {
+    private async changeCryptPassword(): Promise<boolean> {
         const oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
         const newPassword: string = this.passwordFormGroup.get("newPassword").value;
         const confirmPassword: string = this.passwordFormGroup.get("confirmPassword").value;
@@ -88,14 +99,17 @@ export class ChangeCryptPasswordComponent implements OnInit {
         if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
             return;
         }
-        return window.ipc.changeCryptPassword(oldPassword, newPassword, confirmPassword).then(() => {
+        try {
+            await window.ipc.changeCryptPassword(oldPassword, newPassword, confirmPassword);
             this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
-        }).catch((err: unknown): void => {
+            return true;
+        } catch (err: unknown) {
             console.error("change-crypt-password: changeCryptPassword failed =>", err)
             this.successtext_cryptsetup = '';
             this.errortext_cryptsetup = $localize `:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
-        });
+            return false;
+        }
     }
 
     confirmValidation(group: FormGroup): { notSame: boolean } {
