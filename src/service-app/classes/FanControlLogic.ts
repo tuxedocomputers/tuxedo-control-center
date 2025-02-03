@@ -30,7 +30,13 @@ export enum FAN_LOGIC {
     GPU,
 }
 
-class ValueBuffer {
+interface ValueBufferI {
+    addValue: (number) => void;
+    getFilteredValue: () => number;
+    getBufferCopy: () => Array<number>;
+};
+
+export class ValueBuffer implements ValueBufferI {
     private bufferData: Array<number>;
     private bufferMaxSize: number = 13;
 
@@ -67,6 +73,10 @@ class ValueBuffer {
         const middleNumbers: number[] = this.getMiddle(sortedArray);
         const averageTemp: number = this.calculateAverage(middleNumbers);
         return Math.round(averageTemp);
+    }
+
+    public getBufferCopy(): Array<number> {
+        return Array.from(this.bufferData);
     }
 }
 
