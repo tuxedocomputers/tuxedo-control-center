@@ -188,10 +188,10 @@ export class LCT21001 {
         const deviceInfo: DeviceInfo[] = [];
         let blDevice: NodeBle.Device;
         for (const deviceId of deviceIds) {
+            // Sort out devices that are not accessible with the expected parameters
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
-            } catch (err: unknown) {
-                console.error("LCT21001: getDeviceList getDevice failed =>", err)
+            } catch (dummy: unknown) {
                 await blDevice.cleanup();
                 continue;
             }
@@ -200,16 +200,14 @@ export class LCT21001 {
 
             try {
                 info.rssi = parseInt(await blDevice.getRSSI());
-            } catch (err: unknown) {
-                console.error("LCT21001: getDeviceList parseInt failed =>", err)
+            } catch (dummy: unknown) {
                 await blDevice.cleanup();
                 continue;
             }
 
             try {
                 info.name = await blDevice.getName();
-            } catch (err: unknown) {
-                console.error("LCT21001: getDeviceList getName failed =>", err)
+            } catch (dummy: unknown) {
                 info.name = '';
             }
 
