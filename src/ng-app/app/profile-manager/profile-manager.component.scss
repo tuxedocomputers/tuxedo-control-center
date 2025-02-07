@@ -18,42 +18,28 @@
  */
 
 .title {
+    display: flex;
     justify-content: space-between;
-
-    div {
-        height: 100%;
-        display: flex;
-        align-items: center;
-
-        .preset-toggle-group {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            padding-left: 30px;
-
-            mat-button-toggle-group {
-                align-items: center;
-                height: 40px;
-            }
-        }
-        .menu-settings-button {
-            padding-left: 20px;
-        }
-    }
-
-    svg {
-        width: 40px;
-        height: 40px;
-        --icon-detail: var(--icon-main);
-    }
-}
-
-.toolbar-row {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    align-items: center;
 
     span {
-        flex: 1 1 auto;
+        overflow: hidden;
+    }
+
+    mat-button-toggle-group, .import-export-buttons {
+        transform: scale(0.9);
+        transform-origin: right;
+
+        svg {
+            width: 40px;
+            height: 40px;
+            --icon-detail: var(--icon-main);
+        }
+    }
+
+    form {
+        transform: scale(0.8);
+        transform-origin: bottom left;
     }
 }
 
