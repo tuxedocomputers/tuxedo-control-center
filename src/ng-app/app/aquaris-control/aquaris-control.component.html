@@ -221,7 +221,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         (colorPickerChange)="inputColor()"></span>
                     </mat-tab>
                     <mat-tab label="Mode" i18n-label="@@aqTabLEDModeLabel">
-                        <mat-button-toggle-group #ledStaticOrRainbow [formControl]="ctrlLedStaticOrRainbow" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)">
+                        <mat-button-toggle-group #ledStaticOrRainbow [formControl]="ctrlLedStaticOrRainbow" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)" [hideSingleSelectionIndicator]="true">
                             <mat-button-toggle value="static" i18n="@@aqButtonToggleLEDStaticLabel">Single color</mat-button-toggle>
                             <mat-button-toggle value="rainbow" i18n="@@aqButtonToggleLEDRainbowLabel">Rainbow</mat-button-toggle>
                         </mat-button-toggle-group>
