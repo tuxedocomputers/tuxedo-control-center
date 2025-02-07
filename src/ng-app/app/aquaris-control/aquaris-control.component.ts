@@ -112,7 +112,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         this.deviceNameMap = await this.getUserDeviceNames();
         this.isConnected = await this.aquaris.isConnected();
         if (!this.isConnected) {
-            this.aquaris.startDiscover();
+            await this.aquaris.startDiscover();
         }
         await this.updateState();
         await this.periodicUpdate();
@@ -283,9 +283,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         if (this.isConnected) {
             try {
                 if (ledToggle) {
-                    this.aquaris.updateLED(red, green, blue, ledMode);
+                    await this.aquaris.updateLED(red, green, blue, ledMode);
                 } else {
-                    this.aquaris.writeRGBOff();
+                    await this.aquaris.writeRGBOff();
                 }
             } catch (err: unknown) {
                 console.error("aquaris-control: failed writing led state =>", err);
@@ -300,9 +300,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         if (this.isConnected) {
             try {
                 if (fanToggle) {
-                    this.aquaris.writeFanMode(fanSpeed);
+                    await this.aquaris.writeFanMode(fanSpeed);
                 } else {
-                    this.aquaris.writeFanOff();
+                    await this.aquaris.writeFanOff();
                 }
             } catch (err: unknown) {
                 console.error("aquaris-control: failed writing fan state =>", err);
@@ -349,9 +349,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         if (this.isConnected) {
             try {
                 if (pumpToggle) {
-                    this.aquaris.writePumpMode(dutyCycle, voltage);
+                    await this.aquaris.writePumpMode(dutyCycle, voltage);
                 } else {
-                    this.aquaris.writePumpOff();
+                    await this.aquaris.writePumpOff();
                 }
             } catch (err: unknown) {
                 console.error("aquaris-control: writePumpMode failed =>", err)
@@ -409,13 +409,13 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         while (this.isUpdatingDevices) { await sleep(10); }
 
         try {
-            this.aquaris.connect(deviceUUID);
+            await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
             localStorage.setItem('aquarisLastConnected', deviceUUID);
         } catch (err: unknown) {
             console.error("aquaris-control: buttonConnect failed =>", err)
-            this.aquaris.disconnect();
+            await this.aquaris.disconnect();
             this.isConnected = false;
         } finally {
             this.isConnecting = false;
@@ -445,8 +445,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         this.isDisconnecting = true;
         try {
-            this.aquaris.saveState();
-            this.aquaris.disconnect();
+            await this.aquaris.saveState();
+            await this.aquaris.disconnect();
             this.isConnected = await this.aquaris.isConnected();
             this.selectedDeviceUUID = this.findDefaultSelectedDevice();
             if (this.selectedDeviceUUID === undefined) {
@@ -462,15 +462,15 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public async buttonLedStop(): Promise<void> {
-        this.aquaris.writeRGBOff();
+        await this.aquaris.writeRGBOff();
     }
 
     public async buttonFanStop(): Promise<void> {
-        this.aquaris.writeFanOff();
+        await this.aquaris.writeFanOff();
     }
 
     public async buttonPumpStop(): Promise<void> {
-        this.aquaris.writePumpOff();
+        await this.aquaris.writePumpOff();
     }
 
     public selectDevice(deviceUUID: string): void {
@@ -587,7 +587,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.saveOnTheWay = true;
             const waitForSaveMs = 1000;
             await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, waitForSaveMs));
-            this.aquaris.saveState();
+            await this.aquaris.saveState();
             this.saveOnTheWay = false;
         }
     }
