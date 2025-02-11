@@ -428,17 +428,17 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (missingSetting) {
                 throw Error('Missing setting');
             }
-        } catch (err: unknown) {
-            // todo: doing proper variable checks instead of expecting access errors
+        } catch (dummy: unknown) {
+            // No settings available, create default settings
             try {
                 if (this.settings === undefined) {
                     this.settings = this.config.getDefaultSettings(device);
                     this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
-                console.error(`TuxedoControlCenterDaemon: Filled missing settings with default: ${this.config.pathSettings} =>"`, err)
+                this.logLine(`TuxedoControlCenterDaemon: Filled missing settings with default: ${this.config.pathSettings}"`);
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} =>`, err)
+                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} =>`, err);
             }
         }
 
@@ -528,9 +528,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (isTuxedo) {
             if (deviceName !== undefined &&
                 (deviceName === 'STELLARIS1XI04' ||
-                 deviceName === 'STEPOL1XA04' ||
-                 deviceName === 'STELLARIS1XI05' ||
-                 deviceName === 'STELLARIS17I06')) {
+                deviceName === 'STEPOL1XA04' ||
+                deviceName === 'STELLARIS1XI05' ||
+                deviceName === 'STELLARIS16I06' ||
+                deviceName === 'STELLARIS17I06')) {
                 showAquarisMenu = true;
             } else {
                 showAquarisMenu = false;
@@ -572,8 +573,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS1XA05', TUXEDODevice.STELLARIS1XA05);
         dmiSKUDeviceMap.set('STELLARIS16I06', TUXEDODevice.STELLARIS16I06);
         dmiSKUDeviceMap.set('STELLARIS17I06', TUXEDODevice.STELLARIS17I06);
+        dmiSKUDeviceMap.set('STELLSL15A06', TUXEDODevice.STELLSL15A06);
+        dmiSKUDeviceMap.set('STELLSL15I06', TUXEDODevice.STELLSL15I06);
         dmiSKUDeviceMap.set('AURA14GEN3', TUXEDODevice.AURA14G3);
         dmiSKUDeviceMap.set('AURA15GEN3', TUXEDODevice.AURA15G3);
+        dmiSKUDeviceMap.set('SIRIUS1601', TUXEDODevice.SIRIUS1601);
+        dmiSKUDeviceMap.set('SIRIUS1602', TUXEDODevice.SIRIUS1602);
 
         const skuMatch: TUXEDODevice = dmiSKUDeviceMap.get(productSKU);
 

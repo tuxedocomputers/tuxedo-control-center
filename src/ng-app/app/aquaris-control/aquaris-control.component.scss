@@ -165,6 +165,10 @@
     padding: 10px;
     min-height: 200px;
     width: 600px;
+
+    ::ng-deep .mdc-radio {
+        display: none;
+    }
 }
 
 .troubleshoot-list {

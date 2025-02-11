@@ -127,8 +127,15 @@ describe('FanLogic ValueBuffer', () => {
                 buffer.addValue(randomTemp);
                 referenceBuffer.addValue(randomTemp);
             }
-            expect(buffer.getBufferCopy()).toEqual(referenceBuffer.getBufferCopy());
-            expect(buffer.getFilteredValue()).toEqual(referenceBuffer.getFilteredValue());
+
+            let bufferInfo = `for buffer:           ${JSON.stringify(buffer.getBufferCopy())}\n` +
+                             `    reference buffer: ${JSON.stringify(referenceBuffer.getBufferCopy())}\n\n`;
+            expect(buffer.getBufferCopy())
+                .withContext(bufferInfo)
+                .toEqual(referenceBuffer.getBufferCopy());
+            expect(buffer.getFilteredValue())
+                .withContext(bufferInfo)
+                .toEqual(referenceBuffer.getFilteredValue());
         }
     });
 });

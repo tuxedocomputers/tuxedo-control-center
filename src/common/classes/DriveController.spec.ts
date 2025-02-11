@@ -28,7 +28,7 @@ const sizeDriveSda: number = 488397168;
 const sizeDriveSda1: number = 162799056;
 const sizeDriveSda2: number = 162799056;
 
-describe('DriveController', async (): Promise<void> => {
+describe('DriveController', (): void => {
     beforeEach((): void => {
         mockfs({
             '/sys/class/block/': {

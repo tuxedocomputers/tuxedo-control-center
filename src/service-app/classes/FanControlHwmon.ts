@@ -23,6 +23,7 @@ import { FanControlBaseClass } from "./FanControlBaseClass";
 import type { IFanDataInputs } from "../../common/models/ITccFans";
 import { FAN_LOGIC } from "./FanControlLogic";
 import type { FanControlLogic } from "./FanControlLogic";
+import { TUXEDODevice } from "../../common/models/DefaultProfiles";
 
 export class FanControlHwmon extends FanControlBaseClass {
     private hwmonPath: string = "";
@@ -417,6 +418,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async checkAvailable(): Promise<[boolean, boolean]> {
+        let readAvailable, writeAvailable;
         this.hwmonPath = await this.getHwmonPath();
 
         if (this.hwmonPath) {
@@ -426,7 +428,16 @@ export class FanControlHwmon extends FanControlBaseClass {
                 .then((): boolean => true)
                 .catch((): boolean => false);
         }
-        return [!!this.hwmonPath, this.pwmAvailable];
+
+        readAvailable = !!this.hwmonPath;
+        writeAvailable = this.pwmAvailable;
+
+        const dev = this.tccd.identifyDevice();
+        if (dev === TUXEDODevice.SIRIUS1601 || dev === TUXEDODevice.SIRIUS1602) {
+            readAvailable = false;
+        }
+
+        return [readAvailable, writeAvailable];
     }
 
     public async exit(): Promise<void> {
