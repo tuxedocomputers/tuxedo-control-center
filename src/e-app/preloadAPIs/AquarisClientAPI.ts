@@ -45,21 +45,21 @@ export const AquarisClientAPI =
 // for render.d.ts typescript definition
 export interface IAquarisClientAPI
 {
-    connect: (deviceUUID: string) => void,
-    disconnect: () => void,
+    connect: (deviceUUID: string) => Promise<void>,
+    disconnect: () => Promise<void>,
     isConnected: () => Promise<boolean>,
     hasBluetooth: () => Promise<boolean>,
-    startDiscover: () => void,
-    stopDiscover: () => void,
+    startDiscover: () => Promise<void>,
+    stopDiscover: () => Promise<void>,
     getDevices: () => Promise<DeviceInfo[]>,
     getState: () => Promise<AquarisState>,
     readFwVersion: () => Promise<string>,
-    updateLED: (red: number, green: number, blue: number, state: RGBState | number) => void,
-    writeRGBOff: () => void,
-    writeFanMode: (dutyCyclePercent: number) => void,
-    writeFanOff: () => void,
-    writePumpMode: (dutyCyclePercent: number, voltage: PumpVoltage | number) => void,
-    writePumpOff: () => void
-    saveState: () => void,
+    updateLED: (red: number, green: number, blue: number, state: RGBState | number) => Promise<void>,
+    writeRGBOff: () => Promise<void>,
+    writeFanMode: (dutyCyclePercent: number) => Promise<void>,
+    writeFanOff: () => Promise<void>,
+    writePumpMode: (dutyCyclePercent: number, voltage: PumpVoltage | number) => Promise<void>,
+    writePumpOff: () => Promise<void>,
+    saveState: () => Promise<void>,
 
 }
