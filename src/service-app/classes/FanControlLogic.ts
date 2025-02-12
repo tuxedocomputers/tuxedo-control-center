@@ -34,7 +34,7 @@ interface ValueBufferI {
     addValue: (number) => void;
     getFilteredValue: () => number;
     getBufferCopy: () => Array<number>;
-};
+}
 
 export class ValueBuffer implements ValueBufferI {
     private bufferData: Array<number>;
@@ -51,12 +51,21 @@ export class ValueBuffer implements ValueBufferI {
         }
     }
 
-    // input is a sorted array with maximum of 13 temperature readings, taking the middle 7
     private getMiddle(numbers: number[]): number[] {
-        const middleIndex: number = Math.floor(numbers.length / 2);
-        const middleRange: number = Math.max(0, middleIndex - 3);
-        const endRange: number = Math.min(numbers.length, middleIndex + 4);
-        return numbers.slice(middleRange, endRange);
+        const size = 7;
+        const middleIndex: number = Math.round(numbers.length / 2);
+
+        const halfSize: number = Math.round(size / 2);
+        const startRange: number = Math.max(0, middleIndex - halfSize);
+
+        const halfSizeOffset: number =
+            numbers.length % 2 ? Math.floor(size / 2) : Math.ceil(size / 2);
+        const endRange: number = Math.min(
+            numbers.length,
+            middleIndex + halfSizeOffset
+        );
+
+        return numbers.slice(startRange, endRange);
     }
 
     private calculateAverage(numbers: number[]): number {
@@ -69,7 +78,9 @@ export class ValueBuffer implements ValueBufferI {
     }
 
     public getFilteredValue(): number {
-        const sortedArray: number[] = [...this.bufferData].sort();
+        const sortedArray: number[] = [...this.bufferData].sort(
+            (n1: number, n2: number): number => n1 - n2
+        );
         const middleNumbers: number[] = this.getMiddle(sortedArray);
         const averageTemp: number = this.calculateAverage(middleNumbers);
         return Math.round(averageTemp);
