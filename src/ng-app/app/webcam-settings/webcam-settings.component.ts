@@ -58,43 +58,42 @@ export class WebcamSettingsComponent implements OnInit {
     public gridParams: IGridParams = GridParamsSettings;
 
     @ViewChild("video", { static: true })
-    video: ElementRef;
-    mediaDeviceStream: MediaStream;
+    public video: ElementRef;
+    private mediaDeviceStream: MediaStream;
 
-    timer: NodeJS.Timeout = null;
-    mutex = new Mutex();
+    private timer: NodeJS.Timeout = null;
+    private mutex: Mutex = new Mutex();
 
-    spinnerActive: boolean = false;
-    detachedWebcamWindowActive: boolean = false;
+    public spinnerActive: boolean = false;
+    public detachedWebcamWindowActive: boolean = false;
 
-    webcamDropdownData: WebcamDevice[] = [];
-    webcamInitComplete: boolean = false;
-    webcamPresetsOtherDevices: WebcamPreset[] = [];
-    webcamPresetsCurrentDevice: WebcamPreset[] = [];
-    webcamFormGroup: FormGroup = new FormGroup({});
-    webcamCategories: string[] = [];
+    public webcamDropdownData: WebcamDevice[] = [];
+    public webcamInitComplete: boolean = false;
+    private webcamPresetsOtherDevices: WebcamPreset[] = [];
+    private webcamPresetsCurrentDevice: WebcamPreset[] = [];
+    public webcamFormGroup: FormGroup = new FormGroup({});
+    public webcamCategories: string[] = [];
 
-    allPresetData: WebcamPreset[] = [];
-    presetSettings: WebcamDeviceInformation[];
-    defaultPreset: WebcamPreset;
-    selectedPreset: WebcamPreset;
-    selectedWebcam: WebcamDevice;
+    private allPresetData: WebcamPreset[] = [];
+    private presetSettings: WebcamDeviceInformation[];
+    private defaultPreset: WebcamPreset;
+    public selectedPreset: WebcamPreset;
+    public selectedWebcam: WebcamDevice;
 
-    defaultSettings: WebcamPresetValues;
-    viewWebcam: WebcamPresetValues;
-    noWebcams: boolean = false;
+    private defaultSettings: WebcamPresetValues;
+    public viewWebcam: WebcamPresetValues;
+    public noWebcams: boolean = false;
 
-    selectedWebcamMode: string = "Simple";
-    activePreset: WebcamPreset;
+    private activePreset: WebcamPreset;
 
-    easyOptions: string[] = ["brightness", "contrast", "resolution"];
-    easyModeActive: boolean = true;
+    public easyOptions: string[] = ["brightness", "contrast", "resolution"];
+    public easyModeActive: boolean = true;
 
-    selectedModeTabIndex: string = "Simple";
+    public selectedModeTabIndex: string = "Simple";
 
-    v4l2Renames: string[][];
+    private v4l2Renames: string[][];
 
-    warnedOnceWebcamAccessError: boolean = false;
+    private warnedOnceWebcamAccessError: boolean = false;
 
     constructor(
         private utils: UtilsService,
