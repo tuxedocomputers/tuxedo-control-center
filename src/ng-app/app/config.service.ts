@@ -152,7 +152,7 @@ export class ConfigService implements OnDestroy {
         newProfile.name = newProfileName;
         newProfile.id = generateProfileId();
         const newProfileList: ITccProfile[] = this.getCustomProfiles().concat(newProfile);
-        const success: boolean = window.config.pkexecWriteCustomProfilesAsync(newProfileList);
+        const success: boolean = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
             this.updateConfigData();
             await this.dbus.triggerUpdate();
@@ -187,7 +187,7 @@ export class ConfigService implements OnDestroy {
                 newProfileList = newProfileList.concat(newProfile);
             }
         }
-        const success: boolean = window.config.pkexecWriteCustomProfilesAsync(newProfileList);
+        const success: boolean = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
             this.updateConfigData();
             await this.dbus.triggerUpdate();
@@ -202,7 +202,7 @@ export class ConfigService implements OnDestroy {
         if (newProfileList?.length === this.getCustomProfiles()?.length) {
             return false;
         }
-        const success: boolean = window.config.pkexecWriteCustomProfilesAsync(newProfileList);
+        const success: boolean = await window.config.pkexecWriteCustomProfilesAsync(newProfileList);
         if (success) {
             this.updateConfigData();
             await this.dbus.triggerUpdate();

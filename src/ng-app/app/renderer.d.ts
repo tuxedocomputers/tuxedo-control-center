@@ -125,7 +125,7 @@ export interface CONFIG
     pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
     getDefaultFanProfiles: () => ITccFanProfile[],
     setActiveProfile: (profileId: string, stateId: string,settings: ITccSettings) => void,
-    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => boolean,
+    pkexecWriteCustomProfilesAsync: (customProfiles: ITccProfile[]) => Promise<boolean>,
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
