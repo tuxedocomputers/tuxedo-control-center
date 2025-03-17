@@ -17,4 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-module.exports = require('crypto');
+(window as any).process = {
+    env: {}
+};
