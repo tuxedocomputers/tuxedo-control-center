@@ -38,7 +38,7 @@ import { MainGuiComponent } from "./main-gui/main-gui.component";
 import { AquarisControlComponent } from "./aquaris-control/aquaris-control.component";
 import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
 import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
-import { WebcamSettingsGuard } from "./webcam.service";
+import { WebcamSettingsGuard } from "./webcam.guard";
 import { TomteGuiComponent } from "./tomte-gui/tomte-gui.component";
 import { PrimeDialogComponent } from "./prime-dialog/prime-dialog.component";
 import { AmdGpuCountResolver, CpuVendorResolver, DGpuStatusResolver, IGpuStatusResolver, PowerStateStatusResolver } from "./dashboard.resolver";

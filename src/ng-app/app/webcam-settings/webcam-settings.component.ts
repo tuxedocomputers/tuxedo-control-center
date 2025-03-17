@@ -28,7 +28,7 @@ import {
 } from "src/common/models/TccWebcamSettings";
 import { UtilsService } from "../utils.service";
 import { ChangeDetectorRef } from "@angular/core";
-import { WebcamSettingsGuard } from "../webcam.service";
+import { WebcamSettingsGuard } from "../webcam.guard";
 //import { setInterval, clearInterval } from "timers";
 import {
     AbstractControl,
