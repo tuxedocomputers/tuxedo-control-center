@@ -68,7 +68,7 @@ export class DriveController {
         }
 
         const result: Buffer = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
-        const isCrpyt: boolean = result.toString().trim() == "crypto_LUKS";
+        const isCrpyt: boolean = result.toString().trim() === "crypto_LUKS";
 
         return {
             name: name,

@@ -61,7 +61,7 @@ export class PrimeWorker extends DaemonWorker {
         const offloadingStatus: boolean =
             fs.existsSync(
                 "/var/lib/ubuntu-drivers-common/requires_offloading"
-            ) == true;
+            ) === true;
 
         const primeAvailable: string = (
             await execCommandAsync("which prime-select | cat")

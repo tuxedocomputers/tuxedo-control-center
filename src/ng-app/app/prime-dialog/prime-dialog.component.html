@@ -18,30 +18,30 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <div *ngIf="dialogStatus === 'info'" class="container">
-    <h2 mat-dialog-title *ngIf="primeSelectMode == 'iGPU'" i18n="@@primeSelectIGpu">Power-saving CPU graphics
+    <h2 mat-dialog-title *ngIf="primeSelectMode === 'iGPU'" i18n="@@primeSelectIGpu">Power-saving CPU graphics
         processor (iGPU)
     </h2>
-    <h2 mat-dialog-title *ngIf="primeSelectMode == 'dGPU'" i18n="@@primeSelectDGpu">High performance graphics
+    <h2 mat-dialog-title *ngIf="primeSelectMode === 'dGPU'" i18n="@@primeSelectDGpu">High performance graphics
         processor (dGPU)
     </h2>
-    <h2 mat-dialog-title *ngIf="primeSelectMode == 'on-demand'" i18n="@@primeSelectOnDemand">Hybrid graphics mode
+    <h2 mat-dialog-title *ngIf="primeSelectMode === 'on-demand'" i18n="@@primeSelectOnDemand">Hybrid graphics mode
         (on-demand)
     </h2>
 
     <mat-dialog-content class="mat-typography">
-        <mat-dialog-content *ngIf="primeSelectMode == 'iGPU'" class="content" i18n="@@primeSelectIGpuDescription">
+        <mat-dialog-content *ngIf="primeSelectMode === 'iGPU'" class="content" i18n="@@primeSelectIGpuDescription">
             Exclusively uses the graphics processor integrated in the main processor. Suitable for power saving and low
             graphics performance requirements.
             <br>
             <b>Please note:</b> Monitors connected to the high-performance graphics processor do not work in this mode.
         </mat-dialog-content>
 
-        <mat-dialog-content *ngIf="primeSelectMode == 'dGPU'" class="content" i18n="@@primeSelectDGpuDescription">
+        <mat-dialog-content *ngIf="primeSelectMode === 'dGPU'" class="content" i18n="@@primeSelectDGpuDescription">
             Uses high-performance graphics processor for graphics-intensive tasks, but with higher energy consumption,
             even at low load and idle.
         </mat-dialog-content>
 
-        <mat-dialog-content *ngIf="primeSelectMode == 'on-demand'" class="content"
+        <mat-dialog-content *ngIf="primeSelectMode === 'on-demand'" class="content"
             i18n="@@primeSelectOnDemandDescription">
             The system prioritizes the energy-saving CPU graphics processor. The high-performance graphics processor can
             be added by the user if required. Combination of high performance and power saving.

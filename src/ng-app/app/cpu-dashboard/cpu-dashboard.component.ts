@@ -121,7 +121,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.initializeSubscriptions();
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
-        this.dashboardVisibility = document.visibilityState == "visible";
+        this.dashboardVisibility = document.visibilityState === "visible";
 	    this.usingFahrenheit = this.config.getSettings().fahrenheit;
         this.amdGpuCount = window.power.getAmdDGpuCount();
         this.dGpuAvailable = window.power.isDGpuAvailable();
@@ -154,11 +154,11 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     private visibilityChangeListener: () => void = (): void => {
-        if (document.visibilityState == "hidden") {
+        if (document.visibilityState === "hidden") {
             this.dashboardVisibility = false;
             this.tccdbus.setSensorDataCollectionStatus(false);
         }
-        if (document.visibilityState == "visible") {
+        if (document.visibilityState === "visible") {
             this.dashboardVisibility = true;
             this.tccdbus.setSensorDataCollectionStatus(true);
             this.handleVisibilityChange();
@@ -172,10 +172,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private async updateDgpuPowerState(): Promise<void> {
         const powerState: string = await this.power.getDGpuPowerState();
 
-        if (powerState == "D0") {
+        if (powerState === "D0") {
             this.tccdbus.setDGpuD0Metrics(true);
         }
-        if (powerState != "D0") {
+        if (powerState !== "D0") {
             this.tccdbus.setDGpuD0Metrics(false);
         }
     }
@@ -428,7 +428,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public formatDGpuFrequency: (value: number) => string = this.createFormatter(
         (val: number): boolean =>
-            val >= 0 && (this.powerState == "D3cold" || this.d0MetricsUsage),
+            val >= 0 && (this.powerState === "D3cold" || this.d0MetricsUsage),
         (val: number): string => this.utils.formatGpuFrequency(val)
     );
 
@@ -469,9 +469,9 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public dGpuPowerFormat: (value: number) => string = this.createFormatter(
         (): boolean =>
-            this.powerState == "D3cold" ||
+            this.powerState === "D3cold" ||
             (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
-        (val: number): string => (this.powerState == "D3cold" ? "0" : this.roundWattage(val))
+        (val: number): string => (this.powerState === "D3cold" ? "0" : this.roundWattage(val))
     );
 
     public iGpuPowerFormat: (value: number) => string = this.createFormatter(
@@ -548,13 +548,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     }
 
     public getPrimeStateLabel(primeState: string): string {
-        if (primeState == "iGPU") {
+        if (primeState === "iGPU") {
             return $localize`:@@primeSelectIGpu:Power-saving CPU graphics processor (iGPU)`;
         }
-        if (primeState == "dGPU") {
+        if (primeState === "dGPU") {
             return $localize`:@@primeSelectDGpu:High-performance graphics processor (dGPU)`;
         }
-        if (primeState == "on-demand") {
+        if (primeState === "on-demand") {
             return $localize`:@@primeSelectOnDemand:Hybrid graphics mode (on-demand)`;
         }
     }

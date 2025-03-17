@@ -187,10 +187,10 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
    * Note: Only for updating web part, to change behaviour use setBrightnessMode
    */
   public setThemeClass(className: string): void {
-    if (className == "light-theme") {
+    if (className === "light-theme") {
         this.overlayContainer.getContainerElement().classList.remove("dark-theme");
     }
-    if (className == "dark-theme") {
+    if (className === "dark-theme") {
         this.overlayContainer.getContainerElement().classList.remove("light-theme");
     }
     this.overlayContainer.getContainerElement().classList.add(className);

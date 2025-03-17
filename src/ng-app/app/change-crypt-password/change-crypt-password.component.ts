@@ -60,7 +60,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     showPassword(): void {
-        if (this.buttonType == "password") {
+        if (this.buttonType === "password") {
             this.buttonType = "text";
             this.show_password_button_text = $localize `:@@cryptButtonHidePassword:Hide Passwords`;
         }
