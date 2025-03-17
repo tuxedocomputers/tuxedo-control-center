@@ -20,15 +20,17 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 
-@import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
-@import './app/profile-details-edit/profile-details-edit.component-theme.scss';
-@import './tcc-gauge-theme.scss';
-@import './tcc-changelog-theme.scss';
-@import './tcc-charts-theme.scss';
-@import './tcc-color-picker-theme.scss';
+@use './global-styles.scss';
 
-@import './themes/tuxedo-light-theme.scss';
-@import './themes/tuxedo-dark-theme.scss';
+@use './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
+@use './app/profile-details-edit/profile-details-edit.component-theme.scss';
+@use './tcc-gauge-theme.scss';
+@use './tcc-changelog-theme.scss';
+@use './tcc-charts-theme.scss';
+@use './tcc-color-picker-theme.scss';
+
+@use './themes/tuxedo-light-theme.scss';
+@use './themes/tuxedo-dark-theme.scss';
 
 [hidden] {
     visibility: hidden !important;
@@ -54,8 +56,6 @@ body {
     font-size: 8rem;
     color: rgb(133, 133, 133);
 }
-
-@import './global-styles.scss';
 
 /* latin-ext */
 @font-face {

@@ -17,14 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@mixin tcc-charts-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
-
-    .tcc-charts-text {
-        color: var(--text-color);
-    }
+.tcc-charts-text {
+    color: var(--text-color);
 }

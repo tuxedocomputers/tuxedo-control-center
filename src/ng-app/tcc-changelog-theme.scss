@@ -17,14 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@mixin tcc-changelog-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
-
-    .changelog {
-        background-color: var(--background-color);
-    }
+.changelog {
+    background-color: var(--background-color);
 }

@@ -16,7 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+ 
+@use "sass:map";
+@use "@angular/material" as mat;
+ 
 $palettes: (
     primary: (
         0: #000000,
@@ -198,16 +201,6 @@ html {
         --tooltip-container-color: #00000061;
         --gauge-icon-color: #00000061;
         --gauge-legend-color: #e0e0e0;
-
-        @include profile-overview-tile-theme(
-            $tuxedo-control-center-light-theme
-        );
-        @include profile-details-edit-theme($tuxedo-control-center-light-theme);
-
-        @include tcc-gauge-theme($tuxedo-control-center-light-theme);
-        @include tcc-changelog-theme($tuxedo-control-center-light-theme);
-        @include tcc-charts-theme($tuxedo-control-center-light-theme);
-        @include tcc-color-picker-theme($tuxedo-control-center-light-theme);
 
         @include mat.all-component-themes($tuxedo-control-center-light-theme);
 

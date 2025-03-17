@@ -17,31 +17,20 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@mixin profile-overview-tile-theme($theme) {
-    .profile-overview-tile {
-        &.hover-effect:hover {
-            // todo
-            //background-color: mat.get-theme-color($theme, primary, 50);
-        }
-
-        &.selected {
-            // todo
-            //background-color: mat.get-theme-color($theme, primary, 50);
-        }
-
-        .overlay {
-            color: mat.get-theme-color($theme, primary, 50);
-            background-color: mat.get-theme-color($theme, primary, 50);
-        }
+.profile-overview-tile {
+    &.hover-effect:hover {
+        // todo
+        //background-color: mat.get-theme-color($theme, primary, 50);
     }
-}
 
-@mixin profile-overview-tile-typography($config) {
-    .profile-overview-tile {
-        font: {
-            family: mat-font-family($config, body-1);
-            size: mat-font-size($config, body-1);
-            weight: mat-font-weight($config, body-1);
-        }
+    &.selected {
+        // todo
+        //background-color: mat.get-theme-color($theme, primary, 50);
+    }
+
+    .overlay {
+        // todo
+        //color: mat.get-theme-color($theme, primary, 50);
+        //background-color: mat.get-theme-color($theme, primary, 50);
     }
 }

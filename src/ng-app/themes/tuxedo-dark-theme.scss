@@ -17,6 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@use "sass:map";
+@use "@angular/material" as mat;
+
 $palettes: (
     primary: (
         0: #000000,
@@ -198,14 +201,6 @@ html {
         --tooltip-container-color: #616161e6;
         --gauge-icon-color: #ffffff80;
         --gauge-legend-color: #151515;
-
-        @include profile-overview-tile-theme($tuxedo-control-center-dark-theme);
-        @include profile-details-edit-theme($tuxedo-control-center-dark-theme);
-
-        @include tcc-gauge-theme($tuxedo-control-center-dark-theme);
-        @include tcc-changelog-theme($tuxedo-control-center-dark-theme);
-        @include tcc-charts-theme($tuxedo-control-center-dark-theme);
-        @include tcc-color-picker-theme($tuxedo-control-center-dark-theme);
 
         @include mat.all-component-themes($tuxedo-control-center-dark-theme);
 

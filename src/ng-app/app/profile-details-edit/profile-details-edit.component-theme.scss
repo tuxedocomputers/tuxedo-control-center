@@ -17,10 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@mixin profile-details-edit-theme($theme) {
-    .profile-details-edit {
-        .profile-title {
-            background-color: var(--foreground-color);
-        }
+.profile-details-edit {
+    .profile-title {
+        background-color: var(--foreground-color);
     }
 }
