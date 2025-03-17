@@ -43,7 +43,7 @@ const availableLanguages: string[] = [
 ];
 let powersaveBlockerId: number = undefined;
 let startTCCAccelerator: string;
-startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
+startTCCAccelerator = app.commandLine.getSwitchValue('start-tcc-accelerator');
 if (startTCCAccelerator === '') {
     startTCCAccelerator = 'Super+Alt+F6'
 }
