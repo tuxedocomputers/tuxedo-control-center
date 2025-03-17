@@ -24,7 +24,7 @@
     "build-ng-prod": "npm run copy-changelog && ng build --configuration production --aot true --optimization true --build-optimizer true",
     "build-electron": "tsc -p ./src/e-app",
     "build-service": "tsc -p ./src/service-app && cp ./src/package.json ./dist/tuxedo-control-center/service-app/package.json && run-s bundle-service",
-    "bundle-service": "cp ./build/Release/TuxedoIOAPI.node ./dist/tuxedo-control-center/service-app/native-lib && pkg --target node20-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
+    "bundle-service": "cp ./build/Release/TuxedoIOAPI.node ./dist/tuxedo-control-center/service-app/native-lib && pkg --target node22-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
     "build-native": "node-gyp configure && node-gyp rebuild",
     "copy-files": "run-s copy-package-json copy-dist-files copy-cameractls copy-udev-rule",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
@@ -44,7 +44,7 @@
     "test-ng": "ng test --watch=false",
     "test-ng-e2e": "ng e2e",
     "test-appstream": "appstreamcli validate ./src/dist-data/com.tuxedocomputers.tcc.metainfo.xml",
-    "install-build-dep": "curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - && sudo apt install nodejs autoconf automake build-essential gcc g++ make rpm",
+    "install-build-dep": "curl -sL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt install nodejs autoconf automake build-essential gcc g++ make rpm",
     "start-watch": "run-s clean build-electron build-native build-service copy-files && npm run watch-ng-and-electron",
     "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
     "start-ng-watch": "ng build --watch",
@@ -91,7 +91,7 @@
     "@angular/material": "^19.2.2",
     "@types/jasmine": "^5.1.7",
     "@types/jasminewd2": "^2.0.13",
-    "@types/node": "^20.17.10",
+    "@types/node": "^22.13.9",
     "@yao-pkg/pkg": "^6.3.2",
     "angular-gauge": "^5.0.0",
     "electron": "^35.0.1",
@@ -107,6 +107,11 @@
     "node-addon-api": "^8.3.1",
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2"
+  },
+  "overrides": {
+    "usocket": {
+      "nan": "^2.22.2"
+    }
   },
   "browser": {
     "child_process": false,
