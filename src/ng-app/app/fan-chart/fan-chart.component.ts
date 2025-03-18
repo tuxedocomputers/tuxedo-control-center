@@ -166,6 +166,10 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
             type: "line",
             options: {
                 plugins: {
+                    dragData: {
+                        dragX: false,
+                        dragY: false,
+                    },
                     datalabels: {
                         display: false,
                     },
