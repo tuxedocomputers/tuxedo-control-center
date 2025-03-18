@@ -25,6 +25,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{ data.checkboxNoBotherLabel }}</mat-checkbox>
-    <button mat-button (click)="closeDialog(false)">{{ data.buttonAbortLabel }}</button>
-    <button mat-button (click)="closeDialog(true)" cdkFocusInitial>{{ data.buttonConfirmLabel }}</button>
+    <button mat-button *ngIf="data.buttonAbortLabel" (click)="closeDialog(false)">{{ data.buttonAbortLabel }}</button>
+    <button mat-button *ngIf="data.buttonConfirmLabel" (click)="closeDialog(true)" cdkFocusInitial>{{ data.buttonConfirmLabel }}</button>
 </mat-dialog-actions>
