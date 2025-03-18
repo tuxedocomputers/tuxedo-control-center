@@ -33,7 +33,7 @@ export class TccDBusData {
     public device: string = "";
     public deviceHasAquaris: boolean = false;
     public displayModesJSON: string = "{}";
-    public isX11: boolean = false;
+    public isX11: number = -1;
     public tuxedoWmiAvailable: boolean = false;
     public fanHwmonAvailable: boolean = false;
     public tccdVersion: string = ""
@@ -102,7 +102,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     GetDeviceName(): string { return this.data.device; }
     DeviceHasAquaris(): boolean { return this.data.deviceHasAquaris; }
     GetDisplayModesJSON(): string { return this.data.displayModesJSON; }
-    GetIsX11(): boolean { return this.data.isX11; }
+    GetIsX11(): number { return this.data.isX11; }
     TuxedoWmiAvailable(): boolean { return this.data.tuxedoWmiAvailable; }
     FanHwmonAvailable(): boolean { return this.data.fanHwmonAvailable; }
     TccdVersion(): string { return this.data.tccdVersion; }
@@ -249,7 +249,7 @@ TccDBusInterface.configureMembers({
         GetDeviceName: {outSignature: 's'},
         DeviceHasAquaris: { outSignature: 'b'},
         GetDisplayModesJSON: {outSignature: 's'},
-        GetIsX11: { outSignature: 'b'},
+        GetIsX11: { outSignature: 'i'},
         TuxedoWmiAvailable: { outSignature: 'b' },
         FanHwmonAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },

@@ -259,7 +259,7 @@ export class TccDBusController {
         }
     }
 
-    async getIsX11():Promise<boolean> {
+    async getIsX11():Promise<number> {
         try {
             if (this.dbusStatus) {
                 return await this.interface.GetIsX11();
@@ -269,11 +269,11 @@ export class TccDBusController {
 
             if (err instanceof dbus.DBusError) {
                 console.error("dbusController: getIsX11 failed =>", err.text)
-                return false
+                return -1
             }
 
             console.error("dbusController: getIsX11 failed =>", err)
-            return false;
+            return -1;
         }
     }
 

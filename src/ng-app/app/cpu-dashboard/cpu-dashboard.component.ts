@@ -98,7 +98,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
 
-    public isX11: boolean;
+    public isX11: number = -1;
 
     public amdGpuCount: number;
     public dGpuAvailable: boolean;

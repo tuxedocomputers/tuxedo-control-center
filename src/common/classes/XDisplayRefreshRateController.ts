@@ -22,7 +22,7 @@ import * as child_process from "child_process";
 import * as fs from "fs";
 export class XDisplayRefreshRateController {
     private displayName: string = "";
-    private isX11: boolean = undefined;
+    private isX11: number = -1;
     private isWayland: boolean = undefined;
 
     private displayEnvVariable: string = "";
@@ -95,11 +95,11 @@ export class XDisplayRefreshRateController {
                   .toLowerCase()
             : "";
 
-        this.isX11 = sessionType === "x11" ? true : false;
+        this.isX11 = sessionType === "x11" ? 1 : 0;
         this.isWayland = sessionType === "wayland" ? true : false;
     }
 
-    public getIsX11(): boolean {
+    public getIsX11(): number {
         return this.isX11;
     }
 

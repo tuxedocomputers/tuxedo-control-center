@@ -268,7 +268,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-expansion-panel>
 
             <mat-expansion-panel [expanded]="expandPrimeSelect"
-                *ngIf="isIGpuAvailable() && isDGpuAvailable() && primeState != 'off' && primeState != '-1' && isX11">
+                *ngIf="isIGpuAvailable() && isDGpuAvailable() && primeState != 'off' && primeState != '-1' && isX11 === 1">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon>

@@ -53,7 +53,7 @@ export class GlobalSettingsComponent implements OnInit {
 
     public primeState: string = "iGPU";
     public expandPrimeSelect: Boolean = false;
-    public isX11: boolean = false;
+    public isX11: number = -1;
 
     constructor(
         private config: ConfigService,

@@ -31,7 +31,7 @@ export class X11StatusResolver implements Resolve<boolean> {
 
     resolve(): Observable<boolean> {
         return from(this.tccdbus.isX11.asObservable()).pipe(
-            filter((value: boolean): boolean => value !== undefined),
+            filter((value: any): any => value !== undefined && value !== -1),
             first()
         );
     }

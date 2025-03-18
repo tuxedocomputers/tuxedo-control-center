@@ -345,8 +345,8 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         });
     })
 
-    .set(DbusAPIFunctions.getIsX11, (): Promise<boolean> => {
-        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+    .set(DbusAPIFunctions.getIsX11, (): Promise<number> => {
+        return new Promise<number>((resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
             try {
                 resolve(tccDBus.getIsX11());
             } catch (err: unknown) {
