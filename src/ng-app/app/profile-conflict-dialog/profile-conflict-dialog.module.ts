@@ -34,5 +34,5 @@ import { MatDialogModule } from '@angular/material/dialog';
     entryComponents: [ProfileConflictComponent],
     providers: [ProfileConflictDialogService]
   })
-  export class ProfileConflictModule {
+  class ProfileConflictModule {
   }

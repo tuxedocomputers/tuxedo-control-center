@@ -103,7 +103,7 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event: IpcMainEvent): void => {
     event.returnValue = systeminfosURL;
 });
 
-export async function changeLanguage(newLangId: string): Promise<void> {
+async function changeLanguage(newLangId: string): Promise<void> {
     if (newLangId !== await userConfig.get('langId')) {
         await userConfig.set('langId', newLangId);
         await loadTranslation(newLangId);

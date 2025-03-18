@@ -23,13 +23,13 @@ export interface SystemProfileInfo {
     pl: PowerLimit[];
 }
 
-export interface PowerLimit {
+interface PowerLimit {
     limit: number;
     odmName: string;
     systemProfile: SystemProfile;
 }
 
-export enum SystemProfile { 
+enum SystemProfile { 
         ENERGYSAVE,
         SILENT,
         MAXPERFORMACE,

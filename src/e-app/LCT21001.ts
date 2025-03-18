@@ -40,7 +40,7 @@ export enum PumpVoltage {
     V8 = 0x03
 }
 
-export enum LCTDeviceModel {
+enum LCTDeviceModel {
     LCT21001 = 'LCT21001',
     LCT22002 = 'LCT22002',
 }

@@ -124,7 +124,7 @@ export class TccTray {
     }
 }
 
-export class TrayState {
+class TrayState {
     tccGUIVersion: string;
     isAutostartTrayInstalled: boolean;
     isPrimeSupported: boolean;
@@ -137,7 +137,7 @@ export class TrayState {
     hasAquaris: boolean;
 };
 
-export class TrayEvents {
+class TrayEvents {
     startTCCClick: () => void;
     startAquarisControl: () => void;
     exitClick: () => void;

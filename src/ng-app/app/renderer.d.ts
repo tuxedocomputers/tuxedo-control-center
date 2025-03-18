@@ -32,7 +32,7 @@ import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
 import type { BrightnessModeString } from "src/e-app/backendAPIs/brightnessAPI";
 
 // todo: variables shouldn't be uppercase in every letter
-export interface IPC extends EventEmitter {
+interface IPC extends EventEmitter {
     getAppVersion: () => Promise<string>,
     closeApp: () => void,
     closeWindow: () => void,
@@ -65,7 +65,7 @@ export interface IPC extends EventEmitter {
     primeSelect: (selectedState: string) => Promise<string>,
 }
 
-  export interface POWER
+interface POWER
   {
     getDGpuPowerState: (driver: string) => Promise<string>,
     getBusPath: (busPath: string) => string,
@@ -76,25 +76,24 @@ export interface IPC extends EventEmitter {
   }
 
 
-  export interface VENDOR
+interface VENDOR
   {
     getCpuVendor: () => Promise<string>,
 
   }
 
-
-  export interface FS
+interface FS
   {
      writeTextFile: (filePath: string, fileData: string | Buffer, writeFileOptions?) => Promise<void>,
      readTextFile: (filePath: string) => Promise<string>,
      existsSync: (filePath: string) => boolean,
   }
 
-  export interface DRIVECONTROLLER
+interface DRIVECONTROLLER
   {
     getDrives: () => IDrive[]
   }
-export interface WEBCAM
+interface WEBCAM
 {
     onVideoEnded: (callback: () => void) => void,
     onExternalWebcamPreviewClosed: (callback: () => void) => void,
@@ -103,24 +102,24 @@ export interface WEBCAM
     }
 
 // todo: remove or rename
-export interface STUFF
+interface STUFF
 {
     logStuff: (stuff : string) => void,
 }
 
-export interface CPU
+interface CPU
 {
     getGeneralCpuInfoAsync: () => Promise<IGeneralCPUInfo>,
     getLogicalCoreInfoAsync: () =>  Promise<ILogicalCoreInfo[]>,
     getIntelPstateTurboValueAsync: () => Promise<boolean>,
 }
 
-export interface BACKLIGHT
+interface BACKLIGHT
 {
     getDisplayBrightnessInfo: () => IDisplayBrightnessInfo[]
 }
 
-export interface CONFIG
+interface CONFIG
 {
     pkexecWriteConfigAsync: (settings: ITccSettings, customProfiles: ITccProfile[]) => Promise<boolean>,
     getDefaultFanProfiles: () => ITccFanProfile[],
@@ -129,13 +128,13 @@ export interface CONFIG
     pkexecWriteCustomProfiles: (customProfiles: ITccProfile[]) => boolean,
 }
 
-export interface COMP
+interface COMP
 {
     getHasAquaris: () => Promise<boolean>,
     getScalingDriverAcpiCpuFreq: () => string,
 }
 
-export interface PGMS
+interface PGMS
 {
     tomteIsInstalled: () => Promise<boolean>,
     installTomte: () => Promise<boolean>,
@@ -175,13 +174,13 @@ export interface PGMS
   }
 
 
-  export interface IPCReturnValue
+interface IPCReturnValue
   {
     data;
     error;
   }
 
-  export interface IProcessVersions
+interface IProcessVersions
   {
     node: string;
     electron: string;

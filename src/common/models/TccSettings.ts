@@ -94,7 +94,7 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     keyboardBacklightStates: []
 };
 
-export const defaultSettingsMobile: ITccSettings = {
+const defaultSettingsMobile: ITccSettings = {
     fahrenheit: false,
     stateMap: {
         power_ac: defaultCustomProfile.id,

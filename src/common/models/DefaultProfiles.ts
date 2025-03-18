@@ -33,7 +33,7 @@ export enum DefaultProfileIDs {
     HighPerformance = '__high_performance__',
 }
 
-export const defaultCustomProfileID = '__default_custom_profile__';
+const defaultCustomProfileID = '__default_custom_profile__';
 export const defaultMobileCustomProfileID = '__default_mobile_custom_profile__';
 
 export interface IProfileTextMappings {
@@ -354,7 +354,7 @@ const highPerformance25WcTGP: ITccProfile = {
     nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
 };
 
-export const defaultCustomProfile25WcTGP: ITccProfile = {
+const defaultCustomProfile25WcTGP: ITccProfile = {
     id: defaultCustomProfileID,
     name: 'TUXEDO Defaults',
     description: 'Edit profile to change behaviour',

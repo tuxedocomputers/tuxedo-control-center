@@ -28,9 +28,9 @@ import { aquarisAPIHandle } from '../../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../../common/models/IDbusAPI';
 import type { WebcamConstraints } from '../../common/models/TccWebcamSettings';
 export let tccWindow: Electron.BrowserWindow;
-export let aquarisWindow: Electron.BrowserWindow;
+let aquarisWindow: Electron.BrowserWindow;
 export let webcamWindow: Electron.BrowserWindow;
-export let primeWindow: Electron.BrowserWindow;
+let primeWindow: Electron.BrowserWindow;
 
 app.on('second-instance', (event: Event, cmdLine: string[], workingDir: string): void => {
     // If triggered by a second instance, find/show/start GUI

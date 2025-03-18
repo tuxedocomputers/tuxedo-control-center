@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface ITuxedoIOAPI {
+interface ITuxedoIOAPI {
     /**
      * Gets information about the tuxedo-cc-wmi module
      *

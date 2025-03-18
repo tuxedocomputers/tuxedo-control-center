@@ -23,7 +23,7 @@ export interface IDBusFanData {
     gpu2: FanData;
   }
 
-export class dbusVariant<T>
+class dbusVariant<T>
 {
     public signature: string;
     public value: T;

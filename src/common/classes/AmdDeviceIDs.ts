@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export const amdIGpuDeviceIds: string[] = [
+const amdIGpuDeviceIds: string[] = [
     // 3500U (Picasso / Raven 2)
     "15D8",
 

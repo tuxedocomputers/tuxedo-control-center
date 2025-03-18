@@ -18,7 +18,7 @@
  */
 
 // https://dgpu-docs.intel.com/devices/hardware-table.html
-export const intelIGpuDeviceIds: string[] = [
+const intelIGpuDeviceIds: string[] = [
     // Xe Raptor Lake-P (Intel Iris Xe Graphics)
     "A7A9",
     "A7A8",

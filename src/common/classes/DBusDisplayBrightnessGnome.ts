@@ -20,7 +20,7 @@
 import { execCommandSync } from "./Utils";
 import * as dbus from 'dbus-next';
 
-export type OnChangedFunction = (value: number) => void;
+type OnChangedFunction = (value: number) => void;
 
 export class DBusDisplayBrightnessGnome {
 
