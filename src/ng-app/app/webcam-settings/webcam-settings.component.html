@@ -81,10 +81,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                         <hr />
                     </div>
-
+                    
                     <div class="webcam" id="hidden">
-                        <video #video id="video" width="640" height="480" autoplay="false"></video>
-                        <mat-spinner class="spinner" [hidden]="!spinnerActive"></mat-spinner>
+                        <div [hidden]="!webcamService.getSpinnerStatus()" style="width: 640px; height: 480px"></div>
+                        <video id="video" [hidden]="webcamService.getSpinnerStatus()" autoplay width="640" height="480" [srcObject]="mediaDeviceStream"></video>
+                        <mat-spinner class="spinner" [hidden]="!webcamService.getSpinnerStatus()"></mat-spinner>
                     </div>
 
                     <mat-tab-group class="active-always-focused" mat-stretch-tabs #cpuSettingsTabGroup
@@ -131,7 +132,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>refresh</mat-icon>
                                             </button>
                                             <button mat-icon-button color="primary"
-                                                [hidden]="detachedWebcamWindowActive" (click)="openWindow()">
+                                                [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
                                                 <mat-icon>open_in_new</mat-icon>
                                             </button>
                                         </content>
@@ -309,7 +310,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
                                         <mat-icon>refresh</mat-icon>
                                     </button>
-                                    <button mat-icon-button color="primary" [hidden]="detachedWebcamWindowActive"
+                                    <button mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()"
                                         (click)="openWindow()">
                                         <mat-icon>open_in_new</mat-icon>
                                     </button>

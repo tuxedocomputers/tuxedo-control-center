@@ -46,6 +46,7 @@ import { ConfirmDialogData, ConfirmDialogResult } from "../dialog-confirm/dialog
 import { ChoiceDialogData, ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
 import { InputDialogData } from "../dialog-input-text/dialog-input-text.component";
 import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
+import { WebcamService } from "../webcam.service";
 
 // todo: move dialog functions into a seperate file
 @Component({
@@ -57,16 +58,13 @@ import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
 export class WebcamSettingsComponent implements OnInit {
     public gridParams: IGridParams = GridParamsSettings;
 
-    @ViewChild("video", { static: true })
-    public video: ElementRef;
-    private mediaDeviceStream: MediaStream;
+    public video: any;
+    public mediaDeviceStream: MediaStream;
 
     private timer: NodeJS.Timeout = null;
     private mutex: Mutex = new Mutex();
 
     public spinnerActive: boolean = false;
-    public detachedWebcamWindowActive: boolean = false;
-
     public webcamDropdownData: WebcamDevice[] = [];
     public webcamInitComplete: boolean = false;
     private webcamPresetsOtherDevices: WebcamPreset[] = [];
@@ -98,10 +96,13 @@ export class WebcamSettingsComponent implements OnInit {
     constructor(
         private utils: UtilsService,
         private webcamGuard: WebcamSettingsGuard,
+        public webcamService: WebcamService
     ) {}
 
 
     public async ngOnInit(): Promise<void> {
+        this.video = document.getElementById("video")
+
         this.webcamGuard.setLoadingStatus(true);
         // register callback for IPC signal from main
         window.webcam.onApplyControls(async (): Promise<void> => {
@@ -111,7 +112,7 @@ export class WebcamSettingsComponent implements OnInit {
           });
 
         window.webcam.onExternalWebcamPreviewClosed((): void => {
-            this.detachedWebcamWindowActive = false;
+            this.webcamService.setDetachedWebcamWindowActive(false);
             document.getElementById("hidden").style.display = "flex";
             this.applyPreset(this.webcamFormGroup.getRawValue());
         });
@@ -254,17 +255,17 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     private stopWebcam(): void {
-        this.video.nativeElement.pause();
-        if (this.mediaDeviceStream !== undefined) {
-            for (const track of this.mediaDeviceStream.getTracks()) {
+        this.video.pause();
+        if (this.webcamService.getMediaStream() !== undefined && this.webcamService.getMediaStream() !== null) {
+            for (const track of this.webcamService.getMediaStream().getTracks()) {
                 track.stop();
             }
         }
-        this.video.nativeElement.srcObject = null;
+        this.video.srcObject = null;
     }
 
     private setLoading(): void {
-        this.spinnerActive = true;
+        this.webcamService.setSpinnerStatus(true)
         this.webcamGuard.setLoadingStatus(true);
     }
 
@@ -311,7 +312,7 @@ export class WebcamSettingsComponent implements OnInit {
         document.getElementById("hidden").style.display = "none";
         const webcamConfig: WebcamConstraints = this.getCurrentWebcamConstraints();
         window.webcamAPI.createWebcamPreview(webcamConfig);
-        this.detachedWebcamWindowActive = true;
+        this.webcamService.setDetachedWebcamWindowActive(true);
     }
 
     // using list with matching ids instead of one path value in case multiple devices have same id
@@ -507,7 +508,7 @@ export class WebcamSettingsComponent implements OnInit {
         };
         this.utils.confirmDialog(config).then();
     }
-
+    
     private async setWebcamWithConfig(
         config: WebcamConstraints
     ): Promise<void> {
@@ -518,8 +519,9 @@ export class WebcamSettingsComponent implements OnInit {
             .then(
                 async (stream: MediaStream): Promise<void> => {
                     document.getElementById("hidden").style.display = "flex";
-                    this.video.nativeElement.srcObject = stream;
-                    this.mediaDeviceStream = stream;
+                    this.video.srcObject = stream;
+                    
+                    this.webcamService.setMediaStream(stream)
                 },
                 async (error: unknown): Promise<void> => {
                     console.error(error);
@@ -532,18 +534,24 @@ export class WebcamSettingsComponent implements OnInit {
                 }
             );
 
-        if (this.mediaDeviceStream) {
-            this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
+        if (this.webcamService.getMediaStream()) {
+            this.webcamService.getMediaStream().getVideoTracks()[0].onended = (): void => {
                 this.handleVideoEnded();
             };
         }
+    }
+    
+    // setting media stream with ngDoCheck() because getUserMedia() with "this.video.srcObject = stream" is not enough for <video>.
+    // using [srcObject]="mediaDeviceStream" instead of video.srcObject to avoid interruptions in the preview
+    ngDoCheck(): void {
+        this.mediaDeviceStream = this.webcamService.getMediaStream()
     }
 
     private unsetLoading(initComplete: boolean = false): void {
         if (initComplete) {
             this.webcamInitComplete = true;
         }
-        this.spinnerActive = false;
+        this.webcamService.setSpinnerStatus(false)
         this.webcamGuard.setLoadingStatus(false);
         this.utils.pageDisabled = false;
     }
@@ -748,7 +756,7 @@ export class WebcamSettingsComponent implements OnInit {
                 this.webcamFormGroup.markAsPristine();
             }
 
-            if (!this.detachedWebcamWindowActive) {
+            if (!this.webcamService.getDetachedWebcamWindowActive()) {
                 document.getElementById("video").style.visibility = "hidden";
             }
 
@@ -762,7 +770,7 @@ export class WebcamSettingsComponent implements OnInit {
             const webcamConfig: WebcamConstraints = this.createWebcamConfig(config);
             this.setSliderEnabledStatus();
 
-            if (!this.detachedWebcamWindowActive) {
+            if (!this.webcamService.getDetachedWebcamWindowActive()) {
                 await this.setWebcamWithConfig(webcamConfig);
                 await this.executeWebcamCtrlsList(config);
                 await this.setTimeout(1000);
@@ -770,7 +778,7 @@ export class WebcamSettingsComponent implements OnInit {
                 document.getElementById("video").style.visibility = "visible";
             }
 
-            if (this.detachedWebcamWindowActive) {
+            if (this.webcamService.getDetachedWebcamWindowActive()) {
                 window.webcamAPI.setWebcamWithLoading(webcamConfig);
             }
             if (setViewWebcam) {
@@ -1339,8 +1347,10 @@ export class WebcamSettingsComponent implements OnInit {
 
     public ngOnDestroy(): void {
         this.stopWebcam();
+        
+        this.webcamService.setMediaStream(null)
 
-        if (this.detachedWebcamWindowActive) {
+        if (this.webcamService.getDetachedWebcamWindowActive()) {
             window.webcamAPI.closeWebcamPreview()
         }
     }
