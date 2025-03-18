@@ -17,29 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-.title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    span {
-        overflow: hidden;
+ .title {
+    div {
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
 
-    mat-button-toggle-group, .import-export-buttons {
-        transform: scale(0.9);
-        transform-origin: right;
-
-        svg {
-            width: 40px;
-            height: 40px;
-            --icon-detail: var(--icon-main);
-        }
-    }
-
-    form {
-        transform: scale(0.8);
-        transform-origin: bottom left;
+    svg {
+        width: 40px;
+        height: 40px;
+        --icon-detail: var(--icon-main);
     }
 }
 
@@ -55,13 +43,17 @@
     right: 5px;
     left: 0px;
     padding: 0px;
-
+    overflow-y: scroll;
+    
+    .inner-profile-manager-content {
+        margin: 0 10px 10px 10px;
+    }
+    
     &.offset {
         top: 100px;
     }
 
     div {
-        margin: 8px;
         display: flex;
         align-items: stretch;
         flex-wrap: wrap;
@@ -70,12 +62,4 @@
 
 mat-toolbar {
     background: none;
-}
-
-app-profile-overview-tile {
-    height: 100%;
-}
-
-* {
-    overflow-x: hidden;
 }

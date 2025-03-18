@@ -81,27 +81,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 </mat-toolbar>
 <div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}" #profileManagerContent>
-    <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
-        <app-profile-overview-tile
-            *ngFor="let profile of getProfilesForList()"
-            [profile]="profile"
-            [hoverEffect]="false"
-            [active]="isProfileActive(profile.id)"
-            [used]="isProfileUsed(profile.id)"
-            (copyClick)="copyProfile($event)"
-            [showDetails]="viewDetails">
-        </app-profile-overview-tile>
-        <app-profile-overview-tile
-            *ngIf="['all', 'custom'].includes(inputProfileFilter)"
-            [addProfileTile]="true"
-            [hoverEffect]="true"
-            (click)="buttonNew.click()">
-        </app-profile-overview-tile>
+    <div class="inner-profile-manager-content">
+        <div *ngIf="!currentProfile" >
+            <app-profile-overview-tile
+                *ngFor="let profile of getProfilesForList()"
+                [profile]="profile"
+                [hoverEffect]="false"
+                [active]="isProfileActive(profile.id)"
+                [used]="isProfileUsed(profile.id)"
+                (copyClick)="copyProfile($event)"
+                [showDetails]="viewDetails">
+            </app-profile-overview-tile>
+            <app-profile-overview-tile
+                *ngIf="['all', 'custom'].includes(inputProfileFilter)"
+                [addProfileTile]="true"
+                [hoverEffect]="true"
+                (click)="buttonNew.click()">
+            </app-profile-overview-tile>
+        </div>
     </div>
-    <app-profile-details-edit #profileDetailsEdit
-        *ngIf="currentProfile !== undefined"
-        [profile]="currentProfile"
-        (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
-    </app-profile-details-edit>
-    <br />
 </div>
+<app-profile-details-edit #profileDetailsEdit
+    *ngIf="currentProfile !== undefined"
+    [profile]="currentProfile"
+    (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
+</app-profile-details-edit>
+
