@@ -57,7 +57,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-radio-button>
 </mat-radio-group>
 
-<div *ngIf="chargeType !== 'Unknown'" class="charging-thresholds">
+<div *ngIf="!['Unknown', '-1', undefined, ''].includes(chargeType)" class="charging-thresholds"> 
     <mat-checkbox #enableThresholds color="primary"
         [formControl]="ctrlEnableThresholds"
         (change)="checkboxEnableThresholdsChange($event)"
