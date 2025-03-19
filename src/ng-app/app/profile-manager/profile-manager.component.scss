@@ -62,4 +62,18 @@
 
 mat-toolbar {
     background: none;
+    padding-top: 10px;
+    
+    .profile-options {
+        justify-content: space-between;
+        padding-right: 0px;
+    }
+    
+    .menu-button {
+        padding-left: 30px; padding-right: 20px
+    }
+    
+    .info-options {
+        padding-right: 30px
+    }
 }
