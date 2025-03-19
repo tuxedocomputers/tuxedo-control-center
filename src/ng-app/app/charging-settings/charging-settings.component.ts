@@ -86,7 +86,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingPriorityLabels: Map<string, string> = new Map();
     public chargingPriorityDescriptions: Map<string, string> = new Map();
 
-    public chargingProfilesUrlHref: string = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
 
     constructor(
         private utils: UtilsService
@@ -198,11 +197,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
         return result;
     }
-
-    public async openExternalUrl(url: string): Promise<void> {
-        await this.utils.openExternal(url);
-    }
-
+    
     public findClosest(value: number, arr: number[]): number {
         if (!arr || arr?.length === 0) {
             return 0;

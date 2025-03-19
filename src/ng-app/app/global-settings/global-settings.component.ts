@@ -54,6 +54,7 @@ export class GlobalSettingsComponent implements OnInit {
     public primeState: string = "iGPU";
     public expandPrimeSelect: Boolean = false;
     public isX11: number = -1;
+    public chargingProfilesUrlHref: string = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
 
     constructor(
         private config: ConfigService,
@@ -207,5 +208,9 @@ export class GlobalSettingsComponent implements OnInit {
 
     public isIGpuAvailable(): boolean {
         return window.power.isIGpuAvailable();
+    }
+    
+    public async openExternalUrl(url: string): Promise<void> {
+        await this.utils.openExternal(url);
     }
 }

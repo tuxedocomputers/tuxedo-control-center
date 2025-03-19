@@ -16,15 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<label class="charging-group-label" *ngIf="chargingProfilesAvailable?.length > 0">
-    <ng-container i18n="@@chargingProfileLabel">Charging profiles</ng-container>
-    <a matTooltip="Open info page..."
-       i18n-matTooltip="@@chargingProfilesOpenInfoTooltip"
-       matTooltipPosition="right"
-       (click)="openExternalUrl(chargingProfilesUrlHref)">
-        <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-    </a>
-</label>
 <div class="charging-profile-note" i18n="@@chargingProfileNoteLabel"
      *ngIf="chargingProfilesAvailable?.length > 0 || chargingPriosAvailable?.length > 0">
     Please note: The system will still show 100% capacity in "Reduced capacity"
@@ -67,7 +58,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 </mat-radio-group>
 
 <div *ngIf="chargeType !== 'Unknown'" class="charging-thresholds">
-    <label class="charging-group-label" i18n="@@chargingThresholdsLabel">Charging thresholds</label>
     <mat-checkbox #enableThresholds color="primary"
         [formControl]="ctrlEnableThresholds"
         (change)="checkboxEnableThresholdsChange($event)"

@@ -222,7 +222,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </svg>
                         </mat-icon>
                         <ng-container i18n="@@cGlobalSettingsBatteryChargingTitle">Battery charging
-                            options</ng-container>
+                            options
+                        </ng-container>
+                        <a matTooltip="Open info page..."
+                            i18n-matTooltip="@@chargingProfilesOpenInfoTooltip"
+                            matTooltipPosition="right"
+                            (click)="$event.stopPropagation(); openExternalUrl(chargingProfilesUrlHref)"
+                            style="display: flex; width: 40px">
+                             <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link">
+                                <use href="./assets/images/icon_info.svg#Icon">
+                                </use>
+                            </svg>
+                         </a>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="content">
