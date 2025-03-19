@@ -45,12 +45,20 @@ export class TgpChartComponent {
     private dataCollectionTimeout: any = null;
 
     @Input() private nvidiaPowerCTRLMaxPowerLimitEvent: EventEmitter<number>;
+    @Input() private updateTGPChartEvent: EventEmitter<void>;
+
 
     public ngOnInit(): void {
         this.nvidiaPowerCTRLMaxPowerLimitEvent.subscribe(
             (data: number): void => {
                 this.nvidiaPowerCTRLMaxPowerLimit = data;
                 this.resetDataCollectionTimeout();
+            }
+        );
+        
+        this.updateTGPChartEvent.subscribe(
+            (): void => {
+                this.updateChart()
             }
         );
     }

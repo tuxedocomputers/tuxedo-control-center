@@ -138,6 +138,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
     private nvidiaPowerCTRLMaxPowerLimitEvent: EventEmitter<number> = new EventEmitter();
+    private updateTGPChartEvent: EventEmitter<void> = new EventEmitter();
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
     public hideCTGP: boolean = true
@@ -917,6 +918,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     nvidiaPowerCTRLMaxPowerLimitChange(): void {
         this.nvidiaPowerCTRLMaxPowerLimitEvent.emit(this.nvidiaPowerCTRLMaxPowerLimit);
+    }
+    
+    public updateTGPChart(): void {
+        this.updateTGPChartEvent.emit()
     }
     
     ngOnDestroy(): void {
