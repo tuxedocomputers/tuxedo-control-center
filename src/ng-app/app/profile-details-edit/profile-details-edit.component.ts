@@ -143,6 +143,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public hideCTGP: boolean = true
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
+    public changedTdpArray: number[] = []
 
     public get hasMaxFreqWorkaround(): boolean { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
@@ -341,7 +342,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.profileFormGroup.patchValue({
                 display: displayFormGroupValue,
             });
-
+            this.viewProfile.display = displayFormGroupValue;
             this.refreshRate = refreshRate;
         }
     }
@@ -656,6 +657,23 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         for (let i: number = 0; i < tdpValues.controls.length; i++) {
             tdpValues.controls[i].updateValueAndValidity();
         }
+        
+        this.updateTdpIndexArray()
+    }
+
+    private updateTdpIndexArray(): void   {
+        this.changedTdpArray = this.viewProfile.odmPowerLimits.tdpValues
+        .map((x: number, i: number): number =>
+            x !==
+            this.profileFormGroup.get("odmPowerLimits.tdpValues").value[i]
+                ? i
+                : -1
+        )
+        .filter((i: number): boolean => i !== -1);
+    }
+    
+    public checkTdpArrayChange(i: number): boolean {
+        return this.changedTdpArray.includes(i)
     }
 
     public inputDisplayBrightnessChange(newValue: number): void {

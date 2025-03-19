@@ -172,7 +172,28 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-checkbox>
                                     </content>
                                 </mat-grid-tile>
-
+        
+                                <mat-grid-tile [colspan]="gridParams.undo">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="
+                                            profileFormGroup
+                                                .get('display')
+                                                .get('useBrightness')
+                                                .reset(
+                                                    viewProfile.display.useBrightness
+                                                )
+                                        "
+                                        [hidden]="
+                                            profileFormGroup
+                                                .get('display')
+                                                .get('useBrightness').value === viewProfile.display.useBrightness
+                                        ">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </mat-grid-tile>
+        
                                 <mat-grid-tile [colspan]="gridParams.header">
                                     <header [ngClass]="{'inactive': !inputUseBrightness.checked}" i18n="@@cProfMgrDetailsBrightnessLabel">Backlight brightness</header>
                                 </mat-grid-tile>
@@ -214,13 +235,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 "
                                                 #ngSliderThumb="matSliderThumb"/>
                                         </mat-slider>
-                                        <button mat-icon-button
-                                            color="primary"
-                                            (click)="profileFormGroup.get('display').get('brightness').reset(viewProfile.display.brightness); inputDisplayBrightnessChange(inputDisplayBrightness.value);"
-                                            [hidden]="!profileFormGroup.get('display').get('brightness').dirty">
-                                            <mat-icon>undo</mat-icon>
-                                        </button>
                                     </content>
+                                </mat-grid-tile>
+                                
+                                <mat-grid-tile [colspan]="gridParams.undo">
+                                    <button mat-icon-button
+                                        color="primary"
+                                        (click)="profileFormGroup.get('display').get('brightness').reset(viewProfile.display.brightness); inputDisplayBrightnessChange(inputDisplayBrightness.value);"
+                                        [hidden]="profileFormGroup.get('display').get('brightness').value === viewProfile.display.brightness">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
                                 </mat-grid-tile>
                             </mat-grid-list>
 
@@ -246,6 +270,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-checkbox>
                                     </content>
                                 </mat-grid-tile>
+        
+                                <mat-grid-tile [colspan]="gridParams.undo">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="
+                                            profileFormGroup
+                                                .get('display')
+                                                .get('useRefRate')
+                                                .reset(viewProfile.display.useRefRate)
+                                        "
+                                        [hidden]="
+                                            profileFormGroup
+                                                .get('display')
+                                                .get('useRefRate').value === viewProfile.display.useRefRate
+                                        ">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </mat-grid-tile>
 
                                 <mat-grid-tile [colspan]="gridParams.header">
                                     <header [ngClass]="{'inactive': !inputUseRefRate.checked}"
@@ -268,6 +311,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-option>
                                         </mat-select>
                                     </content>
+                                </mat-grid-tile>
+                                
+                                <mat-grid-tile [colspan]="gridParams.undo">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="
+                                            profileFormGroup
+                                                .get('display')
+                                                .get('refreshRate')
+                                                .reset(viewProfile.display.refreshRate)
+                                        "
+                                        [hidden]="
+                                            profileFormGroup
+                                                .get('display')
+                                                .get('refreshRate').value === viewProfile.display.refreshRate
+                                        ">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
                                 </mat-grid-tile>
                             </mat-grid-list>
                         </div>
@@ -317,6 +379,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </content>
                                 </mat-grid-tile>
 
+                                <mat-grid-tile [colspan]="gridParams.undo">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="
+                                            profileFormGroup
+                                                .get('fan')
+                                                .get('fanProfile')
+                                                .reset(viewProfile.fan.fanProfile)
+                                        "
+                                        [hidden]="
+                                            profileFormGroup
+                                                .get('fan')
+                                                .get('fanProfile').value === viewProfile.fan.fanProfile
+                                        ">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </mat-grid-tile>
+                                
                                 <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'">
                                     <!-- Minimum fan speed -->
                                     <mat-grid-tile [colspan]="gridParams.header">
@@ -351,12 +432,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     (change)="sliderMinFanChange()"
                                                     #ngSliderThumb="matSliderThumb"/>
                                             </mat-slider>
-                                            <button mat-icon-button color="primary"
-                                                (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
-                                                [hidden]="!profileFormGroup.get('fan').get('minimumFanspeed').dirty">
-                                                <mat-icon>undo</mat-icon>
-                                            </button>
                                         </content>
+                                    </mat-grid-tile>
+                                    
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button color="primary"
+                                            (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
+                                            [hidden]="profileFormGroup.get('fan').get('minimumFanspeed').value === viewProfile.fan.minimumFanspeed">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
                                     </mat-grid-tile>
 
                                     <!-- Maximum fan speed -->
@@ -392,12 +476,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     (change)="sliderMaxFanChange()"
                                                     #ngSliderThumb="matSliderThumb"/>
                                             </mat-slider>
-                                            <button mat-icon-button color="primary"
-                                                (click)="profileFormGroup.get('fan').get('maximumFanspeed').reset(viewProfile.fan.maximumFanspeed)"
-                                                [hidden]="!profileFormGroup.get('fan').get('maximumFanspeed').dirty">
-                                                <mat-icon>undo</mat-icon>
-                                            </button>
                                         </content>
+                                    </mat-grid-tile>
+
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button color="primary"
+                                            (click)="profileFormGroup.get('fan').get('maximumFanspeed').reset(viewProfile.fan.maximumFanspeed)"
+                                            [hidden]="profileFormGroup.get('fan').get('maximumFanspeed').value === viewProfile.fan.maximumFanspeed">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
                                     </mat-grid-tile>
 
                                     <!-- Offset fan speed -->
@@ -441,15 +528,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     matSliderThumb
                                                     formControlName="offsetFanspeed"/>
                                             </mat-slider>
-                                            <button mat-icon-button color="primary"
-                                                (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
-                                                [hidden]="!profileFormGroup.get('fan').get('offsetFanspeed').dirty">
-                                                <mat-icon>undo</mat-icon>
-                                            </button>
                                         </content>
                                     </mat-grid-tile>
+                                    
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button color="primary"
+                                            (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed);"
+                                            [hidden]="profileFormGroup.get('fan').get('offsetFanspeed').value === viewProfile.fan.offsetFanspeed">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
                                 </div>
-
                             </mat-grid-list>
                         </div>
                         
@@ -460,14 +549,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 (chartToggleEvent)="setChartToggleStatus($event)">
                             </app-fan-custom-chart>
                         </div>
-
+        
                         <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'"
                             class="fan-chart-container">
                             <button mat-stroked-button (click)="toggleFanGraphs()">
                                 <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container>
                                 <mat-icon>bar_chart</mat-icon>
                             </button>
-
+        
                             <app-fan-chart *ngIf="showFanGraphs"
                                 [fanProfile]="profileFormGroup.controls.fan.controls.fanProfile.value"
                                 [minFanspeed]="profileFormGroup.get('fan').get('minimumFanspeed').value"
@@ -475,16 +564,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 [offsetFanspeed]="profileFormGroup.get('fan').get('offsetFanspeed').value">
                             </app-fan-chart>
                         </div>
-
                     </mat-card-content>
                 </div>
-
-
+        
+        
                 <!-- Webcam settings -->
                 <div class="tcc-options-group"
                     [hidden]="!compat.hasWebcamControl"
                     [matTooltip]="!compat.hasWebcamControl ? compat.webcamControlCompatibilityMessage: ''">
-
+        
                     <div class="title-row">
                         <hr />
                         <div class="title">
@@ -513,14 +601,32 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-checkbox>
                                     </content>
                                 </mat-grid-tile>
-                            </mat-grid-list>
+                                <mat-grid-tile [colspan]="gridParams.undo">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="
+                                            profileFormGroup
+                                                .get('webcam')
+                                                .get('status')
+                                                .reset(viewProfile.webcam.status)
+                                        "
+                                        [hidden]="
+                                            profileFormGroup
+                                                .get('webcam')
+                                                .get('status').value === viewProfile.webcam.status
+                                        ">
+                                        <mat-icon>undo</mat-icon>
+                                    </button>
+                                </mat-grid-tile>
+                        </mat-grid-list>
                         </div>
                     </mat-card-content>
                 </div>
-
+        
                 <!-- System (aka ODM) control settings -->
                 <div class="tcc-options-group">
-
+        
                     <div class="title-row">
                         <hr />
                         <div class="title">
@@ -565,6 +671,24 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-select>
                                         </content>
                                     </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name')
+                                                    .reset(viewProfile.odmProfile.name)
+                                            "
+                                            [hidden]="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name').value === viewProfile.odmProfile.name
+                                            ">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
                                 </ng-container>
                                 <ng-container *ngIf="hasDeviceSystemProfileInfo">
                                     <mat-grid-tile [colspan]="gridParams.value">
@@ -595,11 +719,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name')
+                                                    .reset(viewProfile.odmProfile.name)
+                                            "
+                                            [hidden]="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name').value === viewProfile.odmProfile.name
+                                            ">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
                                 </ng-container>
                             </div>
 
                         </mat-grid-list>
-                        
+
                         <p class="sub-header" i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</p>
 
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
@@ -643,13 +785,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                         "
                                                         #ngSliderThumb="matSliderThumb"/>
                                                 </mat-slider>
-                                                <button mat-icon-button
-                                                    color="primary"
-                                                    (click)="buttonODMPowerLimitUndo(i)"
-                                                    [hidden]="!getODMTDPControls[i].dirty">
-                                                    <mat-icon>undo</mat-icon>
-                                                </button>
                                             </content>
+                                        </mat-grid-tile>
+                                        
+                                        <mat-grid-tile [colspan]="gridParams.undo">
+                                            <button mat-icon-button
+                                                color="primary"
+                                                (click)="buttonODMPowerLimitUndo(i)"
+                                                [hidden]="!checkTdpArrayChange(i)">
+                                                <mat-icon>undo</mat-icon>
+                                            </button>
                                         </mat-grid-tile>
                                     </div>
                                 </div>
@@ -688,7 +833,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
-
+        
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="
+                                                profileFormGroup
+                                                    .get('cpu')
+                                                    .get('onlineCores')
+                                                    .reset(viewProfile.cpu.onlineCores)
+                                            "
+                                            [hidden]="
+                                                profileFormGroup
+                                                    .get('cpu')
+                                                    .get('onlineCores').value === viewProfile.cpu.onlineCores
+                                            ">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+                                    
                                     <!-- Maximum performance -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
@@ -707,7 +871,28 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-checkbox>
                                         </content>
                                     </mat-grid-tile>
-
+        
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="
+                                                profileFormGroup
+                                                    .get('cpu')
+                                                    .get('useMaxPerfGov')
+                                                    .reset(
+                                                        viewProfile.cpu.useMaxPerfGov
+                                                    )
+                                            "
+                                            [hidden]="
+                                                profileFormGroup
+                                                    .get('cpu')
+                                                    .get('useMaxPerfGov').value === viewProfile.cpu.useMaxPerfGov
+                                            ">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+                                    
                                     <!-- Minimum frequency -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
@@ -744,12 +929,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     (change)="sliderMinFreqChange()"
                                                     #ngSliderThumb="matSliderThumb"/>
                                             </mat-slider>
-                                            <button mat-icon-button
-                                                color="primary"
-                                                (click)="profileFormGroup.get('cpu').get('scalingMinFrequency').reset(viewProfile.cpu.scalingMinFrequency)"
-                                                [hidden]="!profileFormGroup.get('cpu').get('scalingMinFrequency').dirty">
-                                                <mat-icon>undo</mat-icon>
-                                            </button>
                                         </content>
                                         <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                                             <mat-slider #inputScalingMinFrequencyDummy
@@ -771,7 +950,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
-
+                                    
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button
+                                            color="primary"
+                                            (click)="profileFormGroup.get('cpu').get('scalingMinFrequency').reset(viewProfile.cpu.scalingMinFrequency)"
+                                            [hidden]="profileFormGroup.get('cpu').get('scalingMinFrequency').value === viewProfile.cpu.scalingMinFrequency">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+        
                                     <!-- Maximum frequency -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
@@ -817,12 +1005,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     (change)="sliderMaxFreqChange()"
                                                     #ngSliderThumb="matSliderThumb"/>
                                             </mat-slider>
-                                            <button mat-icon-button
-                                                color="primary"
-                                                (click)="profileFormGroup.get('cpu').get('scalingMaxFrequency').reset(viewProfile.cpu.scalingMaxFrequency)"
-                                                [hidden]="!profileFormGroup.get('cpu').get('scalingMaxFrequency').dirty">
-                                                <mat-icon>undo</mat-icon>
-                                            </button>
                                         </content>
                                         <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">
                                             <mat-slider #inputScalingMaxFrequencyDummy
@@ -839,6 +1021,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
+                                    
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button
+                                            color="primary"
+                                            (click)="profileFormGroup.get('cpu').get('scalingMaxFrequency').reset(viewProfile.cpu.scalingMaxFrequency)"
+                                            [hidden]="profileFormGroup.get('cpu').get('scalingMaxFrequency').value === viewProfile.cpu.scalingMaxFrequency">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+        
                                 </div>
                             </mat-grid-list>
                         </div>
@@ -946,6 +1138,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button
+                                            color="primary"
+                                            (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(viewProfile.nvidiaPowerCTRLProfile.cTGPOffset);"
+                                            [hidden]="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').value === viewProfile.nvidiaPowerCTRLProfile.cTGPOffset">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+        
                                 </div>
                             </mat-grid-list>
                             
@@ -982,6 +1183,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card-content>
         </mat-card>
         <br />
-        
+
     </div>
 </div>
+    
