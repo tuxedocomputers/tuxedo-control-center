@@ -182,6 +182,8 @@ $tuxedo-control-center-dark-theme: mat.define-theme(
 
     --mdc-plain-tooltip-supporting-text-color: var(--text-color);
     
+    --mat-list-active-indicator-shape: 0;
+    
     // font with typography does not apply everywhere, changing globally
     font-family: "Titillium Web";
 
