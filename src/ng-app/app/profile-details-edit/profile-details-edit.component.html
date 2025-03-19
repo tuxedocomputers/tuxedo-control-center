@@ -200,22 +200,24 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-grid-tile [colspan]="gridParams.value">
                                     <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ viewProfile.display.brightness }}%</content>
                                     <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">{{ profileFormGroup.get("display").get("brightness").value }}%</content>
-                                    <button mat-icon-button color="primary"
-                                        [hidden]="!editProfile"
-                                        (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
-                                        (mouseup)="buttonRepeatUp()"
-                                        (mouseleave)="buttonRepeatUp()"
-                                        [ngClass]="{'inactive': !inputUseBrightness.checked}">
-                                        <mat-icon>remove</mat-icon>
-                                    </button>
-                                    <button mat-icon-button color="primary"
-                                        [hidden]="!editProfile"
-                                        (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
-                                        (mouseup)="buttonRepeatUp()"
-                                        (mouseleave)="buttonRepeatUp()"
-                                        [ngClass]="{'inactive': !inputUseBrightness.checked}">
-                                        <mat-icon>add</mat-icon>
-                                    </button>
+                                    <div class="increment-decrement-buttons">
+                                        <button mat-icon-button color="primary"
+                                            [hidden]="!editProfile"
+                                            (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                            (mouseup)="buttonRepeatUp()"
+                                            (mouseleave)="buttonRepeatUp()"
+                                            [ngClass]="{'inactive': !inputUseBrightness.checked}">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="primary"
+                                            [hidden]="!editProfile"
+                                            (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                            (mouseup)="buttonRepeatUp()"
+                                            (mouseleave)="buttonRepeatUp()"
+                                            [ngClass]="{'inactive': !inputUseBrightness.checked}">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.input">
                                     <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': !inputUseBrightness.checked}">
@@ -409,18 +411,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 viewProfile.fan.minimumFanspeed }} %</content>
                                                 <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("fan.minimumFanspeed")?.value }}
                                                     %</content>
-                                                <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
-                                                    (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
-                                                    (change)="sliderMinFanChange()">
-                                                    <mat-icon>remove</mat-icon>
-                                                </button>
-                                                <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
-                                                    (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
-                                                    (change)="sliderMinFanChange()">
-                                                    <mat-icon>add</mat-icon>
-                                                </button>
+                                                <div class="increment-decrement-buttons">
+                                                    <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                                        (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                                        (change)="sliderMinFanChange()">
+                                                        <mat-icon>remove</mat-icon>
+                                                    </button>
+                                                    <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                                        (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                                        (change)="sliderMinFanChange()">
+                                                        <mat-icon>add</mat-icon>
+                                                    </button>
+                                                </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile">
@@ -453,18 +457,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 viewProfile.fan.maximumFanspeed }} %</content>
                                                 <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("fan.maximumFanspeed")?.value }}
                                                     %</content>
-                                                <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), -1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
-                                                    (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
-                                                    (change)="sliderMaxFanChange()">
-                                                    <mat-icon>remove</mat-icon>
-                                                </button>
-                                                <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), +1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
-                                                    (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
-                                                    (change)="sliderMaxFanChange()">
-                                                    <mat-icon>add</mat-icon>
-                                                </button>
+                                                <div class="increment-decrement-buttons">
+                                                    <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), -1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
+                                                        (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                                        (change)="sliderMaxFanChange()">
+                                                        <mat-icon>remove</mat-icon>
+                                                    </button>
+                                                    <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), +1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
+                                                        (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
+                                                        (change)="sliderMaxFanChange()">
+                                                        <mat-icon>add</mat-icon>
+                                                    </button>
+                                                </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile">
@@ -509,16 +515,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             }}
                                             %
                                         </content>
-                                        <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
-                                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>remove</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
-                                            (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>add</mat-icon>
-                                        </button>
+                                        <div class="increment-decrement-buttons">
+                                            <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                                (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="primary" [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                                (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile">
@@ -754,20 +762,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <mat-grid-tile [colspan]="gridParams.value">
                                             <content class="value" [hidden]="editProfile">{{ viewProfile.odmPowerLimits.tdpValues[i] }} W</content>
                                             <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
-                                            <button mat-icon-button color="primary"
-                                                [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
-                                                (mouseup)="buttonRepeatUp()"
-                                                (mouseleave)="buttonRepeatUp()">
-                                                <mat-icon>remove</mat-icon>
-                                            </button>
-                                            <button mat-icon-button color="primary"
-                                                [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
-                                                (mouseup)="buttonRepeatUp()"
-                                                (mouseleave)="buttonRepeatUp()">
-                                                <mat-icon>add</mat-icon>
-                                            </button>
+                                            <div class="increment-decrement-buttons">
+                                                <button mat-icon-button color="primary"
+                                                    [hidden]="!editProfile"
+                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
+                                                    (mouseup)="buttonRepeatUp()"
+                                                    (mouseleave)="buttonRepeatUp()">
+                                                    <mat-icon>remove</mat-icon>
+                                                </button>
+                                                <button mat-icon-button color="primary"
+                                                    [hidden]="!editProfile"
+                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
+                                                    (mouseup)="buttonRepeatUp()"
+                                                    (mouseleave)="buttonRepeatUp()">
+                                                    <mat-icon>add</mat-icon>
+                                                </button>
+                                            </div>
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams.input">
                                             <content class="input" [hidden]="!editProfile">
@@ -901,20 +911,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="inputUseMaxPerfGov.checked || editProfile">{{ formatCpuFrequency(viewProfile.cpu.scalingMinFrequency) }} GHz</content>
                                         <content class="value" [hidden]="inputUseMaxPerfGov.checked || !editProfile">{{ formatCpuFrequency(findClosestValue(profileFormGroup.get("cpu.scalingMinFrequency")?.value, selectableFrequencies)) }} GHz</content>
                                         <content class="value" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{'inactive': true}">{{ formatCpuFrequency(findClosestValue(cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1], selectableFrequencies)) }} GHz</content>
-                                        <button mat-icon-button color="primary"
-                                            [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
-                                            (mouseup)="buttonRepeatUp()"
-                                            (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>remove</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="primary"
-                                            [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), +100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
-                                            (mouseup)="buttonRepeatUp()"
-                                            (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>add</mat-icon>
-                                        </button>
+                                        <div class="increment-decrement-buttons">
+                                            <button mat-icon-button color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), +100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
@@ -977,20 +989,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             Boost</content>
                                         <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && hasMaxFreqWorkaround)" [ngClass]="{'inactive': true}">
                                             Boost</content>
-                                        <button mat-icon-button color="primary"
-                                            [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), -100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
-                                            (mouseup)="buttonRepeatUp()"
-                                            (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>remove</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="primary"
-                                            [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), +100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
-                                            (mouseup)="buttonRepeatUp()"
-                                            (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>add</mat-icon>
-                                        </button>
+                                        <div class="increment-decrement-buttons">
+                                            <button mat-icon-button color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), -100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), +100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
@@ -1075,50 +1089,52 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             }}
                                             W</content
                                         >
-                                        <button
-                                            mat-icon-button
-                                            color="primary"
-                                            [hidden]="!editProfile"
-                                            (mousedown)="
-                                                buttonRepeatDown(
-                                                    modifySliderInputFunc(
-                                                        profileFormGroup
-                                                            .get(
-                                                                'nvidiaPowerCTRLProfile'
-                                                            )
-                                                            .get('cTGPOffset'),
-                                                        -1,
-                                                        0,
-                                                        25
+                                        <div class="increment-decrement-buttons">
+                                            <button
+                                                mat-icon-button
+                                                color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="
+                                                    buttonRepeatDown(
+                                                        modifySliderInputFunc(
+                                                            profileFormGroup
+                                                                .get(
+                                                                    'nvidiaPowerCTRLProfile'
+                                                                )
+                                                                .get('cTGPOffset'),
+                                                            -1,
+                                                            0,
+                                                            25
+                                                        )
                                                     )
-                                                )
-                                            "
-                                            (mouseup)="buttonRepeatUp()"
-                                            (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>remove</mat-icon>
-                                        </button>
-                                        <button
-                                            mat-icon-button
-                                            color="primary"
-                                            [hidden]="!editProfile"
-                                            (mousedown)="
-                                                buttonRepeatDown(
-                                                    modifySliderInputFunc(
-                                                        profileFormGroup
-                                                            .get(
-                                                                'nvidiaPowerCTRLProfile'
-                                                            )
-                                                            .get('cTGPOffset'),
-                                                        +1,
-                                                        0,
-                                                        25
+                                                "
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button
+                                                mat-icon-button
+                                                color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="
+                                                    buttonRepeatDown(
+                                                        modifySliderInputFunc(
+                                                            profileFormGroup
+                                                                .get(
+                                                                    'nvidiaPowerCTRLProfile'
+                                                                )
+                                                                .get('cTGPOffset'),
+                                                            +1,
+                                                            0,
+                                                            25
+                                                        )
                                                     )
-                                                )
-                                            "
-                                            (mouseup)="buttonRepeatUp()"
-                                            (mouseleave)="buttonRepeatUp()">
-                                            <mat-icon>add</mat-icon>
-                                        </button>
+                                                "
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile">
