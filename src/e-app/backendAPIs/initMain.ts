@@ -339,12 +339,6 @@ export async function hideCTGP(): Promise<boolean> {
     return await tccDBus.getHideCTGP();
 }
 
-/*
-########################################################
-################ Profile Functions #####################
-########################################################
-*/
-
 async function getProfiles(): Promise<TccProfile[]> {
     let result: TccProfile[] = [];
     if (!await tccDBus.dbusAvailable()) return [];

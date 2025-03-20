@@ -28,7 +28,6 @@ import { aquarisAPIHandle } from '../../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../../common/models/IDbusAPI';
 import type { WebcamConstraints } from '../../common/models/TccWebcamSettings';
 export let tccWindow: Electron.BrowserWindow;
-let aquarisWindow: Electron.BrowserWindow;
 export let webcamWindow: Electron.BrowserWindow;
 let primeWindow: Electron.BrowserWindow;
 
@@ -53,10 +52,7 @@ app.on('will-quit', async (event: Event): Promise<void> => {
         tccWindow.close();
         tccWindow = null;
     }
-    if (aquarisWindow) {
-        aquarisWindow.close();
-        aquarisWindow = null;
-    }
+
     if (!tray.isActive()) {
         // Actually quit
         globalShortcut.unregisterAll();
@@ -243,41 +239,6 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         await tccWindow.loadFile(indexPath);
     }
 }
-
-function createAquarisControl(langId: string): void {
-    const windowWidth: number = 700;
-    const windowHeight: number = 400;
-
-    aquarisWindow = new BrowserWindow({
-        title: 'Aquaris control',
-        width: windowWidth,
-        height: windowHeight,
-        frame: true,
-        resizable: true,
-        minWidth: windowWidth,
-        minHeight: windowHeight,
-        icon: path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'),
-        webPreferences: {
-            sandbox: false,
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js')
-        }
-    });
-
-    // Hide menu bar
-    aquarisWindow.setMenuBarVisibility(false);
-    // Workaround to menu bar appearing after full screen state
-    aquarisWindow.on('leave-full-screen', (): void => { aquarisWindow.setMenuBarVisibility(false); });
-
-    aquarisWindow.on('closed', (): void => {
-        aquarisWindow = null;
-    });
-
-    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', langId, 'index.html');
-    aquarisWindow.loadFile(indexPath, { hash: '/main-gui/aquaris-control' });
-}
-
 export function clearWebcamWindow(): void
 {
     webcamWindow: Electron.BrowserWindow = null;

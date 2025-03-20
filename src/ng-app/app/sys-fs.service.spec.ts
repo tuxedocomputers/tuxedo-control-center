@@ -18,7 +18,6 @@
  */
 
 import { TestBed, TestBedStatic } from '@angular/core/testing';
-
 import { SysFsService } from './sys-fs.service';
 
 describe('SysFsService', (): void => {

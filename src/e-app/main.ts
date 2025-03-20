@@ -33,10 +33,6 @@ require("./backendAPIs/browserWindowsAPI");
 require("./backendAPIs/ipcBackendAPI");
 require("./backendAPIs/webcamAPI");
 
-// replace setImmediate since it seems to cause problems/not exist anymore
-globalThis.setImmediate = ((fn: any, ...args: any[]): NodeJS.Timeout =>
-    global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate;
-
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
 registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);
 registerAPI(ipcMain, tomteAPIHandle, tomteHandlers);

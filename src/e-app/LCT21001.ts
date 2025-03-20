@@ -76,8 +76,6 @@ export class LCT21001 {
 
     private connectedModel: LCTDeviceModel | undefined;
 
-    constructor() {}
-
     public getConnectedModel(): LCTDeviceModel | undefined {
         return this.connectedModel;
     }

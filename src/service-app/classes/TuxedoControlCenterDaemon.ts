@@ -107,8 +107,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // todo: do error handling inside catchError
         await this.handleArgumentProgramFlow().catch((err: unknown): void => this.catchError(err as Error));
 
-        // If program is still running this is the start of the daemon
-
         this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
         this.setupSignalHandling();
@@ -915,17 +913,5 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      */
     public logLine(text: string): void {
         console.log(text);
-        /*try {
-            const logPath = TccPaths.TCCD_LOG_FILE;
-            if (!fs.existsSync(path.dirname(logPath))) {
-                fs.mkdirSync(path.dirname(logPath), { recursive: true });
-            }
-            const date: Date = new Date();
-            const lineInfo: string = date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' (' + process.pid + '): ';
-            const strLogLine = lineInfo + text + '\n';
-            fs.appendFileSync(logPath, strLogLine, { mode: 0o644 });
-        } catch (err: unknown) {
-            console.log('Can\'t write log');
-        }*/
     }
 }

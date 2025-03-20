@@ -66,8 +66,6 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
     ngOnDestroy() { }
     
     // we need those two functions to properly display the overview tiles 
-    // for now they are dublicates of the ones in profile-overview-tile
-    // maybe in the future we will put them in a more centralized spot
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
     
     public formatCpuFrequency(frequency: number): string {

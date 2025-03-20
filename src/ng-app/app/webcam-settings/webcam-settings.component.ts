@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
     WebcamPreset,
     WebcamDeviceInformation,
@@ -27,7 +27,6 @@ import {
     WebcamPath,
 } from "src/common/models/TccWebcamSettings";
 import { UtilsService } from "../utils.service";
-import { ChangeDetectorRef } from "@angular/core";
 import { WebcamSettingsGuard } from "../webcam.guard";
 //import { setInterval, clearInterval } from "timers";
 import {

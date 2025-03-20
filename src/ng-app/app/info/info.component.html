@@ -22,7 +22,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="inner-info">
                 
         <mat-card class="tcc-card">
-            <mat-card-title class="theme-page-title">
+            <mat-card-title>
                 <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
             </mat-card-title>
             <hr />
@@ -60,16 +60,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </tr>
                 </table>
 
-                <!--div class="update-button">
-                    <button mat-raised-button color="basic">
-                        <strong i18n>Update installieren</strong>
-                    </button>
-                </div>
-                <div class="update-button">
-                    <button mat-raised-button color="basic">
-                        <strong i18n>Allg. Systemupdates</strong>
-                    </button>
-                </div-->
             </div>
 
         </mat-card>
@@ -82,43 +72,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <ng-container i18n>Changelog</ng-container>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <!--p>
-                    <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
-                </p>
-                <table class="versions" cellspacing="0">
-                    <tr><td>Node</td><td><strong>{{ nodeVersion }}</strong></td>
-                    <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
-                    <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
-                </table>
-                <br /-->
+
                 <mat-card class="changelog">
                 <markdown src="assets/CHANGELOG.md"></markdown>
                 </mat-card>
             </mat-expansion-panel>
-
-            <!--mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_language.svg#Icon"></use></svg></mat-icon>
-                        <ng-container i18n="@@cInfoLanguagePanelTitle">Language</ng-container>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                
-                <mat-form-field class="language-select">
-                    <mat-select #selectLang [value]="getCurrentLanguageId()">
-                        <mat-select-trigger>
-                            <mat-icon><img [src]="'./assets/images/' + getLanguageData(selectLang.value).img" /></mat-icon>
-                            {{ getLanguageData(selectLang.value).label }}
-                        </mat-select-trigger>
-                        <mat-option
-                            *ngFor="let lang of getLanguagesMenuArray()"
-                            (click)="changeLanguage(lang.id)"
-                            [value]="lang.id">
-                            <mat-icon><img [src]="'./assets/images/' + lang.img" /></mat-icon> {{ lang.label }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-expansion-panel-->
 
             <mat-expansion-panel>
                 <mat-expansion-panel-header>

@@ -31,11 +31,6 @@
     overflow: hidden;
 }
 
-
-// both issues don't seem to remove the scrollbar, even tho content has enough space...
-// don't want to deactivate scrollbar completely, since the content might get longer and need it.
-// never mind, the scrollbar magically vanished...
-// kind of convinced CSS is cursed at this point.
 .mat-mdc-dialog-container
 {
     // https://github.com/twbs/bootstrap/issues/13608

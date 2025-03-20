@@ -61,14 +61,11 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
         if (!this.dataLoaded) {
             // TODO edit error message, since this has nothing to do with dbus directly
-            // We need a blocking dialog box here or everything goes to hell.
+            // We need a blocking dialog box here
             var result: boolean = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
             this.utils.quit();
         }
         window.ipc.onDbusDead( (): void => {
-            // var result = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
-            // this.utils.quit();
-            // it's possible that because of asynchronicity the dbus Dead message is sent more than once
             if(!this.dbusDead)
             {
                 this.dbusDead = true;

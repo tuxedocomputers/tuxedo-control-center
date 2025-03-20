@@ -18,7 +18,7 @@
  */
 
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, observable, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData, IDBusFanData } from '../../common/models/IFanData';
 import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
@@ -29,7 +29,6 @@ import { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
-import { parseDn } from 'builder-util-runtime';
 
 @Injectable({
   providedIn: 'root'

@@ -27,7 +27,6 @@ import { MatInput } from '@angular/material/input';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
-import { ChangeDetectorRef } from '@angular/core';
 import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
 import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 import { IProfileConflictDialogResult } from '../profile-conflict-dialog/profile-conflict-dialog.component';
@@ -194,24 +193,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     }
                     this.utils.pageDisabled = false;
                     break;
-                case InputMode.Edit:
-                    // TODO: Check if used. Probably old edit name. If needed adjust for ID. If not delete.
-                    if (this.config.setCurrentEditingProfile(this.currentProfile.id)) {
-                        this.config.getCurrentEditingProfile().name = this.inputProfileName.value;
-                        if (this.config.writeCurrentEditingProfile()) {
-                            this.inputActive = false;
-                            this.router.navigate(['profile-manager', this.inputProfileName.value], { relativeTo: this.route.parent });
-                        }
-                    }
-                    break;
             }
-        } else {
-            const choice: ConfirmDialogResult = await this.utils.confirmDialog(
-                {
-                    title: $localize `:@@cProfMgrInvalidNameTitle:Invalid input`,
-                    description: $localize `:@@cProfMgrInvalidNameMessage:A name for the profile is required`,
-                    buttonConfirmLabel: 'Ok'
-                  });
         }
     }
 

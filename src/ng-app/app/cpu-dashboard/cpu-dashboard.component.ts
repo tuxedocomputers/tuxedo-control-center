@@ -128,13 +128,10 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.iGpuAvailable = window.power.isIGpuAvailable();
     }
 
-    // prevents black window being shown for a moment before view has loaded. maybe greater timeout is needed on some devices
     public async ngAfterViewInit(): Promise<void> {
-        setTimeout(async (): Promise<void> => {
         window.ipc.showTccWindow();
-        }, 30);
     }
-
+    
     private setValuesFromRoute(): void {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;

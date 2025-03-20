@@ -231,14 +231,6 @@ contextBridge.exposeInMainWorld(
     }
 );
 
-// todo: rename or remove
-contextBridge.exposeInMainWorld(
-    'stuff',
-    {
-        logStuff: (stuff: string): void => ipcRenderer.send('log-stuff', stuff),
-    }
-);
-
 contextBridge.exposeInMainWorld(
     'pgms',
     {

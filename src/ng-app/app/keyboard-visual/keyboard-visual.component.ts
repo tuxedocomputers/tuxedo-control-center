@@ -42,8 +42,6 @@ export class KeyboardVisualComponent implements OnInit {
     public divHeight: number;
     private viewInitialized: boolean = false;
 
-    // todo: constructor is unnecessary
-    constructor() {}
 
     ngOnInit(): void {
         this.selectedZones = Array.from(

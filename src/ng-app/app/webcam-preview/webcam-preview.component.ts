@@ -18,7 +18,6 @@
  */
 
 import {
-    ChangeDetectorRef,
     Component,
     ElementRef,
     OnInit,
@@ -33,8 +32,6 @@ import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
     standalone: false
 })
 export class WebcamPreviewComponent implements OnInit {
-    constructor() {}
-
     @ViewChild("video", { static: true })
     public video: ElementRef;
     mediaDeviceStream: MediaStream;

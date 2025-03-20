@@ -21,7 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="inner-support-settings-edit">
 
         <mat-card class="tcc-card card-support">
-            <mat-card-title class="theme-page-title">
+            <mat-card-title>
                 <ng-container i18n>TUXEDO Support</ng-container>
             </mat-card-title>
             <hr />
@@ -70,8 +70,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-vertical-stepper [linear]="true" #systeminfoStepper>
                         <mat-step [stepControl]="formTicketNumber">
                             <ng-template matStepLabel>
-                                <ng-container i18n>Step1: Input ticket number</ng-container><!--{{ formTicketNumber.valid ? ': ' : '' }}
-                                <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>-->
+                                <ng-container i18n>Step1: Input ticket number</ng-container>
                             </ng-template>
                             
                             <form [formGroup]="formTicketNumber">

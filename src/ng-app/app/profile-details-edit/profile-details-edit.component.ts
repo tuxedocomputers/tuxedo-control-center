@@ -284,12 +284,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         window.ipc.onWakeupFromSuspend((): void => {
                 // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
                 this.showFanGraphs = false;
-                /*
-                // todo: fix
-                if (this.sliderComponent) {
-                    this.sliderComponent.showFanGraphs = false;
-                }
-                */
             });
     }
 
@@ -365,18 +359,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput(): void {
-        /*
-        // todo: fix
-        if (this.sliderComponent) {
-            const customFanCurveValues: ITccFanProfile =
-                this.sliderComponent.getFanFormGroupValues();
-            this.profileFormGroup
-                .get("fan")
-                .get("customFanCurve")
-                .patchValue(customFanCurveValues);
-        }
-        */
-
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
@@ -415,16 +397,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 this.tccDBus.setDisplayBrightnessGnome(activeProfile.display.brightness);
             }
         }
-
-        /*
-        // todo: fix
-        if (this.sliderComponent) {
-            const customFanCurveValues: AbstractControl = this.profileFormGroup
-                .get("fan")
-                .get("customFanCurve");
-            this.sliderComponent.patchFanFormGroup(customFanCurveValues);
-        }
-        */
 
         this.overwriteDefaultRefreshRateValue();
         this.tempCustomFanCurve = undefined;
@@ -499,7 +471,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
         let newValue: number = cpuGroup.controls.scalingMinFrequency.value;
 
-        // Ensure it's below chosen max value
         if (newValue > cpuGroup.controls.scalingMaxFrequency.value) {
             newValue = cpuGroup.controls.scalingMaxFrequency.value;
         }
@@ -519,7 +490,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
         let newValue: number = cpuGroup.controls.scalingMaxFrequency.value;
 
-        // Ensure it's above chosen min value
         if (newValue < cpuGroup.controls.scalingMinFrequency.value) {
             newValue = cpuGroup.controls.scalingMinFrequency.value;
         }
@@ -567,14 +537,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
 
-        // Find largest allowed min value
         const minValue: number = this.odmPowerLimitInfos[sliderIndex].min;
-
-        /*for (let i = 0; i < sliderIndex; ++i) {
-            if (minValue === undefined || tdpValues.controls[i].value > minValue) {
-                minValue = tdpValues.controls[i].value;
-            }
-        }*/
 
         return minValue;
     }
@@ -583,14 +546,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
 
-        // Find smallest allowed max value
         const maxValue: number = this.odmPowerLimitInfos[sliderIndex].max;
-
-        /*for (let i = sliderIndex + 1; i < tdpValues.controls?.length; ++i) {
-            if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
-                maxValue = tdpValues.controls[i].value;
-            }
-        }*/
 
         return maxValue;
     }
@@ -662,6 +618,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.updateTdpIndexArray()
     }
 
+    
     private updateTdpIndexArray(): void   {
         this.changedTdpArray = this.viewProfile.odmPowerLimits.tdpValues
         .map((x: number, i: number): number =>
@@ -703,49 +660,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public getFanProfileNames(): string[] {
         return this.defaultFanProfiles.map((fanProfile: ITccFanProfile): string => fanProfile.name);
     }
-
-    // public getDisplayModesString(): string[]
-    // {
-    //     let displayModesString = [];
-    //     if(!this.displayModes)
-    //     {
-    //         return [undefined];
-    //     }
-    //     let displayModes = this.getDisplayModes();
-    //     for (let i = 0; i < displayModes?.length; i++)
-    //     {
-    //         displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
-    //     }
-    //     return displayModesString;
-    // }
-
-    // public getActiveDisplayModeString(): string
-    // {
-    //     if(this.displayModes != undefined)
-    //    {
-    //     return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
-    //    }
-    //    else
-    //    {
-    //     return "";
-    //    }
-    // }
-
-    // public setProfileResolutionByString(event)
-    // {
-    //     if(event && event.value)
-    //     {
-    //         let res = event.value.split("x");
-    //         let xRes = parseInt(res[0]);
-    //         let yRes = parseInt(res[1]);
-    //         this.profileFormGroup.controls.display.markAsDirty();
-    //         let displayObject = {xResolution: 0, yResolution: 0};
-    //         displayObject.xResolution = xRes;
-    //         displayObject.yResolution = yRes;
-    //         this.profileFormGroup.controls.display.patchValue(displayObject);
-    //     }
-    // }
-
+    
     public getDisplayModes(): IDisplayMode[] {
         if (!this.displayModes) {
             return undefined;
@@ -835,14 +750,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifySliderInputFunc(slider: any, offset: number, min: number, max: number, hackTrigger?: any, hackArg?: any): () => void {
+    public modifySliderInputFunc(slider: any, offset: number, min: number, max: number): () => void {
         return (): void => {
             this.modifySliderInput(slider, offset, min, max);
-            /* todo: refactor
-             * Note: hackTrigger added as workaround for change event not triggering on
-             *       setValue, should be removed as soon as it works again.
-             */
-            if (hackTrigger !== undefined) { hackTrigger.call(this, hackArg); }
         }
     }
 
@@ -898,20 +808,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             tdpValues.controls[sliderIndex].markAsDirty();
         }
     }
-
-    // todo: is this function used?
-    private setFormGroupValue(groupName: string, value: any): boolean {
-        let valueChanged: boolean = false;
-        if (JSON.stringify(value) !== JSON.stringify(this.viewProfile[groupName])) {
-            valueChanged = true;
-        }
-        this.profileFormGroup.get(groupName).setValue(value);
-        if (valueChanged) {
-            this.profileFormGroup.get(groupName).markAsDirty();
-        }
-        return valueChanged;
-    }
-
+    
     setVerticalSliderDirty(): void {
         this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
     }
@@ -923,7 +820,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public updateTGPChart(): void {
         this.updateTGPChartEvent.emit()
     }
-    
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
         if (!this.fansMinSpeedSubscription.closed) {

@@ -21,11 +21,6 @@ const path: any = require("path");
 import { SysFsController } from './SysFsController';
 import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyNumListExplicit, SysFsPropertyString } from './SysFsProperties';
 
-export enum PowerSupplyType {
-    Mains = 'Mains',
-    Battery = 'Battery',
-}
-
 /**
  * Definitions as of 2023-08-11 from
  *   https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power

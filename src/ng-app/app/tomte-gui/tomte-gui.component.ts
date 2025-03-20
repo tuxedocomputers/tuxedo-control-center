@@ -43,7 +43,7 @@ export class TomteGuiComponent implements OnInit {
     tomteListArray: ITomteModule[] = [];
     moduleToolTips: Map<string, string> = new Map();
     columnsToDisplay: string[] = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
-    // TODO maybe there is a better way to handle this too :)
+    // TODO maybe there is a better way to handle this
     tomteMode: string = "";
     tomteModes: string[] =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
     // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
@@ -138,16 +138,9 @@ export class TomteGuiComponent implements OnInit {
         }
     }
 
-    /*
-========================================================================
-===================       UTILITY FUNCTIONS          ===================
-========================================================================
-*/
-
 /*
         Returns properly translated tooltip for the sliders in each of their proper conditions
 */
-
 // todo: maybe refactor
     public getSliderToolTip(whichButton: string, prerequisite: string, blocked: boolean, installed: boolean): string
     {
@@ -263,13 +256,7 @@ export class TomteGuiComponent implements OnInit {
             return false;
         }
     }
-
-/*
-========================================================================
-===================     BUTTON CLICK FUNCTIONS       ===================
-========================================================================
-*/
-
+    
     /*
         Tries to completely restore tomte to default configuration.
         Throws exhaustive error message if it fails.

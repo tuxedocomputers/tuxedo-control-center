@@ -17,10 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { fromEvent, Subscription } from 'rxjs';
+import { Component, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-root',

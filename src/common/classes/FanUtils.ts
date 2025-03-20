@@ -63,10 +63,6 @@ export function formatTemp(value: number, usingFahrenheit: boolean): string {
     }
 }
 
-export function formatSpeed(value: number | string): string {
-    return `${value} %`;
-}
-
 /**
  * Ensure minimum fan speed if temperature is high
  */

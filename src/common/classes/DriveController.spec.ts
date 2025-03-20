@@ -72,27 +72,10 @@ describe('DriveController', (): void => {
         mockfs.restore();
     });
 
-    /*it('get devices', async () => {
-        let d = await DriveController.getDrives();
-        console.log(d);
-    });*/
-
-    /*it('get devices without loop drives', async () => {
-        let d = await DriveController.getDrives(false);
-        console.log(d);
-    });*/
-
-    /*it('get parent info', async () => {
-        const parent = await DriveController.getDeviceInfo("/sys/class/block/sda");
-        console.log(parent);
-        expect(parent.isParent).toBe(true);
-    });*/
-
     it('get child info', async (): Promise<void> => {
         spyOn(child_process, "execSync").and.returnValue(Buffer.from("ext4"));
 
         const drive: IDrive = await DriveController.getDeviceInfo("/sys/class/block/sda1");
-        //console.log(drive);
         expect(drive.isParent).toBe(false);
         expect(drive.crypt).toBe(false);
         expect(drive.size).toBe(sizeDriveSda1);
@@ -102,7 +85,6 @@ describe('DriveController', (): void => {
         spyOn(child_process, "execSync").and.returnValue(Buffer.from("crypto_LUKS"));
 
         const drive: IDrive = await DriveController.getDeviceInfo("/sys/class/block/sda2");
-        //console.log(drive);
         expect(drive.isParent).toBe(false);
         expect(drive.crypt).toBe(true);
     });

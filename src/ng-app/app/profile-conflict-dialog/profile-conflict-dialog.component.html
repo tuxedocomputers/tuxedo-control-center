@@ -21,45 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <h1 mat-dialog-title i18n="@@@cProfMgrConflictWindowTitle"> Importing Conflict </h1>
 </div>
 <div mat-dialog-content >
-    <!--<p class="dialog-message"> There has been an ID conflict between the following two profiles: </p>
-    -->
-    <!--
-        add names of old and new profile and a few infos maybe
-        just copying the html and css of the profile overview etc sadly didn't turn out to be 
-        that easy. So I need to think about something!
 
-        Alright, looking at default profiles, I will display the following information:
-
-        profile.name: string
-        profile.description: string 
-         if profile.display.useBrightness: boolean
-            then profile.display.brightness: int
-
-        cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: undefined,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-
-        webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Silent',
-        minimumFanspeed: 0,
-        maximumFanspeed: 100,
-        offsetFanspeed: 0
-    },
-
-    => das lassen wir weg
-    odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [5, 10, 15] }
-    -->
 <div class="profile-compare-box">
     <div style="float:left;">  
         

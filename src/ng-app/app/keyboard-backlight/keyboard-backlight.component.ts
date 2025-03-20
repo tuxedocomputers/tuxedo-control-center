@@ -26,7 +26,6 @@ import {
     KeyboardBacklightStateInterface,
 } from "../../../common/models/TccSettings";
 import { filter, take } from "rxjs/operators";
-import { MatSlider } from "@angular/material/slider";
 import { interval, Subscription } from "rxjs";
 import {
     GridParamsBacklight,

@@ -18,7 +18,6 @@
  */
 
 import { TestBed, TestBedStatic } from '@angular/core/testing';
-
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 describe('TccDbusClientService', (): void => {

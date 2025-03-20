@@ -26,7 +26,7 @@ import {
     SysFsPropertyString,
     SysFsPropertyStringList,
 } from "../../common/classes/SysFsProperties";
-import { ITccODMPowerLimits, ITccODMProfile } from "src/common/models/TccProfile";
+import { ITccODMProfile } from "src/common/models/TccProfile";
 
 export class ODMProfileWorker extends DaemonWorker {
     private static tuxedoPlatformProfile: SysFsPropertyString = new SysFsPropertyString(

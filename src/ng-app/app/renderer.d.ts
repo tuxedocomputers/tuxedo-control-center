@@ -101,12 +101,6 @@ interface WEBCAM
     onSettingWebcamWithLoading: (callback: (event: any, config: WebcamConstraints) => void) => void,
     }
 
-// todo: remove or rename
-interface STUFF
-{
-    logStuff: (stuff : string) => void,
-}
-
 interface CPU
 {
     getGeneralCpuInfoAsync: () => Promise<IGeneralCPUInfo>,
@@ -166,7 +160,6 @@ interface PGMS
       backlight: BACKLIGHT,
       config: CONFIG,
       comp: COMP,
-      stuff: STUFF,
       vendor: VENDOR,
       power: POWER,
       pgms: PGMS,
