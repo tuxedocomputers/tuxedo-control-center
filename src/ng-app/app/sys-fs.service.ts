@@ -63,7 +63,7 @@ export class SysFsService implements OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }

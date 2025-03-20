@@ -34,10 +34,10 @@ import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 export class WebcamPreviewComponent implements OnInit {
     @ViewChild("video", { static: true })
     public video: ElementRef;
-    mediaDeviceStream: MediaStream;
-    spinnerActive: boolean = false;
+    private mediaDeviceStream: MediaStream;
+    public spinnerActive: boolean = false;
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         window.webcam.onSettingWebcamWithLoading(async (event: any, config: WebcamConstraints): Promise<void> => {
             document.getElementById("video").style.visibility = "hidden";
                 this.spinnerActive = true;

@@ -33,6 +33,6 @@ export class ChargingPriorityController extends SysFsController {
         );
     }
 
-    readonly chargingPriosAvailable: SysFsPropertyStringList;
-    readonly chargingPrio: SysFsPropertyString;
+    public readonly chargingPriosAvailable: SysFsPropertyStringList;
+    public readonly chargingPrio: SysFsPropertyString;
 }

@@ -23,7 +23,7 @@ import { execCommandAsync, delay } from "../../common/classes/Utils";
 import * as fs from "fs";
 
 export class PrimeWorker extends DaemonWorker {
-    primeSupported: Boolean;
+    private primeSupported: Boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, "PrimeWorker", tccd);

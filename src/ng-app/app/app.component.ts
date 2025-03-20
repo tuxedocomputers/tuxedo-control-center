@@ -29,7 +29,7 @@ import { UtilsService } from './utils.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    @HostBinding('class') componentThemeCssClass;
+    @HostBinding('class') private componentThemeCssClass;
 
     private subscriptions: Subscription = new Subscription();
 

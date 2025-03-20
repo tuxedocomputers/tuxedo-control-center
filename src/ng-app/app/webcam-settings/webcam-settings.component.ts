@@ -542,7 +542,7 @@ export class WebcamSettingsComponent implements OnInit {
     
     // setting media stream with ngDoCheck() because getUserMedia() with "this.video.srcObject = stream" is not enough for <video>.
     // using [srcObject]="mediaDeviceStream" instead of video.srcObject to avoid interruptions in the preview
-    ngDoCheck(): void {
+    public ngDoCheck(): void {
         this.mediaDeviceStream = this.webcamService.getMediaStream()
     }
 

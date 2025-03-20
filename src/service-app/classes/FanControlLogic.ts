@@ -110,10 +110,10 @@ export class FanControlLogic {
      * Minimum fan speed hardware is capable of
      */
     private _fansMinSpeedHWLimit: number = 0;
-    get fansMinSpeedHWLimit(): number {
+    private get fansMinSpeedHWLimit(): number {
         return this._fansMinSpeedHWLimit;
     }
-    set fansMinSpeedHWLimit(speed: number) {
+    private set fansMinSpeedHWLimit(speed: number) {
         if (speed === undefined) {
             this._fansMinSpeedHWLimit = 0;
         } else if (speed < 0) {
@@ -129,10 +129,10 @@ export class FanControlLogic {
      * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
      */
     private _fansOffAvailable: boolean = true;
-    get fansOffAvailable(): boolean {
+    public get fansOffAvailable(): boolean {
         return this._fansOffAvailable;
     }
-    set fansOffAvailable(fansOffAvailableNew: boolean) {
+    public set fansOffAvailable(fansOffAvailableNew: boolean) {
         if (fansOffAvailableNew === undefined) {
             this._fansOffAvailable = true;
         } else {
@@ -144,10 +144,10 @@ export class FanControlLogic {
      * Minimum fan speed returned by logic
      */
     private _minimumFanspeed: number = 0;
-    get minimumFanspeed(): number {
+    public get minimumFanspeed(): number {
         return this._minimumFanspeed;
     }
-    set minimumFanspeed(speed: number) {
+    public set minimumFanspeed(speed: number) {
         if (speed === undefined) {
             this._minimumFanspeed = 0;
         } else if (speed < 0) {
@@ -160,10 +160,10 @@ export class FanControlLogic {
     }
 
     private _maximumFanspeed: number = 100;
-    get maximumFanspeed(): number {
+    public get maximumFanspeed(): number {
         return this._maximumFanspeed;
     }
-    set maximumFanspeed(speed: number) {
+    public set maximumFanspeed(speed: number) {
         if (speed === undefined) {
             this._maximumFanspeed = 100;
         } else if (speed < 0) {
@@ -179,10 +179,10 @@ export class FanControlLogic {
      * Number added to table value providing an offset fan table lookup
      */
     private _offsetFanspeed: number = 0;
-    get offsetFanspeed(): number {
+    public get offsetFanspeed(): number {
         return this._offsetFanspeed;
     }
-    set offsetFanspeed(speed: number) {
+    public set offsetFanspeed(speed: number) {
         if (speed === undefined) {
             this._offsetFanspeed = 0;
         } else if (speed < -100) {

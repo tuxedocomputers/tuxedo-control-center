@@ -146,7 +146,7 @@ export class StateService implements OnDestroy {
     return this.batteryProfileId
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     if (this.updateInterval) {
       clearInterval(this.updateInterval);

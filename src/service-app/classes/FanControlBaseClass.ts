@@ -88,24 +88,24 @@ export abstract class FanControlBaseClass {
         return new SysFsPropertyString(path.join(hwmonPath, fileName + suffix));
     }
 
-    abstract initFanControl(fanWriteAvailable: boolean): Promise<void>;
+    public abstract initFanControl(fanWriteAvailable: boolean): Promise<void>;
 
-    abstract mapLogicToFans(nrFans: number): Promise<boolean>;
+    public abstract mapLogicToFans(nrFans: number): Promise<boolean>;
 
-    abstract getFanSpeedPercent(fanIndex: number): Promise<number>;
+    public abstract getFanSpeedPercent(fanIndex: number): Promise<number>;
 
-    abstract clearTempValues(): Promise<void>;
+    public abstract clearTempValues(): Promise<void>;
 
-    abstract getNumberFans(): Promise<number>;
+    public abstract getNumberFans(): Promise<number>;
 
-    abstract checkAvailable(): Promise<[boolean, boolean]>;
+    public abstract checkAvailable(): Promise<[boolean, boolean]>;
 
-    abstract getFanTemperature(fanIndex: number): Promise<number>;
+    public abstract getFanTemperature(fanIndex: number): Promise<number>;
 
-    abstract writeFanSpeed(
+    public abstract writeFanSpeed(
         fanIndex: number,
         calculatedSpeed: number
     ): Promise<void>;
 
-    abstract exit(): Promise<void>;
+    public abstract exit(): Promise<void>;
 }

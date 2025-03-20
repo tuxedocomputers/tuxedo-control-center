@@ -55,7 +55,7 @@ export class SupportComponent implements OnInit {
     private utils: UtilsService
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.updateAnydeskInstallStatus();
     this.updateWebFAICreatorInstallStatus();
     this.updateProgressStatus();

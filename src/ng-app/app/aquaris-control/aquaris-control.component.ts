@@ -98,17 +98,17 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         this.aquaris = window.aquarisAPI;
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         setTimeout(async (): Promise<void> => {
             window.ipc.showTccWindow();
         }, 200);
     }
 
-    ngAfterContentInit(): void {
+    public ngAfterContentInit(): void {
         this.initCommunication();
     }
 
-    async initCommunication(): Promise<void> {
+    private async initCommunication(): Promise<void> {
         this.deviceNameMap = await this.getUserDeviceNames();
         this.isConnected = await this.aquaris.isConnected();
         if (!this.isConnected) {
@@ -120,7 +120,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         this.connectedTimeout = setInterval(async (): Promise<void> => { await this.periodicUpdate(); }, 3000);
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         if (this.connectedTimeout !== undefined) {
             clearInterval(this.connectedTimeout);
         }

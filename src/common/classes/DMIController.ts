@@ -42,9 +42,9 @@ export class DMIController extends SysFsController {
         );
     }
 
-    readonly boardName: SysFsPropertyString;
-    readonly productSKU: SysFsPropertyString;
-    readonly boardVendor: SysFsPropertyString;
-    readonly chassisVendor: SysFsPropertyString;
-    readonly sysVendor: SysFsPropertyString;
+    public readonly boardName: SysFsPropertyString;
+    public readonly productSKU: SysFsPropertyString;
+    public readonly boardVendor: SysFsPropertyString;
+    public readonly chassisVendor: SysFsPropertyString;
+    public readonly sysVendor: SysFsPropertyString;
 }

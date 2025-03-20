@@ -48,52 +48,52 @@ export class ConfigHandler {
         this.fantablesFileMod = 0o644;
     }
 
-    get pathSettings(): string { return this._pathSettings; }
-    set pathSettings(filename: string) { this._pathSettings = filename; }
-    get pathProfiles(): string { return this._pathProfiles; }
-    set pathProfiles(filename: string) { this._pathProfiles = filename; }
-    get pathWebcam(): string { return this._pathWebcam; }
-    set pathWebcam(filename: string) { this._pathWebcam = filename; }
-    get pathV4l2Names(): string { return this._pathV4l2Names; }
-    set pathV4l2Names(filename: string) { this._pathV4l2Names = filename; }
-    get pathAutosave(): string { return this._pathAutosave; }
-    set pathAutosave(filename: string) { this._pathAutosave = filename; }
-    get pathFanTables(): string { return this._pathFantables; }
-    set pathFanTables(filename: string) { this._pathFantables = filename; }
+    public get pathSettings(): string { return this._pathSettings; }
+    public set pathSettings(filename: string) { this._pathSettings = filename; }
+    public get pathProfiles(): string { return this._pathProfiles; }
+    public set pathProfiles(filename: string) { this._pathProfiles = filename; }
+    public get pathWebcam(): string { return this._pathWebcam; }
+    public set pathWebcam(filename: string) { this._pathWebcam = filename; }
+    public get pathV4l2Names(): string { return this._pathV4l2Names; }
+    public set pathV4l2Names(filename: string) { this._pathV4l2Names = filename; }
+    public get pathAutosave(): string { return this._pathAutosave; }
+    public set pathAutosave(filename: string) { this._pathAutosave = filename; }
+    public get pathFanTables(): string { return this._pathFantables; }
+    public set pathFanTables(filename: string) { this._pathFantables = filename; }
 
-    readSettings(filePath: string = this.pathSettings): ITccSettings {
+    public readSettings(filePath: string = this.pathSettings): ITccSettings {
         return this.readConfig<ITccSettings>(filePath);
     }
 
-    async readSettingsAsync(filePath: string = this.pathSettings): Promise<ITccSettings> {
+    public async readSettingsAsync(filePath: string = this.pathSettings): Promise<ITccSettings> {
         return await this.readConfigAsync<ITccSettings>(filePath);
     }
 
-    readWebcamSettings(filePath: string = this.pathWebcam): WebcamPreset[] {
+    public readWebcamSettings(filePath: string = this.pathWebcam): WebcamPreset[] {
         return this.readConfig<WebcamPreset[]>(filePath);
     }
 
-    readV4l2Names(filePath: string = this._pathV4l2Names): string[][] {
+    public readV4l2Names(filePath: string = this._pathV4l2Names): string[][] {
         return this.readConfig<string[][]>(filePath);
     }
 
-    writeSettings(settings: ITccSettings, filePath: string = this.pathSettings): void {
+    public writeSettings(settings: ITccSettings, filePath: string = this.pathSettings): void {
         this.writeConfig<ITccSettings>(settings, filePath, {
             mode: this.settingsFileMod,
         });
     }
 
-    writeWebcamSettings(settings: WebcamPreset[], filePath: string = this.pathSettings): void {
+    public writeWebcamSettings(settings: WebcamPreset[], filePath: string = this.pathSettings): void {
         this.writeConfig<WebcamPreset[]>(settings, filePath, {
             mode: this.settingsFileMod,
         });
     }
 
-    async writeSettingsAsync(settings: ITccSettings, filePath: string = this.pathSettings): Promise<void> {
+    public async writeSettingsAsync(settings: ITccSettings, filePath: string = this.pathSettings): Promise<void> {
         await this.writeConfigAsync<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
     }
 
-    recursivelyFillObject(obj: object, defaultObj: object): boolean {
+    private recursivelyFillObject(obj: object, defaultObj: object): boolean {
         let objModified: boolean = false;
         for (const key in defaultObj) {
             if (defaultObj[key] !== undefined && obj[key] === undefined) {
@@ -108,7 +108,7 @@ export class ConfigHandler {
         }
         return objModified;
     }
-    readProfiles(device: TUXEDODevice, filePath: string = this.pathProfiles): ITccProfile[] {
+    public readProfiles(device: TUXEDODevice, filePath: string = this.pathProfiles): ITccProfile[] {
         let idUpdated: boolean = false;
         const profiles: ITccProfile[] = this.readConfig<ITccProfile[]>(filePath).map((profile: ITccProfile): ITccProfile => {
             if (profile.id === undefined) {
@@ -146,23 +146,23 @@ export class ConfigHandler {
         return profiles;
     }
 
-    writeProfiles(profiles: ITccProfile[], filePath: string = this.pathProfiles): void {
+    public writeProfiles(profiles: ITccProfile[], filePath: string = this.pathProfiles): void {
         this.writeConfig<ITccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
     }
 
-    readAutosave(filePath: string = this.pathAutosave): ITccAutosave {
+    public readAutosave(filePath: string = this.pathAutosave): ITccAutosave {
         return this.readConfig<ITccAutosave>(filePath);
     }
 
-    writeAutosave(autosave: ITccAutosave, filePath: string = this.pathAutosave): void {
+    public writeAutosave(autosave: ITccAutosave, filePath: string = this.pathAutosave): void {
         this.writeConfig<ITccAutosave>(autosave, filePath, { mode: this.autosaveFileMod });
     }
 
-    readFanTables(filePath: string = this.pathFanTables): ITccFanProfile[] {
+    public readFanTables(filePath: string = this.pathFanTables): ITccFanProfile[] {
         return this.readConfig<ITccFanProfile[]>(filePath);
     }
 
-    writeFanTables(fanTables: ITccFanProfile[], filePath: string = this.pathFanTables): void {
+    public writeFanTables(fanTables: ITccFanProfile[], filePath: string = this.pathFanTables): void {
         this.writeConfig<ITccFanProfile[]>(fanTables, filePath, { mode: this.fantablesFileMod });
     }
 

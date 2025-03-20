@@ -28,11 +28,11 @@ import { ConfigService } from "../config.service";
     standalone: false
 })
 export class PrimeDialogComponent implements OnInit {
-    primeSelectMode: string;
-    loadingBar: boolean = false;
-    langId: string;
+    private primeSelectMode: string;
+    private loadingBar: boolean = false;
+    public langId: string;
 
-    dialogStatus: string = "info";
+    public dialogStatus: string = "info";
 
     constructor(
         private config: ConfigService,

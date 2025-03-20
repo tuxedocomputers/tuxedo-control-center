@@ -98,7 +98,7 @@ export class GpuInfoWorker extends DaemonWorker {
         return amountIntelIGpuDevices === 1 ? intelIGpuDevices : undefined;
     }
 
-    async getIGPUValues(): Promise<void> {
+    public async getIGPUValues(): Promise<void> {
         const iGpuValues: IiGpuInfo = {
             ...this.getDefaultValuesIGpu(),
         };
@@ -113,7 +113,7 @@ export class GpuInfoWorker extends DaemonWorker {
         this.tccd.dbusData.iGpuInfoValuesJSON = iGpuValuesJSON;
     }
 
-    async getIntelIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
+    public async getIntelIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
         if (!this.intelIGpuDrmPath) {
             return iGpuValues;
         }
@@ -145,7 +145,7 @@ export class GpuInfoWorker extends DaemonWorker {
         return this.intelPowerWorker.getCurrentPower();
     }
 
-    async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
+    public async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
         if (this.amdIGpuHwmonPath) {
             return await this.readAmdIGpuValues(
                 iGpuValues,
@@ -168,7 +168,7 @@ export class GpuInfoWorker extends DaemonWorker {
         return iGpuValues;
     }
 
-    async readAmdIGpuValues(
+    public async readAmdIGpuValues(
         iGpuValues: IiGpuInfo,
         amdIGpuHwmonPath: string
     ): Promise<IiGpuInfo> {
@@ -216,7 +216,7 @@ export class GpuInfoWorker extends DaemonWorker {
         return amountAmdIGpuDevices === 1 ? amdIGpuDevices : undefined;
     }
 
-    async getDGPUValues(): Promise<void> {
+    public async getDGPUValues(): Promise<void> {
         let dGpuValues: IdGpuInfo = this.getDefaultValuesDGpu();
         const nvidiaDevices: number = this.availability.getNvidiaDGpuCount();
         const amdDGpuDevices: number = this.availability.getAmdDGpuCount();

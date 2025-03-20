@@ -34,7 +34,7 @@ export class WebcamSettingsGuard
     implements CanDeactivate<CanComponentDeactivate>
 {
     constructor(private utils: UtilsService) {}
-    loading: boolean = false;
+    private loading: boolean = false;
 
     askUnsavedPreset(): Promise<ConfirmDialogResult> {
         const config: ConfirmDialogData = {

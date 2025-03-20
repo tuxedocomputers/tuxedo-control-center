@@ -67,7 +67,7 @@ export class TgpChartComponent {
         this.initChart();
     }
 
-    initChart(): void {
+    public initChart(): void {
         // todo: deduplicate
         const textColor: string = getComputedStyle(
             document.documentElement

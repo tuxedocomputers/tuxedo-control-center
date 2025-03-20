@@ -108,13 +108,13 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.thresholdPresets.set(BatteryThresholdOptions.Stationary, new ThresholdPresets(40, 80));
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.periodicUpdate().then((): void => {
             this.timeout = setInterval(async (): Promise<void> => { await this.periodicUpdate(); }, this.updateInterval);
         });
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         if (this.timeout !== undefined) {
             clearInterval(this.timeout);
         }

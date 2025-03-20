@@ -40,12 +40,12 @@ import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 })
 export class ProfileOverviewTileComponent implements OnInit {
 
-    @Input() profile: ITccProfile;
-    @Input() hoverEffect: boolean = false;
-    @Input() isSelected: boolean = false;
-    @Input() visible: boolean = true;
-    @Input() active: boolean = false;
-    @Input() used: boolean = false;
+    @Input() public profile: ITccProfile;
+    @Input() public hoverEffect: boolean = false;
+    @Input() public isSelected: boolean = false;
+    @Input() public visible: boolean = true;
+    @Input() public active: boolean = false;
+    @Input() public used: boolean = false;
 
     /**
      * Special input to signal that it shouldn't display a profile and just
@@ -53,11 +53,11 @@ export class ProfileOverviewTileComponent implements OnInit {
      *
      * If set to true it overrules the profile input. Defaults to false.
      */
-    @Input() addProfileTile: boolean = false;
+    @Input() public addProfileTile: boolean = false;
 
-    @Input() showDetails: boolean = false;
+    @Input() public showDetails: boolean = false;
 
-    @Output() copyClick: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public copyClick: EventEmitter<string> = new EventEmitter<string>();
 
     public selectStateControl: FormControl;
     public stateInputArray: IStateInfo[];
@@ -87,7 +87,7 @@ export class ProfileOverviewTileComponent implements OnInit {
         private tccDBus: TccDBusClientService
     ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo): void => { this.cpuInfo = cpuInfo; }));
 
         if (!this.addProfileTile) {

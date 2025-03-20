@@ -65,9 +65,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     public inputProfileFilter: string = 'all';
 
-    viewDetails: boolean = false;
+    public viewDetails: boolean = false;
 
-    @ViewChild('inputFocus', { static: false }) inputFocus: MatInput;
+    @ViewChild('inputFocus', { static: false }) public inputFocus: MatInput;
 
     public buttonCopy: ProfileManagerButton;
     public buttonEdit: ProfileManagerButton;
@@ -86,7 +86,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         ) { }
 
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.defineButtons();
 
         this.route.params.subscribe(async (params: any): Promise<void> => {
@@ -118,7 +118,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.stateInputArray = this.state.getStateInputs();
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 

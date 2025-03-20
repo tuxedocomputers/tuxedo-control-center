@@ -78,7 +78,7 @@ export class ConfigService implements OnDestroy {
         }));
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
 
@@ -95,15 +95,15 @@ export class ConfigService implements OnDestroy {
         return this.settings;
     }
 
-    get cpuSettingsDisabledMessage(): string {
+    public get cpuSettingsDisabledMessage(): string {
         return $localize `:@@messageCPUSettingsOff:CPU frequency control deactivated in Settings→Global\u00A0profile\u00A0settings`;
     }
 
-    get fanControlDisabledMessage(): string {
+    public get fanControlDisabledMessage(): string {
         return $localize `:@@messageFanControlOff:Fan control deactivated in Settings→Global\u00A0profile\u00A0settings`;
     }
 
-    get keyboardBacklightControlDisabledMessage(): string {
+    public get keyboardBacklightControlDisabledMessage(): string {
         return $localize `:@@messageKeyboardBacklightControlOff:Keyboard backlight control deactivated in Settings→Global\u00A0profile\u00A0settings`;
     }
 

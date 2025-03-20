@@ -33,11 +33,11 @@ export class ToolsComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute) {}
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
 
     }
 
-    gotoComponent(component: string): void {
+    public gotoComponent(component: string): void {
         this.router.navigate([ component ], { relativeTo: this.route.parent });
     }
 }

@@ -119,7 +119,7 @@ export class FanCustomChartComponent implements OnInit {
         this.initFanFormGroup();
     }
 
-    async ngAfterViewInit(): Promise<void> {
+    public async ngAfterViewInit(): Promise<void> {
         await this.updateFanChartDataset();
         this.initChart();
     }

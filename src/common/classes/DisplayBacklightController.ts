@@ -68,6 +68,6 @@ export class DisplayBacklightController extends SysFsController {
         );
     }
 
-    readonly brightness: SysFsPropertyInteger;
-    readonly maxBrightness: SysFsPropertyInteger;
+    public readonly brightness: SysFsPropertyInteger;
+    public readonly maxBrightness: SysFsPropertyInteger;
 }

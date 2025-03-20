@@ -41,7 +41,7 @@ export class DialogInputTextComponent {
         public dialogRef: MatDialogRef<DialogInputTextComponent>,
         @Inject(MAT_DIALOG_DATA) public data: InputDialogData) {}
 
-    closeDialog(result?: string): void {
+    public closeDialog(result?: string): void {
         this.dialogRef.close(result);
     }
 }

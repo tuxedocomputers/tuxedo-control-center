@@ -37,21 +37,21 @@ import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component'
   standalone: false
 })
 export class TomteGuiComponent implements OnInit {
-    tomteIsInstalled: boolean = false;
-    jsonError: boolean = false;
-    rebootRequired: boolean = false;
-    tomteListArray: ITomteModule[] = [];
-    moduleToolTips: Map<string, string> = new Map();
-    columnsToDisplay: string[] = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
+    public tomteIsInstalled: boolean = false;
+    public jsonError: boolean = false;
+    public rebootRequired: boolean = false;
+    public tomteListArray: ITomteModule[] = [];
+    public moduleToolTips: Map<string, string> = new Map();
+    public columnsToDisplay: string[] = ['moduleName', 'moduleVersion', 'moduleInstalled', 'moduleBlocked', 'moduleDescription'];
     // TODO maybe there is a better way to handle this
-    tomteMode: string = "";
-    tomteModes: string[] =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
+    public tomteMode: string = "";
+    public tomteModes: string[] =["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"];
     // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
-    showRetryButton: boolean = false;
-    loadingInformation: boolean = false;
+    public showRetryButton: boolean = false;
+    public loadingInformation: boolean = false;
     // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and
     // set this variable to false to output the correct error message in the control center
-    isTuxedoDevice: boolean = true;
+    public isTuxedoDevice: boolean = true;
     constructor(
         private utils: UtilsService,
     ) { }
@@ -59,10 +59,10 @@ export class TomteGuiComponent implements OnInit {
 
 
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.tomtelist();
     }
 

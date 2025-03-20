@@ -35,15 +35,14 @@ import { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSet
 })
 export class KeyboardVisualComponent implements OnInit {
     @Input()
-    keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
-    @Input() chosenColorHex: Array<string>;
-    @Output() selectedZonesChange: EventEmitter<number[]> = new EventEmitter<number[]>();
+    public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
+    @Input() public chosenColorHex: Array<string>;
+    @Output() public selectedZonesChange: EventEmitter<number[]> = new EventEmitter<number[]>();
     public selectedZones: Array<number> = [];
     public divHeight: number;
     private viewInitialized: boolean = false;
 
-
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.selectedZones = Array.from(
             { length: this.keyboardBacklightCapabilities.zones },
             (_: unknown, i: number): number => i
@@ -51,17 +50,17 @@ export class KeyboardVisualComponent implements OnInit {
         this.selectedZonesChange.emit(this.selectedZones);
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.viewInitialized = true;
         this.updateHeight();
     }
 
     @HostListener("window:resize")
-    onResize(): void {
+    public onResize(): void {
         this.updateHeight();
     }
 
-    updateHeight(): void {
+    public updateHeight(): void {
         if (this.viewInitialized) {
             let el: HTMLElement;
             if (this.keyboardBacklightCapabilities.zones === 4) {

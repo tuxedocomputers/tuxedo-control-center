@@ -39,7 +39,7 @@ export class ShutdownTimerComponent implements OnInit {
         private utils: UtilsService
     ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.updateTime();
     }
 

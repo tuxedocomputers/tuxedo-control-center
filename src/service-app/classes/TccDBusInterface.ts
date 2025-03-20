@@ -99,38 +99,38 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     // todo: functions should start with Get or Set
-    GetDeviceName(): string { return this.data.device; }
-    DeviceHasAquaris(): boolean { return this.data.deviceHasAquaris; }
-    GetDisplayModesJSON(): string { return this.data.displayModesJSON; }
-    GetIsX11(): number { return this.data.isX11; }
-    TuxedoWmiAvailable(): boolean { return this.data.tuxedoWmiAvailable; }
-    FanHwmonAvailable(): boolean { return this.data.fanHwmonAvailable; }
-    TccdVersion(): string { return this.data.tccdVersion; }
-    GetFanDataJSON(): string { return this.data.fanData; }
-    WebcamSWAvailable(): boolean { return this.data.webcamSwitchAvailable; }
-    GetWebcamSWStatus(): boolean { return this.data.webcamSwitchStatus; }
-    GetForceYUV420OutputSwitchAvailable(): boolean { return this.data.forceYUV420OutputSwitchAvailable; }
+    private GetDeviceName(): string { return this.data.device; }
+    private DeviceHasAquaris(): boolean { return this.data.deviceHasAquaris; }
+    private GetDisplayModesJSON(): string { return this.data.displayModesJSON; }
+    private GetIsX11(): number { return this.data.isX11; }
+    private TuxedoWmiAvailable(): boolean { return this.data.tuxedoWmiAvailable; }
+    private FanHwmonAvailable(): boolean { return this.data.fanHwmonAvailable; }
+    private TccdVersion(): string { return this.data.tccdVersion; }
+    private GetFanDataJSON(): string { return this.data.fanData; }
+    private WebcamSWAvailable(): boolean { return this.data.webcamSwitchAvailable; }
+    private GetWebcamSWStatus(): boolean { return this.data.webcamSwitchStatus; }
+    private GetForceYUV420OutputSwitchAvailable(): boolean { return this.data.forceYUV420OutputSwitchAvailable; }
 
-    GetDGpuInfoValuesJSON(): string {
+    private GetDGpuInfoValuesJSON(): string {
         this.resetDataCollectionTimeout();
         return this.data.dGpuInfoValuesJSON;
     }
 
-    GetIGpuInfoValuesJSON(): string {
+    private GetIGpuInfoValuesJSON(): string {
         this.resetDataCollectionTimeout();
         return this.data.iGpuInfoValuesJSON;
     }
 
-    GetCpuPowerValuesJSON(): string { return this.data.cpuPowerValuesJSON; }
-    GetPrimeState(): string { return this.data.primeState; }
-    SetSensorDataCollectionStatus(status: boolean): void {this.data.sensorDataCollectionStatus = status}
-    GetSensorDataCollectionStatus(): boolean {
+    private GetCpuPowerValuesJSON(): string { return this.data.cpuPowerValuesJSON; }
+    private GetPrimeState(): string { return this.data.primeState; }
+    private SetSensorDataCollectionStatus(status: boolean): void {this.data.sensorDataCollectionStatus = status}
+    private GetSensorDataCollectionStatus(): boolean {
         return this.data.sensorDataCollectionStatus;
     }
 
-    SetDGpuD0Metrics(status: boolean): void { this.data.d0MetricsUsage = status; }
+    private SetDGpuD0Metrics(status: boolean): void { this.data.d0MetricsUsage = status; }
 
-    ConsumeModeReapplyPending(): boolean {
+    private ConsumeModeReapplyPending(): boolean {
         // Unlikely, but possible race condition.
         // However no harmful impact, it will just cause the screen to flicker twice instead of once.
         if (this.data.modeReapplyPending) {
@@ -139,104 +139,104 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }
         return false;
     }
-    GetActiveProfileJSON(): string { return this.data.activeProfileJSON; }
-    SetTempProfile(profileName: string): boolean {
+    private GetActiveProfileJSON(): string { return this.data.activeProfileJSON; }
+    private SetTempProfile(profileName: string): boolean {
         this.data.tempProfileName = profileName;
         return true;
     }
-    SetTempProfileById(id: string): boolean {
+    private SetTempProfileById(id: string): boolean {
         this.data.tempProfileId = id;
         this.interfaceOptions.triggerStateCheck();
         return true;
     }
-    GetProfilesJSON(): string { return this.data.profilesJSON; }
-    GetCustomProfilesJSON(): string { return this.data.customProfilesJSON; }
-    GetDefaultProfilesJSON(): string { return this.data.defaultProfilesJSON; }
-    GetDefaultValuesProfileJSON(): string { return this.data.defaultValuesProfileJSON; }
-    GetSettingsJSON(): string { return this.data.settingsJSON; }
-    ODMProfilesAvailable(): string[] { return this.data.odmProfilesAvailable; }
-    ODMPowerLimitsJSON(): string { return this.data.odmPowerLimitsJSON; }
-    GetKeyboardBacklightCapabilitiesJSON(): string { return this.data.keyboardBacklightCapabilitiesJSON; }
-    GetKeyboardBacklightStatesJSON(): string { return this.data.keyboardBacklightStatesJSON; }
-    SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): boolean {
+    private GetProfilesJSON(): string { return this.data.profilesJSON; }
+    private GetCustomProfilesJSON(): string { return this.data.customProfilesJSON; }
+    private GetDefaultProfilesJSON(): string { return this.data.defaultProfilesJSON; }
+    private GetDefaultValuesProfileJSON(): string { return this.data.defaultValuesProfileJSON; }
+    private GetSettingsJSON(): string { return this.data.settingsJSON; }
+    private ODMProfilesAvailable(): string[] { return this.data.odmProfilesAvailable; }
+    private ODMPowerLimitsJSON(): string { return this.data.odmPowerLimitsJSON; }
+    private GetKeyboardBacklightCapabilitiesJSON(): string { return this.data.keyboardBacklightCapabilitiesJSON; }
+    private GetKeyboardBacklightStatesJSON(): string { return this.data.keyboardBacklightStatesJSON; }
+    private SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): boolean {
         this.data.keyboardBacklightStatesNewJSON.next(keyboardBacklightStatesJSON);
         return true;
     }
-    ModeReapplyPendingChanged(): boolean {
+    public ModeReapplyPendingChanged(): boolean {
         return this.data.modeReapplyPending;
     }
-    GetFansMinSpeed(): number { return this.data.fansMinSpeed; }
-    GetFansOffAvailable(): boolean { return this.data.fansOffAvailable; }
-    async GetChargingProfilesAvailable(): Promise<string> {
+    private GetFansMinSpeed(): number { return this.data.fansMinSpeed; }
+    private GetFansOffAvailable(): boolean { return this.data.fansOffAvailable; }
+    private async GetChargingProfilesAvailable(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingProfilesAvailable());
     }
-    async GetCurrentChargingProfile(): Promise<string> {
+    private async GetCurrentChargingProfile(): Promise<string> {
         return await this.interfaceOptions.chargingWorker.getCurrentChargingProfile();
     }
-    async SetChargingProfile(profileDescriptor: string): Promise<boolean> {
+    private async SetChargingProfile(profileDescriptor: string): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.applyChargingProfile(profileDescriptor);
     }
-    async GetChargingPrioritiesAvailable(): Promise<string> {
+    private async GetChargingPrioritiesAvailable(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingPrioritiesAvailable());
     }
-    async GetCurrentChargingPriority(): Promise<string> {
+    private async GetCurrentChargingPriority(): Promise<string> {
         return await this.interfaceOptions.chargingWorker.getCurrentChargingPriority();
     }
-    async SetChargingPriority(priorityDescriptor: string): Promise<boolean> {
+    private async SetChargingPriority(priorityDescriptor: string): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
 
-    async GetChargeStartAvailableThresholds(): Promise<string> {
+    private async GetChargeStartAvailableThresholds(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeStartAvailableThresholds());
     }
-    async GetChargeEndAvailableThresholds(): Promise<string> {
+    private async GetChargeEndAvailableThresholds(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeEndAvailableThresholds());
     }
-    async GetChargeStartThreshold(): Promise<number> {
+    private async GetChargeStartThreshold(): Promise<number> {
         return await this.interfaceOptions.chargingWorker.getChargeStartThreshold();
     }
-    async GetChargeEndThreshold(): Promise<number> {
+    private async GetChargeEndThreshold(): Promise<number> {
         return await this.interfaceOptions.chargingWorker.getChargeEndThreshold();
     }
-    async SetChargeStartThreshold(value: number): Promise<boolean> {
+    private async SetChargeStartThreshold(value: number): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.setChargeStartThreshold(value);
     }
-    async SetChargeEndThreshold(value: number): Promise<boolean> {
+    private async SetChargeEndThreshold(value: number): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.setChargeEndThreshold(value);
     }
-    async GetChargeType(): Promise<string> {
+    private async GetChargeType(): Promise<string> {
         return await this.interfaceOptions.chargingWorker.getChargeType();
     }
-    async SetChargeType(type: ChargeType): Promise<boolean> {
+    private async SetChargeType(type: ChargeType): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.setChargeType(type);
     }
 
-    GetFnLockSupported(): boolean {
+    private GetFnLockSupported(): boolean {
         return this.fnLock.getFnLockSupported();
     }
-    GetFnLockStatus(): boolean {
+    private GetFnLockStatus(): boolean {
         return this.fnLock.getFnLockStatus();
     }
-    SetFnLockStatus(status: boolean): void {
+    private SetFnLockStatus(status: boolean): void {
         this.fnLock.setFnLockStatus(status);
     }
 
-    GetNVIDIAPowerCTRLDefaultPowerLimit(): number {
+    private GetNVIDIAPowerCTRLDefaultPowerLimit(): number {
         return this.data.nvidiaPowerCTRLDefaultPowerLimit;
     }
 
-    GetNVIDIAPowerCTRLMaxPowerLimit(): number {
+    private GetNVIDIAPowerCTRLMaxPowerLimit(): number {
         return this.data.nvidiaPowerCTRLMaxPowerLimit;
     }
 
-    GetNVIDIAPowerCTRLAvailable(): boolean {
+    private GetNVIDIAPowerCTRLAvailable(): boolean {
         return this.data.nvidiaPowerCTRLAvailable;
     }
-    GetHideCTGP(): boolean {
+    private GetHideCTGP(): boolean {
         return this.data.deviceHideCTGP
     }
 
-    dbusAvailable(): boolean {
+    private dbusAvailable(): boolean {
         return this.data.dbusAvailable
     }
 }

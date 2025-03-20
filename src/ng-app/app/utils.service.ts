@@ -39,8 +39,8 @@ import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
 export class UtilsService {
 
   private blurNoInput: boolean = false;
-  get pageDisabled(): boolean { return this.blurNoInput; }
-  set pageDisabled(value: boolean) { this.blurNoInput = value; }
+  public get pageDisabled(): boolean { return this.blurNoInput; }
+  public set pageDisabled(value: boolean) { this.blurNoInput = value; }
 
   private languagesMenuArray: { id: string, label: string, img: string }[] = [
     { id: 'en', label: 'English', img: 'english.svg' },

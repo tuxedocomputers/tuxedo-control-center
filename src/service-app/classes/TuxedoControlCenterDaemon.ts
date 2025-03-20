@@ -497,7 +497,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
-    deviceHideCTGP() : boolean {
+    private deviceHideCTGP() : boolean {
         // Hide the cTGP settings for the IBP series, because, albeit nvidia-smi tells otherwise,
         // they don't offically support it and using it results in undefined behaviour.
         const dmi = new DMIController('/sys/class/dmi/id');
@@ -512,7 +512,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return hideCTGPValue
     }
 
-    deviceHasAquaris(): boolean {
+    private deviceHasAquaris(): boolean {
         const dmi = new DMIController('/sys/class/dmi/id');
         const deviceName: string = dmi.productSKU.readValueNT();
         const boardVendor: string = dmi.boardVendor.readValueNT();
@@ -540,7 +540,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return showAquarisMenu;
     }
 
-    identifyDevice(): TUXEDODevice {
+    public identifyDevice(): TUXEDODevice {
 
         const dmi = new DMIController('/sys/class/dmi/id');
         const productSKU: string = dmi.productSKU.readValueNT();
@@ -598,22 +598,22 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return TUXEDODevice.UNKNOWN;
     }
 
-    getDefaultProfile(): ITccProfile {
+    private getDefaultProfile(): ITccProfile {
         // TODO, good reason why this is called all over again? just buffer variable, it doesn't change?
         const dev: TUXEDODevice = this.identifyDevice();
         return this.config.getDefaultProfiles(dev)[0];
     }
 
-    getAllProfiles(): ITccProfile[] {
+    private getAllProfiles(): ITccProfile[] {
         const dev: TUXEDODevice = this.identifyDevice();
         return this.config.getDefaultProfiles(dev).concat(this.customProfiles);
     }
 
-    getCurrentProfile(): ITccProfile {
+    public getCurrentProfile(): ITccProfile {
         return this.activeProfile;
     }
 
-    setCurrentProfileByName(profileName: string): boolean {
+    public setCurrentProfileByName(profileName: string): boolean {
         this.activeProfile = this.getAllProfiles().find((profile: ITccProfile): boolean => profile.name === profileName);
         let result: boolean = true;
         if (this.activeProfile === undefined) {
@@ -626,7 +626,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return result;
     }
 
-    setCurrentProfileById(id: string): boolean {
+    public setCurrentProfileById(id: string): boolean {
         this.activeProfile = this.getAllProfiles().find((profile: ITccProfile): boolean => profile.id === id);
         let result: boolean = true;
         if (this.activeProfile === undefined) {
@@ -639,7 +639,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return result;
     }
 
-    getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
+    public getCurrentFanProfile(chosenProfile?: ITccProfile): ITccFanProfile {
         if (chosenProfile === undefined) {
             chosenProfile = this.getCurrentProfile();
         }
@@ -659,7 +659,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return chosenFanProfile;
     }
 
-    getFallbackFanProfile(): ITccFanProfile {
+    private getFallbackFanProfile(): ITccFanProfile {
         // Fallback to 'Balanced'
         let chosenFanProfile: ITccFanProfile = this.config.getDefaultFanProfiles().find((fanProfile: ITccProfile): boolean => fanProfile.name === 'Balanced');
         // Fallback to first in list
@@ -669,12 +669,12 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return chosenFanProfile;
     }
 
-    updateDBusActiveProfileData(): void {
+    public updateDBusActiveProfileData(): void {
         this.dbusData.activeProfileJSON = JSON.stringify(this.fillDeviceSpecificDefaults(this.getCurrentProfile()));
     }
 
     // todo: function too long, could be splitted with cpu, display, webcam, fan, odm subfunctions
-    fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
+    private fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
 
         if (profile.id === undefined) {

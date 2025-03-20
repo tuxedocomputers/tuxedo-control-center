@@ -108,16 +108,16 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
         );
     }
 
-    @Input() set offsetFanspeed(value: number) {
+    @Input() public set offsetFanspeed(value: number) {
         this._offsetFanspeed = value;
         this.resetDataCollectionTimeout();
     }
 
-    get offsetFanspeed(): number {
+    public get offsetFanspeed(): number {
         return this._offsetFanspeed;
     }
 
-    @Input() set fanProfile(nextProfile: string) {
+    @Input() public set fanProfile(nextProfile: string) {
         const nextProfileIndex: number = defaultFanProfiles.findIndex(
             (profile: ITccFanProfile): boolean => profile.name === nextProfile
         );
@@ -127,19 +127,19 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    @Input() set minFanspeed(value: number) {
+    @Input() public set minFanspeed(value: number) {
         this._minFanspeed = value;
         this.resetDataCollectionTimeout();
     }
-    get minFanspeed(): number {
+    public get minFanspeed(): number {
         return this._minFanspeed;
     }
 
-    @Input() set maxFanspeed(value: number) {
+    @Input() public set maxFanspeed(value: number) {
         this._maxFanspeed = value;
         this.resetDataCollectionTimeout();
     }
-    get maxFanspeed(): number {
+    public get maxFanspeed(): number {
         return this._maxFanspeed;
     }
 

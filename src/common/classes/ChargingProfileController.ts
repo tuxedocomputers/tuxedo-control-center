@@ -33,6 +33,6 @@ export class ChargingProfileController extends SysFsController {
         );
     }
 
-    readonly chargingProfilesAvailable: SysFsPropertyStringList;
-    readonly chargingProfile: SysFsPropertyString;
+    public readonly chargingProfilesAvailable: SysFsPropertyStringList;
+    public readonly chargingProfile: SysFsPropertyString;
 }

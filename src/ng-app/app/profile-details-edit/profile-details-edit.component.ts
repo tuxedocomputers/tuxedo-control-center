@@ -69,7 +69,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public defaultFanProfiles: ITccFanProfile [];
 
     @Input()
-    set profile(profile: ITccProfile) {
+    public set profile(profile: ITccProfile) {
         this.viewProfile = profile;
 
         if (profile === undefined) { return; }
@@ -91,9 +91,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     @Input()
-    get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
+    public get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
 
-    @Output() scrollTo: EventEmitter<number> = new EventEmitter<number>();
+    @Output() public scrollTo: EventEmitter<number> = new EventEmitter<number>();
 
     public gridParams: IGridParams = GridParamsSettings;
 
@@ -150,7 +150,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public min = Math.min;
 
-    @ViewChild('inputName') inputName: MatInput;
+    @ViewChild('inputName') public inputName: MatInput;
 
     @ViewChild(FanCustomChartComponent)
     private sliderComponent: FanCustomChartComponent;
@@ -165,7 +165,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         public compat: CompatibilityService
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
         // prevents error messages on forced refresh
         this.cpuInfo =
         {
@@ -527,7 +527,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    get getODMTDPControls(): AbstractControl[] {
+    public get getODMTDPControls(): AbstractControl[] {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
         return tdpValues.controls;
@@ -668,7 +668,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.displayModes.displayModes;
     }
 
-    getRefreshRateNotAvailableTooltipText(): string {
+    public getRefreshRateNotAvailableTooltipText(): string {
         if (this.isX11) {
             return "";
         } else {
@@ -808,19 +808,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             tdpValues.controls[sliderIndex].markAsDirty();
         }
     }
-    
-    setVerticalSliderDirty(): void {
+
+    public setVerticalSliderDirty(): void {
         this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
     }
 
-    nvidiaPowerCTRLMaxPowerLimitChange(): void {
+    public nvidiaPowerCTRLMaxPowerLimitChange(): void {
         this.nvidiaPowerCTRLMaxPowerLimitEvent.emit(this.nvidiaPowerCTRLMaxPowerLimit);
     }
     
-    public updateTGPChart(): void {
+    public updateCTGPChart(): void {
         this.updateTGPChartEvent.emit()
     }
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
         if (!this.fansMinSpeedSubscription.closed) {
             this.fansMinSpeedSubscription.unsubscribe();
