@@ -36,13 +36,8 @@
 
         .keyboard-backlight-content {
             align-items: center;
-            margin-bottom: 25px;
         }
     }
-}
-
-.title-row-margin {
-    margin-bottom: 16px !important;
 }
 
 header {
@@ -59,6 +54,19 @@ content.value {
     font-size: 1.10em;
 }
 
+.value-tile {
+    overflow: visible;
+    
+    .increment-decrement-buttons {
+        display: flex;
+        padding-right: 20px;
+    }
+}
+
+.input-tile {
+    overflow: visible
+}
+
 .align-top-right-container {
     width: 100%;
     height: 100%;
@@ -70,11 +78,11 @@ content.value {
 .wider-tooltip {
     max-width: 275px !important;
 }
-
+    
 .keyboard-visual {
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-bottom: 16px;
 }
+    
 
 .align-slider-components {
     margin: 0;
@@ -99,10 +107,6 @@ input {
     padding-left: 10px;
     outline-width: 0;
     cursor: default !important;
-}
-
-.brightness-slider {
-    width: 11rem;
 }
 
 .resize-text {
@@ -137,8 +141,4 @@ input {
     width: 100%;
     overflow: visible;
     margin: 0;
-}
-
-.content {
-    margin-bottom: 30px;
 }
