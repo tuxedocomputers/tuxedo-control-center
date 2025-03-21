@@ -44,7 +44,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-icon>edit</mat-icon>
             </button>
         </span>
-        <button mat-raised-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting" i18n="@@aqButtonDisconnectLabel">Disconnect</button>
+        <button mat-stroked-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting" i18n="@@aqButtonDisconnectLabel">Disconnect</button>
     </mat-card-title>
 
     <div class="aquaris-content">
@@ -56,7 +56,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <div i18n="@@aqLabelFanControl" class="title">Fan control</div>
                 </header>
-                <button mat-raised-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
+                <button mat-stroked-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
                 <mat-menu #fanPresetMenu>
                     <button mat-menu-item *ngFor="let fanPreset of fanPresets | keyvalue" (click)="selectFanPreset(fanPreset.key)">
                         {{ fanPreset.value.name }}
@@ -245,7 +245,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span matListItemLine>
                         {{ device.uuid }}
                     </span>
-                    <button matListItemMeta mat-raised-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)" i18n="@@aqButtonConnectLabel">Connect</button>
+                    <button matListItemMeta mat-stroked-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)" i18n="@@aqButtonConnectLabel">Connect</button>
                 </mat-list-option>
             </mat-selection-list>
         </div>

@@ -45,7 +45,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <p i18n="@@cTomteGuiUnableToLoadInformationDescription">
                         TUXEDO Tomte ran into a timeout. Maybe it is already running.
                     </p>
-                    <button mat-raised-button color="primary" (click)="tomtelist()" i18n="@@cTomteGuiUnableToLoadInformationRetryButton">
+                    <button mat-stroked-button color="primary" (click)="tomtelist()" i18n="@@cTomteGuiUnableToLoadInformationRetryButton">
                         Retry
                     </button>
                 </div>
@@ -63,7 +63,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <p i18n="@@cTomteGuiInstallTomteDescription">
                         Install TUXEDO Tomte now by pressing this button:
                     </p>
-                    <button mat-raised-button color="primary" (click)="installTomteButton()" i18n="@@cTomteGuiInstallTomteButtonLabel">
+                    <button mat-stroked-button color="primary" (click)="installTomteButton()" i18n="@@cTomteGuiInstallTomteButtonLabel">
                         Install
                     </button>
                 </div>
@@ -277,7 +277,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <ng-container i18n="@@cTomteGuiTomteConfigurationResetDefaultsHeader">Reset to defaults</ng-container>
                 -->
                 <div class="content-container centered">
-                    <button mat-raised-button color="primary" (click)="tomteResetToDefaults()" i18n-matTooltip="@@cTomteGuiResetConfigurationButtonTooltip" matTooltip="Reset Configuration to defaults.">
+                    <button mat-stroked-button color="primary" (click)="tomteResetToDefaults()" i18n-matTooltip="@@cTomteGuiResetConfigurationButtonTooltip" matTooltip="Reset Configuration to defaults.">
                         <p i18n="@@cTomteGuiTomteConfigurationResetDefaultsButtonlabel">
                             Reset Tomte to default settings
                         </p>

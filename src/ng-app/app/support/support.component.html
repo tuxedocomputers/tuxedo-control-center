@@ -40,7 +40,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-grid-tile>
                         <div class="web-info">
                             <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_online.svg#Icon"></use></svg>
-                            <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                            <button mat-stroked-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
                                 <strong i18n="@@cSupportButtonOnline">TUXEDO online support</strong>
                             </button>
                         </div>
@@ -82,7 +82,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <mat-form-field>
                                     <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                                 </mat-form-field> &nbsp;
-                                <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
+                                <button mat-stroked-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
                                 <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty"
                                 class="alert alert-danger">
                                     <div i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</div>
@@ -94,7 +94,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <div i18n>
                                 <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                             </div>
-                            <button mat-raised-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
+                            <button mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
                                 <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
                                 <div i18n="@@cSupportSysInfoButtonStart">Start</div>
                             </button>
@@ -126,14 +126,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <p>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!</p>
                     </div>
                     <p>
-                        <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
+                        <button mat-stroked-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
                             <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
                             <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
                             <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
                             <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
                         </button>
                         &nbsp;
-                        <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled && !(progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName))" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
+                        <button mat-stroked-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled && !(progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName))" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
                     </p>
                 </div>
             </mat-expansion-panel>
@@ -152,14 +152,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!</p>
                     </div>
                     <p>
-                        <button mat-raised-button (click)="buttonInstallRemoveWebFAICreator()" [disabled]="progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName)">
+                        <button mat-stroked-button (click)="buttonInstallRemoveWebFAICreator()" [disabled]="progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName)">
                             <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName) }"></i>&nbsp;
                             <span *ngIf="!webFAICreatorInstalled && !progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorInstallButton">Install WebFAI Creator</span>
                             <span *ngIf="webFAICreatorInstalled && !progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorRemoveButton">Remove WebFAI Creator</span>
                             <span *ngIf="progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorProgressButton">Checking</span>
                         </button>
                         &nbsp;
-                        <button mat-raised-button color="primary" (click)="buttonStartWebFAICreator()" *ngIf="webFAICreatorInstalled && !(progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName))" i18n="@@cSupportWebFAICreatorStartButton">Start WebFAI Creator</button>
+                        <button mat-stroked-button color="primary" (click)="buttonStartWebFAICreator()" *ngIf="webFAICreatorInstalled && !(progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName))" i18n="@@cSupportWebFAICreatorStartButton">Start WebFAI Creator</button>
                     </p>
                 </div>
             </mat-expansion-panel>
