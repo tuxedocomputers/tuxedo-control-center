@@ -22,4 +22,13 @@
     flex-direction: column;
     margin: 15px 0;
     align-items: flex-start;
+    
+    .radio-title {
+        font-size: 16px;
+        font-weight: bold
+    }
+    
+    .radio-description {
+        font-size: 16px
+    }
 }

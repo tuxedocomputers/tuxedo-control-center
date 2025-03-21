@@ -30,6 +30,19 @@
 
     .inner-support-settings-edit {
         margin: 0 10px 10px 10px;
+        
+        .title {
+            font-size: 24px;
+        }
+        
+        .description {
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+        }
     }
 }
 
@@ -49,7 +62,7 @@
         }
 
         .phone-number {
-            font-size: 1.3em;
+            font-size: 20px;
         }
     }
 }

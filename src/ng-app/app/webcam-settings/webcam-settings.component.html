@@ -21,7 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <div class="center">
 
         <mat-card-title>
-            <ng-container i18n="@@noWebcamFoundInfoTitle">No available Webcams found</ng-container>
+            <div i18n="@@noWebcamFoundInfoTitle">No available Webcams found</div>
         </mat-card-title>
         <hr />
         <p i18n="@@noWebcamFoundInfoContent">
@@ -76,8 +76,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <svg viewBox="0 0 512 512" class="tcc-icons">
                                 <use href="./assets/images/icon_webcam.svg#Icon"></use>
                             </svg>
-                            <ng-container i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam
-                            </ng-container>
+                            <div i18n="@@cProfMgrDetailsWebcamHeaderLabel">Webcam
+                            </div>
                         </div>
                         <hr />
                     </div>
@@ -108,7 +108,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-card-content class="content" style="margin-top:0.8rem;">
                         <div>
                             <!-- EASY MODE -->
-                            <ng-container *ngIf="easyModeActive">
+                            <div *ngIf="easyModeActive">
                                 <!-- WEBCAM -->
                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
                                     class="profile-details-edit-grid">
@@ -163,8 +163,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                 </mat-grid-list>
                                 <!-- SETTINGS -->
-                                <ng-container *ngFor="let webcamConfig of getWebcamSettingNames()">
-                                    <ng-container *ngIf="easyOptions.includes(webcamConfig)">
+                                <div *ngFor="let webcamConfig of getWebcamSettingNames()">
+                                    <div *ngIf="easyOptions.includes(webcamConfig)">
                                         <!-- SLIDER -->
                                         <div *ngIf="getOptionValue(webcamConfig, 'type')=='slider'">
                                             <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
@@ -271,9 +271,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 </mat-grid-tile>
                                             </mat-grid-list>
                                         </div>
-                                    </ng-container>
-                                </ng-container>
-                            </ng-container>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </mat-card-content>
                 </div>
@@ -282,11 +282,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <!-- ADVANCED MODE -->
         <div class="tcc-options-group" style="position: relative;top: -2rem;">
-            <ng-container *ngIf="!easyModeActive">
-                <mat-accordion class="example-headers-align" [multi]="false" class="list-group-item">
+            <div *ngIf="!easyModeActive">
+                <mat-accordion [multi]="false">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            <mat-panel-title>
+                            <mat-panel-title class="panel-title">
                                 {{ getTitleTranslation("General") }}
                             </mat-panel-title>
                         </mat-expansion-panel-header>
@@ -340,15 +340,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-list>
                     </mat-expansion-panel>
                     <!-- SETTINGS -->
-                    <ng-container *ngFor="let webcamCategory of webcamCategories">
+                    <div *ngFor="let webcamCategory of webcamCategories">
                         <mat-expansion-panel>
                             <mat-expansion-panel-header>
-                                <mat-panel-title>
+                                <mat-panel-title class="panel-title">
                                     {{ getTitleTranslation(webcamCategory) }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <!-- SLIDER -->
-                            <ng-container *ngFor="let webcamConfig of getWebcamSettingNames()">
+                            <div *ngFor="let webcamConfig of getWebcamSettingNames()">
                                 <div
                                     *ngIf="getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') =='slider'">
                                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
@@ -458,11 +458,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-grid-tile>
                                     </mat-grid-list>
                                 </div>
-                            </ng-container>
+                            </div>
                         </mat-expansion-panel>
-                    </ng-container>
+                    </div>
                 </mat-accordion>
-            </ng-container>
+            </div>
         </div>
     </div>
 </div>

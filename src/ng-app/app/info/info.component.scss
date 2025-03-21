@@ -30,6 +30,10 @@
     
     .inner-info {
         padding: 0 10px 10px 10px;
+        
+        .title {
+            font-size: 24px;
+        }
     }
  }
  
@@ -65,7 +69,11 @@
 
 .accordion-info {
     p {
-        font-size: 1.2em;;
+        font-size: 20px;
+    }
+    
+    .panel-title {
+        font-size: 18px;
     }
 }
 

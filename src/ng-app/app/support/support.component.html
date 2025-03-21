@@ -22,7 +22,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <mat-card class="tcc-card card-support">
             <mat-card-title>
-                <ng-container i18n>TUXEDO Support</ng-container>
+                <div class="title">TUXEDO Support</div>
             </mat-card-title>
             <hr />
             
@@ -54,18 +54,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_systemdiagnose.svg#Icon"></use></svg></mat-icon>
-                        <ng-container i18n>System diagnostics</ng-container>
+                        <div i18n class="panel-title">System diagnostics</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="content-container">
-                    <div i18n>
-                        <p>For more complex problems it may be necessary to evaluate diagnostic data from your PC.</p>
-                        <p>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.</p>
+                    <div>
+                        <div i18n class="description">For more complex problems it may be necessary to evaluate diagnostic data from your PC.</div>
+                        <div i18n class="description">Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.</div>
+                        <div class="description">
+                            <span i18n> For further information please click</span>:
+                            <a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
+
+                        </div>
                     </div>
-                    <p>
-                        <ng-container i18n>For further information please click</ng-container>:
-                        &nbsp;<a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
-                    </p>
                 
                     <mat-vertical-stepper [linear]="true" #systeminfoStepper>
                         <mat-step [stepControl]="formTicketNumber">
@@ -74,17 +75,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </ng-template>
                             
                             <form [formGroup]="formTicketNumber">
-                                <p>
-                                    <ng-container i18n="@@cSupportPleaseEnterTicketnumber">Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </ng-container>
+                                <div>
+                                    <div i18n="@@cSupportPleaseEnterTicketnumber">Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </div>
                                     <a style="color: currentColor; cursor: pointer; text-decoration: underline;" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')" i18n>online form</a>
-                                </p>
+                                </div>
                                 <mat-form-field>
                                     <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
                                 </mat-form-field> &nbsp;
                                 <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
                                 <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty"
                                 class="alert alert-danger">
-                                    <ng-container i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</ng-container>
+                                    <div i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</div>
                                 </div>
                             </form>
 
@@ -95,7 +96,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </div>
                             <button mat-raised-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
                                 <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
-                                <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
+                                <div i18n="@@cSupportSysInfoButtonStart">Start</div>
                             </button>
                             &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                         </mat-step>
@@ -114,7 +115,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg></mat-icon>
-                        <ng-container i18n>Remote support</ng-container>
+                        <div i18n class="panel-title">Remote support</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -141,7 +142,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_restoresystem.svg#Icon"></use></svg></mat-icon>
-                        <ng-container i18n>Restore system</ng-container>
+                        <div i18n class="panel-title">Restore system</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 

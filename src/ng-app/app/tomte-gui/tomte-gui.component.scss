@@ -30,6 +30,17 @@
 
     .inner-tomte-settings-edit {
         margin: 0 10px 10px 10px;
+        
+        .title {
+            font-size: 24px;
+        }
+        
+        .header
+        {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
     }
  }
  
@@ -46,12 +57,6 @@
     }
 }
 
-.tomte-gui-title
-{
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-}
 
 .tomte-local-spinner {
     position: fixed;

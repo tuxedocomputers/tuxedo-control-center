@@ -65,6 +65,18 @@
             margin-bottom: 20px;
         }
     }
+    
+    .card-title {
+        font-size: 24px;
+    }
+    
+    .card-header {
+        font-size: 18px;
+    }
+    
+    .card-content {
+        font-size: 16px;
+    }
 }
 
 .mat-mdc-card-content {
@@ -111,7 +123,7 @@
             justify-content: space-between;
             align-items: center;
 
-            font-size: 1.2em;
+            font-size: 20px;
             text-align: center;
 
             padding-left: 30px;

@@ -30,7 +30,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             (keyup.enter)="closeDialog(inputText.value)"
             (focus)="$event.target.select()">
     </mat-form-field>
-    <p>{{ data.description }}</p>
+    <p class="description">{{ data.description }}</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button (click)="closeDialog()">{{ data.buttonAbortLabel }}</button>

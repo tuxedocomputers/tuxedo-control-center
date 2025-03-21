@@ -42,7 +42,7 @@
         flex-flow: row nowrap;
         align-items: center;
 
-        font-size: 0.8em;
+        font-size: 16px;
         margin: 20px;
 
         .value {
@@ -101,6 +101,10 @@
             align-items: center;
 
             width: 100%;
+            
+            .title {
+                font-size: 18px;
+            }
 
             header {
                 display: flex;
@@ -139,7 +143,7 @@
                         transform: scale(1.4);
                         transform-origin: center;
                     }
-
+                    
                     .description {
                         display: block;
                         margin: 40px auto;
@@ -175,6 +179,24 @@
     width: 600px;
 
     font-size: 1.2em;
+    
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    .description {
+        font-size: 16px;
+    }
+    
+    .demo {
+        display: flex;
+        align-items: center;
+        
+        .description {
+            font-size: 16px;
+        }
+    }
 
     li {
         margin: 10px auto;
@@ -190,7 +212,7 @@
 }
 
 .low-fan-values-notice {
-    font-size: 0.8em;
+    font-size: 16px;
 }
 
 .list-connect-button {

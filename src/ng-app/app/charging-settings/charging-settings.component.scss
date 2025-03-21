@@ -29,9 +29,28 @@
     flex-direction: column;
     margin: 16px 0;
     align-items: flex-start;
+    
+    .header-text {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .content-text {
+        font-size: 16px;
+    }
+    
+    .radio-title {
+        font-size: 16px;
+        font-weight: bold
+    }
+
+    .radio-description {
+        font-size: 16px;
+
+    }
 }
 
 .charging-profile-note {
+    font-size: 16px;
     padding-top: 10px;
 
     display: flex;

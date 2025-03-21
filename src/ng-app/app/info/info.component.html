@@ -23,7 +23,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 
         <mat-card class="tcc-card">
             <mat-card-title>
-                <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
+                <div i18n="@@cInfoInfoPanelTitle" class="title">Info</div>
             </mat-card-title>
             <hr />
             
@@ -48,7 +48,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <table class="updates-table">
                     <tr>
                         <td>
-                            <ng-container i18n>Installed version</ng-container>:
+                            <span i18n>Installed version</span>:
                         </td>
                         <td>
                             {{ appVersion }}
@@ -69,7 +69,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_logbook.svg#Icon"></use></svg></mat-icon>
-                        <ng-container i18n>Changelog</ng-container>
+                        <div i18n class="panel-title" >Changelog</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -82,7 +82,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_imprint.svg#Icon"></use></svg></mat-icon>
-                        <ng-container i18n="@@cInfoImprintPanelTitle">Imprint</ng-container>
+                        <div i18n="@@cInfoImprintPanelTitle" class="panel-title" >Imprint</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-divider></mat-divider>

@@ -54,7 +54,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="category">
                 <header>
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
-                    <ng-container i18n="@@aqLabelFanControl">Fan control</ng-container>
+                    <div i18n="@@aqLabelFanControl" class="title">Fan control</div>
                 </header>
                 <button mat-raised-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
                 <mat-menu #fanPresetMenu>
@@ -83,7 +83,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="unit-text">%</div>
                     <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     <div class="legend">
-                        <div class="text" i18n="@@aqFanGaugeLegendText">Fan speed</div>
+                        <div class="description" i18n="@@aqFanGaugeLegendText">Fan speed</div>
                     </div>
                 </div>
                 <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value < 50) ? 'visible' : 'hidden'" i18n="@@aqLowFanSpeedNotice">Low fan speeds (&lt; 50%) may cause interference noise</div>
@@ -143,7 +143,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <div class="category">
                 <header>
                     <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_theme.svg#Icon"></use></svg>
-                    <ng-container i18n="@@aqLabelLEDControl">LED Control</ng-container>
+                    <div i18n="@@aqLabelLEDControl" class="title">LED Control</div>
                 </header>
                 <mat-slide-toggle class="led-slide-toggle green-slide-toggle" [formControl]="ctrlLedToggle" (change)="ledUpdate(ctrlLedRed.value, ctrlLedGreen.value, ctrlLedBlue.value)"></mat-slide-toggle>
                 <div *ngIf="showLedSliders">
@@ -233,7 +233,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="device-list-wrapper" *ngIf="hasBluetooth && !isConnected && !isConnecting && !isDisconnecting && deviceList?.length > 0">
-            <ng-container i18n="@@aqChooseAquarisText">Please choose your TUXEDO Aquaris and click on the connect button</ng-container>
+            <div i18n="@@aqChooseAquarisText">Please choose your TUXEDO Aquaris and click on the connect button</div>
             <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList?.length === 0">
                 <mat-list-option #currentOption *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
                     <mat-icon matListItemIcon *ngIf="device.rssi >= -65">signal_cellular_alt</mat-icon>
@@ -251,9 +251,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && !hasBluetooth">
-            <p><b i18n="@@aqNoBluetoothHeadlineText">TUXEDO Control Center could not find a Bluetooth connection.</b></p>
-            <p i18n="@@aqNoBluetoothVerifyText">Please verify that:</p>
-            <ol>
+            <p i18n="@@aqNoBluetoothHeadlineText" class="title">TUXEDO Control Center could not find a Bluetooth connection.</p>
+            <p i18n="@@aqNoBluetoothVerifyText" class="description">Please verify that:</p>
+            <ol class="description">
                 <li i18n="@@aqNoBluetoothHintTurnedOn">Your Bluetooth adapter is turned on in your system settings.</li>
                 <li i18n="@@aqNoBluetoothHintNotDisabled">Your Bluetooth adapter is not disabled in the UEFI.</li>
                 <li i18n="@@aqNoBluetoothHintIsInstalled">A Bluetooth adapter is installed in your TUXEDO notebook.</li>
@@ -261,17 +261,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (hasBluetooth && deviceList?.length === 0)">
-            <p><b i18n="@@aqNoDevicesHeadlineText">TUXEDO Control Center could not find your TUXEDO Aquaris</b></p>
-            <p i18n="@@aqNoDevicesVerifyText">Please verify that:</p>
-            <ol>
+            <p><b i18n="@@aqNoDevicesHeadlineText" class="title">TUXEDO Control Center could not find your TUXEDO Aquaris</b></p>
+            <p i18n="@@aqNoDevicesVerifyText" class="description">Please verify that:</p>
+            <ol class="description">
                 <li i18n="@@aqNoDevicesHintSwitchedOn">Your Aquaris is switched on and the blue LED on the power button is blinking.</li>
                 <li i18n="@@aqNoDevicesHintIsConnected">Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</li>
                 <li i18n="@@aqNoDevicesHintIsPluggedIn">Your Aquaris' power cable is plugged into your TUXEDO notebook.</li>
             </ol>
-            <p>
-                <ng-container i18n="@@aqNoDevicesSuggestDemoMode">Do not have a TUXEDO Aquaris yet?</ng-container>
-                <button mat-stroked-button class="try-demo-mode-button" (click)="buttonConnect('demo')" i18n="@@aqNoDevicesDemoButtonLabel">Try demo mode</button>
-            </p>
+            <div class="demo">
+                <div i18n="@@aqNoDevicesSuggestDemoMode" class="description">Do not have a TUXEDO Aquaris yet?
+                </div>
+                <button mat-stroked-button class="try-demo-mode-button" (click)="buttonConnect('demo')" i18n="@@aqNoDevicesDemoButtonLabel">Try demo mode
+                </button>
+            </div>
         </div>
 
         <mat-spinner *ngIf="(isConnecting && !isConnected) || isDisconnecting"></mat-spinner>

@@ -19,10 +19,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-radio-group class="prime-radio-group" [(ngModel)]="activeState">
     <mat-radio-button color="primary" [value]="'iGPU'" (click)="applyGpuProfile('iGPU')">
-        <div class="inner-label">
-            <header i18n="@@primeSelectIGpu">Power-saving CPU graphics processor (iGPU)
-            </header>
-            <div i18n="@@primeSelectIGpuDescription">
+        <div >
+            <div i18n="@@primeSelectIGpu" class="radio-title">Power-saving CPU graphics processor (iGPU)
+            </div>
+            <div i18n="@@primeSelectIGpuDescription" class="radio-description">
                 Exclusively uses the graphics processor integrated in the main processor. Suitable for power saving and
                 low graphics performance requirements.
                 <br>
@@ -35,10 +35,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-radio-group class="prime-radio-group" [(ngModel)]="activeState">
     <mat-radio-button color="primary" [value]="'dGPU'" (click)="applyGpuProfile('dGPU')">
-        <div class="inner-label">
-            <header i18n="@@primeSelectDGpu">High performance graphics processor (dGPU)
-            </header>
-            <div i18n="@@primeSelectDGpuDescription">
+        <div >
+            <div i18n="@@primeSelectDGpu" class="radio-title">High performance graphics processor (dGPU)
+            </div>
+            <div i18n="@@primeSelectDGpuDescription" class="radio-description">
                 Uses high-performance graphics processor for graphics-intensive tasks, but with higher energy
                 consumption, even at low load and idle.
             </div>
@@ -48,10 +48,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-radio-group class="prime-radio-group" [(ngModel)]="activeState">
     <mat-radio-button color="primary" [value]="'on-demand'" (click)="applyGpuProfile('on-demand')">
-        <div class="inner-label">
-            <header i18n="@@primeSelectOnDemand">Hybrid graphics mode (on-demand)
-            </header>
-            <div i18n="@@primeSelectOnDemandDescription">
+        <div >
+            <div i18n="@@primeSelectOnDemand" class="radio-title">Hybrid graphics mode (on-demand)
+            </div>
+            <div i18n="@@primeSelectOnDemandDescription" class="radio-description">
                 The system prioritizes the energy-saving CPU graphics processor. The high-performance graphics processor
                 can be added by the user if required. Combination of high performance and power saving.
             </div>
