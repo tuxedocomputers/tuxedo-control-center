@@ -25,26 +25,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-title>
                 <div i18n="@@cInfoInfoPanelTitle" class="title">Info</div>
             </mat-card-title>
-            <hr />
+            
+            <hr>
+            
+            <div class="logo-div">
+                <svg viewBox="0 0 63.138672 43.930508" class="logo"><use href="./assets/images/tcc_logo_complete.svg#Icon"></use></svg>
+            </div>
+            
+            <hr>
             
             <div class="content-container">
-                <svg viewBox="0 0 63.138672 43.930508" class="logo"><use href="./assets/images/tcc_logo_complete.svg#Icon"></use></svg>
-        
-                <mat-divider class="divider-separator"></mat-divider>
-
-                <div>
-                    <p i18n="@@cInfoTCCDescriptionTextP1">
-                        With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
-                        safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-                    </p>
-                    <p i18n="@@cInfoTCCDescriptionTextP2">
-                        With premade as well as any number of individually configurable profiles, you have
-                        the greatest possible control and adaptability of your TUXEDO device to your needs.
-                    </p>
-                </div>
-
-                <mat-divider style="position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;"></mat-divider>
-
+                <p i18n="@@cInfoTCCDescriptionTextP1">
+                    With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
+                    safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
+                </p>
+                <p i18n="@@cInfoTCCDescriptionTextP2">
+                    With premade as well as any number of individually configurable profiles, you have
+                    the greatest possible control and adaptability of your TUXEDO device to your needs.
+                </p>
+            </div>
+            
+            <hr>
+            
+            <div class="table-div">
                 <table class="updates-table">
                     <tr>
                         <td>
@@ -54,12 +57,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             {{ appVersion }}
                         </td>
                     </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
                 </table>
-
             </div>
 
         </mat-card>
@@ -87,31 +85,31 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-expansion-panel-header>
                 <mat-divider></mat-divider>
                 <pre><code i18n="@@cInfoImprintText">
-        TUXEDO Computers GmbH
+TUXEDO Computers GmbH
 
-        Alter Postweg 101
-        86159 Augsburg
-        Germany
+Alter Postweg 101
+86159 Augsburg
+Germany
 
-        Telephone: +49 (0) 821 / 8998 2992
-        Telefax: +49 (0) 821 / 8998 2999
-        E-Mail: tux&#64;tuxedocomputers.com
-        VAT No.: DE815420876
-        WEEE reg. no.: DE 93420497
-        listed in the commercial register of the local court Augsburg
-        Commercial register number - Part B of the commercial register - 27755
+Telephone: +49 (0) 821 / 8998 2992
+Telefax: +49 (0) 821 / 8998 2999
+E-Mail: tux&#64;tuxedocomputers.com
+VAT No.: DE815420876
+WEEE reg. no.: DE 93420497
+listed in the commercial register of the local court Augsburg
+Commercial register number - Part B of the commercial register - 27755
                 </code></pre>
                 <mat-divider></mat-divider>
                 <pre><code>
-        TUXEDO Control Center is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-                        
-        TUXEDO Control Center is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+TUXEDO Control Center is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+                
+TUXEDO Control Center is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
                 </code></pre>
                 <mat-divider></mat-divider>
             </mat-expansion-panel>

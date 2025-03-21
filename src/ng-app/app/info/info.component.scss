@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- .info {
+.info {
     display: block;
     position: absolute;
     top: 10px;
@@ -31,70 +31,71 @@
     .inner-info {
         padding: 0 10px 10px 10px;
         
-        .title {
-            font-size: 24px;
+        mat-card {
+            .title {
+                display: flex;
+                justify-content: center;
+                
+                .title {
+                    font-size: 24px;
+                }
+            }
+
+            hr {
+                width: 100%;
+                opacity: 0.2;
+            }
+            
+            .logo-div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-top: 16px;
+                padding-bottom: 16px;
+                
+                .logo {
+                    width: 200px;
+                }
+            }
+            
+            .content-container {
+                max-width: 900px;
+                text-align: center;
+            }
+            
+            .table-div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                .updates-table {
+                    width: 300px;
+                    text-align: left;
+                    padding-top: 16px;
+                    padding-bottom: 16px;
+                }
+            }
+        }
+        
+        .accordion-info {
+            p {
+                font-size: 20px;
+            }
+            
+            .changelog {
+                max-height: 400px;
+                overflow-y: scroll;
+                
+                markdown {
+                    margin: 25px;
+                }
+            }
+            
+            .panel-title {
+                font-size: 18px;
+            }
         }
     }
- }
- 
-.logo {
-    width: 200px;
 }
 
-.content-container {
-    max-width: 900px;
-    margin:auto;
-    text-align: center;
-}
 
-.updates-table {
-    width:300px;
-    margin:auto;
-    text-align:left;
-    margin-bottom: 20px;
-}
-
-.update-button {
-    margin-bottom: 20px;
-}
-
-.infoseparator {
-    position: static;
-    width: 200px;
-    right:0;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.accordion-info {
-    p {
-        font-size: 20px;
-    }
-    
-    .panel-title {
-        font-size: 18px;
-    }
-}
-
-table.versions {
-    tr {
-        td {
-            width: 250px;
-            border-bottom: 1pt solid lightgray;
-        }
-    }
-}
-
-.changelog {
-    max-height: 400px;
-    overflow-y: scroll;
-    
-    markdown {
-        margin: 25px;
-    }
-}
-
-.content-container mat-divider.divider-separator {
-    position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;
-}
