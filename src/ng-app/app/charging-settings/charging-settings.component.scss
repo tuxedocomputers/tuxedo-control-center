@@ -27,7 +27,7 @@
 .charging-radio-group {
     display: flex;
     flex-direction: column;
-    margin: 16px 0;
+    padding-top: 16px;
     align-items: flex-start;
     
     .header-text {
@@ -37,21 +37,26 @@
     .content-text {
         font-size: 16px;
     }
+
+    .radio-text {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        
+        .radio-title {
+            font-size: 16px;
+            font-weight: bold
+        }
     
-    .radio-title {
-        font-size: 16px;
-        font-weight: bold
-    }
-
-    .radio-description {
-        font-size: 16px;
-
+        .radio-description {
+            font-size: 16px;
+    
+        }
     }
 }
 
 .charging-profile-note {
     font-size: 16px;
-    padding-top: 10px;
+    padding-top: 16px;
 
     display: flex;
     flex-flow: row nowrap;
