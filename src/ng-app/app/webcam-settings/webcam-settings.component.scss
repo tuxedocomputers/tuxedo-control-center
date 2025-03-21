@@ -42,6 +42,10 @@
         .panel-title {
             font-size: 18px;
         }
+        
+        mat-card .content {
+            padding: 16px 24px 16px !important;
+        }
     }
 
     .webcam {
@@ -105,7 +109,7 @@
             display: flex;
 
             mat-slider {
-                width: 200px;
+                width: 100%;
             }
             
             mat-form-field {
@@ -118,6 +122,11 @@
                     }
                 }
             }
+        }
+        
+        .increment-decrement-buttons {
+            display: flex;
+            padding-right: 20px;
         }
     }
 }

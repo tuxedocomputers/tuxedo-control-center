@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<mat-card class="tcc-card card-global-settings" [hidden]="!noWebcams">
+<mat-card class="tcc-card" [hidden]="!noWebcams">
     <div class="center">
 
         <mat-card-title>
@@ -105,7 +105,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-tab>
                     </mat-tab-group>
 
-                    <mat-card-content class="content" style="margin-top:0.8rem;">
+                    <mat-card-content class="content">
                         <div>
                             <!-- EASY MODE -->
                             <div *ngIf="easyModeActive">
@@ -127,16 +127,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     {{ webcam.label }}
                                                 </mat-option>
                                             </mat-select>
-                                            <button mat-icon-button color="primary"
-                                                (click)="reloadWebcamList(selectedWebcam)">
-                                                <mat-icon>refresh</mat-icon>
-                                            </button>
-                                            <button mat-icon-button color="primary"
-                                                [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
-                                                <mat-icon>open_in_new</mat-icon>
-                                            </button>
                                         </content>
                                     </mat-grid-tile>
+                                    
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button color="primary"
+                                            (click)="reloadWebcamList(selectedWebcam)">
+                                            <mat-icon>refresh</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="primary"
+                                            [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
+                                            <mat-icon>open_in_new</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+
                                 </mat-grid-list>
                                 <!-- PRESETS -->
                                 <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
@@ -147,7 +151,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-grid-tile [colspan]="gridParams.value"></mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input">
-
                                             <mat-select [(ngModel)]="selectedPreset" [compareWith]="comparePresets"
                                                 [ngModelOptions]="{standalone: true}"
                                                 (selectionChange)="applyPreset($event.value.webcamSettings, true, true)">
@@ -156,10 +159,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     {{ preset.presetName }}
                                                 </mat-option>
                                             </mat-select>
-                                            <button mat-icon-button color="primary" (click)="deletePreset()">
-                                                <mat-icon>delete_forever</mat-icon>
-                                            </button>
                                         </content>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button mat-icon-button color="primary" (click)="deletePreset()">
+                                            <mat-icon>delete_forever</mat-icon>
+                                        </button>
                                     </mat-grid-tile>
                                 </mat-grid-list>
                                 <!-- SETTINGS -->
@@ -175,18 +180,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 </mat-grid-tile>
                                                 <mat-grid-tile [colspan]="gridParams.value">
                                                     <content class="value">
-                                                        {{ getPercentValue(webcamConfig) }} %
                                                     </content>
-                                                    <button mat-icon-button color="primary"
-                                                        (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
-                                                        (mouseup)="mouseup()" (mouseleave)="mouseup()">
-                                                        <mat-icon>remove</mat-icon>
-                                                    </button>
-                                                    <button mat-icon-button color="primary"
-                                                        (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
-                                                        (mouseup)="mouseup()" (mouseleave)="mouseup()">
-                                                        <mat-icon>add</mat-icon>
-                                                    </button>
+                                                    <div class="increment-decrement-buttons">
+                                                        <button mat-icon-button color="primary"
+                                                            (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
+                                                            (mouseup)="mouseup()" (mouseleave)="mouseup()">
+                                                            <mat-icon>remove</mat-icon>
+                                                        </button>
+                                                        <button mat-icon-button color="primary"
+                                                            (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
+                                                            (mouseup)="mouseup()" (mouseleave)="mouseup()">
+                                                            <mat-icon>add</mat-icon>
+                                                        </button>
+                                                    </div>
                                                 </mat-grid-tile>
                                                 <mat-grid-tile [colspan]="gridParams.input">
                                                     <content class="input">
@@ -211,14 +217,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                                 "
                                                                 #ngSliderThumb="matSliderThumb"/>
                                                         </mat-slider>
-                                                        <button mat-icon-button color="primary"
-                                                            (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
-                                                            setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                            [hidden]="!webcamFormGroup.get(webcamConfig).dirty && !webcamFormGroup.get(webcamConfig).disabled">
-                                                            <mat-icon>undo</mat-icon>
-                                                        </button>
 
                                                     </content>
+                                                </mat-grid-tile>
+                                                
+                                                <mat-grid-tile [colspan]="gridParams.undo">
+                                                    <button mat-icon-button color="primary"
+                                                        (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
+                                                        setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                        [hidden]="!webcamFormGroup.get(webcamConfig).dirty && !webcamFormGroup.get(webcamConfig).disabled">
+                                                        <mat-icon>undo</mat-icon>
+                                                    </button>
                                                 </mat-grid-tile>
                                             </mat-grid-list>
                                         </div>
@@ -281,7 +290,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-card>
 
         <!-- ADVANCED MODE -->
-        <div class="tcc-options-group" style="position: relative;top: -2rem;">
+        <div class="tcc-options-group">
             <div *ngIf="!easyModeActive">
                 <mat-accordion [multi]="false">
                     <mat-expansion-panel>
@@ -307,15 +316,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             {{ webcam.label }}
                                         </mat-option>
                                     </mat-select>
-                                    <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
-                                        <mat-icon>refresh</mat-icon>
-                                    </button>
-                                    <button mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()"
-                                        (click)="openWindow()">
-                                        <mat-icon>open_in_new</mat-icon>
-                                    </button>
                                 </content>
                             </mat-grid-tile>
+                            
+                            <mat-grid-tile [colspan]="gridParams.undo">
+                                <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
+                                    <mat-icon>refresh</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()"
+                                    (click)="openWindow()">
+                                    <mat-icon>open_in_new</mat-icon>
+                                </button>
+
+                            </mat-grid-tile>
+
                         </mat-grid-list>
                         <!-- PRESETS -->
                         <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
@@ -332,11 +346,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             {{ preset.presetName }}
                                         </mat-option>
                                     </mat-select>
-                                    <button mat-icon-button color="primary" (click)="deletePreset()">
-                                        <mat-icon>delete_forever</mat-icon>
-                                    </button>
                                 </content>
                             </mat-grid-tile>
+                            
+                            <mat-grid-tile [colspan]="gridParams.undo">
+                                <button mat-icon-button color="primary" (click)="deletePreset()">
+                                    <mat-icon>delete_forever</mat-icon>
+                                </button>
+                            </mat-grid-tile>
+
                         </mat-grid-list>
                     </mat-expansion-panel>
                     <!-- SETTINGS -->
@@ -363,16 +381,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 {{ getPercentValue(webcamConfig, webcamConfig.value) }}
                                                 %
                                             </content>
-                                            <button mat-icon-button color="primary"
-                                                (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
-                                                (mouseup)="mouseup()" (mouseleave)="mouseup()">
-                                                <mat-icon>remove</mat-icon>
-                                            </button>
-                                            <button mat-icon-button color="primary"
-                                                (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
-                                                (mouseup)="mouseup()" (mouseleave)="mouseup()">
-                                                <mat-icon>add</mat-icon>
-                                            </button>
+                                            <div class="increment-decrement-buttons">
+                                                <button mat-icon-button color="primary"
+                                                    (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
+                                                    (mouseup)="mouseup()" (mouseleave)="mouseup()">
+                                                    <mat-icon>remove</mat-icon>
+                                                </button>
+                                                <button mat-icon-button color="primary"
+                                                    (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
+                                                    (mouseup)="mouseup()" (mouseleave)="mouseup()">
+                                                    <mat-icon>add</mat-icon>
+                                                </button>
+                                            </div>
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams.input">
                                             <content class="input">
@@ -397,14 +417,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                         "
                                                         #ngSliderThumb="matSliderThumb"/>
                                                 </mat-slider>
-                                                <button mat-icon-button color="primary"
-                                                    (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
-                                                                        setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                    [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : ((webcamFormGroup.get(webcamConfig).dirty) ? false : true)">
-                                                    <mat-icon>undo</mat-icon>
-                                                </button>
                                             </content>
                                         </mat-grid-tile>
+                                        
+                                        <mat-grid-tile [colspan]="gridParams.undo">
+                                            <button mat-icon-button color="primary"
+                                                (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
+                                                                    setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : ((webcamFormGroup.get(webcamConfig).dirty) ? false : true)">
+                                                <mat-icon>undo</mat-icon>
+                                            </button>
+                                        </mat-grid-tile>
+
                                     </mat-grid-list>
                                 </div>
                                 <!-- BOOL -->
@@ -419,7 +443,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams.value">
                                         </mat-grid-tile>
-                                        <mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.input">
                                             <content class="input">
                                                 <mat-checkbox color="primary" formControlName="{{webcamConfig}}"
                                                     (change)="setCheckboxValue($event.checked, webcamConfig)">
