@@ -49,3 +49,11 @@ export const GridParamsSettings: IGridParams = {
     input: 3,
     undo: 2,
 };
+
+export const GridParamsProfileSettings: IGridParams = {
+    cols: 17,
+    header: 8,
+    value: 4,
+    input: 7,
+    undo: 2,
+};
