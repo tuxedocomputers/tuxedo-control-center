@@ -81,19 +81,16 @@ export class NgTranslations {
             const xlfPath: string = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
             fs.readFile(xlfPath, (err: any, xmlBuffer: Buffer): void => {
                 if (err) {
-                    console.error("NgTranslations: loadFile readFile failed =>", err)
-                    reject(err);
+                    reject("NgTranslations: loadFile readFile failed => " + err);
                 } else {
                     xliff.xliff12ToJs(xmlBuffer.toString(), (err: unknown, jsXlf: any): void => {
                         if (err) {
-                            console.error("NgTranslations: loadFile xliff12ToJs failed =>", err)
-                            reject(err);
+                            reject("NgTranslations: loadFile xliff12ToJs failed =>" + err);
                         } else {
                             try {
                                 resolve(this.parseJS(jsXlf, target));
                             } catch (err: unknown) {
-                                console.error("NgTranslations: loadFile parseJS failed =>", err)
-                                reject(err);
+                                reject("NgTranslations: loadFile parseJS failed =>" + err);
                             }
                         }
                     });

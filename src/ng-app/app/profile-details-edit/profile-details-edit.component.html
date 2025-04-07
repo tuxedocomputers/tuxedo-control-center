@@ -53,11 +53,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div class="content">
                         <div>
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="40px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParamsProf.cols" rowHeight="70px" class="profile-details-edit-grid">
 
                                 <!-- Profile name -->
-                                <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsNameLabel">Name</header></mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.input">
+                                <mat-grid-tile [colspan]="gridParamsProf.header"><header i18n="@@cProfMgrDetailsNameLabel">Name</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParamsProf.input">
                                     <content class="input">
                                         <mat-form-field *ngIf="editProfile" appearance="fill">
                                             <input matInput #inputName="matInput"
@@ -73,10 +73,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </content>
                                 </mat-grid-tile>
                             </mat-grid-list>
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="80px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParamsProf.cols" rowHeight="120px" class="profile-details-edit-grid">
                                 <!-- Profile description -->
-                                <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.input">
+                                <mat-grid-tile [colspan]="gridParamsProf.header"><header i18n="@@cProfMgrDetailsDescriptionLabel">Description</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParamsProf.input">
                                     <content class="input">
                                         <mat-form-field *ngIf="editProfile" class="input-description" appearance="fill">
                                             <textarea matInput
@@ -94,10 +94,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </content>
                                 </mat-grid-tile>
                             </mat-grid-list>
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="40px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParamsProf.cols" rowHeight="70px" class="profile-details-edit-grid">
                                 <!-- ODM Profile for "led purposes" -->
                                 <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
-                                    <mat-grid-tile [colspan]="gridParams.header">
+                                    <mat-grid-tile [colspan]="gridParamsProf.header">
                                         <header [ngClass]="{'inactive': false}">
                                             <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">Profile indicator</ng-container>
                                             <mat-icon
@@ -109,7 +109,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-icon>
                                         </header>
                                     </mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParams.input">
+                                    <mat-grid-tile [colspan]="gridParamsProf.input">
                                         <content class="input" *ngIf="editProfile" [ngClass]="{'inactive': false}">
                                             <mat-select formControlName="name" [disableOptionCentering]="true">
                                                 <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
@@ -122,8 +122,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </div>
 
                                 <!-- Profile state selection -->
-                                <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParams.input">
+                                <mat-grid-tile [colspan]="gridParamsProf.header"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParamsProf.input">
                                     <content class="input">
                                         <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
                                             <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
@@ -154,7 +154,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div class="content">
                         <div formGroupName="display">
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid">
 
                                 <mat-grid-tile [colspan]="gridParams.header"><header i18n>Set brightness on profile activation</header></mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.value">
@@ -250,7 +250,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-list>
 
                             <!-- Refresh Rate and Resolution -->
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid"
                                 [matTooltip]="getRefreshRateNotAvailableTooltipText()" [ngClass]="{'not-available': !displayModes}"
                                 *ngIf="(displayModes && (getCurrentResolutionRefreshRates()?.length > 1))">
                                 <mat-grid-tile [colspan]="gridParams.header">
@@ -356,7 +356,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <mat-card-content class="content">
                         <div formGroupName="fan">
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid">
 
                                 <!-- Fan profile -->
                                 <mat-grid-tile [colspan]="gridParams.header">
@@ -590,7 +590,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <mat-card-content class="content">
                         <div formGroupName="webcam">
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid">
                                 <mat-grid-tile [colspan]="gridParams.header">
                                     <header i18n="@@cProfMgrDetailsWebcamStatus">Webcam status (on/off)</header>
                                 </mat-grid-tile>
@@ -644,7 +644,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <mat-card-content class="content">
                         <p class="sub-header" *ngIf="hasDeviceSystemProfileInfo" i18n="@@cProfMgrDetailsODMTDPLabel" >CPU power limit control</p>
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                        <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid"
                             *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode">
                             <!-- ODM Profile -->
                             <!-- Note: "Copy" for "led purposes" also located in profile settings -->
@@ -751,7 +751,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                         <p class="sub-header" i18n="@@cProfMgrDetailsODMTDPLabel" *ngIf="compat.hasODMPowerLimitControl">CPU power limit control</p>
 
-                        <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
+                        <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid" *ngIf="compat.hasODMPowerLimitControl">
                             <div formGroupName="odmPowerLimits">
                                 <div formArrayName="tdpValues">
                                     <div *ngFor="let powerLimitInfo of odmPowerLimitInfos; index as i;">
@@ -816,7 +816,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         >
                             <p class="sub-header" i18n="@@cProfMgrDetailsCPUFreqLabel">CPU frequency control</p>
 
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="profile-details-edit-grid"
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid"
                                 [ngClass]="{'not-available': !this.config.getSettings().cpuSettingsEnabled }"
                                 [matTooltip]="!this.config.getSettings().cpuSettingsEnabled ? this.config.cpuSettingsDisabledMessage : ''"
                             >
@@ -842,7 +842,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
-        
+
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
                                             mat-icon-button
@@ -861,7 +861,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </mat-grid-tile>
-                                    
+
                                     <!-- Maximum performance -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
@@ -880,7 +880,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-checkbox>
                                         </content>
                                     </mat-grid-tile>
-        
+
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
                                             mat-icon-button
@@ -901,7 +901,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </mat-grid-tile>
-                                    
+
                                     <!-- Minimum frequency -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMinFreqLabel">Minimum frequency</header>
@@ -961,7 +961,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
-                                    
+
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button mat-icon-button
                                             color="primary"
@@ -970,7 +970,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </mat-grid-tile>
-        
+
                                     <!-- Maximum frequency -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header [ngClass]="{'inactive': inputUseMaxPerfGov.checked}" i18n="@@cProfMgrDetailsMaxFreqLabel">Maximum frequency</header>
@@ -1034,7 +1034,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
-                                    
+
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button mat-icon-button
                                             color="primary"
@@ -1043,7 +1043,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </mat-grid-tile>
-        
+
                                 </div>
                             </mat-grid-list>
                         </div>

@@ -35,7 +35,7 @@ import { FanCustomChartComponent } from '../fan-custom-chart/fan-custom-chart.co
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
+import { GridParamsProfileSettings, GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { min: number; actual: unknown } | null => {
@@ -96,6 +96,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     @Output() public scrollTo: EventEmitter<number> = new EventEmitter<number>();
 
     public gridParams: IGridParams = GridParamsSettings;
+    public gridParamsProf: IGridParams = GridParamsProfileSettings;
 
 
     public selectStateControl: FormControl;

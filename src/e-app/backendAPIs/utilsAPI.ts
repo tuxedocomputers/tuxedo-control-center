@@ -238,7 +238,7 @@ export async function loadTranslation(langId: string): Promise<void> {
             await translation.loadLanguage(langId);
             canLoadTranslation = true;
         } catch (err: unknown) {
-            console.error("translationAndTheme: loadTranslation failed =>", err)
+            console.log("\nloadTranslation: watch mode, waiting for translation\n    =>", err)
             await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 3000));
         }
     }

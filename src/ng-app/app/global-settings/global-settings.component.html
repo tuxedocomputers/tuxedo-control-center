@@ -47,7 +47,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div class="content">
 
-                    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="4em">
                         <mat-grid-tile [colspan]="gridParams.header">
                             <div i18n="@@cGlobalSettingsTemperatureDisplayHeader" class="header">Temperature Display</div>
                         </mat-grid-tile>
@@ -74,7 +74,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class=margin-bottom i18n="@@cGlobalSettingsTemperatureDisplayDescription" class="description">Switch between Celsius and Fahrenheit
                     </div>
 
-                    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="4em">
                         <mat-grid-tile [colspan]="gridParams.header">
                             <div i18n="@@cGlobalSettingsCpuFrequencyHeader" class="header">CPU Frequency Control</div>
                         </mat-grid-tile>
@@ -101,7 +101,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         system reboot.
                     </div>
 
-                    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="4em" class="global-settings-grid">
                         <mat-grid-tile [colspan]="gridParams.header">
                             <div i18n="@@cGlobalSettingsFanControlHeader" class="header">Fan Control</div>
                         </mat-grid-tile>
@@ -126,7 +126,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         fan control is restored
                         directly.</div>
 
-                    <mat-grid-list [cols]="gridParams.cols" rowHeight="3em" class="global-settings-grid">
+                    <mat-grid-list [cols]="gridParams.cols" rowHeight="4em" class="global-settings-grid">
                         <mat-grid-tile [colspan]="gridParams.header">
                             <div i18n="@@cGlobalSettingsKeyboardBacklightHeader" class="header">Keyboard Backlight Control</div>
                         </mat-grid-tile>
@@ -174,7 +174,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
                         <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index">
                             <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols"
-                                rowHeight="3em" class="global-settings-grid">
+                                rowHeight="4em" class="global-settings-grid">
                                 <mat-grid-tile class=margin-left [colspan]="gridParams.header">
                                     <div i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel">Port
                                         {{port}} of
@@ -227,6 +227,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             i18n-matTooltip="@@chargingProfilesOpenInfoTooltip"
                             matTooltipPosition="right"
                             (click)="$event.stopPropagation(); openExternalUrl(chargingProfilesUrlHref)"
+                            class="info-icon"
                             style="display: flex; width: 40px">
                              <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link">
                                 <use href="./assets/images/icon_info.svg#Icon">
