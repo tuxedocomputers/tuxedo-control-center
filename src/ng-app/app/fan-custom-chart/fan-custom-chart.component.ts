@@ -41,7 +41,7 @@ import { customFanPreset } from "src/common/models/TccFanTable";
 
 import { Chart } from "chart.js";
 
-import type { ChartConfiguration } from "chart.js";
+import type { ChartConfiguration, ChartType, ChartTypeRegistry, TooltipItem } from "chart.js";
 
 import "chartjs-plugin-datalabels";
 import "chartjs-plugin-dragdata";
@@ -100,7 +100,8 @@ export class FanCustomChartComponent implements OnInit {
     private prevTemp: number;
 
     private chartEntered: boolean;
-    private cpuData: any[] = [];
+    private cpuData: { x: number; y: number }[] = [];
+    private chart: Chart;
 
     constructor(
         private fb: FormBuilder,
@@ -175,7 +176,12 @@ export class FanCustomChartComponent implements OnInit {
             interpolatePointsArray(tableGPU),
         ]);
 
-        this.cpuData = interpolatedTableCpu;
+        this.cpuData = interpolatedTableCpu
+            .map((value: number, index: number): { x: number; y: number } => ({
+                x: index,
+                y: value,
+            }))
+            .filter(({ x }: { x: number }): boolean => x % 10 === 0);
     }
 
     public mouseEnter(): void {
@@ -195,14 +201,20 @@ export class FanCustomChartComponent implements OnInit {
         this.prevTemp = value.y;
         return false;
     }
+    
+    private adjustFanCurve(newEntry: { x: number; y: number }): void {
+        for (const cpuEntry of this.cpuData) {
+            if (
+                (newEntry.x < cpuEntry.x && newEntry.y > cpuEntry.y) ||
+                (newEntry.x > cpuEntry.x && newEntry.y < cpuEntry.y)
+            ) {
+                this.setFormValue(cpuEntry.x, newEntry.y);
+                cpuEntry.y = newEntry.y;
+            }
+          }
+    }
+    
     private initChart(): void {
-        const filteredData: { x: number; y: number }[] = this.cpuData
-            .map((value: number, index: number): { x: number; y: number } => ({
-                x: index,
-                y: value,
-            }))
-            .filter(({ x }: { x: number }): boolean => x % 10 === 0);
-
         // todo: deduplicate
         const textColor: string = getComputedStyle(
             document.documentElement
@@ -237,8 +249,15 @@ export class FanCustomChartComponent implements OnInit {
 
                             this.setFormValue(value.x, value.y);
                         },
-                        onDragEnd: (e: MouseEvent): void => {
+                        onDragEnd: (
+                            e: MouseEvent,
+                            datasetIndex: number,
+                            index: number,
+                            value: { x: number; y: number }
+                        ): void => {
                             this.dirtyFanFormGroup();
+                            this.adjustFanCurve(value);
+                            this.updateChart()
                         },
                     },
                     datalabels: {
@@ -252,10 +271,10 @@ export class FanCustomChartComponent implements OnInit {
 
                     tooltip: {
                         callbacks: {
-                            label: (context: any): string => {
+                            label: (context: TooltipItem<ChartType>): string => {
                                 return `${context.dataset.label}: ${context.formattedValue} %`;
                             },
-                            title: (context: any): string => {
+                            title: (context: TooltipItem<keyof ChartTypeRegistry>[]): string => {
                                 return formatTemp(
                                     context[0].dataIndex * 10,
                                     this.fahrenheit
@@ -273,7 +292,7 @@ export class FanCustomChartComponent implements OnInit {
             data: {
                 labels: this.tempsLabels,
                 // todo: label translation
-                datasets: createLineChartDataset("CPU & GPU Fan", filteredData),
+                datasets: createLineChartDataset("CPU & GPU Fan", this.cpuData),
             },
         };
 
@@ -281,7 +300,7 @@ export class FanCustomChartComponent implements OnInit {
             "2d"
         ) as CanvasRenderingContext2D;
 
-        new Chart(ctx, chartConfiguration);
+        this.chart = new Chart(ctx, chartConfiguration);
     }
     private setFormValue(temp: number, sliderValue: number): void {
         this.fanFormGroup.patchValue({
@@ -291,6 +310,13 @@ export class FanCustomChartComponent implements OnInit {
 
     public dirtyFanFormGroup(): void {
         this.setSliderDirty.emit();
+    }
+    
+    private updateChart(): void {
+        if (this.chart) {
+            this.chart.data.datasets[0].data = this.cpuData;
+            this.chart.update();
+        }
     }
 
     public ngOnDestroy(): void {
