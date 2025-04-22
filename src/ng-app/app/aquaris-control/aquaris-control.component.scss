@@ -43,8 +43,8 @@
         align-items: center;
 
         font-size: 16px;
-        margin: 20px;
         gap: 10px;
+        padding-bottom: 16px;
 
         .value {
             font-weight: normal;
@@ -93,6 +93,7 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+    padding-bottom: 16px;
 
     .categories {
         display: flex;
@@ -122,12 +123,12 @@
                 display: inline-flex;
                 width: 80px;
             }
-            
+
             .fan-control {
                 display: flex;
                 align-items: center;
             }
-
+            
             mat-button-toggle-group {
                 margin: 25px 0px;
                 font-size: 0.7em;
@@ -194,6 +195,7 @@
     .title {
         font-size: 18px;
         font-weight: bold;
+        padding-bottom: 16px;
     }
     
     .description {

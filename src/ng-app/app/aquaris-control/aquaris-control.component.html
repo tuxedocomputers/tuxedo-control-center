@@ -247,8 +247,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && !hasBluetooth">
-            <p i18n="@@aqNoBluetoothHeadlineText" class="title">TUXEDO Control Center could not find a Bluetooth connection.</p>
-            <p i18n="@@aqNoBluetoothVerifyText" class="description">Please verify that:</p>
+            <div i18n="@@aqNoBluetoothHeadlineText" class="title">TUXEDO Control Center could not find a Bluetooth connection.</div>
+            <div i18n="@@aqNoBluetoothVerifyText" class="description">Please verify that:</div>
             <ol class="description">
                 <li i18n="@@aqNoBluetoothHintTurnedOn">Your Bluetooth adapter is turned on in your system settings.</li>
                 <li i18n="@@aqNoBluetoothHintNotDisabled">Your Bluetooth adapter is not disabled in the UEFI.</li>
@@ -257,8 +257,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (hasBluetooth && deviceList?.length === 0)">
-            <p><b i18n="@@aqNoDevicesHeadlineText" class="title">TUXEDO Control Center could not find your TUXEDO Aquaris</b></p>
-            <p i18n="@@aqNoDevicesVerifyText" class="description">Please verify that:</p>
+            <div i18n="@@aqNoDevicesHeadlineText" class="title">TUXEDO Control Center could not find your TUXEDO Aquaris</div>
+            <div i18n="@@aqNoDevicesVerifyText" class="description">Please verify that:</div>
             <ol class="description">
                 <li i18n="@@aqNoDevicesHintSwitchedOn">Your Aquaris is switched on and the blue LED on the power button is blinking.</li>
                 <li i18n="@@aqNoDevicesHintIsConnected">Your Aquaris is connected to your TUXEDO notebook's power supply, which is connected to a power outlet.</li>
