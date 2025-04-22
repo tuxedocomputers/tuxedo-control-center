@@ -44,41 +44,47 @@
 
         font-size: 16px;
         margin: 20px;
+        gap: 10px;
 
         .value {
             font-weight: normal;
         }
-
-        .connection-status-dot {
-            display: inline-block;
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            transform-origin: center;
-
-            margin: 10px;
-
-            background-color: gray;
         
-            @keyframes pulse-frames {
-                0%   { opacity: 0.3; transform: scale(0.42); }
-                50%  { opacity: 0.7; transform: scale(0.83); }
-                100% { opacity: 0.3; transform: scale(0.42);}
-            }
-        
-            &.searching {
+        .inner-connection-status {
+            display: flex;
+            align-items: center;
+            
+            .connection-status-dot {
+                display: inline-block;
+                height: 24px;
+                width: 24px;
+                border-radius: 50%;
+                transform-origin: center;
+    
+                margin: 10px;
+    
                 background-color: gray;
-                animation: pulse-frames 1.0s infinite;
-            }
-        
-            &.connected {
-                transform: scale(0.42);
-                background-color: rgba(100, 209, 113, 1.00);
+            
+                @keyframes pulse-frames {
+                    0%   { opacity: 0.3; transform: scale(0.42); }
+                    50%  { opacity: 0.7; transform: scale(0.83); }
+                    100% { opacity: 0.3; transform: scale(0.42);}
+                }
+            
+                &.searching {
+                    background-color: gray;
+                    animation: pulse-frames 1.0s infinite;
+                }
+            
+                &.connected {
+                    transform: scale(0.42);
+                    background-color: rgba(100, 209, 113, 1.00);
+                }
             }
         }
 
         mat-icon {
-            margin: 10px;
+            margin: 0px;
         }
     }
 }
@@ -115,6 +121,11 @@
             .label {
                 display: inline-flex;
                 width: 80px;
+            }
+            
+            .fan-control {
+                display: flex;
+                align-items: center;
             }
 
             mat-button-toggle-group {

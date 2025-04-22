@@ -28,16 +28,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
         <header>TUXEDO <span class="emph">AQUARIS</span></header>
         <span class="connection-status">
-            <span
-                class="connection-status-dot"
-                *ngIf="hasBluetooth"
-                [ngClass]="{
-                    'searching': !isConnected || isConnecting || isDisconnecting,
-                    'connected': isConnected && !isConnecting && !isDisconnecting
-                }"
-            ></span>
-            <mat-icon *ngIf="!hasBluetooth">bluetooth_disabled</mat-icon>
-            <span class="value">{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span>
+            <div class="inner-connection-status">
+                <span
+                    class="connection-status-dot"
+                    *ngIf="hasBluetooth"
+                    [ngClass]="{
+                        'searching': !isConnected || isConnecting || isDisconnecting,
+                        'connected': isConnected && !isConnecting && !isDisconnecting
+                    }"
+                ></span>
+                <mat-icon *ngIf="!hasBluetooth">bluetooth_disabled</mat-icon>
+                <span class="value">{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span>
+            </div>
             <button mat-icon-button
                 *ngIf="isConnected && !isConnecting && !isDisconnecting"
                 (click)="inputTextDialog()">
@@ -81,7 +83,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                 </div>
                 <div class="low-fan-values-notice" [style.visibility]="(fanSpeed.value > 0 && fanSpeed.value < 50) ? 'visible' : 'hidden'" i18n="@@aqLowFanSpeedNotice">Low fan speeds (&lt; 50%) may cause interference noise</div>
-                <span>
+                <span class="fan-control">
                     <button mat-icon-button color="primary"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max));"
                         (mouseup)="buttonRepeatUp()"
