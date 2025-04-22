@@ -28,7 +28,7 @@ export abstract class DaemonWorker {
         // Also inject the state (i.e configs etc..)
         protected tccd: TuxedoControlCenterDaemon) {}
 
-    public timer: NodeJS.Timer;
+    public timer: NodeJS.Timeout;
 
     protected previousProfile: ITccProfile;
     protected activeProfile: ITccProfile;

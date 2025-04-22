@@ -192,8 +192,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public onExit(): void {
         this.workers.forEach((worker: DaemonWorker): void => {
-            // todo: fix
-            //clearInterval(worker.timer);
+            clearInterval(worker.timer);
         });
         this.workers.forEach((worker: DaemonWorker): void => {
             // On exit events for each worker before exiting and saving settings
