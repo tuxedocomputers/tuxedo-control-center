@@ -314,12 +314,6 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlFanDutyCycleTextInput.reset();
         }
     }
-
-    // todo: function is empty
-    public async sliderFanChange(fanSpeed: number): Promise<void> {
-
-    }
-
     public async selectFanPreset(fanPresetId: string): Promise<void> {
         const fanPreset = this.fanPresets.get(fanPresetId);
 

@@ -98,19 +98,6 @@ export async function activateTccGui(module?: string): Promise<void> {
     }
 }
 
-// todo: removing function if it is unused
-
-// function activateAquarisGui() {
-//     if (aquarisWindow) {
-//         if (aquarisWindow.isMinimized()) { aquarisWindow.restore(); }
-//         aquarisWindow.focus();
-//     } else {
-//         userConfig.get('langId').then(langId => {
-//             createAquarisControl(langId);
-//         });
-//     }
-// }
-
 export function quitCurrentTccSession(): void {
     if (tray.isActive()) {
         tray.destroy();

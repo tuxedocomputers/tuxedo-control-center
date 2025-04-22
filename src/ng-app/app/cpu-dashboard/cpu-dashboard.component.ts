@@ -507,14 +507,6 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         return ret;
     }
 
-    // todo: is this function used?
-    private formatFahrenheit(val: number): number {
-        if (this.usingFahrenheit) {
-            val = this.utils.getFahrenheitFromCelsius(val);
-        }
-        return Math.round(val);
-     }
-
     public gotoSettings(): void {
         this.router.navigate(["global-settings", true], {
             relativeTo: this.route.parent,
