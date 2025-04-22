@@ -194,6 +194,7 @@
         align-items: center;
         
         .description {
+            padding-right: 16px;
             font-size: 16px;
         }
     }
@@ -234,10 +235,6 @@
     border-style: unset;
     background-color: transparent;
     outline: none;
-}
-
-.try-demo-mode-button {
-    margin: 0 10px;
 }
 
 .fan-speed-edit {
