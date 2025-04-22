@@ -442,5 +442,6 @@ export class FanControlHwmon extends FanControlBaseClass {
 
     public async exit(): Promise<void> {
         await this.setHwmonPwmEnable(2);
+        console.log("FanControlHwmon: Enabling auto mode")
     }
 }

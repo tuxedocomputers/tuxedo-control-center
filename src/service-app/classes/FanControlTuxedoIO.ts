@@ -116,5 +116,6 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
     public async exit(): Promise<void> {
         ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
         ioAPI.setEnableModeSet(false);
+        console.log("FanControlTuxedoIO: Enabling auto mode")
     }
 }
