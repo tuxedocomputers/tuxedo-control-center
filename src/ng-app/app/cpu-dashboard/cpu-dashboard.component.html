@@ -36,7 +36,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <!-- Active profile -->
                 <div class="content-container active-profile active-tcc-profile" *ngIf="activeProfile">
                     <span class="text" i18n="@@cDashboardActiveProfile">Active profile:</span>
-                    <a mat-button class="link" (click)="goToProfileEdit(activeProfile)">{{ activeProfile.name }}</a>
+                    <a mat-stroked-button class="link" (click)="goToProfileEdit(activeProfile)">{{ activeProfile.name }}</a>
                 </div>
 
                 <!-- CPU -->
@@ -134,7 +134,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div class="content-container active-profile" *ngIf="isX11 === 1 && iGpuAvailable
                             && dGpuAvailable && primeState != undefined && primeState != '-1'">
                         <span class="text" i18n="@@cDashboardActiveGraphicsMode">Active Graphics Mode:</span>
-                        <a mat-button class="link" (click)="gotoSettings()">
+                        <a mat-stroked-button class="link" (click)="gotoSettings()">
                             {{ getPrimeStateLabel(primeState) }}
                         </a>
                     </div>
