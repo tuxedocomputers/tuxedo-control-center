@@ -268,3 +268,9 @@ mat-tab-group.active-always-focused {
         subscript-text-size: 16px,
     )
 );
+
+@include mat.tabs-overrides(
+    (
+        label-text-size: 16px,
+    )
+);
