@@ -150,62 +150,39 @@ $colorSet: (
 
 $primary-palette: map.merge(map.get($palettes, primary), $colorSet);
 
-$tuxedo-control-center-light-theme: mat.define-theme(
-    (
-        color: (
-            theme-type: light,
-            primary: $primary-palette,
-        ),
-        typography: (
-            brand-family: "Titillium Web",
-            plain-family: "Titillium Web",
-        ),
-    )
-);
-
-:root {
-    --icon-main: currentColor;
-    --icon-detail: #e30016;
-    --gauge-red: #e22131;
-    
-    --mat-sidenav-container-background-color: var(--foreground-color);
-    --mdc-elevated-card-container-color: var(--foreground-color);
-    --mdc-outlined-card-container-color: var(--foreground-color);
-    --mat-expansion-container-background-color: var(--foreground-color);
-    --mat-sidenav-content-background-color: var(--background-color);
-
-    --mat-divider-color: var(--mdc-outlined-card-outline-color);
-
-    --mat-sidenav-container-divider-color: var(
-        --mdc-outlined-card-outline-color
-    );
-
-    --mdc-plain-tooltip-supporting-text-color: var(--text-color);
-    
-    --mat-list-active-indicator-shape: 0;
-    
-    // font with typography does not apply everywhere, changing globally
-    font-family: "Titillium Web";
-
-    // mat.tooltip-overrides didn't change the color, using css directly
-    --mdc-plain-tooltip-container-color: var(--tooltip-container-color);
-}
-
 html {
+    @media (prefers-color-scheme: light) {
+        color-scheme: light;
+
+        @include mat.theme(
+            (
+                color: (
+                    theme-type: light,
+                    primary: $primary-palette,
+                ),
+                typography: (
+                    brand-family: "Titillium Web",
+                    plain-family: "Titillium Web",
+                ),
+            )
+        );
+    }
+
     @media (prefers-color-scheme: light) {
         --foreground-color: #ffffff;
         --background-color: #fafafa;
 
         --text-color: #1c1b1b;
-        --gauge-legend-text-color: #00000061;
-        --gauge-metric-text-color: #00000061;
+        --tooltip-text-color: #e5e2e1;
 
-        --tooltip-container-color: #00000061;
+        --tooltip-container-color: #616161f1;
         --gauge-icon-color: #00000061;
         --gauge-legend-color: #e0e0e0;
 
-        @include mat.all-component-themes($tuxedo-control-center-light-theme);
+        --slide-toggle-track-color: #64d1718a;
+        --slide-toggle-handle-color: #64d171;
 
-        @include mat.typography-hierarchy($tuxedo-control-center-light-theme);
+        --divider-color: #0000001f;
+        --container-divider-color: #0000001f;
     }
 }
