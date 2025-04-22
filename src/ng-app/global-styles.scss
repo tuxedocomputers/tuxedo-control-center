@@ -106,14 +106,8 @@
         display: flex;
         justify-content: stretch;
         align-items: center;
-
-        margin-top: 30px;
         margin-bottom: 20px;
-
-        &.top {
-            margin-top:0px;
-        }
-
+        
         hr {
             opacity: 0.3;
             width: 100%;
@@ -137,6 +131,12 @@
                 transform-origin: center bottom;
             }
         }
+    }
+}
+
+.tcc-options-group:not(:first-child) {
+    .title-row {
+        margin-top: 30px;
     }
 }
 
