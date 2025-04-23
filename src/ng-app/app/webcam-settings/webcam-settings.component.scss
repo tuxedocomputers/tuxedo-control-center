@@ -44,7 +44,7 @@
         }
         
         mat-card .content {
-            padding: 16px 24px 16px !important;
+            padding: 16px 8px 0px !important;
         }
     }
 
@@ -80,7 +80,7 @@
             background-color: var(--foreground-color);
         }
     }
-
+    
     .profile-details-edit-grid {
         .inactive {
             opacity: 0.2;
