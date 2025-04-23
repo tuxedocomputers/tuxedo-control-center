@@ -57,7 +57,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-radio-button>
 </mat-radio-group>
 
-<div *ngIf="!['Unknown', '-1', undefined, ''].includes(chargeType)" class="charging-thresholds"> 
+<div *ngIf="!['Unknown', '-1', undefined, ''].includes(chargeType)"> 
     <mat-checkbox #enableThresholds color="primary"
         [formControl]="ctrlEnableThresholds"
         (change)="checkboxEnableThresholdsChange($event)"
@@ -108,73 +108,49 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </mat-radio-button>
     </mat-radio-group>
 
-    <mat-grid-list [cols]="gridParams.cols" rowHeight="30px" class="edit-grid">
-        <mat-grid-tile [colspan]="gridParams.header" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
-            <div i18n="@@chargingThresholdsLabelStartThreshold">Start threshold</div>
+    <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="edit-grid" [ngClass]="{'inactive': ctrlChargingThresholdGroup.value !== 'custom' || chargingThresholdsProgress}">
+        <mat-grid-tile [colspan]="gridParams.header">
+            <div i18n="@@chargingThresholdsLabelStartThreshold" class="header">Start threshold</div>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.value" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.value">
             <content class="value">
-                <span>{{ findClosest(startThreshold.value, chargeStartAvailableThresholds) }} %</span>
+                <span>{{ chargeStartThreshold }} %</span>
             </content>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.input" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.input">
             <content class="input">
-                <mat-slider
-                    #startThreshold
-                    [disabled]="
-                        chargingThresholdsProgress || !chargeThresholdsEnabled
-                    "
-                    min="0"
-                    max="100"
-                    step="1"
-                    color="primary">
-                    <input
-                        matSliderThumb
-                        [formControl]="ctrlChargeStartThreshold"
-                        (change)="
-                            sliderStartThresholdChange({
-                                source: ngSliderThumb,
-                                parent: ngSlider,
-                                value: ngSliderThumb.value,
-                            })
-                        "
-                        #ngSliderThumb="matSliderThumb"/>
-                </mat-slider>
+                    <mat-select [(value)]="chargeStartThreshold">
+                        <mat-option *ngFor="let chargeStartAvailableThreshold of chargeStartAvailableThresholds" [value]="chargeStartAvailableThreshold">
+                            {{ chargeStartAvailableThreshold }} %
+                        </mat-option>
+                    </mat-select>
             </content>
         </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
 
-        <mat-grid-tile [colspan]="gridParams.header" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
-            <div i18n="@@chargingThresholdsLabelEndThreshold">End threshold</div>
+        <mat-grid-tile [colspan]="gridParams.header">
+            <div i18n="@@chargingThresholdsLabelEndThreshold" class="header">End threshold</div>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.value" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.value">
             <content class="value">
-                <span>{{ findClosest(endThreshold.value, chargeEndAvailableThresholds) }} %</span>
+                <span>{{ chargeEndThreshold }} %</span>
             </content>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="gridParams.input" [hidden]="ctrlChargingThresholdGroup.value !== 'custom'">
+        <mat-grid-tile [colspan]="gridParams.input">
             <content class="input">
-                <mat-slider
-                    #endThreshold
-                    [disabled]="
-                        chargingThresholdsProgress || !chargeThresholdsEnabled
-                    "
-                    min="0"
-                    max="100"
-                    step="1"
-                    color="primary">
-                    <input
-                        matSliderThumb
-                        [formControl]="ctrlChargeEndThreshold"
-                        (change)="
-                            sliderEndThresholdChange({
-                                source: ngSliderThumb,
-                                parent: ngSlider,
-                                value: ngSliderThumb.value,
-                            })
-                        "
-                        #ngSliderThumb="matSliderThumb"/>
-                </mat-slider>
+                    <mat-select [(value)]="chargeEndThreshold">
+                        <mat-option *ngFor="let chargeEndAvailableThreshold of chargeEndAvailableThresholds" [value]="chargeEndAvailableThreshold" color="primary">
+                            {{ chargeEndAvailableThreshold }} %
+                        </mat-option>
+                    </mat-select>
             </content>
         </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
     </mat-grid-list>
+    
+    <div class="apply-button">
+        <!-- todo: translation -->
+        <button mat-stroked-button [disabled]="ctrlChargingThresholdGroup.value !== 'custom' || chargingThresholdsProgress" (click)="thresholdChange()">Save</button>
+    </div>
 </div>
+

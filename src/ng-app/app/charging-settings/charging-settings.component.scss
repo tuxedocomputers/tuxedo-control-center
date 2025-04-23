@@ -68,46 +68,49 @@
     height: 30px;
 }
 
-.charging-thresholds {
-    display: flex;
-    flex-flow: column nowrap;
+.inactive {
+    opacity: 0.2;
+    pointer-events: none;
 }
 
 .edit-grid {
-
-    .inactive {
-        opacity: 0.2;
-        pointer-events: none;
+    mat-grid-tile {
+        overflow: visible;
     }
+    
+    .description {
+        font-size: 16px;
+        text-align: left;
+        padding-top: 0px;
+        font-style: oblique;
+    }
+    
+    .input {
+        width: 100%;
 
-    header {
-        display: flex;
-        align-items: center;
-
+        mat-slider {
+            width: 100%;
+        }
+    }
+    
+    .header {
         width: 100%;
         text-align: left;
-        font-size: 1.10em;
+        font-size: 16px;
+        font-weight: bold;
     }
-
-    content.value {
+    
+    .value {
         width: 100%;
         text-align: left;
         font-weight: bold;
-        font-size: 1.15em;
+        font-size: 16px;
     }
+}
 
-    content.input {
-        width: 100%;
-
-        mat-form-field {
-            width: 360px;
-
-            &.input-description {
-
-                textarea {
-                    resize: none;
-                }
-            }
-        }
-    }
+.apply-button {
+    display: flex;
+    justify-content: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }

@@ -20,11 +20,11 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { UtilsService } from "../utils.service";
 import { FormControl } from "@angular/forms";
-import { MatSliderChange } from "@angular/material/slider";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ChargeType } from "src/common/classes/PowerSupplyController";
 import { MatRadioChange } from "@angular/material/radio";
-import { GridParamsMenu, IGridParams } from "src/common/models/IGridParams";
+import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
+import { ConfirmDialogData } from "../dialog-confirm/dialog-confirm.component";
 
 class ThresholdPresets {
     constructor(
@@ -63,6 +63,9 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargeEndAvailableThresholds: number[] = [];
     public chargeStartThreshold: number;
     public chargeEndThreshold: number;
+    public setChargeStartThreshold: number;
+    public setChargeEndThreshold: number;
+
     public chargeType: string;
     public chargeThresholdsEnabled: boolean = false;
 
@@ -76,7 +79,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     private updateInterval: number = 1000;
     private timeout;
 
-    public gridParams: IGridParams = GridParamsMenu;
+    public gridParams: IGridParams = GridParamsSettings;
 
 
     public chargingProfileLabels: Map<string, string> = new Map();
@@ -106,19 +109,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.thresholdPresets.set(BatteryThresholdOptions.Stationary, new ThresholdPresets(40, 80));
     }
 
-    public ngOnInit(): void {
-        this.periodicUpdate().then((): void => {
-            this.timeout = setInterval(async (): Promise<void> => { await this.periodicUpdate(); }, this.updateInterval);
-        });
-    }
-
-    public ngOnDestroy(): void {
-        if (this.timeout !== undefined) {
-            clearInterval(this.timeout);
-        }
-    }
-
-    private async periodicUpdate(): Promise<void> {
+    public async ngOnInit(): Promise<void> {
         await this.readAvailableSettings();
 
         const featureAvailable: boolean =
@@ -127,6 +118,12 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
 
         if (featureAvailable) {
             this.hasFeature.emit(true);
+        }
+    }
+
+    public ngOnDestroy(): void {
+        if (this.timeout !== undefined) {
+            clearInterval(this.timeout);
         }
     }
 
@@ -209,40 +206,46 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }        return closest;
     }
 
-    public async sliderStartThresholdChange(changeEvent: MatSliderChange): Promise<void> {
-
-        let newValue: number = changeEvent.value;
-        const validValues: number[] = this.chargeStartAvailableThresholds.filter(
-            (value: number): boolean => value < this.ctrlChargeEndThreshold.value
-        );
-        newValue = this.findClosest(newValue, validValues);
-        this.ctrlChargeStartThreshold.setValue(newValue);
-
-        if (newValue !== this.chargeStartThreshold) {
-            this.chargingThresholdsProgress = true;
-            await window.dbusAPI.setChargeStartThreshold(newValue);
-            await this.readAvailableSettings(true);
-            this.chargingThresholdsProgress = false;
+    public async thresholdChange(): Promise<void> {
+        if (this.chargeStartThreshold >= this.chargeEndThreshold) {
+            const config: ConfirmDialogData = {
+                // todo: translation
+                title: "Invalid configuration",
+                description: "To proceed, ensure the end threshold is higher than the start threshold.",
+                buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+            };
+            await this.utils.confirmDialog(config);
+            return;
         }
-    }
-
-    public async sliderEndThresholdChange(changeEvent: MatSliderChange): Promise<void> {
-
-        let newValue: number = changeEvent.value;
-        const validValues: number[] = this.chargeEndAvailableThresholds.filter(
-            (value: number): boolean => value > this.ctrlChargeStartThreshold.value
-        );
-        newValue = this.findClosest(newValue, validValues);
-        this.ctrlChargeEndThreshold.setValue(newValue);
-
-        if (newValue !== this.chargeEndThreshold) {
-            this.chargingThresholdsProgress = true;
-            await window.dbusAPI.setChargeEndThreshold(newValue);
-            await this.readAvailableSettings(true);
-            this.chargingThresholdsProgress = false;
+        
+        this.setChargeStartThreshold = this.chargeStartThreshold
+        this.setChargeEndThreshold = this.chargeEndThreshold
+        
+        await window.dbusAPI.setChargeStartThreshold(this.chargeStartThreshold);
+        await window.dbusAPI.setChargeEndThreshold(this.chargeEndThreshold);
+        await this.readAvailableSettings(true);
+        
+        if (this.chargeStartThreshold !== this.setChargeStartThreshold ||
+            this.chargeEndThreshold !== this.setChargeEndThreshold) {
+            const config: ConfirmDialogData = {
+                // todo: translation
+                title: "Error",
+                description: "The start and end battery thresholds did not apply correctly. Please try again.",
+                buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+            };
+            await this.utils.confirmDialog(config);
+            return;
         }
-    }
 
+        const config: ConfirmDialogData = {
+            // todo: translation
+            title: "Success",
+            description: "The start and end battery thresholds have been updated.",
+            buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
+        };
+        await this.utils.confirmDialog(config);
+    }
+    
     public async checkboxEnableThresholdsChange(changeEvent: MatCheckboxChange): Promise<void> {
         this.chargingThresholdsProgress = true;
 
@@ -277,7 +280,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
 
         await this.readAvailableSettings();
-
         this.chargingThresholdsProgress = false;
     }
 }
