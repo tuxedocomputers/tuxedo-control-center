@@ -62,7 +62,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <!-- COLOR PICKER -->
             <mat-grid-list
                 [cols]="gridParams.cols"
-                rowHeight="30px"
+                rowHeight="35px"
                 class="keyboard-backlight-grid"
                 *ngIf="
                     keyboardBacklightCapabilities.maxRed > 0 &&
@@ -114,7 +114,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </mat-grid-list>
 
             <!-- BRIGHTNESS SLIDER -->
-            <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
+            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px"
                 *ngIf="keyboardBacklightCapabilities.maxBrightness > 0">
                 <mat-grid-tile [colspan]="gridParams.space"></mat-grid-tile>
                 <mat-grid-tile [colspan]="gridParams.header">
