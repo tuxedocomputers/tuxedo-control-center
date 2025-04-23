@@ -22,11 +22,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div class="tomte-settings-edit">
     <div class="inner-tomte-settings-edit">
 
-        <mat-card class="tcc-card card-support">
+        <mat-card class="tcc-card">
             <mat-card-title>
                 <div i18n="@@cTomteGuiTomteHeader" class="title">TUXEDO Tomte</div>
             </mat-card-title>
-            <hr />
+            <hr>
             <div class="content-container centered">
                 <p i18n="@@cTomteGuiTomteDescription">
                     TUXEDO Tomte is a configuration service that only works with TUXEDO 
@@ -34,9 +34,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     or required packages, relieving users of tedious troubleshooting and problem solving.
                 </p>
             </div>
-            <br />
+            
             <div *ngIf="showRetryButton">
-                <hr />
+                <hr>
                 <div class="header" i18n="@@cTomteGuiUnableToLoadInformationHeader">
                     Unable to load information
                 </div>
@@ -49,11 +49,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         Retry
                     </button>
                 </div>
-                <br />
+                
             </div>
 
             <div *ngIf="!tomteIsInstalled && !loadingInformation">
-                <hr />
+                <hr>
                 <div class="header" i18n="@@cTomteGuiInstallTomteHeader">
                     Install TUXEDO Tomte
                 </div>
@@ -67,12 +67,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         Install
                     </button>
                 </div>
-                <br />
+                
             </div>
 
             <div *ngIf="loadingInformation">
                 <div [ngClass]="{'blur-no-input': false}">  
-                    <hr />
+                    <hr>
                 
                     <div class="content-container centered">
                         <p i18n="@@cTomteGuiLoadingInformationDescription">
@@ -80,11 +80,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </p>
                     </div>
                 </div>
-                <br />
+                
             </div>
 
             <div *ngIf="!isTuxedoDevice">
-                <hr />
+                <hr>
                 <div class="header" i18n="@@cTomteGuiNotTuxedoDeviceHeader">
                     TUXEDO Tomte not producing output
                 </div>
@@ -94,12 +94,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. 
                     </p>
                 </div>
-                <br />
+                
             </div>
 
             <div *ngIf="tomteMode && tomteIsInstalled && !loadingInformation && !showRetryButton">
 
-                <hr />
+                <hr>
                 <div class="header" i18n="@@cTomteGuiTomteOperationModeHeader">
                     Tomte operation mode
                 </div>
@@ -112,54 +112,60 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mat-form-field>
                         <mat-select [(value)]="tomteMode" (selectionChange)="tomteModeButton($event)" [disableOptionCentering]="true">
                             <mat-option [value]="tomteModes[0]" color="primary">
-                                <div i18n="@@cTomteGuiTomteOperationModeAutomaticButtonLabel">
-                                    Full Service
-                                </div>
-                                <div style="float: right">
-                                    <mat-icon
-                                    class="info-icon"
-                                    i18n-matTooltip="@@cTomteGuiTomteOperationModeAutomaticButtonTooltip"
-                                    matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer."
-                                    [matTooltipShowDelay]="infoTooltipShowDelay">
-                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                                    </mat-icon>
+                                <div class="mat-option">
+                                    <div i18n="@@cTomteGuiTomteOperationModeAutomaticButtonLabel">
+                                        Full Service
+                                    </div>
+                                    <div class="info-icon">
+                                        <mat-icon
+                                        class="info-icon"
+                                        i18n-matTooltip="@@cTomteGuiTomteOperationModeAutomaticButtonTooltip"
+                                        matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer."
+                                        [matTooltipShowDelay]="infoTooltipShowDelay">
+                                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                        </mat-icon>
+                                    </div>
                                 </div>
                             </mat-option>
                             <mat-option [value]="tomteModes[1]" color="primary">
-                                <div i18n="@@cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel">
-                                    Updates Only
-                                </div>
-                                <div style="float: right">
-                                    <mat-icon
-                                    class="info-icon"
-                                    i18n-matTooltip="@@cTomteGuiTomteOperationModeUpdatesOnlyTooltip"
-                                    matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available."
-                                    [matTooltipShowDelay]="infoTooltipShowDelay">
-                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                                    </mat-icon>
+                                <div class="mat-option">
+                                    <div i18n="@@cTomteGuiTomteOperationModeUpdatesOnlyButtonLabel">
+                                        Updates Only
+                                    </div>
+                                    <div class="info-icon">
+                                        <mat-icon
+                                        class="info-icon"
+                                        i18n-matTooltip="@@cTomteGuiTomteOperationModeUpdatesOnlyTooltip"
+                                        matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available."
+                                        [matTooltipShowDelay]="infoTooltipShowDelay">
+                                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                        </mat-icon>
+                                    </div>
                                 </div>
                             </mat-option>
                             <mat-option [value]="tomteModes[2]" color="primary">
-                                <div i18n="@@cTomteGuiTomteOperationModeDisabledButtonLabel">
-                                    Disabled
-                                </div>
-                                <div style="float: right">
-                                    <mat-icon
-                                    class="info-icon"
-                                    i18n-matTooltip="@@cTomteGuiTomteOperationModeDisabledTooltip"
-                                    matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active."
-                                    [matTooltipShowDelay]="infoTooltipShowDelay">
-                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                                    </mat-icon>
+                                <div class="mat-option">
+                                    <div i18n="@@cTomteGuiTomteOperationModeDisabledButtonLabel">
+                                        Disabled
+                                    </div>
+                                    <div class="info-icon">
+                                        <mat-icon
+                                        class="info-icon"
+                                        i18n-matTooltip="@@cTomteGuiTomteOperationModeDisabledTooltip"
+                                        matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active."
+                                        [matTooltipShowDelay]="infoTooltipShowDelay">
+                                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                        </mat-icon>
+                                    </div>
                                 </div>
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <br />
+                
             </div>
             <div *ngIf="jsonError">
-                <hr />
+                <hr>
                 <div class="header" i18n="@@cTomteGuiJsonErrorHeader">
                     Could not parse output
                 </div>
@@ -172,22 +178,17 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </div>
             </div>
             <div *ngIf="!jsonError && tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteIsInstalled">
-                <hr />
+                <hr>
                     <div class="header" i18n="@@cTomteGuiTomteConfigurationHeader">
                         Tomte Configuration
                     </div>
-                <div class="content-container centered">
-                    <!--
-                    <p i18n="@@cTomteGuiTomteConfigurationDescription">
-                        See what packages tomte is handling and block or uninstall them as needed.
-                    </p>
-                    -->
+                <div class="content-container centered table">
                     <div *ngIf="rebootRequired" >
                         <p class="tomte-warning-text" i18n="@@cTomteGuiTomteConfigurationRebootWarning">
                             Some changes may not take affect until after reboot.
                         </p>    
                     </div>
-                    <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z2 tomte-list-output-table" style="width: 100%">
+                    <table mat-table [dataSource]="tomteListArray" class="mat-elevation-z2 tomte-list-output-table">
 
                         <div matColumnDef="moduleName">
                             <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleName">
@@ -254,29 +255,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo"> 
                                 Info 
                             </th>
-                            <td mat-cell *matCellDef="let line"> 
-                                <mat-icon
-                                class="info-icon"
-                                [matTooltip]="moduleToolTips.get(line.moduleName)"
-                                [matTooltipShowDelay]="infoTooltipShowDelay"
-                                >
-                                <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
-                            </mat-icon>
+                            <td mat-cell *matCellDef="let line">
+                                    <mat-icon class="info-icon"
+                                    [matTooltip]="moduleToolTips.get(line.moduleName)"
+                                    [matTooltipShowDelay]="infoTooltipShowDelay">
+                                        <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                    </mat-icon>
 
                             </td>
                         </div>
-
 
                         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
                         <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
                     </table>
                 </div>
-                <br />
-            <!-- 
-                <hr />
-                <ng-container i18n="@@cTomteGuiTomteConfigurationResetDefaultsHeader">Reset to defaults</ng-container>
-                -->
-                <div class="content-container centered">
+                
+                <div class="content-container centered reset-button">
                     <button mat-stroked-button color="primary" (click)="tomteResetToDefaults()" i18n-matTooltip="@@cTomteGuiResetConfigurationButtonTooltip" matTooltip="Reset Configuration to defaults.">
                         <p i18n="@@cTomteGuiTomteConfigurationResetDefaultsButtonlabel">
                             Reset Tomte to default settings
