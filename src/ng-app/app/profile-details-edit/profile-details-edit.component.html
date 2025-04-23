@@ -20,9 +20,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div class="backlight-settings-edit">
     <div class="inner-backlight-settings-edit">
             
-        <mat-card *ngIf="viewProfile" class="profile-details-edit tcc-card" [formGroup]="profileFormGroup">
+        <mat-card *ngIf="viewProfile" class="tcc-card" [formGroup]="profileFormGroup">
             <mat-card-title class="profile-title">
-                <div></div>
                 <div class="save-reset-buttons">
                     <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
                         <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
@@ -40,6 +39,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </span>
                 </div>
             </mat-card-title>
+            
             <mat-card-content>
                 <!-- Profile settings -->
                 <div class="tcc-options-group">
