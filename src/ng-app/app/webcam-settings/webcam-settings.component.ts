@@ -1236,7 +1236,7 @@ export class WebcamSettingsComponent implements OnInit {
     ): boolean {
         return preset1 && preset2
             ? preset1.presetName === preset2.presetName
-            : preset2 === preset2;
+            : preset1 === preset2;
     }
 
     private setTimeout(delay: number): Promise<void> {
