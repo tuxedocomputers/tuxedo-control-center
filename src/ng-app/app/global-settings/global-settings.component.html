@@ -70,6 +70,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-button-toggle>
                             </content>
                         </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
                     <div class=margin-bottom i18n="@@cGlobalSettingsTemperatureDisplayDescription" class="description">Switch between Celsius and Fahrenheit
                     </div>
@@ -93,6 +94,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-checkbox>
                             </content>
                         </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
                     <div class=margin-bottom i18n="@@cGlobalSettingsCpuFrequencyDescription" class="description">On deactivate, CPU
                         frequency
@@ -120,6 +122,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-checkbox>
                             </content>
                         </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
                     <div class=margin-bottom i18n="@@cGlobalSettingsFanControlDescription" class="description">On deactivate, the default
                         automatic
@@ -146,6 +149,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-checkbox>
                             </content>
                         </mat-grid-tile>
+                        <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
                     <div i18n="@@cGlobalSettingsKeyboardBacklightDescription" class="description">On deactivate, keyboard backlight settings
                         are <strong>not</strong> reset to default.
@@ -197,6 +201,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-checkbox>
                                     </content>
                                 </mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                             </mat-grid-list>
                         </ng-template>
                         <div i18n="@@cGlobalSettingsChromaSubsamplingDescription">This setting might fix flickering on

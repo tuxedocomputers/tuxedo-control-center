@@ -26,7 +26,7 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
-import { GridParamsMenu, IGridParams } from "src/common/models/IGridParams";
+import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
 
 @Component({
     selector: 'app-global-settings',
@@ -37,7 +37,7 @@ import { GridParamsMenu, IGridParams } from "src/common/models/IGridParams";
 export class GlobalSettingsComponent implements OnInit {
     Object: ObjectConstructor = Object;
 
-    public gridParams: IGridParams = GridParamsMenu;
+    public gridParams: IGridParams = GridParamsSettings;
 
     public cpuSettingsEnabled: boolean = true;
     public fanControlEnabled: boolean = true;
