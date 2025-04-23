@@ -94,10 +94,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </content>
                                 </mat-grid-tile>
                             </mat-grid-list>
-                            <mat-grid-list [cols]="gridParamsProf.cols" rowHeight="70px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid">
                                 <!-- ODM Profile for "led purposes" -->
                                 <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
-                                    <mat-grid-tile [colspan]="gridParamsProf.header">
+                                    <mat-grid-tile [colspan]="gridParams.header">
                                         <header [ngClass]="{'inactive': false}">
                                             <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">Profile indicator</ng-container>
                                             <mat-icon
@@ -109,7 +109,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-icon>
                                         </header>
                                     </mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParamsProf.input">
+                                    <mat-grid-tile [colspan]="gridParams.value">
+                                        <content class="value">
+                                            {{ odmProfileToName.get(profileFormGroup.get("odmProfile").get("name").value) }}
+                                        </content>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" *ngIf="editProfile" [ngClass]="{'inactive': false}">
                                             <mat-select formControlName="name" [disableOptionCentering]="true">
                                                 <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
@@ -119,12 +124,32 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </content>
                                         <content class="input" *ngIf="!editProfile">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
                                     </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name')
+                                                    .reset(viewProfile.odmProfile.name)
+                                            "
+                                            [hidden]="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name').value === viewProfile.odmProfile.name
+                                            ">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
                                 </div>
-
+                            </mat-grid-list>
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="70px" class="profile-details-edit-grid">
                                 <!-- Profile state selection -->
-                                <mat-grid-tile [colspan]="gridParamsProf.header"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
-                                <mat-grid-tile [colspan]="gridParamsProf.input">
-                                    <content class="input">
+                                <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsStateAssignmentLabel">Activate profile automatically on</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.value"></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.input">
+                                    <content class="input toggle-group">
                                         <mat-button-toggle-group color="primary" [formControl]="selectStateControl" multiple matTooltipPosition="left">
                                             <mat-button-toggle mat-flat-button *ngFor="let state of stateInputArray"
                                                 [disabled]="getSettings().stateMap[state.value] === viewProfile.id"
@@ -136,7 +161,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-button-toggle-group>
                                     </content>
                                 </mat-grid-tile>
-
+                                <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                             </mat-grid-list>
                         </div>
                     </div>

@@ -33,38 +33,36 @@
 
     .inner-backlight-settings-edit {
         margin: 0 10px 10px 10px;
-        
+
+        .sub-header {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
         .profile-title {
             position: fixed;
             top: 10px;
             right: 40px;
             z-index: 100;
             padding-top: 10px;
-    
+
             .save-reset-buttons {
                 --icon-detail: var(--icon-main);
                 background-color: var(--foreground-color);
             }
-    
+
             .name {
                 width: 400px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 font-size: 20px;
-    
+
                 input {
                     width: 400px;
                 }
             }
         }
-
-            
-        .sub-header {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
 
         .profile-details-edit-grid {
             .inactive {
@@ -107,6 +105,11 @@
                         }
                     }
                 }
+            }
+            
+            content.toggle-group {
+                text-align: left;
+                direction: rtl;
             }
             
             .increment-decrement-buttons {
