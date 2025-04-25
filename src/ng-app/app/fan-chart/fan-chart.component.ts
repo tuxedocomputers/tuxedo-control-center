@@ -75,6 +75,13 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(private config: ConfigService, private fb: FormBuilder) {}
 
     public ngOnInit(): void {}
+    
+    // this.chart.config._config.options.plugins.tooltip.animation is sometimes set to false
+    public ngDoCheck(): void {
+        if (this.chart) {
+            this.chart.options.plugins.tooltip.animation = chartAnimation
+        }
+    }
 
     public ngAfterViewInit(): void {
         this.updateDatasets();

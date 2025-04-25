@@ -20,6 +20,7 @@
 import { Component, EventEmitter, Input, ViewChild } from "@angular/core";
 import { Chart, ChartConfiguration } from "chart.js";
 import {
+    chartAnimation,
     chartMaintainAspectRatio,
     chartResponsive,
     createBarChartDataset,
@@ -63,6 +64,13 @@ export class TgpChartComponent {
         );
     }
 
+    // this.chart.config._config.options.plugins.tooltip.animation is sometimes set to false
+    public ngDoCheck(): void {
+        if (this.chart) {
+            this.chart.options.plugins.tooltip.animation = chartAnimation
+        }
+    }
+    
     public ngAfterViewInit(): void {
         this.initChart();
     }

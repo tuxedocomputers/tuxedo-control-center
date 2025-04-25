@@ -119,6 +119,13 @@ export class FanCustomChartComponent implements OnInit {
     public ngOnInit(): void {
         this.initFanFormGroup();
     }
+    
+    // this.chart.config._config.options.plugins.tooltip.animation is sometimes set to false
+    public ngDoCheck(): void {
+        if (this.chart) {
+            this.chart.options.plugins.tooltip.animation = chartAnimation
+        }
+    }
 
     public async ngAfterViewInit(): Promise<void> {
         await this.updateFanChartDataset();
