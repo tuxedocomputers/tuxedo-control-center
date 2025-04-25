@@ -93,8 +93,8 @@ export class FanCustomChartComponent implements OnInit {
     public showFanGraphs: boolean = false;
     public tempsLabels: string[];
 
-    private fahrenheit: boolean;
     private textColor: string = "";
+    private fahrenheit: boolean = false;
 
     @ViewChild("chartCanvas") chartCanvas!: any;
 

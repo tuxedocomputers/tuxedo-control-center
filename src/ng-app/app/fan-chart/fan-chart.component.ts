@@ -74,10 +74,12 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     public tempCustomFanCurve: ITccFanProfile = undefined;
     
     private textColor: string = "";
+    private fahrenheit: boolean = false;
 
 
     constructor(private config: ConfigService, private fb: FormBuilder, private utils: UtilsService) {
         this.textColor = this.utils.getTextColor();
+        this.fahrenheit = this.config?.getSettings()?.fahrenheit;
     }
 
     public ngOnInit(): void {}
@@ -197,14 +199,14 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
                             title: (context: TooltipItem<"line">[]): string => {
                                 return formatTemp(
                                     context[0].dataIndex,
-                                    this.config?.getSettings()?.fahrenheit
+                                    this.fahrenheit
                                 );
                             },
                         },
                     },
                 },
                 scales: createLineChartScales(
-                    this.config?.getSettings()?.fahrenheit,
+                    this.fahrenheit,
                     this.textColor
                 ),
                 interaction: {
