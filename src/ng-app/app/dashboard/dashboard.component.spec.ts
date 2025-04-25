@@ -19,21 +19,21 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CpuDashboardComponent } from './cpu-dashboard.component';
+import { DashboardComponent } from './dashboard.component';
 
-describe('CpuDashboardComponent', () => {
-  let component: CpuDashboardComponent;
-  let fixture: ComponentFixture<CpuDashboardComponent>;
+describe('DashboardComponent', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CpuDashboardComponent ]
+      declarations: [ DashboardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CpuDashboardComponent);
+    fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

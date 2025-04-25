@@ -40,12 +40,12 @@ import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { PowerStateService } from "../power-state.service";
 
 @Component({
-    selector: "app-cpu-dashboard",
-    templateUrl: "./cpu-dashboard.component.html",
-    styleUrls: ["./cpu-dashboard.component.scss"],
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
     standalone: false
 })
-export class CpuDashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];
     public cpuInfo: IGeneralCPUInfo;
     public pstateInfo: IPstateInfo;

@@ -30,7 +30,7 @@ import {
 import { ProfileManagerComponent } from "./profile-manager/profile-manager.component";
 import { SupportComponent } from "./support/support.component";
 import { InfoComponent } from "./info/info.component";
-import { CpuDashboardComponent } from "./cpu-dashboard/cpu-dashboard.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
 import { ToolsComponent } from "./tools/tool.component";
 import { GlobalSettingsComponent } from "./global-settings/global-settings.component";
@@ -60,7 +60,7 @@ const routes: Routes = [
             { path: "info", component: InfoComponent },
             {
                 path: "cpu-dashboard",
-                component: CpuDashboardComponent,
+                component: DashboardComponent,
                 resolve: {
                     powerStateStatus: PowerStateStatusResolver,
                     x11Status: X11StatusResolver,

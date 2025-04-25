@@ -62,7 +62,7 @@ import { ProfileDetailsEditComponent } from './profile-details-edit/profile-deta
 import { InfoComponent } from './info/info.component';
 
 import { MarkdownModule } from 'ngx-markdown';
-import { CpuDashboardComponent } from './cpu-dashboard/cpu-dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
@@ -112,7 +112,7 @@ declare const require;
     ProfileOverviewTileComponent,
     ProfileDetailsEditComponent,
     InfoComponent,
-    CpuDashboardComponent,
+    DashboardComponent,
     GlobalSettingsComponent,
     ShutdownTimerComponent,
     ToolsComponent,
