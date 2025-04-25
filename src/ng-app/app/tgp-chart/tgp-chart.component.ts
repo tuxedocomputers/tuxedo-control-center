@@ -99,6 +99,7 @@ export class TgpChartComponent {
                 ),
             },
             options: {
+                normalized: true,
                 indexAxis: "y",
                 scales: {
                     x: {

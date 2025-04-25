@@ -227,6 +227,8 @@ export class FanCustomChartComponent implements OnInit {
         const chartConfiguration: ChartConfiguration = {
             type: "line",
             options: {
+                normalized: true,
+                parsing: false,
                 plugins: {
                     dragData: {
                         dragX: false,

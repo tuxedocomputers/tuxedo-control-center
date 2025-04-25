@@ -173,6 +173,8 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
         const chartConfiguration: ChartConfiguration = {
             type: "line",
             options: {
+                normalized: true,
+                parsing: false,
                 plugins: {
                     dragData: {
                         dragX: false,
