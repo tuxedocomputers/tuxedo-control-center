@@ -45,6 +45,7 @@ import {
     defaultFanProfiles,
 } from "src/common/models/TccFanTable";
 import { ConfigService } from "../config.service";
+import { UtilsService } from "../utils.service";
 
 @Component({
     selector: "app-fan-chart",
@@ -71,8 +72,13 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     public fanFormGroup: FormGroup;
     public customFanCurve: ITccFanProfile = undefined;
     public tempCustomFanCurve: ITccFanProfile = undefined;
+    
+    private textColor: string = "";
 
-    constructor(private config: ConfigService, private fb: FormBuilder) {}
+
+    constructor(private config: ConfigService, private fb: FormBuilder, private utils: UtilsService) {
+        this.textColor = this.utils.getTextColor();
+    }
 
     public ngOnInit(): void {}
     
@@ -164,11 +170,6 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private initChart(): void {
-        // todo: deduplicate
-        const textColor: string = getComputedStyle(
-            document.documentElement
-        ).getPropertyValue("color");
-
         const chartConfiguration: ChartConfiguration = {
             type: "line",
             options: {
@@ -182,7 +183,7 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
                     },
                     legend: {
                         labels: {
-                            color: textColor,
+                            color: this.textColor,
                         },
                     },
 
@@ -202,7 +203,7 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
                 },
                 scales: createLineChartScales(
                     this.config?.getSettings()?.fahrenheit,
-                    textColor
+                    this.textColor
                 ),
                 interaction: {
                     mode: "index",

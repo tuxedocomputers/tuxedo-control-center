@@ -25,6 +25,7 @@ import {
     chartResponsive,
     createBarChartDataset,
 } from "src/common/classes/FanChartProperties";
+import { UtilsService } from "../utils.service";
 
 @Component({
     selector: "app-tgp-chart",
@@ -44,10 +45,15 @@ export class TgpChartComponent {
     @Input()
     public nvidiaPowerCTRLDefaultPowerLimit: number;
     private dataCollectionTimeout: any = null;
+    
+    private textColor: string = ""
 
     @Input() private nvidiaPowerCTRLMaxPowerLimitEvent: EventEmitter<number>;
     @Input() private updateTGPChartEvent: EventEmitter<void>;
 
+    constructor(private utils: UtilsService) {
+        this.textColor = this.utils.getTextColor();
+    }
 
     public ngOnInit(): void {
         this.nvidiaPowerCTRLMaxPowerLimitEvent.subscribe(
@@ -76,11 +82,6 @@ export class TgpChartComponent {
     }
 
     public initChart(): void {
-        // todo: deduplicate
-        const textColor: string = getComputedStyle(
-            document.documentElement
-        ).getPropertyValue("color");
-
         const chartConfiguration: ChartConfiguration = {
             type: "bar",
             data: {
@@ -106,13 +107,13 @@ export class TgpChartComponent {
                         max: this.nvidiaPowerCTRLMaxPowerLimit,
                         stacked: true,
                         ticks: {
-                            color: textColor,
+                            color: this.textColor,
                         },
                     },
                     y: {
                         stacked: true,
                         ticks: {
-                            color: textColor,
+                            color: this.textColor,
                         },
                     },
                 },
@@ -121,12 +122,12 @@ export class TgpChartComponent {
 
                 plugins: {
                     datalabels: {
-                        color: textColor,
+                        color: this.textColor,
                         display: true,
                     },
                     legend: {
                         labels: {
-                            color: textColor,
+                            color: this.textColor,
                         },
                     },
                 },

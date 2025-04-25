@@ -169,10 +169,16 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   public getThemeClass(): string {
     return this.themeClass.value;
   }
+  
+  public getTextColor(): string {
+    return getComputedStyle(
+        document.documentElement
+    ).getPropertyValue("--text-color");
+  }
 
   // TODO make brightness mode into an enum and export it from somewhere else, e.g. render.d.ts
   public async setBrightnessMode(mode: BrightnessModeString): Promise<void> {
-    return await window.ipc.setBrightnessMode( mode);
+    return await window.ipc.setBrightnessMode(mode);
   }
 
   public async getBrightnessMode(): Promise<BrightnessModeString> {

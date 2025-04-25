@@ -94,6 +94,7 @@ export class FanCustomChartComponent implements OnInit {
     public tempsLabels: string[];
 
     private fahrenheit: boolean;
+    private textColor: string = "";
 
     @ViewChild("chartCanvas") chartCanvas!: any;
 
@@ -108,6 +109,7 @@ export class FanCustomChartComponent implements OnInit {
         private config: ConfigService,
         private utils: UtilsService
     ) {
+        this.textColor = this.utils.getTextColor()
         this.tempsLabels = Array.from(Array(100).keys())
             .concat(100)
             .map((e: number): string =>
@@ -222,11 +224,6 @@ export class FanCustomChartComponent implements OnInit {
     }
     
     private initChart(): void {
-        // todo: deduplicate
-        const textColor: string = getComputedStyle(
-            document.documentElement
-        ).getPropertyValue("color");
-
         const chartConfiguration: ChartConfiguration = {
             type: "line",
             options: {
@@ -272,7 +269,7 @@ export class FanCustomChartComponent implements OnInit {
                     },
                     legend: {
                         labels: {
-                            color: textColor,
+                            color: this.textColor,
                         },
                     },
 
@@ -290,7 +287,7 @@ export class FanCustomChartComponent implements OnInit {
                         },
                     },
                 },
-                scales: createLineChartScales(this.fahrenheit, textColor),
+                scales: createLineChartScales(this.fahrenheit, this.textColor),
                 interaction: chartInteraction,
                 animation: chartAnimation,
                 responsive: chartResponsive,
