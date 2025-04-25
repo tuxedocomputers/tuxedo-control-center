@@ -818,9 +818,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.nvidiaPowerCTRLMaxPowerLimitEvent.emit(this.nvidiaPowerCTRLMaxPowerLimit);
     }
     
-    public updateCTGPChart(): void {
+    public updateTGPChart(): void {
         this.updateTGPChartEvent.emit()
     }
+    
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
         if (!this.fansMinSpeedSubscription.closed) {
