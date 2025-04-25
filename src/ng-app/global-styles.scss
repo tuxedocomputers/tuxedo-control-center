@@ -292,3 +292,9 @@ mat-tab-group.active-always-focused {
         label-text-size: 16px,
     )
 );
+
+@include mat.checkbox-overrides(
+    (
+        label-text-size: 16px,
+    )
+);
