@@ -225,8 +225,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-grid-tile [colspan]="gridParams.undo">
                                                     <button mat-icon-button color="primary"
                                                         (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
-                                                        setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                        [hidden]="!webcamFormGroup.get(webcamConfig).dirty && !webcamFormGroup.get(webcamConfig).disabled">
+                                                                            setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                        [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                         <mat-icon>undo</mat-icon>
                                                     </button>
                                                 </mat-grid-tile>
@@ -248,6 +248,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                             (change)="setCheckboxValue($event.checked, webcamConfig)">
                                                         </mat-checkbox>
                                                     </content>
+                                                </mat-grid-tile>
+                                                <mat-grid-tile [colspan]="gridParams.undo">
+                                                    <button mat-icon-button color="primary"
+                                                        (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setCheckboxValue(viewWebcam[webcamConfig], webcamConfig);
+                                                            webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                        [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                        <mat-icon>undo</mat-icon>
+                                                    </button>
                                                 </mat-grid-tile>
                                             </mat-grid-list>
                                         </div>
@@ -278,6 +286,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                             </mat-option>
                                                         </mat-select>
                                                     </content>
+                                                </mat-grid-tile>
+                                                <mat-grid-tile [colspan]="gridParams.undo">
+                                                    <button mat-icon-button color="primary"
+                                                        (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setOptionsMenuValue($event, webcamConfig, viewWebcam[webcamConfig]);
+                                                            webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                        [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                        <mat-icon>undo</mat-icon>
+                                                    </button>
                                                 </mat-grid-tile>
                                             </mat-grid-list>
                                         </div>
@@ -420,16 +436,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 </mat-slider>
                                             </content>
                                         </mat-grid-tile>
-                                        
-                                        <mat-grid-tile [colspan]="gridParams.undo">
+                                         <mat-grid-tile [colspan]="gridParams.undo">
                                             <button mat-icon-button color="primary"
                                                 (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
                                                                     setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : ((webcamFormGroup.get(webcamConfig).dirty) ? false : true)">
+                                                [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                 <mat-icon>undo</mat-icon>
                                             </button>
                                         </mat-grid-tile>
-
                                     </mat-grid-list>
                                 </div>
                                 <!-- BOOL -->
@@ -450,6 +464,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     (change)="setCheckboxValue($event.checked, webcamConfig)">
                                                 </mat-checkbox>
                                             </content>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.undo">
+                                            <button mat-icon-button color="primary"
+                                                (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setCheckboxValue(viewWebcam[webcamConfig], webcamConfig);
+                                                    webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                <mat-icon>undo</mat-icon>
+                                            </button>
                                         </mat-grid-tile>
                                     </mat-grid-list>
                                 </div>
@@ -480,6 +502,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     </mat-option>
                                                 </mat-select>
                                             </content>
+                                        </mat-grid-tile>
+                                        <mat-grid-tile [colspan]="gridParams.undo">
+                                            <button mat-icon-button color="primary"
+                                                (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setOptionsMenuValue($event, webcamConfig, viewWebcam[webcamConfig]);
+                                                    webcamFormGroup.controls[webcamConfig].markAsPristine()"
+                                                [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                <mat-icon>undo</mat-icon>
+                                            </button>
                                         </mat-grid-tile>
                                     </mat-grid-list>
                                 </div>

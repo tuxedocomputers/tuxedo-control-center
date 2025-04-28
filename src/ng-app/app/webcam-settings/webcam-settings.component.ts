@@ -427,11 +427,14 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public async setOptionsMenuValue(
-        event: MatOptionSelectionChange,
+        event: MatOptionSelectionChange | PointerEvent,
         configParameter: string,
         option: string
     ): Promise<void> {
-        if (event.isUserInput) {
+        if (
+            event instanceof PointerEvent ||
+            (event instanceof MatOptionSelectionChange && event.isUserInput)
+        ) {
             this.mutex.runExclusive(async (): Promise<void> => {
                 this.setLoading();
                 this.webcamFormGroup.get(configParameter).markAsDirty();
