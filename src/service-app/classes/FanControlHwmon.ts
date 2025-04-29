@@ -26,6 +26,7 @@ import type { FanControlLogic } from "./FanControlLogic";
 import { TUXEDODevice } from "../../common/models/DefaultProfiles";
 
 export class FanControlHwmon extends FanControlBaseClass {
+    public fanControlName: string = "";
     private hwmonPath: string = "";
     private pwmAvailable: boolean = false;
     private fanControlPath: string =
@@ -418,7 +419,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async checkAvailable(): Promise<[boolean, boolean]> {
-        let readAvailable, writeAvailable;
+        let readAvailable: boolean = false;
         this.hwmonPath = await this.getHwmonPath();
 
         if (this.hwmonPath) {
@@ -430,10 +431,11 @@ export class FanControlHwmon extends FanControlBaseClass {
         }
 
         readAvailable = !!this.hwmonPath;
-        writeAvailable = this.pwmAvailable;
+        const writeAvailable: boolean = this.pwmAvailable;
 
-        const dev = this.tccd.identifyDevice();
-        if (dev === TUXEDODevice.SIRIUS1601 || dev === TUXEDODevice.SIRIUS1602) {
+        // Sirius can have 2 hwmon paths, but only using tuxi to avoid high cpu usage
+        const dev: TUXEDODevice = this.tccd.identifyDevice();
+        if (this.fanControlName !== "tuxi" && (dev === TUXEDODevice.SIRIUS1601 || dev === TUXEDODevice.SIRIUS1602)) {
             readAvailable = false;
         }
 

@@ -19,8 +19,14 @@
 
 import { execCommandAsync } from "../../common/classes/Utils";
 import { FanControlHwmon } from "./FanControlHwmon";
+import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
 export class FanControlPwm extends FanControlHwmon {
+    constructor(tccd: TuxedoControlCenterDaemon) {
+        super(tccd);
+        this.fanControlName = "pwm";
+    }
+    
     public async getHwmonPath(): Promise<string | undefined> {
         return await execCommandAsync(
             "grep -rl '^tuxedo$' /sys/class/hwmon/*/name | sed 's|/name$||'",
