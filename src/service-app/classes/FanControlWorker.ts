@@ -97,7 +97,7 @@ export class FanControlWorker extends DaemonWorker {
             }
             
             this.fanApi = null;
-            console.log("FanControlWorker: Fan Api not available")
+            console.log("FanControlWorker: Fan API not available")
         }
     }
 
@@ -154,14 +154,14 @@ export class FanControlWorker extends DaemonWorker {
         const fanApiUnavailable: boolean =
             this.fanApi === undefined || this.fanApi === null;
         if (fanApiUnavailable && this.retryFanInitCounter > 0) {
-            console.log("FanControlWorker: Fan Api not defined, retrying init");
+            console.log("FanControlWorker: Fan API not defined, retrying init");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
             this.onStart(true);
             return;
         }
 
         if (fanApiUnavailable && this.retryFanInitCounter === 0) {
-            console.log("FanControlWorker: Fan Api init failed");
+            console.log("FanControlWorker: Fan API init failed");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
         }
     }
