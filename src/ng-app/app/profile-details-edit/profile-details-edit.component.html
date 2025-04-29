@@ -825,7 +825,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <button mat-icon-button
                                                 color="primary"
                                                 (click)="buttonODMPowerLimitUndo(i)"
-                                                [hidden]="!checkTdpArrayChange(i)">
+                                                [hidden]="profileFormGroup.get('odmPowerLimits').get('tdpValues').value[i] === viewProfile.odmPowerLimits.tdpValues[i]">
                                                 <mat-icon>undo</mat-icon>
                                             </button>
                                         </mat-grid-tile>
