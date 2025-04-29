@@ -95,6 +95,9 @@ export class FanControlWorker extends DaemonWorker {
                     return;
                 }
             }
+            
+            this.fanApi = null;
+            console.log("FanControlWorker: Fan Api not available")
         }
     }
 
