@@ -182,12 +182,12 @@ export class FanControlHwmon extends FanControlBaseClass {
 
     private matchLabels(): void {
         this.fanTempMap = new Map();
-
+        
         for (const [fanIndex, fanLabel] of this.fanLabelMap) {
             let matchedTempLabel: string | undefined;
             let matchedTempInput: SysFsPropertyInteger | undefined;
-
-            // multiple cpu fans can have one cpu temp sensor
+                        
+            // multiple cpu fans can have one cpu temperature sensor
             matchedTempLabel = [...this.tempLabelMap.values()].find(
                 (tempLabel: string): boolean =>
                     tempLabel.startsWith(fanLabel.replace(/cpu\d+/i, "cpu")),
@@ -211,9 +211,12 @@ export class FanControlHwmon extends FanControlBaseClass {
                     tempInput: matchedTempInput,
                 });
             } else {
-                console.log(
-                    `FanControlHwmon: matchLabels: temp label did not match for index ${fanIndex}`,
-                );
+                console.log(`FanControlHwmon: matchLabels: Failed to set fan with index ${fanIndex} and label ${fanLabel}`)
+                console.log("FanControlHwmon: matchLabels: fanLabelMap: ", this.fanLabelMap)
+                console.log("FanControlHwmon: matchLabels: tempLabelMap: ", this.tempLabelMap)
+                console.log("FanControlHwmon: matchLabels: tempInputMap: ", this.tempInputMap)
+                this.tccd.onExit()
+                process.exit(0)
             }
         }
     }
