@@ -298,3 +298,11 @@ mat-tab-group.active-always-focused {
         label-text-size: 16px,
     )
 );
+
+@include mat.stepper-overrides(
+    (
+        header-label-text-size: 16px,
+        header-error-state-label-text-size: 16px,
+        header-selected-state-label-text-size: 16px,
+    )
+);
