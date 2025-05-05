@@ -79,18 +79,17 @@ export class FanControlWorker extends DaemonWorker {
         this.mapStatus = false;
 
         if (!this.fanApi) {
-            // todo: set type
             const fanControlClasses: {
-                class: any;
+                class: FanControlTuxi | FanControlPwm | FanControlTuxedoIO
                 name: string;
             }[] = [
-                { class: FanControlTuxi, name: "tuxi" },
-                { class: FanControlPwm, name: "pwm" },
-                { class: FanControlTuxedoIO, name: "tuxedo-io" },
+                { class: new FanControlTuxi(this.tccd), name: "tuxi" },
+                { class: new FanControlPwm(this.tccd), name: "pwm" },
+                { class: new FanControlTuxedoIO(this.tccd), name: "tuxedo-io" },
             ];
 
-            for (const { class: FanClass, name } of fanControlClasses) {
-                this.fanApi = new FanClass(this.tccd);
+            for (const { class: fanClass, name } of fanControlClasses) {
+                this.fanApi = fanClass;
                 if (await this.initializeFanControl(this.fanApi, name)) {
                     return;
                 }
