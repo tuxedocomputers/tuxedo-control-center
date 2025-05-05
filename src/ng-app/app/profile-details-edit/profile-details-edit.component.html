@@ -94,9 +94,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </content>
                                 </mat-grid-tile>
                             </mat-grid-list>
-                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid">
+                            <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" *ngIf="compat.uwLEDOnlyMode" class="profile-details-edit-grid">
                                 <!-- ODM Profile for "led purposes" -->
-                                <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl" *ngIf="compat.uwLEDOnlyMode">
+                                <div formGroupName="odmProfile" [hidden]="!compat.hasODMProfileControl">
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header [ngClass]="{'inactive': false}">
                                             <ng-container i18n="@@cProfMgrDetailsODMProfileLabelLEDInfo">Profile indicator</ng-container>
@@ -1226,4 +1226,3 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     </div>
 </div>
-    
