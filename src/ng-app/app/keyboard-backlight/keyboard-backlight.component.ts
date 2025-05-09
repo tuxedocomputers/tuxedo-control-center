@@ -160,7 +160,10 @@ export class KeyboardBacklightComponent implements OnInit {
     ): string[] {
         return keyboardBacklightStates
             .map(({ red, green, blue }: KeyboardBacklightStateInterface): number => {
-                return (red << 16) + (green << 8) + blue;
+                if (red !== undefined && green !== undefined && blue !== undefined) {
+                    return (red << 16) + (green << 8) + blue;
+                }
+                return (255 << 16) + (255 << 8) + 255;
             })
             .map(this.intToRGBSharpString);
     }
