@@ -118,11 +118,13 @@ export function delay(ms: number): Promise<void> {
 }
 
 // seperate exec cmd functionality because tccd can not access electron
-export async function execCommandAsync(command: string): Promise<string> {
+export async function execCommandAsync(command: string, logging?: boolean): Promise<string> {
     return new Promise((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         child_process.exec(command, (error: any, stdout: string, stderr: string): void => {
             if (error) {
-                console.error("Utils: execCommandAsync failed =>", error);
+                if (logging ?? true) {
+                    console.error("Utils: execCommandAsync failed =>", error);
+                };
                 resolve("");
             } else {
                 resolve(stdout.trim());

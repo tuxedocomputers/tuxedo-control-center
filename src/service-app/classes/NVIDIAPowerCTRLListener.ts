@@ -57,11 +57,18 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
 
         this.applyActiveProfile();
 
-        this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit =
-            Number(await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.default_limit"));
-        this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit =
-            Number(await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.max_limit"));
-        this.tccd.dbusData.nvidiaPowerCTRLAvailable = true;
+        const defaultPowerLimit: string = await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.default_limit", false)
+        const maxPowerLimit: string = await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.max_limit", false)
+        if (defaultPowerLimit && maxPowerLimit) {
+            this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit = Number(defaultPowerLimit);
+            this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit = Number(maxPowerLimit);
+            this.tccd.dbusData.nvidiaPowerCTRLAvailable = true;
+        } else {
+            console.error("NVIDIAPowerCTRLListener: power limit is not available")
+            this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit = -1;
+            this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit = -1;
+            this.tccd.dbusData.nvidiaPowerCTRLAvailable = false;
+        }
     }
 
     public isAvailable(): boolean {
