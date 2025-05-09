@@ -17,12 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Tick } from "chart.js";
+import {
+    BubbleDataPoint,
+    CartesianScaleTypeRegistry,
+    ChartDataset,
+    ChartTypeRegistry,
+    CoreInteractionOptions,
+    Point,
+    ScaleOptionsByType,
+    Tick,
+} from "chart.js";
 import { formatTemp } from "./FanUtils";
+import {_DeepPartialObject } from "chart.js/dist/types/utils";
 
-
-export const chartInteraction = {
-    mode: "index" as any, // todo: use correct type
+export const chartInteraction: _DeepPartialObject<CoreInteractionOptions> = {
+    mode: "index",
     intersect: false,
 };
 
@@ -35,10 +44,13 @@ export const chartMaintainAspectRatio = false;
 
 export function createLineChartDataset(
     primaryLabel: string,
-    primaryData: any,
+    primaryData: { x: number; y: number }[],
     secondaryLabel?: string,
-    secondaryData?: any
-): any {
+    secondaryData?: { x: number; y: number }[]
+): ChartDataset<
+    keyof ChartTypeRegistry,
+    (number | [number, number] | Point | BubbleDataPoint)[]
+>[] {
     const baseDataset = {
         spanGaps: true,
         showLine: true,
@@ -71,10 +83,13 @@ export function createLineChartDataset(
 
 export function createBarChartDataset(
     primaryLabel: string,
-    primaryData: any,
+    primaryData: number[],
     secondaryLabel: string,
-    secondaryData: any
-): any {
+    secondaryData: number[]
+): ChartDataset<
+    keyof ChartTypeRegistry,
+    (number | [number, number] | Point | BubbleDataPoint)[]
+>[] {
     return [
         {
             label: primaryLabel,
@@ -93,10 +108,14 @@ export function createLineChartScales(
     fahrenheit: boolean,
     textColor: string,
     max?: number
-): any {
+): _DeepPartialObject<{
+    [key: string]: ScaleOptionsByType<
+        "radialLinear" | keyof CartesianScaleTypeRegistry
+    >;
+}> {
     return {
         x: {
-            type: "linear" as any, // todo: use correct type
+            type: "linear",
             min: 0,
             max: max ? max : 100,
             ticks: {
