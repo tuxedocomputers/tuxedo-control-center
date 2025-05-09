@@ -18,7 +18,7 @@
  */
 
 import { Component, EventEmitter, Input, ViewChild } from "@angular/core";
-import { Chart, ChartConfiguration } from "chart.js";
+import { Chart, ChartConfiguration, TooltipItem } from "chart.js";
 import {
     chartAnimation,
     chartMaintainAspectRatio,
@@ -122,6 +122,13 @@ export class TgpChartComponent {
                 maintainAspectRatio: chartMaintainAspectRatio,
 
                 plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context: TooltipItem<"bar">): string => {
+                                return `${context.dataset.label}: ${context.formattedValue} W`;
+                            }
+                        }
+                    },
                     datalabels: {
                         color: this.textColor,
                         display: true,
