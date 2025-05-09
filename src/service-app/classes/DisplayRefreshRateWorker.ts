@@ -49,7 +49,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                 child_process.execSync("users").toString().trim().split(" ")
             ),
         ].toString();
-        
+
         const usersAvailable: boolean = loggedInUsers.length > 0;
         const usersChanged: boolean = loggedInUsers !== this.previousUsers;
         this.previousUsers = loggedInUsers;
@@ -70,13 +70,12 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             this.resetToDefault();
         }
 
-        if (usersAvailable && !this.controller.getIsWayland()) {
-            if (!this.displayInfoFound) {
+        if (usersAvailable && !this.controller.checkVariablesAvailable()) {
+            if (!this.displayInfoFound && this.controller.getIsTTY() !== true) {
                 this.updateDisplayData();
             }
-
-                this.setActiveDisplayMode();
-            }
+        }
+        this.setActiveDisplayMode();
     }
 
     public onExit(): void {}
@@ -94,27 +93,70 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                 refreshRate !== activeMode?.refreshRates[0];
 
             if (hasDifferentRefreshRate) {
-                this.setDisplayMode(
-                    activeMode.xResolution,
-                    activeMode.yResolution,
-                    refreshRate
-                );
-                activeMode.refreshRates[0] = refreshRate;
+                const status: boolean =
+                    this.controller.setRefreshRateAndResolution(
+                        activeMode.xResolution,
+                        activeMode.yResolution,
+                        refreshRate
+                    );
+
+                if (status) {
+                    console.log(
+                        `DisplayRefreshRateWorker: setActiveDisplayMode: Set ${refreshRate}Hz with ${activeMode.xResolution}x${activeMode.yResolution}`
+                    );
+                    activeMode.refreshRates[0] = refreshRate;
+                } else {
+                    console.error(
+                        `DisplayRefreshRateWorker: setActiveDisplayMode: Failed to set refresh rate ${refreshRate}Hz with ${
+                            activeMode.xResolution
+                        }x${
+                            activeMode.yResolution
+                        } for display ${this.controller.getDisplay()} with the name ${this.controller.getDisplayName()}`
+                    );
+                }
             }
         }
     }
 
     private updateDisplayData(): void {
-        this.displayInfo = this.controller.getDisplayModes();
+        this.controller.setVariables();
+
+        if (
+            this.controller.getIsTTY() === false &&
+            this.controller.getIsWayland() === false &&
+            this.controller.getIsX11() === 1
+        ) {
+            this.displayInfo = this.controller.getDisplayModes();
+            if (this.displayInfo === undefined) {
+                this.tccd.dbusData.displayModesJSON = "{}";
+            } else {
+                this.displayInfoFound = true;
+                this.tccd.dbusData.displayModesJSON = JSON.stringify(
+                    this.displayInfo
+                );
+            }
+        } else {
+            this.tccd.dbusData.displayModesJSON = "{}";
+        }
 
         this.tccd.dbusData.isX11 = this.controller.getIsX11();
 
+        if (this.controller.getIsX11() === 1) {
+            console.log(
+                "DisplayRefreshRateWorker: Detected x11"
+            );
+        }
 
-        if (this.displayInfo === undefined) {
-            this.tccd.dbusData.displayModesJSON = "{}";
-        } else {
-            this.displayInfoFound = true;
-            this.tccd.dbusData.displayModesJSON = JSON.stringify(this.displayInfo);
+        if (this.controller.getIsWayland()) {
+            console.log(
+                "DisplayRefreshRateWorker: Detected wayland"
+            );
+        }
+
+        if (this.controller.getIsTTY()) {
+            console.log(
+                "DisplayRefreshRateWorker: Detected tty"
+            );
         }
     }
 
@@ -127,9 +169,5 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         } else {
             return this.displayInfo.activeMode;
         }
-    }
-
-    private setDisplayMode(xRes: number, yRes: number, refRate: number): void {
-        this.controller.setRefreshResolution(xRes, yRes, refRate);
     }
 }
