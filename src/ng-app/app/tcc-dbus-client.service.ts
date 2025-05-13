@@ -90,18 +90,105 @@ export class TccDBusClientService implements OnDestroy {
   public isX11: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
   public device: TUXEDODevice = 0;
   public hasAquaris: boolean = true;
+  
+  private dbusFunctionMap: Map<BehaviorSubject<any>, () => Promise<string | number | boolean | string[]>> = new Map<
+    BehaviorSubject<any>,
+    () => Promise<string | string[] | boolean | number>
+  >([
+    [this.fanData, (): Promise<string> => window.dbusAPI.getFanData()],
+    [this.isX11, (): Promise<number> => window.dbusAPI.getIsX11()],
+    [
+        this.primeState,
+        (): Promise<string> => window.dbusAPI.getPrimeState()],
+    [
+      this.iGpuInfo,
+      (): Promise<string> => window.dbusAPI.getIGpuInfoValuesJSON(),
+    ],
+    [
+      this.dGpuInfo,
+      (): Promise<string> => window.dbusAPI.getDGpuInfoValuesJSON(),
+    ],
+    [
+      this.cpuPower,
+      (): Promise<string> => window.dbusAPI.getCpuPowerValuesJSON(),
+    ],
+    [
+      this.displayModes,
+      (): Promise<string> => window.dbusAPI.getDisplayModesJSON(),
+    ],
+    [
+      this.keyboardBacklightCapabilities,
+      (): Promise<string> =>
+        window.dbusAPI.getKeyboardBacklightCapabilitiesJSON(),
+    ],
+    [
+      this.keyboardBacklightStates,
+      (): Promise<string> =>
+        window.dbusAPI.getKeyboardBacklightStatesJSON(),
+    ],
 
+    [
+      this.fansMinSpeed,
+      (): Promise<number> => window.dbusAPI.getFansMinSpeed(),
+    ],
+    [
+      this.fansOffAvailable,
+      (): Promise<boolean> => window.dbusAPI.getFansOffAvailable(),
+    ],
 
-// todo: refactor, put types into a seperate place
-private observableUpdateListJSON: Map<TccDBusClientService["fanData"] | TccDBusClientService["iGpuInfo"] | TccDBusClientService["dGpuInfo"] |
-    TccDBusClientService["cpuPower"] | TccDBusClientService["displayModes"] | TccDBusClientService["keyboardBacklightCapabilities"] |
-    TccDBusClientService["keyboardBacklightStates"], string> = new Map().set(this.fanData, "getFanData")
-    .set(this.iGpuInfo, "getIGpuInfoValuesJSON")
-    .set(this.dGpuInfo, "getDGpuInfoValuesJSON")
-    .set(this.cpuPower, "getCpuPowerValuesJSON")
-    .set(this.displayModes, "getDisplayModesJSON")
-    .set(this.keyboardBacklightCapabilities, "getKeyboardBacklightCapabilitiesJSON")
-    .set(this.keyboardBacklightStates, "getKeyboardBacklightStatesJSON")
+    [
+      this.nvidiaPowerCTRLDefaultPowerLimit,
+      (): Promise<number> =>
+        window.dbusAPI.getNVIDIAPowerCTRLDefaultPowerLimit(),
+    ],
+    [
+      this.nvidiaPowerCTRLMaxPowerLimit,
+      (): Promise<number> =>
+        window.dbusAPI.getNVIDIAPowerCTRLMaxPowerLimit(),
+    ],
+    [
+      this.nvidiaPowerCTRLAvailable,
+      (): Promise<boolean> =>
+        window.dbusAPI.getNVIDIAPowerCTRLAvailable(),
+    ],
+    [this.hideCTGP, (): Promise<boolean> => window.dbusAPI.getHideCTGP()],
+
+    [
+      this.tuxedoWmiAvailable,
+      (): Promise<boolean> => window.dbusAPI.tuxedoWmiAvailable(),
+    ],
+    [
+      this.fanHwmonAvailable,
+      (): Promise<boolean> => window.dbusAPI.fanHwmonAvailable(),
+    ],
+
+    [
+      this.sensorDataCollectionStatus,
+      (): Promise<boolean> =>
+        window.dbusAPI.getSensorDataCollectionStatus(),
+    ],
+
+    [
+      this.chargingProfilesAvailable,
+      (): Promise<string[]> =>
+        window.dbusAPI.getChargingProfilesAvailable(),
+    ],
+
+    [
+      this.webcamSWAvailable,
+      (): Promise<boolean> => window.dbusAPI.webcamSWAvailable(),
+    ],
+    [
+      this.webcamSWStatus,
+      (): Promise<boolean> => window.dbusAPI.getWebcamSWStatus(),
+    ],
+
+    [
+      this.forceYUV420OutputSwitchAvailable,
+      (): Promise<boolean> =>
+        window.dbusAPI.getForceYUV420OutputSwitchAvailable(),
+    ],
+  ]);
 
   constructor(private utils: UtilsService) {
     this.updateTuxedoDevice();
@@ -109,30 +196,7 @@ private observableUpdateListJSON: Map<TccDBusClientService["fanData"] | TccDBusC
     this.timeout = setInterval((): void => { this.periodicUpdate(); }, this.updateInterval);
   }
 
-  // updates an observable that wants parsed JSON input
-  private async updateJSONObservable(observable: BehaviorSubject<any>, updateFunction: string): Promise<void> {
-    // https://stackoverflow.com/questions/1723287/calling-a-javascript-function-named-in-a-variable
-    const data: any = await window.dbusAPI[updateFunction]();
-    try{
-        if (data) {
-            const parsedData: string = JSON.parse(data);
-            observable.next(parsedData);
-        }
-        // todo: maybe only running data to empty once to avoid logging too much
-        if (!data) {
-            observable.next({});
-            console.log(`tcc-dbus-client: updateJSONObservable: window.dbusAPI did not return data for ${updateFunction}`)
-        }
-    }
-    catch(err: unknown) {
-        console.error("tcc-dbus-client: updateJSONObservable failed =>", err)
-        // TODO, set stuff to default values? Do more error handling? Check if dbus is even up?
-        //console.error("Could not update observable through function " + updateFunction +"\n" + err);
-    }
-  }
-
   // Display Brightness Gnome Workarounds
-
   displayBrightnessNotSupportedGnome(): boolean
   {
     return window.ipc.displayBrightnessNotSupportedGnome()
@@ -150,6 +214,41 @@ private observableUpdateListJSON: Map<TccDBusClientService["fanData"] | TccDBusC
     }
   }
 
+  private async updateBehaviorSubject(
+    behaviorSubject: BehaviorSubject<any>,
+    dbusFunction: () => Promise<any>
+  ): Promise<void> {
+    try {
+      const data: string | string[] | boolean | number =
+        await dbusFunction();
+
+      if (data === undefined || data === "") {
+        console.log(
+          `tcc-dbus-client: ${dbusFunction} did not return data and returned "${data}" instead`
+        );
+        behaviorSubject.next({});
+        return;
+      }
+
+      if (typeof data === "string") {
+        behaviorSubject.next(JSON.parse(data));
+      } else {
+        behaviorSubject.next(data);
+      }
+    } catch (err: unknown) {
+      console.error(`tcc-dbus-client: ${dbusFunction} failed => ${err}`);
+    }
+  }
+  
+  public async getDbusData(): Promise<void> {
+    const promiseArray: Promise<void>[] = Array.from(
+      this.dbusFunctionMap.entries()
+    ).map(([behaviorSubject, dbusFunction]: [BehaviorSubject<any>, () => Promise<string | string[] | boolean | number>]): Promise<void> => {
+      return this.updateBehaviorSubject(behaviorSubject, dbusFunction);
+    });
+    await Promise.all(promiseArray);
+  }
+
   private async periodicUpdate(): Promise<void> {
     const dbusAvailable: boolean = await window.dbusAPI.dbusAvailable()
     this.dbusAvailable.next(dbusAvailable)
@@ -157,39 +256,9 @@ private observableUpdateListJSON: Map<TccDBusClientService["fanData"] | TccDBusC
         console.error("tcc-dbus-client: periodicUpdate: Communication with TCCD interrupted, dbus not available");
         return;
     }
-    for ( const [obs,func] of this.observableUpdateListJSON.entries()) {
-        this.updateJSONObservable(obs,func);
-    }
-    this.isX11.next(await window.dbusAPI.getIsX11());
 
-    this.fansMinSpeed.next(await window.dbusAPI.getFansMinSpeed());
-    this.fansOffAvailable.next(await window.dbusAPI.getFansOffAvailable());
-
-    this.nvidiaPowerCTRLDefaultPowerLimit.next(await window.dbusAPI.getNVIDIAPowerCTRLDefaultPowerLimit());
-    this.nvidiaPowerCTRLMaxPowerLimit.next(await window.dbusAPI.getNVIDIAPowerCTRLMaxPowerLimit());
-    this.nvidiaPowerCTRLAvailable.next(await window.dbusAPI.getNVIDIAPowerCTRLAvailable());
-    this.hideCTGP.next(await window.dbusAPI.getHideCTGP());
-
-    // Read and publish data (note: atm polled)
-    const wmiAvailability: boolean = await window.dbusAPI.tuxedoWmiAvailable();
-    this.tuxedoWmiAvailable.next(wmiAvailability);
-
-    const fanHwmonAvailability: boolean = await window.dbusAPI.fanHwmonAvailable();
-    this.fanHwmonAvailable.next(fanHwmonAvailability);
+    await this.getDbusData();
     this.hasAquaris = await window.comp.getHasAquaris();
-    this.sensorDataCollectionStatus.next(await window.dbusAPI.getSensorDataCollectionStatus())
-
-    // todo: i assume that availability shouldn't change during a session and thus periodic checks result in unnecessary file access
-    // probably better to only check if global settings are accessed and also only once
-    this.chargingProfilesAvailable.next(
-        await window.dbusAPI.getChargingProfilesAvailable()
-    );
-
-    this.primeState.next(await window.dbusAPI.getPrimeState())
-    this.webcamSWAvailable.next(await window.dbusAPI.webcamSWAvailable());
-    this.webcamSWStatus.next(await window.dbusAPI.getWebcamSWStatus());
-
-    this.forceYUV420OutputSwitchAvailable.next(await window.dbusAPI.getForceYUV420OutputSwitchAvailable());
 
     const nextODMProfilesAvailable: string[] = await window.dbusAPI.odmProfilesAvailable();
     this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);

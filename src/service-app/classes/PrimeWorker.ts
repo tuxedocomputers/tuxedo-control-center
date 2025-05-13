@@ -45,11 +45,11 @@ export class PrimeWorker extends DaemonWorker {
         const primeSupported: boolean = await this.checkPrimeSupported();
 
         if (primeSupported) {
-            this.tccd.dbusData.primeState = await this.checkPrimeStatus();
+            this.tccd.dbusData.primeState = JSON.stringify(await this.checkPrimeStatus());
             this.primeSupported = primeSupported;
         }
         if (!primeSupported) {
-            this.tccd.dbusData.primeState = "-1";
+            this.tccd.dbusData.primeState = JSON.stringify("-1");
         }
     }
 
