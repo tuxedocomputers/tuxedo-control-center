@@ -91,16 +91,16 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     private async changeCryptPassword(): Promise<boolean> {
-        const oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
         const newPassword: string = this.passwordFormGroup.get("newPassword").value;
+        const oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
         const confirmPassword: string = this.passwordFormGroup.get("confirmPassword").value;
 
-        // Just to be sure that sane values are read to not brick the encryption when gui logic failed
-        if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
-            return;
+        if (newPassword === "" || newPassword !== confirmPassword || oldPassword === "") {
+            return false;
         }
+        
         try {
-            await window.ipc.changeCryptPassword(oldPassword, newPassword, confirmPassword);
+            await window.ipc.changeCryptPassword(newPassword, oldPassword, confirmPassword);
             this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
             return true;
