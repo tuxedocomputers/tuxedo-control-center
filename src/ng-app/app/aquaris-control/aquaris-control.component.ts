@@ -178,15 +178,15 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public hexToRed(hex: string): number {
-        return parseInt(hex.slice(1, 3), 16);
+        return Number.parseInt(hex.slice(1, 3), 16);
     }
 
     public hexToGreen(hex: string): number {
-        return parseInt(hex.slice(3, 5), 16);
+        return Number.parseInt(hex.slice(3, 5), 16);
     }
 
     public hexToBlue(hex: string): number {
-        return parseInt(hex.slice(5, 7), 16);
+        return Number.parseInt(hex.slice(5, 7), 16);
     }
 
     private async updateState(): Promise<void> {
@@ -328,7 +328,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public async fanSpeedTextInput(): Promise<void> {
-        const textSpeed: number = parseInt(this.ctrlFanDutyCycleTextInput.value);
+        const textSpeed: number = Number.parseInt(this.ctrlFanDutyCycleTextInput.value);
         if (!isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
             await this.setCustomFanSpeed(textSpeed);
             this.ctrlFanDutyCycleTextInput.reset();
@@ -337,8 +337,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public async pumpInput(): Promise<void> {
         const pumpToggle: boolean = this.ctrlPumpToggle.value;
-        const dutyCycle: number = parseInt(this.ctrlPumpDutyCycle.value);
-        const voltage: number = parseInt(this.ctrlPumpVoltage.value);
+        const dutyCycle: number = Number.parseInt(this.ctrlPumpDutyCycle.value);
+        const voltage: number = Number.parseInt(this.ctrlPumpVoltage.value);
 
         if (this.isConnected) {
             try {

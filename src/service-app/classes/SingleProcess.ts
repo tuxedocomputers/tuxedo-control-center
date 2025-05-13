@@ -96,7 +96,7 @@ export class SingleProcess {
             const available: boolean = fs.existsSync(this.pidPath)
             if (available) {
                 const strPid: Buffer = fs.readFileSync(this.pidPath);
-                const intPid: number = parseInt(strPid.toString(), 10);
+                const intPid: number = Number.parseInt(strPid.toString(), 10);
                 return intPid;
             }
             return Number.NaN;

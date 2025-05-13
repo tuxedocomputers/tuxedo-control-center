@@ -55,7 +55,7 @@ export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
 export class SysFsPropertyInteger extends SysFsPropertyIO<number> {
 
     convertStringToType(value: string): number {
-        return parseInt(value, 10);
+        return Number.parseInt(value, 10);
     }
 
     convertTypeToString(value: number): string {
@@ -66,7 +66,7 @@ export class SysFsPropertyInteger extends SysFsPropertyIO<number> {
 export class SysFsPropertyIntegerHex extends SysFsPropertyIO<number> {
 
     protected convertStringToType(value: string): number {
-        return parseInt(value, 16);
+        return Number.parseInt(value, 16);
     }
 
     protected convertTypeToString(value: number): string {
@@ -77,7 +77,7 @@ export class SysFsPropertyIntegerHex extends SysFsPropertyIO<number> {
 export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
 
     convertStringToType(value: string): boolean {
-        return parseInt(value, 10) === 1;
+        return Number.parseInt(value, 10) === 1;
     }
 
     convertTypeToString(value: boolean): string {
@@ -164,7 +164,7 @@ export class SysFsPropertyNumListExplicit extends SysFsPropertyIO<number[]> {
         if (value.trim() === '') {
             return [];
         } else {
-            const trimmedList: number[] = value.split(this.listSeparator).map((element: string): number => parseInt(element.trim()));
+            const trimmedList: number[] = value.split(this.listSeparator).map((element: string): number => Number.parseInt(element.trim()));
             // Finally filter all empty strings
             return trimmedList.filter((e: number): boolean => !isNaN(e));
         }

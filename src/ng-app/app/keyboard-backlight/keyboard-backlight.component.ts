@@ -77,7 +77,7 @@ export class KeyboardBacklightComponent implements OnInit {
     // Converts a string value: "#RRGGBB" to an integer value: 0xRRGGBBAA
     private RGBSharpStringToInt(input: string, alpha = "00"): number {
         const hex: string = input.replace("#", "") + alpha;
-        return parseInt(hex, 16);
+        return Number.parseInt(hex, 16);
     }
 
     private clamp(input: number, min: number, max: number): number {
