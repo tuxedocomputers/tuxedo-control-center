@@ -222,7 +222,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   public async confirmDialog(config: ConfirmDialogData): Promise<ConfirmDialogResult> {
     const dialogRef: MatDialogRef<DialogConfirmComponent, ConfirmDialogResult> = this.dialog.open(DialogConfirmComponent, {
       minWidth: 350,
-      maxWidth: 550,
+      maxWidth: 600,
       data: config
     });
     let result: ConfirmDialogResult =  await dialogRef.afterClosed().toPromise();
@@ -238,7 +238,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   public async choiceDialog(config: ChoiceDialogData, disableClose: boolean = false): Promise<ConfirmChoiceResult> {
     const dialogRef: MatDialogRef<DialogChoiceComponent, ConfirmChoiceResult> = this.dialog.open(DialogChoiceComponent, {
       minWidth: 350,
-      maxWidth: 550,
+      maxWidth: 600,
       data: config,
       autoFocus: false,
       disableClose: disableClose
@@ -260,7 +260,7 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   ): Promise<Boolean> {
     const dialogRef: MatDialogRef<DialogWaitingComponent, Boolean> = this.dialog.open(DialogWaitingComponent, {
       minWidth: 350,
-      maxWidth: 550,
+      maxWidth: 600,
       data: config,
       autoFocus: false,
       disableClose: true,
