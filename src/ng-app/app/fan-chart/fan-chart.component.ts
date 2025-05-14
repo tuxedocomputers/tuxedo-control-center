@@ -247,19 +247,6 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public getFanFormGroupValues(): ITccFanProfile {
-        const fanTable: { temp: number; speed: number }[] =
-            customFanPreset.tableCPU.map(
-                ({
-                    temp,
-                }: ITccFanTableEntry): { temp: number; speed: number } => ({
-                    temp,
-                    speed: this.fanFormGroup.get(`${temp}c`).value,
-                })
-            );
-        return { tableCPU: fanTable, tableGPU: fanTable };
-    }
-
     private resetDataCollectionTimeout(): void {
         if (this.dataCollectionTimeout) {
             clearTimeout(this.dataCollectionTimeout);

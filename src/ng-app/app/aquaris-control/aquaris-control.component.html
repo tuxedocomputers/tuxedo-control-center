@@ -100,8 +100,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             matSliderThumb
                             [formControl]="ctrlFanDutyCycle"
                             (input)="sliderFanInput(fanSpeed.value)"
-                            #ngSliderThumb="matSliderThumb"
-                            (change)="sliderFanChange(fanSpeed.value)"/>
+                            #ngSliderThumb="matSliderThumb"/>
                     </mat-slider>
                     <button mat-icon-button color="primary"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, +1, fanSpeed.min, fanSpeed.max));"
