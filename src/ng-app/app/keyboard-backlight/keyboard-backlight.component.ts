@@ -122,34 +122,39 @@ export class KeyboardBacklightComponent implements OnInit {
             (color: string): string => color ?? "#ffffff"
         );
     }
+    
+    private setKeyboardBacklightStates(
+        keyboardBacklightStates: KeyboardBacklightStateInterface[],
+        hasChosenColor: boolean,
+        hasNoPickerInUsage: boolean
+    ): void {
+        // todo: maybe adjusting error handling
+        if (keyboardBacklightStates[0]) {
+            const { brightness, red, green, blue } =
+                keyboardBacklightStates[0];
 
-    // todo: reduce indents by splitting into more fucntions
+            if (hasChosenColor && hasNoPickerInUsage) {
+                this.chosenBrightness = brightness;
+                this.chosenColorHex = this.createColorHexArray(
+                    keyboardBacklightStates
+                );
+            }
+            else {
+                this.chosenBrightnessPending = brightness;
+                this.chosenColorHexPending = this.createColorHexArray(
+                    keyboardBacklightStates
+                );
+            }
+        }
+    }
+
     private subscribeKeyboardBacklightStates(): void {
         this.keyboardBacklightStatesSubscription.add(
             this.tccdbus.keyboardBacklightStates.subscribe(
                 (keyboardBacklightStates: KeyboardBacklightStateInterface[]): void => {
                     const hasChosenColor: boolean = keyboardBacklightStates?.length > 0;
                     const hasNoPickerInUsage: boolean = !this.isPickerInUsage();
-
-                    // todo: maybe adjusting error handling
-                    if (keyboardBacklightStates[0]) {
-                        const { brightness, red, green, blue } =
-                            keyboardBacklightStates[0];
-
-                        if (hasChosenColor && hasNoPickerInUsage) {
-                            this.chosenBrightness = brightness;
-                            this.chosenColorHex = this.createColorHexArray(
-                                keyboardBacklightStates
-                            );
-                        }
-                        else {
-                            this.chosenBrightnessPending = brightness;
-                            this.chosenColorHexPending = this.createColorHexArray(
-                                keyboardBacklightStates
-                            );
-                        }
-                    }
-
+                    this.setKeyboardBacklightStates(keyboardBacklightStates, hasChosenColor, hasNoPickerInUsage)
                 }
             )
         )
