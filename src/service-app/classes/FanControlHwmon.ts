@@ -270,16 +270,16 @@ export class FanControlHwmon extends FanControlBaseClass {
         };
     }
 
-    public async mapLogicToFans(nrFans: number): Promise<boolean> {
+    public async mapLogicToFans(numberInterfaces: number): Promise<boolean> {
         if (!this.fans) {
             this.fans = new Map();
-            for (let i: number = 1; i <= nrFans; i++) {
+            for (let i: number = 1; i <= numberInterfaces; i++) {
                 this.fans.set(i, undefined);
             }
 
             await this.initPaths();
 
-            for (let i: number = 1; i <= nrFans; i++) {
+            for (let i: number = 1; i <= numberInterfaces; i++) {
                 const label: string = this.fanLabelMap.get(i);
 
                 if (label) {
@@ -387,7 +387,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         }
     }
 
-    public async getNumberFans(): Promise<number> {
+    public async getNumberFanInterfaces(): Promise<number> {
         try {
             if (this.hwmonPath) {
                 const hwmonfiles: string[] = await fs.promises.readdir(
@@ -400,6 +400,10 @@ export class FanControlHwmon extends FanControlBaseClass {
             console.error(error);
             return;
         }
+    }
+    
+    public async getNumberFans(): Promise<number> {
+        return await this.getNumberFanInterfaces();
     }
 
     public async getNumberTemp(): Promise<number> {

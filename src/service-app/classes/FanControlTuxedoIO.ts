@@ -32,7 +32,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         }
     }
 
-    public async mapLogicToFans(nrFans: number): Promise<boolean> {
+    public async mapLogicToFans(numberInterfaces: number): Promise<boolean> {
         if (!this.fans || this.fans.size === 0) {
             this.fans = new Map();
             const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
@@ -42,13 +42,13 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
             ]);
 
             // todo: maybe add change into tuxedo-drivers to return -1 if value not available
-            if (fanTemp0 > 1 && nrFans >= 1) {
+            if (fanTemp0 > 1 && numberInterfaces >= 1) {
                 this.setFan(1, FAN_LOGIC.CPU);
             }
-            if (fanTemp1 > 1 && nrFans >= 2) {
+            if (fanTemp1 > 1 && numberInterfaces >= 2) {
                 this.setFan(2, FAN_LOGIC.GPU);
             }
-            if (fanTemp2 > 1 && nrFans >= 3) {
+            if (fanTemp2 > 1 && numberInterfaces >= 3) {
                 this.setFan(3, FAN_LOGIC.GPU);
             }
 
@@ -101,9 +101,13 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
             console.log("FanControlTuxedoIO: Fan speed write with IO API failed");
         }
     }
+    
+    public async getNumberFanInterfaces(): Promise<number> {
+        return ioAPI.getNumberFans();
+    }
 
     public async getNumberFans(): Promise<number> {
-        return ioAPI.getNumberFans();
+        return this.fans.size;
     }
 
     public async clearTempValues(): Promise<void> {}

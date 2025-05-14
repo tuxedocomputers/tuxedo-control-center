@@ -134,17 +134,22 @@ export class FanControlWorker extends DaemonWorker {
             console.log(`FanControlWorker: ${name} available`);
             await this.initFanControl();
             await this.setFanProfile();
-            const amountFans: number = await fanApiInstance.getNumberFans();
-            console.log(`FanControlWorker: Detected ${amountFans} fans`);
+            const numberFans: number = await fanApiInstance.getNumberFans();
+            
+            if (numberFans === 1) {
+                console.log(`FanControlWorker: Detected ${numberFans} fan`);
+            } else {
+                console.log(`FanControlWorker: Detected ${numberFans} fans`);
+            }
             return true;
         }
         return false;
     }
 
     private async setPreviousFans(): Promise<void> {
-        const numberFans: number = await this.fanApi.getNumberFans();
+        const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
 
-        for (let i: number = 0; i <= numberFans; i++) {
+        for (let i: number = 0; i <= numberInterfaces; i++) {
             this.previousTempValues.set(i, -1);
         }
     }
@@ -202,10 +207,10 @@ export class FanControlWorker extends DaemonWorker {
 
     private async initFanControl(): Promise<void> {
         await this.fanApi.initFanControl(this.fanWriteAvailable);
-        const numberFans: number = await this.fanApi.getNumberFans();
+        const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
 
-        if (numberFans) {
-            this.mapStatus = await this.fanApi.mapLogicToFans(numberFans);
+        if (numberInterfaces) {
+            this.mapStatus = await this.fanApi.mapLogicToFans(numberInterfaces);
             await this.setPreviousFans();
             return;
         }
