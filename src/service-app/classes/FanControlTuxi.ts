@@ -17,17 +17,30 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { TUXEDODevice } from "../../common/models/DefaultProfiles";
 import { getHwmonPathWithName } from "../../common/classes/FanUtils";
 import { FanControlHwmon } from "./FanControlHwmon";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
 export class FanControlTuxi extends FanControlHwmon {
-    constructor(tccd: TuxedoControlCenterDaemon) {
+    private tuxedoDevice: TUXEDODevice;
+    
+    constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
         super(tccd);
         this.fanControlName = "tuxi";
+        this.tuxedoDevice = tuxedoDevice
     }
     
     public async getHwmonPath(): Promise<string | undefined> {
        return await getHwmonPathWithName("tuxedo_tuxi_sensors");
+    }
+    
+    public async checkAvailable(): Promise<[boolean, boolean]> {
+        // Sirius can have 2 hwmon paths, but only using tuxi to avoid high cpu usage
+        if (this.fanControlName !== "tuxi" && (this.tuxedoDevice === TUXEDODevice.SIRIUS1601 || this.tuxedoDevice === TUXEDODevice.SIRIUS1602)) {
+            return [false, false];
+        }
+                
+        return super.checkAvailable();
     }
 }

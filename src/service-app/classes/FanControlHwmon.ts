@@ -23,12 +23,11 @@ import { FanControlBaseClass } from "./FanControlBaseClass";
 import type { IFanDataInputs } from "../../common/models/ITccFans";
 import { FAN_LOGIC } from "./FanControlLogic";
 import type { FanControlLogic } from "./FanControlLogic";
-import { TUXEDODevice } from "../../common/models/DefaultProfiles";
 
 export class FanControlHwmon extends FanControlBaseClass {
     public fanControlName: string = "";
     private hwmonPath: string = "";
-    private pwmAvailable: boolean = false;
+    private writeAvailable: boolean = false;
     private fanControlPath: string =
         "/sys/bus/platform/devices/tuxedo_fan_control/";
 
@@ -67,7 +66,7 @@ export class FanControlHwmon extends FanControlBaseClass {
 
     // 1 = manual mode, 2 = auto mode
     private async setHwmonPwmEnable(status: number): Promise<void> {
-        if (this.pwmAvailable) {
+        if (this.writeAvailable) {
             const pwmfiles: string[] = await fs.promises.readdir(
                 this.fanControlPath,
             );
@@ -86,12 +85,12 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
-        if (this.pwmAvailable) {
+        if (this.writeAvailable) {
             this.tccd.dbusData.fanHwmonAvailable = true;
         }
 
         if (
-            this.pwmAvailable &&
+            this.writeAvailable &&
             fanWriteAvailable &&
             this.tccd.settings.fanControlEnabled
         ) {
@@ -430,27 +429,20 @@ export class FanControlHwmon extends FanControlBaseClass {
         this.hwmonPath = await this.getHwmonPath();
 
         if (this.hwmonPath) {
-            this.pwmAvailable = await fs.promises
-
+            this.writeAvailable = await fs.promises
                 .access(this.fanControlPath)
                 .then((): boolean => true)
                 .catch((): boolean => false);
         }
 
         readAvailable = !!this.hwmonPath;
-        const writeAvailable: boolean = this.pwmAvailable;
-
-        // Sirius can have 2 hwmon paths, but only using tuxi to avoid high cpu usage
-        const dev: TUXEDODevice = this.tccd.identifyDevice();
-        if (this.fanControlName !== "tuxi" && (dev === TUXEDODevice.SIRIUS1601 || dev === TUXEDODevice.SIRIUS1602)) {
-            readAvailable = false;
-        }
-
+        const writeAvailable: boolean = this.writeAvailable;
+        
         return [readAvailable, writeAvailable];
     }
 
     public async exit(): Promise<void> {
         await this.setHwmonPwmEnable(2);
-        console.log("FanControlHwmon: Enabling auto mode")
+        console.log("FanControlHwmon: Enabling auto mode");
     }
 }

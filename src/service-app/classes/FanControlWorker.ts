@@ -30,6 +30,7 @@ import { getCurrentCustomProfile } from "./FanControlUtils";
 import { FanControlBaseClass } from "./FanControlBaseClass";
 import { FanData } from "../../common/models/IFanData";
 import { FanControlTuxi } from "./FanControlTuxi";
+import { TUXEDODevice } from "src/common/models/DefaultProfiles";
 
 export class FanControlWorker extends DaemonWorker {
     private previousFanControlEnabled: boolean = undefined;
@@ -66,9 +67,11 @@ export class FanControlWorker extends DaemonWorker {
             },
         })),
     };
+    private tuxedoDevice: TUXEDODevice;
 
-    constructor(tccd: TuxedoControlCenterDaemon) {
+    constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
         super(1000, "FanControlWorker", tccd);
+        this.tuxedoDevice = tuxedoDevice
     }
 
     public async onStart(retry?: boolean): Promise<void> {
@@ -83,7 +86,7 @@ export class FanControlWorker extends DaemonWorker {
                 class: FanControlTuxi | FanControlPwm | FanControlTuxedoIO
                 name: string;
             }[] = [
-                { class: new FanControlTuxi(this.tccd), name: "tuxi" },
+                { class: new FanControlTuxi(this.tccd, this.tuxedoDevice), name: "tuxi" },
                 { class: new FanControlPwm(this.tccd), name: "pwm" },
                 { class: new FanControlTuxedoIO(this.tccd), name: "tuxedo-io" },
             ];

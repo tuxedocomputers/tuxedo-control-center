@@ -30,4 +30,8 @@ export class FanControlPwm extends FanControlHwmon {
     public async getHwmonPath(): Promise<string | undefined> {
        return await getHwmonPathWithName("tuxedo");
     }
+    
+    public async checkAvailable(): Promise<[boolean, boolean]> {
+        return super.checkAvailable();
+     }
 }

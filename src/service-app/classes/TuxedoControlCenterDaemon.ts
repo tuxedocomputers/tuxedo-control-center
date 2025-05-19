@@ -119,7 +119,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new DisplayBacklightWorker(this));
         this.workers.push(new CpuWorker(this));
         this.workers.push(new WebcamWorker(this));
-        this.workers.push(new FanControlWorker(this));
+        this.workers.push(new FanControlWorker(this, this.identifyDevice()));
         this.workers.push(new YCbCr420WorkaroundWorker(this));
         this.workers.push(new GpuInfoWorker(this, new AvailabilityService()));
         this.workers.push(new CpuPowerWorker(this));
