@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { execCommandAsync } from "../../common/classes/Utils";
+import { getHwmonPathWithName } from "../../common/classes/FanUtils";
 import { FanControlHwmon } from "./FanControlHwmon";
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
@@ -28,8 +28,6 @@ export class FanControlTuxi extends FanControlHwmon {
     }
     
     public async getHwmonPath(): Promise<string | undefined> {
-        return await execCommandAsync(
-            "grep -rl '^tuxedo_tuxi_sensors$' /sys/class/hwmon/*/name | sed 's|/name$||'",
-        );
+       return await getHwmonPathWithName("tuxedo_tuxi_sensors");
     }
 }

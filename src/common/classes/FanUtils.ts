@@ -18,6 +18,8 @@
  */
 
 import type { ITccFanTableEntry } from "../models/TccFanTable";
+const fsp = require("fs").promises;
+import * as path from "path";
 
 async function interpolatePoints(
     points: ITccFanTableEntry[],
@@ -72,4 +74,33 @@ export function manageCriticalTemperature(temp: number, speed: number): number {
         : temp >= 80
         ? Math.max(30, speed)
         : speed;
+}
+
+export async function getHwmonPathWithName(name: string): Promise<string> {
+    try {
+        const basePath = "/sys/class/hwmon/";
+        const hwmonDirs: string[] = await fsp.readdir(basePath);
+
+        for (const dirName of hwmonDirs) {
+            const dirPath: string = path.join(basePath, dirName);
+            const nameFilePath: string = path.join(dirPath, "name");
+
+            try {
+                const content: string = await fsp.readFile(
+                    nameFilePath,
+                    "utf-8"
+                );
+
+                if (content.trim() === name) {
+                    return dirPath;
+                }
+            } catch (err: unknown) {
+                console.error(`FanUtils: getHwmonPathWithName: ${err}`);
+            }
+        }
+    } catch (err: unknown) {
+        console.error(`FanUtils: getHwmonPathWithName: ${err}`);
+    }
+
+    return "";
 }
