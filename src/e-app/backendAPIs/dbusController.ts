@@ -71,7 +71,9 @@ export class TccDBusController {
 
     async getNVIDIAPowerCTRLDefaultPowerLimit(): Promise<number> {
         try {
-            return await this.interface.GetNVIDIAPowerCTRLDefaultPowerLimit();
+            if (this.dbusStatus) {
+                return await this.interface.GetNVIDIAPowerCTRLDefaultPowerLimit();
+            }
         } catch (err: unknown) {
             this.dbusStatus = false
 
@@ -87,7 +89,9 @@ export class TccDBusController {
 
     async getNVIDIAPowerCTRLMaxPowerLimit(): Promise<number> {
         try {
-            return await this.interface.GetNVIDIAPowerCTRLMaxPowerLimit();
+            if (this.dbusStatus) {
+                return await this.interface.GetNVIDIAPowerCTRLMaxPowerLimit();
+            }
         } catch (err: unknown) {
             this.dbusStatus = false
 
@@ -103,7 +107,9 @@ export class TccDBusController {
 
     async getNVIDIAPowerCTRLAvailable(): Promise<boolean> {
         try {
-            return await this.interface.GetNVIDIAPowerCTRLAvailable();
+            if (this.dbusStatus) {
+                return await this.interface.GetNVIDIAPowerCTRLAvailable();
+            }
         } catch (err: unknown) {
             this.dbusStatus = false
 
@@ -118,16 +124,18 @@ export class TccDBusController {
     }
     async getHideCTGP(): Promise <boolean> {
         try {
-            return await this.interface.GetHideCTGP();
+            if (this.dbusStatus) {
+                return await this.interface.GetHideCTGP();
+            }
         } catch (err: unknown) {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: GetHideCTGP failed =>", err.text)
+                console.error("dbusController: getHideCTGP failed =>", err.text)
                 return false
             }
 
-            console.error("dbusController: GetHideCTGP failed =>", err)
+            console.error("dbusController: getHideCTGP failed =>", err)
             return false;
         }
     }
