@@ -107,8 +107,8 @@ export class TomteGuiComponent implements OnInit {
                             continue;
                         }
                 }
-                this.tomteListArray = tomteInformation.modules;
-                this.tomteMode = tomteInformation.tomteMode;
+                this.tomteListArray = tomteInformation?.modules ?? [];
+                this.tomteMode = tomteInformation?.tomteMode ?? "";
             }
             this.getModuleDescriptions();
             this.loadingInformation = false;
