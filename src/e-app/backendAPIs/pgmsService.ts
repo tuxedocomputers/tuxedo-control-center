@@ -32,19 +32,22 @@ export class ProgramManagementService {
     }
 
     public async isInstalled(name: string): Promise<boolean> {
-      this.isCheckingInstallation.set(name, true);
-        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
-        execCmd(`which ${name} || :`).then((result: string): void => {
-          this.isCheckingInstallation.set(name, false);
-          resolve(true);
-        }).catch((err: unknown): void => {
-          console.error("pgmsService: isInstalled failed =>", err)
-          this.isCheckingInstallation.set(name, false);
-          resolve(false);
+        this.isCheckingInstallation.set(name, true);
+          return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+          // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
+          execCmd(`which ${name} || :`).then((result: string): void => {
+            this.isCheckingInstallation.set(name, false);
+            if (result.trim()) {
+              resolve(true);
+            }
+            resolve(false)
+          }).catch((err: unknown): void => {
+            console.error("pgmsService: isInstalled failed =>", err)
+            this.isCheckingInstallation.set(name, false);
+            resolve(false);
+          });
         });
-      });
-    }
+      }
 
     public async install(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
