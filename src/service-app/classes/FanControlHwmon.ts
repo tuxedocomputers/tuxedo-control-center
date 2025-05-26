@@ -39,6 +39,8 @@ export class FanControlHwmon extends FanControlBaseClass {
     private fanLabelMap: Map<number, string> = new Map<number, string>();
     private tempLabelMap: Map<number, string> = new Map<number, string>();
     private fanTempMap: Map<number, any> = new Map<number, string>();
+    private tempCache: Map<number, number | null> = new Map();
+
 
     private async getFilteredAndMappedFiles(
         files: string[],
@@ -105,7 +107,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         this.printLabelInformation();
     }
 
-    private async setMapData(): Promise<void> {
+    public async setMapData(): Promise<void> {
         this.fanSpeedInputMap = new Map();
         this.fanMaxInputMap = new Map();
         this.tempInputMap = new Map();
@@ -179,7 +181,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         }
     }
 
-    private matchLabels(): void {
+    public matchLabels(): void {
         this.fanTempMap = new Map();
         
         for (const [fanIndex, fanLabel] of this.fanLabelMap) {
@@ -338,8 +340,6 @@ export class FanControlHwmon extends FanControlBaseClass {
         this.tempCache.clear();
     }
 
-    private tempCache: Map<number, number | null> = new Map();
-
     public async getFanTemperature(fanIndex: number): Promise<number> {
         const fanData = this.fanTempMap.get(fanIndex + 1);
         if (!fanData) {
@@ -425,7 +425,6 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async checkAvailable(): Promise<[boolean, boolean]> {
-        let readAvailable: boolean = false;
         this.hwmonPath = await this.getHwmonPath();
 
         if (this.hwmonPath) {
@@ -435,14 +434,64 @@ export class FanControlHwmon extends FanControlBaseClass {
                 .catch((): boolean => false);
         }
 
-        readAvailable = !!this.hwmonPath;
+        const readAvailable: boolean = !!this.hwmonPath;
         const writeAvailable: boolean = this.writeAvailable;
-        
+
         return [readAvailable, writeAvailable];
     }
 
     public async exit(): Promise<void> {
         await this.setHwmonPwmEnable(2);
         console.log("FanControlHwmon: Enabling auto mode");
+    }
+
+    public testMatchLabels(): Map<
+        number,
+        { tempLabel: string; tempInput: SysFsPropertyInteger }
+    > {
+        this.matchLabels();
+        return this.fanTempMap;
+    }
+
+    public setFanLabelMap(fanLabelMap: Map<number, string>): void {
+        this.fanLabelMap = fanLabelMap;
+    }
+
+    public setTempLabelMap(tempLabelMap: Map<number, string>): void {
+        this.tempLabelMap = tempLabelMap;
+    }
+
+    public setTempInputMap(
+        tempInputMap: Map<number, SysFsPropertyInteger>
+    ): void {
+        this.tempInputMap = tempInputMap;
+    }
+
+    public setHwmonPath(hwmonPath: string): void {
+        this.hwmonPath = hwmonPath;
+    }
+
+    public getFanSpeedInputMap(): Map<number, SysFsPropertyInteger> {
+        return this.fanSpeedInputMap;
+    }
+
+    public getFanMaxInputMap(): Map<number, SysFsPropertyInteger> {
+        return this.fanMaxInputMap;
+    }
+
+    public getPwmInputMap(): Map<number, SysFsPropertyInteger> {
+        return this.pwmInputMap;
+    }
+
+    public getFanLabelMap(): Map<number, string> {
+        return this.fanLabelMap;
+    }
+
+    public getTempInputMap(): Map<number, SysFsPropertyInteger> {
+        return this.tempInputMap;
+    }
+
+    public getTempLabelMap(): Map<number, string> {
+        return this.tempLabelMap;
     }
 }

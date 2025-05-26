@@ -34,12 +34,12 @@ export abstract class FanControlBaseClass {
     public fans: Map<number, FanControlLogic>;
 
     public async setFan(index: number, logic: FAN_LOGIC): Promise<void> {
-        const cpuLogic = new FanControlLogic(
-            this.tccd.getCurrentFanProfile(),
+        const fanLogic = new FanControlLogic(
+            this.tccd?.getCurrentFanProfile(),
             logic,
             this.tccd
         );
-        this.fans.set(index, cpuLogic);
+        this.fans.set(index, fanLogic);
     }
 
     public async setFanProfileValues(
