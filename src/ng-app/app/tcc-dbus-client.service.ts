@@ -29,6 +29,7 @@ import { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
 import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
+import { DbusFunctionEntry } from '../../common/models/IDbus';
 
 @Injectable({
   providedIn: 'root'
@@ -91,105 +92,188 @@ export class TccDBusClientService implements OnDestroy {
   public device: TUXEDODevice = 0;
   public hasAquaris: boolean = true;
   
-  private dbusFunctionMap: Map<BehaviorSubject<any>, () => Promise<string | number | boolean | string[]>> = new Map<
-    BehaviorSubject<any>,
-    () => Promise<string | string[] | boolean | number>
-  >([
-    [this.fanData, (): Promise<string> => window.dbusAPI.getFanData()],
-    [this.isX11, (): Promise<number> => window.dbusAPI.getIsX11()],
+  private dbusFunctionMap: Map<BehaviorSubject<any>, DbusFunctionEntry> =
+    new Map<BehaviorSubject<any>, DbusFunctionEntry>([
     [
+      this.fanData,
+        {
+          dbusFunctionName: "getFanData",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getFanData(),
+        },
+      ],
+      [
+        this.isX11,
+        {
+          dbusFunctionName: "getIsX11",
+          dbusFunction: (): Promise<number> =>
+            window.dbusAPI.getIsX11(),
+        },
+      ],
+      [
         this.primeState,
-        (): Promise<string> => window.dbusAPI.getPrimeState()],
-    [
-      this.iGpuInfo,
-      (): Promise<string> => window.dbusAPI.getIGpuInfoValuesJSON(),
-    ],
-    [
-      this.dGpuInfo,
-      (): Promise<string> => window.dbusAPI.getDGpuInfoValuesJSON(),
-    ],
-    [
-      this.cpuPower,
-      (): Promise<string> => window.dbusAPI.getCpuPowerValuesJSON(),
-    ],
-    [
-      this.displayModes,
-      (): Promise<string> => window.dbusAPI.getDisplayModesJSON(),
-    ],
-    [
-      this.keyboardBacklightCapabilities,
-      (): Promise<string> =>
-        window.dbusAPI.getKeyboardBacklightCapabilitiesJSON(),
-    ],
-    [
-      this.keyboardBacklightStates,
-      (): Promise<string> =>
-        window.dbusAPI.getKeyboardBacklightStatesJSON(),
-    ],
-
-    [
-      this.fansMinSpeed,
-      (): Promise<number> => window.dbusAPI.getFansMinSpeed(),
-    ],
-    [
-      this.fansOffAvailable,
-      (): Promise<boolean> => window.dbusAPI.getFansOffAvailable(),
-    ],
-
-    [
-      this.nvidiaPowerCTRLDefaultPowerLimit,
-      (): Promise<number> =>
-        window.dbusAPI.getNVIDIAPowerCTRLDefaultPowerLimit(),
-    ],
-    [
-      this.nvidiaPowerCTRLMaxPowerLimit,
-      (): Promise<number> =>
-        window.dbusAPI.getNVIDIAPowerCTRLMaxPowerLimit(),
-    ],
-    [
-      this.nvidiaPowerCTRLAvailable,
-      (): Promise<boolean> =>
-        window.dbusAPI.getNVIDIAPowerCTRLAvailable(),
-    ],
-    [this.hideCTGP, (): Promise<boolean> => window.dbusAPI.getHideCTGP()],
-
-    [
-      this.tuxedoWmiAvailable,
-      (): Promise<boolean> => window.dbusAPI.tuxedoWmiAvailable(),
-    ],
-    [
-      this.fanHwmonAvailable,
-      (): Promise<boolean> => window.dbusAPI.fanHwmonAvailable(),
-    ],
-
-    [
-      this.sensorDataCollectionStatus,
-      (): Promise<boolean> =>
-        window.dbusAPI.getSensorDataCollectionStatus(),
-    ],
-
-    [
-      this.chargingProfilesAvailable,
-      (): Promise<string[]> =>
-        window.dbusAPI.getChargingProfilesAvailable(),
-    ],
-
-    [
-      this.webcamSWAvailable,
-      (): Promise<boolean> => window.dbusAPI.webcamSWAvailable(),
-    ],
-    [
-      this.webcamSWStatus,
-      (): Promise<boolean> => window.dbusAPI.getWebcamSWStatus(),
-    ],
-
-    [
-      this.forceYUV420OutputSwitchAvailable,
-      (): Promise<boolean> =>
-        window.dbusAPI.getForceYUV420OutputSwitchAvailable(),
-    ],
-  ]);
-
+        {
+          dbusFunctionName: "getPrimeState",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getPrimeState(),
+        },
+      ],
+      [
+        this.iGpuInfo,
+        {
+          dbusFunctionName: "getIGpuInfoValuesJSON",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getIGpuInfoValuesJSON(),
+        },
+      ],
+      [
+        this.dGpuInfo,
+        {
+          dbusFunctionName: "getDGpuInfoValuesJSON",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getDGpuInfoValuesJSON(),
+        },
+      ],
+      [
+        this.cpuPower,
+        {
+          dbusFunctionName: "getCpuPowerValuesJSON",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getCpuPowerValuesJSON(),
+        },
+      ],
+      [
+        this.displayModes,
+        {
+          dbusFunctionName: "getDisplayModesJSON",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getDisplayModesJSON(),
+        },
+      ],
+      [
+        this.keyboardBacklightCapabilities,
+        {
+          dbusFunctionName: "getKeyboardBacklightCapabilitiesJSON",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getKeyboardBacklightCapabilitiesJSON(),
+        },
+      ],
+      [
+        this.keyboardBacklightStates,
+        {
+          dbusFunctionName: "getKeyboardBacklightStatesJSON",
+          dbusFunction: (): Promise<string> =>
+            window.dbusAPI.getKeyboardBacklightStatesJSON(),
+        },
+      ],
+  
+      [
+        this.fansMinSpeed,
+        {
+          dbusFunctionName: "getFansMinSpeed",
+          dbusFunction: (): Promise<number> =>
+            window.dbusAPI.getFansMinSpeed(),
+        },
+      ],
+      [
+        this.fansOffAvailable,
+        {
+          dbusFunctionName: "getFansOffAvailable",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.getFansOffAvailable(),
+        },
+      ],
+  
+      [
+        this.nvidiaPowerCTRLDefaultPowerLimit,
+        {
+          dbusFunctionName: "getNVIDIAPowerCTRLDefaultPowerLimit",
+          dbusFunction: (): Promise<number> =>
+            window.dbusAPI.getNVIDIAPowerCTRLDefaultPowerLimit(),
+        },
+      ],
+      [
+        this.nvidiaPowerCTRLMaxPowerLimit,
+        {
+          dbusFunctionName: "getNVIDIAPowerCTRLMaxPowerLimit",
+          dbusFunction: (): Promise<number> =>
+            window.dbusAPI.getNVIDIAPowerCTRLMaxPowerLimit(),
+        },
+      ],
+      [
+        this.nvidiaPowerCTRLAvailable,
+        {
+          dbusFunctionName: "getNVIDIAPowerCTRLAvailable",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.getNVIDIAPowerCTRLAvailable(),
+        },
+      ],
+      [
+        this.hideCTGP,
+        {
+          dbusFunctionName: "getHideCTGP",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.getHideCTGP(),
+        },
+      ],
+      [
+        this.tuxedoWmiAvailable,
+        {
+          dbusFunctionName: "tuxedoWmiAvailable",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.tuxedoWmiAvailable(),
+        },
+      ],
+      [
+        this.fanHwmonAvailable,
+        {
+          dbusFunctionName: "fanHwmonAvailable",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.fanHwmonAvailable(),
+        },
+      ],
+      [
+        this.sensorDataCollectionStatus,
+        {
+          dbusFunctionName: "getSensorDataCollectionStatus",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.getSensorDataCollectionStatus(),
+        },
+      ],
+      [
+        this.chargingProfilesAvailable,
+        {
+          dbusFunctionName: "getChargingProfilesAvailable",
+          dbusFunction: (): Promise<string[]> =>
+            window.dbusAPI.getChargingProfilesAvailable(),
+        },
+      ],
+      [
+        this.webcamSWAvailable,
+        {
+          dbusFunctionName: "webcamSWAvailable",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.webcamSWAvailable(),
+        },
+      ],
+      [
+        this.webcamSWStatus,
+        {
+          dbusFunctionName: "getWebcamSWStatus",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.getWebcamSWStatus(),
+        },
+      ],
+      [
+        this.forceYUV420OutputSwitchAvailable,
+        {
+          dbusFunctionName: "getForceYUV420OutputSwitchAvailable",
+          dbusFunction: (): Promise<boolean> =>
+            window.dbusAPI.getForceYUV420OutputSwitchAvailable(),
+        },
+      ],
+    ]);
+  
   constructor(private utils: UtilsService) {
     this.updateTuxedoDevice();
     this.periodicUpdate();
@@ -216,6 +300,7 @@ export class TccDBusClientService implements OnDestroy {
 
   private async updateBehaviorSubject(
     behaviorSubject: BehaviorSubject<any>,
+    dbusFunctionName: string,
     dbusFunction: () => Promise<any>
   ): Promise<void> {
     try {
@@ -224,7 +309,7 @@ export class TccDBusClientService implements OnDestroy {
 
       if (data === undefined || data === "") {
         console.log(
-          `tcc-dbus-client: ${dbusFunction} did not return data and returned "${data}" instead`
+          `tcc-dbus-client: ${dbusFunctionName} did not return data and returned "${data}" instead`
         );
         behaviorSubject.next({});
         return;
@@ -236,16 +321,25 @@ export class TccDBusClientService implements OnDestroy {
         behaviorSubject.next(data);
       }
     } catch (err: unknown) {
-      console.error(`tcc-dbus-client: ${dbusFunction} failed => ${err}`);
+      console.error(`tcc-dbus-client: ${dbusFunctionName} failed => ${err}`);
     }
   }
   
   public async getDbusData(): Promise<void> {
     const promiseArray: Promise<void>[] = Array.from(
-      this.dbusFunctionMap.entries()
-    ).map(([behaviorSubject, dbusFunction]: [BehaviorSubject<any>, () => Promise<string | string[] | boolean | number>]): Promise<void> => {
-      return this.updateBehaviorSubject(behaviorSubject, dbusFunction);
-    });
+        this.dbusFunctionMap.entries()
+    ).map(
+        ([behaviorSubject, { dbusFunctionName, dbusFunction }]: [
+            BehaviorSubject<any>,
+            DbusFunctionEntry
+        ]): Promise<void> => {
+            return this.updateBehaviorSubject(
+                behaviorSubject,
+                dbusFunctionName,
+                dbusFunction
+            );
+        }
+    );
     await Promise.all(promiseArray);
   }
 
