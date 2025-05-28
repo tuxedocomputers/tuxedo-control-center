@@ -678,6 +678,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public roundValue(value: number): number {
         return Math.round(value)
     }
+    
+    public roundDownToNearestMultiple(value: number, multiple: number): number {
+        return value - (value % multiple);
+    }
 
     private getMatchingMode(
         xResolution: number,
