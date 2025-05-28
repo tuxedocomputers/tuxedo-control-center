@@ -180,7 +180,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     </header>
                                                 </mat-grid-tile>
                                                 <mat-grid-tile [colspan]="gridParams.value">
-                                                    <content class="value">
+                                                    <content class="value" [ngClass]="{'inactive': !checkValid(webcamConfig)}">
+                                                        {{ getPercentValue(webcamConfig, webcamConfig.value) }}
+                                                        %
                                                     </content>
                                                     <div class="increment-decrement-buttons">
                                                         <button mat-icon-button color="primary"
