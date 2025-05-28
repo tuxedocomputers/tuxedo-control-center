@@ -395,8 +395,8 @@ export class FanControlHwmon extends FanControlBaseClass {
                 const fanFiles: string[] = await this.getFanFiles(hwmonfiles);
                 return fanFiles.length;
             }
-        } catch (error) {
-            console.error(error);
+        } catch (err: unknown) {
+            console.error("FanControlHwmon: getNumberFanInterfaces failed =>", err);
             return;
         }
     }
@@ -414,8 +414,8 @@ export class FanControlHwmon extends FanControlBaseClass {
                 const fanFiles: string[] = await this.getTempFiles(hwmonfiles);
                 return fanFiles.length;
             }
-        } catch (error) {
-            console.error(error);
+        } catch (err: unknown) {
+            console.error("FanControlHwmon: getNumberTemp failed =>", err);
             return;
         }
     }
