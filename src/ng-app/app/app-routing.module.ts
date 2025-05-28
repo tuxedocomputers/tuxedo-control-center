@@ -41,8 +41,18 @@ import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.componen
 import { WebcamSettingsGuard } from "./webcam.guard";
 import { TomteGuiComponent } from "./tomte-gui/tomte-gui.component";
 import { PrimeDialogComponent } from "./prime-dialog/prime-dialog.component";
-import { AmdGpuCountResolver, CpuVendorResolver, DGpuStatusResolver, IGpuStatusResolver, PowerStateStatusResolver } from "./dashboard.resolver";
+import {
+    AmdGpuCountResolver,
+    CpuVendorResolver,
+    DGpuStatusResolver,
+    IGpuStatusResolver,
+    PowerStateStatusResolver,
+} from "./dashboard.resolver";
 import { X11StatusResolver } from "./x11.resolver";
+import { AnydeskInstalledResolver } from "./anydesk.resolver";
+import { AptInstalledResolver } from "./apt.resolver";
+import { TomteInstalledResolver } from "./tomte.resolver";
+import { WebfaiCreatorInstalledResolver } from "./webfaiCreator.resolver";
 
 const routes: Routes = [
     { path: "", redirectTo: "/main-gui/cpu-dashboard", pathMatch: "full" },
@@ -56,7 +66,15 @@ const routes: Routes = [
                 path: "profile-manager/:profileId",
                 component: ProfileManagerComponent,
             },
-            { path: "support", component: SupportComponent },
+            {
+                path: "support",
+                component: SupportComponent,
+                resolve: {
+                    anydeskInstalled: AnydeskInstalledResolver,
+                    aptInstalled: AptInstalledResolver,
+                    webfaiCreatorInstalled: WebfaiCreatorInstalledResolver,
+                },
+            },
             { path: "info", component: InfoComponent },
             {
                 path: "cpu-dashboard",
@@ -90,6 +108,7 @@ const routes: Routes = [
                         ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
                     x11Status: X11StatusResolver,
+                    aptInstalled: AptInstalledResolver,
                 },
                 component: GlobalSettingsComponent,
             },
@@ -102,11 +121,19 @@ const routes: Routes = [
                         ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
                     x11Status: X11StatusResolver,
+                    aptInstalled: AptInstalledResolver,
                 },
                 component: GlobalSettingsComponent,
             },
             { path: "aquaris-control", component: AquarisControlComponent },
-            { path: "tomte-gui", component: TomteGuiComponent },
+            {
+                path: "tomte-gui",
+                component: TomteGuiComponent,
+                resolve: {
+                    aptInstalled: AptInstalledResolver,
+                    tomteInstalled: TomteInstalledResolver,
+                },
+            },
         ],
     },
     { path: "webcam-preview", component: WebcamPreviewComponent },

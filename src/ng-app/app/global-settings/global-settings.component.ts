@@ -54,6 +54,8 @@ export class GlobalSettingsComponent implements OnInit {
     public primeState: string = "iGPU";
     public expandPrimeSelect: Boolean = false;
     public isX11: number = -1;
+    public aptInstalled: boolean = false;
+    
     public chargingProfilesUrlHref: string = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
 
     constructor(
@@ -66,7 +68,7 @@ export class GlobalSettingsComponent implements OnInit {
 
     // todo: move this.config.getSettings() into a variable in every function, too many calls
     public ngOnInit(): void {
-        this.setValuesFromResolverRoute();
+        this.setVariablesWithRouteSnapshot();
 
         const routingFromDashboard: string = this.route.snapshot.paramMap.get("routingFromDashboard");
         if (routingFromDashboard) {
@@ -91,7 +93,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => { this.ctrlBrightnessMode.setValue(mode) });
     }
 
-    private setValuesFromResolverRoute(): void {
+    private setVariablesWithRouteSnapshot(): void {
         const paramMap = this.route.snapshot.paramMap;
         const data = this.route.snapshot.data;
 
@@ -107,6 +109,8 @@ export class GlobalSettingsComponent implements OnInit {
 
         this.primeState = data.primeSelectAvailable;
         this.isX11 = data.x11Status;
+        
+        this.aptInstalled = data.aptInstalled;
     }
     
     public onCPUSettingsEnabledChanged(event: any): void {

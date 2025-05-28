@@ -22,6 +22,7 @@ import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAPI';
 import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -37,7 +38,6 @@ import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component'
   standalone: false
 })
 export class TomteGuiComponent implements OnInit {
-    public tomteIsInstalled: boolean = false;
     public jsonError: boolean = false;
     public rebootRequired: boolean = false;
     public tomteListArray: ITomteModule[] = [];
@@ -52,20 +52,30 @@ export class TomteGuiComponent implements OnInit {
     // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and
     // set this variable to false to output the correct error message in the control center
     public isTuxedoDevice: boolean = true;
+    public aptInstalled: boolean = false;
+    public tomteInstalled: boolean = false;
+    
+    
     constructor(
         private utils: UtilsService,
+        private route: ActivatedRoute,
     ) { }
-
-
-
-
+    
     public ngOnInit(): void {
+        this.setVariablesWithRouteSnapshot();
     }
 
     public ngAfterViewInit(): void {
         this.tomtelist();
     }
 
+    private setVariablesWithRouteSnapshot(): void {
+        const data = this.route.snapshot.data;
+        
+        this.aptInstalled = data.aptInstalled;
+        this.tomteInstalled = data.tomteInstalled;
+    }
+    
     public focusControl(control: any): void {
         setTimeout((): void => { control.focus(); }, 0);
     }
@@ -81,8 +91,9 @@ export class TomteGuiComponent implements OnInit {
         // only check version once and then store it?
         this.showRetryButton = false;
         this.loadingInformation = true;
-        this.tomteIsInstalled = await window.pgms.tomteIsInstalled();
-        if (this.tomteIsInstalled)
+
+        this.tomteInstalled = await window.pgms.tomteInstalled();
+        if (this.tomteInstalled)
             {
                 let tomteInformation: ITomteInformation;
                 // check for information a few times, if it keeps failing, show retry button
@@ -288,7 +299,7 @@ export class TomteGuiComponent implements OnInit {
         Tries to either install or uninstall a given module, depending on if the module is already installed or not
         Not to be confused with the installTomteButton() function that instead tries to install tomte
     */
-    public async tomteUn_InstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
+    public async tomteModuleInstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
     {
         this.utils.pageDisabled = true;
         const dialogueYes: boolean = await this.confirmChangesDialogue();
@@ -307,7 +318,7 @@ export class TomteGuiComponent implements OnInit {
         {
 
             await window.tomteAPI.removeModule(name).catch((err: unknown): void => {
-                console.error("tomote-gui: tomteUn_InstallButton removeModule failed =>", err);
+                console.error("tomote-gui: tomteModuleInstallButton removeModule failed =>", err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -317,7 +328,7 @@ export class TomteGuiComponent implements OnInit {
         {
 
             await window.tomteAPI.installModule(name).catch((err: unknown): void => {
-                console.error("tomote-gui: tomteUn_InstallButton installModule failed =>", err);
+                console.error("tomote-gui: tomteModuleInstallButton installModule failed =>", err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -387,19 +398,17 @@ export class TomteGuiComponent implements OnInit {
 
     /*
         Tries to install tomte when button is clicked and throws error message if it fails.
-        Not to be confused with the tomteUn_InstallButton() function, which tries to un-/install a given module
+        Not to be confused with the tomteModuleInstallButton() function, which tries to un-/install a given module
     */
     public async installTomteButton(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        const gotInstalled: boolean = await window.pgms.installTomte();
-        if (!gotInstalled)
+        const tomteInstalled: boolean = await window.pgms.installTomte();
+        if (!tomteInstalled)
         {
             this.throwErrorMessage($localize `:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`);
         }
         this.utils.pageDisabled = false;
         this.tomtelist();
     }
-
-
 }

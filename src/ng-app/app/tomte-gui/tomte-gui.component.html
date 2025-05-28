@@ -52,14 +52,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 
             </div>
 
-            <div *ngIf="!tomteIsInstalled && !loadingInformation">
+            <div *ngIf="!tomteInstalled && !loadingInformation">
                 <hr>
                 <div class="header" i18n="@@cTomteGuiInstallTomteHeader">
                     Install TUXEDO Tomte
                 </div>
-
             
-                <div class="content-container centered">
+                <div class="content-container centered" *ngIf="aptInstalled">
                     <p i18n="@@cTomteGuiInstallTomteDescription">
                         Install TUXEDO Tomte now by pressing this button:
                     </p>
@@ -68,6 +67,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </button>
                 </div>
                 
+                <div class="content-container centered" *ngIf="!aptInstalled">
+                    Tomte is not installed.
+                </div>
             </div>
 
             <div *ngIf="loadingInformation">
@@ -97,7 +99,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 
             </div>
 
-            <div *ngIf="tomteMode && tomteIsInstalled && !loadingInformation && !showRetryButton">
+            <div *ngIf="tomteMode && tomteInstalled && !loadingInformation && !showRetryButton">
 
                 <hr>
                 <div class="header" i18n="@@cTomteGuiTomteOperationModeHeader">
@@ -177,7 +179,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </p>    
             </div>
             </div>
-            <div *ngIf="!jsonError && tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteIsInstalled">
+            <div *ngIf="!jsonError && tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteInstalled">
                 <hr>
                     <div class="header" i18n="@@cTomteGuiTomteConfigurationHeader">
                         Tomte Configuration
@@ -217,7 +219,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 class="green-slide-toggle"
                                 [disabled]="line.prerequisite === 'prerequisite' || line.blocked"
                                 [checked]="line.installed"
-                                (change)="tomteUn_InstallButton(line.moduleName,line.installed,line.blocked)"
+                                (change)="tomteModuleInstallButton(line.moduleName,line.installed,line.blocked)"
                                 [matTooltip]="getSliderToolTip('installed', line.prerequisite, line.blocked, line.installed)"
                                 >
                             

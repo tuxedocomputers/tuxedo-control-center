@@ -130,18 +130,19 @@ interface COMP
 
 interface PGMS
 {
-    tomteIsInstalled: () => Promise<boolean>,
+    aptInstalled: () => Promise<boolean>,
+    tomteInstalled: () => Promise<boolean>,
     installTomte: () => Promise<boolean>,
     uninstallTomte: () => Promise<boolean>,
     startTomte: () => Promise<void>,
-    anydeskIsInstalled: () => Promise<boolean>,
+    anydeskInstalled: () => Promise<boolean>,
     installAnydesk: () => Promise<boolean>,
     uninstallAnydesk: () => Promise<boolean>,
     startAnydesk: () => Promise<void>,
-    webfaiCreatorIsInstalled: () => Promise<boolean>,
-    installWebfaicreator: () => Promise<boolean>,
-    uninstallWebfaicreator: () => Promise<boolean>,
-    startWebfaicreator: () => Promise<void>,
+    webfaiCreatorInstalled: () => Promise<boolean>,
+    installWebfaiCreator: () => Promise<boolean>,
+    uninstallWebfaiCreator: () => Promise<boolean>,
+    startWebfaiCreator: () => Promise<void>,
     isInProgress: () => Promise<Map<string, boolean>>,
     isCheckingInstallation: () => Promise<Map<string, boolean>>,
 }

@@ -236,7 +236,7 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cSupportWebFAICreatorInstallButton" datatype="html">
+      <trans-unit id="cSupportWebfaiCreatorInstallButton" datatype="html">
         <source>Install WebFAI Creator</source>
         <target phase-name="approval-1" state="translated">WebFAI Creator installieren</target>
         <context-group purpose="location">
@@ -244,7 +244,7 @@
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cSupportWebFAICreatorRemoveButton" datatype="html">
+      <trans-unit id="cSupportWebfaiCreatorRemoveButton" datatype="html">
         <source>Remove WebFAI Creator</source>
         <target phase-name="approval-1" state="translated">WebFAI Creator entfernen</target>
         <context-group purpose="location">
