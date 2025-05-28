@@ -149,11 +149,17 @@ export class XDisplayRefreshRateController {
     }
 
     public getDisplayModes(): IDisplayFreqRes {
-        const result: string = child_process
-            .execSync(
-                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.display} --current`
-            )
-            .toString();
+        let result: string = "";
+        try {
+            result = child_process
+                .execSync(
+                    `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.display} --current`
+                )
+                .toString();
+        } catch(err: unknown) {
+            console.error(`XDisplayRefreshRateController: getDisplayModes: xrandr failed with xAuthorityFile "${this.xAuthorityFile}" and display "${this.display}" => ${err}`)
+            return undefined;
+        }
 
         const displayNameRegex = /(eDP\S*|LVDS\S*)/;
 
