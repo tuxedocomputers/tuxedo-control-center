@@ -257,16 +257,6 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                 {
                     newProfiles = newProfiles.concat(profiles[i]);
                 }
-                else if (res.action === "keepOld") // basically same thing as cancel
-                {
-                    continue;
-                }
-                else if (res.action === "keepBoth")
-                {
-                    const newProfile: ITccProfile = profiles[i];
-                    newProfile.id = "generateNewID";
-                    newProfiles = newProfiles.concat(newProfile);
-                }
                 else if (res.action === "newName")
                 {
                     const newProfile: ITccProfile = profiles[i];

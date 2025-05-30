@@ -16,117 +16,99 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-.mat-mdc-dialog-container
-{
-    min-height: 600px !important;
-    min-width: 520px !important;
-}
-
-.profile-compare-box{
-
+ 
+.profile-compare-box {
     justify-content: space-between;
-    width: 99%;
-    min-width: 520px;
     overflow: hidden;
-}
-
-.mat-mdc-dialog-container
-{
-    // https://github.com/twbs/bootstrap/issues/13608
-    overflow-y: auto;
-}
-
-.mat-mdc-dialog-actions
-{
-   // https://github.com/angular/components/issues/20344
-   margin-bottom: 30px !important; 
-}
-.profile_old_new
-{
-    font-size: 24px;
-    text-align: center;
-}
-
- .profile-overview-tile{
-    position: relative;
-    z-index: 10;
-
-    width: 215px;
-    margin: 8px;
-    padding: 10px;
-    padding-top: 0px;
-    padding-bottom: 15px;
-
-    border-radius: 15px;
-
-    hr {
-        opacity: 0.2;
+    
+    .profile {
+        font-size: 24px;
+        text-align: center;
     }
-
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-
-        margin-bottom: 5px;
-
-        .profile-name {
-            font-size: 20px;
-            font-weight: bold;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            margin:auto;
-        }
+    
+    .profile-old {
+        float: left;
+        padding-left: 16px;
     }
-
-    content {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-between;
-
-        .description {
-            height: 110px;
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    
+    .profile-new {
+        float: right;
+        padding-right: 16px
     }
-
-    .status-flexbox {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 20px;
-
-        .status-component {
-            width: 50%;
-
+    
+    .profile-overview-tile {
+        width: 325px;
+        margin: 8px;
+        padding: 10px;
+        padding-top: 0px;
+        padding-bottom: 15px;
+        
+        header {
             display: flex;
-            flex-flow: column;
-            justify-content: flex-start;
-            align-items: center;
-
-            .status-icon-container {
-                width: 48px;
-                height: 48px;    
+            justify-content: space-between;
+    
+            padding-top: 16px;
+            padding-bottom: 16px;
+                    
+            .profile-name {
+                font-size: 20px;
+                font-weight: bold;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                margin: auto;
+            }
+        }
+    
+        .content {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between;
+            text-align: center;
+    
+            .description {
                 text-align: center;
-                svg {
-                    width: inherit;
-                    height: inherit;
+                text-overflow: ellipsis;
+            }
+        }
+    
+        .status-flexbox {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+    
+            .status-component {
+                width: 50%;
+    
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+    
+                .status-icon-container {
+                    width: 48px;
+                    height: 48px;    
+                    text-align: center;
+                    svg {
+                        width: inherit;
+                        height: inherit;
+                    }
+        
+                    --icon-detail: var(--icon-main);
                 }
     
-                --icon-detail: var(--icon-main);
-            }
-
-            .status-info {
-                margin-top: 5px;
-                margin-bottom: 5px;
-            }
-
-            &.inactive {
-                opacity: 0.3;
+                .status-info {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                }
+    
+                &.inactive {
+                    opacity: 0.3;
+                }
             }
         }
     }
+}
+
+mat-form-field {
+    padding-right: 16px;
 }

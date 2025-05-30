@@ -39,7 +39,9 @@ export class ProfileConflictDialogService {
         data: {
           oldProfile: oldProfile,
           newProfile: newProfile
-        }
+        },
+        minWidth: 800,
+        maxWidth: 800,
    }); 
   }    
 
