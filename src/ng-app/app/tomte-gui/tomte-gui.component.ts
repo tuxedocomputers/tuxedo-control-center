@@ -49,9 +49,6 @@ export class TomteGuiComponent implements OnInit {
     // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
     public showRetryButton: boolean = false;
     public loadingInformation: boolean = false;
-    // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and
-    // set this variable to false to output the correct error message in the control center
-    public isTuxedoDevice: boolean = true;
     public aptInstalled: boolean = false;
     public tomteInstalled: boolean = false;
     

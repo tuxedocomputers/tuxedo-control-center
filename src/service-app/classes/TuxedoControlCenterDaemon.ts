@@ -458,19 +458,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // It probably doesn't exist yet so create a structure for saving
             this.autosave = this.config.getDefaultAutosave();
         }
-
-        /*try {
-            this.fanTables = this.config.readFanTables();
-        } catch (err: unknown) {
-            this.logLine('Failed to read fan tables: ' + this.config.pathFanTables);
-            this.fanTables = [ this.config.getDefaultFanTable() ];
-            try {
-                this.config.writeFanTables(this.fanTables);
-                this.logLine('Wrote default fan tables: ' + this.config.pathFanTables);
-            } catch (err: unknown) {
-                this.logLine('Failed to write default fan tables: ' + this.config.pathFanTables);
-            }
-        }*/
     }
 
     private setupSignalHandling(): void {

@@ -82,25 +82,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </p>
                     </div>
                 </div>
-                
-            </div>
-
-            <div *ngIf="!isTuxedoDevice">
-                <hr>
-                <div class="header" i18n="@@cTomteGuiNotTuxedoDeviceHeader">
-                    TUXEDO Tomte not producing output
-                </div>
-            
-                <div class="content-container centered">
-                    <p i18n="@@cTomteGuiNotTuxedoDeviceDescription">
-                        TUXEDO Tomte seems to be installed, but is not producing any output. This could mean that you are using a non TUXEDO device or a TUXEDO desktop. If you are using a TUXEDO laptop this could mean that something went wrong. TUXEDO Tomtes job is it to automatically install fixes for TUXEDO laptops, so if you are experiencing problems—like a non-working touchpad—and see this message, contact our tech support telling them that tomte is installed but seems to not work properly. 
-                    </p>
-                </div>
-                
             </div>
 
             <div *ngIf="tomteMode && tomteInstalled && !loadingInformation && !showRetryButton">
-
                 <hr>
                 <div class="header" i18n="@@cTomteGuiTomteOperationModeHeader">
                     Tomte operation mode
