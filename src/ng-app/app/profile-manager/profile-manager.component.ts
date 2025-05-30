@@ -202,10 +202,11 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     {
         try{
             const documentsPath: string = await this.utils.getPath('documents');
-            const res: string = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
-            const profiles: ITccProfile[] = this.config.getCustomProfiles();
-            const txt: string = JSON.stringify(profiles);
-            await this.utils.writeTextFile("" + res, txt);
+            const result: string = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
+            if (result) {
+                const profiles: ITccProfile[] = this.config.getCustomProfiles();
+                await this.utils.writeTextFile(result, JSON.stringify(profiles));     
+            }
         }
         catch(err: unknown)
         {
@@ -220,12 +221,18 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         this.utils.pageDisabled = true;
         const documentsPath: string = await this.utils.getPath('documents');
         const importLabel: string = $localize `:@@pMgrImportLabelFileDialoge:Import`;
-        let res: string[];
-        let txt: string;
+        let profileSettings: string = "";
+        
         try
         {
-            res = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile', 'multiSelections'] });
-            txt = await this.utils.readTextFile(res[0] + "");
+            const result: string[] = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile']});
+            if (result.length === 0) {
+                this.utils.pageDisabled = false;
+                return;
+            }
+            if (result.length === 1) {
+                profileSettings = await this.utils.readTextFile(result[0]);
+            }
         }
         catch (err: unknown)
         {
@@ -237,7 +244,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         let profiles: ITccProfile[];
         try
         {
-            profiles = JSON.parse(txt);
+            if (profileSettings) {
+                profiles = JSON.parse(profileSettings);
+            }
         }
         catch(err: unknown)
         {
@@ -252,15 +261,15 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             const conflictProfileIndex:number = oldProfiles.findIndex((x: ITccProfile): boolean => x.id === profiles[i].id);
             if (conflictProfileIndex !== -1)
             {
-                const res: IProfileConflictDialogResult = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
-                if(res.action === "keepNew")
+                const result: IProfileConflictDialogResult = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
+                if(result.action === "keepNew")
                 {
                     newProfiles = newProfiles.concat(profiles[i]);
                 }
-                else if (res.action === "newName")
+                else if (result.action === "newName")
                 {
                     const newProfile: ITccProfile = profiles[i];
-                    newProfile.name = res.newName;
+                    newProfile.name = result.newName;
                     newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
                 }
@@ -271,20 +280,15 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             }
         }
         if(newProfiles?.length > 0)
-        {
+            {
             const importSuccess: boolean = await this.config.importProfiles(newProfiles);
             if (!importSuccess)
             {
-                console.error("profile-manager: importing of Profiles failed =>")
+                console.error("profile-manager: profile import failed")
             }
         }
         this.utils.pageDisabled = false;
     }
-
-
-
-
-
     public deleteProfile(profileId: string): void {
         this.config.deleteCustomProfile(profileId).then(((success: boolean): void => {
             if (success) {

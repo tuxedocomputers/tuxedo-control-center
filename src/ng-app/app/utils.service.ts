@@ -82,31 +82,25 @@ export class UtilsService {
     return window.ipc.getPath(path);
   }
 
-
-   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
-   // for selecting existing files
-   // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
   public async openFileDialog(properties: Electron.OpenDialogOptions): Promise<string[]> {
-      return new Promise<string[]>((resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
-      window.ipc.openFileDialog(properties).then((result: OpenDialogReturnValue): void => {
-        if (result.canceled) {
-            reject(result.canceled);
-          } else {
-            resolve(result.filePaths);
-          }
+    return new Promise<string[]>((resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
+    window.ipc.openFileDialog(properties).then((result: OpenDialogReturnValue): void => {
+      if (result.canceled) {
+          console.log("utils: openFileDialog canceled")
+          resolve([]);
+        } else {
+          resolve(result.filePaths);
+        }
       });
     });
   }
-
-
-  // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
-  // for selecting a non existing file (saving)
-  // does not save anything, just returns a path
+  
   public async saveFileDialog(properties: Electron.OpenDialogOptions): Promise<string> {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
       window.ipc.saveFileDialog(properties).then((result: SaveDialogReturnValue): void => {
         if (result.canceled) {
-          reject(result.canceled);
+          console.log("utils: saveFileDialog canceled")
+          resolve("");
         } else {
           resolve(result.filePath);
         }
