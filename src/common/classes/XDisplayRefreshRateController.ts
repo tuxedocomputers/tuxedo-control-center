@@ -225,7 +225,7 @@ export class XDisplayRefreshRateController {
             yResolution: Number.parseInt(resolution[1]),
         };
         for (const rate of refreshrates) {
-            const num: number = parseFloat(rate.replace(/[^0-9.]/g, ""));
+            const num: number = Number.parseFloat(rate.replace(/[^0-9.]/g, ""));
             if (!newMode?.refreshRates.includes(num)) {
                 newMode?.refreshRates.push(num);
             }
