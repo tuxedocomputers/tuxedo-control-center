@@ -45,7 +45,7 @@ export class SingleProcess {
         return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void): Promise<void> => {
             const pid: number = this.readPid();
 
-            if (!isNaN(pid)) { // If there is a PID in file
+            if (!Number.isNaN(pid)) { // If there is a PID in file
                 if (this.isRunning()) {
                     try {
                         process.kill(pid, 'SIGINT');
@@ -132,7 +132,7 @@ export class SingleProcess {
         let isRunning: boolean = true;
 
         const intPid: number = this.readPid();
-        if (isNaN(intPid)) {
+        if (Number.isNaN(intPid)) {
             isRunning = false;
         } else {
             try {

@@ -329,7 +329,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public async fanSpeedTextInput(): Promise<void> {
         const textSpeed: number = Number.parseInt(this.ctrlFanDutyCycleTextInput.value);
-        if (!isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
+        if (!Number.isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
             await this.setCustomFanSpeed(textSpeed);
             this.ctrlFanDutyCycleTextInput.reset();
         }

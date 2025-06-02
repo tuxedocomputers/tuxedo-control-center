@@ -166,7 +166,7 @@ export class SysFsPropertyNumListExplicit extends SysFsPropertyIO<number[]> {
         } else {
             const trimmedList: number[] = value.split(this.listSeparator).map((element: string): number => Number.parseInt(element.trim()));
             // Finally filter all empty strings
-            return trimmedList.filter((e: number): boolean => !isNaN(e));
+            return trimmedList.filter((e: number): boolean => !Number.isNaN(e));
         }
     }
 

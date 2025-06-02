@@ -237,7 +237,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // If something changed, reload configs
             if (settingsSaved || profilesSaved || webcamSaved) {
                 const pidNumber: number = this.readPid();
-                if (isNaN(pidNumber)) {
+                if (Number.isNaN(pidNumber)) {
                     console.log('Failed to locate running tccd process. Cannot reload config.');
                     process.exit(1);
                 } else {
