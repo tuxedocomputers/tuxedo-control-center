@@ -42,7 +42,6 @@ interface IPC extends EventEmitter {
     setBrightnessMode: (mode: BrightnessModeString) => void,
     getShouldUseDarkColors: () => Promise<boolean>,
     onUpdateBrightnessMode: (callback: () => void) => void,
-    onWakeupFromSuspend: (callback: () => void) => void,
     onDbusDead: (callback: () => void) => void,
     openExternal: (url: string) => void,
     getPath: (path: string) => Promise<string>,

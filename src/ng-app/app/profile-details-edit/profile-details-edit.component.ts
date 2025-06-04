@@ -280,11 +280,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
-
-        window.ipc.onWakeupFromSuspend((): void => {
-                // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
-                this.showFanGraphs = false;
-            });
     }
 
     public getPowerLimitToName(name: string): string {

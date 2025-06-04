@@ -36,14 +36,6 @@ app.on('second-instance', (event: Event, cmdLine: string[], workingDir: string):
     activateTccGui();
 });
 
-app.on("ready", (): void => {
-    powerMonitor.on("resume", (): void => {
-        if (tccWindow) {
-            tccWindow.webContents.send("wakeup-from-suspend");
-        }
-    });
-});
-
 app.on('will-quit', async (event: Event): Promise<void> => {
     // Prevent default quit action
     event.preventDefault();

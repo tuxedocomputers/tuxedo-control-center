@@ -61,14 +61,6 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    onWakeupFromSuspend: (callback: () => void): void => {
-        var channelname: string = 'wakeup-from-suspend';
-        if(callbacks.indexOf(channelname) < 0)
-        {
-            callbacks.push(channelname);
-            ipcRenderer.on(channelname, callback);
-        }
-    },
     onDbusDead: (callback: () => void): void => {
         var channelname: string = 'dbus-died';
         if(callbacks.indexOf(channelname) < 0)
