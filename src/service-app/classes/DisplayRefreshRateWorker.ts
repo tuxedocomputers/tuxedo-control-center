@@ -130,12 +130,14 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                             activeMode.yResolution
                         } for display "${this.controller.getDisplay()}" with the name "${this.controller.getDisplayName()}" and XAUTHORITY "${this.controller.getXAuthorityFile()}"`
                     );
+                    this.resetToDefault();
                 }
             }
         }
     }
 
     private updateDisplayData(): void {
+        this.resetToDefault();
         this.controller.setVariables();
 
         if (
