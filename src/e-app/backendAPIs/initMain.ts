@@ -54,12 +54,7 @@ const appPath: string = __dirname.replace('app.asar/', '');
 const autostartLocation: string = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
 export const translation = new NgTranslations();
-// Ensure that only one instance of the application is running
 const applicationLock: boolean = app.requestSingleInstanceLock();
-if (!applicationLock) {
-    console.log('TUXEDO Control Center is already running');
-    app.exit(0);
-}
 
 if (watchOption) {
     require('electron-reload')(path.join(__dirname, '..', '..', 'ng-app'));
@@ -76,8 +71,10 @@ if (!userConfigDirExists()) {
 }
 
 
-app.whenReady().then( async (): Promise<void> => {
+app.whenReady().then(async (): Promise<void> => {
     try {
+        exitIfProcessExists();
+        
         const systemLanguageId: string = app.getLocale().substring(0, 2);
         if (await userConfig.get('langId') === undefined) {
             if (availableLanguages.includes(systemLanguageId)) {
@@ -104,10 +101,53 @@ app.whenReady().then( async (): Promise<void> => {
         await setBrightnessMode(mode);
         // Trigger initial update manually
         nativeTheme.emit('updated');
-});
+    });
 
     startDbusAndInit();
 });
+
+function exitIfProcessExists(): void {
+    if (applicationLock) {
+        let singletonLock: string = undefined;
+        
+        try {
+            const userDataDir: string = app.commandLine.getSwitchValue('user-data-dir')
+            let singletonLockPath: string = undefined
+            
+            if (userDataDir) {
+                singletonLockPath = path.join(userDataDir, "SingletonLock")
+            } else {
+                singletonLockPath = "~/.config/tuxedo-control-center/SingletonLock"
+            }
+            
+            singletonLock = child_process
+                .execSync(`readlink ${singletonLockPath}`)
+                .toString()
+                .trim();
+        } catch(err: unknown) {
+            console.log("initMain: exitIfProcessExists failed =>", err)
+        }
+        
+        if (singletonLock) {
+            const singletonLockId: number = Number.parseInt(
+                singletonLock.match(/(?<=-)(?!.*-).*/)[0]
+            );
+
+            if (singletonLockId !== process.pid) {
+                console.log(
+                    `initMain: SingletonLock check failed ("${singletonLockId}" !== "${process.pid}")`
+                );
+                app.exit(0);
+            }
+        } else {
+            console.log("initMain: SingletonLock check failed");
+            app.exit(0);
+        }
+    } else {
+        console.log("TUXEDO Control Center is already running");
+        app.exit(0);
+    }
+}
 
 async function startDbusAndInit(): Promise<void> {
     const dbusInitialized: boolean = await tccDBus.init();
