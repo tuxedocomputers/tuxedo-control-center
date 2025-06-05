@@ -31,7 +31,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
     private displayInfoFound: boolean = false;
-    private previousUsers: string = "";
+    private previousUsers: string[] = [];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(5000, "DisplayRefreshrateWorker", tccd);
@@ -42,18 +42,31 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     // user is able to switch XDG_SESSION_TYPE in login screen and thus a new check needs to be done
     // not checking XDG_SESSION_TYPE during login screen, checking again on user change
-    // sometimes "users" returns the same user more than once
     private checkUsers(): boolean[] {
-        const loggedInUsers: string = [
-            ...new Set(
-                child_process.execSync("users").toString().trim().split(" ")
-            ),
-        ].toString();
+        const userInformation: string[] = child_process
+            .execSync("w --no-header")
+            .toString()
+            .split("\n");
+
+        let loggedInUsers: string[] = [];
+
+        for (const line of userInformation) {
+            const result: RegExpMatchArray = line.match(/^([^\s\d]+)/);
+
+            if (result) {
+                const userName: string = result[0];
+
+                if (userName && userName !== "sddm" && userName !== "gdm") {
+                    loggedInUsers.push(userName);
+                }
+            }
+        }
 
         const usersAvailable: boolean = loggedInUsers.length > 0;
-        const usersChanged: boolean = loggedInUsers !== this.previousUsers;
+        const usersChanged: boolean =
+            JSON.stringify(loggedInUsers) !==
+            JSON.stringify(this.previousUsers);
         this.previousUsers = loggedInUsers;
-
         return [usersAvailable, usersChanged];
     }
 
@@ -91,7 +104,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             // todo: add variable checks to avoid access error
             const hasDifferentRefreshRate: boolean =
                 refreshRate !== activeMode?.refreshRates[0];
-                
+
             if (hasDifferentRefreshRate) {
                 const status: boolean =
                     this.controller.setRefreshRateAndResolution(
