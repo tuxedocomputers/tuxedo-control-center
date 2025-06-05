@@ -157,7 +157,7 @@ export class XDisplayRefreshRateController {
         try {
             result = child_process
                 .execSync(
-                    `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.display} --current`
+                    `XAUTHORITY=${this.xAuthorityFile} xrandr -q -display ${this.display} --current`
                 )
                 .toString();
         } catch(err: unknown) {
@@ -264,7 +264,7 @@ export class XDisplayRefreshRateController {
         if (this.checkVariablesAvailable() && this.isX11 === 1) {
             try {
                 child_process.execSync(
-                    `export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.display} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`
+                    `XAUTHORITY=${this.xAuthorityFile} xrandr -display ${this.display} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`
                 );
                 return true;
             } catch (err: unknown) {
