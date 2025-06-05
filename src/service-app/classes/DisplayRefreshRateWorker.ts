@@ -91,7 +91,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             // todo: add variable checks to avoid access error
             const hasDifferentRefreshRate: boolean =
                 refreshRate !== activeMode?.refreshRates[0];
-
+                
             if (hasDifferentRefreshRate) {
                 const status: boolean =
                     this.controller.setRefreshRateAndResolution(
@@ -102,7 +102,11 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
                 if (status) {
                     console.log(
-                        `DisplayRefreshRateWorker: setActiveDisplayMode: Set ${refreshRate}Hz with ${activeMode.xResolution}x${activeMode.yResolution}`
+                        `DisplayRefreshRateWorker: setActiveDisplayMode: Set ${refreshRate}Hz with ${
+                            activeMode.xResolution
+                        }x${
+                            activeMode.yResolution
+                        } and XAUTHORITY "${this.controller.getXAuthorityFile()}"`
                     );
                     activeMode.refreshRates[0] = refreshRate;
                 } else {
@@ -111,7 +115,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                             activeMode.xResolution
                         }x${
                             activeMode.yResolution
-                        } for display ${this.controller.getDisplay()} with the name ${this.controller.getDisplayName()}`
+                        } for display "${this.controller.getDisplay()}" with the name "${this.controller.getDisplayName()}" and XAUTHORITY "${this.controller.getXAuthorityFile()}"`
                     );
                 }
             }

@@ -124,6 +124,10 @@ export class XDisplayRefreshRateController {
     public getDisplayName(): string {
         return this.displayName;
     }
+    
+    public getXAuthorityFile(): string {
+        return this.xAuthorityFile;
+    }
 
     public resetValues(): void {
         this.isX11 = -1;
@@ -264,10 +268,6 @@ export class XDisplayRefreshRateController {
                 );
                 return true;
             } catch (err: unknown) {
-                console.error(
-                    "XDisplayRefreshRateController: setRefreshRateAndResolution failed =>",
-                    err
-                );
                 return false;
             }
         }
