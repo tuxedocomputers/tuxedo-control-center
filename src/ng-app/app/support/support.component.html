@@ -116,21 +116,27 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-expansion-panel-header>
 
                 <div class="content-container">
-                    <div i18n>
-                        <p>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <i>AnyDesk</i> remote maintenance software.</p>
-                        <p>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.</p>
-                        <p>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!</p>
+                    <div *ngIf="isX11 === 1">
+                        <div i18n>
+                            <p>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <i>AnyDesk</i> remote maintenance software.</p>
+                            <p>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.</p>
+                            <p>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!</p>
+                        </div>
+                        <p>
+                            <button mat-stroked-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
+                                <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
+                                <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
+                                <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
+                                <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
+                            </button>
+                            &nbsp;
+                            <button mat-stroked-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled && !(progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName))" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
+                        </p>
                     </div>
-                    <p>
-                        <button mat-stroked-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
-                            <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
-                            <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
-                            <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
-                            <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
-                        </button>
-                        &nbsp;
-                        <button mat-stroked-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled && !(progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName))" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
-                    </p>
+                    
+                    <div *ngIf="isX11 !== 1">
+                        To use AnyDesk, your operating system must be restarted with the X11 graphics system. Please log out and select X11 on the login screen. To do this, select “Plasma (X11)” instead of “Plasma (Wayland)” on KDE or “Ubuntu” instead of “Ubuntu with Wayland” on Gnome.
+                    </div>
                 </div>
             </mat-expansion-panel>
 

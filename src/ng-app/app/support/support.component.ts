@@ -41,6 +41,7 @@ export class SupportComponent implements OnInit {
   public anydeskInstalled: boolean;
   public aptInstalled: boolean = false;
   public webfaiCreatorInstalled: boolean;
+  public isX11: number = -1;
   public formTicketNumber: FormGroup;
   public systeminfoRunOutput: string = '';
   public systeminfoRunProgress: boolean = false;
@@ -74,6 +75,7 @@ export class SupportComponent implements OnInit {
     this.anydeskInstalled = data.anydeskInstalled;
     this.aptInstalled = data.aptInstalled;
     this.webfaiCreatorInstalled = data.webfaiCreatorInstalled;
+    this.isX11 = data.x11Status;
   }
 
   public focusControl(control: MatInput): void  {

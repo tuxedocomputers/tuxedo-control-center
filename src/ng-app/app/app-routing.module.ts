@@ -73,6 +73,7 @@ const routes: Routes = [
                     anydeskInstalled: AnydeskInstalledResolver,
                     aptInstalled: AptInstalledResolver,
                     webfaiCreatorInstalled: WebfaiCreatorInstalledResolver,
+                    x11Status: X11StatusResolver,
                 },
             },
             { path: "info", component: InfoComponent },
