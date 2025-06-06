@@ -89,15 +89,29 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
         } else {
             tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
         }
-        // todo: use then() and catch() instead
-        const data: {data: string; error: unknown} = await execFile(
-            'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath);
-        if(data.error) {
-            resolve(false);
-        }
-        else {
-            resolve(true);
-        }
+
+        await execFile(
+            "pkexec " +
+                tccdExec +
+                " --new_profiles " +
+                tmpProfilesPath +
+                " --new_settings " +
+                tmpSettingsPath
+        )
+            .then((data: any): any => {
+                if (data.error) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            })
+            .catch((err: unknown): void => {
+                console.error(
+                    "configAPI: pkexecWriteConfigAsync failed =>",
+                    err
+                );
+                resolve(false);
+            });
     });
 }
 
