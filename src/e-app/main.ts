@@ -36,7 +36,7 @@ const appPath = __dirname.replace('app.asar/', '');
 
 const autostartLocation = path.join(os.homedir(), '.config/autostart');
 const autostartDesktopFilename = 'tuxedo-control-center-tray.desktop';
-const tccConfigDir = path.join(os.homedir(), '.tcc');
+const tccConfigDir = getConfigDirPath();
 const tccStandardConfigFile = path.join(tccConfigDir, 'user.conf');
 const availableLanguages = [
     'en',
@@ -802,6 +802,21 @@ function isFirstStart(): boolean {
     return !userConfigDirExists();
 }
 
+function getConfigDirPath(): string {
+    const homeDir = os.homedir();
+    const homeTccConfigDir = path.join(homeDir, '.tcc');
+
+    const envXdgConfigDir = process.env.XDG_CONFIG_HOME;
+    const customXdgConfigDir = path.join(homeDir, '.config');
+
+    if (fs.existsSync(homeTccConfigDir)) {
+        return homeTccConfigDir;
+    } else {
+        const xdgConfigDirToUse = envXdgConfigDir || customXdgConfigDir;
+        return path.join(xdgConfigDirToUse, 'tuxedo-control-center');
+    }
+}
+
 function userConfigDirExists(): boolean {
     try {
         return fs.existsSync(tccConfigDir);
@@ -812,7 +827,7 @@ function userConfigDirExists(): boolean {
 
 function createUserConfigDir(): boolean {
     try {
-        fs.mkdirSync(tccConfigDir);
+        fs.mkdirSync(tccConfigDir, { recursive: true });
         return true;
     } catch (err) {
         return false;
