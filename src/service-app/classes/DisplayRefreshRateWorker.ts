@@ -141,11 +141,13 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.controller.setVariables();
 
         if (
-            this.controller.getIsTTY() === false &&
-            this.controller.getIsWayland() === false &&
-            this.controller.getIsX11() === 1
+           this.controller.checkVariablesAvailable() && 
+           this.controller.getIsTTY() === false &&
+           this.controller.getIsWayland() === false &&
+           this.controller.getIsX11() === 1
         ) {
             this.displayInfo = this.controller.getDisplayModes();
+            
             if (this.displayInfo === undefined) {
                 this.tccd.dbusData.displayModesJSON = "{}";
             } else {
