@@ -41,6 +41,8 @@ export class UtilsService {
   private blurNoInput: boolean = false;
   public get pageDisabled(): boolean { return this.blurNoInput; }
   public set pageDisabled(value: boolean) { this.blurNoInput = value; }
+  private odmMap: Map<string, string> = new Map();
+  private fanProfileMap: Map<string, string> = new Map();
 
   private languagesMenuArray: { id: string, label: string, img: string }[] = [
     { id: 'en', label: 'English', img: 'english.svg' },
@@ -55,6 +57,8 @@ export class UtilsService {
   public themeClass: BehaviorSubject<string>;
 
   private localeId: string;
+  public odmProfileNameMap: Map<string, string> = new Map();
+
 
   constructor(
     private decimalPipe: DecimalPipe,
@@ -68,13 +72,23 @@ export class UtilsService {
       }
 
       this.themeClass = new BehaviorSubject(undefined);
+      
+      this.odmMap.set('low-power', $localize `:@@odmLowPower:Low-power`);
+      this.odmMap.set('balanced', $localize `:@@odmBalanced:Balanced`);
+      this.odmMap.set('performance', $localize `:@@odmPerformance:Performance`);
+  
+      this.fanProfileMap.set('Silent', $localize `:@@fanSilent:Silent`);
+      this.fanProfileMap.set('Quiet', $localize `:@@fanQuiet:Quiet`);
+      this.fanProfileMap.set('Balanced', $localize `:@@fanBalanced:Balanced`);
+      this.fanProfileMap.set('Cool', $localize `:@@fanCool:Cool`);
+      this.fanProfileMap.set('Freezy', $localize `:@@fanFreezy:Freezy`);
+      this.fanProfileMap.set('Custom', $localize `:@@fanCustom:Custom`);
     }
 
   public getFahrenheitFromCelsius(temp: number): number {
     return ((temp * 1.8) + 32);
   }
-
-
+  
   // get Path, e.g. home path  https://www.electronjs.org/docs/latest/api/app#appgetpathname
   // logic moved to main.ts
   public async getPath(path: string): Promise<string>
@@ -113,9 +127,9 @@ export class UtilsService {
     window.ipc.openExternal(url);
   }
 
-public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> {
+  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> {
     return window.fs.writeTextFile(filePath,fileData,writeFileOptions);
-}
+  }
 
   public async readTextFile(filePath: string): Promise<string> {
     return window.fs.readTextFile(filePath);
@@ -275,7 +289,6 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
   private defaultProfileInfos: Map<string, IProfileTextMappings> = new Map<string, IProfileTextMappings>();
 
   public fillDefaultProfileTexts(profile: ITccProfile): void {
-
     this.defaultProfileInfos.set(DefaultProfileIDs.Quiet, {
         name: $localize `:@@profileNameQuiet:Quiet`,
         description: $localize `:@@profileDescQuiet:Low performance for light office tasks for very quiet fans and low power consumption.`
@@ -335,5 +348,48 @@ public async writeTextFile(filePath: string, fileData: string | Buffer, writeFil
     } else {
         return undefined;
     }
+  }
+  
+  public getFanProfileName(name: string): string {
+    return this.fanProfileMap.get(name)
+  }
+  
+  public setODMProfileNames(
+    odmProfileNames: string[],
+    uwLEDOnlyMode: boolean,
+    odmProfileLEDNames?: Map<string, string>
+  ): void {
+    this.odmProfileNameMap.clear();
+    
+    for (const profileName of odmProfileNames) {
+      if (profileName?.length > 0) {
+        if (
+          uwLEDOnlyMode &&
+          odmProfileLEDNames !== undefined &&
+          odmProfileLEDNames?.size !== 0
+        ) {
+          this.odmProfileNameMap.set(
+            profileName,
+            odmProfileLEDNames.get(profileName)
+          );
+        } else {
+          const odmProfile: string = this.odmMap.get(profileName);
+          
+          if (odmProfile) {
+            this.odmProfileNameMap.set(profileName, odmProfile);
+          } else {
+            this.odmProfileNameMap.set(
+              profileName,
+              profileName.charAt(0).toUpperCase() +
+              profileName.replace("_", " ").slice(1)
+            );
+          }
+        }
+      }
+    }
+  }
+  
+  public getODMProfileName(name: string): string {
+    return this.odmProfileNameMap.get(name);
   }
 }

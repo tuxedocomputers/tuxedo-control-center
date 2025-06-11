@@ -219,11 +219,10 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
             },
             data: {
                 labels: this.tempsLabels,
-                // todo: label translation
                 datasets: createLineChartDataset(
-                    "CPU Fan",
+                    $localize`:@@cpuFan:CPU Fan`,
                     this.cpuData,
-                    "GPU Fan",
+                    $localize`:@@gpuFan:GPU Fan`,
                     this.gpuData
                 ),
             },

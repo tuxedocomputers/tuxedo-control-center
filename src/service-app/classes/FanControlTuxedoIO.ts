@@ -82,7 +82,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!tempReadSuccess) {
-            console.log("FanControlTuxedoIO: Fan temp read with IO API failed");
+            console.log("FanControlTuxedoIO: Fan temperature read with IO API failed");
         }
 
         return currentTemperatureCelcius.value;

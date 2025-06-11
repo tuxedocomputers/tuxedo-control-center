@@ -68,9 +68,6 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
-    public odmProfileNames: string[] = [];
-    public odmProfileToName: Map<string, string> = new Map();
-
     public odmPowerLimitInfos: TDPInfo[];
     public selectedCPUTabIndex: number;
 
@@ -104,15 +101,7 @@ export class ProfileOverviewTileComponent implements OnInit {
         }
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
-            this.odmProfileNames = nextAvailableODMProfiles;
-
-            // Update ODM profile name map
-            this.odmProfileToName.clear();
-            for (const profileName of this.odmProfileNames) {
-                if (profileName?.length > 0) {
-                    this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
-                }
-            }
+            this.utils.setODMProfileNames(nextAvailableODMProfiles, this.compat.uwLEDOnlyMode)
         }));
 
         this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe((nextODMPowerLimits: TDPInfo[]): void => {

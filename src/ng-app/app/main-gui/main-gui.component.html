@@ -21,7 +21,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-toolbar-row class="title-row">
         <div id="title-left">
             <img src="./assets/taskbar_icon_free.svg" id="title-logo">
-            <span id="title-text" i18n>TUXEDO Control Center</span>
+            <span id="title-text" i18n="@@menuTuxedoControlCenter">TUXEDO Control Center</span>
         </div>
         <div id="title-right">
             <svg viewBox="0 0 376 376" (click)="buttonMinimize()">
@@ -129,7 +129,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-icon><svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_settings.svg#Icon"></use>
                             </svg></mat-icon>
-                        <ng-container i18n>Settings</ng-container>
+                        <ng-container i18n="@@menuSettings">Settings</ng-container>
                     </content>
                 </mat-list-item>
                 <mat-divider></mat-divider>
@@ -138,7 +138,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-icon><svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_info.svg#Icon"></use>
                             </svg></mat-icon>
-                        <ng-container i18n>Info</ng-container>
+                        <ng-container i18n="@@menuInfo">Info</ng-container>
                     </content>
                 </mat-list-item>
             </mat-nav-list>

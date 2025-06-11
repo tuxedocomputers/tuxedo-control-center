@@ -473,15 +473,15 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public connectedStatusString(): string {
         if (!this.hasBluetooth) {
-            return $localize `:aqConnectionStatusNoBluetooth:Bluetooth not available`;
+            return $localize `:@@aqConnectionStatusNoBluetooth:Bluetooth not available`;
         } else if (this.isConnecting) {
-            return $localize `:aqConnectionStatusConnecting:Connecting...`;
+            return $localize `:@@aqConnectionStatusConnecting:Connecting...`;
         } else if (this.isDisconnecting) {
-            return $localize `:aqConnectionStatusDisconnecting:Disconnecting...`;
+            return $localize `:@@aqConnectionStatusDisconnecting:Disconnecting...`;
         } else if (this.isConnected) {
-            return $localize `:aqConnectionStatusConnectedTo:Connected to`;
+            return $localize `:@@aqConnectionStatusConnectedTo:Connected to`;
         } else {
-            return $localize `:aqConnectionStatusLookingForDevices:Looking for devices...`;
+            return $localize `:@@aqConnectionStatusLookingForDevices:Looking for devices...`;
         }
     }
 

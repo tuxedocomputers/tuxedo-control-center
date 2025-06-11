@@ -109,7 +109,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg viewBox="0 0 512 512"><use href="./assets/images/icon_gear.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info">
-                        {{ odmProfileToName.get(profile.odmProfile.name) }}
+                        {{ utils.getODMProfileName(profile.odmProfile.name) }}
                     </span>
                 </div>
                 <div class="status-component" [ngClass]="{'inactive': !profile.fan.useControl, 'not-available': !compat.hasFanControl || !this.config.getSettings().fanControlEnabled}">
@@ -117,7 +117,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg viewBox="0 0 512 512"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
                     </div>
                     <span class="status-info" *ngIf="profile.fan.useControl">
-                        {{ profile.fan.fanProfile }}
+                        {{ utils.getFanProfileName(profile.fan.fanProfile) }}
                     </span>
                 </div>
                 <div class="status-component" [ngClass]="{'inactive': !profile.display.useBrightness}">
@@ -142,7 +142,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <content *ngIf="addProfileTile" class="add-profile">
             <div class="description" i18n="@@ProfOverviewTileNewProfileDescription">
-                Create a new profile and configure it as you want
+                Create a new profile and configure it as you want.
             </div>
         </content>
     </mat-card-content>

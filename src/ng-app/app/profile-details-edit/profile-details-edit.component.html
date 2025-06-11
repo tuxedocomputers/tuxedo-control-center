@@ -111,18 +111,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.value">
                                         <content class="value">
-                                            {{ odmProfileToName.get(profileFormGroup.get("odmProfile").get("name").value) }}
+                                            {{ utils.getODMProfileName(profileFormGroup.get("odmProfile").get("name").value) }}
                                         </content>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" *ngIf="editProfile" [ngClass]="{'inactive': false}">
                                             <mat-select formControlName="name" [disableOptionCentering]="true">
                                                 <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
-                                                    {{ odmProfileToName.get(odmProfileName) }}
+                                                    {{ utils.getODMProfileName(odmProfileName) }}
                                                 </mat-option>
                                             </mat-select>
                                         </content>
-                                        <content class="input" *ngIf="!editProfile">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
+                                        <content class="input" *ngIf="!editProfile">{{ utils.getODMProfileName(viewProfile.odmProfile.name) }}</content>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
@@ -181,7 +181,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div formGroupName="display">
                             <mat-grid-list [cols]="gridParams.cols" rowHeight="35px" class="profile-details-edit-grid">
 
-                                <mat-grid-tile [colspan]="gridParams.header"><header i18n>Set brightness on profile activation</header></mat-grid-tile>
+                                <mat-grid-tile [colspan]="gridParams.header"><header i18n="@@cProfMgrDetailsSetBrightness">Set brightness on profile activation</header></mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.value">
                                     <content class="value">
                                         <span [hidden]="!inputUseBrightness.checked" i18n="@@cProfMgrDetailsUseBrightnessYes">yes</span>
@@ -389,16 +389,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.value">
                                     <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{
-                                        viewProfile.fan.fanProfile }}</content>
+                                        utils.getFanProfileName(viewProfile.fan.fanProfile) }}</content>
                                     <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{
-                                        profileFormGroup.controls.fan.controls.fanProfile.value }}</content>
+                                        utils.getFanProfileName(profileFormGroup.controls.fan.controls.fanProfile.value) }}</content>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.input">
                                     <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                         <mat-select formControlName="fanProfile" [disableOptionCentering]="true">
                                             <mat-option *ngFor="let fanProfileName of getFanProfileNames()"
                                                 [value]="fanProfileName" color="primary">
-                                                {{ fanProfileName }}
+                                                {{ utils.getFanProfileName(fanProfileName) }}
                                             </mat-option>
                                         </mat-select>
                                     </content>
@@ -690,14 +690,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-grid-tile>
                                 <ng-container *ngIf="!hasDeviceSystemProfileInfo">
                                     <mat-grid-tile [colspan]="gridParams.value">
-                                        <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(viewProfile.odmProfile.name) }}</content>
-                                        <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ odmProfileToName.get(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
+                                        <content class="value" [hidden]="editProfile" [ngClass]="{'inactive': false}">{{ utils.getODMProfileName(viewProfile.odmProfile.name) }}</content>
+                                        <content class="value" [hidden]="!editProfile" [ngClass]="{'inactive': false}">{{ utils.getODMProfileName(profileFormGroup.controls.odmProfile.controls.name.value) }}</content>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile" [ngClass]="{'inactive': false}">
                                             <mat-select formControlName="name" [disableOptionCentering]="true">
                                                 <mat-option *ngFor="let odmProfileName of odmProfileNames" [value]="odmProfileName" color="primary">
-                                                    {{ odmProfileToName.get(odmProfileName) }}
+                                                    {{ utils.getODMProfileName(odmProfileName) }}
                                                 </mat-option>
                                             </mat-select>
                                         </content>

@@ -156,26 +156,26 @@ export class TomteGuiComponent implements OnInit {
         {
             if (prerequisite === 'prerequisite')
             {
-                return $localize `:@@tomteGuiSliderToolTipBlockRequisite:Cannot block a module that is a prerequisite`
+                return $localize `:@@tomteGuiSliderToolTipBlockRequisite:This module is essential for the proper operation of your TUXEDO and cannot be deactivated`
             }
             if(blocked)
             {
-                return $localize `:@@tomteGuiSliderToolTipUnblock:Unblock this module`
+                return $localize `:@@tomteGuiSliderToolTipUnblock:Activate module`
             }
             else
             {
-                return $localize `:@@tomteGuiSliderToolTipBlock:Block this module`
+                return $localize `:@@tomteGuiSliderToolTipBlock:Deactivate module`
             }
         }
         if (whichButton === 'installed')
         {
             if (prerequisite === 'prerequisite')
             {
-                return $localize `:@@tomteGuiSliderToolTipUninstallRequisite:Cannot uninstall a module that is a prerequisite`
+                return $localize `:@@tomteGuiSliderToolTipUninstallRequisite:This module is essential for the proper operation of your TUXEDO and cannot be uninstalled`
             }
             if(blocked)
             {
-                return $localize `:@@tomteGuiSliderToolTipUnInstallBlocked:Cannot un-/install a module that is blocked.`
+                return $localize `:@@tomteGuiSliderToolTipUnInstallBlocked:Cannot install or uninstall a module that is blocked`
             }
             if (installed)
             {
@@ -218,7 +218,7 @@ export class TomteGuiComponent implements OnInit {
         const tomteGuiNoticeDisable: string = localStorage.getItem('tomteGuiNoticeDisable');
         if (tomteGuiNoticeDisable === null || tomteGuiNoticeDisable === 'false') {
             const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
-                title: $localize `:@@tomteBreakingChangesTitle:Are you sure you want to issue this command?`,
+                title: $localize `:@@tomteBreakingChangesTitle:Authentication is required to run TUXEDO Tomte`,
                 description: $localize `:@@tomteBreakingChangesWarning:Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!`,
                 linkLabel: '',
                 linkHref: '',
@@ -395,7 +395,7 @@ export class TomteGuiComponent implements OnInit {
 
     /*
         Tries to install tomte when button is clicked and throws error message if it fails.
-        Not to be confused with the tomteModuleInstallButton() function, which tries to un-/install a given module
+        Not to be confused with the tomteModuleInstallButton() function, which tries to install or uninstall a given module
     */
     public async installTomteButton(): Promise<void>
     {

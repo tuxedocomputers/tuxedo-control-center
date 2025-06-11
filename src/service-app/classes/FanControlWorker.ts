@@ -161,14 +161,14 @@ export class FanControlWorker extends DaemonWorker {
         const fanApiUnavailable: boolean =
             this.fanApi === undefined || this.fanApi === null;
         if (fanApiUnavailable && this.retryFanInitCounter > 0) {
-            console.log("FanControlWorker: Fan API not defined, retrying init");
+            console.log("FanControlWorker: Fan API not defined, retrying initialization");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
             this.onStart(true);
             return;
         }
 
         if (fanApiUnavailable && this.retryFanInitCounter === 0) {
-            console.log("FanControlWorker: Fan API init failed");
+            console.log("FanControlWorker: Fan API initialization failed");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
         }
     }
@@ -197,7 +197,7 @@ export class FanControlWorker extends DaemonWorker {
     ): Promise<void> {
         if ((fanControlEnabled || sensorCollection) && this.fanApi) {
             if (this.mapStatus === false) {
-                console.log("FanControlWorker: Mapping failed, retrying init");
+                console.log("FanControlWorker: Mapping failed, retrying initialization");
                 await this.initFanControl();
                 await this.setFanProfile();
             }

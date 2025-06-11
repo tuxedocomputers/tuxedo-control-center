@@ -27,8 +27,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <hr />
             
             <div class="content-container centered">
-                <p i18n>You got a problem with your TUXEDO device?</p>
-                <p i18n>Then please contact us by phone or use our online support.</p>
+                <p i18n="@@cSupportProblem">You got a problem with your TUXEDO device?</p>
+                <p i18n="@@cSupportContactSupport">Then please contact us by phone or use our online support.</p>
             
                 <div class="contact-information">
                     <div class="phone-info">
@@ -50,35 +50,40 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_systemdiagnose.svg#Icon"></use></svg></mat-icon>
-                        <div i18n class="panel-title">System diagnostics</div>
+                        <div i18n="@@cSupportSystemDiagnosticsTitle" class="panel-title">System diagnostics</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="content-container">
                     <div>
-                        <div i18n class="description">For more complex problems it may be necessary to evaluate diagnostic data from your PC.</div>
-                        <div i18n class="description">Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.</div>
+                        <div i18n="@@cSupportSystemDiagnosticsDescription1" class="description">For more complex problems it may be necessary to evaluate diagnostic data from your PC.</div>
+                        <div i18n="@@cSupportSystemDiagnosticsDescription2" class="description">Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.</div>
                         <div class="description">
-                            <span i18n> For further information please click</span>:
+                            <span i18n="@@cSupportSystemDiagnosticsClick"> For further information please click</span>:
                             <a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
-
                         </div>
                     </div>
                 
                     <mat-vertical-stepper [linear]="true" #systeminfoStepper>
                         <mat-step [stepControl]="formTicketNumber">
                             <ng-template matStepLabel>
-                                <ng-container i18n>Step1: Input ticket number</ng-container>
+                                <ng-container i18n="@@cSupportSystemDiagnosticsTicketNumber">Step 1: Input ticket number</ng-container>
                             </ng-template>
                             
                             <form [formGroup]="formTicketNumber">
                                 <div>
-                                    <div i18n="@@cSupportPleaseEnterTicketnumber">Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </div>
-                                    <a style="color: currentColor; cursor: pointer; text-decoration: underline;" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')" i18n>online form</a>
+                                    <span i18n="@@cSupportPleaseEnterTicketNumber">
+                                        Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate 
+                                    </span>
+                                    <a style="color: currentColor; cursor: pointer; text-decoration: underline;" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')" i18n="@@cSupportTicketOnlineForm">
+                                        online form
+                                    </a>.
                                 </div>
-                                <mat-form-field>
-                                    <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
-                                </mat-form-field> &nbsp;
-                                <button mat-stroked-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
+                                <div style="padding-top: 16px">
+                                    <mat-form-field>
+                                        <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
+                                    </mat-form-field> &nbsp;
+                                    <button mat-stroked-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systemInfosCompleted=false">Next</button>
+                                </div>
                                 <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty"
                                 class="alert alert-danger">
                                     <div i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 990 and is 9 digits long.</div>
@@ -86,17 +91,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </form>
 
                         </mat-step>
-                        <mat-step i18n-label label="Step2: Download and run system info collection program" [completed]="systeminfosCompleted">
-                            <div i18n>
+                        <mat-step [completed]="systemInfosCompleted">
+                            <ng-template matStepLabel i18n="@@cSupportInfoCollection" >Step 2: Download and run system info collection program</ng-template>
+                            <div i18n="@@cSupportSystemDiagnosticsDataCollectionDescription">
                                 <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                             </div>
-                            <button mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
+                            <button mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systemInfosCompleted">
                                 <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
                                 <div i18n="@@cSupportSysInfoButtonStart">Start</div>
                             </button>
                             &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                         </mat-step>
-                        <mat-step i18n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
+                        <mat-step [completed]="systemInfosCompleted" state="done">
+                            <ng-template matStepLabel i18n="@@cSupportSystemDiagnosticsDone">Step 3: Done</ng-template>
                             <p i18n="@@cSupportSysInfoTextDone1">Your system diagnostics data has been successfully sent.</p>
                             <p i18n="@@cSupportSysInfoTextDone2">We will come back to you as soon as this has been evaluated.</p>
                         </mat-step>
@@ -111,13 +118,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg></mat-icon>
-                        <div i18n class="panel-title">Remote support</div>
+                        <div i18n="@@cSupportRemoteSupport" class="panel-title">Remote support</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
                 <div class="content-container">
                     <div *ngIf="isX11 === 1">
-                        <div i18n>
+                        <div i18n="@@cSupportAnydeskX11Description">
                             <p>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <i>AnyDesk</i> remote maintenance software.</p>
                             <p>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.</p>
                             <p>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!</p>
@@ -134,8 +141,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </p>
                     </div>
                     
-                    <div *ngIf="isX11 !== 1">
-                        To use AnyDesk, your operating system must be restarted with the X11 graphics system. Please log out and select X11 on the login screen. To do this, select “Plasma (X11)” instead of “Plasma (Wayland)” on KDE or “Ubuntu” instead of “Ubuntu with Wayland” on Gnome.
+                    <div i18n="@@cSupportAnydeskWaylandDescription" *ngIf="isX11 !== 1">
+                        To use AnyDesk, your operating system must be restarted with the X11 graphics system. Please log out and select X11 on the login screen.
                     </div>
                 </div>
             </mat-expansion-panel>
@@ -144,12 +151,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_restoresystem.svg#Icon"></use></svg></mat-icon>
-                        <div i18n class="panel-title">Restore system</div>
+                        <div i18n="@@cSupportRestoreTitle" class="panel-title">Restore system</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
                 <div class="content-container">
-                    <div i18n>
+                    <div i18n="@@cSupportRestoreDescription">
                         <p>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.</p>
                         <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!</p>
                     </div>

@@ -47,7 +47,7 @@ import { InputDialogData } from "../dialog-input-text/dialog-input-text.componen
 import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
 import { WebcamService } from "../webcam.service";
 
-// todo: move dialog functions into a seperate file
+// todo: move dialog functions into a new file
 @Component({
     selector: "app-webcam-settings",
     templateUrl: "./webcam-settings.component.html",
@@ -718,7 +718,7 @@ export class WebcamSettingsComponent implements OnInit {
         this.mutex.runExclusive(async (): Promise<void> => {
             const unknown_all: boolean[] = [];
 
-            // TODO hacky solution, this should all be handled in main.ts
+            // todo: this should be in main.ts
             if (environment.production) {
                 this.v4l2Renames = await window.webcamAPI.readV4l2Names('');
             } else {

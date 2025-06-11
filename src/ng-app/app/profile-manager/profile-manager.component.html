@@ -63,12 +63,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <button mat-menu-item (click)="exportProfiles()">
                         <mat-icon>save</mat-icon>
 
-                        <span>Export Profile Settings</span>
+                        <span i18n="@@cProfMgrExportSettings">Export profile settings</span>
                     </button>
                     <button mat-menu-item (click)="importProfiles()">
                         <mat-icon>file_upload</mat-icon>
 
-                        <span>Import Profile Settings</span>
+                        <span i18n="@@cProfMgrImportSettings">Import profile settings</span>
                     </button>
                 </mat-menu>
             </div>
@@ -83,8 +83,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
                 <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="cancelInput()" placeholder="Profile name" minLength="1" maxLength="50" />
             </mat-form-field>
-            <button mat-stroked-button color="primary" i18n [disabled]="profileNameExist(inputFocus.value)">Save</button>
-            <button mat-stroked-button color="basic" (click)="cancelInput()" i18n>Cancel</button>
+            <button mat-stroked-button color="primary" i18n="@@cProfMgrSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button mat-stroked-button color="basic" (click)="cancelInput()" i18n="@@cProfMgrCancel">Cancel</button>
         </form>
     </mat-toolbar-row>
 

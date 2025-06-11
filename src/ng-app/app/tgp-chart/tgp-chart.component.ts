@@ -86,11 +86,10 @@ export class TgpChartComponent {
             type: "bar",
             data: {
                 labels: ["TGP"],
-                // todo: label translation
                 datasets: createBarChartDataset(
-                    "Configurable graphics power (cTGP)",
+                    $localize`:@@configurableGraphicsPower:Configurable graphics power (cTGP)`,
                     [this.nvidiaPowerCTRLDefaultPowerLimit + this.cTGPOffset],
-                    "Dynamic Boost range",
+                    $localize`:@@dynamicBoostRange:Dynamic Boost range`,
                     [
                         this.nvidiaPowerCTRLMaxPowerLimit -
                             this.nvidiaPowerCTRLDefaultPowerLimit -

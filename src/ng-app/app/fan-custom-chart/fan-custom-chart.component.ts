@@ -297,8 +297,7 @@ export class FanCustomChartComponent implements OnInit {
             },
             data: {
                 labels: this.tempsLabels,
-                // todo: label translation
-                datasets: createLineChartDataset("CPU & GPU Fan", this.cpuData),
+                datasets: createLineChartDataset($localize`:@@cpuAndGpuFan:CPU & GPU Fan`, this.cpuData),
             },
         };
 

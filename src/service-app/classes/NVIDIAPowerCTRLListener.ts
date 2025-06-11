@@ -64,7 +64,7 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
             this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit = Number(maxPowerLimit);
             this.tccd.dbusData.nvidiaPowerCTRLAvailable = true;
         } else {
-            console.error("NVIDIAPowerCTRLListener: power limit is not available")
+            console.error("NVIDIAPowerCTRLListener: Power limit is not available")
             this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit = -1;
             this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit = -1;
             this.tccd.dbusData.nvidiaPowerCTRLAvailable = false;

@@ -116,7 +116,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public selectableFrequencies;
 
     public odmProfileNames: string[] = [];
-    public odmProfileToName: Map<string, string> = new Map();
+
     public hasDeviceSystemProfileInfo: boolean;
     public deviceSystemProfileInfo: SystemProfileInfo;
 
@@ -198,20 +198,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.hasDeviceSystemProfileInfo = this.compat.getHasSystemProfileInfo();
         this.deviceSystemProfileInfo = this.compat.getSystemProfileInfo();
 
-        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]) => {
+        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
             this.odmProfileNames = nextAvailableODMProfiles;
 
-            // Update ODM profile name map
-            this.odmProfileToName.clear();
-            for (const profileName of this.odmProfileNames) {
-                if (profileName?.length > 0) {
-                    if (this.compat.uwLEDOnlyMode) {
-                        this.odmProfileToName.set(profileName, odmProfileLEDNames.get(profileName));
-                    } else {
-                        this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
-                    }
-                }
-            }
+            this.utils.setODMProfileNames(nextAvailableODMProfiles, this.compat.uwLEDOnlyMode, odmProfileLEDNames)
         }));
 
         this.fansMinSpeedSubscription.add(this.tccDBus.fansMinSpeed.subscribe(

@@ -45,7 +45,7 @@ export class SupportComponent implements OnInit {
   public formTicketNumber: FormGroup;
   public systeminfoRunOutput: string = '';
   public systeminfoRunProgress: boolean = false;
-  public systeminfosCompleted: boolean = false;
+  public systemInfosCompleted: boolean = false;
   public anydeskProgramName: string = 'anydesk';
   public webfaiCreatorProgramName = 'tuxedo-webfai-creator';
   // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
@@ -161,7 +161,7 @@ export class SupportComponent implements OnInit {
     this.utils.pageDisabled = true;
     window.ipc.runSysteminfo(this.formTicketNumber.controls.inputTicketNumber.value).then(() => {
       this.systeminfoOutput('Done');
-      this.systeminfosCompleted = true;
+      this.systemInfosCompleted = true;
       systeminfoStepper.selected.completed = true;
       systeminfoStepper.next();
     }).catch((err: unknown): void => {

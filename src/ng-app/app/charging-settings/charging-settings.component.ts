@@ -209,9 +209,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public async thresholdChange(): Promise<void> {
         if (this.chargeStartThreshold >= this.chargeEndThreshold) {
             const config: ConfirmDialogData = {
-                // todo: translation
-                title: "Invalid configuration",
-                description: "To proceed, ensure the end threshold is higher than the start threshold.",
+                title: $localize`:@@chargingDialogInvalidConfigurationTitle:Invalid configuration`,
+                description: $localize`:@@chargingDialogInvalidConfigurationDescription:To proceed, ensure the end threshold is higher than the start threshold.`,
                 buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
             };
             await this.utils.confirmDialog(config);
@@ -228,9 +227,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         if (this.chargeStartThreshold !== this.setChargeStartThreshold ||
             this.chargeEndThreshold !== this.setChargeEndThreshold) {
             const config: ConfirmDialogData = {
-                // todo: translation
-                title: "Error",
-                description: "The start and end battery thresholds did not apply correctly. Please try again.",
+                title: $localize`:@@chargingDialogErrorTitle:Error`,
+                description: $localize`:@@chargingDialogErrorDescription:The start and end battery thresholds did not apply correctly. Please try again.`,
                 buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
             };
             await this.utils.confirmDialog(config);
@@ -238,9 +236,8 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
 
         const config: ConfirmDialogData = {
-            // todo: translation
-            title: "Success",
-            description: "The start and end battery thresholds have been updated.",
+            title: $localize`:@@chargingDialogSuccessTitle:The changes have been applied`,
+            description: $localize`:@@chargingDialogSuccessDescription:The battery charging thresholds have been updated.`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
         await this.utils.confirmDialog(config);

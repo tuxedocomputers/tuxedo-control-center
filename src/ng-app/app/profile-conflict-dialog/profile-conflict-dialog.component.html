@@ -23,9 +23,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div mat-dialog-content >
 
 <div i18n="@@cProfMgrConflictDescription">
-    An energy profile with this name already exists. How would you like to proceed?
+    A profile with this name already exists. How would you like to proceed?
 </div>
-
+    
 <div class="profile-compare-box">
     <div class="profile-old">
         <h1 class="profile" i18n="@@cProfMgrConflictTitleOldProfile">Old profile</h1>
@@ -58,14 +58,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg class="status-icon-container" viewBox="0 0 512 512" >
                         <use href="./assets/images/icon_gear.svg#Icon"></use>
                     </svg>
-                    <p *ngIf="data.oldProfile.odmProfile.name" class="status-info">{{ data.oldProfile.odmProfile.name }}</p>
+                    <p *ngIf="data.oldProfile.odmProfile.name" class="status-info">{{ utils.getODMProfileName(data.oldProfile.odmProfile.name)}}</p>
                 </div>
 
                 <div class="status-component" [class.inactive]="!data.oldProfile.fan.useControl" >
                     <svg class="status-icon-container" viewBox="0 0 512 512" >
                         <use href="./assets/images/icon_fan.svg#Icon"></use>
                     </svg>
-                    <p *ngIf="data.oldProfile.fan.useControl" class="status-info">{{ data.oldProfile.fan.fanProfile }}</p>
+                    <p *ngIf="data.oldProfile.fan.useControl" class="status-info">{{ utils.getFanProfileName(data.oldProfile.fan.fanProfile) }}</p>
     
                 </div>
                 <div class="status-component" [class.inactive]="!data.oldProfile.display.useBrightness">
@@ -115,14 +115,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <svg class="status-icon-container" viewBox="0 0 512 512" >
                         <use href="./assets/images/icon_gear.svg#Icon"></use>
                     </svg>
-                    <p *ngIf="data.newProfile.odmProfile.name" class="status-info">{{ data.newProfile.odmProfile.name }}</p>
+                    <p *ngIf="data.newProfile.odmProfile.name" class="status-info">{{ utils.getODMProfileName(data.newProfile.odmProfile.name) }}</p>
                 </div>
 
                 <div class="status-component" [class.inactive]="!data.newProfile.fan.useControl" >
                     <svg class="status-icon-container" viewBox="0 0 512 512" >
                         <use href="./assets/images/icon_fan.svg#Icon"></use>
                     </svg>
-                    <p *ngIf="data.newProfile.fan.useControl" class="status-info">{{ data.newProfile.fan.fanProfile }}</p>
+                    <p *ngIf="data.newProfile.fan.useControl" class="status-info">{{ utils.getFanProfileName(data.newProfile.fan.fanProfile) }}</p>
     
                 </div>
                 <div class="status-component" [class.inactive]="!data.newProfile.display.useBrightness">

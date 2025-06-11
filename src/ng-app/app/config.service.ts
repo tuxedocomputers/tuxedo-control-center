@@ -96,15 +96,15 @@ export class ConfigService implements OnDestroy {
     }
 
     public get cpuSettingsDisabledMessage(): string {
-        return $localize `:@@messageCPUSettingsOff:CPU frequency control deactivated in Settings→Global\u00A0profile\u00A0settings`;
+        return $localize `:@@messageCPUSettingsOff:CPU frequency control deactivated in Settings → Global profile settings`;
     }
 
     public get fanControlDisabledMessage(): string {
-        return $localize `:@@messageFanControlOff:Fan control deactivated in Settings→Global\u00A0profile\u00A0settings`;
+        return $localize `:@@messageFanControlOff:Fan control deactivated in Settings → Global profile settings`;
     }
 
     public get keyboardBacklightControlDisabledMessage(): string {
-        return $localize `:@@messageKeyboardBacklightControlOff:Keyboard backlight control deactivated in Settings→Global\u00A0profile\u00A0settings`;
+        return $localize `:@@messageKeyboardBacklightControlOff:Keyboard backlight control deactivated in Settings → Global profile settings`;
     }
 
     public getCustomProfiles(): ITccProfile[] {
