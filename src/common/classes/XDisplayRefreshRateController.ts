@@ -196,7 +196,7 @@ export class XDisplayRefreshRateController {
             const displayNameMatch: any = currLine.match(displayNameRegex);
             if (displayNameMatch) {
                 newDisplayModes.displayName = this.displayName =
-                    displayNameMatch[0];
+                    displayNameMatch[0].trim();
 
                 foundDisplayName = true;
             }
