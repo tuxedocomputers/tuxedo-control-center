@@ -1132,8 +1132,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                         )
                                                     )
                                                 "
-                                                (mouseup)="buttonRepeatUp()"
-                                                (mouseleave)="buttonRepeatUp()">
+                                                (mouseup)="buttonRepeatUp(); updateTGPChart()"
+                                                (mouseleave)="buttonRepeatUp(); updateTGPChart()">
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
@@ -1155,8 +1155,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                         )
                                                     )
                                                 "
-                                                (mouseup)="buttonRepeatUp()"
-                                                (mouseleave)="buttonRepeatUp()">
+                                                (mouseup)="buttonRepeatUp(); updateTGPChart()"
+                                                (mouseleave)="buttonRepeatUp(); updateTGPChart()">
                                                 <mat-icon>add</mat-icon>
                                             </button>
                                         </div>
