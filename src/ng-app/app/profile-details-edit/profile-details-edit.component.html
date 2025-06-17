@@ -737,7 +737,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     <input
                                                         matSliderThumb
                                                         #odmProfilesPowerLimitSlider
-                                                        [(value)]="plSliderIndex"
+                                                        [(value)]="powerLimitSliderIndex"
                                                         (input)="
                                                             sliderODMProfileChange(
                                                                 odmProfilesPowerLimitSlider.value
@@ -752,6 +752,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            *ngIf="!hasDeviceSystemProfileInfo"
                                             mat-icon-button
                                             color="primary"
                                             (click)="
@@ -759,6 +760,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     .get('odmProfile')
                                                     .get('name')
                                                     .reset(viewProfile.odmProfile.name)
+                                            "
+                                            [hidden]="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name').value === viewProfile.odmProfile.name
+                                            ">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                        
+                                        <button
+                                            *ngIf="hasDeviceSystemProfileInfo"
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="
+                                                profileFormGroup
+                                                    .get('odmProfile')
+                                                    .get('name')
+                                                    .reset(viewProfile.odmProfile.name);
+                                                resetPowerLimitSliderIndex()
                                             "
                                             [hidden]="
                                                 profileFormGroup

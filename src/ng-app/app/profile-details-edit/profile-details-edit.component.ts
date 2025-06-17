@@ -147,6 +147,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
     public get hasMaxFreqWorkaround(): boolean { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+    public powerLimitSliderIndex: number = undefined;
 
     public min = Math.min;
 
@@ -197,6 +198,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.hasDeviceSystemProfileInfo = this.compat.getHasSystemProfileInfo();
         this.deviceSystemProfileInfo = this.compat.getSystemProfileInfo();
+        
+        this.resetPowerLimitSliderIndex();
 
         this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
             this.odmProfileNames = nextAvailableODMProfiles;
@@ -270,6 +273,28 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
         this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
         this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
+    }
+    
+    public resetPowerLimitSliderIndex(): void {
+        if (this.hasDeviceSystemProfileInfo) {
+            const profileName: string = this.viewProfile?.odmProfile?.name;
+
+            if (!profileName) {
+                return;
+            }
+
+            for (
+                let i: number = 0;
+                i < this.deviceSystemProfileInfo.pl?.length;
+                i++
+            ) {
+                if (
+                    this.deviceSystemProfileInfo.pl[i].odmName === profileName
+                ) {
+                    this.powerLimitSliderIndex = i;
+                }
+            }
+        }
     }
 
     public getPowerLimitToName(name: string): string {
@@ -385,6 +410,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.overwriteDefaultRefreshRateValue();
         this.tempCustomFanCurve = undefined;
+        
+        this.resetPowerLimitSliderIndex();
     }
 
     public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile): void {
