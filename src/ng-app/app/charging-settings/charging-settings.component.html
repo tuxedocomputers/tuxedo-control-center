@@ -51,8 +51,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         color="primary"
         [disabled]="chargingPriorityProgress">
         <div class="radio-text">
-            <div>{{ chargingPriorityLabels.get(priority) }}</div>
-            {{ chargingPriorityDescriptions.get(priority) }}
+            <div class="radio-title">{{ chargingPriorityLabels.get(priority) }}</div>
+            <div class="radio-description">{{ chargingPriorityDescriptions.get(priority) }}</div>
         </div>
     </mat-radio-button>
 </mat-radio-group>
