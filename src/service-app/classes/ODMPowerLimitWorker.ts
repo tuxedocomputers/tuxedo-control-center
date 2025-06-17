@@ -29,7 +29,7 @@ export class ODMPowerLimitWorker extends DaemonWorker {
         super(5000, "ODMPowerlimitWorker", tccd);
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         let odmPowerLimitSettings: ITccODMPowerLimits = this.activeProfile.odmPowerLimits;
         if (odmPowerLimitSettings === undefined) {
             odmPowerLimitSettings = { tdpValues: [] }
@@ -63,11 +63,11 @@ export class ODMPowerLimitWorker extends DaemonWorker {
         this.tccd.dbusData.odmPowerLimitsJSON = JSON.stringify(tdpInfo);
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
 
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
 
     }
 }

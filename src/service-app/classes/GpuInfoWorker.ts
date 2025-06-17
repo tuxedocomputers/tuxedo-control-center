@@ -87,7 +87,7 @@ export class GpuInfoWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
     private async getIntelIGpuDrmPath(): Promise<string | undefined> {
         const intelIGpuDevices: string = await execCommandAsync(

@@ -53,7 +53,7 @@ export class PrimeWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
     // only supporting gpu switch on systems which can use prime-select since primary focus is Tuxdeo OS and Ubuntu
     // other operating systems may handle this differently and thus can't easily be supported

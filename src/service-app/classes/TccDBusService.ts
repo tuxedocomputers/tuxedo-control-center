@@ -49,7 +49,7 @@ export class TccDBusService extends DaemonWorker {
         }
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         if (!this.started) {
             this.bus.requestName('com.tuxedocomputers.tccd', 0).then((name: number): void => {
                 try {
@@ -65,7 +65,7 @@ export class TccDBusService extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         // Make sure wmiAvailability info is updated. Is done here until it gets its own worker.
         this.dbusData.tuxedoWmiAvailable = TuxedoIOAPI.wmiAvailable();
 
@@ -74,7 +74,7 @@ export class TccDBusService extends DaemonWorker {
         }
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
         this.dbusData.dbusAvailable = false;
 
         try {

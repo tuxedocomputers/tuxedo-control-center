@@ -29,7 +29,7 @@ export class WebcamWorker extends DaemonWorker {
         super(2000, "WebCamWorker", tccd);
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         this.updateWebcamStatuses();
 
         const activeProfile: ITccProfile = this.activeProfile;
@@ -60,11 +60,11 @@ export class WebcamWorker extends DaemonWorker {
         this.updateWebcamStatuses();
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         this.updateWebcamStatuses();
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
 
     }
 

@@ -105,11 +105,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         // Check arguments, start, stop, restart config files etc..
         // todo: do error handling inside catchError
-        await this.handleArgumentProgramFlow().catch((err: unknown): void => this.catchError(err as Error));
+        await this.handleArgumentProgramFlow().catch(async (err: unknown): Promise<void> => await this.catchError(err as Error));
 
         this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
-        this.setupSignalHandling();
+        await this.setupSignalHandling();
 
         this.dbusData.tccdVersion = tccPackage.version;
         this.stateWorker = new StateSwitcherWorker(this);
@@ -132,7 +132,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.listeners.push(new KeyboardBacklightListener(this));
         this.listeners.push(new NVIDIAPowerCTRLListener(this));
 
-        this.startWorkers();
+        await this.startWorkers();
 
         this.started = true;
         this.logLine('Daemon started');
@@ -150,11 +150,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     }
 
-    public startWorkers(): void {
+    public async startWorkers(): Promise<void> {
         for (const worker of this.workers) {
             try {
                 worker.updateProfile(this.getCurrentProfile());
-                worker.start();
+                await worker.start();
             } catch (err: unknown) {
                 console.error("TuxedoControlCenterDaemon: Failed executing onStart =>", err)
             }
@@ -177,7 +177,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         return this.chargingWorker;
     }
 
-    public catchError(err: Error): void {
+    public async catchError(err: Error): Promise<void> {
         this.logLine('Tccd Exception');
         const errorLine: string = err.name + ': ' + err.message;
         this.logLine(errorLine);
@@ -185,23 +185,27 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.logLine(err.stack);
         }
         if (this.started) {
-            this.onExit();
+            await this.onExit();
         }
         process.exit();
     }
 
-    public onExit(): void {
-        this.workers.forEach((worker: DaemonWorker): void => {
+    public async onExit(): Promise<void> {
+        for (const worker of this.workers) {
             clearInterval(worker.timer);
-        });
-        this.workers.forEach((worker: DaemonWorker): void => {
-            // On exit events for each worker before exiting and saving settings
+        }
+
+        for (const worker of this.workers) {
             try {
-                worker.exit();
+                await worker.exit();
             } catch (err: unknown) {
-                console.error("TuxedoControlCenterDaemon: Failed executing onExit() =>", err)
+                console.error(
+                    "TuxedoControlCenterDaemon: Failed executing onExit() =>",
+                    err,
+                );
             }
-        });
+        }
+
         this.config.writeAutosave(this.autosave);
         this.config.writeSettings(this.settings);
     }
@@ -460,19 +464,19 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
     }
 
-    private setupSignalHandling(): void {
+    private async setupSignalHandling(): Promise<void> {
         // Setup signal catching/handling
         // SIGINT is the normal exit signal that the service gets from itself
-        process.on('SIGINT', (): never => {
+        process.on('SIGINT', async (): Promise<never> => {
             this.logLine('SIGINT - Exiting');
-            this.onExit();
+            await this.onExit();
             process.exit(0);
         });
 
         // Also stop on SIGTERM
-        process.on('SIGTERM', (): never => {
+        process.on('SIGTERM', async (): Promise<never> => {
             this.logLine('SIGTERM - Exiting');
-            this.onExit();
+            await this.onExit();
             process.exit(SIGTERM);
         });
 

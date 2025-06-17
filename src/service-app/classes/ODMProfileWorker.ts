@@ -47,7 +47,7 @@ export class ODMProfileWorker extends DaemonWorker {
         super(10000, "ODMProfileWorker", tccd);
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
 
         if (
             ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
@@ -64,9 +64,9 @@ export class ODMProfileWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {}
+    public async onWork(): Promise<void> {}
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
     public ODM(
         platformProfile: SysFsPropertyString,

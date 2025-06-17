@@ -38,7 +38,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.controller = new XDisplayRefreshRateController();
     }
 
-    public onStart(): void {}
+    public async onStart(): Promise<void> {}
 
     // user is able to switch XDG_SESSION_TYPE in login screen and thus a new check needs to be done
     // not checking XDG_SESSION_TYPE during login screen, checking again on user change
@@ -76,7 +76,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.controller.resetValues();
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         const [usersAvailable, usersChanged] = this.checkUsers();
 
         if (usersChanged) {
@@ -91,7 +91,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.setActiveDisplayMode();
     }
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
     private setActiveDisplayMode(): void {
         const activeprofile: ITccProfile = this.tccd.getCurrentProfile();

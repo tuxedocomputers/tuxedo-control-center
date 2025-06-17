@@ -44,7 +44,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
         });
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
 
         // Figure out which brightness percentage to set
         const currentProfile: ITccProfile = this.activeProfile;
@@ -69,7 +69,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
 
         // Possibly save brightness regularly
@@ -89,7 +89,7 @@ export class DisplayBacklightWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
         this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
 
         this.controllers.forEach((controller: DisplayBacklightController): void => {

@@ -32,7 +32,7 @@ export class ChargingWorker extends DaemonWorker {
         super(10000, "ChargingWorker", tccd);
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         if (this.hasChargingProfile()) {
             if (this.tccd.settings.chargingProfile === null || this.tccd.settings.chargingProfile === undefined) {
                 try {
@@ -58,11 +58,11 @@ export class ChargingWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
 
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
 
     }
 

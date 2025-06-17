@@ -33,20 +33,20 @@ export abstract class DaemonWorker {
     protected previousProfile: ITccProfile;
     protected activeProfile: ITccProfile;
 
-    protected abstract onStart(): void;
-    protected abstract onWork(): void;
-    protected abstract onExit(): void;
+    protected abstract onStart(): Promise<void>;
+    protected abstract onWork(): Promise<void>;
+    protected abstract onExit(): Promise<void>;
 
-    public start(): void { this.triggerWork(this.onStart); }
-    public work(): void { this.triggerWork(this.onWork); }
-    public exit(): void { this.triggerWork(this.onExit); }
+    public async start(): Promise<void> { await this.triggerWork(this.onStart); }
+    public async work(): Promise<void> { await this.triggerWork(this.onWork); }
+    public async exit(): Promise<void> { await this.triggerWork(this.onExit); }
 
     public updateProfile(activeProfile: ITccProfile): void {
         this.activeProfile = activeProfile;
     }
 
-    private triggerWork(eventFunction: () => void): void {
-        eventFunction.call(this);
+    private async triggerWork(eventFunction: () => Promise<void>): Promise<void> {
+        await eventFunction.call(this);
         this.previousProfile = this.activeProfile;
     }
 

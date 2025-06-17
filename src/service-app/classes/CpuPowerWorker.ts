@@ -37,7 +37,7 @@ export class CpuPowerWorker extends DaemonWorker {
         super(2000, "CpuPowerWorker", tccd);
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         this.powerWorker = new PowerController(this.intelRAPL);
 
         this.RAPLConstraint0Status =
@@ -58,7 +58,7 @@ export class CpuPowerWorker extends DaemonWorker {
         this.onWork();
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         if (this.tccd.dbusData.sensorDataCollectionStatus) {
             const cpuPowerValues: ICpuPower = {
                 powerDraw: this.getCurrentPower(),
@@ -118,5 +118,5 @@ export class CpuPowerWorker extends DaemonWorker {
         return maxPowerLimit / 1000000;
     }
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 }

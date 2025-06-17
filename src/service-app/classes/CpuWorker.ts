@@ -49,13 +49,13 @@ export class CpuWorker extends DaemonWorker {
         }
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         if (this.tccd.settings.cpuSettingsEnabled) {
             this.applyCpuProfile(this.activeProfile);
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         // Check if current profile CPU values are actually set. If not
         // apply profile again
 
@@ -69,7 +69,7 @@ export class CpuWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
     /**
      * Choose the default governor for the current system

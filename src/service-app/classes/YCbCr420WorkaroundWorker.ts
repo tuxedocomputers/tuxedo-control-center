@@ -39,7 +39,7 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         }
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         let settings_changed: boolean = false;
 
         for (let card: number = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
@@ -60,11 +60,11 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         //noop
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
         //noop
     }
 }

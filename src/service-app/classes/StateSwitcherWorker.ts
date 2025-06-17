@@ -43,7 +43,7 @@ export class StateSwitcherWorker extends DaemonWorker {
         this.refreshProfile = true;
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         // Check state and switch profile if appropriate
         const newState: ProfileStates = determineState();
 
@@ -63,7 +63,7 @@ export class StateSwitcherWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         // Check state and switch profile if appropriate
         const newState: ProfileStates = determineState();
         const oldActiveProfileId: string = this.tccd.activeProfile.id;
@@ -113,7 +113,7 @@ export class StateSwitcherWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
         // Do nothing
     }
 
