@@ -71,7 +71,7 @@ export class TccDBusController {
 
     async getNVIDIAPowerCTRLDefaultPowerLimit(): Promise<number> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetNVIDIAPowerCTRLDefaultPowerLimit();
             }
         } catch (err: unknown) {
@@ -89,7 +89,7 @@ export class TccDBusController {
 
     async getNVIDIAPowerCTRLMaxPowerLimit(): Promise<number> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetNVIDIAPowerCTRLMaxPowerLimit();
             }
         } catch (err: unknown) {
@@ -107,7 +107,7 @@ export class TccDBusController {
 
     async getNVIDIAPowerCTRLAvailable(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetNVIDIAPowerCTRLAvailable();
             }
         } catch (err: unknown) {
@@ -124,7 +124,7 @@ export class TccDBusController {
     }
     async getHideCTGP(): Promise <boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetHideCTGP();
             }
         } catch (err: unknown) {
@@ -141,7 +141,7 @@ export class TccDBusController {
     }
     async tuxedoWmiAvailable(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.TuxedoWmiAvailable();
             }
         } catch (err: unknown) {
@@ -159,7 +159,7 @@ export class TccDBusController {
 
     async fanHwmonAvailable(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.FanHwmonAvailable();
             }
         } catch (err: unknown) {
@@ -177,7 +177,7 @@ export class TccDBusController {
 
     async deviceHasAquaris(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.DeviceHasAquaris();
             }
         } catch (err: unknown) {
@@ -195,7 +195,7 @@ export class TccDBusController {
 
     async tccdVersion(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.TccdVersion();
             }
         } catch (err: unknown) {
@@ -213,7 +213,7 @@ export class TccDBusController {
 
     async getDeviceJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetDeviceName();
             }
         } catch (err: unknown) {
@@ -231,7 +231,7 @@ export class TccDBusController {
 
     async getFanDataJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return this.interface.GetFanDataJSON();
             }
         } catch (err: unknown) {
@@ -250,7 +250,7 @@ export class TccDBusController {
 
     async getDisplayModesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetDisplayModesJSON();
             }
         } catch (err: unknown) {
@@ -269,7 +269,7 @@ export class TccDBusController {
 
     async getIsX11():Promise<number> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetIsX11();
             }
         } catch (err: unknown) {
@@ -288,7 +288,7 @@ export class TccDBusController {
 
     async webcamSWAvailable(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.WebcamSWAvailable();
             }
         } catch (err: unknown) {
@@ -306,7 +306,7 @@ export class TccDBusController {
 
     async getWebcamSWStatus(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetWebcamSWStatus();
             }
         } catch (err: unknown) {
@@ -324,7 +324,7 @@ export class TccDBusController {
 
     async getForceYUV420OutputSwitchAvailable(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetForceYUV420OutputSwitchAvailable();
             }
         } catch (err: unknown) {
@@ -342,7 +342,7 @@ export class TccDBusController {
 
     async getDGpuInfoValuesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetDGpuInfoValuesJSON();
             }
         } catch (err: unknown) {
@@ -360,7 +360,7 @@ export class TccDBusController {
 
     async getIGpuInfoValuesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetIGpuInfoValuesJSON();
             }
         } catch (err: unknown) {
@@ -378,7 +378,7 @@ export class TccDBusController {
 
     async getCpuPowerValuesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetCpuPowerValuesJSON();
             }
         } catch (err: unknown) {
@@ -396,7 +396,7 @@ export class TccDBusController {
 
     async getPrimeState(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetPrimeState();
             }
         } catch (err: unknown) {
@@ -414,7 +414,7 @@ export class TccDBusController {
 
     async consumeModeReapplyPending(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.ConsumeModeReapplyPending();
             }
         } catch (err: unknown) {
@@ -433,7 +433,7 @@ export class TccDBusController {
 
     async getActiveProfileJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetActiveProfileJSON();
             }
         } catch (err: unknown) {
@@ -451,7 +451,7 @@ export class TccDBusController {
 
     async setTempProfileById(profileId: string): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetTempProfileById(profileId);
             }
         } catch (err: unknown) {
@@ -469,7 +469,7 @@ export class TccDBusController {
 
     async getProfilesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetProfilesJSON();
             }
         } catch (err: unknown) {
@@ -487,7 +487,7 @@ export class TccDBusController {
 
     async getCustomProfilesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetCustomProfilesJSON();
             }
         } catch (err: unknown) {
@@ -505,7 +505,7 @@ export class TccDBusController {
 
     async getDefaultProfilesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetDefaultProfilesJSON();
             }
         } catch (err: unknown) {
@@ -523,7 +523,7 @@ export class TccDBusController {
 
     async getDefaultValuesProfileJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetDefaultValuesProfileJSON();
             }
         } catch (err: unknown) {
@@ -541,7 +541,7 @@ export class TccDBusController {
 
     async getSettingsJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetSettingsJSON();
             }
         } catch (err: unknown) {
@@ -559,7 +559,7 @@ export class TccDBusController {
 
     async odmProfilesAvailable(): Promise<string[]> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.ODMProfilesAvailable();
             }
         } catch (err: unknown) {
@@ -577,7 +577,7 @@ export class TccDBusController {
 
     async odmPowerLimits(): Promise<TDPInfo[]> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return JSON.parse(await this.interface.ODMPowerLimitsJSON());
             }
         } catch (err: unknown) {
@@ -595,7 +595,7 @@ export class TccDBusController {
 
     async odmPowerLimitsJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.ODMPowerLimitsJSON();
             }
         } catch (err: unknown) {
@@ -613,7 +613,7 @@ export class TccDBusController {
 
     async getKeyboardBacklightCapabilitiesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetKeyboardBacklightCapabilitiesJSON();
             }
         } catch (err: unknown) {
@@ -631,7 +631,7 @@ export class TccDBusController {
 
     async getKeyboardBacklightStatesJSON(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetKeyboardBacklightStatesJSON();
             }
         } catch (err: unknown) {
@@ -649,7 +649,7 @@ export class TccDBusController {
 
     async setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON);
             }
         } catch (err: unknown) {
@@ -667,7 +667,7 @@ export class TccDBusController {
 
     async getFansMinSpeed(): Promise<number> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetFansMinSpeed();
             }
         } catch (err: unknown) {
@@ -685,7 +685,7 @@ export class TccDBusController {
 
     async getFansOffAvailable(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetFansOffAvailable();
             }
         } catch (err: unknown) {
@@ -703,7 +703,7 @@ export class TccDBusController {
 
     async getChargingProfilesAvailable(): Promise<string[]> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return JSON.parse(await this.interface.GetChargingProfilesAvailable());
             }
         } catch (err: unknown) {
@@ -721,7 +721,7 @@ export class TccDBusController {
 
     async getCurrentChargingProfile(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetCurrentChargingProfile();
             }
         } catch (err: unknown) {
@@ -739,7 +739,7 @@ export class TccDBusController {
 
     async setChargingProfile(profileDescriptor: string): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetChargingProfile(profileDescriptor);
             }
         } catch (err: unknown) {
@@ -757,7 +757,7 @@ export class TccDBusController {
 
     async getChargingPrioritiesAvailable(): Promise<string[]> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return JSON.parse(await this.interface.GetChargingPrioritiesAvailable());
             }
         } catch (err: unknown) {
@@ -775,7 +775,7 @@ export class TccDBusController {
 
     async getCurrentChargingPriority(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetCurrentChargingPriority();
             }
         } catch (err: unknown) {
@@ -793,7 +793,7 @@ export class TccDBusController {
 
     async setChargingPriority(priorityDescriptor: string): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetChargingPriority(priorityDescriptor);
             }
         } catch (err: unknown) {
@@ -811,7 +811,7 @@ export class TccDBusController {
 
     async getChargeStartAvailableThresholds(): Promise<number[]> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return JSON.parse(await this.interface.GetChargeStartAvailableThresholds());
             }
         } catch (err: unknown) {
@@ -829,7 +829,7 @@ export class TccDBusController {
 
     async getChargeEndAvailableThresholds(): Promise<number[]> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return JSON.parse(await this.interface.GetChargeEndAvailableThresholds());
             }
         } catch (err: unknown) {
@@ -848,7 +848,7 @@ export class TccDBusController {
 
     async getChargeStartThreshold(): Promise<number> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetChargeStartThreshold();
             }
         } catch (err: unknown) {
@@ -866,7 +866,7 @@ export class TccDBusController {
 
     async setChargeStartThreshold(value: number): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetChargeStartThreshold(value);
             }
         } catch (err: unknown) {
@@ -884,7 +884,7 @@ export class TccDBusController {
 
     async getChargeEndThreshold(): Promise<number> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetChargeEndThreshold();
             }
         } catch (err: unknown) {
@@ -902,7 +902,7 @@ export class TccDBusController {
 
     async setChargeEndThreshold(value: number): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetChargeEndThreshold(value);
             }
         } catch (err: unknown) {
@@ -920,7 +920,7 @@ export class TccDBusController {
 
     async getChargeType(): Promise<string> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetChargeType();
             }
         } catch (err: unknown) {
@@ -938,7 +938,7 @@ export class TccDBusController {
 
     async setChargeType(chargeType: ChargeType): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetChargeType(chargeType);
             }
         } catch (err: unknown) {
@@ -956,7 +956,7 @@ export class TccDBusController {
 
     async getFnLockSupported(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetFnLockSupported();
             }
         } catch (err: unknown) {
@@ -974,7 +974,7 @@ export class TccDBusController {
 
     async getFnLockStatus(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetFnLockStatus();
             }
         } catch (err: unknown) {
@@ -992,7 +992,7 @@ export class TccDBusController {
 
     async setFnLockStatus(status: boolean): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetFnLockStatus(status);
             }
         } catch (err: unknown) {
@@ -1010,7 +1010,7 @@ export class TccDBusController {
 
     async setSensorDataCollectionStatus(status: boolean): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetSensorDataCollectionStatus(status);
             }
         } catch (err: unknown) {
@@ -1028,7 +1028,7 @@ export class TccDBusController {
 
     async getSensorDataCollectionStatus(): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.GetSensorDataCollectionStatus();
             }
         } catch (err: unknown) {
@@ -1046,7 +1046,7 @@ export class TccDBusController {
 
     async setDGpuD0Metrics(status: boolean): Promise<boolean> {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 return await this.interface.SetDGpuD0Metrics(status);
             }
         } catch (err: unknown) {
@@ -1064,7 +1064,7 @@ export class TccDBusController {
 
     onModeReapplyPendingChanged(callback_function: () => void): boolean {
         try {
-            if (this.dbusStatus) {
+            if (this.dbusStatus && this.interface) {
                 this.interface.on('ModeReapplyPendingChanged', callback_function);
             }
         } catch (err: unknown) {
