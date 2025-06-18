@@ -326,12 +326,17 @@ function createUserConfigDir(): boolean {
 
 async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
     try {
-        const primeStatus: string = JSON.parse(await tccDBus.getPrimeState());
-        const primeAvailable: boolean = primeStatus !== undefined && primeStatus !== "off" && primeStatus !== "-1";
-        return [primeAvailable, primeStatus];
+        let primeStatus: string = await tccDBus.getPrimeState();
+        
+        if (primeStatus) {
+            primeStatus = JSON.parse(primeStatus);
+            const primeAvailable: boolean = primeStatus !== undefined && primeStatus !== "off" && primeStatus !== "-1";
+            return [primeAvailable, primeStatus];
+        }
+        return [false, "-1"];
     } catch (err: unknown) {
         console.error("initMain: checkPrimeAvailabilityStatus failed =>", err)
-        return [false, "-1"]
+        return [false, "-1"];
     }
 }
 
