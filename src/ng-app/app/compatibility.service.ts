@@ -75,9 +75,15 @@ export class CompatibilityService {
 
     get hasCpuTemp(): boolean {
         const fanData: IDBusFanData = this.tccDbus.fanData?.value;
+        
+        if (!fanData) {
+            return false;
+        }
+        
         const { cpu } = fanData;
         const cpuTemp: TimeData = cpu?.temp;
         return this.hasDataWithValue(cpuTemp);
+        
     }
 
     get hasIGpuTemp(): boolean {
@@ -88,6 +94,11 @@ export class CompatibilityService {
 
     get hasDGpuTemp(): boolean {
         const fanData: IDBusFanData = this.tccDbus.fanData?.value;
+        
+        if (!fanData) {
+            return false;
+        }
+        
         const { gpu1, gpu2 } = fanData;
         const gpu1Temp: TimeData = gpu1?.temp;
         const gpu2Temp: TimeData = gpu2?.temp;
@@ -111,6 +122,11 @@ export class CompatibilityService {
 
     get hasCpuFan(): boolean {
         const fanData: IDBusFanData = this.tccDbus.fanData?.value;
+        
+        if (!fanData) {
+            return false;
+        }
+        
         const { cpu } = fanData;
         const cpuSpeed: TimeData = cpu?.speed;
 
@@ -119,6 +135,11 @@ export class CompatibilityService {
 
     get hasDGpuFan(): boolean {
         const fanData: IDBusFanData = this.tccDbus.fanData?.value;
+        
+        if (!fanData) {
+            return false;
+        }
+        
         const { gpu1, gpu2 } = fanData;
         const gpu1Speed: TimeData = gpu1?.speed;
         const gpu2Speed: TimeData = gpu2?.speed;

@@ -323,6 +323,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.fanData.subscribe((fanData: IDBusFanData): void => {
                 this.fanData = fanData;
+                
+                if (!fanData) {
+                    return;
+                }
+                
                 const { gpu1, gpu2 } = fanData;
                 const gpu1Temp: number = gpu1?.temp?.data;
                 const gpu2Temp: number = gpu2?.temp?.data;

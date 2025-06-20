@@ -51,9 +51,9 @@ export class TccTray {
             // Creation of each profile selection submenu item
             return {
                 label: profile.name,
-                click: (): void => this.events.profileClick(profile.id),
+                click: (): void => this.events.profileClick(profile?.id),
                 type: 'radio',
-                checked: profile.id === this.state.activeProfile.id
+                checked: profile?.id === this.state?.activeProfile?.id
             };
         });
 

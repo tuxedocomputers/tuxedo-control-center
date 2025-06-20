@@ -311,7 +311,7 @@ export class TccDBusClientService implements OnDestroy {
         console.log(
           `tcc-dbus-client: ${dbusFunctionName} did not return data and returned "${data}" instead`
         );
-        behaviorSubject.next({});
+        behaviorSubject.next(undefined);
         return;
       }
 

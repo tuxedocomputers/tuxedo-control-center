@@ -76,7 +76,11 @@ export class GlobalSettingsComponent implements OnInit {
         }
 
         this.subscriptions.add(this.tccdbus.forceYUV420OutputSwitchAvailable.subscribe(
-            (forceYUV420OutputSwitchAvailable: boolean): void => { this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable; }
+            (forceYUV420OutputSwitchAvailable: boolean): void => {
+                if (forceYUV420OutputSwitchAvailable) {
+                    this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable;
+                }
+            }
         ));
 
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
