@@ -25,6 +25,7 @@ import { IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { TccDBusClientService } from "../tcc-dbus-client.service";
 
 @Component({
   selector: 'app-main-gui',
@@ -41,12 +42,14 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     private dbusDead: boolean = false;
 
     public dataLoaded: boolean;
+    private retryCount: number = 0;
 
     constructor(
         private state: StateService,
         private utils: UtilsService,
         public compat: CompatibilityService,
         private route: ActivatedRoute,
+        private dbus: TccDBusClientService,
         ) {
             const data = this.route.snapshot.data;
             this.dataLoaded = data.loaded === true;
@@ -60,11 +63,41 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.state.initializeProfileNames()
 
         if (!this.dataLoaded) {
-            // TODO edit error message, since this has nothing to do with dbus directly
-            // We need a blocking dialog box here
-            var result: boolean = confirm($localize `:@@msgboxMessageServiceUnavailable:Unfortunately, the background service tccd is not working reliably. Please check the corresponding system logs or restart this service manually.`);
-            this.utils.quit();
+            console.error("main-gui: ngOnInit: dbus data not available");
+            this.retryCount = 0;
+
+            this.subscriptions.add(
+                this.dbus.dbusAvailable.subscribe(
+                    (dbusAvailable: boolean): void => {
+                        this.retryCount += 1;
+
+                        if (!dbusAvailable && this.retryCount > 3) {
+                            alert(
+                                $localize`:@@msgboxMessageServiceUnavailable:The background service tccd is not available. Please check the corresponding system logs or restart this service manually.`,
+                            );
+                            this.subscriptions.unsubscribe();
+                            this.utils.quit();
+                        }
+
+                        if (!this.dbus.dataLoaded && this.retryCount > 3) {
+                            alert(
+                                $localize`:@@msgboxMessagDataUnavailable:Profiles are not available. Please check the corresponding system logs or restart tccd manually.`,
+                            );
+                            this.subscriptions.unsubscribe();
+                            this.utils.quit();
+                        }
+
+                        if (dbusAvailable && this.dbus.dataLoaded) {
+                            console.log(
+                                "main-gui: ngOnInit: dbus data available",
+                            );
+                            this.subscriptions.unsubscribe();
+                        }
+                    },
+                ),
+            );
         }
+
         window.ipc.onDbusDead( (): void => {
             if(!this.dbusDead)
             {
