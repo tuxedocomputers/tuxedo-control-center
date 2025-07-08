@@ -115,7 +115,7 @@ export class FanCustomChartComponent implements OnInit {
             .map((e: number): string =>
                 formatTemp(e, this.config?.getSettings()?.fahrenheit)
             );
-        this.fahrenheit = this.config.getSettings().fahrenheit;
+        this.fahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
     }
 
     public ngOnInit(): void {

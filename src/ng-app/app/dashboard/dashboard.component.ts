@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
         this.dashboardVisibility = document.visibilityState === "visible";
-	    this.usingFahrenheit = this.config.getSettings().fahrenheit;
+	    this.usingFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
         this.amdGpuCount = window.power.getAmdDGpuCount();
         this.dGpuAvailable = window.power.isDGpuAvailable();
         this.iGpuAvailable = window.power.isIGpuAvailable();

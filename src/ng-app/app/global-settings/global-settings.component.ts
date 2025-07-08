@@ -84,7 +84,7 @@ export class GlobalSettingsComponent implements OnInit {
         ));
 
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
-        this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit;
+        this.temperatureDisplayFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
         for (let card: number = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
@@ -141,7 +141,7 @@ export class GlobalSettingsComponent implements OnInit {
                 this.config.getSettings().fahrenheit = !event;
             }
 
-            this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit
+            this.temperatureDisplayFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
 
             this.utils.pageDisabled = false;
         });
