@@ -77,7 +77,7 @@ export const defaultProfiles: ITccProfile[] = [
             onlineCores: undefined,
             useMaxPerfGov: false,
             scalingMinFrequency: undefined,
-            scalingMaxFrequency: -1,
+            scalingMaxFrequency: undefined,
             governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
             noTurbo: false
