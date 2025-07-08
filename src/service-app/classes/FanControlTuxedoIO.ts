@@ -68,7 +68,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!speedReadSuccess) {
-            console.log("FanControlTuxedoIO: Fan speed read with IO API failed");
+            console.log(`FanControlTuxedoIO: Fan speed read with IO API index ${fanIndex} failed`);
         }
 
         return currentSpeedPercent.value;
@@ -82,7 +82,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!tempReadSuccess) {
-            console.log("FanControlTuxedoIO: Fan temperature read with IO API failed");
+            console.log(`FanControlTuxedoIO: Fan temperature read with IO API index ${fanIndex} failed`);
         }
 
         return currentTemperatureCelcius.value;
@@ -98,7 +98,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         );
 
         if (!speedWriteSuccess) {
-            console.log("FanControlTuxedoIO: Fan speed write with IO API failed");
+            console.log(`FanControlTuxedoIO: Fan speed write with IO API index ${fanIndex} failed`);
         }
     }
     

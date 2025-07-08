@@ -200,6 +200,15 @@ export class FanControlWorker extends DaemonWorker {
                 console.log("FanControlWorker: Mapping failed, retrying initialization");
                 await this.initFanControl();
                 await this.setFanProfile();
+                
+                const numberFans: number = await this.fanApi.getNumberFans();
+                if (numberFans === 1) {
+                    console.log(`FanControlWorker: Detected ${numberFans} fan`);
+                } else {
+                    console.log(
+                        `FanControlWorker: Detected ${numberFans} fans`,
+                    );
+                }
             }
 
             if (this.mapStatus) {
