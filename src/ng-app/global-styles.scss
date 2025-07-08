@@ -306,3 +306,11 @@ mat-tab-group.active-always-focused {
         header-selected-state-label-text-size: 16px,
     )
 );
+
+.mdc-button__label {
+    z-index: unset !important;
+}
+
+.mat-icon {
+    z-index: unset !important;
+}
