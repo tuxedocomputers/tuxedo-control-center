@@ -1003,7 +1003,7 @@ Handelsregisternummer HRB 27755
         </context-group>
       </trans-unit>
       <trans-unit id="cDashboardCpuTemperatureLabel" datatype="html">
-        <source>CPU - Temp</source>
+        <source>CPU - Temperature</source>
         <target phase-name="approval-1" state="new">CPU - Temperatur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/dashboard/dashboard.component.html</context>
