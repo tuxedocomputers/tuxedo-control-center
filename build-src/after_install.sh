@@ -18,8 +18,8 @@ cp ${DIST_DATA}/com.tuxedocomputers.tccd.conf /usr/share/dbus-1/system.d/com.tux
 cp ${DIST_DATA}/com.tuxedocomputers.tomte.policy /usr/share/polkit-1/actions/com.tuxedocomputers.tomte.policy || true
 
 # Copy and enable services
-cp ${DIST_DATA}/tccd.service /etc/systemd/system/tccd.service || true
-cp ${DIST_DATA}/tccd-sleep.service /etc/systemd/system/tccd-sleep.service || true
+cp ${DIST_DATA}/tccd.service /usr/lib/systemd/system/tccd.service || true
+cp ${DIST_DATA}/tccd-sleep.service /usr/lib/systemd/system/tccd-sleep.service || true
 systemctl daemon-reload
 systemctl enable tccd tccd-sleep
 systemctl restart tccd
