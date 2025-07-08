@@ -252,16 +252,22 @@ mat-tab-group.active-always-focused {
 @include mat.dialog-overrides(
     (
         supporting-text-size: 16px,
+        supporting-text-color: var(--text-color),
         with-actions-content-padding: 20px 24px 5px,
     )
 );
 
 @include mat.button-overrides(
     (
-        text-label-text-size: 16px,
-        protected-label-text-size: 16px,
-        outlined-label-text-size: 16px,
+        filled-label-text-color: var(--text-color),
+        outlined-label-text-color: var(--text-color),
+        protected-label-text-color: var(--text-color),
+        text-label-text-color: var(--text-color),
+        tonal-label-text-color: var(--text-color),
         filled-label-text-size: 16px,
+        outlined-label-text-size: 16px,
+        protected-label-text-size: 16px,
+        text-label-text-size: 16px,
     )
 );
 
