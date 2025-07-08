@@ -122,20 +122,20 @@ export class TccDBusController {
             return false;
         }
     }
-    async getHideCTGP(): Promise <boolean> {
+    async getIsUnsupportedConfigurableTGPDevice(): Promise <boolean> {
         try {
             if (this.dbusStatus && this.interface) {
-                return await this.interface.GetHideCTGP();
+                return await this.interface.GetIsUnsupportedConfigurableTGPDevice();
             }
         } catch (err: unknown) {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getHideCTGP failed =>", err.text)
+                console.error("dbusController: getIsUnsupportedConfigurableTGPDevice failed =>", err.text)
                 return false
             }
 
-            console.error("dbusController: getHideCTGP failed =>", err)
+            console.error("dbusController: getIsUnsupportedConfigurableTGPDevice failed =>", err)
             return false;
         }
     }

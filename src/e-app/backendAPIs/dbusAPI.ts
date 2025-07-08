@@ -513,9 +513,9 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         });
     })
 
-    .set(DbusAPIFunctions.getHideCTGP, async (): Promise<boolean> => {
+    .set(DbusAPIFunctions.getIsUnsupportedConfigurableTGPDevice, async (): Promise<boolean> => {
         return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
-            resolve(tccDBus.getHideCTGP());
+            resolve(tccDBus.getIsUnsupportedConfigurableTGPDevice());
         });
     })
 

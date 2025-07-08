@@ -259,8 +259,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.device = JSON.stringify(dev);
         const aq: boolean = this.deviceHasAquaris();
         this.dbusData.deviceHasAquaris = aq;
-        const hideCTGP: boolean = this.deviceHideCTGP();
-        this.dbusData.deviceHideCTGP = hideCTGP;
+        this.dbusData.isUnsupportedConfigurableTGPDevice = this.getIsUnsupportedConfigurableTGPDevice();
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
@@ -487,19 +486,23 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         });
     }
 
-    private deviceHideCTGP() : boolean {
-        // Hide the cTGP settings for the IBP series, because, albeit nvidia-smi tells otherwise,
-        // they don't offically support it and using it results in undefined behaviour.
-        const dmi = new DMIController('/sys/class/dmi/id');
+    private getIsUnsupportedConfigurableTGPDevice(): boolean {
+        // Configurable TGP (cTGP) settings are not available for the IBP series
+        // nvidia-smi tells otherwise, but they don't offically support it and using it results in undefined behaviour
+        const dmi = new DMIController("/sys/class/dmi/id");
         const deviceName: string = dmi.productSKU.readValueNT();
-        const hideCTGPValue: boolean = deviceName === "IBP14I06" ||
-                             deviceName === "IBP1XI07MK1" ||
-                             deviceName === "IBP1XI07MK2" ||
-                             deviceName === "IBP1XI08MK1" ||
-                             deviceName === "IBP14I08MK2" ||
-                             deviceName === "IBP16I08MK2" ||
-                             deviceName === "IBP14A09MK1 / IBP15A09MK1"; // todo: check if it is intentional to have 2 ids in one string
-        return hideCTGPValue
+
+        const unsupportedDevices: string[] = [
+            "IBP14I06",
+            "IBP1XI07MK1",
+            "IBP1XI07MK2",
+            "IBP1XI08MK1",
+            "IBP14I08MK2",
+            "IBP16I08MK2",
+            "IBP14A09MK1 / IBP15A09MK1",
+        ]; // todo: check devices
+
+        return unsupportedDevices.includes(deviceName);
     }
 
     private deviceHasAquaris(): boolean {

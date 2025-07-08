@@ -19,7 +19,6 @@
 
 require("./utilsAPI");
 require("./cpuAPI");
-require("./ctgpAPI")
 require("./sysFsAPI");
 require("./configAPI");
 require("./systemInfosAPI");

@@ -384,8 +384,8 @@ export async function hasAquaris(): Promise<boolean> {
     return await tccDBus.deviceHasAquaris();
 }
 
-export async function hideCTGP(): Promise<boolean> {
-    return await tccDBus.getHideCTGP();
+export async function getIsUnsupportedConfigurableTGPDevice(): Promise<boolean> {
+    return await tccDBus.getIsUnsupportedConfigurableTGPDevice();
 }
 
 async function getProfiles(): Promise<TccProfile[]> {

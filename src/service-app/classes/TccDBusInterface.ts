@@ -66,7 +66,7 @@ export class TccDBusData {
     public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
-    public deviceHideCTGP: boolean = true;
+    public isUnsupportedConfigurableTGPDevice: boolean = true;
 }
 
 export class TccDBusOptions {
@@ -232,8 +232,8 @@ export class TccDBusInterface extends dbus.interface.Interface {
     private GetNVIDIAPowerCTRLAvailable(): boolean {
         return this.data.nvidiaPowerCTRLAvailable;
     }
-    private GetHideCTGP(): boolean {
-        return this.data.deviceHideCTGP
+    private GetIsUnsupportedConfigurableTGPDevice(): boolean {
+        return this.data.isUnsupportedConfigurableTGPDevice
     }
 
     private dbusAvailable(): boolean {
@@ -300,7 +300,7 @@ TccDBusInterface.configureMembers({
         GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' },
-        GetHideCTGP: { outSignature: 'b' }
+        GetIsUnsupportedConfigurableTGPDevice: { outSignature: 'b' }
     },
     signals: {
         ModeReapplyPendingChanged: { signature: 'b' }

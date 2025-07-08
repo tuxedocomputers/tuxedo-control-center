@@ -142,7 +142,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private updateTGPChartEvent: EventEmitter<void> = new EventEmitter();
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
-    public hideCTGP: boolean = true
+    public isUnsupportedConfigurableTGPDevice: boolean = true
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
@@ -263,9 +263,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }));
 
-        this.subscriptions.add(this.tccDBus.hideCTGP.subscribe(nexthideCTGP => {
-            if (nexthideCTGP !== this.hideCTGP) {
-                this.hideCTGP = nexthideCTGP;
+        this.subscriptions.add(this.tccDBus.isUnsupportedConfigurableTGPDevice.subscribe(nextIsUnsupportedConfigurableTGPDevice => {
+            if (nextIsUnsupportedConfigurableTGPDevice !== this.isUnsupportedConfigurableTGPDevice) {
+                this.isUnsupportedConfigurableTGPDevice = nextIsUnsupportedConfigurableTGPDevice;
             }
         }));
 

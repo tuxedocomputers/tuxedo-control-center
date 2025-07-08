@@ -74,7 +74,7 @@ export const DbusClientAPI =
         getNVIDIAPowerCTRLDefaultPowerLimit: (): Promise<number> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLDefaultPowerLimit]),
         getNVIDIAPowerCTRLMaxPowerLimit: (): Promise<number> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLMaxPowerLimit]),
         getNVIDIAPowerCTRLAvailable: (): Promise<boolean> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLAvailable]),
-        getHideCTGP: (): Promise<boolean> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getHideCTGP])
+        getIsUnsupportedConfigurableTGPDevice: (): Promise<boolean> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getIsUnsupportedConfigurableTGPDevice])
     }
 
 // for render.d.ts typescript definition
@@ -130,5 +130,5 @@ export interface IDbusClientAPI
     getNVIDIAPowerCTRLDefaultPowerLimit: () => Promise<number>,
     getNVIDIAPowerCTRLMaxPowerLimit: () => Promise<number>,
     getNVIDIAPowerCTRLAvailable: () => Promise<boolean>,
-    getHideCTGP: () => Promise<boolean>,
+    getIsUnsupportedConfigurableTGPDevice: () => Promise<boolean>,
 }

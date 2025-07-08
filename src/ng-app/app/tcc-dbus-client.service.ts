@@ -86,7 +86,7 @@ export class TccDBusClientService implements OnDestroy {
   public nvidiaPowerCTRLDefaultPowerLimit: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
   public nvidiaPowerCTRLMaxPowerLimit: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
   public nvidiaPowerCTRLAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
-  public hideCTGP: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+  public isUnsupportedConfigurableTGPDevice: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
   public isX11: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
   public device: TUXEDODevice = 0;
@@ -209,11 +209,11 @@ export class TccDBusClientService implements OnDestroy {
         },
       ],
       [
-        this.hideCTGP,
+        this.isUnsupportedConfigurableTGPDevice,
         {
-          dbusFunctionName: "getHideCTGP",
+          dbusFunctionName: "getIsUnsupportedConfigurableTGPDevice",
           dbusFunction: (): Promise<boolean> =>
-            window.dbusAPI.getHideCTGP(),
+            window.dbusAPI.getIsUnsupportedConfigurableTGPDevice(),
         },
       ],
       [
