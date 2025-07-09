@@ -278,8 +278,8 @@ export class FanControlHwmon extends FanControlBaseClass {
         };
     }
 
-    public async mapLogicToFans(numberInterfaces: number): Promise<boolean> {
-        if (!this.fans) {
+    public async mapLogicToFans(numberInterfaces: number, reset: boolean): Promise<boolean> {
+        if (!this.fans || reset) {
             this.fans = new Map();
             for (let i: number = 1; i <= numberInterfaces; i++) {
                 this.fans.set(i, undefined);
@@ -317,6 +317,10 @@ export class FanControlHwmon extends FanControlBaseClass {
         }
 
         return true;
+    }
+    
+    public async getNumberFansAvailable(): Promise<number> {
+        return this.getNumberFans();
     }
 
     public async getFanSpeedPercent(fanIndex: number): Promise<number> {
@@ -446,7 +450,7 @@ export class FanControlHwmon extends FanControlBaseClass {
 
         return [readAvailable, writeAvailable];
     }
-
+    
     public async exit(): Promise<void> {
         await this.setHwmonPwmEnable(2);
         console.log("FanControlHwmon: Enabling automatic mode");

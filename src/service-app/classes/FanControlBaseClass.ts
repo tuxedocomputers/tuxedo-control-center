@@ -92,7 +92,9 @@ export abstract class FanControlBaseClass {
         fanWriteAvailable: boolean,
         fanControlEnabled: boolean,
     ): Promise<void>;
-    public abstract mapLogicToFans(numberInterfaces: number): Promise<boolean>;
+    public abstract mapLogicToFans(numberInterfaces: number, reset: boolean): Promise<boolean>;
+    public abstract getNumberFansAvailable(): Promise<number>;
+
 
     public abstract getFanSpeedPercent(fanIndex: number): Promise<number>;
 

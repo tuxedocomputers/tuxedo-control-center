@@ -45,15 +45,15 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         }
     }
 
-    public async mapLogicToFans(numberInterfaces: number): Promise<boolean> {
-        if (!this.fans || this.fans.size === 0) {
+    public async mapLogicToFans(numberInterfaces: number, reset?: boolean): Promise<boolean> {
+        if (!this.fans || this.fans.size === 0 || reset) {
             this.fans = new Map();
             const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
-                this.getFanTemperature(0),
-                this.getFanTemperature(1),
-                this.getFanTemperature(2),
+                this.getFanTemperature(0, false),
+                this.getFanTemperature(1, false),
+                this.getFanTemperature(2, false),
             ]);
-
+            
             // todo: maybe add change into tuxedo-drivers to return -1 if value not available
             if (fanTemp0 > 1 && numberInterfaces >= 1) {
                 this.setFan(1, FAN_LOGIC.CPU);
@@ -69,8 +69,28 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
                 return false;
             }
         }
+        
 
         return true;
+    }
+    
+    public async getNumberFansAvailable(): Promise<number> {
+        const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
+            this.getFanTemperature(0, false),
+            this.getFanTemperature(1, false),
+            this.getFanTemperature(2, false),
+        ]);
+                
+        if (fanTemp2 > 1 && fanTemp1 > 1 && fanTemp0 > 1) {
+            return 3;
+        }
+        if (fanTemp1 > 1 && fanTemp0 > 1) {
+            return 2;
+        }
+        if (fanTemp0 > 1) {
+            return 1;
+        }
+        return 0;
     }
 
     public async getFanSpeedPercent(fanIndex: number): Promise<number> {
@@ -87,14 +107,14 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         return currentSpeedPercent.value;
     }
 
-    public async getFanTemperature(fanIndex: number): Promise<number> {
+    public async getFanTemperature(fanIndex: number, logging?: boolean): Promise<number> {
         const currentTemperatureCelcius: ObjWrapper<number> = { value: -1 };
         const tempReadSuccess: boolean = ioAPI.getFanTemperature(
             fanIndex,
             currentTemperatureCelcius
         );
-
-        if (!tempReadSuccess) {
+                
+        if (!tempReadSuccess && (logging ?? true)) {
             console.log(`FanControlTuxedoIO: Fan temperature read with IO API index ${fanIndex} failed`);
         }
 

@@ -209,7 +209,7 @@ describe("FanControlTuxi", (): void => {
         fanApi.setHwmonPath(hwmonPath);
 
         const numberInterfaces: number = await fanApi.getNumberFanInterfaces();
-        await fanApi.mapLogicToFans(numberInterfaces);
+        await fanApi.mapLogicToFans(numberInterfaces, false);
         await fanApi.setMapData();
 
         const fanSpeedInputMap = new Map();
@@ -290,7 +290,7 @@ describe("FanControlTuxi", (): void => {
         fanApi.setHwmonPath(hwmonPath);
 
         const numberInterfaces: number = await fanApi.getNumberFanInterfaces();
-        await fanApi.mapLogicToFans(numberInterfaces);
+        await fanApi.mapLogicToFans(numberInterfaces, false);
         await fanApi.setMapData();
         fanApi.matchLabels();
 
