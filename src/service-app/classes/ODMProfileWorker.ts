@@ -53,13 +53,16 @@ export class ODMProfileWorker extends DaemonWorker {
             ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
             ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
         ) {
+            console.log("ODMProfileWorker: Tuxedo platform profile available")
             this.ODM(ODMProfileWorker.tuxedoPlatformProfile, ODMProfileWorker.tuxedoPlatformProfileChoices);
         } else if (
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
+            console.log("ODMProfileWorker: Platform profile available")
             this.ODM(ODMProfileWorker.platformProfile, ODMProfileWorker.platformProfileChoices);
         } else {
+            console.log("ODMProfileWorker: Using tuxedo-io")
             this.fallbackODM();
         }
     }
@@ -99,7 +102,7 @@ export class ODMProfileWorker extends DaemonWorker {
             // Make sure a valid one could be found before proceeding, otherwise abort
             if (availableProfiles.value.includes(chosenODMProfileName)) {
                 this.tccd.logLine(
-                    "Set ODM profile '" + chosenODMProfileName + "' "
+                    "ODMProfileWorker: Set ODM profile '" + chosenODMProfileName + "' "
                 );
                 if (!ioAPI.setODMPerformanceProfile(chosenODMProfileName)) {
                     this.tccd.logLine(
