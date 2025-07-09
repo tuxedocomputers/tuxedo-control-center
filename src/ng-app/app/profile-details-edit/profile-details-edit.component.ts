@@ -154,7 +154,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     @ViewChild('inputName') public inputName: MatInput;
 
     @ViewChild(FanCustomChartComponent)
-    private sliderComponent: FanCustomChartComponent;
+    private customChartComponent: FanCustomChartComponent;
 
     constructor(
         private utils: UtilsService,
@@ -369,6 +369,15 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public submitFormInput(): void {
+        if (this.customChartComponent) {
+            const customFanCurveValues: ITccFanProfile =
+                this.customChartComponent.getFanFormGroupValues();
+            this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve")
+                .patchValue(customFanCurveValues);
+        }
+        
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
@@ -395,7 +404,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public discardFormInput(): void {
+    public async discardFormInput(): Promise<void> {
         this.profileFormGroup.reset(this.viewProfile);
         this.selectStateControl.reset(
             this.state.getProfileStates(this.viewProfile.id)
@@ -408,6 +417,17 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
         }
 
+        if (this.customChartComponent) {
+            const customFanCurveValues: ITccFanProfile = this.profileFormGroup
+                .get("fan")
+                .get("customFanCurve").value;
+            this.customChartComponent.setFanFormGroupValues(
+                customFanCurveValues,
+            );
+            await this.customChartComponent.updateFanChartDataset();
+            this.customChartComponent.updateChart();
+        }
+        
         this.overwriteDefaultRefreshRateValue();
         this.tempCustomFanCurve = undefined;
         
@@ -807,7 +827,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setVerticalSliderDirty(): void {
+    public setCustomChartDirty(): void {
         this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
     }
 

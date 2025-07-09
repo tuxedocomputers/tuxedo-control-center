@@ -74,7 +74,8 @@ export class FanCustomChartComponent implements OnInit {
     public customFanCurve: ITccFanProfile;
 
     @Output()
-    public setSliderDirty: EventEmitter<void> = new EventEmitter<void>();
+    public setCustomChartDirtyEvent: EventEmitter<void> =
+        new EventEmitter<void>();
 
     @Output()
     public customFanCurveEvent: EventEmitter<ITccFanProfile> =
@@ -177,6 +178,14 @@ export class FanCustomChartComponent implements OnInit {
         return { tableCPU: fanTable, tableGPU: fanTable };
     }
 
+    public setFanFormGroupValues(customFanCurveValues: ITccFanProfile): void {
+        customFanCurveValues.tableCPU.forEach(
+            ({ temp, speed }: ITccFanTableEntry): void => {
+                this.setFormValue(temp, speed);
+            },
+        );
+    }
+    
     public async updateFanChartDataset(): Promise<void> {
         const { tableCPU, tableGPU } = this.getFanFormGroupValues();
 
@@ -261,7 +270,7 @@ export class FanCustomChartComponent implements OnInit {
                             index: number,
                             value: { x: number; y: number }
                         ): void => {
-                            this.dirtyFanFormGroup();
+                            this.setCustomChartDirty();
                             this.adjustFanCurve(value);
                             this.updateChart()
                         },
@@ -313,11 +322,11 @@ export class FanCustomChartComponent implements OnInit {
         });
     }
 
-    public dirtyFanFormGroup(): void {
-        this.setSliderDirty.emit();
+    public setCustomChartDirty(): void {
+        this.setCustomChartDirtyEvent.emit();
     }
     
-    private updateChart(): void {
+    public updateChart(): void {
         if (this.chart) {
             this.chart.data.datasets[0].data = this.cpuData;
             this.chart.update();

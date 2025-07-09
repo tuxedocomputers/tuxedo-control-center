@@ -38,7 +38,8 @@ export async function getCustomFanCurve(
 export async function getCurrentCustomProfile(
     activeProfile: ITccProfile
 ): Promise<ITccFanProfile> {
-    const customFanCurve = await this.getCustomFanCurve(activeProfile);
+    const customFanCurve: ITccFanProfile =
+        await getCustomFanCurve(activeProfile);
     const [tableCPU, tableGPU] = await Promise.all([
         interpolatePointsArray(customFanCurve.tableCPU),
         interpolatePointsArray(customFanCurve.tableGPU),
