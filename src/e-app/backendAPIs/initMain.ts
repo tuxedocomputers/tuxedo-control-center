@@ -170,7 +170,8 @@ async function initTray(): Promise<void> {
         tray.state.fnLockStatus = await fnLockStatus();
     }
     [tray.state.isPrimeSupported, tray.state.primeQuery] = await checkPrimeAvailabilityStatus();
-
+    tray.state.isX11 = await isX11();
+    
     await updateTrayProfiles();
     tray.events.startTCCClick = (): Promise<void> => activateTccGui();
     tray.events.startAquarisControl = (): Promise<void> => activateTccGui('/main-gui/aquaris-control');
@@ -338,6 +339,10 @@ async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
         console.error("initMain: checkPrimeAvailabilityStatus failed =>", err)
         return [false, "-1"];
     }
+}
+
+async function isX11(): Promise<boolean> {
+    return (await tccDBus.getIsX11()) === 1;
 }
 
 async function fnLockSupported(): Promise<boolean> {

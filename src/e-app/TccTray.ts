@@ -90,10 +90,10 @@ export class TccTray {
                 checked: this.state.fnLockStatus,
                 visible: this.state.fnLockSupported,
             },
-            { type: 'separator', visible: this.state.isPrimeSupported },
+            { type: 'separator', visible: this.state.isPrimeSupported && this.state.isX11 },
             {
                 label: 'Graphics',
-                visible: this.state.isPrimeSupported,
+                visible: this.state.isPrimeSupported && this.state.isX11,
                 submenu: [
                     {
                         label: 'Select dGPU',
@@ -128,6 +128,7 @@ class TrayState {
     tccGUIVersion: string;
     isAutostartTrayInstalled: boolean;
     isPrimeSupported: boolean;
+    isX11: boolean;
     primeQuery: string;
     activeProfile: TccProfile;
     profiles: TccProfile[];
