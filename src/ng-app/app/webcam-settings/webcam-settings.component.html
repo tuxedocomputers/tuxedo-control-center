@@ -228,7 +228,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     <button mat-icon-button color="primary"
                                                         (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
                                                                             setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                        [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                        [hidden]="webcamService.getSpinnerStatus() ? true : webcamFormGroup.get(webcamConfig).disabled ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                         <mat-icon>undo</mat-icon>
                                                     </button>
                                                 </mat-grid-tile>
@@ -255,7 +255,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     <button mat-icon-button color="primary"
                                                         (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setCheckboxValue(viewWebcam[webcamConfig], webcamConfig);
                                                             webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                        [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                        [hidden]="webcamService.getSpinnerStatus() ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                         <mat-icon>undo</mat-icon>
                                                     </button>
                                                 </mat-grid-tile>
@@ -293,7 +293,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     <button mat-icon-button color="primary"
                                                         (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setOptionsMenuValue($event, webcamConfig, viewWebcam[webcamConfig]);
                                                             webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                        [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                        [hidden]="webcamService.getSpinnerStatus() ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                         <mat-icon>undo</mat-icon>
                                                     </button>
                                                 </mat-grid-tile>
@@ -442,7 +442,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <button mat-icon-button color="primary"
                                                 (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
                                                                     setSliderValue(viewWebcam[webcamConfig], webcamConfig); webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                [hidden]="webcamFormGroup.get(webcamConfig).disabled ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                [hidden]="webcamService.getSpinnerStatus() ? true : webcamFormGroup.get(webcamConfig).disabled ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                 <mat-icon>undo</mat-icon>
                                             </button>
                                         </mat-grid-tile>
@@ -471,7 +471,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <button mat-icon-button color="primary"
                                                 (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setCheckboxValue(viewWebcam[webcamConfig], webcamConfig);
                                                     webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                [hidden]="webcamService.getSpinnerStatus() ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                 <mat-icon>undo</mat-icon>
                                             </button>
                                         </mat-grid-tile>
@@ -509,7 +509,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <button mat-icon-button color="primary"
                                                 (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); setOptionsMenuValue($event, webcamConfig, viewWebcam[webcamConfig]);
                                                     webcamFormGroup.controls[webcamConfig].markAsPristine()"
-                                                [hidden]="webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
+                                                [hidden]="webcamService.getSpinnerStatus() ? true : webcamFormGroup.get(webcamConfig).value === viewWebcam[webcamConfig]">
                                                 <mat-icon>undo</mat-icon>
                                             </button>
                                         </mat-grid-tile>
