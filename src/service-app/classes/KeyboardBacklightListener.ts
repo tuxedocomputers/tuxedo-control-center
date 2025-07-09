@@ -49,7 +49,7 @@ export class KeyboardBacklightListener {
             return;
         }
 
-        if (this.keyboardBacklightCapabilities.zones !== undefined) {
+        if (this.keyboardBacklightCapabilities?.zones !== undefined) {
             // Init state in settings if not yet done or anything is wonky
             if (this.keyboardBacklightCapabilities.zones != this.tccd.settings.keyboardBacklightStates?.length) {
                 this.tccd.settings.keyboardBacklightStates = []
@@ -96,9 +96,13 @@ export class KeyboardBacklightListener {
         this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface('org.freedesktop.UPower.KbdBacklight');
         this.sysDBusUPowerKbdBacklightInterface.on('BrightnessChanged', (async function(brightness: number): Promise<void> {
             if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
-                const keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-                for (const i in keyboardBacklightStatesNew) {
-                    keyboardBacklightStatesNew[i].brightness = brightness;
+                const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = this.tccd.settings.keyboardBacklightStates;
+                if (keyboardBacklightStatesNew) {
+                    for (const i in keyboardBacklightStatesNew) {
+                        if (keyboardBacklightStatesNew[i]) {
+                            keyboardBacklightStatesNew[i].brightness = brightness;
+                        }
+                    }
                 }
                 this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
             }
@@ -108,19 +112,23 @@ export class KeyboardBacklightListener {
     private async initSysFSListener(): Promise<void> {
         if (this.keyboardBacklightCapabilities.maxRed != undefined) {
             for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
-                if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                    (function(i: number): void {
-                        fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
-                            if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
-                                const keyboardBacklightStatesNew: KeyboardBacklightStateInterface = this.tccd.settings.keyboardBacklightStates;
-                                const colors: number[] = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
-                                keyboardBacklightStatesNew[i].red = colors[0];
-                                keyboardBacklightStatesNew[i].green = colors[1];
-                                keyboardBacklightStatesNew[i].blue = colors[2];
-                                this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
-                            }
-                        }).bind(this));
-                    }).bind(this)(i);
+                if (this.ledsRGBZones[i]) {
+                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                        (function(i: number): void {
+                            fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
+                                if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
+                                    const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = this.tccd.settings.keyboardBacklightStates;
+                                    const colors: number[] = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                                    if (keyboardBacklightStatesNew && keyboardBacklightStatesNew[i] && colors) {
+                                        keyboardBacklightStatesNew[i].red = colors[0];
+                                        keyboardBacklightStatesNew[i].green = colors[1];
+                                        keyboardBacklightStatesNew[i].blue = colors[2];
+                                        this.setKeyboardBacklightStates(keyboardBacklightStatesNew, false, true, true);
+                                    }
+                                }
+                            }).bind(this));
+                        }).bind(this)(i);
+                    }
                 }
             }
         }
@@ -277,7 +285,7 @@ export class KeyboardBacklightListener {
             } catch (err: unknown) {
                 console.error("KeyboardBacklightListener: setKeyboardBacklightStates failed =>", err)
                 // todo: error handling
-                if ((err as any).name === "DBusError") {
+                if ((err as any)?.name === "DBusError") {
                     console.log("Failed to write brightness using UPower: Try restarting upower.service followed by tccd.service using systemctl.")
                 }
                 else {
@@ -289,11 +297,15 @@ export class KeyboardBacklightListener {
                 this.setBufferInput(this.ledsRGBZones[0], true)
             }
             for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
-                if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
-                    await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
-                                                    keyboardBacklightStatesNew[i].red.toString() + " " +
-                                                    keyboardBacklightStatesNew[i].green.toString() + " " +
-                                                    keyboardBacklightStatesNew[i].blue.toString());
+                if (this.ledsRGBZones[i]) {
+                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                        if (keyboardBacklightStatesNew && keyboardBacklightStatesNew[i]) {
+                            await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
+                                keyboardBacklightStatesNew[i].red.toString() + " " +
+                                keyboardBacklightStatesNew[i].green.toString() + " " +
+                                keyboardBacklightStatesNew[i].blue.toString());
+                        }
+                    }
                 }
             }
             if (this.ledsRGBZones?.length > 0) {
