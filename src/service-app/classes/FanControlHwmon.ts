@@ -66,7 +66,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         return await this.getFilteredAndMappedFiles(files, /^temp\d/);
     }
 
-    // 1 = manual mode, 2 = auto mode
+    // 1 = manual mode, 2 = automatic mode
     private async setHwmonPwmEnable(status: number): Promise<void> {
         if (this.writeAvailable) {
             const pwmfiles: string[] = await fs.promises.readdir(
@@ -86,18 +86,25 @@ export class FanControlHwmon extends FanControlBaseClass {
         }
     }
 
-    public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
+    public async initFanControl(
+        fanWriteAvailable: boolean,
+        fanControlEnabled: boolean,
+    ): Promise<void> {
         if (this.writeAvailable) {
             this.tccd.dbusData.fanHwmonAvailable = true;
         }
 
-        if (
-            this.writeAvailable &&
-            fanWriteAvailable &&
-            this.tccd.settings.fanControlEnabled
-        ) {
-            console.log("FanControlHwmon: Enabling manual mode");
-            await this.setHwmonPwmEnable(1);
+        if (this.writeAvailable && fanWriteAvailable) {
+            if (fanControlEnabled) {
+                await this.setHwmonPwmEnable(1);
+                console.log("FanControlHwmon: Enabling manual mode");
+            }
+            if (!fanControlEnabled) {
+                await this.setHwmonPwmEnable(2);
+                console.log("FanControlHwmon: Enabling automatic mode");
+            }
+        } else {
+            console.log("FanControlHwmon: Fan write not available");
         }
     }
 
@@ -442,7 +449,7 @@ export class FanControlHwmon extends FanControlBaseClass {
 
     public async exit(): Promise<void> {
         await this.setHwmonPwmEnable(2);
-        console.log("FanControlHwmon: Enabling auto mode");
+        console.log("FanControlHwmon: Enabling automatic mode");
     }
 
     public testMatchLabels(): Map<

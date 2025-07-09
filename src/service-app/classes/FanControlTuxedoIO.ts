@@ -23,12 +23,25 @@ import { FanControlBaseClass } from "./FanControlBaseClass";
 import { FAN_LOGIC } from "./FanControlLogic";
 
 export class FanControlTuxedoIO extends FanControlBaseClass {
-    public async initFanControl(fanWriteAvailable: boolean): Promise<void> {
+    public async initFanControl(
+        fanWriteAvailable: boolean,
+        fanControlEnabled: boolean,
+    ): Promise<void> {
         if (fanWriteAvailable) {
-            console.log("FanControlTuxedoIO: Enabling manual mode");
-            ioAPI.setEnableModeSet(true);
+            if (fanControlEnabled) {
+                ioAPI.setEnableModeSet(true);
+                console.log("FanControlTuxedoIO: Enabling manual mode");
+            }
+            if (!fanControlEnabled) {
+                ioAPI.setFansAuto();
+                ioAPI.setEnableModeSet(false);
+                console.log("FanControlTuxedoIO: Enabling automatic mode");
+            }
+
             this.tccd.dbusData.fansOffAvailable = ioAPI.getFansOffAvailable();
             this.tccd.dbusData.fansMinSpeed = ioAPI.getFansMinSpeed();
+        } else {
+            console.log("FanControlTuxedoIO: Fan write not available");
         }
     }
 
@@ -120,6 +133,6 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
     public async exit(): Promise<void> {
         ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
         ioAPI.setEnableModeSet(false);
-        console.log("FanControlTuxedoIO: Enabling auto mode")
+        console.log("FanControlTuxedoIO: Enabling automatic mode")
     }
 }

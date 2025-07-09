@@ -88,8 +88,10 @@ export abstract class FanControlBaseClass {
         return new SysFsPropertyString(path.join(hwmonPath, fileName + suffix));
     }
 
-    public abstract initFanControl(fanWriteAvailable: boolean): Promise<void>;
-
+    public abstract initFanControl(
+        fanWriteAvailable: boolean,
+        fanControlEnabled: boolean,
+    ): Promise<void>;
     public abstract mapLogicToFans(numberInterfaces: number): Promise<boolean>;
 
     public abstract getFanSpeedPercent(fanIndex: number): Promise<number>;
