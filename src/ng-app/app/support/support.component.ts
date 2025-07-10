@@ -46,7 +46,7 @@ export class SupportComponent implements OnInit {
   public systeminfoRunOutput = '';
   public systeminfoRunProgress = false;
   public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
-  public systeminfosURL = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+  public systeminfosURL = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
   public systeminfosCompleted = false;
 
   constructor(
