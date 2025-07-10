@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.17] - 2025-07-10
+### Fixed
+- Download of system diagnostics script failing, URL adjusted
+
 ## [2.1.16] - 2024-12-18
 ### Changed
 - Descriptive text when no keyboard backlight control is found updated to reflect current
