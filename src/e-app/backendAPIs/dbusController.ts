@@ -63,7 +63,7 @@ export class TccDBusController {
             this.dbusStatus = status
             return status
         } catch (err: unknown) {
-            console.error("dbusController: dbusAvailable: dbus access was requested, but dbus is offline")
+            console.error("dbusController: dbusAvailable: dbus access was requested, but dbus is not available")
             this.dbusStatus = false
             return false;
         }
