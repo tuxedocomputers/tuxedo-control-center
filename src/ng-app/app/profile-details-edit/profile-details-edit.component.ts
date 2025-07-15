@@ -589,7 +589,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
         let newValue: number = tdpValues.controls[movedSliderIndex].value;
 
-
         const minValue: number = this.sliderODMPowerLimitMinValue(movedSliderIndex);
         const maxValue: number = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
 
@@ -602,9 +601,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         for (let i: number = 0; i < movedSliderIndex; ++i) {
             if (tdpValues.controls[i].value > newValue) {
                 tdpValues.controls[i].setValue(newValue);
+                tdpValues.controls[i].markAsDirty();
             }
         }
-
+        
         // Ensure new value is below chosen max value
         if (newValue > maxValue) {
             newValue = maxValue;
@@ -614,9 +614,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         for (let i: number = movedSliderIndex + 1; i < tdpValues.controls?.length; ++i) {
             if (tdpValues.controls[i].value < newValue) {
                 tdpValues.controls[i].setValue(newValue);
+                tdpValues.controls[i].markAsDirty();
             }
         }
-
+        
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 
@@ -643,9 +644,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        // to fix bug of not updated validity of middle slider
+
         for (let i: number = 0; i < tdpValues.controls.length; i++) {
-            tdpValues.controls[i].updateValueAndValidity();
+            // to fix bug of not updated validity of middle slider
+            tdpValues.controls[i].updateValueAndValidity(); 
+            
+            if (this.viewProfile?.odmPowerLimits?.tdpValues !== undefined && tdpValues.controls[i].value === this.viewProfile?.odmPowerLimits?.tdpValues[i]) {
+                tdpValues.controls[i].markAsPristine();
+            }
         }
     }
     
