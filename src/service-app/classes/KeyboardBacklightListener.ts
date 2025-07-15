@@ -288,9 +288,6 @@ export class KeyboardBacklightListener {
                 if ((err as any)?.name === "DBusError") {
                     console.log("Failed to write brightness using UPower: Try restarting upower.service followed by tccd.service using systemctl.")
                 }
-                else {
-                    throw err;
-                }
             }
 
             if (this.ledsRGBZones?.length > 0) {
