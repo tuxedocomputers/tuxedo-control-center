@@ -654,7 +654,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public inputDisplayBrightnessOffsetFunc(slider: FormControl, offset: number): () => void {
+    public inputDisplayBrightnessOffset(slider: FormControl, offset: number): () => void {
         return (): void => {
             let newValue: number = slider.value + offset;
             if (newValue < 0) {
@@ -767,14 +767,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public buttonRepeatUp(): void {
         clearInterval(this.buttonRepeatTimer);
     }
-
-    public modifySliderInputFunc(slider: any, offset: number, min: number, max: number): () => void {
+    
+    public modifySliderInput(slider: any, offset: number, min: number, max: number, updateFunction?: any, updateFunctionArg?: any): () => void {
         return (): void => {
-            this.modifySliderInput(slider, offset, min, max);
-        }
-    }
-
-    public modifySliderInput(slider: any, offset: number, min: number, max: number): void {
             let newValue: number = slider.value += offset;
             if (newValue < min) {
                 newValue = min;
@@ -783,6 +778,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
             slider.setValue(newValue);
             slider.markAsDirty();
+            
+            if (updateFunction !== undefined) { updateFunction.call(this, updateFunctionArg); }
+        }
     }
 
     @ViewChild('fancontrolHeader') fancontrolHeaderE;

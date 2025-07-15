@@ -227,7 +227,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <div class="increment-decrement-buttons">
                                         <button mat-icon-button color="primary"
                                             [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                            (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffset(profileFormGroup.get('display').get('brightness'), -1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
                                             (mouseup)="buttonRepeatUp()"
                                             (mouseleave)="buttonRepeatUp()"
                                             [ngClass]="{'inactive': !inputUseBrightness.checked}">
@@ -235,7 +235,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </button>
                                         <button mat-icon-button color="primary"
                                             [hidden]="!editProfile"
-                                            (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffsetFunc(profileFormGroup.get('display').get('brightness'), +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
+                                            (mousedown)="buttonRepeatDown(inputDisplayBrightnessOffset(profileFormGroup.get('display').get('brightness'), +1)); profileFormGroup.get('display').get('brightness').markAsDirty();"
                                             (mouseup)="buttonRepeatUp()"
                                             (mouseleave)="buttonRepeatUp()"
                                             [ngClass]="{'inactive': !inputUseBrightness.checked}">
@@ -436,13 +436,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     %</content>
                                                 <div class="increment-decrement-buttons">
                                                     <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('fan').get('minimumFanspeed'), -1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
                                                         (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
                                                         (change)="sliderMinFanChange()">
                                                         <mat-icon>remove</mat-icon>
                                                     </button>
                                                     <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('fan').get('minimumFanspeed'), +1, inputMinimumFanspeed.min, inputMinimumFanspeed.max)); profileFormGroup.get('fan').get('minimumFanspeed').markAsDirty();"
                                                         (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
                                                         (change)="sliderMinFanChange()">
                                                         <mat-icon>add</mat-icon>
@@ -482,13 +482,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     %</content>
                                                 <div class="increment-decrement-buttons">
                                                     <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), -1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('fan').get('maximumFanspeed'), -1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
                                                         (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
                                                         (change)="sliderMaxFanChange()">
                                                         <mat-icon>remove</mat-icon>
                                                     </button>
                                                     <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                        (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('maximumFanspeed'), +1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
+                                                        (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('fan').get('maximumFanspeed'), +1, inputMaximumFanspeed.min, inputMaximumFanspeed.max)); profileFormGroup.get('fan').get('maximumFanspeed').markAsDirty();"
                                                         (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()"
                                                         (change)="sliderMaxFanChange()">
                                                         <mat-icon>add</mat-icon>
@@ -540,12 +540,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </content>
                                         <div class="increment-decrement-buttons">
                                             <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('fan').get('offsetFanspeed'), -1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
                                                 (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button mat-icon-button color="primary" [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('fan').get('offsetFanspeed'), +1, inputOffsetFanspeed.min, inputOffsetFanspeed.max)); profileFormGroup.get('fan').get('offsetFanspeed').markAsDirty();"
                                                 (mouseup)="buttonRepeatUp()" (mouseleave)="buttonRepeatUp()">
                                                 <mat-icon>add</mat-icon>
                                             </button>
@@ -808,14 +808,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <div class="increment-decrement-buttons">
                                                 <button mat-icon-button color="primary"
                                                     [hidden]="!editProfile"
-                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
+                                                    (mousedown)="buttonRepeatDown(modifySliderInput(getODMTDPControls[i], -1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
                                                     (mouseup)="buttonRepeatUp()"
                                                     (mouseleave)="buttonRepeatUp()">
                                                     <mat-icon>remove</mat-icon>
                                                 </button>
                                                 <button mat-icon-button color="primary"
                                                     [hidden]="!editProfile"
-                                                    (mousedown)="buttonRepeatDown(modifySliderInputFunc(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
+                                                    (mousedown)="buttonRepeatDown(modifySliderInput(getODMTDPControls[i], +1, sliderODMPowerLimitMinValue(i), sliderODMPowerLimitMaxValue(i), sliderODMPowerLimitChange, i))"
                                                     (mouseup)="buttonRepeatUp()"
                                                     (mouseleave)="buttonRepeatUp()">
                                                     <mat-icon>add</mat-icon>
@@ -957,14 +957,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <div class="increment-decrement-buttons">
                                             <button mat-icon-button color="primary"
                                                 [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('cpu').get('scalingMinFrequency'), -100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
                                                 (mouseup)="buttonRepeatUp()"
                                                 (mouseleave)="buttonRepeatUp()">
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button mat-icon-button color="primary"
                                                 [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMinFrequency'), +100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('cpu').get('scalingMinFrequency'), +100000, inputScalingMinFrequency.min, inputScalingMinFrequency.max, sliderMinFreqChange));"
                                                 (mouseup)="buttonRepeatUp()"
                                                 (mouseleave)="buttonRepeatUp()">
                                                 <mat-icon>add</mat-icon>
@@ -1035,14 +1035,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <div class="increment-decrement-buttons">
                                             <button mat-icon-button color="primary"
                                                 [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), -100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('cpu').get('scalingMaxFrequency'), -100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
                                                 (mouseup)="buttonRepeatUp()"
                                                 (mouseleave)="buttonRepeatUp()">
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button mat-icon-button color="primary"
                                                 [hidden]="!editProfile"
-                                                (mousedown)="buttonRepeatDown(modifySliderInputFunc(profileFormGroup.get('cpu').get('scalingMaxFrequency'), +100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('cpu').get('scalingMaxFrequency'), +100000, inputScalingMaxFrequency.min, inputScalingMaxFrequency.max, sliderMaxFreqChange));"
                                                 (mouseup)="buttonRepeatUp()"
                                                 (mouseleave)="buttonRepeatUp()">
                                                 <mat-icon>add</mat-icon>
@@ -1139,7 +1139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 [hidden]="!editProfile"
                                                 (mousedown)="
                                                     buttonRepeatDown(
-                                                        modifySliderInputFunc(
+                                                        modifySliderInput(
                                                             profileFormGroup
                                                                 .get(
                                                                     'nvidiaPowerCTRLProfile'
@@ -1162,7 +1162,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 [hidden]="!editProfile"
                                                 (mousedown)="
                                                     buttonRepeatDown(
-                                                        modifySliderInputFunc(
+                                                        modifySliderInput(
                                                             profileFormGroup
                                                                 .get(
                                                                     'nvidiaPowerCTRLProfile'
