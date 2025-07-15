@@ -173,7 +173,7 @@ export class ConfigHandler {
             // FIXME for some reason this actually doesn't enforce the type
             config = JSON.parse(fileData.toString());
         } catch (err: unknown) {
-            console.error("ConfigHandler: readConfig failed =>", err)
+            console.error(`ConfigHandler: readConfig failed to read ${filename} => ${err}`)
             throw err;
         }
         return config;
@@ -185,7 +185,7 @@ export class ConfigHandler {
             const fileData: Buffer = await fs.promises.readFile(filename);
             config = JSON.parse(fileData.toString());
         } catch (err: unknown) {
-            console.error("ConfigHandler: readConfigAsync failed =>", err)
+            console.error(`ConfigHandler: readConfigAsync failed to read ${filename} => ${err}`)
             throw err;
         }
         return config;
