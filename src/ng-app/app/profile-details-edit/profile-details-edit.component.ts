@@ -432,6 +432,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.tempCustomFanCurve = undefined;
         
         this.resetPowerLimitSliderIndex();
+        this.updateTGPChart();
     }
 
     public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile): void {
