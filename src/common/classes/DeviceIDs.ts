@@ -1,65 +1,112 @@
 // https://dgpu-docs.intel.com/devices/hardware-table.html
-export const intelIGpuDeviceIds = [
-    // Xe Raptor Lake-P (Intel Iris Xe Graphics)
-    "A7A9",
-    "A7A8",
-    "A7A1",
-    "A7A0",
-    "A721",
-    "A720",
+const intelIGpuDeviceIds = [
+    // GPUs with supported drivers
 
-    // Xe Raptor Lake-S (Intel UHD Graphics)
-    "A78B",
-    "A78A",
-    "A789",
-    "A788",
-    "A783",
-    "A782",
-    "A781",
+    // Xe2 Lunar Lake (Intel Graphics)
+    "6420",
+    "64B0",
+
+    // Xe-LPG Arrow Lake-H (Intel Graphics)
+    "7D51",
+
+    // Xe-LPG Arrow Lake-S (Intel Graphics)
+    "7D67",
+
+    // Xe-LPG Arrow Lake-U (Intel Graphics)
+    "7D41",
+
+    // Xe-LPG Meteor Lake (Intel Graphics)
+    "7DD5",
+    "7D45",
+    "7D40",
+
+    // Xe Raptor Lake-S (Intel UHD Graphics 770)
     "A780",
 
-    // Xe Alder Lake-S (Intel UHD Graphics)
+    // Xe Raptor Lake-S (Intel UHD Graphics)
+    "A781",
+    "A788",
+    "A789",
+    "A78A",
+    "A78B",
+
+    // Xe Raptor Lake-S (Intel UHD Graphics 730)
+    "A782",
+
+    // Xe Raptor Lake-S (Intel UHD Graphics 710)
+    "A783",
+
+    // Xe Raptor Lake-P (Intel Iris Xe Graphics)
+    "A7A0",
+    "A7A1",
+
+    // Xe Raptor Lake-P (Intel UHD Graphics)
+    "A7A8",
+    "A7A9",
+    "A721",
+
+    // Xe Raptor Lake-P (Intel Graphics)
+    "A7AA",
+    "A7AB",
+
+    // Xe Raptor Lake-U (Intel Graphics)
+    "A7AC",
+    "A7AD",
+
+    // Xe Alder Lake-S (Intel UHD Graphics 770)
     "4680",
-    "4682",
+    "4690",
     "4688",
     "468A",
     "468B",
-    "4690",
+
+    // Xe Alder Lake-S (Intel UHD Graphics 730)
+    "4682",
     "4692",
+
+    // Xe Alder Lake-S (Intel UHD Graphics 710)
     "4693",
+
+    // Xe Alder Lake-N (Intel Graphics)
+    "46D3",
+    "46D4",
 
     // Xe Alder Lake-N (Intel UHD Graphics)
     "46D0",
     "46D1",
     "46D2",
 
-    // Xe Alder Lake (Intel UHD Graphics)
+    // Xe Alder Lake-P (Intel UHD Graphics)
     "4626",
     "4628",
     "462A",
-    "46A0",
-    "46A1",
     "46A2",
-    "46A3",
-    "46A6",
-    "46A8",
-    "46AA",
-    "46B0",
-    "46B1",
-    "46B2",
     "46B3",
-    "46C0",
-    "46C1",
     "46C2",
+    "46A3",
+    "46B2",
     "46C3",
 
-    // Xe Rocket Lake (Intel UHD Graphics)
+    // Xe Alder Lake-P (Intel Iris Xe Graphics)
+    "46A0",
+    "46B0",
+    "46C0",
+    "46A6",
+    "46AA",
+    "46A8",
+    "46A1",
+    "46B1",
+    "46C1",
+
+    // Xe Rocket Lake (Intel UHD Graphics 750)
     "4C8A",
+
+    // Xe Rocket Lake (Intel UHD Graphics 730)
     "4C8B",
+
+    // Xe Rocket Lake (Intel UHD Graphics P750)
     "4C90",
     "4C9A",
-    "4C8C",
-    "4C80",
 
     // Xe Jasper Lake (Intel UHD Graphics)
     "4E71",
@@ -69,28 +116,24 @@ export const intelIGpuDeviceIds = [
     "4E51",
 
     // Xe Elkhart Lake (Intel UHD Graphics)
-    "4571",
     "4557",
     "4555",
+    "4571",
     "4551",
     "4541",
 
     // Xe Tiger Lake (Intel UHD Graphics)
     "9A59",
+    "9A78",
     "9A60",
-    "9A68",
     "9A70",
+    "9A68",
 
     // Xe Tiger Lake (Intel Iris Xe Graphics)
     "9A40",
     "9A49",
 
-    // Xe Tiger Lake (Intel UHD Graphics)
-    "9A78",
-    "9AC0",
-    "9AC9",
-    "9AD9",
-    "9AF8",
+    // GPUs with unsupported drivers
 
     // Gen11 Ice Lake (Intel HD Graphics)
     "8A70",
@@ -307,6 +350,8 @@ export const intelIGpuDeviceIds = [
     // Gen9 Skylake (Intel HD Graphics)
     "190A",
     "190E",
+
+    // Legacy GPUs
 
     // Gen8 Broadwell (Intel HD Graphics)
     "163D",
