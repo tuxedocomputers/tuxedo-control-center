@@ -38,6 +38,12 @@ const amdIGpuDeviceIds: string[] = [
 
     // 8845HS (Phoenix3)
     "1900",
+    
+    // Ryzen AI 7 350
+    "1114",
+    
+    // Ryzen AI 9 HX 370
+    "150E",
 ];
 
 const amdVendorId = "1002";
