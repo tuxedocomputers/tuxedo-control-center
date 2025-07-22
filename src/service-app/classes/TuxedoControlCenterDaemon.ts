@@ -350,25 +350,29 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 missingSetting = true;
             }
             // Delete additional ports from settings
-            for (const settingsPort in this.settings.ycbcr420Workaround[card]) {
-                let stillAvailable: boolean = false;
-                for (const port of outputPorts[card]) {
-                    if (settingsPort === port) {
-                        stillAvailable = true;
+            if (this.settings.ycbcr420Workaround[card] !== undefined) {
+                for (const settingsPort in this.settings.ycbcr420Workaround[card]) {
+                    let stillAvailable: boolean = false;
+                    for (const port of outputPorts[card]) {
+                        if (settingsPort === port) {
+                            stillAvailable = true;
+                        }
                     }
-                }
-                if (!stillAvailable) {
-                    this.logLine('Additional ycbcr420Workaround port in settings');
-                    delete this.settings.ycbcr420Workaround[card][settingsPort];
-                    missingSetting = true;
+                    if (!stillAvailable) {
+                        this.logLine('Additional ycbcr420Workaround port in settings');
+                        delete this.settings.ycbcr420Workaround[card][settingsPort];
+                        missingSetting = true;
+                    }
                 }
             }
             // Add port to settings if missing
-            for (const port of outputPorts[card]) {
-                if (this.settings.ycbcr420Workaround[card][port] === undefined) {
-                    this.logLine('Missing ycbcr420Workaround port in settings');
-                    this.settings.ycbcr420Workaround[card][port] = false;
-                    missingSetting = true;
+            if (outputPorts[card] !== undefined) {
+                for (const port of outputPorts[card]) {
+                    if (this.settings.ycbcr420Workaround[card][port] === undefined) {
+                        this.logLine('Missing ycbcr420Workaround port in settings');
+                        this.settings.ycbcr420Workaround[card][port] = false;
+                        missingSetting = true;
+                    }
                 }
             }
         }
