@@ -24,7 +24,7 @@ import { tccWindow } from "./browserWindowsAPI";
 import { execCmd, writeTextFile } from "./utilsAPI";
 import type { ClientRequest, IncomingMessage } from "node:http";
 
-export const systeminfosURL: string = 'https://mytuxedo.de/index.php/s/DcAeZk4TbBTTjRq/download';
+export const systeminfosURL: string = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
 
 async function getSystemInfos(): Promise<Buffer> {
     return new Promise<Buffer>(async (resolve: (value: Buffer | PromiseLike<Buffer>) => void, reject: (reason?: unknown) => void): Promise<void> => {
