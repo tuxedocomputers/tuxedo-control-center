@@ -101,16 +101,11 @@
     }
 
     .status-flexbox {
-        display: flex;
-        flex-wrap: wrap;
+        display: block;
         margin-top: 20px;
 
         .status-component {
-            width: 50%;
-
             display: flex;
-            flex-flow: column;
-            justify-content: flex-start;
             align-items: center;
 
             .status-icon-container {
@@ -122,11 +117,6 @@
                 }
     
                 --icon-detail: var(--icon-main);
-            }
-
-            .status-info {
-                text-align: center;
-                transform: translateY(-5px);
             }
 
             &.inactive {
