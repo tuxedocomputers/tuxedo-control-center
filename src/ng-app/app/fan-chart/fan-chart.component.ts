@@ -25,7 +25,6 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { Chart, ChartConfiguration, TooltipItem } from "chart.js";
 import {
     chartAnimation,
@@ -69,7 +68,6 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     private _minFanspeed: number = 0;
     private _maxFanspeed: number = 0;
 
-    public fanFormGroup: FormGroup;
     public customFanCurve: ITccFanProfile = undefined;
     public tempCustomFanCurve: ITccFanProfile = undefined;
     
@@ -77,7 +75,7 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     private fahrenheit: boolean = false;
 
 
-    constructor(private config: ConfigService, private fb: FormBuilder, private utils: UtilsService) {
+    constructor(private config: ConfigService, private utils: UtilsService) {
         this.textColor = this.utils.getTextColor();
         this.fahrenheit = this.config?.getSettings()?.fahrenheit;
     }

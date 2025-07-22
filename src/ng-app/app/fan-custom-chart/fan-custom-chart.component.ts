@@ -140,7 +140,6 @@ export class FanCustomChartComponent implements OnInit {
             this.tempCustomFanCurve || this.customFanCurve;
 
         // todo: currently only using cpu values for both gpu and cpu
-        // todo: deduplicate code
         type CPUFanSpeedMap = { [temp: string]: number };
 
         const initialValues: CPUFanSpeedMap = fanCurve.tableCPU.reduce(
