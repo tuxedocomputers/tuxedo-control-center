@@ -91,9 +91,12 @@ export class TgpChartComponent {
                     [this.nvidiaPowerCTRLDefaultPowerLimit + this.cTGPOffset],
                     $localize`:@@dynamicBoostRange:Dynamic Boost range`,
                     [
-                        this.nvidiaPowerCTRLMaxPowerLimit -
-                            this.nvidiaPowerCTRLDefaultPowerLimit -
-                            this.cTGPOffset,
+                        Math.min(
+                            this.nvidiaPowerCTRLMaxPowerLimit -
+                                this.nvidiaPowerCTRLDefaultPowerLimit -
+                                this.cTGPOffset,
+                            25
+                        ),
                     ]
                 ),
             },
@@ -155,9 +158,12 @@ export class TgpChartComponent {
             ];
 
             this.chart.data.datasets[1].data = [
-                this.nvidiaPowerCTRLMaxPowerLimit -
-                    this.nvidiaPowerCTRLDefaultPowerLimit -
-                    this.cTGPOffset,
+                Math.min(
+                    this.nvidiaPowerCTRLMaxPowerLimit -
+                        this.nvidiaPowerCTRLDefaultPowerLimit -
+                        this.cTGPOffset,
+                    25
+                ),
             ];
             this.chart.update();
             return;
