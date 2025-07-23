@@ -22,6 +22,7 @@ import type { TDPInfo } from "../../native-lib/TuxedoIOAPI";
 // todo: ChargeType is not used as a type here and thus can not have the type keyword, needs to be fixed
 import { ChargeType } from "../../common/classes/PowerSupplyController";
 import { app } from "electron";
+import { Mutex } from "async-mutex";
 
 export class TccDBusController {
     private busName: string = 'com.tuxedocomputers.tccd';
@@ -30,6 +31,9 @@ export class TccDBusController {
     private bus: dbus.MessageBus;
     private interface: dbus.ClientInterface;
     private dbusStatus: boolean = true
+    private mutex: Mutex = new Mutex();
+    private dbusTimeout: boolean = false;
+
 
     constructor() {
         try {
@@ -51,26 +55,39 @@ export class TccDBusController {
         }
 
     }
+        
     async dbusAvailable(): Promise<boolean> {
         try {
-            if (!this.dbusStatus) {
-                console.log("dbusController: dbusAvailable: trying to connect to dbus")
-            }
-            const status: boolean = await this.interface.dbusAvailable();
+            return await this.mutex.runExclusive(async (): Promise<boolean> => {
+                if (!this.dbusTimeout) {
+                    const status: boolean =
+                        await this.interface.dbusAvailable();
 
-            if (!this.dbusStatus && status) {
-                console.log("dbusController: dbusAvailable: dbus connected")
-            }
-
-            this.dbusStatus = status
-            return status
+                    if (!this.dbusStatus && status) {
+                        console.log(
+                            "dbusController: dbusAvailable: dbus available",
+                        );
+                    }
+                    this.dbusStatus = status;
+                    return status;
+                }
+                return false;
+            });
         } catch (err: unknown) {
-            console.error("dbusController: dbusAvailable: dbus access was requested, but dbus is not available")
-            this.dbusStatus = false
+            console.error(
+                "dbusController: dbusAvailable: dbus not available",
+            );
+            this.dbusStatus = false;
+            this.dbusTimeout = true;
+
+            setTimeout((): void => {
+                this.dbusTimeout = false;
+                this.mutex.release();
+            }, 2000);
             return false;
         }
     }
-
+    
     async getNVIDIAPowerCTRLDefaultPowerLimit(): Promise<number> {
         try {
             if (this.dbusStatus && this.interface) {
