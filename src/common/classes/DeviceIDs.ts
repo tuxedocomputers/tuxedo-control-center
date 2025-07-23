@@ -602,6 +602,12 @@ export const amdIGpuDeviceIds = [
     // Hawk Point
     "1900",
     "1901",
+    
+    // Ryzen AI 7 350
+    "1114",
+
+    // Ryzen AI 9 HX 370
+    "150E",
 ];
 
 const amdVendorId = "1002";
