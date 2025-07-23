@@ -53,7 +53,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div class="content-container system-monitor-gauges">
                     <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasCpuTemp }"
-                        [matTooltip]="!compat.hasCpuTemp ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasCpuTemp) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="fanData?.cpu?.temp?.data" [showValue]="false"
                             [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -83,7 +83,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasCpuFan }"
-                        [matTooltip]="!compat.hasCpuFan ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasCpuFan) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="fanData?.cpu?.speed?.data" [showValue]="false"
                             [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -100,7 +100,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <!-- only displaying cpu wattage if there isn't a second amdgpu device because of odd wattage numbers -->
                     <div class="tcc-gauge" *ngIf="!(cpuVendor === 'amd' && amdGpuCount > 0)"
                         [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasCpuPower }"
-                        [matTooltip]="!compat.hasCpuPower ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasCpuPower) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="gaugeCPUPower" [showValue]="false"
                             [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -146,7 +146,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         && dGpuAvailable && primeState === 'iGPU')">
                     <div class="tcc-gauge" *ngIf="cpuVendor === 'amd'"
                         [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasIGpuTemp }"
-                        [matTooltip]="!compat.hasIGpuTemp ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasIGpuTemp) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false" [dialStartAngle]="130"
                             [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -162,7 +162,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasIGpuFreq }"
-                        [matTooltip]="!compat.hasIGpuFreq ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasIGpuFreq) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="gaugeIGpuFreq"
                             [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -178,7 +178,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div *ngIf="cpuVendor === 'intel'" class="tcc-gauge"
                         [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasIGpuPowerDraw}"
-                        [matTooltip]="!compat.hasIGpuPowerDraw ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasIGpuPowerDraw) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false" [dialStartAngle]="130"
                             [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -199,7 +199,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         && dGpuAvailable) || (iGpuAvailable
                         && dGpuAvailable && primeState === 'dGPU')">
                     <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasDGpuTemp }"
-                        [matTooltip]="!compat.hasDGpuTemp ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasDGpuTemp) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUTemp" [showValue]="false"
                             [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -216,7 +216,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div class="tcc-gauge"
                         [ngClass]="{'not-available': !compat.tccDbusAvailable || ((powerState !== 'D3cold') && !(powerState === 'D0' && compat.hasDGpuFreq && d0MetricsUsage)) }"
-                        [matTooltip]="powerState === 'D3cold' ? '' : !compat.hasDGpuFreq ? compat.compatibilityMessage: ''">
+                        [matTooltip]="powerState === 'D3cold' ? '' : (!compat.tccDbusAvailable || !compat.hasDGpuFreq) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0"
                             [value]="powerState === 'D3cold' ? 0 : compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
                             [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
@@ -232,7 +232,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
                     <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasDGpuFan }"
-                        [matTooltip]="!compat.hasDGpuFan ? compat.compatibilityMessage: ''">
+                        [matTooltip]="(!compat.tccDbusAvailable || !compat.hasDGpuFan) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUFanSpeed" [showValue]="false"
                             [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                             [animationDuration]="animatedGaugesDuration">
@@ -248,7 +248,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </div>
                     <div class="tcc-gauge"
                         [ngClass]="{'not-available': !compat.tccDbusAvailable || (!(powerState === 'D0' && compat.hasDGpuPowerDraw && d0MetricsUsage) && powerState !== 'D3cold') }"
-                        [matTooltip]="powerState == 'D3cold' ? '' : !compat.hasDGpuPowerDraw ? compat.compatibilityMessage: ''">
+                        [matTooltip]="powerState == 'D3cold' ? '' : (!compat.tccDbusAvailable || !compat.hasDGpuPowerDraw) ? compat.compatibilityMessage: ''">
                         <mwl-gauge [max]="100" [min]="0"
                             [value]="powerState === 'D3cold' ? 0 : compat.hasDGpuPowerDraw ? gaugeDGPUPower : 0"
                             [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
@@ -273,7 +273,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" *ngIf="cpuVendor === 'amd'"
                                     [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasIGpuTemp }"
-                                    [matTooltip]="!compat.hasIGpuTemp ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="(!compat.tccDbusAvailable || !compat.hasIGpuTemp) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false"
                                         [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                                         [animationDuration]="animatedGaugesDuration">
@@ -290,7 +290,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </div>
                                 </div>
                                 <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasIGpuFreq }"
-                                    [matTooltip]="!compat.hasIGpuFreq ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="(!compat.tccDbusAvailable || !compat.hasIGpuFreq) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
                                         [value]="gaugeIGpuFreq"
                                         [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50"
@@ -307,7 +307,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </div>
                                 <div *ngIf="cpuVendor === 'intel'" class="tcc-gauge"
                                     [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasIGpuPowerDraw}"
-                                    [matTooltip]="!compat.hasIGpuPowerDraw ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="(!compat.tccDbusAvailable || !compat.hasIGpuPowerDraw) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0" [value]="0" [showValue]="false"
                                         [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                                         [animationDuration]="animatedGaugesDuration">
@@ -326,7 +326,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <mat-tab label="High-performance graphics processor (dGPU)" i18n-label="@@primeSelectDGpu">
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasDGpuTemp }"
-                                    [matTooltip]="!compat.hasDGpuTemp ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="(!compat.tccDbusAvailable || !compat.hasDGpuTemp) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUTemp" [showValue]="false"
                                         [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                                         [animationDuration]="animatedGaugesDuration">
@@ -344,7 +344,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </div>
                                 <div class="tcc-gauge"
                                     [ngClass]="{'not-available': !compat.tccDbusAvailable || ((powerState !== 'D3cold') && !(powerState === 'D0' && compat.hasDGpuFreq && d0MetricsUsage)) }"
-                                    [matTooltip]="powerState === 'D3cold' ? '' : !compat.hasDGpuFreq ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="powerState === 'D3cold' ? '' : (!compat.tccDbusAvailable || !compat.hasDGpuFreq) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
                                         [value]="powerState === 'D3cold' ? 0 : compat.hasDGpuFreq ? gaugeDGPUFreq : 0"
                                         [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50"
@@ -360,7 +360,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </div>
                                 </div>
                                 <div class="tcc-gauge" [ngClass]="{'not-available': !compat.tccDbusAvailable || !compat.hasDGpuFan }"
-                                    [matTooltip]="!compat.hasDGpuFan ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="(!compat.tccDbusAvailable || !compat.hasDGpuFan) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0" [value]="gaugeDGPUFanSpeed" [showValue]="false"
                                         [dialStartAngle]="130" [dialEndAngle]="50" [animated]="animatedGauges"
                                         [animationDuration]="animatedGaugesDuration">
@@ -377,7 +377,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </div>
                                 <div class="tcc-gauge"
                                     [ngClass]="{'not-available': !compat.tccDbusAvailable || (!(powerState === 'D0' && compat.hasDGpuPowerDraw && d0MetricsUsage) && powerState !== 'D3cold') }"
-                                    [matTooltip]="powerState === 'D3cold' ? '' : !compat.hasDGpuPowerDraw ? compat.compatibilityMessage: ''">
+                                    [matTooltip]="powerState === 'D3cold' ? '' : (!compat.tccDbusAvailable || !compat.hasDGpuPowerDraw) ? compat.compatibilityMessage: ''">
                                     <mwl-gauge [max]="100" [min]="0"
                                         [value]="powerState === 'D3cold' ? 0 : compat.hasDGpuPowerDraw ? gaugeDGPUPower : 0"
                                         [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50"
