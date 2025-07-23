@@ -396,14 +396,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    public formatValue: (value: number, compatible: boolean, formatter: (val: number) => string) => string = (
+    public formatValue: (
         value: number,
         compatible: boolean,
-        formatter: (val: number) => string
+        formatter: (val: number) => string,
+    ) => string = (
+        value: number,
+        compatible: boolean,
+        formatter: (val: number) => string,
     ): string => {
-        return compatible
-            ? formatter(value)
-            : $localize`:@@noDashboardValue:N/A`;
+        return !this.compat.tccDbusAvailable
+            ? $localize`:@@noDashboardValue:N/A`
+            : compatible
+              ? formatter(value)
+              : $localize`:@@noDashboardValue:N/A`;
     };
 
     private createFormatter(
