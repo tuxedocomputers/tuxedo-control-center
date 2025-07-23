@@ -397,8 +397,11 @@ async function getProfiles(): Promise<TccProfile[]> {
     let result: TccProfile[] = [];
     if (!await tccDBus.dbusAvailable()) return [];
     try {
-        const profiles: TccProfile[] = JSON.parse(await tccDBus.getProfilesJSON());
-        result = profiles;
+        const profilesJSON: string = await tccDBus.getProfilesJSON();
+        
+        if (profilesJSON !== undefined) {
+            result = JSON.parse(profilesJSON);
+        }
     } catch (err: unknown) {
         console.error("initMain: getProfiles failed =>", err)
     }
@@ -414,7 +417,11 @@ async function getActiveProfile(): Promise<TccProfile> {
     let result: TccProfile = undefined;
     if (!await tccDBus.dbusAvailable()) return undefined;
     try {
-        result = JSON.parse(await tccDBus.getActiveProfileJSON());
+        const activeProfileJSON: string = await tccDBus.getActiveProfileJSON();
+        
+        if (activeProfileJSON !== undefined) {
+            result = JSON.parse(activeProfileJSON);
+        }
     } catch(err: unknown) {
         console.error("initMain: getActiveProfile failed =>", err)
     }
