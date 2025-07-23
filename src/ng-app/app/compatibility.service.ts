@@ -204,9 +204,8 @@ export class CompatibilityService {
         return this.hasODMPowerLimitControl && this.hasODMProfileControl;
     }
 
-    // todo: check if Subject is correct
-    get tccDbusAvailable(): Subject<boolean> {
-        return this.tccDbus.dbusAvailable;
+    get tccDbusAvailable(): boolean {
+        return this.tccDbus.isDbusAvailable;
     }
 
     get hasAquaris(): boolean {

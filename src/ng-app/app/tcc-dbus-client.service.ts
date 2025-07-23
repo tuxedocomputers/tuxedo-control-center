@@ -41,6 +41,7 @@ export class TccDBusClientService implements OnDestroy {
 
   public available: Subject<boolean> = new Subject<boolean>(); // todo: may not be required
   public dbusAvailable: Subject<boolean> = new Subject<boolean>();
+  public isDbusAvailable: boolean = false;
   public tuxedoWmiAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public fanHwmonAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   public dataLoaded: boolean = false;
@@ -344,9 +345,12 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   private async periodicUpdate(): Promise<void> {
-    const dbusAvailable: boolean = await window.dbusAPI.dbusAvailable()
-    this.dbusAvailable.next(dbusAvailable)
-    if(!this.dbusAvailable) {
+    const dbusAvailable: boolean = await window.dbusAPI.dbusAvailable();
+    
+    this.dbusAvailable.next(dbusAvailable);
+    this.isDbusAvailable = dbusAvailable;
+
+    if(!dbusAvailable) {
         console.error("tcc-dbus-client: periodicUpdate: Communication with TCCD interrupted, dbus not available");
         return;
     }
