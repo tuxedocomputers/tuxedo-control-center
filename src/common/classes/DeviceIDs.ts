@@ -28,11 +28,13 @@ const intelIGpuDeviceIds = [
     "A788",
     "A789",
     "A78A",
-    "A78B",
 
     // Xe Raptor Lake-S (Intel UHD Graphics 730)
     "A782",
 
+    // Xe Raptor Lake-S (Intel UHD Graphics)
+    "A78B",
+    
     // Xe Raptor Lake-S (Intel UHD Graphics 710)
     "A783",
 
@@ -42,8 +44,6 @@ const intelIGpuDeviceIds = [
 
     // Xe Raptor Lake-P (Intel UHD Graphics)
     "A7A8",
-    "A7A9",
-    "A721",
 
     // Xe Raptor Lake-P (Intel Graphics)
     "A7AA",
@@ -52,6 +52,10 @@ const intelIGpuDeviceIds = [
     // Xe Raptor Lake-U (Intel Graphics)
     "A7AC",
     "A7AD",
+
+    // Xe Raptor Lake-P (Intel UHD Graphics)
+    "A7A9",
+    "A721",
 
     // Xe Alder Lake-S (Intel UHD Graphics 770)
     "4680",
@@ -527,6 +531,21 @@ const intelIGpuDeviceIds = [
     // Gen5 Iron Lake (Intel HD Graphics)
     "0042",
     "0046",
+    
+    // GPUs that were removed from the official hardware table
+    
+    // Xe Raptor Lake-P (Intel Iris Xe Graphics)
+    "A720",
+
+    // Xe Rocket Lake (Intel UHD Graphics)
+    "4C8C",
+    "4C80", 
+
+    // Xe Tiger Lake (Intel UHD Graphics)
+    "9AC0", 
+    "9AC9",
+    "9AD9",
+    "9AF8",
 ];
 
 const intelVendorId = "8086";
