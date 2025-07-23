@@ -277,8 +277,8 @@ export class TccDBusClientService implements OnDestroy {
   
   constructor(private utils: UtilsService) {
     this.updateTuxedoDevice();
-    this.periodicUpdate();
-    this.timeout = setInterval((): void => { this.periodicUpdate(); }, this.updateInterval);
+    this.dbusUpdate();
+    this.timeout = setInterval((): void => { this.dbusUpdate(); }, this.updateInterval);
   }
 
   // Display Brightness Gnome Workarounds
@@ -344,14 +344,14 @@ export class TccDBusClientService implements OnDestroy {
     await Promise.all(promiseArray);
   }
 
-  private async periodicUpdate(): Promise<void> {
+  private async dbusUpdate(): Promise<void> {
     const dbusAvailable: boolean = await window.dbusAPI.dbusAvailable();
     
     this.dbusAvailable.next(dbusAvailable);
     this.isDbusAvailable = dbusAvailable;
 
     if(!dbusAvailable) {
-        console.error("tcc-dbus-client: periodicUpdate: Communication with TCCD interrupted, dbus not available");
+        console.error("tcc-dbus-client: dbusUpdate: dbus not available");
         return;
     }
 
@@ -370,7 +370,7 @@ export class TccDBusClientService implements OnDestroy {
     // Retrieve and parse profiles
     const activeProfileJSON: string = await window.dbusAPI.getActiveProfileJSON();
     if (activeProfileJSON !== undefined) {
-        if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
+        if (activeProfileJSON === undefined) { console.log('tcc-dbus-client: dbusUpdate: unexpected error => no active profile'); }
         try {
             const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
             // this.utils.fillDefaultValuesProfile(activeProfile);
@@ -379,7 +379,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.activeProfile.next(activeProfile);
                 this.previousActiveProfileJSON = activeProfileJSON;
             }
-        } catch(err: unknown) { console.error("tcc-dbus-client.service: unexpected error parsing profile =>", err); }
+        } catch(err: unknown) { console.error("tcc-dbus-client: dbusUpdate: unexpected error parsing profile =>", err); }
     }
 
     const defaultProfilesJSON: string = await window.dbusAPI.getDefaultProfilesJSON();
@@ -400,7 +400,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.previousDefaultValuesProfileJSON = defaultValuesProfileJSON;
             }
         } catch (err: unknown) {
-            console.error("tcc-dbus-client.service: unexpected error parsing profile lists =>",  err);
+            console.error("tcc-dbus-client: dbusUpdate: unexpected error parsing profile lists =>",  err);
         }
 
         this.dataLoaded = true;
@@ -412,7 +412,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.settings.next(JSON.parse(settingsJSON));
                 this.previousSettingsJSON = settingsJSON;
             }
-        } catch (err: unknown) { console.error("tcc-dbus-client.service: unexpected error parsing settings =>", err); }
+        } catch (err: unknown) { console.error("tcc-dbus-client: dbusUpdate: unexpected error parsing settings =>", err); }
     }
   }
 
@@ -421,7 +421,7 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   public async triggerUpdate(): Promise<void> {
-    await this.periodicUpdate();
+    await this.dbusUpdate();
   }
 
   ngOnDestroy(): void {
