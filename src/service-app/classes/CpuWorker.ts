@@ -68,7 +68,9 @@ export class CpuWorker extends DaemonWorker {
         }
     }
 
-    public onExit() {}
+    public onExit() {
+        this.setCpuDefaultConfig();
+    }
 
     /**
      * Choose the default governor for the current system
