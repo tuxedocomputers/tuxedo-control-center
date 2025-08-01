@@ -402,6 +402,7 @@ export enum TUXEDODevice {
     IBP14G6_TQF,
     IBP14G7_AQF_ARX,
     IBPG8,
+    IBPG10AMD,
     PULSE1502,
     AURA14G3,
     AURA15G3,

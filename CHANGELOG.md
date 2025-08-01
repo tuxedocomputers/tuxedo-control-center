@@ -1,5 +1,15 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Dashboard support for new AMD iGPUs (IBP Gen10 AMD)
+- Dashboard support for new Intel iGPUs (Stellaris Gen7 Intel)
+
+### Fixed
+- Systeminfos: Ticket number format hint
+- Suspend for certain devices where wakeup fails when cores are disabled
+- Non used platform profiles for IBP Gen10 AMD
+
 ## [2.1.17] - 2025-07-10
 ### Fixed
 - Download of system diagnostics script failing, URL adjusted
