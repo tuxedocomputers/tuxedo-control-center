@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.18] - 2025-08-01
 ### Added
 - Dashboard support for new AMD iGPUs (IBP Gen10 AMD)
 - Dashboard support for new Intel iGPUs (Stellaris Gen7 Intel)
