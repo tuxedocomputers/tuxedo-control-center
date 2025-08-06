@@ -2741,32 +2741,32 @@ Commercial register number - Part B of the commercial register - 27755
         </context-group>
       </trans-unit>
       <trans-unit id="chargingPriorityChargeBatteryLabel" datatype="html">
-        <source>Priorize battery charging speed</source>
-        <target state="translated">Priorize battery charging speed</target>
+        <source>Prioritize battery charging speed</source>
+        <target state="translated">Prioritize battery charging speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="chargingPriorityPerformanceLabel" datatype="html">
-        <source>Priorize performance</source>
-        <target state="translated">Priorize performance</target>
+        <source>Prioritize performance</source>
+        <target state="translated">Prioritize performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="chargingPriorityChargeBatteryDescription" datatype="html">
-        <source>Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</source>
-        <target state="translated">Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.</target>
+        <source>Fast battery charging is prioritized at the expense of system performance. Once the battery is charged, full performance is available.</source>
+        <target state="translated">Fast battery charging is prioritized at the expense of system performance. Once the battery is charged, full performance is available.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="chargingPriorityPerformanceDescription" datatype="html">
-        <source>Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</source>
-        <target state="translated">Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</target>
+        <source>Performance is prioritized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</source>
+        <target state="translated">Performance is prioritized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.ts</context>
           <context context-type="linenumber">109</context>

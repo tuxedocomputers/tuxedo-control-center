@@ -255,7 +255,7 @@
 ### Added
 - Battery charging options for a number of devices
   - Choose one of three "charging profiles" to influence peak charge and charging time
-  - Choose whether to priorize charging or performance when on USB-C PD
+  - Choose whether to prioritize charging or performance when on USB-C PD
   - For now available through "Settings" => "Battery charging options" (for devices with this feature)
   - Tray shortcut coming soon
 
