@@ -102,11 +102,11 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         this.chargingProfileDescriptions.set('balanced', $localize `:@@chargingProfileBalancedDescription:Reduced charging speed and battery capacity (~90 %) for better battery lifespan.`);
         this.chargingProfileDescriptions.set('stationary', $localize `:@@chargingProfileStationaryDescription:Very significant reduced charging speed and battery capacity (~80 %) for best possible battery lifespan. This is recommended if you use your TUXEDO almost only stationary connected to a wall outlet.`);
 
-        this.chargingPriorityLabels.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryLabel:Priorize battery charging speed`);
-        this.chargingPriorityLabels.set('performance', $localize `:@@chargingPriorityPerformanceLabel:Priorize performance`);
+        this.chargingPriorityLabels.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryLabel:Prioritize battery charging speed`);
+        this.chargingPriorityLabels.set('performance', $localize `:@@chargingPriorityPerformanceLabel:Prioritize performance`);
 
-        this.chargingPriorityDescriptions.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryDescription:Fast battery charging is priorized at the expense of system performance. Once the battery is charged, full performance is available.`);
-        this.chargingPriorityDescriptions.set('performance', $localize `:@@chargingPriorityPerformanceDescription:Performance is priorized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.`);
+        this.chargingPriorityDescriptions.set('charge_battery', $localize `:@@chargingPriorityChargeBatteryDescription:Fast battery charging is prioritized at the expense of system performance. Once the battery is charged, full performance is available.`);
+        this.chargingPriorityDescriptions.set('performance', $localize `:@@chargingPriorityPerformanceDescription:Performance is prioritized over battery charging speed. Under high system load charging speed is reduced for best performance. At low loads full charging speed is available.`);
 
         this.thresholdPresets.set(BatteryThresholdOptions.Balanced, new ThresholdPresets(60, 90));
         this.thresholdPresets.set(BatteryThresholdOptions.Stationary, new ThresholdPresets(40, 80));
