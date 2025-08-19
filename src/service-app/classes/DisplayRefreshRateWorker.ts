@@ -26,19 +26,33 @@ import {
 import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import * as child_process from "child_process";
 import { ITccProfile } from "src/common/models/TccProfile";
+import { execCommandAsync } from "../../common/classes/Utils";
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
     private displayInfoFound: boolean = false;
     private previousUsers: string[] = [];
+    private wAvailable: boolean = undefined;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(5000, "DisplayRefreshrateWorker", tccd);
         this.controller = new XDisplayRefreshRateController();
     }
 
-    public async onStart(): Promise<void> {}
+    public async onStart(): Promise<void> {
+        try {
+            this.wAvailable = !!(await execCommandAsync("which w"))
+                .toString()
+                .trim();
+            if (!this.wAvailable) {
+                console.log("DisplayRefreshrateWorker: w not available")
+            }
+        } catch (err: unknown) {
+            console.error("DisplayRefreshrateWorker: onStart failed =>", err);
+            this.wAvailable = false;
+        }
+    }
 
     // user is able to switch XDG_SESSION_TYPE in login screen and thus a new check needs to be done
     // not checking XDG_SESSION_TYPE during login screen, checking again on user change
@@ -77,6 +91,10 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     }
 
     public async onWork(): Promise<void> {
+        if (!this.wAvailable) {
+            return;
+        }
+
         const [usersAvailable, usersChanged] = this.checkUsers();
 
         if (usersChanged) {
