@@ -6,6 +6,7 @@
 /tmp
 /out-tsc
 /usr
+/etc
 # Only exists if Bazel was run
 /bazel-out
 
