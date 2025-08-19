@@ -454,12 +454,11 @@ public:
     }
 
     virtual bool GetNumberTDPs(int &nrTDPs) {
-
         // Check return status of getters to figure out how many
         // TDPs are configurable
         for (int i = 2; i >= 0; --i) {
             int status = 0;
-            bool success = GetTDP(i, status);
+            bool success = GetTDPMin(i, status);
             if (success && status >= 0) {
                 nrTDPs = i + 1;
                 break;
