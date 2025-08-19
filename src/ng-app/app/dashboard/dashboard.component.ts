@@ -179,6 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private initializeSubscriptions(): void {
         this.subscribeToPstate();
+        this.subscribeIsX11();
         this.subscribeToDGpuInfo();
         this.subscribeToIGpuInfo();
         this.subscribeToCpuInfo();
@@ -187,7 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscribeODMInfo();
         this.subscribePrimeState();
     }
-
+    
     private subscribePrimeState(): void {
         this.subscriptions.add(
             this.tccdbus.primeState
@@ -201,7 +202,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
             )
         );
     }
-
+    
+    private subscribeIsX11(): void {
+        this.subscriptions.add(
+            this.tccdbus.isX11
+                .pipe(
+                    filter((value: number): boolean => value !== undefined && value !== -1)
+                )
+                .subscribe((isX11: number): void => {
+                    this.isX11 = isX11;
+                }
+            )
+        );
+    }
+    
     private subscribeODMInfo(): void {
         this.subscriptions.add(
             this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]): void => {

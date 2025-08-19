@@ -20,7 +20,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -95,6 +95,7 @@ export class GlobalSettingsComponent implements OnInit {
         }
 
         this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => { this.ctrlBrightnessMode.setValue(mode) });
+        this.subscribeIsX11();
     }
 
     private setVariablesWithRouteSnapshot(): void {
@@ -115,6 +116,19 @@ export class GlobalSettingsComponent implements OnInit {
         this.isX11 = data.x11Status;
         
         this.aptInstalled = data.aptInstalled;
+    }
+    
+    private subscribeIsX11(): void {
+        this.subscriptions.add(
+            this.tccdbus.isX11
+                .pipe(
+                    filter((value: number): boolean => value !== undefined && value !== -1)
+                )
+                .subscribe((isX11: number): void => {
+                    this.isX11 = isX11;
+                }
+            )
+        );
     }
     
     public onCPUSettingsEnabledChanged(event: any): void {
