@@ -116,16 +116,13 @@ async function changeLanguage(newLangId: string): Promise<void> {
 }
 
 ipcMain.on('ipc-open-external', (event: IpcMainEvent, url: string): void => {
-    // Explanation: openExternal can theoretically pose a security risk
-    // that's why we only let weblinks happen.
-    // https://benjamin-altpeter.de/shell-openexternal-dangers/
     if(url.startsWith('http://') || url.startsWith('https://'))
     {
         shell.openExternal(url);
     }
     else
     {
-        console.error("utilsAPI: Link violates security! Needs to be a weblink! Link: " + url);
+        console.error(`utilsAPI: ${url} needs to be a weblink`);
     }
 });
 

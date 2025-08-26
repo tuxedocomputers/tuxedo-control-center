@@ -29,7 +29,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.tccdVersion());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getVersion failed =>", err)
+                console.error("dbusAPI: getVersion failed =>", err)
             }
         });
     })
@@ -39,7 +39,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.tuxedoWmiAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.tuxedoWmiAvailable failed =>", err)
+                console.error("dbusAPI: tuxedoWmiAvailable failed =>", err)
             }
         });
     })
@@ -49,7 +49,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getFanDataJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getFanData failed =>", err)
+                console.error("dbusAPI: getFanData failed =>", err)
             }
         });
     })
@@ -59,7 +59,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.webcamSWAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.webcamSWAvailable failed =>", err)
+                console.error("dbusAPI: webcamSWAvailable failed =>", err)
             }
         });
     })
@@ -69,7 +69,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getForceYUV420OutputSwitchAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getForceYUV420OutputSwitchAvailable failed =>", err)
+                console.error("dbusAPI: getForceYUV420OutputSwitchAvailable failed =>", err)
             }
         });
     })
@@ -79,7 +79,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.consumeModeReapplyPending());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.consumeModeReapplyPending failed =>", err)
+                console.error("dbusAPI: consumeModeReapplyPending failed =>", err)
             }
         });
     })
@@ -89,7 +89,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getActiveProfileJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getActiveProfileJSON failed =>", err)
+                console.error("dbusAPI: getActiveProfileJSON failed =>", err)
             }
         });
     })
@@ -99,7 +99,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setTempProfileById(profileId));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setTempProfileById failed =>", err)
+                console.error("dbusAPI: setTempProfileById failed =>", err)
             }
         });
     })
@@ -109,7 +109,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getProfilesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getProfilesJSON failed =>", err)
+                console.error("dbusAPI: getProfilesJSON failed =>", err)
             }
         });
     })
@@ -119,7 +119,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getCustomProfilesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getCustomProfilesJSON failed =>", err)
+                console.error("dbusAPI: getCustomProfilesJSON failed =>", err)
             }
         });
     })
@@ -129,7 +129,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getDefaultProfilesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getDefaultProfilesJSON failed =>", err)
+                console.error("dbusAPI: getDefaultProfilesJSON failed =>", err)
             }
         });
     })
@@ -139,7 +139,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getDefaultValuesProfileJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getDefaultValuesProfileJSON failed =>", err)
+                console.error("dbusAPI: getDefaultValuesProfileJSON failed =>", err)
             }
         });
     })
@@ -149,7 +149,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getSettingsJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getSettingsJSON failed =>", err)
+                console.error("dbusAPI: getSettingsJSON failed =>", err)
             }
         });
     })
@@ -159,7 +159,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.odmProfilesAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.odmProfilesAvailable failed =>", err)
+                console.error("dbusAPI: odmProfilesAvailable failed =>", err)
             }
         });
     })
@@ -169,7 +169,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.odmPowerLimitsJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.odmPowerLimitsJSON failed =>", err)
+                console.error("dbusAPI: odmPowerLimitsJSON failed =>", err)
             }
         });
     })
@@ -179,7 +179,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON failed =>", err)
+                console.error("dbusAPI: getKeyboardBacklightCapabilitiesJSON failed =>", err)
             }
         });
     })
@@ -189,7 +189,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getKeyboardBacklightStatesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getKeyboardBacklightStatesJSON failed =>", err)
+                console.error("dbusAPI: getKeyboardBacklightStatesJSON failed =>", err)
             }
         });
     })
@@ -199,7 +199,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
             } catch (err: unknown) {
-                    console.error("dbusAPI: DbusAPIFunctions.setKeyboardBacklightStatesJSON failed =>", err)
+                    console.error("dbusAPI: setKeyboardBacklightStatesJSON failed =>", err)
             }
         });
     })
@@ -209,7 +209,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         try {
             resolve(tccDBus.getFansMinSpeed());
         } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getFansMinSpeed failed =>", err)
+                console.error("dbusAPI: getFansMinSpeed failed =>", err)
             }
         });
     })
@@ -219,7 +219,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getFansOffAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getFansOffAvailable failed =>", err)
+                console.error("dbusAPI: getFansOffAvailable failed =>", err)
             }
         });
     })
@@ -229,7 +229,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargingProfilesAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargingProfilesAvailable failed =>", err)
+                console.error("dbusAPI: getChargingProfilesAvailable failed =>", err)
             }
         });
     })
@@ -239,7 +239,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getCurrentChargingProfile());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getCurrentChargingProfile failed =>", err)
+                console.error("dbusAPI: getCurrentChargingProfile failed =>", err)
             }
         });
     })
@@ -249,7 +249,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setChargingProfile(profileDescriptor));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setChargingProfile failed =>", err)
+                console.error("dbusAPI: setChargingProfile failed =>", err)
             }
         });
     })
@@ -259,7 +259,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargingPrioritiesAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargingPrioritiesAvailable failed =>", err)
+                console.error("dbusAPI: getChargingPrioritiesAvailable failed =>", err)
             }
         });
     })
@@ -269,7 +269,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getCurrentChargingPriority());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getCurrentChargingPriority failed =>", err)
+                console.error("dbusAPI: getCurrentChargingPriority failed =>", err)
             }
         });
     })
@@ -280,7 +280,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setChargingPriority(priorityDescriptor));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setChargingPriority failed =>", err)
+                console.error("dbusAPI: setChargingPriority failed =>", err)
             }
         });
     })
@@ -290,7 +290,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getDGpuInfoValuesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getDGpuInfoValuesJSON failed =>", err)
+                console.error("dbusAPI: getDGpuInfoValuesJSON failed =>", err)
             }
         });
     })
@@ -300,7 +300,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getIGpuInfoValuesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getIGpuInfoValuesJSON failed =>", err)
+                console.error("dbusAPI: getIGpuInfoValuesJSON failed =>", err)
             }
         });
     })
@@ -310,7 +310,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getSensorDataCollectionStatus());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getSensorDataCollectionStatus failed =>", err)
+                console.error("dbusAPI: getSensorDataCollectionStatus failed =>", err)
             }
         });
     })
@@ -320,7 +320,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getPrimeState());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getPrimeState failed =>", err)
+                console.error("dbusAPI: getPrimeState failed =>", err)
             }
         });
     })
@@ -330,7 +330,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getCpuPowerValuesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getCpuPowerValuesJSON failed =>", err)
+                console.error("dbusAPI: getCpuPowerValuesJSON failed =>", err)
             }
         });
     })
@@ -340,7 +340,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getDisplayModesJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getDisplayModesJSON failed =>", err)
+                console.error("dbusAPI: getDisplayModesJSON failed =>", err)
             }
         });
     })
@@ -350,7 +350,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getIsX11());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getIsX11 failed =>", err)
+                console.error("dbusAPI: getIsX11 failed =>", err)
             }
         });
     })
@@ -360,7 +360,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setSensorDataCollectionStatus(status));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setSensorDataCollectionStatus failed =>", err)
+                console.error("dbusAPI: setSensorDataCollectionStatus failed =>", err)
             }
         });
     })
@@ -370,7 +370,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setDGpuD0Metrics(status));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setDGpuD0Metrics failed =>", err)
+                console.error("dbusAPI: setDGpuD0Metrics failed =>", err)
             }
         });
     })
@@ -380,7 +380,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargeStartAvailableThresholds());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargeStartAvailableThresholds failed =>", err)
+                console.error("dbusAPI: getChargeStartAvailableThresholds failed =>", err)
             }
         });
     })
@@ -390,7 +390,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargeEndAvailableThresholds());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargeEndAvailableThresholds failed =>", err)
+                console.error("dbusAPI: getChargeEndAvailableThresholds failed =>", err)
             }
         });
     })
@@ -400,7 +400,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargeStartThreshold());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargeStartThreshold failed =>", err)
+                console.error("dbusAPI: getChargeStartThreshold failed =>", err)
             }
         });
     })
@@ -410,7 +410,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargeEndThreshold());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargeEndThreshold failed =>", err)
+                console.error("dbusAPI: getChargeEndThreshold failed =>", err)
             }
         });
     })
@@ -420,7 +420,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getChargeType());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getChargeType failed =>", err)
+                console.error("dbusAPI: getChargeType failed =>", err)
             }
         });
     })
@@ -430,7 +430,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setChargeStartThreshold(newValue));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setChargeStartThreshold failed =>", err)
+                console.error("dbusAPI: setChargeStartThreshold failed =>", err)
             }
         });
     })
@@ -440,7 +440,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setChargeEndThreshold(newValue));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setChargeEndThreshold failed =>", err)
+                console.error("dbusAPI: setChargeEndThreshold failed =>", err)
             }
                resolve(true)
         });
@@ -452,7 +452,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.setChargeType(chargeType));
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.setChargeType failed =>", err)
+                console.error("dbusAPI: setChargeType failed =>", err)
             }
         });
     })
@@ -463,7 +463,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.dbusAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.dbusAvailable failed =>", err)
+                console.error("dbusAPI: dbusAvailable failed =>", err)
             }
         });
     })
@@ -474,7 +474,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.fanHwmonAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.fanHwmonAvailable failed =>", err)
+                console.error("dbusAPI: fanHwmonAvailable failed =>", err)
             }
 
         });
@@ -485,7 +485,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getWebcamSWStatus());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getWebcamSWStatus failed =>", err)
+                console.error("dbusAPI: getWebcamSWStatus failed =>", err)
             }
         });
     })
@@ -495,7 +495,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
             try {
                 resolve(tccDBus.getDeviceJSON());
             } catch (err: unknown) {
-                console.error("dbusAPI: DbusAPIFunctions.getDeviceJSON failed =>", err)
+                console.error("dbusAPI: getDeviceJSON failed =>", err)
             }
         });
     })

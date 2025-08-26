@@ -123,8 +123,8 @@ export class FanControlWorker extends DaemonWorker {
                 this.fanCheckCounter += 1
             }
             
-        } catch (error) {
-            console.log(error);
+        } catch (err: unknown) {
+            console.log(`FanControlWorker: onWork failed => ${err}`);
         }
     }
     

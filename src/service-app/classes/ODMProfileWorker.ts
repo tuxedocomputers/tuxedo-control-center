@@ -102,7 +102,7 @@ export class ODMProfileWorker extends DaemonWorker {
             // Make sure a valid one could be found before proceeding, otherwise abort
             if (availableProfiles.value.includes(chosenODMProfileName)) {
                 this.tccd.logLine(
-                    "ODMProfileWorker: Set ODM profile '" + chosenODMProfileName + "' "
+                    "ODMProfileWorker: Setting ODM profile '" + chosenODMProfileName + "' "
                 );
                 if (!ioAPI.setODMPerformanceProfile(chosenODMProfileName)) {
                     this.tccd.logLine(

@@ -43,7 +43,7 @@ export class KeyboardBacklightListener {
         this.updateKeyboardBacklightCapabilities();
 
         if (this.keyboardBacklightCapabilities.zones === undefined && this.onStartRetryCount) {
-            console.log("Could not find keyboard backlight. Retrying...");
+            console.log("KeyboardBacklightListener: Could not find keyboard backlight, retrying");
             --this.onStartRetryCount;
             setTimeout((): void => { this.init() }, 1000);
             return;
@@ -76,7 +76,7 @@ export class KeyboardBacklightListener {
         }
 
         if (this.keyboardBacklightCapabilities.zones === undefined) {
-            console.log("Failed to configure keyboard backlight.");
+            console.log("KeyboardBacklightListener: Failed to configure keyboard backlight");
         }
     }
 
@@ -173,7 +173,7 @@ export class KeyboardBacklightListener {
         }
 
         if (ledsWhitePath) {
-            console.log("Detected white only keyboard backlight");
+            console.log("KeyboardBacklightListener: Detected white only keyboard backlight");
             this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(ledsWhitePath + "/max_brightness"));
             this.keyboardBacklightCapabilities.zones = 1;
         }
@@ -181,7 +181,7 @@ export class KeyboardBacklightListener {
             this.updateLEDSRGBZonesForPerKeyKBL();
 
             if (this.ledsRGBZones?.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
-                console.log("Detected RGB zone keyboard backlight");
+                console.log("KeyboardBacklightListener: Detected RGB zone keyboard backlight");
                 this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -191,12 +191,12 @@ export class KeyboardBacklightListener {
                     this.keyboardBacklightCapabilities.zones++;
                 }
                 if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
-                    console.log("Detected RGB 3 zone keyboard backlight");
+                    console.log("KeyboardBacklightListener: Detected RGB 3 zone keyboard backlight");
                     this.keyboardBacklightCapabilities.zones++;
                 }
             }
             else if (this.ledsRGBZones?.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
-                console.log("Detected per-key RGB keyboard backlight");
+                console.log("KeyboardBacklightListener: Detected per-key RGB keyboard backlight");
                 this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
@@ -204,7 +204,7 @@ export class KeyboardBacklightListener {
                 this.keyboardBacklightCapabilities.zones = this.ledsRGBZones?.length;
             }
             else {
-                console.log("Detected no keyboard backlight");
+                console.log("KeyboardBacklightListener: Detected no keyboard backlight");
                 this.tccd.dbusData.keyboardBacklightCapabilitiesJSON = "{}"
                 return;
             }

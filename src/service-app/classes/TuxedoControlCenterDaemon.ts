@@ -135,7 +135,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         await this.startWorkers();
 
         this.started = true;
-        this.logLine('Daemon started');
+        this.logLine('TuxedoControlCenterDaemon: Daemon started');
 
         // Start continuous work for each worker with individual interval
         for (const worker of this.workers) {
