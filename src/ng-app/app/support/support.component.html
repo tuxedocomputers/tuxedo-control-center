@@ -97,8 +97,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                             </div>
                             <button mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systemInfosCompleted">
-                                <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
-                                <div i18n="@@cSupportSysInfoButtonStart">Start</div>
+                                <div class="start-button">
+                                    <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
+                                    <div i18n="@@cSupportSysInfoButtonStart">Start</div>
+                                </div>
                             </button>
                             &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
                         </mat-step>
