@@ -977,7 +977,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     public async handlePresetName(): Promise<void> {
         const presetName: string = await this.askPresetNameDialog();
-        if (presetName === undefined) {
+        if (presetName === undefined || presetName === "") {
             this.noPresetNameWarningDialog();
             return;
         }
