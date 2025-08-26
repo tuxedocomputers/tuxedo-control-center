@@ -59,7 +59,7 @@ async function getSystemInfos(): Promise<Buffer> {
 const systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
     function updateSystemInfoLabel(text: string): void
     {
-        tccWindow.webContents.send('ipc-update-system-info-label', text);
+        tccWindow.webContents.send('update-system-info-label', text);
     }
 
     async function runSysteminfo(ticketNumber: string): Promise<void> {
@@ -96,7 +96,7 @@ const systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
         });
       }
 
-ipcMain.handle('ipc-run-systeminfos', async (event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
+ipcMain.handle('run-systeminfos', async (event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         resolve(runSysteminfo(ticketNumber));
     });

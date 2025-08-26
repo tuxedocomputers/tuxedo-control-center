@@ -22,7 +22,7 @@ import type { IpcMainInvokeEvent } from "electron";
 import { execCmd } from "./utilsAPI";
 import * as fs from 'node:fs';
 
-ipcMain.handle('ipc-set-shutdown-time', async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
+ipcMain.handle('set-shutdown-time', async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute)
         .then((results: string) => {resolve(results)})
@@ -30,7 +30,7 @@ ipcMain.handle('ipc-set-shutdown-time', async (event: IpcMainInvokeEvent, select
     });
 });
 
-ipcMain.handle('ipc-cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         execCmd("pkexec shutdown -c")
         .then((results: string): void => {resolve(results)})
@@ -38,19 +38,19 @@ ipcMain.handle('ipc-cancel-shutdown', async (event: IpcMainInvokeEvent): Promise
     });
 });
 
-ipcMain.handle('ipc-get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         const available: boolean = fs.existsSync("/run/systemd/shutdown/scheduled")
         if (available) {
             execCmd("cat /run/systemd/shutdown/scheduled")
             .then((results: string): void => {resolve(results)})
-            .catch((err: unknown): void => {console.error("shutdownAPI: ipc-get-scheduled-shutdown failed =>", err); resolve("")});
+            .catch((err: unknown): void => {console.error("shutdownAPI: get-scheduled-shutdown failed =>", err); resolve("")});
         }
         resolve("")
     });
 });
 
-ipcMain.handle('ipc-issue-reboot', async (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('issue-reboot', async (event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         execCmd("reboot")
         .then((results: string): void => {resolve(results)})

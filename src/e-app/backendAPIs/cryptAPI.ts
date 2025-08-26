@@ -38,7 +38,7 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
     return execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
 }
 
-ipcMain.handle('ipc-change-crypt-password', async (event: IpcMainInvokeEvent, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
+ipcMain.handle('change-crypt-password', async (event: IpcMainInvokeEvent, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
     return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         resolve(changeCryptPassword(newPassword, oldPassword, confirmPassword));
     });

@@ -82,14 +82,14 @@ function getBusPath(driver: string): string {
     return undefined;
 }
 
-ipcMain.handle('ipc-prime-select', async (event: IpcMainInvokeEvent, selectedState: string): Promise<{data: string; error: unknown}> => {
+ipcMain.handle('prime-select', async (event: IpcMainInvokeEvent, selectedState: string): Promise<{data: string; error: unknown}> => {
     return new Promise<{data:string, error:unknown}>((resolve: (value: {data:string, error:unknown} | PromiseLike<{data:string, error:unknown}>) => void, reject: (reason?: unknown) => void): void => {
         try {
             resolve( execFile(
                 `pkexec prime-select ${selectedState}`
             ));
         } catch (err: unknown) {
-          console.error("powerAPI: ipc-prime-select failed =>", err)
+          console.error("powerAPI: prime-select failed =>", err)
           reject(err);
         }
       });

@@ -69,8 +69,8 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    openExternal: (url: string): void => ipcRenderer.send('ipc-open-external', url),
-    getPath: (path: string): Promise<string> => ipcRenderer.invoke('ipc-get-path', path),
+    openExternal: (url: string): void => ipcRenderer.send('open-external', url),
+    getPath: (path: string): Promise<string> => ipcRenderer.invoke('get-path', path),
     openFileDialog: (properties: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => ipcRenderer.invoke('show-open-dialog', properties),
     saveFileDialog: (properties: Electron.OpenDialogOptions): Promise<SaveDialogReturnValue> => ipcRenderer.invoke('show-save-dialog', properties),
     primeWindowClose: (): void => ipcRenderer.send("prime-window-close"),
@@ -84,7 +84,7 @@ contextBridge.exposeInMainWorld(
         }
     },
     onUpdateSysteminfoLabel: (callback: (event: any, text: any) => void): void => {
-        var channelname: string = 'ipc-update-system-info-label';
+        var channelname: string = 'update-system-info-label';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -94,15 +94,15 @@ contextBridge.exposeInMainWorld(
     // todo: make async
     displayBrightnessNotSupportedGnome: (): boolean => ipcRenderer.sendSync('get-display-brightness-not-supported-sync'),
     setDisplayBrightnessGnome: (valuePercent: number): Promise<void> => ipcRenderer.invoke('set-display-brightness-gnome',valuePercent),
-    setShutdownTime: (selectedHour: number, selectedMinute: number): Promise<string> => ipcRenderer.invoke('ipc-set-shutdown-time', selectedHour, selectedMinute),
-    cancelShutdown: (): Promise<string> => ipcRenderer.invoke('ipc-cancel-shutdown'),
-    getScheduledShutdown: (): Promise<string> => ipcRenderer.invoke('ipc-get-scheduled-shutdown'),
-    issueReboot: (): Promise<void> => ipcRenderer.invoke('ipc-issue-reboot'),
+    setShutdownTime: (selectedHour: number, selectedMinute: number): Promise<string> => ipcRenderer.invoke('set-shutdown-time', selectedHour, selectedMinute),
+    cancelShutdown: (): Promise<string> => ipcRenderer.invoke('cancel-shutdown'),
+    getScheduledShutdown: (): Promise<string> => ipcRenderer.invoke('get-scheduled-shutdown'),
+    issueReboot: (): Promise<void> => ipcRenderer.invoke('issue-reboot'),
     showTccWindow: (): void => ipcRenderer.send('show-tcc-window'),
     triggerLanguageChange: (languageId: string): void => ipcRenderer.send('trigger-language-change', languageId),
-    changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string): Promise<void> => ipcRenderer.invoke('ipc-change-crypt-password', newPassword, oldPassword, confirmPassword),
-    runSysteminfo: (ticketNumber: string): Promise<void> => ipcRenderer.invoke('ipc-run-systeminfos',ticketNumber),
-    primeSelect: (selectedState: string): Promise<string> => ipcRenderer.invoke('ipc-prime-select', selectedState)
+    changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string): Promise<void> => ipcRenderer.invoke('change-crypt-password', newPassword, oldPassword, confirmPassword),
+    runSysteminfo: (ticketNumber: string): Promise<void> => ipcRenderer.invoke('run-systeminfos',ticketNumber),
+    primeSelect: (selectedState: string): Promise<string> => ipcRenderer.invoke('prime-select', selectedState)
 }
 
 );

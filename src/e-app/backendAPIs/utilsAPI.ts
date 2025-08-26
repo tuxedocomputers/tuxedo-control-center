@@ -85,7 +85,7 @@ ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electr
 });
 
 // todo: make cleaner
-ipcMain.handle('ipc-get-path', (event: IpcMainInvokeEvent, arg: any): Promise<string>  => {
+ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: any): Promise<string>  => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         const requestedPath: string = app.getPath(arg);
         resolve(requestedPath);
@@ -115,7 +115,7 @@ async function changeLanguage(newLangId: string): Promise<void> {
     }
 }
 
-ipcMain.on('ipc-open-external', (event: IpcMainEvent, url: string): void => {
+ipcMain.on('open-external', (event: IpcMainEvent, url: string): void => {
     if(url.startsWith('http://') || url.startsWith('https://'))
     {
         shell.openExternal(url);
