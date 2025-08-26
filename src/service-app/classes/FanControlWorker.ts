@@ -72,6 +72,7 @@ export class FanControlWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
         super(1000, "FanControlWorker", tccd);
         this.tuxedoDevice = tuxedoDevice;
+        this.updateDbusData();
     }
 
     public async onStart(retry?: boolean): Promise<void> {
