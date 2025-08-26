@@ -235,8 +235,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.tccDBus.displayModes.subscribe((nextdisplayModes: IDisplayFreqRes): void => {
             if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
                 this.displayModes = nextdisplayModes;
-                this.overwriteDefaultRefreshRateValue();
             }
+            this.overwriteDefaultRefreshRateValue();
         }));
 
         this.subscriptions.add(this.tccDBus.isX11.subscribe((nextIsX11: number): void => {
